@@ -1,0 +1,247 @@
+---
+title: "UI générative avec l'AI SDK - React, pas à pas | vllnt UI"
+description: "Construire une UI générative avec l'AI SDK en React : relier à la main les parties d'outil de useChat aux composants VLLNT UI. Aucun adaptateur n'existe encore."
+date: 2026-11-20
+updated: 2026-11-20
+tags: [generative-ui, ai-sdk, react, tool-calls]
+status: mixed
+components: [ai-tool-call-display, ai-streaming-text, ai-message-bubble, skeleton]
+---
+
+# UI générative avec l'AI SDK en React et les composants VLLNT UI
+
+L'AI SDK (de Vercel) transmet chaque appel d'outil au navigateur sous la forme d'une partie typée d'un message de chat. Au sens de l'AI SDK, l'UI générative consiste à afficher un composant React pour cette partie.
+
+Après cette page, vous saurez afficher les messages de `useChat` avec des composants VLLNT UI : du texte en flux continu, une carte pour chaque appel d'outil, et un composant dédié au résultat d'un outil, avec une vue de chargement et une vue d'erreur.
+
+## Ce qui est disponible et ce qui ne l'est pas
+
+**Disponible aujourd'hui :** les composants. Ce sont de simples composants React : vous reliez donc les parties de message de l'AI SDK à ces composants dans votre propre code. Cette page montre comment.
+
+**Sur la feuille de route :** des helpers qui font ce lien à votre place. VLLNT UI ne fournit aucun adaptateur pour l'AI SDK. Le travail est suivi dans [vllnt/ui#672](https://github.com/vllnt/ui/issues/672).
+
+Les exemples suivent la [documentation AI SDK UI](https://ai-sdk.dev/docs/ai-sdk-ui/generative-user-interfaces) de `useChat`. VLLNT UI ne les teste pas à chaque version de l'AI SDK : vérifiez-les avec la version que vous installez.
+
+## Comment l'AI SDK décrit un appel d'outil
+
+`useChat` renvoie `messages`. Chaque message possède un tableau `parts`. Une partie de texte a le type `text`. Une partie d'outil a le type `tool-` suivi du nom de l'outil : un outil nommé `getWeather` arrive donc sous le type `tool-getWeather`.
+
+Chaque partie d'outil porte un `state`. Ces quatre états couvrent un appel d'outil du début à la fin :
+
+| État | Ce qui se passe | Ce que contient la partie |
+|---|---|---|
+| `input-streaming` | Le modèle écrit encore l'entrée de l'outil | Un `input` partiel |
+| `input-available` | L'entrée est complète et l'outil s'exécute | `input` |
+| `output-available` | L'outil a répondu | `input` et `output` |
+| `output-error` | L'outil a échoué | `input` et `errorText` |
+
+Le travail d'interface consiste à concevoir une vue pour chaque état.
+
+## Étape 1 : installer et nommer l'outil
+
+```bash
+pnpm add ai @ai-sdk/react zod @vllnt/ui
+```
+
+Définissez l'outil côté serveur. Sa clé dans l'objet `tools` devient le type de la partie côté client.
+
+```ts
+import { tool } from "ai";
+import { z } from "zod";
+
+export const tools = {
+  getWeather: tool({
+    description: "Get the current weather for a city",
+    inputSchema: z.object({
+      city: z.string().describe("The city to get the weather for"),
+    }),
+    execute: async ({ city }) => {
+      return { city, conditions: "Sunny", temperature: 21 };
+    },
+  }),
+};
+```
+
+Passez `tools` à votre route de chat. La route elle-même est celle de la documentation de l'AI SDK. Elle n'est pas reproduite ici, parce que son API change d'une version de l'AI SDK à l'autre.
+
+## Étape 2 : afficher chaque partie avec un composant existant
+
+Cette version ne demande aucun composant sur mesure. Le texte va dans `AIStreamingText`. Chaque appel d'outil va dans `AIToolCallDisplay`, qui affiche le nom de l'outil, son entrée, son statut et sa sortie.
+
+```tsx
+"use client";
+
+import { useState } from "react";
+
+import { useChat } from "@ai-sdk/react";
+import {
+  AIMessageBubble,
+  AIStreamingText,
+  AIToolCallDisplay,
+  type AIToolCallStatus,
+} from "@vllnt/ui";
+
+const TOOL_STATUS: Record<string, AIToolCallStatus> = {
+  "input-available": "running",
+  "input-streaming": "queued",
+  "output-available": "complete",
+  "output-error": "error",
+};
+
+function toolOutput(part: {
+  errorText?: string;
+  output?: unknown;
+  state: string;
+}) {
+  if (part.state === "output-available") {
+    return JSON.stringify(part.output, null, 2);
+  }
+  if (part.state === "output-error") {
+    return part.errorText;
+  }
+  return undefined;
+}
+
+export function Chat() {
+  const [input, setInput] = useState("");
+  const { messages, sendMessage, status } = useChat();
+
+  return (
+    <div className="space-y-4">
+      {messages.map((message, messageIndex) => {
+        const isLast = messageIndex === messages.length - 1;
+
+        return (
+          <AIMessageBubble key={message.id} messageRole={message.role}>
+            {message.parts.map((part, index) => {
+              if (part.type === "text") {
+                return (
+                  <AIStreamingText
+                    isStreaming={isLast && status === "streaming"}
+                    key={index}
+                    text={part.text}
+                  />
+                );
+              }
+
+              if (part.type === "tool-getWeather") {
+                return (
+                  <AIToolCallDisplay
+                    input={JSON.stringify(part.input, null, 2)}
+                    key={part.toolCallId}
+                    output={toolOutput(part)}
+                    status={TOOL_STATUS[part.state] ?? "queued"}
+                    toolName="getWeather"
+                  />
+                );
+              }
+
+              return null;
+            })}
+          </AIMessageBubble>
+        );
+      })}
+
+      <form
+        onSubmit={(event) => {
+          event.preventDefault();
+          sendMessage({ text: input });
+          setInput("");
+        }}
+      >
+        <input
+          aria-label="Message"
+          onChange={(event) => setInput(event.target.value)}
+          value={input}
+        />
+      </form>
+    </div>
+  );
+}
+```
+
+`TOOL_STATUS` est la table de correspondance qu'un adaptateur contiendrait. L'AI SDK a quatre états et `AIToolCallDisplay` a quatre statuts (`queued`, `running`, `complete`, `error`) : la table tient en une ligne par état.
+
+La [page d'AI Tool Call Display](/components/ai-tool-call-display) liste ses autres props, comme `description` et `duration`. La [page d'AI Streaming Text](/components/ai-streaming-text) présente les options du curseur.
+
+## Étape 3 : donner au résultat son propre composant
+
+Une carte générique montre la sortie brute. L'UI générative la remplace par un composant conçu pour ce résultat. Écrivez d'abord le composant. Il reçoit la sortie de l'outil en props.
+
+```tsx
+import { Card, CardContent, CardHeader, CardTitle } from "@vllnt/ui";
+
+type WeatherProps = {
+  city: string;
+  conditions: string;
+  temperature: number;
+};
+
+export function WeatherCard({ city, conditions, temperature }: WeatherProps) {
+  return (
+    <Card className="w-64">
+      <CardHeader>
+        <CardTitle>{city}</CardTitle>
+      </CardHeader>
+      <CardContent>
+        {temperature} degrees, {conditions}
+      </CardContent>
+    </Card>
+  );
+}
+```
+
+Remplacez ensuite la branche `tool-getWeather` de l'étape 2 par une vue par état. Importez `Skeleton` depuis `@vllnt/ui` et `WeatherCard` depuis votre propre fichier.
+
+```tsx
+if (part.type === "tool-getWeather") {
+  switch (part.state) {
+    case "input-streaming":
+    case "input-available":
+      return <Skeleton className="h-24 w-64" key={part.toolCallId} />;
+    case "output-available":
+      return <WeatherCard key={part.toolCallId} {...part.output} />;
+    case "output-error":
+      return (
+        <AIToolCallDisplay
+          key={part.toolCallId}
+          output={part.errorText}
+          status="error"
+          toolName="getWeather"
+        />
+      );
+    default:
+      return null;
+  }
+}
+```
+
+Le `Skeleton` a la même largeur que `WeatherCard` et une hauteur fixe : le message garde sa largeur quand le résultat arrive.
+
+En TypeScript, `part.input` et `part.output` ne sont typés que si vous donnez à `useChat` un type de message qui inclut vos outils. La documentation de l'AI SDK explique comment faire.
+
+## Quoi afficher dans chaque état
+
+| État | Vue générique | Vue dédiée |
+|---|---|---|
+| `input-streaming` | `AIToolCallDisplay` avec `status="queued"` | `Skeleton` à la taille du résultat |
+| `input-available` | `AIToolCallDisplay` avec `status="running"` | `Skeleton` à la taille du résultat |
+| `output-available` | `AIToolCallDisplay` avec `status="complete"` | Votre composant, avec `part.output` en props |
+| `output-error` | `AIToolCallDisplay` avec `status="error"` | La même carte d'erreur, ou la vôtre |
+
+Commencez par la vue générique pour chaque outil. Passez un outil à une vue dédiée quand son résultat mérite un composant conçu pour lui.
+
+## Ce que cette page ne couvre pas
+
+- **Les états d'approbation.** La documentation de l'AI SDK liste aussi des états pour les outils qui demandent l'accord de l'utilisateur, comme `approval-requested`. VLLNT UI a un composant `ApprovalRequest` sur `main` pour cette étape. Il est présent dans les versions canary, pas dans la version 0.3.0. Le lien se fait de la même façon.
+- **Les React Server Components.** L'AI SDK propose une fonction `streamUI` qui diffuse des composants depuis le serveur. Sa documentation la présente comme expérimentale : cette page utilise donc `useChat`.
+- **Les exécutions d'agent en plusieurs étapes.** Pour montrer une exécution entière sous forme de chronologie, voir [afficher les appels d'outil et les étapes d'un agent en React](/build/tool-calls-agent-steps).
+
+## Le partage du travail entre les deux bibliothèques
+
+L'AI SDK s'occupe des données : l'appel au modèle, le flux, l'exécution des outils et l'état des messages. VLLNT UI s'occupe de ce que voit l'utilisateur. Aucune ne remplace l'autre, et il n'existe pas de partenariat entre les deux projets. La [comparaison entre VLLNT UI et l'AI SDK](/vs/vercel-ai-sdk) les met côte à côte.
+
+## Pour aller plus loin
+
+- Lisez [les composants d'UI générative en React](/articles/generative-ui-components-react) pour comprendre ce qui rend un composant utilisable par un modèle.
+- Suivez [vllnt/ui#672](https://github.com/vllnt/ui/issues/672) pour l'avancement de l'adaptateur.
