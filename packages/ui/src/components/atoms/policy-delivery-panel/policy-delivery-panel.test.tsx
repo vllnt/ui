@@ -33,6 +33,25 @@ describe("PolicyDeliveryPanel", () => {
     expect(screen.queryByRole("button")).not.toBeInTheDocument();
   });
 
+  it.each([
+    ["Enforced", "text-success"],
+    ["Advisory", "text-warning"],
+    ["Disabled", "text-muted-foreground"],
+  ] as const)(
+    "status chip %s puts its colour on the dot and keeps a neutral surface",
+    (label, dotClass) => {
+      render(<PolicyDeliveryPanel policies={sample} />);
+      const chip = screen.getByText(label);
+      expect(chip.querySelector("[data-policy-status-dot]")).toHaveClass(
+        dotClass,
+      );
+      expect(chip).toHaveClass("bg-secondary");
+      expect(chip.className).not.toMatch(
+        /(?:bg|border)-(?:amber|emerald|red|sky|slate)-|\/(?:5|10|40)\b/,
+      );
+    },
+  );
+
   it("invokes onToggle when a row is clicked", () => {
     const handleToggle = vi.fn();
     render(

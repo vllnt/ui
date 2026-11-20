@@ -1,0 +1,35 @@
+---
+title: "Scrim"
+description: "Voile plein cadre plat qui assombrit la surface derriere un panneau, une feuille ou un volet, au niveau dim ou strong. Installez Scrim depuis le registre VLLNT UI avec la CLI shadcn."
+keywords:
+  - "voile d'arriere-plan"
+  - "composant voile"
+  - "scrim react"
+  - "scrim shadcn"
+  - "composant overlay"
+---
+Voile plein cadre plat qui assombrit la surface derriere un panneau, une feuille ou un volet. Fait partie de la famille overlay dans VLLNT UI, il est publie comme
+entree de registre lisible par machine — copiez la source directement dans votre
+application avec la CLI shadcn et possedez-la, sans dependance d'execution a une
+bibliotheque de composants.
+
+Reglez `level` sur `dim` (la valeur par defaut, un voile noir leger a 50 %) ou sur `strong` (un voile noir a 80 % qui masque ce qui se trouve derriere). Le voile est noir dans tous les modes de theme. Il est purement decoratif : il est rendu avec `aria-hidden` et les lecteurs d'ecran l'ignorent. Il remplit son plus proche ancetre positionne ; ajoutez `className="fixed"` pour couvrir toute la fenetre.
+
+<Preview />
+
+## Installation
+
+Ajoutez Scrim a votre projet avec la CLI shadcn. La source arrive dans votre
+code, prete a etre adaptee :
+
+<Install />
+
+## Source
+
+<Code />
+
+## Stories
+
+Explorez chaque variante et chaque etat dans le Storybook interactif :
+
+<Stories />

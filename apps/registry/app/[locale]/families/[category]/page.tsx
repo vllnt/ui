@@ -18,11 +18,7 @@ import {
   jsonLdScriptAttributes,
 } from "@/lib/jsonld";
 import { pageMetadata } from "@/lib/og";
-import {
-  getPlatform,
-  type PlatformQuery,
-  withPlatformQuery,
-} from "@/lib/platform";
+import { getPlatform, variantQuery, withPlatformQuery } from "@/lib/platform";
 import { registry } from "@/lib/registry";
 import { canonical, localizePathname } from "@/lib/seo";
 import {
@@ -33,9 +29,17 @@ import {
 import type { ComponentCategory } from "@/types/registry";
 
 type Props = {
-  readonly params: Promise<{ category: string; locale: Locale }>;
-  readonly searchParams: Promise<PlatformQuery>;
+  readonly params: Promise<{
+    category: string;
+    locale: Locale;
+    platform?: string;
+  }>;
 };
+
+export const revalidate = 86_400;
+
+/** `generateStaticParams` covers every family, so an unknown category is a 404 that no cache stores. */
+export const dynamicParams = false;
 
 function findFamily(category: string) {
   return groupedComponents.find((group) => group.category === category);
@@ -85,11 +89,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   });
 }
 
-export default async function FamilyPage({ params, searchParams }: Props) {
-  const [{ category, locale }, query] = await Promise.all([
-    params,
-    searchParams,
-  ]);
+export default async function FamilyPage({ params }: Props) {
+  const { category, locale, platform: platformParameter } = await params;
   setRequestLocale(locale);
 
   const group = findFamily(category);
@@ -104,7 +105,8 @@ export default async function FamilyPage({ params, searchParams }: Props) {
   const pathname = `/families/${category}`;
   const t = await getTranslations("pages.families");
   const common = await getTranslations("common");
-  const platform = getPlatform(query.platform);
+  const platform = getPlatform(platformParameter);
+  const query = variantQuery(platform);
   const platformsByName = new Map(
     registry.items.map((item) => [item.name, item.platforms]),
   );
@@ -141,9 +143,13 @@ export default async function FamilyPage({ params, searchParams }: Props) {
         ])}
       />
       <PlatformSidebar
+        platform={getPlatform(platformParameter, "all")}
         sections={await getSidebarSections(group.category, locale)}
       />
-      <main className="flex-1 overflow-y-auto bg-background">
+      <main
+        className="flex-1 overflow-y-auto bg-background"
+        data-pagefind-ignore={platformParameter === undefined ? undefined : ""}
+      >
         <section className="border-b border-border">
           <div className="mx-auto max-w-7xl px-4 py-16 lg:px-8">
             <Breadcrumb
@@ -190,7 +196,7 @@ export default async function FamilyPage({ params, searchParams }: Props) {
                 <ArrowRight className="size-4" />
               </Link>
               <Link
-                className="inline-flex h-11 items-center rounded-md border border-border px-5 text-sm font-medium hover:bg-muted"
+                className="inline-flex h-11 items-center rounded-md border border-border px-5 text-sm font-medium hover:bg-secondary"
                 href={withPlatformQuery("/docs/agents", query, platform)}
               >
                 {t("agentsDocs")}
@@ -199,7 +205,11 @@ export default async function FamilyPage({ params, searchParams }: Props) {
                 {t("componentCount", { count: visibleItems.length })}
               </span>
             </div>
-            <PlatformSelector className="mt-6 flex min-h-11 w-fit max-w-full items-center gap-1 overflow-x-auto rounded-md border border-border p-1" />
+            <PlatformSelector
+              className="mt-6 flex min-h-11 w-fit max-w-full items-center gap-1 overflow-x-auto rounded-md border border-border p-1"
+              pathname={pathname}
+              platform={platform}
+            />
           </div>
         </section>
 

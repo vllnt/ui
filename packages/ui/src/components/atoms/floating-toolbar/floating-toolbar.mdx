@@ -57,6 +57,10 @@ Drop to a smaller set when only a couple of actions apply.
 
 <Canvas of={Stories.Compact} sourceState="shown" />
 
+## Keyboard
+
+The toolbar is one tab stop. Tab enters on the first enabled action, or on the last action that had focus. Left and Right Arrow move between actions and wrap at the ends, Home and End jump to the first and last, and disabled actions are skipped. An `onKeyDown` you pass runs first, and `event.preventDefault()` there stops the arrow handling. The colour transition stops under `prefers-reduced-motion`.
+
 ## Notes
 
 - The toolbar applies `translateY(-100%)` so the `y` coordinate is the **bottom** edge of the bar — pass the top of the selection halo and the toolbar floats just above it.

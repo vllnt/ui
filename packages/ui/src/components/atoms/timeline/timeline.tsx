@@ -93,11 +93,35 @@ const COLOR_OVERRIDES: Record<TimelineColor, { border: string; fill: string }> =
     },
   };
 
+/**
+ * Localizable status words for a {@link TimelineItem}. Each word stays
+ * visually hidden and names the item's status for assistive technology. An
+ * empty string omits the word.
+ *
+ * @public
+ */
+export type TimelineLabels = {
+  /** Word for an `active` item. Defaults to `"In progress"`. */
+  active?: string;
+  /** Word for a `completed` item. Defaults to `"Completed"`. */
+  completed?: string;
+  /** Word for an `upcoming` item. Defaults to `"Upcoming"`. */
+  upcoming?: string;
+};
+
+const DEFAULT_LABELS = {
+  active: "In progress",
+  completed: "Completed",
+  upcoming: "Upcoming",
+} as const satisfies Required<TimelineLabels>;
+
 type TimelineContextValue = {
+  labels: TimelineLabels;
   orientation: TimelineOrientation;
 };
 
 const TimelineContext = createContext<TimelineContextValue>({
+  labels: {},
   orientation: "vertical",
 });
 
@@ -128,7 +152,10 @@ const timelineVariants = cva("flex", {
  *
  * @public
  */
-export type TimelineProps = ComponentPropsWithoutRef<"ol"> &
+export type TimelineProps = {
+  /** Localizable status words shared by every item. Items can override them. */
+  labels?: TimelineLabels;
+} & ComponentPropsWithoutRef<"ol"> &
   VariantProps<typeof timelineVariants>;
 
 /**
@@ -154,14 +181,15 @@ export type TimelineProps = ComponentPropsWithoutRef<"ol"> &
 export const Timeline = ({
   children,
   className,
+  labels,
   orientation,
   ref,
   ...rest
 }: TimelineProps & { ref?: React.Ref<HTMLOListElement> }) => {
   const resolvedOrientation: TimelineOrientation = orientation ?? "vertical";
   const contextValue = useMemo<TimelineContextValue>(
-    () => ({ orientation: resolvedOrientation }),
-    [resolvedOrientation],
+    () => ({ labels: labels ?? {}, orientation: resolvedOrientation }),
+    [labels, resolvedOrientation],
   );
   return (
     <TimelineContext.Provider value={contextValue}>
@@ -194,6 +222,8 @@ export type TimelineItemProps = {
   icon?: ReactNode;
   /** When true, suppresses the trailing connector. Defaults to `false`. */
   isLast?: boolean;
+  /** Status words for this item. Overrides the {@link Timeline} `labels`. */
+  labels?: TimelineLabels;
   /** Status drives marker fill and connector style. Defaults to `"upcoming"`. */
   status?: TimelineItemStatus;
   /** Item title. */
@@ -275,6 +305,7 @@ type ItemBodyProps = {
   date?: ReactNode;
   description?: ReactNode;
   orientation: TimelineOrientation;
+  statusLabel: string;
   title: ReactNode;
 };
 
@@ -283,6 +314,7 @@ function ItemBody({
   date,
   description,
   orientation,
+  statusLabel,
   title,
 }: ItemBodyProps): ReactNode {
   return (
@@ -301,6 +333,7 @@ function ItemBody({
         <p className="text-sm font-semibold tracking-tight text-foreground">
           {title}
         </p>
+        {statusLabel ? <span className="sr-only">{statusLabel}</span> : null}
         {date ? (
           <span className="font-mono text-xs text-muted-foreground">
             {date}
@@ -335,11 +368,14 @@ export const TimelineItem = ({
     description,
     icon,
     isLast = false,
+    labels,
     status = "upcoming",
     title,
     ...rest
   } = props;
-  const orientation = useTimelineOrientation();
+  const { labels: groupLabels, orientation } = use(TimelineContext);
+  const statusLabel =
+    labels?.[status] ?? groupLabels[status] ?? DEFAULT_LABELS[status];
   return (
     <li
       className={cn(
@@ -359,6 +395,7 @@ export const TimelineItem = ({
         date={date}
         description={description}
         orientation={orientation}
+        statusLabel={statusLabel}
         title={title}
       >
         {children}

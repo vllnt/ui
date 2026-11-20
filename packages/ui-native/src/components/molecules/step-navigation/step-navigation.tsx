@@ -1,7 +1,8 @@
 import type { ReactNode, Ref } from "react";
-import { Pressable, StyleSheet, View, type ViewProps } from "react-native";
+import { StyleSheet, View, type ViewProps } from "react-native";
 
 import { useAnnounceOnChange } from "../../../primitives/accessibility";
+import { InteractivePressable } from "../../../primitives/interactive-pressable";
 import { useTheme } from "../../../theme/theme-provider";
 import { Text } from "../../atoms/text/text";
 
@@ -35,8 +36,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     flexDirection: "row",
     justifyContent: "center",
-    minHeight: 44,
-    minWidth: 44,
   },
   counter: { fontVariant: ["tabular-nums"] },
   root: {
@@ -79,18 +78,14 @@ function StepNavigation({
   };
   const counter = `${resolved.step} ${currentStep} / ${totalSteps}`;
   useAnnounceOnChange(counter);
-  const actionStyle =
-    (disabled: boolean) =>
-    ({ pressed }: { readonly pressed: boolean }) => [
-      styles.action,
-      {
-        backgroundColor: pressed ? theme.colors.accent : "transparent",
-        borderRadius: theme.radius.md,
-        gap: theme.spacing[1],
-        opacity: disabled ? 0.5 : pressed ? 0.8 : 1,
-        paddingHorizontal: theme.spacing[3],
-      },
-    ];
+  const actionStyle = [
+    styles.action,
+    {
+      borderRadius: theme.radius.md,
+      gap: theme.spacing[1],
+      paddingHorizontal: theme.spacing[3],
+    },
+  ];
   const content = (
     <View
       {...props}
@@ -108,37 +103,37 @@ function StepNavigation({
         style,
       ]}
     >
-      <Pressable
+      <InteractivePressable
         accessibilityHint={resolved.navigation}
         accessibilityLabel={resolved.previousAccessibility}
         accessibilityRole="button"
         accessibilityState={{ disabled: !canPrevious }}
         disabled={!canPrevious}
         onPress={onPrevious}
-        style={actionStyle(!canPrevious)}
+        style={actionStyle}
       >
         {previousIcon}
         <Text size="small" weight="medium">
           {resolved.previous}
         </Text>
-      </Pressable>
+      </InteractivePressable>
       <Text size="small" style={styles.counter} tone="muted">
         {counter}
       </Text>
-      <Pressable
+      <InteractivePressable
         accessibilityHint={resolved.navigation}
         accessibilityLabel={resolved.nextAccessibility}
         accessibilityRole="button"
         accessibilityState={{ disabled: !canNext }}
         disabled={!canNext}
         onPress={onNext}
-        style={actionStyle(!canNext)}
+        style={actionStyle}
       >
         <Text size="small" weight="medium">
           {resolved.next}
         </Text>
         {nextIcon}
-      </Pressable>
+      </InteractivePressable>
     </View>
   );
   return safeArea ? safeArea(content) : content;

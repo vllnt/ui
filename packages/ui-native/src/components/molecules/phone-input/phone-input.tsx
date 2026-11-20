@@ -1,6 +1,5 @@
 import type { Ref } from "react";
 import {
-  Pressable,
   StyleSheet,
   Text as NativeText,
   type TextInput,
@@ -9,6 +8,8 @@ import {
 } from "react-native";
 
 import { useGroupDisabled } from "../../../primitives/control-group";
+import { interactionTokens } from "../../../primitives/interaction-state";
+import { InteractivePressable } from "../../../primitives/interactive-pressable";
 import { typeStyle } from "../../../primitives/type-style";
 import { useTheme } from "../../../theme/theme-provider";
 import { Input } from "../../atoms/input/input";
@@ -75,7 +76,7 @@ function PhoneCountryPrefix({
   );
 
   return onPress ? (
-    <Pressable
+    <InteractivePressable
       accessibilityLabel={accessibilityLabel}
       accessibilityRole="button"
       accessibilityState={{ disabled }}
@@ -85,7 +86,7 @@ function PhoneCountryPrefix({
       style={style}
     >
       {content}
-    </Pressable>
+    </InteractivePressable>
   ) : (
     <View
       accessibilityLabel={`${country.label}, ${country.dialCode}`}
@@ -119,7 +120,7 @@ function PhoneInput({
           backgroundColor: theme.colors.background,
           borderColor: theme.colors.input,
           borderRadius: theme.radius.md,
-          opacity: disabled ? 0.5 : 1,
+          opacity: disabled ? interactionTokens(theme).disabledOpacity : 1,
         },
       ]}
     >

@@ -1,8 +1,9 @@
 "use client";
 
 import type { ReactNode, Ref } from "react";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 
+import { InteractivePressable } from "../../../primitives/interactive-pressable";
 import {
   ModalLayer,
   type ModalLayerCloseReason,
@@ -38,14 +39,12 @@ const styles = StyleSheet.create({
   action: {
     alignItems: "center",
     justifyContent: "center",
-    minHeight: 44,
   },
   actions: {
     flexDirection: "row",
     justifyContent: "flex-end",
   },
   content: { flex: 1, justifyContent: "center" },
-  disabled: { opacity: 0.5 },
   surface: {
     alignSelf: "center",
     borderWidth: 1,
@@ -123,18 +122,18 @@ function AlertDialog({
         </Text>
         {children}
         <View style={[styles.actions, { gap: theme.spacing[2] }]}>
-          <Pressable
+          <InteractivePressable
             accessibilityLabel={cancelLabel}
             accessibilityRole="button"
+            filled
             onPress={() => {
               close("requestClose");
             }}
-            style={({ pressed }) => [
+            style={[
               styles.action,
               {
                 backgroundColor: theme.colors.secondary,
                 borderRadius: theme.radius.md,
-                opacity: pressed ? 0.8 : 1,
                 paddingHorizontal: theme.spacing[4],
               },
             ]}
@@ -142,27 +141,26 @@ function AlertDialog({
             <Text style={typeStyle(theme, "bodySmall", "secondaryForeground")}>
               {cancelLabel}
             </Text>
-          </Pressable>
-          <Pressable
+          </InteractivePressable>
+          <InteractivePressable
             accessibilityLabel={actionLabel}
             accessibilityRole="button"
             accessibilityState={{ disabled: actionDisabled }}
             disabled={actionDisabled}
+            filled
             onPress={() => {
               onAction();
               setVisible(false);
             }}
-            style={({ pressed }) => [
+            style={[
               styles.action,
               {
                 backgroundColor: destructive
                   ? theme.colors.destructive
                   : theme.colors.primary,
                 borderRadius: theme.radius.md,
-                opacity: pressed ? 0.8 : 1,
                 paddingHorizontal: theme.spacing[4],
               },
-              actionDisabled ? styles.disabled : undefined,
             ]}
           >
             <Text
@@ -175,7 +173,7 @@ function AlertDialog({
             >
               {actionLabel}
             </Text>
-          </Pressable>
+          </InteractivePressable>
         </View>
       </View>
     </ModalLayer>

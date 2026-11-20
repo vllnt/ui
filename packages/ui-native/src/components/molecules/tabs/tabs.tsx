@@ -13,7 +13,6 @@ import {
 } from "react";
 
 import {
-  Pressable,
   type PressableProps,
   ScrollView,
   type ScrollViewProps,
@@ -22,6 +21,7 @@ import {
   type ViewProps,
 } from "react-native";
 
+import { InteractivePressable } from "../../../primitives/interactive-pressable";
 import { isSingleSelected } from "../../../primitives/selection";
 import type { ControllableStateOptions } from "../../../primitives/use-controllable-state";
 import { useControllableState } from "../../../primitives/use-controllable-state";
@@ -88,7 +88,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderBottomWidth: 2,
     justifyContent: "center",
-    minHeight: 44,
   },
 });
 
@@ -207,7 +206,7 @@ function TabsTrigger({
     (candidate) => candidate,
   );
   return (
-    <Pressable
+    <InteractivePressable
       {...props}
       accessibilityHint={accessibilityHint ?? listLabel}
       accessibilityLabel={accessibilityLabel}
@@ -219,12 +218,11 @@ function TabsTrigger({
         tabs.onValueChange(value);
       }}
       ref={ref}
+      selected={selected}
       style={(state) => [
         styles.trigger,
         {
-          backgroundColor: state.pressed ? theme.colors.accent : "transparent",
           borderBottomColor: selected ? theme.colors.primary : "transparent",
-          opacity: disabled ? 0.5 : state.pressed ? 0.8 : 1,
           paddingHorizontal: theme.spacing[4],
         },
         typeof style === "function" ? style(state) : style,
@@ -241,7 +239,7 @@ function TabsTrigger({
       ) : (
         children
       )}
-    </Pressable>
+    </InteractivePressable>
   );
 }
 TabsTrigger.displayName = "TabsTrigger";

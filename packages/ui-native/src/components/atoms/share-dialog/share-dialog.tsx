@@ -9,8 +9,9 @@ import {
 } from "react";
 
 import type { ShareContent, ShareOptions } from "react-native";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 
+import { InteractivePressable } from "../../../primitives/interactive-pressable";
 import {
   ModalLayer,
   type ModalLayerCloseReason,
@@ -53,7 +54,7 @@ export type ShareDialogProps = ModalLayerPresentationProps & {
 };
 
 const styles = StyleSheet.create({
-  action: { alignItems: "center", justifyContent: "center", minHeight: 44 },
+  action: { alignItems: "center", justifyContent: "center" },
   actions: { flexDirection: "row", justifyContent: "flex-end" },
   content: { flex: 1, justifyContent: "center" },
   surface: { alignSelf: "center", borderWidth: 1, maxWidth: 560, width: "92%" },
@@ -176,18 +177,18 @@ function ShareDialog({
           </Text>
         )}
         <View style={[styles.actions, { gap: theme.spacing[2] }]}>
-          <Pressable
+          <InteractivePressable
             accessibilityLabel={cancelLabel}
             accessibilityRole="button"
+            filled
             onPress={() => {
               close("requestClose");
             }}
-            style={({ pressed }) => [
+            style={[
               styles.action,
               {
                 backgroundColor: theme.colors.secondary,
                 borderRadius: theme.radius.md,
-                opacity: pressed ? 0.8 : 1,
                 paddingHorizontal: theme.spacing[4],
               },
             ]}
@@ -195,8 +196,8 @@ function ShareDialog({
             <Text style={{ color: theme.colors.secondaryForeground }}>
               {cancelLabel}
             </Text>
-          </Pressable>
-          <Pressable
+          </InteractivePressable>
+          <InteractivePressable
             accessibilityLabel={shareLabel}
             accessibilityRole="button"
             accessibilityState={{
@@ -204,13 +205,13 @@ function ShareDialog({
               disabled: !available || sharing,
             }}
             disabled={!available || sharing}
+            filled
             onPress={() => void share()}
-            style={({ pressed }) => [
+            style={[
               styles.action,
               {
                 backgroundColor: theme.colors.primary,
                 borderRadius: theme.radius.md,
-                opacity: available ? (pressed ? 0.8 : 1) : 0.5,
                 paddingHorizontal: theme.spacing[4],
               },
             ]}
@@ -218,7 +219,7 @@ function ShareDialog({
             <Text style={{ color: theme.colors.primaryForeground }}>
               {shareLabel}
             </Text>
-          </Pressable>
+          </InteractivePressable>
         </View>
       </View>
     </ModalLayer>

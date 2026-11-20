@@ -22,4 +22,33 @@ test.describe("Kbd Visual", () => {
     const component = await mount(<Kbd shortcut="ctrl+k" />);
     await expect(component).toHaveScreenshot("kbd-shortcut.png");
   });
+
+  test("platform-mac", async ({ mount }) => {
+    const component = await mount(<Kbd platform="mac" shortcut="mod+k" />);
+    await expect(component).toHaveScreenshot("kbd-platform-mac.png");
+  });
+
+  test("platform-win", async ({ mount }) => {
+    const component = await mount(<Kbd platform="win" shortcut="mod+k" />);
+    await expect(component).toHaveScreenshot("kbd-platform-win.png");
+  });
+
+  test("variant-bracket", async ({ mount }) => {
+    const component = await mount(<Kbd variant="bracket">K</Kbd>);
+    await expect(component).toHaveScreenshot("kbd-variant-bracket.png");
+  });
+
+  test("variant-bracket-mac", async ({ mount }) => {
+    const component = await mount(
+      <Kbd platform="mac" shortcut="mod+k" variant="bracket" />,
+    );
+    await expect(component).toHaveScreenshot("kbd-variant-bracket-mac.png");
+  });
+
+  test("variant-bracket-win", async ({ mount }) => {
+    const component = await mount(
+      <Kbd platform="win" shortcut="mod+k" variant="bracket" />,
+    );
+    await expect(component).toHaveScreenshot("kbd-variant-bracket-win.png");
+  });
 });

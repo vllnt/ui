@@ -14,7 +14,6 @@ import {
 } from "react";
 
 import {
-  Pressable,
   StyleSheet,
   type Text as NativeText,
   Text,
@@ -28,6 +27,7 @@ import {
   plainText,
   useAnnounceOnChange,
 } from "../../../primitives/accessibility";
+import { InteractivePressable } from "../../../primitives/interactive-pressable";
 import { typeStyle } from "../../../primitives/type-style";
 import { useTheme } from "../../../theme/theme-provider";
 
@@ -124,9 +124,6 @@ const styles = StyleSheet.create({
     minHeight: 24,
     minWidth: 24,
   },
-  pressed: {
-    opacity: 0.8,
-  },
   progress: {
     height: 6,
     overflow: "hidden",
@@ -151,8 +148,6 @@ const styles = StyleSheet.create({
   toggle: {
     alignItems: "center",
     justifyContent: "center",
-    minHeight: 44,
-    minWidth: 44,
   },
 });
 
@@ -365,21 +360,17 @@ function StepHeader({
         </Text>
       </View>
       {hasDetails ? (
-        <Pressable
+        <InteractivePressable
           accessibilityLabel={joinAccessibilityText([toggleLabel, title], ", ")}
           accessibilityRole="button"
           accessibilityState={{ expanded: isOpen }}
           onPress={onToggle}
-          style={({ pressed }) => [
-            styles.toggle,
-            { borderRadius: theme.radius.sm },
-            pressed ? styles.pressed : undefined,
-          ]}
+          style={[styles.toggle, { borderRadius: theme.radius.sm }]}
         >
           <Text style={typeStyle(theme, "caption", "mutedForeground")}>
             {toggleLabel}
           </Text>
-        </Pressable>
+        </InteractivePressable>
       ) : null}
     </View>
   );

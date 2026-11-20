@@ -2,18 +2,13 @@
 
 import { createContext, type ReactNode, type Ref, use, useMemo } from "react";
 
-import {
-  Pressable,
-  StyleSheet,
-  Text,
-  View,
-  type ViewProps,
-} from "react-native";
+import { StyleSheet, Text, View, type ViewProps } from "react-native";
 
 import {
   decorativeProps,
   joinAccessibilityText,
 } from "../../../primitives/accessibility";
+import { InteractivePressable } from "../../../primitives/interactive-pressable";
 import { typeStyle } from "../../../primitives/type-style";
 import { useTheme } from "../../../theme/theme-provider";
 import { Badge } from "../../atoms/badge/badge";
@@ -86,7 +81,6 @@ const ProgressTrackerContext = createContext<
   ProgressTrackerContextValue | undefined
 >(undefined);
 const styles = StyleSheet.create({
-  modulePressable: { minHeight: 44 },
   row: { alignItems: "center", flexDirection: "row", flexWrap: "wrap" },
   stats: { flexDirection: "row", flexWrap: "wrap" },
 });
@@ -350,7 +344,7 @@ function ProgressTrackerModule({
   );
   if (!onPress || locked) return content;
   return (
-    <Pressable
+    <InteractivePressable
       accessibilityHint={joinAccessibilityText([
         description,
         badge,
@@ -371,16 +365,13 @@ function ProgressTrackerModule({
           ", ",
         ),
       }}
+      filled
       onPress={() => {
         onPress(module);
       }}
-      style={({ pressed }) => [
-        styles.modulePressable,
-        { opacity: pressed ? 0.8 : 1 },
-      ]}
     >
       {content}
-    </Pressable>
+    </InteractivePressable>
   );
 }
 ProgressTrackerModule.displayName = "ProgressTrackerModule";

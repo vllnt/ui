@@ -1,0 +1,70 @@
+import { Canvas, Controls, Meta, Primary } from '@storybook/addon-docs/blocks'
+import * as Stories from './tag-group.stories'
+
+<Meta of={Stories} />
+
+# TagGroup
+
+A labelled set of tags with optional selection (`single` or `multiple`) and per-tag removal.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.com/r/tag-group.json
+```
+
+## Import
+
+```tsx
+import { TagGroup, TagGroupItem } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<TagGroup label="Topics" selectionMode="multiple" defaultValue={['design']}>
+  <TagGroupItem value="design">Design</TagGroupItem>
+  <TagGroupItem value="engineering">Engineering</TagGroupItem>
+</TagGroup>
+```
+
+<Canvas of={Stories.Selectable} sourceState="shown" />
+
+## Removable tags
+
+Pass `onRemove` to a `TagGroupItem` to render a remove button. It is a real `<button>` with a 24 x 24 px hit area and a visible focus ring. Its accessible name is `Remove <value>`, using the item's `value` (for example `Remove open`).
+
+<Canvas of={Stories.Removable} sourceState="shown" />
+
+## Remove label
+
+`labels.remove` receives the item's `value` and returns the accessible name of its remove button. It applies to every item in the group.
+
+```tsx
+<TagGroup labels={{ remove: (tag) => `Supprimer ${tag}` }}>…</TagGroup>
+```
+
+<Canvas of={Stories.CustomRemoveLabel} sourceState="shown" />
+
+The default name changed from `Remove tag` to `Remove <value>`, so each button names the tag it removes.
+
+## Penpot mapping
+
+Family `molecule / Tag group` (4 mains).
+
+| Penpot axis | Value | Code |
+| ----------- | ----- | ---- |
+| `Wrap` | `wrap` | Built (`flex-wrap`, the only behaviour) |
+| `Wrap` | `scroll` | Not built |
+| `Size` | `default` | Built (the only size) |
+| `Size` | `sm` | Not built |
+
+| Top layer | Code |
+| --------- | ---- |
+| `Row 1`, `Row 2` | Not built as layers: wrapped lines of the same group |
+
+## API Reference
+
+<Controls />

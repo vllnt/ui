@@ -3,7 +3,6 @@
 import { type Ref, useMemo, useState } from "react";
 
 import {
-  Pressable,
   ScrollView,
   StyleSheet,
   Text as NativeText,
@@ -16,6 +15,7 @@ import {
   useAnnounceOnChange,
 } from "../../../primitives/accessibility";
 import { useGroupDisabled } from "../../../primitives/control-group";
+import { InteractivePressable } from "../../../primitives/interactive-pressable";
 import { ModalLayer } from "../../../primitives/modal-layer";
 import { typeStyle } from "../../../primitives/type-style";
 import type { ControllableStateOptions } from "../../../primitives/use-controllable-state";
@@ -53,14 +53,13 @@ export type ComboboxProps = Omit<ViewProps, "children"> & {
 };
 
 const styles = StyleSheet.create({
-  action: { alignItems: "center", justifyContent: "center", minHeight: 44 },
+  action: { alignItems: "center", justifyContent: "center" },
   heading: { marginBottom: 8 },
   modal: { flex: 1, justifyContent: "flex-end" },
   option: {
     alignItems: "center",
     flexDirection: "row",
     justifyContent: "space-between",
-    minHeight: 44,
   },
   panel: { borderTopWidth: 1, maxHeight: "80%" },
   search: { marginBottom: 8 },
@@ -69,7 +68,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     flexDirection: "row",
     justifyContent: "space-between",
-    minHeight: 44,
   },
 });
 
@@ -125,7 +123,7 @@ function Combobox({
 
   return (
     <View ref={ref} style={style} {...props}>
-      <Pressable
+      <InteractivePressable
         accessibilityLabel={labels.open}
         accessibilityRole="button"
         accessibilityState={{ disabled, expanded: open }}
@@ -142,7 +140,6 @@ function Combobox({
             backgroundColor: theme.colors.background,
             borderColor: theme.colors.input,
             borderRadius: theme.radius.md,
-            opacity: disabled ? 0.5 : 1,
             paddingHorizontal: theme.spacing[3],
           },
         ]}
@@ -163,7 +160,7 @@ function Combobox({
         >
           ⌄
         </NativeText>
-      </Pressable>
+      </InteractivePressable>
       <ModalLayer
         animationType={reducedMotion ? "none" : "fade"}
         contentProps={{ style: styles.modal }}
@@ -209,7 +206,7 @@ function Combobox({
             {visibleOptions.map((option) => {
               const selected = option.id === selectedId;
               return (
-                <Pressable
+                <InteractivePressable
                   accessibilityLabel={option.label}
                   accessibilityRole="radio"
                   accessibilityState={{
@@ -223,6 +220,7 @@ function Combobox({
                     setSelectedId(option.id);
                     setModalOpen(false);
                   }}
+                  selected={selected}
                   style={[
                     styles.option,
                     {
@@ -230,7 +228,6 @@ function Combobox({
                         ? theme.colors.accent
                         : theme.colors.background,
                       borderRadius: theme.radius.sm,
-                      opacity: disabled || option.disabled ? 0.5 : 1,
                       paddingHorizontal: theme.spacing[3],
                     },
                   ]}
@@ -245,7 +242,7 @@ function Combobox({
                       ✓
                     </NativeText>
                   ) : null}
-                </Pressable>
+                </InteractivePressable>
               );
             })}
             {noResults ? (
@@ -260,7 +257,7 @@ function Combobox({
               </NativeText>
             ) : null}
           </ScrollView>
-          <Pressable
+          <InteractivePressable
             accessibilityLabel={labels.close}
             accessibilityRole="button"
             onPress={() => {
@@ -271,7 +268,7 @@ function Combobox({
             <NativeText style={typeStyle(theme, "bodySmall", "foreground")}>
               {labels.close}
             </NativeText>
-          </Pressable>
+          </InteractivePressable>
         </View>
       </ModalLayer>
     </View>

@@ -3,7 +3,6 @@
 import { type Ref, useLayoutEffect, useMemo, useRef, useState } from "react";
 
 import {
-  Pressable,
   ScrollView,
   StyleSheet,
   Text as NativeText,
@@ -15,6 +14,7 @@ import {
   decorativeProps,
   useAnnounceOnChange,
 } from "../../../primitives/accessibility";
+import { InteractivePressable } from "../../../primitives/interactive-pressable";
 import type { ClipboardService } from "../../../primitives/platform-services";
 import { typeStyle } from "../../../primitives/type-style";
 import { useTheme } from "../../../theme/theme-provider";
@@ -54,8 +54,6 @@ const styles = StyleSheet.create({
   action: {
     alignItems: "center",
     justifyContent: "center",
-    minHeight: 44,
-    minWidth: 44,
   },
   header: {
     alignItems: "center",
@@ -113,7 +111,7 @@ function TerminalHeader({
         {title}
       </NativeText>
       {showCopy && copyLabel ? (
-        <Pressable
+        <InteractivePressable
           accessibilityLabel={copyLabel}
           accessibilityRole="button"
           accessibilityState={{
@@ -121,15 +119,13 @@ function TerminalHeader({
             disabled: !available || copying,
           }}
           disabled={!available || copying}
+          filled
           onPress={onCopy}
-          style={({ pressed }) => [
+          style={[
             styles.action,
             {
-              backgroundColor: pressed
-                ? theme.colors.accent
-                : theme.colors.muted,
+              backgroundColor: theme.colors.muted,
               borderRadius: theme.radius.md,
-              opacity: available ? 1 : 0.5,
               paddingHorizontal: theme.spacing[3],
             },
           ]}
@@ -140,7 +136,7 @@ function TerminalHeader({
           >
             {copyLabel}
           </NativeText>
-        </Pressable>
+        </InteractivePressable>
       ) : null}
     </View>
   );

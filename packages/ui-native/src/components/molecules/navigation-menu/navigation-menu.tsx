@@ -1,14 +1,9 @@
 "use client";
 
 import type { ReactNode, Ref } from "react";
-import {
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  View,
-  type ViewProps,
-} from "react-native";
+import { ScrollView, StyleSheet, View, type ViewProps } from "react-native";
 
+import { InteractivePressable } from "../../../primitives/interactive-pressable";
 import {
   defaultLinkingService,
   type LinkingService,
@@ -47,8 +42,6 @@ const styles = StyleSheet.create({
   trigger: {
     alignItems: "center",
     justifyContent: "center",
-    minHeight: 44,
-    minWidth: 44,
   },
 });
 
@@ -126,7 +119,7 @@ function NavigationMenu({
             item.panel !== undefined &&
             isSingleSelected(expandedId, item, (candidate) => candidate.id);
           return (
-            <Pressable
+            <InteractivePressable
               accessibilityHint={accessibilityLabel ?? label}
               accessibilityLabel={item.label}
               accessibilityRole={navigationRole(item)}
@@ -140,17 +133,13 @@ function NavigationMenu({
               onPress={() => {
                 activate(item);
               }}
-              style={({ pressed }) => [
+              selected={current}
+              style={[
                 styles.trigger,
                 {
                   backgroundColor:
-                    current || expanded
-                      ? theme.colors.accent
-                      : pressed
-                        ? theme.colors.muted
-                        : "transparent",
+                    current || expanded ? theme.colors.accent : "transparent",
                   borderRadius: theme.radius.md,
-                  opacity: item.disabled ? 0.5 : pressed ? 0.8 : 1,
                   paddingHorizontal: theme.spacing[4],
                 },
               ]}
@@ -162,7 +151,7 @@ function NavigationMenu({
               >
                 {item.label}
               </Text>
-            </Pressable>
+            </InteractivePressable>
           );
         })}
       </ScrollView>

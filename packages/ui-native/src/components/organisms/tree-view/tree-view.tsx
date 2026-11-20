@@ -3,15 +3,10 @@
 import { useCallback, useMemo } from "react";
 
 import type { ReactNode, Ref } from "react";
-import {
-  Pressable,
-  StyleSheet,
-  Text,
-  View,
-  type ViewProps,
-} from "react-native";
+import { StyleSheet, Text, View, type ViewProps } from "react-native";
 
 import { joinAccessibilityText } from "../../../primitives/accessibility";
+import { InteractivePressable } from "../../../primitives/interactive-pressable";
 import { toggleMultipleSelected } from "../../../primitives/selection";
 import { typeStyle } from "../../../primitives/type-style";
 import {
@@ -89,7 +84,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     flex: 1,
     flexDirection: "row",
-    minHeight: 44,
   },
 });
 
@@ -127,7 +121,7 @@ function TreeRow({
         ]}
       >
         {branch ? (
-          <Pressable
+          <InteractivePressable
             accessibilityLabel={
               expanded ? labels.collapseNode(node) : labels.expandNode(node)
             }
@@ -137,19 +131,16 @@ function TreeRow({
             onPress={() => {
               onExpand(node.id);
             }}
-            style={({ pressed }) => [
-              styles.disclosure,
-              { opacity: node.disabled ? 0.5 : pressed ? 0.8 : 1 },
-            ]}
+            style={styles.disclosure}
           >
             <Text style={{ color: theme.colors.foreground }}>
               {expanded ? "−" : "+"}
             </Text>
-          </Pressable>
+          </InteractivePressable>
         ) : (
           <View style={styles.disclosure} />
         )}
-        <Pressable
+        <InteractivePressable
           accessibilityHint={joinAccessibilityText([
             labels.level ? labels.level(depth + 1) : `Level ${depth + 1}`,
             labels.region,
@@ -161,11 +152,12 @@ function TreeRow({
           onPress={() => {
             onSelect(node);
           }}
-          style={({ pressed }) => [
+          selected={selected}
+          style={[
             styles.selection,
             {
+              borderRadius: theme.radius.md,
               gap: theme.spacing[2],
-              opacity: node.disabled ? 0.5 : pressed ? 0.8 : 1,
               paddingRight: theme.spacing[3],
             },
           ]}
@@ -183,7 +175,7 @@ function TreeRow({
           >
             {node.label}
           </Text>
-        </Pressable>
+        </InteractivePressable>
       </View>
       {branch && expanded ? (
         <TreeRows

@@ -151,7 +151,7 @@ function TimerProgress({
         <span>{startedAt ? "SLA elapsed" : "Time remaining"}</span>
         <span>{statusText}</span>
       </div>
-      <div className="h-2 overflow-hidden rounded-full bg-muted">
+      <div className="h-2 overflow-hidden rounded-full bg-secondary">
         <div
           className={cn("h-full transition-all", toneClassName)}
           style={{ width: `${progressWidth}%` }}

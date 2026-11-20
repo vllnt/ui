@@ -2,7 +2,6 @@
 
 import type { Ref } from "react";
 import {
-  Pressable,
   StyleSheet,
   Text as NativeText,
   View,
@@ -10,6 +9,7 @@ import {
 } from "react-native";
 
 import { useGroupDisabled } from "../../../primitives/control-group";
+import { InteractivePressable } from "../../../primitives/interactive-pressable";
 import { typeStyle } from "../../../primitives/type-style";
 import type { ControllableStateOptions } from "../../../primitives/use-controllable-state";
 import { useControllableState } from "../../../primitives/use-controllable-state";
@@ -31,7 +31,7 @@ export type ColorPickerProps = Omit<ViewProps, "children"> & {
 };
 
 const styles = StyleSheet.create({
-  item: { alignItems: "center", flexDirection: "row", minHeight: 44 },
+  item: { alignItems: "center", flexDirection: "row" },
   root: { flexDirection: "row", flexWrap: "wrap" },
   swatch: { borderWidth: 1, height: 28, width: 28 },
 });
@@ -63,7 +63,7 @@ function ColorPicker({
       {colors.map((choice) => {
         const selected = choice.id === selectedId;
         return (
-          <Pressable
+          <InteractivePressable
             accessibilityHint={label}
             accessibilityLabel={choice.label}
             accessibilityRole="radio"
@@ -73,10 +73,7 @@ function ColorPicker({
             onPress={() => {
               setSelectedId(choice.id);
             }}
-            style={[
-              styles.item,
-              { gap: theme.spacing[2], opacity: disabled ? 0.5 : 1 },
-            ]}
+            style={[styles.item, { gap: theme.spacing[2] }]}
           >
             <View
               style={[
@@ -101,7 +98,7 @@ function ColorPicker({
             >
               {choice.label}
             </NativeText>
-          </Pressable>
+          </InteractivePressable>
         );
       })}
     </View>

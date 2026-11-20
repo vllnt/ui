@@ -2,6 +2,7 @@
 
 import type { ComponentPropsWithoutRef, ReactNode } from "react";
 
+import { statusDotVariants, type StatusTone } from "../../../lib/status-dot";
 import { cn } from "../../../lib/utils";
 
 /**
@@ -17,12 +18,10 @@ const ROLE_LABEL: Record<RoutingRole, string> = {
   shadow: "Shadow",
 };
 
-const ROLE_TONE: Record<RoutingRole, string> = {
-  fallback:
-    "border-amber-500/40 bg-amber-500/10 text-amber-700 dark:text-amber-300",
-  primary:
-    "border-emerald-500/40 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300",
-  shadow: "border-border bg-muted/40 text-muted-foreground",
+const ROLE_TONE: Record<RoutingRole, StatusTone> = {
+  fallback: "warning",
+  primary: "success",
+  shadow: "neutral",
 };
 
 /**
@@ -97,18 +96,21 @@ const RowBody = (props: {
           {assignment.agent}
         </span>
         <span
-          className={cn(
-            "rounded-full border px-1.5 py-0.5 text-[10px] uppercase tracking-wide",
-            ROLE_TONE[assignment.role],
-          )}
+          className="inline-flex items-center gap-1.5 rounded-full border border-border bg-secondary px-1.5 py-0.5 text-[10px] uppercase tracking-wide text-foreground"
+          data-routing-role-chip
         >
+          <span
+            aria-hidden="true"
+            className={statusDotVariants({ tone: ROLE_TONE[assignment.role] })}
+            data-routing-role-dot
+          />
           {ROLE_LABEL[assignment.role]}
         </span>
       </span>
       {load === null ? null : (
         <span
           aria-hidden="true"
-          className="h-1 w-full overflow-hidden rounded-full bg-muted/40"
+          className="h-1 w-full overflow-hidden rounded-full bg-secondary/40"
         >
           <span
             className="block h-full rounded-full bg-foreground/50"
@@ -128,7 +130,7 @@ const Row = (props: { assignment: RoutingAssignment }): React.ReactElement => {
     };
     return (
       <button
-        className="flex w-full items-center gap-2 rounded-md border border-transparent px-2 py-1.5 text-left transition-colors hover:border-border hover:bg-muted/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        className="flex w-full items-center gap-2 rounded-md border border-transparent px-2 py-1.5 text-left transition-colors hover:border-border hover:bg-secondary/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         data-routing-assignment={assignment.id}
         data-routing-role={assignment.role}
         onClick={handleActivateAssignment}

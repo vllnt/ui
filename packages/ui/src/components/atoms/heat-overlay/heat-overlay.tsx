@@ -7,15 +7,23 @@ import { cn } from "../../../lib/utils";
 /**
  * Tone of the heat gradient — drives the inner circle color.
  *
+ * Prefer `"warning"`. The older `"warn"` still renders the same tone.
+ *
  * @public
  */
-export type HeatOverlayTone = "cool" | "danger" | "neutral" | "warn";
+export type HeatOverlayTone =
+  | "cool"
+  | "danger"
+  | "neutral"
+  | "warn"
+  | "warning";
 
 const TONE_FILL: Record<HeatOverlayTone, string> = {
   cool: "fill-blue-500",
   danger: "fill-red-500",
   neutral: "fill-foreground",
   warn: "fill-amber-500",
+  warning: "fill-amber-500",
 };
 
 /**
@@ -56,7 +64,7 @@ const DEFAULT_LABELS = {
  * @public
  */
 export type HeatOverlayProps = {
-  /** Optional global tone applied to every point that omits its own. Defaults to `"warn"`. */
+  /** Optional global tone applied to every point that omits its own. Defaults to `"warning"`. */
   defaultTone?: HeatOverlayTone;
   /** Sample radius in pixels at full weight. Defaults to `48`. */
   intensity?: number;
@@ -130,7 +138,7 @@ export const HeatOverlay = ({
 }: HeatOverlayProps & { ref?: React.Ref<SVGSVGElement> }) => {
   const {
     className,
-    defaultTone = "warn",
+    defaultTone = "warning",
     intensity = 48,
     labels,
     points,

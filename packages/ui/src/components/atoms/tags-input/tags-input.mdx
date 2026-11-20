@@ -41,6 +41,28 @@ Pass `value` and `onValueChange` when tags should be driven from parent state.
 
 <Canvas of={Stories.Controlled} sourceState="shown" />
 
+## Remove buttons
+
+Each tag has a real `<button>` named `Remove <tag>` (for example `Remove React`) with a 24 x 24 px hit area and a visible focus ring.
+
+## Penpot mapping
+
+Family `molecule / Tags input` (21 mains).
+
+| Penpot axis | Value | Code |
+| ----------- | ----- | ---- |
+| `State` | `rest`, `filled` | Default render, with or without tags |
+| `State` | `focus` | `focus-within` ring on the field |
+| `State` | `disabled` | `disabled` |
+| `State` | `hover`, `pressed` | Not built on the field (only the remove button has a hover style) |
+| `State` | `error` | Not built (`aria-invalid` is a follow-up) |
+| `Size` | `default`, `lg`, `sm` | Not built (single size, `min-h-10`) |
+
+| Top layer | Code |
+| --------- | ---- |
+| `Field` | `TagsInput` root |
+| `Hint` | Not built |
+
 ## API Reference
 
 <Controls />

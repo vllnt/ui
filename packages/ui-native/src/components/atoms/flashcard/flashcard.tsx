@@ -1,19 +1,14 @@
 "use client";
 
 import type { ReactNode, Ref } from "react";
-import {
-  Pressable,
-  StyleSheet,
-  Text,
-  View,
-  type ViewProps,
-} from "react-native";
+import { StyleSheet, Text, View, type ViewProps } from "react-native";
 
 import {
   joinAccessibilityText,
   plainText,
   useAnnounceOnChange,
 } from "../../../primitives/accessibility";
+import { InteractivePressable } from "../../../primitives/interactive-pressable";
 import { typeStyle } from "../../../primitives/type-style";
 import {
   controllableOptions,
@@ -54,8 +49,6 @@ const styles = StyleSheet.create({
   action: {
     alignItems: "center",
     justifyContent: "center",
-    minHeight: 44,
-    minWidth: 44,
   },
   footer: {
     alignItems: "center",
@@ -175,16 +168,16 @@ function Flashcard({
         >
           {isFlipped ? labels.answerInstruction : labels.promptInstruction}
         </Text>
-        <Pressable
+        <InteractivePressable
           accessibilityLabel={`${labels.flip}: ${actionLabel}`}
           accessibilityRole="button"
+          filled
           onPress={toggle}
-          style={({ pressed }) => [
+          style={[
             styles.action,
             {
               backgroundColor: theme.colors.primary,
               borderRadius: theme.radius.md,
-              opacity: pressed ? 0.8 : 1,
               paddingHorizontal: theme.spacing[4],
             },
           ]}
@@ -192,7 +185,7 @@ function Flashcard({
           <Text style={typeStyle(theme, "bodySmall", "primaryForeground")}>
             {actionLabel}
           </Text>
-        </Pressable>
+        </InteractivePressable>
       </View>
     </View>
   );

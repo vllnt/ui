@@ -2,7 +2,6 @@
 
 import type { Ref } from "react";
 import {
-  Pressable,
   StyleSheet,
   Text as NativeText,
   View,
@@ -10,6 +9,8 @@ import {
 } from "react-native";
 
 import { useGroupDisabled } from "../../../primitives/control-group";
+import { interactionTokens } from "../../../primitives/interaction-state";
+import { InteractivePressable } from "../../../primitives/interactive-pressable";
 import { toggleMultipleSelected } from "../../../primitives/selection";
 import { typeStyle } from "../../../primitives/type-style";
 import type { ControllableStateOptions } from "../../../primitives/use-controllable-state";
@@ -92,12 +93,14 @@ function TagGroup({
                   ? theme.colors.primary
                   : theme.colors.border,
                 borderRadius: theme.radius.full,
-                opacity: itemDisabled ? 0.5 : 1,
+                opacity: itemDisabled
+                  ? interactionTokens(theme).disabledOpacity
+                  : 1,
               },
             ]}
           >
             {selection ? (
-              <Pressable
+              <InteractivePressable
                 accessibilityHint={label}
                 accessibilityLabel={item.label}
                 accessibilityRole="togglebutton"
@@ -111,7 +114,14 @@ function TagGroup({
                     toggleMultipleSelected(selectedIds, item, getId),
                   );
                 }}
-                style={[styles.action, { paddingLeft: theme.spacing[3] }]}
+                selected={selected}
+                style={[
+                  styles.action,
+                  {
+                    borderRadius: theme.radius.full,
+                    paddingLeft: theme.spacing[3],
+                  },
+                ]}
               >
                 <NativeText
                   style={typeStyle(
@@ -122,7 +132,7 @@ function TagGroup({
                 >
                   {item.label}
                 </NativeText>
-              </Pressable>
+              </InteractivePressable>
             ) : (
               <View style={[styles.action, { paddingLeft: theme.spacing[3] }]}>
                 <NativeText
@@ -134,7 +144,7 @@ function TagGroup({
               </View>
             )}
             {onRemove && removeLabel ? (
-              <Pressable
+              <InteractivePressable
                 accessibilityLabel={removeLabel(item.label)}
                 accessibilityRole="button"
                 accessibilityState={{ disabled: itemDisabled }}
@@ -153,7 +163,7 @@ function TagGroup({
                 >
                   ×
                 </NativeText>
-              </Pressable>
+              </InteractivePressable>
             ) : null}
           </View>
         );

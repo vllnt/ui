@@ -2,7 +2,6 @@
 
 import type { ReactNode, Ref } from "react";
 import {
-  Pressable,
   type PressableProps,
   StyleSheet,
   View,
@@ -14,6 +13,7 @@ import {
   useControlGroup,
   useNestedControlGroup,
 } from "../../../primitives/control-group";
+import { InteractivePressable } from "../../../primitives/interactive-pressable";
 import { useTheme } from "../../../theme/theme-provider";
 import { Text } from "../../atoms/text/text";
 
@@ -42,8 +42,6 @@ const styles = StyleSheet.create({
   action: {
     alignItems: "center",
     justifyContent: "center",
-    minHeight: 44,
-    minWidth: 44,
   },
   horizontal: { alignItems: "center", flexDirection: "row" },
   horizontalSeparator: { height: 24, width: 1 },
@@ -105,7 +103,7 @@ function ToolbarButton({
   const group = useControlGroup();
   const disabled = ownDisabled === true || group.disabled === true;
   return (
-    <Pressable
+    <InteractivePressable
       {...props}
       accessibilityHint={accessibilityHint ?? group.label}
       accessibilityRole="button"
@@ -118,9 +116,7 @@ function ToolbarButton({
       style={(state) => [
         styles.action,
         {
-          backgroundColor: state.pressed ? theme.colors.accent : "transparent",
           borderRadius: theme.radius.md,
-          opacity: disabled ? 0.5 : 1,
           paddingHorizontal: theme.spacing[2],
         },
         typeof style === "function" ? style(state) : style,
@@ -131,7 +127,7 @@ function ToolbarButton({
       ) : (
         children
       )}
-    </Pressable>
+    </InteractivePressable>
   );
 }
 ToolbarButton.displayName = "ToolbarButton";

@@ -2,15 +2,10 @@
 
 import { type Ref, useId } from "react";
 
-import {
-  Pressable,
-  StyleSheet,
-  Text,
-  View,
-  type ViewProps,
-} from "react-native";
+import { StyleSheet, Text, View, type ViewProps } from "react-native";
 
 import { useAnnounceOnChange } from "../../../primitives/accessibility";
+import { InteractivePressable } from "../../../primitives/interactive-pressable";
 import { typeStyle } from "../../../primitives/type-style";
 import { useControllableState } from "../../../primitives/use-controllable-state";
 import { useTheme } from "../../../theme/theme-provider";
@@ -48,7 +43,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     width: 20,
   },
-  item: { alignItems: "flex-start", flexDirection: "row", minHeight: 44 },
+  item: { alignItems: "flex-start", flexDirection: "row" },
   progressFill: { height: "100%" },
   progressTrack: { height: 8, overflow: "hidden" },
   root: { borderWidth: 1 },
@@ -172,7 +167,7 @@ function Checklist({
         {items.map((item) => {
           const checked = selected.has(item.id);
           return (
-            <Pressable
+            <InteractivePressable
               accessibilityLabel={labels.item(item, checked)}
               accessibilityRole="checkbox"
               accessibilityState={{ checked }}
@@ -190,12 +185,10 @@ function Checklist({
                 )
                   onComplete?.();
               }}
-              style={({ pressed }) => [
+              style={[
                 styles.item,
                 {
-                  backgroundColor: pressed
-                    ? theme.colors.muted
-                    : theme.colors.card,
+                  backgroundColor: theme.colors.card,
                   borderRadius: theme.radius.md,
                   gap: theme.spacing[3],
                   opacity: checked ? 0.7 : 1,
@@ -244,7 +237,7 @@ function Checklist({
                   </Text>
                 ) : null}
               </View>
-            </Pressable>
+            </InteractivePressable>
           );
         })}
       </View>

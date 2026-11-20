@@ -1,8 +1,32 @@
 # @vllnt/ui
 
-React component library — 313 components built on Radix UI primitives, Tailwind CSS, and CVA.
+React components built on Radix UI primitives, Tailwind CSS, and CVA. For humans and AI agents.
 
 See [CHANGELOG.md](./CHANGELOG.md) for release history.
+
+## For AI agents
+
+An agent can read this library as text and JSON, without scraping pages. The site is <https://ui.vllnt.com>.
+
+| URL | Returns |
+| --- | --- |
+| `https://ui.vllnt.com/llms.txt` | A short plain-text overview: install steps, docs links, and components grouped by category. |
+| `https://ui.vllnt.com/llms-full.txt` | One long text file: guides, the design guide, latest release notes, templates, and a summary of every component. |
+| `https://ui.vllnt.com/r/registry.json` | JSON index of every component in the shadcn registry. |
+| `https://ui.vllnt.com/r/<name>` | One component as a shadcn registry item, with its source files inline. |
+| `https://ui.vllnt.com/r/themes?t=<token>` | A shadcn theme item decoded from a theme token made in the theme editor. |
+| `https://ui.vllnt.com/r/design.json` | The design tokens as JSON. |
+| `https://ui.vllnt.com/design.txt` | The design guide as plain text. `https://ui.vllnt.com/DESIGN.md` is the same guide as Markdown. |
+| `https://ui.vllnt.com/mcp` | An MCP server. It speaks JSON-RPC 2.0 over HTTP POST and has four read-only tools: `search_components`, `get_component`, `list_categories`, `list_platforms`. A GET returns server info. |
+| `https://ui.vllnt.com/.well-known/api-catalog` | A catalog of these APIs (RFC 9727 linkset). |
+
+The home page, the design and philosophy pages, and most docs and component pages also answer in Markdown. Send `Accept: text/markdown` to the same URL. A wildcard `Accept` does not select Markdown; the header must name `text/markdown`.
+
+```bash
+curl -H "Accept: text/markdown" https://ui.vllnt.com/components/button
+```
+
+More: <https://ui.vllnt.com/docs/agents>.
 
 ## Install
 
@@ -142,6 +166,7 @@ export function Example() {
 | `@vllnt/ui/styles.css` | Full styles (Tailwind base + theme variables + utilities) |
 | `@vllnt/ui/themes/default.css` | Theme CSS variables only (no Tailwind base) |
 | `@vllnt/ui/themes/presets.css` | Built-in color presets (applied via `data-theme`) |
+| `@vllnt/ui/themes/products.css` | Product themes `maia` and `paas` (generated; applied via `data-theme`) |
 
 ## Theming
 
@@ -164,7 +189,7 @@ All colors are **OKLCH channel** CSS variables (`L C H`), consumed as
   --destructive: 0.55 0.2078 25.326;
   --destructive-foreground: 0.9848 0 0;
   --border: 0.9219 0 0;
-  --input: 0.66 0 0;
+  --input: 0.6167 0 0;
   --ring: 0.1445 0 0;
   --radius: 0.5rem;
   --card: 1 0 0;
@@ -190,6 +215,35 @@ Import `@vllnt/ui/themes/presets.css` and switch between built-in color presets
 at runtime with `<ThemeSwitcher />` (or `setThemePreset` / `useThemePreset`),
 which set `data-theme` on the document root. Render `<ThemePresetProvider />`
 once near the root to restore the saved preset before paint.
+
+### Product themes
+
+`@vllnt/ui/themes/products.css` adds two full product themes, generated from
+`packages/design/tokens.json`. Import it after `styles.css`, set
+`data-theme="maia"` or `data-theme="paas"` on `<html>`, and keep using the
+`dark` class for dark mode:
+
+```html
+<html data-theme="maia" class="dark">
+```
+
+- `maia` (Ink): no accent; `--primary` is the ink colour (pure black `#000000`
+  in light on purpose, while core keeps `#171717`; white in dark). Core Inter
+  plus JetBrains Mono, weights 400 to 600, tighter type
+  scale and radius. Its Label step is capitals in the design: add `uppercase`
+  where you use it.
+- `paas`: core neutrals and status tones in JetBrains Mono. Dark is the design
+  default; light works too.
+
+The package does not ship fonts. Core puts Inter (sans) and JetBrains Mono
+(mono) first, then the system stacks. Load Inter and JetBrains Mono (core, Maia
+and PaaS) in your app, for example with `next/font` or a font `<link>`; without
+them each stack falls back to the system font stack (`system-ui` for core sans
+and Maia, `ui-monospace` for core mono and PaaS).
+
+Both define `success`, `warning`, `info`, `diff-added` and `diff-removed` roles
+(the core theme defines them as well). Web `--radius` carries the theme's
+`md` step only; the other radius steps ship in the `@vllnt/ui-core` outputs.
 
 To design and export your own theme, use the visual editor at
 [`/themes`](https://ui.vllnt.com/themes) — it exports a CSS block, a

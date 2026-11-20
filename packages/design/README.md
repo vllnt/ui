@@ -16,6 +16,30 @@ pnpm -F @vllnt/design-source tokens:check
 The generator preserves the existing `@vllnt/ui` CSS entry points and converts
 OKLCH colors to sRGB for React Native, where OKLCH is not reliably supported.
 
+## Generated outputs
+
+`tokens.json` is the only input. `tokens:check` fails when any output is stale.
+
+| Output | Path |
+|--------|------|
+| Default theme CSS and styles block | `packages/ui/themes/default.css`, `packages/ui/styles.css` |
+| Product theme CSS (`html[data-theme="maia"]`, `.dark`, same for `paas`) | `packages/ui/themes/products.css` |
+| Native theme, product themes, Tamagui-shaped objects | `packages/ui-core/src/generated/design-tokens.ts` |
+| Penpot token sets (multi-set DTCG) | `packages/design/generated/penpot-tokens.json` |
+
+The Tamagui objects (`tamaguiTokens`, `tamaguiThemes`) are plain data in the
+shape `createTokens` and `createTamagui({ themes })` take; no Tamagui package is
+a dependency. The Penpot file has sets `vllnt/core` and `vllnt/<theme>/<mode>`,
+a Dark and Light theme per product, and `$metadata.tokenSetOrder`.
+
+## Sources
+
+`sources/` holds read-only copies of design exports, with their provenance in
+`sources/README.md`. The generator never reads them. `scripts/product-themes.test.mjs`
+compares the Maia theme and the generated Penpot sets against the Maia copy.
+
+Run the tests with `pnpm -F @vllnt/design-source test:once`.
+
 ## Schema
 
 The token file follows `tokens.schema.json`:
@@ -26,8 +50,30 @@ The token file follows `tokens.schema.json`:
 - `color.semantic`: CSS variable names, light/dark OKLCH channels, and intended roles.
 - `typography.scale`: font size plus explicit font-size and line-height CSS variables.
 - `spacing.scale`: 4-point spacing tokens mapped to rem values.
-- `radius`: allowed radius tokens.
-- `elevation`: allowed shadow tokens.
+- `color.badge-label` and `brand.status`: Penpot alias names. Each leaf is
+  `{ value, role }` with `value` a `{color.<role>}` reference. They reach the
+  Penpot sets and `designTokens` only; the web uses the role itself.
+- `radius`: allowed radius tokens. `control` (6) and `surface` (8) are role
+  names; themes cannot override them.
+- `size`: `{ value, role }` leaves with a px or rem length (`control-xs`,
+  `target.min`). A leaf with `coarse: "{size.<name>}"` takes that token's value
+  under `@media (pointer: coarse)`; the generator writes the rule.
+- `opacity`: `{ value, role }` leaves from 0 to 1 (`grain`, `contact`).
+- `themes`: named product themes (`maia`, `paas`). Each has a `label`, a
+  `description`, an optional `defaultMode`, and optional overrides of existing
+  core roles: `color.light` / `color.dark` (OKLCH channels), `typography`
+  (`fontFamily`, `fontWeight`, `scale`), `radius` and `opacity`. Every key must
+  already exist in the core, so a theme cannot add roles.
+- `elevation`: allowed shadow tokens (Tailwind classes; not exported to Penpot).
+- `shadow`: `{ role, light, dark }` library shadows (`raised`, `overlay`,
+  `floating`). Each mode is a list of layers `{ offsetX, offsetY, blur, spread,
+  color, inset }`; the generator writes `--shadow-<name>` in both modes and the
+  Penpot `shadow` tokens (light in `vllnt/core`, dark in each `<theme>/dark` set).
+- `spacing.page-gutter`, `spacing.page-gutter-tablet`, `spacing.page-gutter-desktop`:
+  `{ value: "{spacing.N}", role }` aliases of the scale, the page padding of the
+  shared site shell (20 below 768 px, 48 from 768 px, 96 from 1200 px).
+- `size.page-max`: the maximum width of the page column (1440 px).
+- `size.measure-narrow`: the narrow text column width (480 px).
 - `motion`: allowed durations, easing, and reduced-motion behavior.
 - `iconography`: icon library, sizes, stroke, and color policy.
 

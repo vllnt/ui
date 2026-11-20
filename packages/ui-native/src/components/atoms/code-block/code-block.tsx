@@ -3,7 +3,6 @@
 import { type ReactNode, type Ref, useEffect, useRef, useState } from "react";
 
 import {
-  Pressable,
   ScrollView,
   StyleSheet,
   Text as NativeText,
@@ -12,6 +11,7 @@ import {
 } from "react-native";
 
 import { useAnnounceOnChange } from "../../../primitives/accessibility";
+import { InteractivePressable } from "../../../primitives/interactive-pressable";
 import type { ClipboardService } from "../../../primitives/platform-services";
 import { typeStyle } from "../../../primitives/type-style";
 import { useTheme } from "../../../theme/theme-provider";
@@ -46,8 +46,6 @@ const styles = StyleSheet.create({
   action: {
     alignItems: "center",
     justifyContent: "center",
-    minHeight: 44,
-    minWidth: 44,
   },
   header: {
     alignItems: "center",
@@ -97,20 +95,18 @@ function CodeBlockHeader({
         <View />
       )}
       {label ? (
-        <Pressable
+        <InteractivePressable
           accessibilityLabel={label}
           accessibilityRole="button"
           accessibilityState={{ disabled: !available }}
           disabled={!available}
+          filled
           onPress={onCopy}
-          style={({ pressed }) => [
+          style={[
             styles.action,
             {
-              backgroundColor: pressed
-                ? theme.colors.accent
-                : theme.colors.muted,
+              backgroundColor: theme.colors.muted,
               borderRadius: theme.radius.md,
-              opacity: available ? 1 : 0.5,
               paddingHorizontal: theme.spacing[3],
             },
           ]}
@@ -121,7 +117,7 @@ function CodeBlockHeader({
           >
             {label}
           </NativeText>
-        </Pressable>
+        </InteractivePressable>
       ) : null}
     </View>
   );

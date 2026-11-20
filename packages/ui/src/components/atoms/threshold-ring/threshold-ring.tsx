@@ -7,15 +7,23 @@ import { cn } from "../../../lib/utils";
 /**
  * Tone of the active arc — drives its stroke color.
  *
+ * Prefer `"warning"`. The older `"warn"` still renders the same tone.
+ *
  * @public
  */
-export type ThresholdRingTone = "danger" | "neutral" | "success" | "warn";
+export type ThresholdRingTone =
+  | "danger"
+  | "neutral"
+  | "success"
+  | "warn"
+  | "warning";
 
 const TONE_STROKE: Record<ThresholdRingTone, string> = {
   danger: "stroke-red-500",
   neutral: "stroke-foreground",
   success: "stroke-emerald-500",
   warn: "stroke-amber-500",
+  warning: "stroke-amber-500",
 };
 
 /**
@@ -161,7 +169,7 @@ const Tick = (props: { geom: Geometry }): null | React.ReactElement => {
  *
  * @example
  * ```tsx
- * <ThresholdRing value={0.82} threshold={0.7} tone="warn" centerLabel="82%" />
+ * <ThresholdRing value={0.82} threshold={0.7} tone="warning" centerLabel="82%" />
  * ```
  *
  * @public
@@ -199,7 +207,7 @@ export const ThresholdRing = ({
       {...rest}
     >
       <circle
-        className="stroke-muted"
+        className="stroke-secondary"
         cx={geom.cx}
         cy={geom.cy}
         fill="none"

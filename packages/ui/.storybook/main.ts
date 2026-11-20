@@ -4,6 +4,8 @@ import { fileURLToPath } from 'node:url'
 import { defineMain } from '@storybook/react-vite/node'
 import remarkGfm from 'remark-gfm'
 
+import { cfBeaconTag } from './cf-beacon'
+
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
 export default defineMain({
@@ -29,6 +31,10 @@ export default defineMain({
     '@chromatic-com/storybook',
     '@github-ui/storybook-addon-performance-panel',
   ],
+
+  // The token is read at build time; a build without it ships no beacon.
+  managerHead: (head) =>
+    `${head ?? ''}${cfBeaconTag(process.env.NEXT_PUBLIC_CF_BEACON_TOKEN)}`,
 
   viteFinal(config) {
     return {

@@ -2,18 +2,13 @@
 
 import { type ReactNode, type Ref, useCallback, useId, useState } from "react";
 
-import {
-  Pressable,
-  StyleSheet,
-  Text,
-  View,
-  type ViewProps,
-} from "react-native";
+import { StyleSheet, Text, View, type ViewProps } from "react-native";
 
 import {
   joinAccessibilityText,
   useAnnounceOnChange,
 } from "../../../primitives/accessibility";
+import { InteractivePressable } from "../../../primitives/interactive-pressable";
 import { typeStyle } from "../../../primitives/type-style";
 import { useTheme } from "../../../theme/theme-provider";
 
@@ -46,13 +41,11 @@ export type ReasoningProps = Omit<ViewProps, "children"> & {
 
 const styles = StyleSheet.create({
   content: { borderTopWidth: 1 },
-  pressed: { opacity: 0.8 },
   root: { borderWidth: 1, overflow: "hidden" },
   step: { flexDirection: "row" },
   trigger: {
     alignItems: "center",
     flexDirection: "row",
-    minHeight: 44,
   },
   triggerLabel: { flex: 1 },
 });
@@ -76,7 +69,7 @@ function ReasoningTrigger({
   const status = isStreaming ? labels.reasoning : labels.reasoned;
   useAnnounceOnChange(status);
   return (
-    <Pressable
+    <InteractivePressable
       accessibilityLabel={isOpen ? labels.collapse : labels.expand}
       accessibilityRole="button"
       accessibilityState={{
@@ -97,10 +90,9 @@ function ReasoningTrigger({
       }}
       disabled={isStreaming}
       onPress={onPress}
-      style={({ pressed }) => [
+      style={[
         styles.trigger,
         { gap: theme.spacing[2], paddingHorizontal: theme.spacing[3] },
-        pressed ? styles.pressed : undefined,
       ]}
     >
       <Text
@@ -121,7 +113,7 @@ function ReasoningTrigger({
       ) : (
         duration
       )}
-    </Pressable>
+    </InteractivePressable>
   );
 }
 ReasoningTrigger.displayName = "ReasoningTrigger";

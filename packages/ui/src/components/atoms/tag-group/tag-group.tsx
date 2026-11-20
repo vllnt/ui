@@ -9,8 +9,19 @@ import { cn } from "../../../lib/utils";
 /** Selection behaviour for a TagGroup. */
 export type TagSelectionMode = "multiple" | "none" | "single";
 
+/** Localizable strings for a TagGroup. */
+export type TagGroupLabels = {
+  /** Accessible name of a tag's remove button. Defaults to `` (tag) => `Remove ${tag}` ``. */
+  remove?: (tag: string) => string;
+};
+
+function defaultRemoveLabel(tag: string): string {
+  return `Remove ${tag}`;
+}
+
 type TagGroupContextValue = {
   disabled: boolean;
+  removeLabel: (tag: string) => string;
   select: (value: string) => void;
   selectedValues: string[];
   selectionMode: TagSelectionMode;
@@ -79,6 +90,8 @@ export type TagGroupProps = {
   defaultValue?: string[];
   disabled?: boolean;
   label?: string;
+  /** Localizable strings. */
+  labels?: TagGroupLabels;
   onValueChange?: (value: string[]) => void;
   selectionMode?: TagSelectionMode;
   value?: string[];
@@ -90,6 +103,7 @@ const TagGroup = ({
   defaultValue = [],
   disabled = false,
   label,
+  labels,
   onValueChange,
   ref,
   selectionMode = "none",
@@ -101,9 +115,10 @@ const TagGroup = ({
     selectionMode,
     value,
   });
+  const removeLabel = labels?.remove ?? defaultRemoveLabel;
   const context = React.useMemo<TagGroupContextValue>(
-    () => ({ disabled, select, selectedValues, selectionMode }),
-    [disabled, select, selectedValues, selectionMode],
+    () => ({ disabled, removeLabel, select, selectedValues, selectionMode }),
+    [disabled, removeLabel, select, selectedValues, selectionMode],
   );
 
   return (
@@ -136,7 +151,7 @@ const TagGroupItem = ({
   ref,
   value,
 }: TagGroupItemProps & { ref?: React.Ref<HTMLSpanElement> }) => {
-  const { disabled, select, selectedValues, selectionMode } =
+  const { disabled, removeLabel, select, selectedValues, selectionMode } =
     useTagGroupContext();
   const selectable = selectionMode !== "none";
   const selected = selectedValues.includes(value);
@@ -171,8 +186,8 @@ const TagGroupItem = ({
       )}
       {onRemove ? (
         <button
-          aria-label="Remove tag"
-          className="rounded-sm opacity-70 outline-none transition-opacity hover:opacity-100 focus-visible:ring-2 focus-visible:ring-ring"
+          aria-label={removeLabel(value)}
+          className="-m-1 inline-flex size-6 shrink-0 items-center justify-center rounded-sm opacity-70 outline-none transition-opacity hover:opacity-100 focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring"
           disabled={disabled}
           onClick={onRemove}
           type="button"

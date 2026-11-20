@@ -73,7 +73,7 @@ function ChecklistItemRow({
     <li>
       <button
         className={cn(
-          "w-full flex items-start gap-3 p-2 rounded-md text-left transition-colors hover:bg-muted/50",
+          "w-full flex items-start gap-3 p-2 rounded-md text-left transition-colors hover:bg-secondary/50",
           isChecked && "opacity-60",
         )}
         onClick={onToggle}
@@ -245,7 +245,7 @@ export function Checklist({
         title={title}
         total={items.length}
       />
-      <div className="h-1 bg-muted rounded-full mb-4 overflow-hidden">
+      <div className="h-1 bg-secondary rounded-full mb-4 overflow-hidden">
         <div
           className={cn(
             "h-full transition-all duration-300",

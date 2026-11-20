@@ -27,6 +27,7 @@ const badgeVariants = {
   destructive: true,
   outline: true,
   secondary: true,
+  soft: true,
 } satisfies Record<BadgeVariant, true> &
   Record<NonNullable<BadgeProps["variant"]>, true>;
 

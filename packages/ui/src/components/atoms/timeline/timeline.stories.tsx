@@ -90,6 +90,25 @@ export const WithRichContent: Story = {
   ),
 };
 
+export const StatusLabels: Story = {
+  render: (args) => (
+    <Timeline
+      {...args}
+      labels={{ active: "En cours", completed: "Terminé", upcoming: "À venir" }}
+    >
+      <TimelineItem date="Jan" status="completed" title="Plan" />
+      <TimelineItem date="Mar" status="active" title="Build" />
+      <TimelineItem
+        date="Jul"
+        isLast
+        labels={{ upcoming: "Prévu" }}
+        status="upcoming"
+        title="Ship"
+      />
+    </Timeline>
+  ),
+};
+
 export const ColorOverrides: Story = {
   render: (args) => (
     <Timeline {...args}>

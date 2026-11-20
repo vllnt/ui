@@ -1,10 +1,13 @@
 import { react } from '@vllnt/eslint-config'
 
+import a12Allowlist from './eslint-rules/a12-allowlist.js'
+import a12StatusTextColour from './eslint-rules/a12-status-text-colour.js'
+
 export default [
   {
     // Build-tool configs outside the typed component surface are not linted
     // (postcss.config.mjs, tailwind.config.ts, tsup/playwright configs).
-    ignores: ['node_modules/**', 'dist/**', 'storybook-static/**', '.storybook/**', 'eslint.config.js', 'scripts/**', 'playwright-ct.config.ts', 'playwright/**', 'postcss.config.mjs', 'tailwind.config.ts', 'tsup.config.ts', 'src/**/*.visual.tsx', 'src/**/*.stories.tsx', 'src/**/*.stories.ts'],
+    ignores: ['node_modules/**', 'dist/**', 'storybook-static/**', '.storybook/**', 'eslint.config.js', 'eslint-rules/**', 'scripts/**', 'playwright-ct.config.ts', 'playwright/**', 'postcss.config.mjs', 'tailwind.config.ts', 'tsup.config.ts', 'src/**/*.visual.tsx', 'src/**/*.stories.tsx', 'src/**/*.stories.ts'],
   },
   ...react,
   {
@@ -55,6 +58,18 @@ export default [
     },
   },
   {
+    // A12 (signature v1.3): status colour goes on a glyph, a dot or a border,
+    // never on words. See eslint-rules/a12-status-text-colour.js.
+    files: ['src/components/**/*.tsx'],
+    ignores: ['**/*.test.tsx', '**/*.visual.tsx'],
+    plugins: { vllnt: { rules: { 'a12-no-status-text-colour': a12StatusTextColour } } },
+    rules: { 'vllnt/a12-no-status-text-colour': 'error' },
+  },
+  // Files that predate A12 (list only shrinks); flat config rejects an empty `files`.
+  ...(a12Allowlist.length > 0
+    ? [{ files: a12Allowlist, rules: { 'vllnt/a12-no-status-text-colour': 'off' } }]
+    : []),
+  {
     // vaul's Drawer `autoFocus` prop moves focus into the opened sheet (APG
     // modal dialog); the rule targets DOM autofocus on page load.
     files: ['**/drawer/drawer.tsx'],
@@ -70,6 +85,7 @@ export default [
       '**/ai-artifact/ai-artifact.tsx',
       '**/bottom-activity-strip/bottom-activity-strip.tsx',
       '**/canvas-view/canvas-view.tsx',
+      '**/code-block/code-block.tsx',
       '**/conversation-thread/conversation-thread.tsx',
       '**/gantt-chart/gantt-chart.tsx',
       '**/parallel-timeline/parallel-timeline.tsx',

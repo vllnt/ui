@@ -33,6 +33,24 @@ export default [
     },
   },
   {
+    files: ["src/components/**/*.{ts,tsx}"],
+    rules: {
+      "no-restricted-imports": [
+        "error",
+        {
+          paths: [
+            {
+              importNames: ["Pressable"],
+              message:
+                "Use InteractivePressable from src/primitives (affordance contract #633)",
+              name: "react-native",
+            },
+          ],
+        },
+      ],
+    },
+  },
+  {
     files: ["**/*.test.{ts,tsx}"],
     rules: {
       "@typescript-eslint/no-empty-function": "off",

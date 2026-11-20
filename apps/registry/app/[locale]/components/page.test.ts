@@ -48,10 +48,9 @@ vi.mock("@/lib/sidebar-sections", () => ({
 import ComponentsPage, { generateMetadata } from "./page";
 
 describe("catalog platform query", () => {
-  it("matches rendered inventory and structured data to metadata for repeated platform keys", async () => {
+  it("matches rendered inventory and structured data to metadata for a platform variant", async () => {
     const props = {
-      params: Promise.resolve({ locale: "en" as const }),
-      searchParams: Promise.resolve({ platform: ["native", "web"] }),
+      params: Promise.resolve({ locale: "en" as const, platform: "native" }),
     };
     const html = renderToStaticMarkup(await ComponentsPage(props));
     const metadata = await generateMetadata(props);

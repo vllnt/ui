@@ -7,6 +7,8 @@ import { cn } from "../../../lib/utils";
 /**
  * Tone of an event — drives the leading dot color.
  *
+ * Prefer `"warning"`. The older `"warn"` still renders the same tone.
+ *
  * @public
  */
 export type ActivityStripTone =
@@ -14,7 +16,8 @@ export type ActivityStripTone =
   | "info"
   | "neutral"
   | "success"
-  | "warn";
+  | "warn"
+  | "warning";
 
 const TONE_DOT: Record<ActivityStripTone, string> = {
   danger: "bg-red-500",
@@ -22,6 +25,7 @@ const TONE_DOT: Record<ActivityStripTone, string> = {
   neutral: "bg-muted-foreground",
   success: "bg-emerald-500",
   warn: "bg-amber-500",
+  warning: "bg-amber-500",
 };
 
 /**
@@ -99,7 +103,7 @@ const Chip = (props: { event: ActivityEvent }): React.ReactElement => {
     };
     return (
       <button
-        className="flex items-center rounded-full border border-border bg-background px-2 py-1 text-[11px] transition-colors hover:bg-muted/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        className="flex items-center rounded-full border border-border bg-background px-2 py-1 text-[11px] transition-colors hover:bg-secondary/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         data-strip-event={event.id}
         data-strip-event-tone={tone}
         onClick={handleActivateEvent}
@@ -139,7 +143,7 @@ const Chip = (props: { event: ActivityEvent }): React.ReactElement => {
  * <BottomActivityStrip
  *   events={[
  *     { id: "1", label: "deploy ok", ts: "12s", tone: "success" },
- *     { id: "2", label: "queue spike", ts: "1m", tone: "warn" },
+ *     { id: "2", label: "queue spike", ts: "1m", tone: "warning" },
  *   ]}
  *   maxEvents={20}
  * />
