@@ -100,7 +100,7 @@
   },
   "landing": {
     "agent": {
-      "description": "Chaque composant est publie comme descripteur JSON lisible par machine avec nom, version, stabilite, schema d'accessibilite, exemples d'usage et definitions de props. Les agents decouvrent le registre via trois surfaces.",
+      "description": "Chaque composant est publié comme descripteur JSON lisible par machine, avec son nom, sa version, sa stabilité, ses plateformes, ses fichiers et ses dépendances. Les notes d'accessibilité, les exemples d'usage et les définitions de props sont ajoutés composant par composant. Les agents découvrent le registre via trois surfaces.",
       "eyebrow": "Agent-first",
       "llmsDescription": "Index concis selon la specification llmstxt.org - sections, liens, descriptions.",
       "llmsFullDescription": "Contexte complet du registre en une requete - docs + descripteurs par composant.",
@@ -173,6 +173,20 @@
       "rsc": "Fonctionne avec l'App Router de Next.js",
       "tailwind": "Tailwind CSS 3.4",
       "typescript": "TypeScript"
+    },
+    "vision": {
+      "eyebrow": "Vision",
+      "title": "La couche UI des interfaces générées, pensées pour la voix et spatiales.",
+      "description": "Aujourd'hui, un socle commun affiche vllnt/ui sur le web et en React Native. Ensuite, les mêmes composants et tokens doivent s'afficher dans les apps de réalité augmentée et spatiales, et être composés par l'IA à l'exécution : diffusés à l'écran au fil de leur génération, adaptés à chaque utilisateur et mis à jour sans rebuild.",
+      "spatialTitle": "Spatial",
+      "spatialDescription": "Profondeur, saisie à la main et au regard, et cibles plus grandes, sur les mêmes composants. Proposé pour la 0.5.0 dans une RFC ouverte ; rien de spatial n'est encore disponible.",
+      "dynamicTitle": "UI dynamique, composée par l'IA",
+      "dynamicDescription": "Les descripteurs lisibles par machine, le serveur MCP, les thèmes sous forme de données et les états de flux continu sont disponibles aujourd'hui. Un schéma de props complet et des thèmes par utilisateur sont sur la feuille de route. L'intégration avec json-render et l'AI SDK de Vercel l'est aussi.",
+      "roadmap": "Feuille de route",
+      "partlyShipped": "En partie disponible",
+      "readVision": "Lire la vision",
+      "voiceTitle": "Pensé pour la voix",
+      "voiceDescription": "L'interface suit la voix : transcription en direct, états d'écoute et de push-to-talk, forme d'onde, et réponses parlées toujours doublées d'un texte. Rien de spécifique à la voix n'est encore disponible."
     }
   },
   "pages": {
