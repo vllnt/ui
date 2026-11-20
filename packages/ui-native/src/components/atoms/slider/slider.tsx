@@ -1,6 +1,6 @@
 "use client";
 
-import { type Ref, useState } from "react";
+import { type Ref, useRef, useState } from "react";
 
 import {
   type AccessibilityActionEvent,
@@ -14,7 +14,14 @@ import { useGroupDisabled } from "../../../primitives/control-group";
 import { useControllableState } from "../../../primitives/use-controllable-state";
 import { useTheme } from "../../../theme/theme-provider";
 
-/** Props for a horizontal, single-value native slider. */
+/** Axis a native slider runs along. */
+export type SliderOrientation = "horizontal" | "vertical";
+
+/**
+ * Props for a single-value native slider. The web `minStepsBetweenThumbs`
+ * prop has no native counterpart because this slider has one thumb, and the
+ * web `name`, `form` and `dir` props are DOM-only.
+ */
 export type SliderProps = Omit<
   ViewProps,
   | "children"
@@ -22,6 +29,8 @@ export type SliderProps = Omit<
   | "onLayout"
   | "onResponderGrant"
   | "onResponderMove"
+  | "onResponderRelease"
+  | "onResponderTerminate"
   | "onStartShouldSetResponder"
 > & {
   /** Screen-reader name of the decrement action. Defaults to "Decrease". */
@@ -30,9 +39,22 @@ export type SliderProps = Omit<
   readonly disabled?: boolean;
   /** Screen-reader name of the increment action. Defaults to "Increase". */
   readonly incrementLabel?: string;
+  /**
+   * Runs the track the other way: the minimum sits at the end edge (right for
+   * `"horizontal"`, top for `"vertical"`). Defaults to `false`.
+   */
+  readonly inverted?: boolean;
   readonly max?: number;
   readonly min?: number;
   readonly onValueChange?: (value: number) => void;
+  /**
+   * Runs once when a drag ends (or is cancelled) on a different value than it
+   * started on, and after each screen-reader step that moves the value. It
+   * gets the final value; `onValueChange` still runs on every move.
+   */
+  readonly onValueCommit?: (value: number) => void;
+  /** Axis of the slider. Defaults to `"horizontal"`, as on web. */
+  readonly orientation?: SliderOrientation;
   readonly ref?: Ref<View>;
   readonly step?: number;
   readonly value?: number;
@@ -48,7 +70,35 @@ const styles = StyleSheet.create({
   root: { height: 44, justifyContent: "center", width: "100%" },
   thumb: { height: 20, marginLeft: -10, position: "absolute", width: 20 },
   track: { height: 8, overflow: "hidden", width: "100%" },
+  verticalFill: { width: "100%" },
+  verticalRoot: { alignItems: "center", height: "100%", width: 44 },
+  verticalThumb: {
+    height: 20,
+    marginTop: -10,
+    position: "absolute",
+    width: 20,
+  },
+  verticalTrack: { height: "100%", overflow: "hidden", width: 8 },
 });
+
+type SliderAxis = {
+  /** The minimum sits at the end edge (right or bottom) of the track. */
+  readonly reversed: boolean;
+  readonly vertical: boolean;
+};
+
+function axisOf(orientation: SliderOrientation, inverted: boolean): SliderAxis {
+  const vertical = orientation === "vertical";
+  return { reversed: vertical !== inverted, vertical };
+}
+
+function fillDirection({
+  reversed,
+  vertical,
+}: SliderAxis): "column" | "column-reverse" | "row" | "row-reverse" {
+  if (vertical) return reversed ? "column-reverse" : "column";
+  return reversed ? "row-reverse" : "row";
+}
 
 function clamp(value: number, min: number, max: number): number {
   return Math.min(Math.max(value, min), max);
@@ -67,8 +117,10 @@ function normalizeValue(
 }
 
 /**
- * Horizontal native slider with adjustable actions and a simple track gesture.
- * It intentionally supports one value and does not claim DOM range parity.
+ * Native slider with adjustable actions and a simple track gesture, running
+ * along either axis. It intentionally supports one value and does not claim
+ * DOM range parity. A vertical slider is 44 points wide and takes its height
+ * from its parent, so give it a parent (or `style`) with a definite height.
  */
 function Slider({
   accessibilityState,
@@ -76,9 +128,12 @@ function Slider({
   defaultValue,
   disabled: ownDisabled = false,
   incrementLabel = "Increase",
+  inverted = false,
   max: maxProperty = 100,
   min: minProperty = 0,
   onValueChange,
+  onValueCommit,
+  orientation = "horizontal",
   ref,
   step: stepProperty = 1,
   style,
@@ -114,26 +169,49 @@ function Slider({
         },
   );
   const currentValue = normalizeValue(storedValue, min, upperBound, step);
-  const [trackWidth, setTrackWidth] = useState(0);
+  const [trackSize, setTrackSize] = useState({ height: 0, width: 0 });
+  const dragged = useRef<{ latest: number; start: number }>(undefined);
+  const axis = axisOf(orientation, inverted);
+  const trackLength = axis.vertical ? trackSize.height : trackSize.width;
   const range = upperBound - min;
   const ratio = range === 0 ? 0 : (currentValue - min) / range;
+  const edgeOffset = axis.reversed ? 1 - ratio : ratio;
 
-  const update = (nextValue: number) => {
-    if (disabled) return;
-    setCurrentValue(normalizeValue(nextValue, min, upperBound, step));
+  const update = (nextValue: number): number => {
+    const next = normalizeValue(nextValue, min, upperBound, step);
+    if (!disabled) setCurrentValue(next);
+    return next;
   };
   const updateFromGesture = (event: GestureResponderEvent) => {
-    if (trackWidth <= 0) return;
-    const gestureRatio = clamp(event.nativeEvent.locationX / trackWidth, 0, 1);
-    update(min + gestureRatio * range);
+    if (trackLength <= 0) return;
+    const { locationX, locationY } = event.nativeEvent;
+    const gestureOffset = clamp(
+      (axis.vertical ? locationY : locationX) / trackLength,
+      0,
+      1,
+    );
+    const gestureRatio = axis.reversed ? 1 - gestureOffset : gestureOffset;
+    const next = update(min + gestureRatio * range);
+    if (dragged.current) dragged.current.latest = next;
+  };
+  const startDrag = (event: GestureResponderEvent) => {
+    dragged.current = { latest: currentValue, start: currentValue };
+    updateFromGesture(event);
+  };
+  const endDrag = () => {
+    const drag = dragged.current;
+    dragged.current = undefined;
+    if (!disabled && drag !== undefined && drag.latest !== drag.start) {
+      onValueCommit?.(drag.latest);
+    }
+  };
+  const stepBy = (direction: -1 | 1) => {
+    const next = update(currentValue + direction * step);
+    if (!disabled && next !== currentValue) onValueCommit?.(next);
   };
   const handleAccessibilityAction = (event: AccessibilityActionEvent) => {
-    if (event.nativeEvent.actionName === "increment") {
-      update(currentValue + step);
-    }
-    if (event.nativeEvent.actionName === "decrement") {
-      update(currentValue - step);
-    }
+    if (event.nativeEvent.actionName === "increment") stepBy(1);
+    if (event.nativeEvent.actionName === "decrement") stepBy(-1);
   };
 
   return (
@@ -154,32 +232,40 @@ function Slider({
       accessible
       onAccessibilityAction={handleAccessibilityAction}
       onLayout={(event) => {
-        setTrackWidth(event.nativeEvent.layout.width);
+        const { height, width } = event.nativeEvent.layout;
+        setTrackSize({ height, width });
       }}
-      onResponderGrant={updateFromGesture}
+      onResponderGrant={startDrag}
       onResponderMove={updateFromGesture}
+      onResponderRelease={endDrag}
+      onResponderTerminate={endDrag}
       onStartShouldSetResponder={() => !disabled}
       ref={ref}
-      style={[styles.root, { opacity: disabled ? 0.5 : 1 }, style]}
+      style={[
+        axis.vertical ? styles.verticalRoot : styles.root,
+        { opacity: disabled ? 0.5 : 1 },
+        style,
+      ]}
     >
       <View
         accessibilityElementsHidden
         importantForAccessibility="no-hide-descendants"
         style={[
-          styles.track,
+          axis.vertical ? styles.verticalTrack : styles.track,
           {
             backgroundColor: theme.colors.secondary,
             borderRadius: theme.radius.full,
+            flexDirection: fillDirection(axis),
           },
         ]}
       >
         <View
           style={[
-            styles.fill,
-            {
-              backgroundColor: theme.colors.primary,
-              width: `${ratio * 100}%`,
-            },
+            axis.vertical ? styles.verticalFill : styles.fill,
+            { backgroundColor: theme.colors.primary },
+            axis.vertical
+              ? { height: `${ratio * 100}%` }
+              : { width: `${ratio * 100}%` },
           ]}
         />
       </View>
@@ -187,14 +273,16 @@ function Slider({
         accessibilityElementsHidden
         importantForAccessibility="no-hide-descendants"
         style={[
-          styles.thumb,
+          axis.vertical ? styles.verticalThumb : styles.thumb,
           {
             backgroundColor: theme.colors.background,
             borderColor: theme.colors.primary,
             borderRadius: theme.radius.full,
             borderWidth: 2,
-            left: `${ratio * 100}%`,
           },
+          axis.vertical
+            ? { top: `${edgeOffset * 100}%` }
+            : { left: `${edgeOffset * 100}%` },
         ]}
       />
     </View>

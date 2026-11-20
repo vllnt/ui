@@ -412,7 +412,34 @@ const feedbackAndStatus: Readonly<Record<string, AccessibilityFixture>> = {
       title="Delete workspace?"
     />
   ),
-  badge: () => <Badge variant="secondary">Experimental</Badge>,
+  badge: () => (
+    <>
+      <Badge variant="secondary">Experimental</Badge>
+      <Badge dot size="header" tone="success">
+        Active
+      </Badge>
+      <Badge dot size="sm" tone="warning" variant="outline">
+        Past due
+      </Badge>
+      <Badge border="strong" size="inline" tone="info">
+        Beta
+      </Badge>
+      <Badge border="none" tone="neutral" variant="soft">
+        Draft
+      </Badge>
+      <Badge dot tone="danger">
+        Offline
+      </Badge>
+      <Badge dot tone="danger-tint">
+        Failed
+      </Badge>
+      <Badge tone="danger-solid">Blocked</Badge>
+      <Badge tone="solid">New</Badge>
+      <Badge dot tone="primary">
+        Primary
+      </Badge>
+    </>
+  ),
   banner: () => (
     <>
       <Banner dismissible icon={glyphIcon()} variant="destructive">
@@ -466,7 +493,32 @@ const feedbackAndStatus: Readonly<Record<string, AccessibilityFixture>> = {
   "presence-sync-indicator": () => (
     <PresenceSyncIndicator state="reconnecting" status="retry 2 of 5" />
   ),
-  "progress-bar": () => <ProgressBar max={10} value={4} />,
+  "progress-bar": () => (
+    <>
+      <ProgressBar max={10} value={4} />
+      <ProgressBar label="Upload" max={8} value={3} valueLabel="3 / 8" />
+      <ProgressBar
+        label="Storage"
+        max={100}
+        showValue
+        size="sm"
+        tone="warning"
+        value={72}
+      />
+      <ProgressBar label="Import" max={100} size="lg" tone="info" value={35} />
+      <ProgressBar blocks label="Steps" max={100} tone="success" value={60} />
+      <ProgressBar label="Syncing" max={10} mode="indeterminate" value={0} />
+      <ProgressBar
+        isComplete
+        label="Backup"
+        max={10}
+        tone="neutral"
+        value={10}
+      />
+      <ProgressBar isComplete label="Deploy" max={10} value={10} />
+      <ProgressBar isLoading label="Report" max={10} value={4} />
+    </>
+  ),
   "role-badge": () => <RoleBadge accountRole="owner" />,
   "scroll-progress": () => (
     <ScrollProgress label="Article progress" value={0.5} />
@@ -484,6 +536,7 @@ const feedbackAndStatus: Readonly<Record<string, AccessibilityFixture>> = {
       toasts={[
         {
           actionLabel: "Undo",
+          altText: "Undo save",
           description: "Your changes are stored.",
           id: "saved",
           onAction: noop,
@@ -506,15 +559,32 @@ const dataDisplay: Readonly<Record<string, AccessibilityFixture>> = {
     />
   ),
   avatar: () => (
-    <Avatar>
-      <AvatarImage
-        accessibilityLabel="Ada Lovelace"
-        source={{ uri: "https://example.com/ada.png" }}
-      />
-      <AvatarFallback>
-        <Text>AL</Text>
-      </AvatarFallback>
-    </Avatar>
+    <>
+      <Avatar>
+        <AvatarImage
+          accessibilityLabel="Ada Lovelace"
+          source={{ uri: "https://example.com/ada.png" }}
+        />
+        <AvatarFallback>
+          <Text>AL</Text>
+        </AvatarFallback>
+      </Avatar>
+      <Avatar presence="online">
+        <AvatarFallback>
+          <Text>GH</Text>
+        </AvatarFallback>
+      </Avatar>
+      <Avatar presence="away" shape="square">
+        <AvatarFallback>
+          <Text>LN</Text>
+        </AvatarFallback>
+      </Avatar>
+      <Avatar presence="busy" presenceLabels={{ busy: "Do not disturb" }}>
+        <AvatarFallback>
+          <Text>KJ</Text>
+        </AvatarFallback>
+      </Avatar>
+    </>
   ),
   "avatar-group": () => (
     <AvatarGroup
@@ -530,6 +600,7 @@ const dataDisplay: Readonly<Record<string, AccessibilityFixture>> = {
     <DataList
       items={[
         { id: "region", label: "Region", value: "North America" },
+        { density: "compact", id: "plan", label: "Plan", value: "Team" },
         {
           id: "owner",
           label: "Owner",
@@ -1026,6 +1097,7 @@ const choiceControls: Readonly<Record<string, AccessibilityFixture>> = {
     <>
       <Checkbox accessibilityLabel="Accept terms" defaultChecked />
       <Checkbox accessibilityLabel="Locked option" disabled />
+      <Checkbox accessibilityLabel="Agree to privacy policy" required />
     </>
   ),
   "checkbox-group": () => (
@@ -1059,13 +1131,25 @@ const choiceControls: Readonly<Record<string, AccessibilityFixture>> = {
     />
   ),
   "radio-group": () => (
-    <RadioGroup accessibilityLabel="Delivery" defaultValue="standard">
-      <RadioGroupItem value="standard">Standard</RadioGroupItem>
-      <RadioGroupItem value="express">Express</RadioGroupItem>
-      <RadioGroupItem disabled value="pickup">
-        Pickup
-      </RadioGroupItem>
-    </RadioGroup>
+    <>
+      <RadioGroup accessibilityLabel="Delivery" defaultValue="standard">
+        <RadioGroupItem value="standard">Standard</RadioGroupItem>
+        <RadioGroupItem value="express">Express</RadioGroupItem>
+        <RadioGroupItem disabled value="pickup">
+          Pickup
+        </RadioGroupItem>
+      </RadioGroup>
+      <RadioGroup accessibilityLabel="Plan" loop={false} required>
+        <RadioGroupItem value="free">Free</RadioGroupItem>
+        <RadioGroupItem value="pro">Pro</RadioGroupItem>
+      </RadioGroup>
+      <RadioGroup accessibilityLabel="Billing">
+        <RadioGroupItem value="monthly">Monthly</RadioGroupItem>
+        <RadioGroupItem required value="yearly">
+          Yearly
+        </RadioGroupItem>
+      </RadioGroup>
+    </>
   ),
   rating: () => (
     <Rating
@@ -1079,23 +1163,59 @@ const choiceControls: Readonly<Record<string, AccessibilityFixture>> = {
     />
   ),
   "segmented-control": () => (
-    <SegmentedControl
-      items={[
-        { id: "grid", label: "Grid" },
-        { id: "list", label: "List" },
-      ]}
-      label="Layout"
-      selection={{ defaultValue: "grid", mode: "uncontrolled" }}
-    />
+    <>
+      <SegmentedControl
+        items={[
+          { id: "grid", label: "Grid" },
+          { id: "list", label: "List" },
+        ]}
+        label="Layout"
+        selection={{ defaultValue: "grid", mode: "uncontrolled" }}
+      />
+      <SegmentedControl
+        items={[
+          { id: "day", label: "Day", size: "lg" },
+          { id: "week", label: "Week" },
+        ]}
+        label="Range"
+        loop={false}
+        orientation="vertical"
+        rovingFocus={false}
+        selection={{ defaultValue: "day", mode: "uncontrolled" }}
+        size="sm"
+      />
+    </>
   ),
   slider: () => (
     <>
       <Slider accessibilityLabel="Zoom" max={20} min={10} value={15} />
       <Slider accessibilityLabel="Locked slider" disabled value={5} />
+      <Slider accessibilityLabel="Reverse zoom" inverted value={40} />
+      <Slider
+        accessibilityLabel="Volume"
+        orientation="vertical"
+        style={{ height: 160 }}
+        value={60}
+      />
+      <Slider
+        accessibilityLabel="Brightness"
+        inverted
+        onValueCommit={noop}
+        orientation="vertical"
+        style={{ height: 160 }}
+        value={30}
+      />
     </>
   ),
   switch: () => (
-    <Switch accessibilityLabel="Notifications" checked onCheckedChange={noop} />
+    <>
+      <Switch
+        accessibilityLabel="Notifications"
+        checked
+        onCheckedChange={noop}
+      />
+      <Switch accessibilityLabel="Auto-update" defaultChecked required />
+    </>
   ),
   "tag-group": () => (
     <TagGroup
@@ -1463,15 +1583,35 @@ const navigation: Readonly<Record<string, AccessibilityFixture>> = {
     />
   ),
   tabs: () => (
-    <Tabs defaultValue="overview" id="account">
-      <TabsList accessibilityLabel="Account sections">
-        <TabsTrigger value="overview">Overview</TabsTrigger>
-        <TabsTrigger value="activity">Activity</TabsTrigger>
-      </TabsList>
-      <TabsContent value="overview">
-        <Text>Overview panel</Text>
-      </TabsContent>
-    </Tabs>
+    <>
+      <Tabs defaultValue="overview" id="account">
+        <TabsList accessibilityLabel="Account sections">
+          <TabsTrigger value="overview">Overview</TabsTrigger>
+          <TabsTrigger value="activity">Activity</TabsTrigger>
+        </TabsList>
+        <TabsContent value="overview">
+          <Text>Overview panel</Text>
+        </TabsContent>
+      </Tabs>
+      <Tabs defaultValue="plans" id="billing" variant="pill">
+        <TabsList accessibilityLabel="Billing sections">
+          <TabsTrigger value="plans">Plans</TabsTrigger>
+          <TabsTrigger value="invoices">Invoices</TabsTrigger>
+        </TabsList>
+        <TabsContent value="plans">
+          <Text>Plans panel</Text>
+        </TabsContent>
+      </Tabs>
+      <Tabs defaultValue="docs" id="help" variant="link">
+        <TabsList accessibilityLabel="Help sections">
+          <TabsTrigger value="docs">Docs</TabsTrigger>
+          <TabsTrigger value="support">Support</TabsTrigger>
+        </TabsList>
+        <TabsContent value="docs">
+          <Text>Docs panel</Text>
+        </TabsContent>
+      </Tabs>
+    </>
   ),
   "top-bar": () => <TopBar title="Project" />,
   "tree-view": () => (
@@ -1601,10 +1741,17 @@ const layout: Readonly<Record<string, AccessibilityFixture>> = {
     </Form>
   ),
   grid: () => (
-    <Grid cols={2} gap={2}>
-      <Text>One</Text>
-      <Text>Two</Text>
-    </Grid>
+    <>
+      <Grid cols={2} gap={2}>
+        <Text>One</Text>
+        <Text>Two</Text>
+      </Grid>
+      <Grid cols={1} gap={2} lgCols={3} mdCols={2} smCols={2}>
+        <Text>Three</Text>
+        <Text>Four</Text>
+        <Text>Five</Text>
+      </Grid>
+    </>
   ),
   heading: () => (
     <Heading level={2} size={3}>

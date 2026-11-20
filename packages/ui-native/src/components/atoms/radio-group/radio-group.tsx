@@ -10,10 +10,16 @@ import {
   type ViewProps,
 } from "react-native";
 
-import { decorativeProps } from "../../../primitives/accessibility";
+import {
+  decorativeProps,
+  requiredHint,
+} from "../../../primitives/accessibility";
 import { useGroupDisabled } from "../../../primitives/control-group";
 import { interactionTokens } from "../../../primitives/interaction-state";
-import { InteractivePressable } from "../../../primitives/interactive-pressable";
+import {
+  InteractivePressable,
+  type KeyDownEvent,
+} from "../../../primitives/interactive-pressable";
 import {
   isSingleSelected,
   type SelectionKey,
@@ -21,32 +27,61 @@ import {
 } from "../../../primitives/selection";
 import { typeStyle } from "../../../primitives/type-style";
 import { useControllableState } from "../../../primitives/use-controllable-state";
+import {
+  type RovingGroup,
+  useRovingGroup,
+  useRovingItem,
+} from "../../../primitives/use-roving-group";
 import { useTheme } from "../../../theme/theme-provider";
 
 /** Layout axis for a native radio group. */
 export type RadioGroupOrientation = "horizontal" | "vertical";
 
-/** Props for a controlled or uncontrolled native radio group. */
+/**
+ * Props for a controlled or uncontrolled native radio group. The web `name`
+ * and `dir` props are DOM-only (a form field name and a text direction the
+ * platform already applies), so native does not take them.
+ */
 export type RadioGroupProps = Omit<ViewProps, "children"> & {
   readonly children: ReactNode;
   readonly defaultValue?: SelectionKey;
   readonly disabled?: boolean;
+  /**
+   * Whether the arrow keys wrap from the last radio to the first and back.
+   * Defaults to `true`, as on web.
+   */
+  readonly loop?: boolean;
   readonly onValueChange?: (value: SelectionKey | undefined) => void;
   readonly orientation?: RadioGroupOrientation;
   readonly ref?: Ref<View>;
+  /**
+   * Marks a choice as required. Every radio announces it in its hint; web
+   * draws no visible marker for it, so neither does native.
+   */
+  readonly required?: boolean;
+  /** Spoken word for `required`. Defaults to "Required". */
+  readonly requiredLabel?: string;
   readonly value?: SelectionKey;
 };
 
 /** Props for a radio item identified by a caller-owned stable value. */
 export type RadioGroupItemProps = Omit<PressableProps, "children"> & {
   readonly children?: ReactNode;
+  /** Runs when a key goes down while this radio has focus. */
+  readonly onKeyDown?: (event: KeyDownEvent) => void;
   readonly ref?: Ref<View>;
+  /** Marks this radio as required, on top of the group's own `required`. */
+  readonly required?: boolean;
   readonly value: SelectionKey;
 };
 
 type RadioGroupContextValue = {
   readonly disabled: boolean;
+  readonly group: RovingGroup<SelectionKey>;
   readonly groupLabel?: string;
+  readonly loop: boolean;
+  readonly required: boolean;
+  readonly requiredLabel?: string;
   readonly select: (value: SelectionKey) => void;
   readonly value?: SelectionKey;
 };
@@ -85,14 +120,18 @@ function RadioGroup(groupProps: RadioGroupProps) {
     children,
     defaultValue,
     disabled: ownDisabled = false,
+    loop = true,
     onValueChange,
     orientation = "vertical",
     ref,
+    required = false,
+    requiredLabel,
     style,
     value,
     ...props
   } = groupProps;
   const disabled = useGroupDisabled(ownDisabled);
+  const group = useRovingGroup<SelectionKey>();
   const [selectedValue, setSelectedValue] = useControllableState(
     "value" in groupProps
       ? { mode: "controlled", onChange: onValueChange, value }
@@ -105,13 +144,26 @@ function RadioGroup(groupProps: RadioGroupProps) {
   const context = useMemo<RadioGroupContextValue>(
     () => ({
       disabled: disabled ?? undefined,
+      group,
       groupLabel: accessibilityLabel,
+      loop,
+      required,
+      requiredLabel,
       select(nextValue) {
         setSelectedValue(selectSingle(selectedValue, nextValue, identity));
       },
       value: selectedValue,
     }),
-    [accessibilityLabel, disabled, selectedValue, setSelectedValue],
+    [
+      accessibilityLabel,
+      disabled,
+      group,
+      loop,
+      required,
+      requiredLabel,
+      selectedValue,
+      setSelectedValue,
+    ],
   );
   const theme = useTheme();
 
@@ -144,8 +196,10 @@ function RadioGroupItem({
   accessibilityState,
   children,
   disabled = false,
+  onKeyDown,
   onPress,
   ref,
+  required = false,
   style,
   value,
   ...props
@@ -157,11 +211,21 @@ function RadioGroupItem({
   const theme = useTheme();
   const checked = isSingleSelected(context.value, value, identity);
   const isDisabled = Boolean(context.disabled || disabled);
+  const itemRef = useRovingItem({
+    disabled: isDisabled,
+    group: context.group,
+    itemKey: value,
+    reference: ref,
+  });
 
   return (
     <InteractivePressable
       {...props}
-      accessibilityHint={accessibilityHint ?? context.groupLabel}
+      accessibilityHint={requiredHint(
+        accessibilityHint ?? context.groupLabel,
+        context.required || required,
+        context.requiredLabel,
+      )}
       accessibilityRole="radio"
       accessibilityState={{
         ...accessibilityState,
@@ -169,11 +233,18 @@ function RadioGroupItem({
         disabled: isDisabled,
       }}
       disabled={isDisabled}
+      onKeyDown={(event) => {
+        onKeyDown?.(event);
+        const target = context.group.move(value, event.nativeEvent.key, {
+          loop: context.loop,
+        });
+        if (target !== undefined) context.select(target);
+      }}
       onPress={(event) => {
         onPress?.(event);
         if (!event?.defaultPrevented) context.select(value);
       }}
-      ref={ref}
+      ref={itemRef}
       style={(state) => [
         styles.item,
         { borderRadius: theme.radius.md, gap: theme.spacing[2] },

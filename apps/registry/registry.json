@@ -2601,8 +2601,17 @@
         "notes": "Non-semantic by default (a div); set `as` to h1 for a hero heading. The optional reveal animation is gated behind prefers-reduced-motion, so it does not play when the user requests reduced motion."
       },
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "portable-options",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/atoms/display/display.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "dock",

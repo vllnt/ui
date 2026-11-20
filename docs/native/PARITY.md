@@ -35,7 +35,7 @@ Everything here ships in 0.1.0. **State**: exists = native module today; MISSING
 | Component | Web | Native | State | Interactive | Affordance | Props gap | Notes |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | `aspect-ratio` | atoms | atoms/aspect-ratio | exists | no | — | none |  |
-| `grid` | atoms | atoms/grid | exists | no | — | `smCols`, `mdCols`, `lgCols` |  |
+| `grid` | atoms | atoms/grid | exists | no | — | none |  |
 | `panel` | atoms | atoms/panel | exists | no | — | none |  |
 | `spacer` | — | atoms/spacer | exists (native-only) | no | — | — | Fixed or flexible gap between siblings when Stack gap is not enough. Proposed: `<Spacer size={4} />`. size takes a spacing token for a fixed gap; the flex prop makes it absorb free space instead. |
 | `stack` | — | atoms/stack | exists (native-only) | no | — | — | Native has no layout primitive for rows and columns; every screen re-implements flex rows and gaps. Proposed: `<Stack direction="row" gap={3} align="center" justify="space-between" wrap />`. One Stack, no Box. direction is "row" \| "column"; gap takes spacing tokens; align and justify map to flex alignment and wrap allows flex wrap. Renders a plain View with no accessibility role. |
@@ -66,14 +66,14 @@ Everything here ships in 0.1.0. **State**: exists = native module today; MISSING
 
 | Component | Web | Native | State | Interactive | Affordance | Props gap | Notes |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| `checkbox` | atoms | atoms/checkbox | exists | yes | `rest`, `hover`, `focus-visible`, `pressed`, `selected`, `disabled` | `required` |  |
+| `checkbox` | atoms | atoms/checkbox | exists | yes | `rest`, `hover`, `focus-visible`, `pressed`, `selected`, `disabled` | none |  |
 | `field` | molecules | molecules/field | exists | no | — | none | Static wrapper for label, hint and error; the control inside carries the states. |
 | `input` | atoms | atoms/input | exists | yes | `rest`, `focus-visible`, `disabled` | none |  |
-| `radio-group` | atoms | atoms/radio-group | exists | yes | `rest`, `hover`, `focus-visible`, `pressed`, `selected`, `disabled` | `dir`, `loop`, `name`, `required`, `RadioGroupItem.required` |  |
-| `segmented-control` | atoms | atoms/segmented-control | exists | yes | `rest`, `hover`, `focus-visible`, `pressed`, `selected`, `disabled` | `dir`, `orientation`, `loop`, `rovingFocus`, `SegmentedControlItem.size` | Renamed: `value` → `selection.value`, `defaultValue` → `selection.defaultValue`, `onValueChange` → `selection.onChange`, `SegmentedControlItem.value` → `items[].id`. Data-driven: items replace SegmentedControlItem children, and label is required. |
+| `radio-group` | atoms | atoms/radio-group | exists | yes | `rest`, `hover`, `focus-visible`, `pressed`, `selected`, `disabled` | none | `dir` and `name` are DOM-only (no RTL override or form field on native). |
+| `segmented-control` | atoms | atoms/segmented-control | exists | yes | `rest`, `hover`, `focus-visible`, `pressed`, `selected`, `disabled` | none | Renamed: `value` → `selection.value`, `defaultValue` → `selection.defaultValue`, `onValueChange` → `selection.onChange`, `SegmentedControlItem.value` → `items[].id`. Data-driven: items replace SegmentedControlItem children, and label is required. `dir` is DOM-only. |
 | `select` | atoms | atoms/select | exists | yes | `rest`, `hover`, `focus-visible`, `pressed`, `selected`, `disabled` | `dir`, `name`, `autoComplete`, `form` | Renamed: `children` → `options`, `value` → `selection.value`, `defaultValue` → `selection.defaultValue`, `onValueChange` → `selection.onChange`, `SelectItem.value` → `options[].id`, `SelectItem.disabled` → `options[].disabled`, `SelectValue.placeholder` → `labels.placeholder`. Data-driven: options replace SelectItem, SelectGroup, SelectLabel and SelectSeparator, so no grouping or separators. Opens in a bottom panel, so SelectContent positioning props do not apply. Selected is the option row. `open`, `defaultOpen` and `onOpenChange` control the panel. `required` speaks `requiredLabel` (default "Required") with the trigger hint: React Native has no required accessibility state and nothing is validated for you, so pass `invalid` and `errorText` once the user leaves it empty. No native meaning, so not offered: dir (no right-to-left flipping), and name, autoComplete and form (there is no form element to submit). |
-| `slider` | atoms | atoms/slider | exists | yes | `rest`, `disabled` | `dir`, `form`, `name`, `orientation`, `inverted`, `minStepsBetweenThumbs`, `onValueCommit` | Single thumb: value, defaultValue and onValueChange use a number, web uses number[]. |
-| `switch` | atoms | atoms/switch | exists | yes | `rest`, `selected` | `defaultChecked`, `required` | Pressed and disabled looks are drawn by the platform Switch, not styled by the component. |
+| `slider` | atoms | atoms/slider | exists | yes | `rest`, `disabled` | `minStepsBetweenThumbs` | Single thumb: value, defaultValue and onValueChange use a number, web uses number[]. `dir`, `form` and `name` are DOM-only. `minStepsBetweenThumbs` stays a gap: the native slider has one thumb. |
+| `switch` | atoms | atoms/switch | exists | yes | `rest`, `selected` | none | Pressed and disabled looks are drawn by the platform Switch, not styled by the component. |
 | `textarea` | atoms | molecules/textarea | exists | yes | `rest`, `focus-visible`, `disabled` | none | Wraps native Input and inherits its states. |
 
 ### Feedback
@@ -81,11 +81,11 @@ Everything here ships in 0.1.0. **State**: exists = native module today; MISSING
 | Component | Web | Native | State | Interactive | Affordance | Props gap | Notes |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | `alert` | atoms | atoms/alert | exists | no | — | none |  |
-| `badge` | atoms | atoms/badge | exists | no | — | `border`, `dot`, `size`, `tone` |  |
-| `progress-bar` | atoms | molecules/progress-bar | exists | no | — | `label`, `mode`, `showValue`, `size`, `tone`, `valueLabel`, `blocks` |  |
+| `badge` | atoms | atoms/badge | exists | no | — | none |  |
+| `progress-bar` | atoms | molecules/progress-bar | exists | no | — | none |  |
 | `skeleton` | atoms | atoms/skeleton | exists | no | — | none |  |
 | `spinner` | atoms | atoms/spinner | exists | no | — | none |  |
-| `toast` | atoms | atoms/toast | exists | yes | `rest`, `hover`, `focus-visible`, `pressed`, `disabled` | `ToastAction.altText` | Renamed: `variant` → `toasts[].variant`. Data-driven: a toasts array replaces Toast, ToastTitle, ToastDescription, ToastAction and ToastClose, and duration and action are fields of ToastItem. The action and close buttons carry the states; only the action can be disabled. |
+| `toast` | atoms | atoms/toast | exists | yes | `rest`, `hover`, `focus-visible`, `pressed`, `disabled` | none | Renamed: `variant` → `toasts[].variant`. Data-driven: a toasts array replaces Toast, ToastTitle, ToastDescription, ToastAction and ToastClose, and duration and action are fields of ToastItem. The action and close buttons carry the states; only the action can be disabled. |
 
 ### Overlays
 
@@ -102,17 +102,17 @@ Everything here ships in 0.1.0. **State**: exists = native module today; MISSING
 
 | Component | Web | Native | State | Interactive | Affordance | Props gap | Notes |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| `data-list` | atoms | molecules/data-list | exists | no | — | `DataListItem.density` | Renamed: `children` → `items`. Data-driven: items replace DataListItem, DataListLabel and DataListValue. |
+| `data-list` | atoms | molecules/data-list | exists | no | — | none | Renamed: `children` → `items`. Data-driven: items replace DataListItem, DataListLabel and DataListValue. |
 | `item` | atoms | atoms/item | exists | no | — | none | Not pressable on native today. |
 | `list-box` | atoms | atoms/list-box | exists | yes | `rest`, `hover`, `focus-visible`, `pressed`, `selected`, `disabled` | none | Renamed: `selectionMode` → `mode`, `children` → `options`, `value` → `selection.value`, `defaultValue` → `selection.defaultValue`, `onValueChange` → `selection.onChange`, `ListBoxItem.value` → `options[].id`, `ListBoxItem.disabled` → `options[].disabled`. Data-driven: options replace ListBoxItem children. selection holds a ReadonlySet of ids, web value is string[]. |
-| `tabs` | atoms | molecules/tabs | exists | yes | `rest`, `hover`, `focus-visible`, `pressed`, `selected`, `disabled` | `variant` |  |
+| `tabs` | atoms | molecules/tabs | exists | yes | `rest`, `hover`, `focus-visible`, `pressed`, `selected`, `disabled` | none |  |
 | `top-bar` | atoms | molecules/top-bar | exists | no | — | none |  |
 
 ### Data display
 
 | Component | Web | Native | State | Interactive | Affordance | Props gap | Notes |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| `avatar` | atoms | atoms/avatar | exists | no | — | `presence`, `presenceLabels`, `shape`, `AvatarFallback.delayMs`, `AvatarImage.onLoadingStatusChange` | size is a pixel number (default 40); web takes xs, sm, md, lg or xl. |
+| `avatar` | atoms | atoms/avatar | exists | no | — | none | size is a pixel number (default 40); web takes xs, sm, md, lg or xl. |
 | `card` | atoms | atoms/card | exists | no | — | none |  |
 | `separator` | atoms | atoms/separator | exists | no | — | none |  |
 

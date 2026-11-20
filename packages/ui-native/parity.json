@@ -219,13 +219,7 @@
       "foundation": true,
       "interactive": false,
       "source": "src/components/atoms/avatar/avatar.tsx",
-      "propsGap": [
-        "presence",
-        "presenceLabels",
-        "shape",
-        "AvatarFallback.delayMs",
-        "AvatarImage.onLoadingStatusChange"
-      ],
+      "propsGap": [],
       "note": "size is a pixel number (default 40); web takes xs, sm, md, lg or xl."
     },
     {
@@ -243,12 +237,7 @@
       "foundation": true,
       "interactive": false,
       "source": "src/components/atoms/badge/badge.tsx",
-      "propsGap": [
-        "border",
-        "dot",
-        "size",
-        "tone"
-      ]
+      "propsGap": []
     },
     {
       "name": "banner",
@@ -448,9 +437,7 @@
         "disabled"
       ],
       "source": "src/components/atoms/checkbox/checkbox.tsx",
-      "propsGap": [
-        "required"
-      ]
+      "propsGap": []
     },
     {
       "name": "checkbox-group",
@@ -659,9 +646,7 @@
       "foundation": true,
       "interactive": false,
       "source": "src/components/molecules/data-list/data-list.tsx",
-      "propsGap": [
-        "DataListItem.density"
-      ],
+      "propsGap": [],
       "propsRenamed": {
         "children": "items"
       },
@@ -1010,11 +995,7 @@
       "foundation": true,
       "interactive": false,
       "source": "src/components/atoms/grid/grid.tsx",
-      "propsGap": [
-        "smCols",
-        "mdCols",
-        "lgCols"
-      ]
+      "propsGap": []
     },
     {
       "name": "group-hull",
@@ -1658,15 +1639,7 @@
       "foundation": true,
       "interactive": false,
       "source": "src/components/molecules/progress-bar/progress-bar.tsx",
-      "propsGap": [
-        "label",
-        "mode",
-        "showValue",
-        "size",
-        "tone",
-        "valueLabel",
-        "blocks"
-      ]
+      "propsGap": []
     },
     {
       "name": "progress-card",
@@ -1774,13 +1747,8 @@
         "disabled"
       ],
       "source": "src/components/atoms/radio-group/radio-group.tsx",
-      "propsGap": [
-        "dir",
-        "loop",
-        "name",
-        "required",
-        "RadioGroupItem.required"
-      ]
+      "propsGap": [],
+      "note": "`dir` and `name` are DOM-only (no RTL override or form field on native)."
     },
     {
       "name": "range-calendar",
@@ -1957,20 +1925,14 @@
         "disabled"
       ],
       "source": "src/components/atoms/segmented-control/segmented-control.tsx",
-      "propsGap": [
-        "dir",
-        "orientation",
-        "loop",
-        "rovingFocus",
-        "SegmentedControlItem.size"
-      ],
+      "propsGap": [],
       "propsRenamed": {
         "value": "selection.value",
         "defaultValue": "selection.defaultValue",
         "onValueChange": "selection.onChange",
         "SegmentedControlItem.value": "items[].id"
       },
-      "note": "Data-driven: items replace SegmentedControlItem children, and label is required."
+      "note": "Data-driven: items replace SegmentedControlItem children, and label is required. `dir` is DOM-only."
     },
     {
       "name": "select",
@@ -2167,15 +2129,9 @@
       ],
       "source": "src/components/atoms/slider/slider.tsx",
       "propsGap": [
-        "dir",
-        "form",
-        "name",
-        "orientation",
-        "inverted",
-        "minStepsBetweenThumbs",
-        "onValueCommit"
+        "minStepsBetweenThumbs"
       ],
-      "note": "Single thumb: value, defaultValue and onValueChange use a number, web uses number[]."
+      "note": "Single thumb: value, defaultValue and onValueChange use a number, web uses number[]. `dir`, `form` and `name` are DOM-only. `minStepsBetweenThumbs` stays a gap: the native slider has one thumb."
     },
     {
       "name": "slideshow",
@@ -2340,10 +2296,7 @@
         "selected"
       ],
       "source": "src/components/atoms/switch/switch.tsx",
-      "propsGap": [
-        "defaultChecked",
-        "required"
-      ],
+      "propsGap": [],
       "note": "Pressed and disabled looks are drawn by the platform Switch, not styled by the component."
     },
     {
@@ -2384,9 +2337,7 @@
         "disabled"
       ],
       "source": "src/components/molecules/tabs/tabs.tsx",
-      "propsGap": [
-        "variant"
-      ]
+      "propsGap": []
     },
     {
       "name": "tag-group",
@@ -2595,9 +2546,7 @@
         "disabled"
       ],
       "source": "src/components/atoms/toast/toast.tsx",
-      "propsGap": [
-        "ToastAction.altText"
-      ],
+      "propsGap": [],
       "propsRenamed": {
         "variant": "toasts[].variant"
       },
