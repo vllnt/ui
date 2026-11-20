@@ -543,7 +543,7 @@ const dataDisplay: Readonly<Record<string, AccessibilityFixture>> = {
         </AvatarFallback>
       </Avatar>
       <Avatar presence="away" shape="square">
-        <AvatarFallback delayMs={0}>
+        <AvatarFallback>
           <Text>LN</Text>
         </AvatarFallback>
       </Avatar>

@@ -389,9 +389,9 @@ describe("ProgressBar", () => {
       timing.mockRestore();
     });
 
-    it("sweeps the fill when motion is allowed", async () => {
+    it("sweeps the fill when motion is allowed and stops it on unmount", async () => {
       const timing = jest.spyOn(Animated, "timing");
-      renderThemed(
+      const { unmount } = renderThemed(
         <ProgressBar
           max={10}
           mode="indeterminate"
@@ -401,6 +401,7 @@ describe("ProgressBar", () => {
       );
       await act(async () => void 0);
       expect(timing).toHaveBeenCalled();
+      unmount();
       timing.mockRestore();
     });
   });
