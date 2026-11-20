@@ -1,0 +1,145 @@
+---
+title: "Generative UI components - React parts to stream | vllnt UI"
+description: "Generative UI components for React: what lets a model pick, fill and stream a component, what VLLNT UI ships for it today, and what is still on the roadmap."
+date: 2026-11-20
+updated: 2026-11-20
+tags: [generative-ui, ai-components, react, agents]
+status: mixed
+components: [ai-message-bubble, ai-streaming-text, ai-tool-call-display, ai-source-citation, reasoning]
+---
+
+# Generative UI components in React
+
+Generative UI is an interface that a model or a server composes at runtime. The application supplies the components. The model decides which ones to show and with which data.
+
+After this page you can render one assistant turn (text, reasoning, a tool call and its sources) from plain data with shipped VLLNT UI components. You also get a five-point check for making your own components usable by a model.
+
+## What ships and what does not
+
+**Ships today:** 18 AI components, a JSON descriptor for each of the 321 components in the registry, and an accessibility test on every story.
+
+**Roadmap:** an adapter for json-render or the AI SDK, and a props schema for every component. Neither ships. Both are tracked in [vllnt/ui#672](https://github.com/vllnt/ui/issues/672).
+
+## Two ways a model drives a UI
+
+Both patterns below are in use today. In both, the model selects from components the application already has. It does not write new markup.
+
+1. **Tool-driven.** The model calls a tool. Your code maps the tool call and its result to a component. This is how generative UI works in the AI SDK (by Vercel). See [AI SDK generative UI in React](/articles/ai-sdk-generative-ui-react).
+2. **Spec-driven.** The model writes a JSON tree that names components from a catalog. A renderer turns the tree into React. This is how json-render (vercel-labs) works. See [how to build a json-render component catalog](/articles/json-render-component-catalog).
+
+The patterns ask the same thing of a component library, which is the subject of the next section.
+
+## What a component needs before a model can use it
+
+| Property | What it means | In VLLNT UI today |
+|---|---|---|
+| Describable | A model can find the component and read what it does | Every component has a descriptor at `/r/<name>.json`. All 321 carry a version and a stability level. 2 carry prop definitions, 3 carry usage examples |
+| Data-driven | Props are strings, numbers, booleans, arrays and plain objects, so they travel as JSON | `AIToolCallDisplay` takes `toolName`, `status`, `input` and `output` as strings |
+| Stream-safe | The layout holds while content is still arriving | `AIStreamingText` and `Reasoning` take an `isStreaming` flag. `Skeleton` reserves space |
+| Safe to update | A new version does not break screens built on the old one | Semantic versioning, and a canary build on every change to `main` |
+| Accessible | A generated screen meets WCAG 2.2 AA like a hand-built one | Every story is tested with axe, levels A and AA, in light and dark themes |
+
+The first row is where the gap is. A model can read what every component is. It can read the full prop list for only 2 of them. Until the schemas exist, you write the mapping from model output to props yourself, as in the example below.
+
+## The components that ship for it
+
+The [AI component family](/families/ai) has 18 components. These six cover one assistant turn.
+
+| Job | Component | Props that carry the data |
+|---|---|---|
+| A message in the conversation | `AIMessageBubble` | `messageRole`, `author`, `timestamp`, `status` |
+| Text that arrives token by token | `AIStreamingText` | `text`, `isStreaming` |
+| The model's reasoning | `Reasoning` | `steps`, `duration`, `isStreaming` |
+| One tool call | `AIToolCallDisplay` | `toolName`, `status`, `input`, `output`, `duration` |
+| A source behind an answer | `AISourceCitation` | `title`, `source`, `snippet`, `href` |
+| A multi-step agent run | `AgentActivity` with `AgentStep` | `status`, `elapsed` |
+
+## Example: one assistant turn from plain data
+
+The `Turn` type below holds only strings, numbers, booleans and arrays. A server can send it as JSON, and a model can fill it.
+
+```tsx
+import {
+  AIMessageBubble,
+  AISourceCitation,
+  AIStreamingText,
+  AIToolCallDisplay,
+  type AIToolCallStatus,
+  Reasoning,
+} from "@vllnt/ui";
+
+type Turn = {
+  isStreaming: boolean;
+  reasoning?: { seconds?: number; steps: string[] };
+  sources: { href: string; source: string; title: string }[];
+  text: string;
+  toolCall?: {
+    input?: string;
+    name: string;
+    output?: string;
+    status: AIToolCallStatus;
+  };
+};
+
+export function AssistantTurn({ turn }: { turn: Turn }) {
+  return (
+    <AIMessageBubble author="Assistant" messageRole="assistant">
+      {turn.reasoning ? (
+        <Reasoning
+          duration={turn.reasoning.seconds}
+          isStreaming={turn.isStreaming}
+          steps={turn.reasoning.steps}
+        />
+      ) : null}
+      {turn.toolCall ? (
+        <AIToolCallDisplay
+          input={turn.toolCall.input}
+          output={turn.toolCall.output}
+          status={turn.toolCall.status}
+          toolName={turn.toolCall.name}
+        />
+      ) : null}
+      <AIStreamingText isStreaming={turn.isStreaming} text={turn.text} />
+      {turn.sources.map((source) => (
+        <AISourceCitation
+          href={source.href}
+          key={source.href}
+          source={source.source}
+          title={source.title}
+        />
+      ))}
+    </AIMessageBubble>
+  );
+}
+```
+
+`AIToolCallStatus` is one of `queued`, `running`, `complete` or `error`. Send a new `Turn` each time the stream delivers more data, and the same components update in place.
+
+To add the prompt box and the message list around this turn, follow [build an AI chat UI in React](/build/ai-chat-ui). The [AI Tool Call Display page](/components/ai-tool-call-display) has the live preview of the tool card.
+
+## A check for your own components
+
+Run these five checks on any component a model should be able to use.
+
+1. **Props are plain data.** Pass React nodes only through `children` or named slots, and behavior only through event handlers.
+2. **Every async view has three states.** Loading, result and error, each reachable from props alone.
+3. **The size is known before the data.** Reserve the space, so content that arrives later does not move the page.
+4. **One sentence says what it is for.** A model picks a component from its description, so write the description for a reader who has never seen the screen.
+5. **The accessible name is a prop.** A generated screen has no designer to add the missing label afterwards.
+
+These checks follow the design rules VLLNT UI sets for its own components, listed in the repository's [AGENTS.md](https://github.com/vllnt/ui/blob/main/AGENTS.md).
+
+## What is on the roadmap
+
+None of the following ships. Each item is planned work.
+
+- **A json-render catalog and AI SDK helpers** for VLLNT UI components ([vllnt/ui#672](https://github.com/vllnt/ui/issues/672)).
+- **A complete props schema** for every component, so a renderer can validate a generated tree before showing it.
+- **A contract for partial props,** so any component can render from incomplete, streamed data.
+- **Accessibility checks on a generated tree,** run before the screen appears.
+
+## Next steps
+
+- Wire tool calls to components with the [AI SDK generative UI guide](/articles/ai-sdk-generative-ui-react).
+- Let a model compose whole screens with a [json-render component catalog](/articles/json-render-component-catalog).
+- Browse the [AI component family](/families/ai) for the other 12 components.

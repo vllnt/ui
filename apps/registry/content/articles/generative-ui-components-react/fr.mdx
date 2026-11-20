@@ -1,0 +1,145 @@
+---
+title: "Composants d'UI générative - des briques React | vllnt UI"
+description: "Composants d'UI générative pour React : ce qui permet à un modèle de choisir, remplir et diffuser un composant, ce que VLLNT UI fournit et ce qui reste à venir."
+date: 2026-11-20
+updated: 2026-11-20
+tags: [generative-ui, ai-components, react, agents]
+status: mixed
+components: [ai-message-bubble, ai-streaming-text, ai-tool-call-display, ai-source-citation, reasoning]
+---
+
+# Composants d'UI générative en React
+
+Une UI générative est une interface qu'un modèle ou un serveur compose à l'exécution. L'application fournit les composants. Le modèle décide lesquels afficher, et avec quelles données.
+
+Après cette page, vous saurez afficher un tour d'assistant (texte, raisonnement, appel d'outil et sources) à partir de simples données, avec des composants VLLNT UI déjà disponibles. Vous aurez aussi une vérification en cinq points pour rendre vos propres composants utilisables par un modèle.
+
+## Ce qui est disponible et ce qui ne l'est pas
+
+**Disponible aujourd'hui :** 18 composants IA, un descripteur JSON pour chacun des 321 composants du registre, et un test d'accessibilité sur chaque story.
+
+**Sur la feuille de route :** un adaptateur pour json-render ou pour l'AI SDK, et un schéma de props pour chaque composant. Aucun des deux n'est disponible. Les deux sont suivis dans [vllnt/ui#672](https://github.com/vllnt/ui/issues/672).
+
+## Deux façons pour un modèle de piloter une interface
+
+Les deux approches ci-dessous sont utilisées aujourd'hui. Dans les deux, le modèle choisit parmi des composants que l'application possède déjà. Il n'écrit pas de nouveau balisage.
+
+1. **Par les outils.** Le modèle appelle un outil. Votre code relie l'appel et son résultat à un composant. C'est le fonctionnement de l'UI générative dans l'AI SDK (de Vercel). Voir [l'UI générative avec l'AI SDK en React](/articles/ai-sdk-generative-ui-react).
+2. **Par une spec.** Le modèle écrit un arbre JSON qui nomme des composants d'un catalogue. Un moteur de rendu transforme l'arbre en React. C'est le fonctionnement de json-render (vercel-labs). Voir [comment écrire un catalogue de composants json-render](/articles/json-render-component-catalog).
+
+Les deux approches demandent la même chose à une bibliothèque de composants. C'est l'objet de la section suivante.
+
+## Ce qu'un composant doit offrir pour qu'un modèle l'utilise
+
+| Propriété | Ce que cela signifie | Dans VLLNT UI aujourd'hui |
+|---|---|---|
+| Descriptible | Un modèle peut trouver le composant et lire ce qu'il fait | Chaque composant a un descripteur à `/r/<name>.json`. Les 321 indiquent une version et un niveau de stabilité. 2 décrivent leurs props, 3 donnent des exemples d'usage |
+| Piloté par les données | Les props sont des chaînes, des nombres, des booléens, des tableaux et des objets simples : elles circulent en JSON | `AIToolCallDisplay` reçoit `toolName`, `status`, `input` et `output` sous forme de chaînes |
+| Sûr en flux continu | La mise en page tient pendant que le contenu arrive encore | `AIStreamingText` et `Reasoning` acceptent un indicateur `isStreaming`. `Skeleton` réserve l'espace |
+| Sûr à mettre à jour | Une nouvelle version ne casse pas les écrans construits sur l'ancienne | Versionnage sémantique, et une version canary à chaque changement sur `main` |
+| Accessible | Un écran généré respecte le WCAG 2.2 AA comme un écran fait à la main | Chaque story est testée avec axe, niveaux A et AA, en thème clair et sombre |
+
+L'écart se trouve à la première ligne. Un modèle peut lire ce qu'est chaque composant. Il ne peut lire la liste complète des props que pour 2 d'entre eux. Tant que les schémas n'existent pas, vous écrivez vous-même la correspondance entre la sortie du modèle et les props, comme dans l'exemple plus bas.
+
+## Les composants disponibles pour cela
+
+La [famille de composants IA](/families/ai) compte 18 composants. Ces six-là couvrent un tour d'assistant.
+
+| Rôle | Composant | Props qui portent les données |
+|---|---|---|
+| Un message de la conversation | `AIMessageBubble` | `messageRole`, `author`, `timestamp`, `status` |
+| Un texte qui arrive jeton par jeton | `AIStreamingText` | `text`, `isStreaming` |
+| Le raisonnement du modèle | `Reasoning` | `steps`, `duration`, `isStreaming` |
+| Un appel d'outil | `AIToolCallDisplay` | `toolName`, `status`, `input`, `output`, `duration` |
+| Une source derrière une réponse | `AISourceCitation` | `title`, `source`, `snippet`, `href` |
+| Une exécution d'agent en plusieurs étapes | `AgentActivity` avec `AgentStep` | `status`, `elapsed` |
+
+## Exemple : un tour d'assistant à partir de simples données
+
+Le type `Turn` ci-dessous ne contient que des chaînes, des nombres, des booléens et des tableaux. Un serveur peut l'envoyer en JSON, et un modèle peut le remplir.
+
+```tsx
+import {
+  AIMessageBubble,
+  AISourceCitation,
+  AIStreamingText,
+  AIToolCallDisplay,
+  type AIToolCallStatus,
+  Reasoning,
+} from "@vllnt/ui";
+
+type Turn = {
+  isStreaming: boolean;
+  reasoning?: { seconds?: number; steps: string[] };
+  sources: { href: string; source: string; title: string }[];
+  text: string;
+  toolCall?: {
+    input?: string;
+    name: string;
+    output?: string;
+    status: AIToolCallStatus;
+  };
+};
+
+export function AssistantTurn({ turn }: { turn: Turn }) {
+  return (
+    <AIMessageBubble author="Assistant" messageRole="assistant">
+      {turn.reasoning ? (
+        <Reasoning
+          duration={turn.reasoning.seconds}
+          isStreaming={turn.isStreaming}
+          steps={turn.reasoning.steps}
+        />
+      ) : null}
+      {turn.toolCall ? (
+        <AIToolCallDisplay
+          input={turn.toolCall.input}
+          output={turn.toolCall.output}
+          status={turn.toolCall.status}
+          toolName={turn.toolCall.name}
+        />
+      ) : null}
+      <AIStreamingText isStreaming={turn.isStreaming} text={turn.text} />
+      {turn.sources.map((source) => (
+        <AISourceCitation
+          href={source.href}
+          key={source.href}
+          source={source.source}
+          title={source.title}
+        />
+      ))}
+    </AIMessageBubble>
+  );
+}
+```
+
+`AIToolCallStatus` vaut `queued`, `running`, `complete` ou `error`. Envoyez un nouveau `Turn` chaque fois que le flux apporte des données : les mêmes composants se mettent à jour sur place.
+
+Pour ajouter la zone de saisie et la liste des messages autour de ce tour, suivez [construire une interface de chat IA en React](/build/ai-chat-ui). La [page d'AI Tool Call Display](/components/ai-tool-call-display) montre l'aperçu en direct de la carte d'outil.
+
+## Une vérification pour vos propres composants
+
+Appliquez ces cinq contrôles à tout composant qu'un modèle doit pouvoir utiliser.
+
+1. **Les props sont de simples données.** Ne passez des nœuds React que par `children` ou par des emplacements nommés, et le comportement que par des gestionnaires d'événements.
+2. **Chaque vue asynchrone a trois états.** Chargement, résultat et erreur, chacun atteignable par les props seules.
+3. **La taille est connue avant les données.** Réservez l'espace, pour qu'un contenu arrivé plus tard ne déplace pas la page.
+4. **Une phrase dit à quoi il sert.** Un modèle choisit un composant d'après sa description : écrivez-la pour un lecteur qui n'a jamais vu l'écran.
+5. **Le nom accessible est une prop.** Sur un écran généré, aucun designer ne viendra ajouter après coup le libellé manquant.
+
+Ces contrôles reprennent les règles de conception que VLLNT UI fixe à ses propres composants, listées dans le fichier [AGENTS.md](https://github.com/vllnt/ui/blob/main/AGENTS.md) du dépôt.
+
+## Sur la feuille de route
+
+Rien de ce qui suit n'est disponible. Chaque point est un travail prévu.
+
+- **Un catalogue json-render et des helpers AI SDK** pour les composants VLLNT UI ([vllnt/ui#672](https://github.com/vllnt/ui/issues/672)).
+- **Un schéma de props complet** pour chaque composant, pour qu'un moteur de rendu valide un arbre généré avant de l'afficher.
+- **Un contrat de props partielles,** pour que tout composant s'affiche à partir de données incomplètes, reçues en flux continu.
+- **Des contrôles d'accessibilité sur un arbre généré,** exécutés avant que l'écran n'apparaisse.
+
+## Pour aller plus loin
+
+- Reliez les appels d'outil aux composants avec le [guide de l'UI générative avec l'AI SDK](/articles/ai-sdk-generative-ui-react).
+- Laissez un modèle composer des écrans entiers avec un [catalogue de composants json-render](/articles/json-render-component-catalog).
+- Parcourez la [famille de composants IA](/families/ai) pour découvrir les 12 autres composants.
