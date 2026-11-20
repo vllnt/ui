@@ -14,9 +14,16 @@ export type RuntimeMetricTrend = "down" | "flat" | "up";
 /**
  * Tone of the metric value — drives the dot color.
  *
+ * Prefer `"warning"`. The older `"warn"` still renders the same tone.
+ *
  * @public
  */
-export type RuntimeMetricTone = "danger" | "neutral" | "success" | "warn";
+export type RuntimeMetricTone =
+  | "danger"
+  | "neutral"
+  | "success"
+  | "warn"
+  | "warning";
 
 /**
  * One metric tile in the runtime overview.
@@ -60,6 +67,7 @@ const TONE_DOT: Record<RuntimeMetricTone, string> = {
   neutral: "bg-muted-foreground",
   success: "bg-emerald-500",
   warn: "bg-amber-500",
+  warning: "bg-amber-500",
 };
 
 const TREND_GLYPH: Record<RuntimeMetricTrend, string> = {

@@ -3,7 +3,6 @@
 import { type Ref, useCallback, useEffect, useRef, useState } from "react";
 
 import {
-  Pressable,
   type PressableProps,
   StyleSheet,
   Text as NativeText,
@@ -12,6 +11,7 @@ import {
 
 import { useAnnounceOnChange } from "../../../primitives/accessibility";
 import { useGroupDisabled } from "../../../primitives/control-group";
+import { InteractivePressable } from "../../../primitives/interactive-pressable";
 import type { ClipboardService } from "../../../primitives/platform-services";
 import { typeStyle } from "../../../primitives/type-style";
 import { useTheme } from "../../../theme/theme-provider";
@@ -51,8 +51,6 @@ const styles = StyleSheet.create({
   root: {
     alignItems: "center",
     justifyContent: "center",
-    minHeight: 44,
-    minWidth: 44,
   },
 });
 
@@ -163,7 +161,7 @@ function CopyButton({
   }, [onStatusChange, status]);
 
   return (
-    <Pressable
+    <InteractivePressable
       {...props}
       accessibilityLabel={currentLabel}
       accessibilityRole="button"
@@ -181,7 +179,6 @@ function CopyButton({
           borderColor: theme.colors.input,
           borderRadius: theme.radius.md,
           borderWidth: 1,
-          opacity: isDisabled ? 0.5 : state.pressed ? 0.8 : 1,
           paddingHorizontal: theme.spacing[3],
           paddingVertical: theme.spacing[2],
         },
@@ -197,7 +194,7 @@ function CopyButton({
       >
         {currentLabel}
       </NativeText>
-    </Pressable>
+    </InteractivePressable>
   );
 }
 CopyButton.displayName = "CopyButton";

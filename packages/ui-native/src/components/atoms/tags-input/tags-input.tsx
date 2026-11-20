@@ -3,7 +3,6 @@
 import { type Ref, useRef, useState } from "react";
 
 import {
-  Pressable,
   StyleSheet,
   Text as NativeText,
   TextInput,
@@ -13,6 +12,8 @@ import {
 
 import { focusAccessibility } from "../../../primitives/accessibility";
 import { useGroupDisabled } from "../../../primitives/control-group";
+import { interactionTokens } from "../../../primitives/interaction-state";
+import { InteractivePressable } from "../../../primitives/interactive-pressable";
 import { useMergedReferences } from "../../../primitives/merge-references";
 import { typeStyle } from "../../../primitives/type-style";
 import type { ControllableStateOptions } from "../../../primitives/use-controllable-state";
@@ -40,8 +41,6 @@ const styles = StyleSheet.create({
   add: {
     alignItems: "center",
     justifyContent: "center",
-    minHeight: 44,
-    minWidth: 44,
   },
   input: { flex: 1, minHeight: 44, minWidth: 120 },
   root: {
@@ -100,7 +99,7 @@ function TagsInput({
           borderColor: theme.colors.input,
           borderRadius: theme.radius.md,
           gap: theme.spacing[1],
-          opacity: disabled ? 0.5 : 1,
+          opacity: disabled ? interactionTokens(theme).disabledOpacity : 1,
           paddingHorizontal: theme.spacing[2],
         },
         style,
@@ -121,7 +120,7 @@ function TagsInput({
           <NativeText style={typeStyle(theme, "bodySmall", "foreground")}>
             {tag}
           </NativeText>
-          <Pressable
+          <InteractivePressable
             accessibilityLabel={labels.remove(tag)}
             accessibilityRole="button"
             accessibilityState={{ disabled: locked }}
@@ -136,7 +135,7 @@ function TagsInput({
             <NativeText style={{ color: theme.colors.foreground }}>
               ×
             </NativeText>
-          </Pressable>
+          </InteractivePressable>
         </View>
       ))}
       <TextInput
@@ -159,16 +158,16 @@ function TagsInput({
         style={[styles.input, ...typeStyle(theme, "bodySmall", "foreground")]}
         value={draft}
       />
-      <Pressable
+      <InteractivePressable
         accessibilityLabel={labels.add}
         accessibilityRole="button"
         accessibilityState={{ disabled: addDisabled }}
         disabled={addDisabled}
         onPress={commit}
-        style={[styles.add, { opacity: addDisabled ? 0.5 : 1 }]}
+        style={styles.add}
       >
         <NativeText style={{ color: theme.colors.foreground }}>+</NativeText>
-      </Pressable>
+      </InteractivePressable>
     </View>
   );
 }

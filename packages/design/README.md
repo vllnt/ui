@@ -50,13 +50,30 @@ The token file follows `tokens.schema.json`:
 - `color.semantic`: CSS variable names, light/dark OKLCH channels, and intended roles.
 - `typography.scale`: font size plus explicit font-size and line-height CSS variables.
 - `spacing.scale`: 4-point spacing tokens mapped to rem values.
-- `radius`: allowed radius tokens.
+- `color.badge-label` and `brand.status`: Penpot alias names. Each leaf is
+  `{ value, role }` with `value` a `{color.<role>}` reference. They reach the
+  Penpot sets and `designTokens` only; the web uses the role itself.
+- `radius`: allowed radius tokens. `control` (6) and `surface` (8) are role
+  names; themes cannot override them.
+- `size`: `{ value, role }` leaves with a px or rem length (`control-xs`,
+  `target.min`). A leaf with `coarse: "{size.<name>}"` takes that token's value
+  under `@media (pointer: coarse)`; the generator writes the rule.
+- `opacity`: `{ value, role }` leaves from 0 to 1 (`grain`, `contact`).
 - `themes`: named product themes (`maia`, `paas`). Each has a `label`, a
   `description`, an optional `defaultMode`, and optional overrides of existing
   core roles: `color.light` / `color.dark` (OKLCH channels), `typography`
-  (`fontFamily`, `fontWeight`, `scale`) and `radius`. Every key must already
-  exist in the core, so a theme cannot add roles.
-- `elevation`: allowed shadow tokens.
+  (`fontFamily`, `fontWeight`, `scale`), `radius` and `opacity`. Every key must
+  already exist in the core, so a theme cannot add roles.
+- `elevation`: allowed shadow tokens (Tailwind classes; not exported to Penpot).
+- `shadow`: `{ role, light, dark }` library shadows (`raised`, `overlay`,
+  `floating`). Each mode is a list of layers `{ offsetX, offsetY, blur, spread,
+  color, inset }`; the generator writes `--shadow-<name>` in both modes and the
+  Penpot `shadow` tokens (light in `vllnt/core`, dark in each `<theme>/dark` set).
+- `spacing.page-gutter`, `spacing.page-gutter-tablet`, `spacing.page-gutter-desktop`:
+  `{ value: "{spacing.N}", role }` aliases of the scale, the page padding of the
+  shared site shell (20 below 768 px, 48 from 768 px, 96 from 1200 px).
+- `size.page-max`: the maximum width of the page column (1440 px).
+- `size.measure-narrow`: the narrow text column width (480 px).
 - `motion`: allowed durations, easing, and reduced-motion behavior.
 - `iconography`: icon library, sizes, stroke, and color policy.
 

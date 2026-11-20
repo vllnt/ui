@@ -2,13 +2,13 @@
 
 import type { Ref } from "react";
 import {
-  Pressable,
   StyleSheet,
   Text as NativeText,
   View,
   type ViewProps,
 } from "react-native";
 
+import { InteractivePressable } from "../../../primitives/interactive-pressable";
 import {
   defaultLinkingService,
   type LinkingService,
@@ -135,7 +135,7 @@ function SiblingLink({
 }: SiblingLinkProps) {
   const theme = useTheme();
   return (
-    <Pressable
+    <InteractivePressable
       accessibilityHint={hint}
       accessibilityLabel={buildLabel(caption, link, variant)}
       accessibilityRole="link"
@@ -145,13 +145,11 @@ function SiblingLink({
           (error: unknown) => onOpenError?.(error, link),
         );
       }}
-      style={({ pressed }) => [
+      style={[
         styles.item,
         side === "next" ? styles.next : styles.previous,
         {
-          backgroundColor: pressed
-            ? theme.colors.accent
-            : theme.colors.background,
+          backgroundColor: theme.colors.background,
           borderColor: theme.colors.border,
           borderRadius: theme.radius.md,
           borderWidth: 1,
@@ -161,7 +159,7 @@ function SiblingLink({
       ]}
     >
       <SiblingText caption={caption} link={link} variant={variant} />
-    </Pressable>
+    </InteractivePressable>
   );
 }
 SiblingLink.displayName = "SiblingLink";

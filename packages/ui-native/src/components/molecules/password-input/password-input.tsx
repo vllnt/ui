@@ -1,7 +1,6 @@
 import { type Ref, useState } from "react";
 
 import {
-  Pressable,
   StyleSheet,
   Text as NativeText,
   type TextInput,
@@ -10,6 +9,7 @@ import {
 } from "react-native";
 
 import { useGroupDisabled } from "../../../primitives/control-group";
+import { InteractivePressable } from "../../../primitives/interactive-pressable";
 import { typeStyle } from "../../../primitives/type-style";
 import { useTheme } from "../../../theme/theme-provider";
 import { Input } from "../../atoms/input/input";
@@ -60,7 +60,7 @@ function PasswordInput({
         secureTextEntry={!visible}
         style={[styles.input, { paddingRight: toggleWidth }, style]}
       />
-      <Pressable
+      <InteractivePressable
         accessibilityLabel={label}
         accessibilityRole="button"
         accessibilityState={{ disabled }}
@@ -81,7 +81,7 @@ function PasswordInput({
         >
           {label}
         </NativeText>
-      </Pressable>
+      </InteractivePressable>
     </View>
   );
 }

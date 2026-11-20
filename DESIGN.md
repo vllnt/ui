@@ -58,7 +58,7 @@ library.
 
 Machine clients use `packages/design/tokens.json`. The JSON schema is
 documented in `packages/design/tokens.schema.json` and groups tokens by color,
-typography, spacing, radius, elevation, motion, and iconography.
+typography, spacing, radius, size, opacity, elevation, motion, and iconography.
 
 ### Semantic tokens (consumer-facing)
 
@@ -82,7 +82,7 @@ Values are OKLCH channels; the sRGB hex is what renders on an sRGB display.
 | `--success-foreground` / `--warning-foreground` / `--info-foreground` | Text on that fill (same pairing as destructive) | `0.9848 0 0` (#fafafa) | `0.2044 0 0` (#171717) |
 | `--diff-added` / `--diff-removed` | Added / removed line surfaces; `--foreground` is the text on them | `0.94 0.04 150` (#d9f3dd) / `0.94 0.03 25` (#ffe4e1) | `0.26 0.05 150` (#102b17) / `0.26 0.055 25` (#3b1816) |
 | `--border` | Decorative hairline (cards, separators, tables) | `0.9219 0 0` (#e5e5e5) | `0.2686 0 0` (#262626) |
-| `--input` | Form-control boundary | `0.66 0 0` (#929292) | `0.49 0 0` (#606060) |
+| `--input` | Form-control boundary | `0.6167 0 0` (#858585) | `0.5208 0 0` (#696969) |
 | `--ring` | Focus ring | `0.1445 0 0` (#0a0a0a) | `0.8697 0 0` (#d4d4d4) |
 
 **Dark surfaces are pure black.** In dark mode `--background`, `--muted`,
@@ -126,6 +126,15 @@ In dark mode `--destructive` is a light red paired with a dark
 `--destructive-foreground` (the shadcn v4 pairing). One dark red cannot be both
 readable text on a near-black surface and a fill behind white text.
 
+### Penpot alias names
+
+The Penpot libraries carry two token groups that name an existing role instead of adding a colour. `tokens.json` and the Penpot token sets keep the names so a Penpot binding resolves; the web has no variable for them, so use the role.
+
+| Penpot token | Resolves to | On the web |
+|--------------|-------------|------------|
+| `color.badge-label.success` / `warning` / `info` / `danger` | `{color.success}` / `{color.warning}` / `{color.info}` / `{color.destructive}` | the `success`, `warning`, `info` or `destructive` role |
+| `brand.status.<status>.light` / `.dark` | `implemented` `{color.success}`, `candidate` `{color.info}`, `planned` `{color.muted-foreground}`, `unsupported` `{color.destructive}`, `deprecated` `{color.warning}` (the same in both modes) | the role in the middle column |
+
 ### Anti-patterns
 - **Never** use `bg-black` / `text-white` / `bg-white`. Use `bg-background` / `bg-foreground` / `text-foreground` so dark mode works.
 - **Never** use `bg-gray-500` / Tailwind palette literals. Pick a semantic token.
@@ -147,12 +156,12 @@ themes, which own those roles. Tests enforce it and fail on any regression:
 | Danger text | `--destructive` on background, card, popover, muted, and on its own 10% tint (`bg-destructive/10`) | 4.5:1 |
 | Status text | `--success`, `--warning`, `--info` on background, card, popover, muted, and on their own 10% tint | 4.5:1 |
 | Diff text | `--foreground` on `--diff-added` and `--diff-removed` | 4.5:1 |
-| Control boundary | `--input` against background, card, popover | 3:1 |
+| Control boundary | `--input` against background, card, popover, muted | 3:1 |
 | Focus ring | `--ring` against background | 3:1 |
 
 Default theme ratios: muted-foreground 5.41 (light, on background) / 4.96 (light, on muted), 8.33 (dark, on every surface: they are all #000000);
 destructive text 5.41 / 4.96 (light), 7.26 (dark, on every surface);
-destructive-foreground on destructive 5.18 (light), 6.20 (dark); input 3.11 (light), 3.34 (dark, on every surface);
+destructive-foreground on destructive 5.18 (light), 6.20 (dark); input 3.69 (light, on background, card and popover) / 3.38 (light, on muted), 3.83 (dark, on every surface);
 success / warning / info text on muted 5.22 / 5.60 / 5.57 (light), 11.20 / 11.88 / 9.19 (dark), and on their 10% tint 4.95 / 5.33 / 5.24 (light);
 success / warning / info foreground on its fill 5.46 / 5.85 / 5.82 (light), 9.56 / 10.14 / 7.85 (dark);
 foreground on diff-added / diff-removed 16.80 / 16.44 (light), 14.58 / 15.15 (dark).
@@ -162,22 +171,23 @@ foreground on diff-added / diff-removed 16.80 / 16.44 (light), 14.58 / 15.15 (da
 - Text on `bg-primary` / `bg-secondary` / `bg-accent` / `bg-destructive` / `bg-success` / `bg-warning` / `bg-info` uses that surface's `*-foreground`. `--muted-foreground` is only guaranteed on background, card, popover, and muted.
 - Put light text on a destructive fill with `text-destructive-foreground`, never `text-white`: dark mode pairs a light red with dark text.
 - New themes and presets must pass the contract test before merging. Keep new values inside the sRGB gamut so the measured ratio matches what renders.
+- Every preset sets its own `--input`, so the control-boundary rule (muted row included) is met per preset. `packages/ui/src/lib/__tests__/fit-preset-inputs.ts` computes it: it moves only the lightness of `--input`, by the smallest 0.001 step that reaches 3:1 on background, card, popover and muted, and keeps hue and chroma. After changing a preset's surfaces, run `pnpm -F @vllnt/ui exec tsx src/lib/__tests__/fit-preset-inputs.ts` to see the values, and add `--write` to update `themes/presets.css`.
 - Hand-written presets in `themes/presets.css` do not define the status or diff roles; they inherit the default theme's. On five presets (dracula, synthwave, nord, claude, dusk) those inherited tones fall below 4.5:1 on some preset surfaces, so use the status roles with a preset only after checking the pair (tracked in [#579](https://github.com/vllnt/ui/issues/579)). Product themes define every role. The theme switcher and `useThemePreset` do not know the product themes yet (also #579).
 
 ### Product themes
 
-A product theme is a named override layer on the core tokens, authored in the `themes` block of `packages/design/tokens.json`. It overrides existing roles (colors per mode, fonts, type steps, `--radius`); it never adds product-specific role names to the core. Apply one with `data-theme` on `<html>`; the `dark` class still picks the mode. `themes/products.css` is generated, so edit `tokens.json` and run `pnpm tokens:generate`.
+A product theme is a named override layer on the core tokens, authored in the `themes` block of `packages/design/tokens.json`. It overrides existing roles (colors per mode, fonts, type steps, `--radius`, `--opacity-grain` and `--opacity-contact`); it never adds product-specific role names to the core. Apply one with `data-theme` on `<html>`; the `dark` class still picks the mode. `themes/products.css` is generated, so edit `tokens.json` and run `pnpm tokens:generate`.
 
 | Theme | `data-theme` | Identity |
 |-------|--------------|----------|
-| Maia | `maia` | Pink `--primary` (#BE148B light, #F46CBF dark) on white / black, Figtree + JetBrains Mono, tighter scale, radius sm 6 / md 8 / lg 12 / xl 16 |
+| Maia | `maia` | Ink: no accent, `--primary` is the ink colour (#000000 light, #FFFFFF dark; pure black on purpose, while core `--primary` stays #171717 in light) on white / black, core Inter + JetBrains Mono, weights 400 to 600, tighter scale, radius sm 6 / md 8 / lg 12 / xl 16 |
 | PaaS | `paas` | Core neutrals and status tones, JetBrains Mono for sans, display and mono. Dark is the design default; light works too. No accent: `--primary` stays the core neutral |
 
-Maia's palette comes from a Penpot export kept for review in `packages/design/sources/` (the generator never reads it). Its product-specific names map onto core roles:
+Maia's palette comes from a Penpot export kept for review in `packages/design/sources/` (the generator never reads it). That copy is the 8 Nov pink export. Maia is now Ink (owner decision, 11 Nov): the export's `accent` no longer becomes `--primary`, its Figtree faces and its 700 weights are not used, and every other value still follows it. Its product-specific names map onto core roles:
 
 | Maia token | Core role |
 |------------|-----------|
-| `accent` | `--primary` (and `--primary-foreground` from `accent-foreground`) |
+| `accent` | not mapped (Ink: `--primary` is the ink colour, `--primary-foreground` its inverse) |
 | `muted` | `--muted`; core `--accent` is the same subtle surface |
 | `muted-foreground`, `status.planned`, `state.idle` | `--muted-foreground` |
 | `surface-raised` | `--card` and `--popover` |
@@ -230,7 +240,7 @@ Other outputs from the same source, drift-checked by `pnpm tokens:check`:
 | Label | `--font-size-label` | 0.75rem (12px) | 600 (`--font-weight-label`) | 1.4 |
 | Code | inherit | inherit | 400 mono | 1.5 |
 
-Product themes override these steps. Maia sets Display 28/700, H5 20/600, H6 15/600, Body 14/400, Body small 13/400, Caption 12/500 and Label 11/700; its Mono 12/400 is `font-mono` at the Caption size with the body weight. Maia's Display weight (700) and Label weight (700) are theme-level exceptions to the rule below; core stays at 600. Maia's Label is set in capitals in the design; the tokens carry no text-transform role (a theme cannot add roles), so add `uppercase` where the Label step is used. Steps a theme does not set (H1 to H4, Body large) keep the core size.
+Product themes override these steps. Maia sets Display 28/600, H5 20/600, H6 15/600, Body 14/400, Body small 13/400, Caption 12/500 and Label 11/600; its Mono 12/400 is `font-mono` at the Caption size with the body weight. No theme uses weight 700. Maia's Label is set in capitals in the design; the tokens carry no text-transform role (a theme cannot add roles), so add `uppercase` where the Label step is used. Steps a theme does not set (H1 to H4, Body large) keep the core size.
 
 **Rules**
 - The `Text` / `Heading` / `Display` / `Prose` foundation primitives consume the tokens above — style them by overriding tokens, not by forking the components.
@@ -256,10 +266,22 @@ Product themes override these steps. Maia sets Display 28/700, H5 20/600, H6 15/
 | `space-10` | 40px | Large control height, loose section break |
 | `space-12` | 48px | Page section |
 | `space-16` | 64px | Hero / landing block |
+| `space-24` | 96px | Page gutter from 1200 px |
 
 **Rules**
 - Stay on the scale. Never `gap-[7px]` etc.
 - One axis at a time on flex children — use `gap-y-N` or `gap-x-N`, not `gap-N` when only one axis is needed.
+
+**Page column.** Three role tokens alias the scale for the horizontal page padding, and one sets the column's maximum width. They equal the page column of the live shared site shell (20 px, 48 px from 768 px, 96 px from 1200 px, at most 1440 px wide), so the Penpot libraries, which follow these values, and the shell agree. Read them instead of repeating `px-5` / `px-12` / `px-24`. The breakpoints (768, 1200) belong to the shell and are not tokens.
+
+| Token | CSS variable | Value | Use |
+|-------|--------------|-------|-----|
+| `spacing.page-gutter` | `--spacing-page-gutter` | 20px (`space-5`) | Page padding below 768 px |
+| `spacing.page-gutter-tablet` | `--spacing-page-gutter-tablet` | 48px (`space-12`) | Page padding from 768 px |
+| `spacing.page-gutter-desktop` | `--spacing-page-gutter-desktop` | 96px (`space-24`) | Page padding from 1200 px |
+| `size.page-max` | `--size-page-max` | 1440px (90rem) | Maximum width of the page column |
+
+**Narrow measure.** `size.measure-narrow` (`--size-measure-narrow`, 480px) is the width of a narrow text column, for rich text in a tight container.
 
 ---
 
@@ -273,8 +295,12 @@ Product themes override these steps. Maia sets Display 28/700, H5 20/600, H6 15/
 | `radius-lg` | 12px |
 | `radius-xl` | 16px |
 | `radius-full` | 9999px |
+| `radius-control` | 6px (`--radius-control`) |
+| `radius-surface` | 8px (`--radius-surface`) |
 
 Cards, popovers, dialogs use `radius-md`. Pills, avatars use `radius-full`. Long surfaces (panels, sheets) use `radius-lg`.
+
+`radius-control` and `radius-surface` are role names for controls (buttons, inputs) and surfaces (cards, panels). The Penpot libraries use the same two names, but their `md`, `lg` and `xl` are 6, 8 and 12 where the code's are 8, 12 and 16. To get the same pixels in code and in Penpot, use the role names, not the `md` / `lg` / `xl` steps. Themes cannot override the two roles.
 
 ---
 
@@ -290,6 +316,21 @@ Use sparingly. Most components are flat with `border` + `bg-background`.
 | `shadow-lg` | `0 10px 15px -3px rgba(0,0,0,0.1)` (popovers, dialogs) |
 
 No coloured shadows. No multi-layered glow effects.
+
+**Library shadows.** Three shadow tokens carry the Penpot library's values, with a separate set per mode (dark adds an inset 1px top highlight). They are emitted as CSS variables and as Penpot `shadow` tokens; the Tailwind classes above are unchanged.
+
+| Token | Variable | Light | Dark |
+|-------|----------|-------|------|
+| `shadow.raised` | `--shadow-raised` | `0 1px 3px #0000001A, 0 1px 2px #0000000F` | `0 1px 3px #00000066, 0 1px 2px #0000003D, inset 0 1px 0 #FFFFFF14` |
+| `shadow.overlay` | `--shadow-overlay` | `0 8px 24px #00000024` | `0 8px 24px #00000080, inset 0 1px 0 #FFFFFF1F` |
+| `shadow.floating` | `--shadow-floating` | `0 16px 40px #0000002E` | `0 16px 40px #00000099, inset 0 1px 0 #FFFFFF29` |
+
+**Grain and contact layers.** Two opacity tokens set how strong a Surface grain or contact-shadow layer is when a component draws one. Nothing draws either unless it opts in.
+
+| Token | Value |
+|-------|-------|
+| `--opacity-grain` | 1 (PaaS theme: 0) |
+| `--opacity-contact` | 1 (PaaS theme: 0) |
 
 ---
 
@@ -362,6 +403,17 @@ No coloured shadows. No multi-layered glow effects.
 - Color is **never** the only signal — pair with icon, text, or pattern.
 - Animations respect `prefers-reduced-motion`.
 - Components shipping a defined ARIA pattern (combobox, dialog, menu, tabs) declare their full keyboard map in `meta.json` per #255.
+
+### Touch targets
+
+| Token | Value | Role |
+|-------|-------|------|
+| `--size-target-min` | 44px | Smallest hit target for a touch pointer |
+| `--size-control-xs` | 32px; 44px under `@media (pointer: coarse)` | Extra-small control height |
+
+`themes/default.css` and `styles.css` declare both. Under `@media (pointer: coarse)` they set `--size-control-xs: var(--size-target-min)` and change nothing else. A component reaches 44px by sizing from these variables; `Button` `lg` is already 44. Each component adopts them in its own change.
+
+The Penpot libraries keep one `size.target.min` and `size.control-xs` per density (compact 24, regular 32, touch 44). Code has one value per name: `size.target.min` is the touch value (44) and `size.control-xs` the regular one (32).
 
 ---
 

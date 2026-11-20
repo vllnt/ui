@@ -1,7 +1,7 @@
 import * as React from "react";
 
 import { cn } from "../../../lib/utils";
-import { badgeVariants } from "../../atoms/badge/badge";
+import { Badge, type BadgeProps } from "../../atoms/badge/badge";
 
 export type PlanBadgeTier = "enterprise" | "free" | "growth" | "starter";
 
@@ -29,24 +29,27 @@ function getPlanLabel(tier: PlanBadgeTier): string {
   }
 }
 
-function getPlanClasses(tier: PlanBadgeTier, state: PlanBadgeState): string {
+function getPlanTone(
+  tier: PlanBadgeTier,
+  state: PlanBadgeState,
+): BadgeProps["tone"] {
   if (state === "legacy") {
-    return "border-amber-500/30 bg-amber-500/10 text-amber-700 dark:text-amber-300";
+    return "warning";
   }
 
   if (state === "trial") {
-    return "border-sky-500/30 bg-sky-500/10 text-sky-700 dark:text-sky-300";
+    return "info";
   }
 
   switch (tier) {
     case "enterprise":
-      return "border-primary/30 bg-primary/10 text-primary";
+      return "primary";
     case "free":
-      return "border-border bg-muted text-muted-foreground";
+      return "neutral";
     case "growth":
-      return "border-violet-500/30 bg-violet-500/10 text-violet-700 dark:text-violet-300";
+      return "info";
     case "starter":
-      return "border-emerald-500/30 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300";
+      return "success";
   }
 }
 
@@ -59,17 +62,16 @@ export const PlanBadge = ({
   ...props
 }: PlanBadgeProps & { ref?: React.Ref<HTMLSpanElement> }) => {
   return (
-    <span
+    <Badge
       className={cn(
-        badgeVariants({ variant: "outline" }),
-        "gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-medium tracking-[0.02em] shadow-none",
-        getPlanClasses(tier, state),
+        "py-1 text-[11px] font-medium tracking-[0.02em] shadow-none hover:bg-secondary",
         className,
       )}
+      dot
       ref={reference}
+      tone={getPlanTone(tier, state)}
       {...props}
     >
-      <span aria-hidden="true" className="size-1.5 rounded-full bg-current" />
       <span>{label ?? getPlanLabel(tier)}</span>
       {state === "trial" ? (
         <span className="text-current/80">Trial</span>
@@ -77,7 +79,7 @@ export const PlanBadge = ({
       {state === "legacy" ? (
         <span className="text-current/80">Legacy</span>
       ) : null}
-    </span>
+    </Badge>
   );
 };
 

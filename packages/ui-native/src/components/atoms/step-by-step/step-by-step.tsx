@@ -9,14 +9,9 @@ import {
   type Ref,
 } from "react";
 
-import {
-  Pressable,
-  StyleSheet,
-  Text,
-  View,
-  type ViewProps,
-} from "react-native";
+import { StyleSheet, Text, View, type ViewProps } from "react-native";
 
+import { InteractivePressable } from "../../../primitives/interactive-pressable";
 import { typeStyle } from "../../../primitives/type-style";
 import {
   controllableOptions,
@@ -58,8 +53,6 @@ const styles = StyleSheet.create({
   toggle: {
     alignItems: "center",
     justifyContent: "center",
-    minHeight: 44,
-    minWidth: 44,
   },
 });
 
@@ -199,7 +192,7 @@ function StepByStepRoot({
                 stepStyle,
               ]}
             >
-              <Pressable
+              <InteractivePressable
                 accessibilityLabel={labels?.toggleStep(stepTitle, completed)}
                 accessibilityRole="checkbox"
                 accessibilityState={{ checked: completed }}
@@ -232,7 +225,7 @@ function StepByStepRoot({
                     {completed ? "✓" : (number ?? index + 1)}
                   </Text>
                 </View>
-              </Pressable>
+              </InteractivePressable>
               <View
                 style={{
                   flex: 1,

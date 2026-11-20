@@ -2,7 +2,6 @@
 
 import type { Ref } from "react";
 import {
-  Pressable,
   StyleSheet,
   Text as NativeText,
   View,
@@ -10,6 +9,7 @@ import {
 } from "react-native";
 
 import { useGroupDisabled } from "../../../primitives/control-group";
+import { InteractivePressable } from "../../../primitives/interactive-pressable";
 import { toggleMultipleSelected } from "../../../primitives/selection";
 import { typeStyle } from "../../../primitives/type-style";
 import type { ControllableStateOptions } from "../../../primitives/use-controllable-state";
@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     width: 24,
   },
-  item: { alignItems: "center", flexDirection: "row", minHeight: 44 },
+  item: { alignItems: "center", flexDirection: "row" },
   wrap: { flexWrap: "wrap" },
 });
 
@@ -78,7 +78,7 @@ function CheckboxGroup({
         const checked = selectedIds.has(item.id);
         const itemDisabled = disabled || item.disabled === true;
         return (
-          <Pressable
+          <InteractivePressable
             accessibilityHint={label}
             accessibilityLabel={item.label}
             accessibilityRole="checkbox"
@@ -88,10 +88,7 @@ function CheckboxGroup({
             onPress={() => {
               setSelectedIds(toggleMultipleSelected(selectedIds, item, getId));
             }}
-            style={[
-              styles.item,
-              { gap: theme.spacing[2], opacity: itemDisabled ? 0.5 : 1 },
-            ]}
+            style={[styles.item, { gap: theme.spacing[2] }]}
           >
             <View
               style={[
@@ -116,7 +113,7 @@ function CheckboxGroup({
             <NativeText style={typeStyle(theme, "bodySmall", "foreground")}>
               {item.label}
             </NativeText>
-          </Pressable>
+          </InteractivePressable>
         );
       })}
     </View>

@@ -1,7 +1,6 @@
 import { isValidElement, type ReactNode, type Ref, useState } from "react";
 
 import {
-  Pressable,
   type PressableProps,
   StyleSheet,
   Text as NativeText,
@@ -13,6 +12,7 @@ import {
   decorativeProps,
   useAnnounceOnChange,
 } from "../../../primitives/accessibility";
+import { InteractivePressable } from "../../../primitives/interactive-pressable";
 import { TextColorContext } from "../../../primitives/text-color";
 import { useTheme } from "../../../theme/theme-provider";
 import { Text } from "../../atoms/text/text";
@@ -40,8 +40,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderWidth: 1,
     justifyContent: "center",
-    minHeight: 44,
-    minWidth: 44,
   },
   body: {
     alignItems: "center",
@@ -52,8 +50,6 @@ const styles = StyleSheet.create({
   dismiss: {
     alignItems: "center",
     justifyContent: "center",
-    minHeight: 44,
-    minWidth: 44,
   },
   root: {
     alignItems: "flex-start",
@@ -108,14 +104,14 @@ function BannerDismiss({
   readonly onPress: () => void;
 }) {
   return (
-    <Pressable
+    <InteractivePressable
       accessibilityLabel={label}
       accessibilityRole="button"
       onPress={onPress}
       style={styles.dismiss}
     >
       <NativeText style={{ color }}>×</NativeText>
-    </Pressable>
+    </InteractivePressable>
   );
 }
 BannerDismiss.displayName = "BannerDismiss";
@@ -214,7 +210,7 @@ function BannerAction({
   const theme = useTheme();
   const isDisabled = disabled === true;
   return (
-    <Pressable
+    <InteractivePressable
       {...props}
       accessibilityRole="button"
       accessibilityState={{ ...props.accessibilityState, disabled: isDisabled }}
@@ -225,14 +221,13 @@ function BannerAction({
         {
           borderColor: theme.colors.border,
           borderRadius: theme.radius.md,
-          opacity: state.pressed ? 0.8 : isDisabled ? 0.5 : 1,
           paddingHorizontal: theme.spacing[3],
         },
         typeof style === "function" ? style(state) : style,
       ]}
     >
       {typeof children === "function" ? children : children}
-    </Pressable>
+    </InteractivePressable>
   );
 }
 BannerAction.displayName = "BannerAction";

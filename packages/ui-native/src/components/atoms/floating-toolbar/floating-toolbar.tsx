@@ -1,12 +1,7 @@
 import type { ReactNode, Ref } from "react";
-import {
-  Pressable,
-  StyleSheet,
-  Text,
-  View,
-  type ViewProps,
-} from "react-native";
+import { StyleSheet, Text, View, type ViewProps } from "react-native";
 
+import { InteractivePressable } from "../../../primitives/interactive-pressable";
 import { useTheme } from "../../../theme/theme-provider";
 
 /** One caller-identified native toolbar action. */
@@ -38,8 +33,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     flexDirection: "row",
     justifyContent: "center",
-    minHeight: 44,
-    minWidth: 44,
   },
   root: {
     alignItems: "center",
@@ -111,21 +104,21 @@ function FloatingToolbar({
           action.onPress();
         };
         return (
-          <Pressable
+          <InteractivePressable
             accessibilityHint={labels.region}
             accessibilityLabel={action.label}
             accessibilityRole="button"
             accessibilityState={{ disabled: action.disabled }}
             disabled={action.disabled}
+            filled
             key={action.id}
             onPress={handlePress}
-            style={({ pressed }) => [
+            style={[
               styles.action,
               {
                 backgroundColor: colors.backgroundColor,
                 borderRadius: theme.radius.md,
                 gap: theme.spacing[2],
-                opacity: action.disabled ? 0.5 : pressed ? 0.8 : 1,
                 paddingHorizontal: theme.spacing[3],
               },
             ]}
@@ -142,7 +135,7 @@ function FloatingToolbar({
             >
               {action.label}
             </Text>
-          </Pressable>
+          </InteractivePressable>
         );
       })}
     </View>

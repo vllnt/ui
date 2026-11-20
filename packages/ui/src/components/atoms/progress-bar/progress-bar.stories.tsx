@@ -8,6 +8,9 @@ const meta = {
     value: 40,
   },
   argTypes: {
+    blocks: {
+      control: "boolean",
+    },
     mode: {
       control: "inline-radio",
       options: ["determinate", "indeterminate"],
@@ -68,6 +71,10 @@ export const Large: Story = {
 
 export const Indeterminate: Story = {
   args: { label: "Preparing upload", mode: "indeterminate" },
+};
+
+export const Blocks: Story = {
+  args: { blocks: true, label: "Upload", value: 40 },
 };
 
 export const StepLabel: Story = {

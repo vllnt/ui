@@ -3,7 +3,6 @@
 import { type Ref, useMemo, useState } from "react";
 
 import {
-  Pressable,
   ScrollView,
   StyleSheet,
   Text as NativeText,
@@ -16,6 +15,7 @@ import {
   useAnnounceOnChange,
 } from "../../../primitives/accessibility";
 import { useGroupDisabled } from "../../../primitives/control-group";
+import { InteractivePressable } from "../../../primitives/interactive-pressable";
 import { ModalLayer } from "../../../primitives/modal-layer";
 import { typeStyle } from "../../../primitives/type-style";
 import type { ControllableStateOptions } from "../../../primitives/use-controllable-state";
@@ -51,7 +51,7 @@ export type SelectProps = Omit<ViewProps, "children"> & {
 };
 
 const styles = StyleSheet.create({
-  close: { alignItems: "center", justifyContent: "center", minHeight: 44 },
+  close: { alignItems: "center", justifyContent: "center" },
   error: { marginTop: 4 },
   heading: { marginBottom: 8 },
   modal: { flex: 1, justifyContent: "flex-end" },
@@ -59,7 +59,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     flexDirection: "row",
     justifyContent: "space-between",
-    minHeight: 44,
   },
   panel: { borderTopWidth: 1, maxHeight: "75%" },
   trigger: {
@@ -67,7 +66,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     flexDirection: "row",
     justifyContent: "space-between",
-    minHeight: 44,
     width: "100%",
   },
 });
@@ -107,7 +105,7 @@ function Select({
 
   return (
     <View ref={ref} style={style} {...props}>
-      <Pressable
+      <InteractivePressable
         accessibilityHint={error}
         accessibilityLabel={labels.open}
         accessibilityRole="button"
@@ -127,7 +125,6 @@ function Select({
               ? theme.colors.destructive
               : theme.colors.input,
             borderRadius: theme.radius.md,
-            opacity: disabled ? 0.5 : 1,
             paddingHorizontal: theme.spacing[3],
           },
         ]}
@@ -148,7 +145,7 @@ function Select({
         >
           ⌄
         </NativeText>
-      </Pressable>
+      </InteractivePressable>
       {error ? (
         <NativeText
           accessibilityLiveRegion="polite"
@@ -196,7 +193,7 @@ function Select({
               const selected = option.id === selectedId;
               const optionDisabled = disabled || option.disabled === true;
               return (
-                <Pressable
+                <InteractivePressable
                   accessibilityLabel={option.label}
                   accessibilityRole="radio"
                   accessibilityState={{
@@ -209,6 +206,7 @@ function Select({
                     setSelectedId(option.id);
                     setModalOpen(false);
                   }}
+                  selected={selected}
                   style={[
                     styles.option,
                     {
@@ -216,7 +214,6 @@ function Select({
                         ? theme.colors.accent
                         : theme.colors.background,
                       borderRadius: theme.radius.sm,
-                      opacity: optionDisabled ? 0.5 : 1,
                       paddingHorizontal: theme.spacing[3],
                     },
                   ]}
@@ -231,11 +228,11 @@ function Select({
                       ✓
                     </NativeText>
                   ) : null}
-                </Pressable>
+                </InteractivePressable>
               );
             })}
           </ScrollView>
-          <Pressable
+          <InteractivePressable
             accessibilityLabel={labels.close}
             accessibilityRole="button"
             onPress={() => {
@@ -246,7 +243,7 @@ function Select({
             <NativeText style={typeStyle(theme, "bodySmall", "foreground")}>
               {labels.close}
             </NativeText>
-          </Pressable>
+          </InteractivePressable>
         </View>
       </ModalLayer>
     </View>

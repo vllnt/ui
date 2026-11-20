@@ -2,16 +2,11 @@
 
 import { type Ref, useId } from "react";
 
-import {
-  Pressable,
-  StyleSheet,
-  Text,
-  View,
-  type ViewProps,
-} from "react-native";
+import { StyleSheet, Text, View, type ViewProps } from "react-native";
 
 import { useAnnounceOnChange } from "../../../primitives/accessibility";
 import { useGroupDisabled } from "../../../primitives/control-group";
+import { InteractivePressable } from "../../../primitives/interactive-pressable";
 import { typeStyle } from "../../../primitives/type-style";
 import {
   controllableOptions,
@@ -51,8 +46,6 @@ const styles = StyleSheet.create({
   option: {
     alignItems: "center",
     justifyContent: "center",
-    minHeight: 44,
-    minWidth: 44,
   },
   root: { alignItems: "center", flexDirection: "row", flexWrap: "wrap" },
 });
@@ -88,7 +81,7 @@ function RatingOption({
   const theme = useTheme();
   const selected = choice === activeValue;
   return (
-    <Pressable
+    <InteractivePressable
       accessibilityHint={groupLabel}
       accessibilityLabel={label}
       accessibilityRole="radio"
@@ -98,10 +91,7 @@ function RatingOption({
       onPress={() => {
         onSelect(allowClear && selected ? 0 : choice);
       }}
-      style={({ pressed }) => [
-        styles.option,
-        { opacity: readOnly ? 0.6 : pressed ? 0.8 : 1 },
-      ]}
+      style={styles.option}
     >
       <Text
         style={{
@@ -114,7 +104,7 @@ function RatingOption({
       >
         {choice <= activeValue ? "★" : "☆"}
       </Text>
-    </Pressable>
+    </InteractivePressable>
   );
 }
 RatingOption.displayName = "RatingOption";

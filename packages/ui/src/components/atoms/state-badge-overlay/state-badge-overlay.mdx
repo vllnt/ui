@@ -46,7 +46,7 @@ import { StateBadgeOverlay } from '@vllnt/ui'
 
 ## Complete state
 
-\`complete\` is a calm emerald chip — visible but not loud, since complete is the default eventual state.
+\`complete\` is a neutral chip with a green dot — visible but not loud, since complete is the default eventual state.
 
 <Canvas of={Stories.Complete} sourceState="shown" />
 
@@ -58,6 +58,6 @@ Pass \`label\` to override the humanized state name (e.g. domain-specific verbs)
 
 ## Notes
 
-- States map: \`idle\` (muted) · \`queued\` (amber) · \`running\` (blue, pulsing dot) · \`complete\` (emerald) · \`failed\` (red) · \`stopped\` (foreground).
+- States map (dot colour): \`idle\` (muted) · \`queued\` (warning) · \`running\` (info, pulsing dot) · \`complete\` (success) · \`failed\` (destructive) · \`stopped\` (muted). The chip surface is \`secondary\` and the label stays foreground in every state.
 - Anchors map: \`top-right\` (default) · \`top-left\` · \`bottom-right\` · \`bottom-left\`. The anchor pixel is always the meeting corner.
 - Each render emits \`data-state-badge-overlay\` + \`data-state-name\` + \`data-state-anchor\`. The leading dot emits \`data-state-badge-dot\`.

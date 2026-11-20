@@ -1,14 +1,9 @@
 "use client";
 
 import type { ReactNode, Ref } from "react";
-import {
-  Pressable,
-  StyleSheet,
-  Text,
-  View,
-  type ViewProps,
-} from "react-native";
+import { StyleSheet, Text, View, type ViewProps } from "react-native";
 
+import { InteractivePressable } from "../../../primitives/interactive-pressable";
 import {
   ModalLayer,
   type ModalLayerCloseReason,
@@ -45,16 +40,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
     flex: 1,
     justifyContent: "center",
-    minHeight: 44,
-    minWidth: 44,
   },
   actions: { flexDirection: "row" },
   backdrop: { flex: 1, justifyContent: "center" },
   close: {
     alignItems: "center",
     justifyContent: "center",
-    minHeight: 44,
-    minWidth: 44,
     position: "absolute",
     right: 8,
     top: 8,
@@ -133,7 +124,7 @@ function CompletionDialog({
         >
           {title}
         </Text>
-        <Pressable
+        <InteractivePressable
           accessibilityLabel={closeLabel}
           accessibilityRole="button"
           onPress={() => {
@@ -144,7 +135,7 @@ function CompletionDialog({
           <Text style={{ color: theme.colors.mutedForeground, fontSize: 20 }}>
             ×
           </Text>
-        </Pressable>
+        </InteractivePressable>
         {typeof description === "string" || typeof description === "number" ? (
           <Text style={typeStyle(theme, "bodySmall", "foreground")}>
             {description}
@@ -153,18 +144,18 @@ function CompletionDialog({
           <View style={{ gap: theme.spacing[2] }}>{description}</View>
         ) : null}
         <View style={[styles.actions, { gap: theme.spacing[2] }]}>
-          <Pressable
+          <InteractivePressable
             accessibilityRole="button"
+            filled
             onPress={() => {
               onCancel();
               setVisible(false);
             }}
-            style={({ pressed }) => [
+            style={[
               styles.action,
               {
                 backgroundColor: theme.colors.secondary,
                 borderRadius: theme.radius.md,
-                opacity: pressed ? 0.8 : 1,
                 paddingHorizontal: theme.spacing[3],
               },
             ]}
@@ -172,19 +163,19 @@ function CompletionDialog({
             <Text style={typeStyle(theme, "bodySmall", "secondaryForeground")}>
               {cancelLabel}
             </Text>
-          </Pressable>
-          <Pressable
+          </InteractivePressable>
+          <InteractivePressable
             accessibilityRole="button"
+            filled
             onPress={() => {
               onConfirm();
               setVisible(false);
             }}
-            style={({ pressed }) => [
+            style={[
               styles.action,
               {
                 backgroundColor: theme.colors.primary,
                 borderRadius: theme.radius.md,
-                opacity: pressed ? 0.8 : 1,
                 paddingHorizontal: theme.spacing[3],
               },
             ]}
@@ -192,7 +183,7 @@ function CompletionDialog({
             <Text style={typeStyle(theme, "bodySmall", "primaryForeground")}>
               {confirmLabel}
             </Text>
-          </Pressable>
+          </InteractivePressable>
         </View>
       </View>
     </ModalLayer>

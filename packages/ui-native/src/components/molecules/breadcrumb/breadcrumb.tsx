@@ -1,13 +1,8 @@
 import type { ReactNode, Ref } from "react";
-import {
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  View,
-  type ViewProps,
-} from "react-native";
+import { ScrollView, StyleSheet, View, type ViewProps } from "react-native";
 
 import { decorativeProps } from "../../../primitives/accessibility";
+import { InteractivePressable } from "../../../primitives/interactive-pressable";
 import {
   defaultLinkingService,
   type LinkingService,
@@ -82,7 +77,7 @@ function Breadcrumb({
                 </Text>
               ) : null}
               {interactive ? (
-                <Pressable
+                <InteractivePressable
                   accessibilityHint={trail}
                   accessibilityLabel={item.label}
                   accessibilityRole={item.href ? "link" : "button"}
@@ -98,11 +93,10 @@ function Breadcrumb({
                         });
                     }
                   }}
-                  style={({ pressed }) => [
+                  style={[
                     styles.item,
                     {
                       gap: theme.spacing[1],
-                      opacity: item.disabled ? 0.5 : pressed ? 0.8 : 1,
                       paddingHorizontal: theme.spacing[2],
                     },
                   ]}
@@ -111,7 +105,7 @@ function Breadcrumb({
                   <Text size="small" tone="muted">
                     {item.label}
                   </Text>
-                </Pressable>
+                </InteractivePressable>
               ) : (
                 <View
                   accessibilityHint={trail}

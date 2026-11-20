@@ -2,7 +2,6 @@ import { useState } from "react";
 
 import type { Ref } from "react";
 import {
-  Pressable,
   StyleSheet,
   Text as NativeText,
   View,
@@ -13,6 +12,7 @@ import {
   decorativeProps,
   useAnnounceOnChange,
 } from "../../../primitives/accessibility";
+import { InteractivePressable } from "../../../primitives/interactive-pressable";
 import { useTheme } from "../../../theme/theme-provider";
 import { Badge, type BadgeProps } from "../../atoms/badge/badge";
 import { Text } from "../../atoms/text/text";
@@ -61,7 +61,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     flexDirection: "row",
     justifyContent: "space-between",
-    minHeight: 44,
   },
 });
 
@@ -90,7 +89,7 @@ function ToolSection({ defaultExpanded, label, value }: ToolSectionProps) {
         },
       ]}
     >
-      <Pressable
+      <InteractivePressable
         accessibilityLabel={label}
         accessibilityRole="button"
         accessibilityState={{ expanded: isExpanded }}
@@ -114,7 +113,7 @@ function ToolSection({ defaultExpanded, label, value }: ToolSectionProps) {
         >
           {isExpanded ? "−" : "+"}
         </NativeText>
-      </Pressable>
+      </InteractivePressable>
       {isExpanded ? (
         <NativeText
           selectable

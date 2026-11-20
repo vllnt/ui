@@ -3,7 +3,6 @@
 import { type Ref, useMemo, useState } from "react";
 
 import {
-  Pressable,
   ScrollView,
   StyleSheet,
   Text as NativeText,
@@ -13,6 +12,7 @@ import {
 
 import { useAnnounceOnChange } from "../../../primitives/accessibility";
 import { useGroupDisabled } from "../../../primitives/control-group";
+import { InteractivePressable } from "../../../primitives/interactive-pressable";
 import { ModalLayer } from "../../../primitives/modal-layer";
 import { toggleMultipleSelected } from "../../../primitives/selection";
 import { typeStyle } from "../../../primitives/type-style";
@@ -51,12 +51,12 @@ export type MultiSelectProps = Omit<ViewProps, "children"> & {
 };
 
 const styles = StyleSheet.create({
-  action: { alignItems: "center", justifyContent: "center", minHeight: 44 },
+  action: { alignItems: "center", justifyContent: "center" },
   heading: { marginBottom: 8 },
   modal: { flex: 1, justifyContent: "flex-end" },
-  option: { justifyContent: "center", minHeight: 44 },
+  option: { justifyContent: "center" },
   panel: { borderTopWidth: 1, maxHeight: "80%" },
-  trigger: { borderWidth: 1, justifyContent: "center", minHeight: 44 },
+  trigger: { borderWidth: 1, justifyContent: "center" },
 });
 
 /**
@@ -110,7 +110,7 @@ function MultiSelect({
 
   return (
     <View ref={ref} style={style} {...props}>
-      <Pressable
+      <InteractivePressable
         accessibilityLabel={labels.open}
         accessibilityRole="button"
         accessibilityState={{ disabled, expanded: open }}
@@ -130,7 +130,6 @@ function MultiSelect({
             backgroundColor: theme.colors.background,
             borderColor: theme.colors.input,
             borderRadius: theme.radius.md,
-            opacity: disabled ? 0.5 : 1,
             paddingHorizontal: theme.spacing[3],
           },
         ]}
@@ -147,7 +146,7 @@ function MultiSelect({
             ? selectedLabels.join(", ")
             : labels.placeholder}
         </NativeText>
-      </Pressable>
+      </InteractivePressable>
       <ModalLayer
         animationType={reducedMotion ? "none" : "fade"}
         contentProps={{ style: styles.modal }}
@@ -194,7 +193,7 @@ function MultiSelect({
             {visibleOptions.map((option) => {
               const selected = selectedIds.has(option.id);
               return (
-                <Pressable
+                <InteractivePressable
                   accessibilityLabel={option.label}
                   accessibilityRole="checkbox"
                   accessibilityState={{
@@ -208,6 +207,7 @@ function MultiSelect({
                       toggleMultipleSelected(selectedIds, option, getId),
                     );
                   }}
+                  selected={selected}
                   style={[
                     styles.option,
                     {
@@ -215,7 +215,6 @@ function MultiSelect({
                         ? theme.colors.accent
                         : theme.colors.background,
                       borderRadius: theme.radius.sm,
-                      opacity: disabled || option.disabled ? 0.5 : 1,
                       paddingHorizontal: theme.spacing[3],
                     },
                   ]}
@@ -226,7 +225,7 @@ function MultiSelect({
                     {selected ? "✓ " : ""}
                     {option.label}
                   </NativeText>
-                </Pressable>
+                </InteractivePressable>
               );
             })}
             {noResults ? (
@@ -241,7 +240,7 @@ function MultiSelect({
               </NativeText>
             ) : null}
           </ScrollView>
-          <Pressable
+          <InteractivePressable
             accessibilityLabel={labels.close}
             accessibilityRole="button"
             onPress={() => {
@@ -253,7 +252,7 @@ function MultiSelect({
             <NativeText style={typeStyle(theme, "bodySmall", "foreground")}>
               {labels.close}
             </NativeText>
-          </Pressable>
+          </InteractivePressable>
         </View>
       </ModalLayer>
     </View>

@@ -1,8 +1,9 @@
 "use client";
 
 import type { ReactNode, Ref } from "react";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 
+import { InteractivePressable } from "../../../primitives/interactive-pressable";
 import {
   ModalLayer,
   type ModalLayerCloseReason,
@@ -31,14 +32,12 @@ export type TooltipProps = {
 };
 
 const styles = StyleSheet.create({
-  close: { alignItems: "center", justifyContent: "center", minHeight: 44 },
+  close: { alignItems: "center", justifyContent: "center" },
   content: { flex: 1, justifyContent: "center" },
   surface: { alignSelf: "center", borderWidth: 1, maxWidth: 420, width: "88%" },
   trigger: {
     alignItems: "center",
     justifyContent: "center",
-    minHeight: 44,
-    minWidth: 44,
   },
 });
 
@@ -71,7 +70,7 @@ function Tooltip({
 
   return (
     <>
-      <Pressable
+      <InteractivePressable
         accessibilityHint={helpHint}
         accessibilityLabel={triggerLabel}
         accessibilityRole="button"
@@ -79,10 +78,7 @@ function Tooltip({
         onPress={() => {
           setVisible(!visible);
         }}
-        style={({ pressed }) => [
-          styles.trigger,
-          { opacity: pressed ? 0.8 : 1 },
-        ]}
+        style={styles.trigger}
       >
         {typeof trigger === "string" || typeof trigger === "number" ? (
           <Text style={typeStyle(theme, "bodySmall", "foreground")}>
@@ -91,7 +87,7 @@ function Tooltip({
         ) : (
           trigger
         )}
-      </Pressable>
+      </InteractivePressable>
       <ModalLayer
         animationType={reduceMotion ? "none" : "fade"}
         contentProps={{ style: styles.content }}
@@ -128,9 +124,10 @@ function Tooltip({
           ) : (
             children
           )}
-          <Pressable
+          <InteractivePressable
             accessibilityLabel={closeLabel}
             accessibilityRole="button"
+            filled
             onPress={() => {
               close("requestClose");
             }}
@@ -145,7 +142,7 @@ function Tooltip({
             <Text style={{ color: theme.colors.secondaryForeground }}>
               {closeLabel}
             </Text>
-          </Pressable>
+          </InteractivePressable>
         </View>
       </ModalLayer>
     </>
