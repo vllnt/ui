@@ -1,10 +1,21 @@
-import { Text } from "react-native";
+import { Text, View } from "react-native";
 
+import type { IconGlyphProps } from "../components/atoms/icon/icon";
 import type { SearchDialogLabels } from "../components/atoms/search-dialog/search-dialog";
 
 // Fixture data without a Testing Library import: the accessibility fixtures
 // use it, and the Expo catalog bundles those fixtures. `test-utils.tsx`
 // re-exports it for the Jest tests.
+
+/** Square drawn with a `View`: a stand-in for a lucide icon, which ui-native does not bundle. */
+export function SquareGlyph({ color, size }: IconGlyphProps) {
+  return (
+    <View
+      style={{ backgroundColor: color, height: size, width: size }}
+      testID="glyph"
+    />
+  );
+}
 
 /** Code/Preview tabs whose panels render "<label> panel". */
 export const codePreviewTabs = [

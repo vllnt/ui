@@ -19,6 +19,7 @@ import {
   DataSection,
   FormSection,
   FoundationSection,
+  LayoutSection,
   NavigationSection,
   OverlaySection,
   ThemeSection,
@@ -71,6 +72,7 @@ function CatalogContent({
         ) : (
           <>
             <FoundationSection onPress={incrementPresses} presses={presses} />
+            <LayoutSection />
             <FormSection
               enabled={alertsEnabled}
               onEnabledChange={setAlertsEnabled}

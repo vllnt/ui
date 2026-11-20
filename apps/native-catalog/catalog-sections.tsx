@@ -22,14 +22,18 @@ import {
   Checklist,
   DataList,
   Dialog,
+  Display,
   EmptyState,
   Heading,
+  Icon,
   Input,
   NumberTicker,
   ProgressBar,
   SearchBar,
   Separator,
+  Spacer,
   Spinner,
+  Stack,
   StatusIndicator,
   Switch,
   Tabs,
@@ -43,6 +47,8 @@ import {
 } from "@vllnt/ui-native";
 import type { ReactNode } from "react";
 import { View } from "react-native";
+
+import { SquareGlyph } from "../../packages/ui-native/src/tests/fixture-data";
 
 import { nativeComponentCount } from "./catalog-metadata";
 
@@ -171,6 +177,34 @@ export function FoundationSection({
         Interaction count: {presses}
       </Text>
       <Separator />
+    </Section>
+  );
+}
+
+export function LayoutSection() {
+  return (
+    <Section title="Type and layout">
+      <Display animated as="h1">
+        Display
+      </Display>
+      <Stack align="center" direction="row" gap={3}>
+        <Icon icon={SquareGlyph} label="Verified" size="sm" />
+        <Icon icon={SquareGlyph} />
+        <Icon icon={SquareGlyph} size="lg" tone="muted" />
+        <Text size="small" tone="muted">
+          Icon sizes sm, md and lg
+        </Text>
+      </Stack>
+      <Stack align="center" direction="row">
+        <Text>Start</Text>
+        <Spacer flex size={2} />
+        <Text>End</Text>
+      </Stack>
+      <Stack direction="row" gap={2} wrap>
+        <Badge>Stack</Badge>
+        <Badge variant="secondary">gap</Badge>
+        <Badge variant="outline">wrap</Badge>
+      </Stack>
     </Section>
   );
 }

@@ -13,6 +13,11 @@ describe("native catalog", () => {
     expect(
       screen.getByLabelText("Native manifest inventory"),
     ).toBeOnTheScreen();
+    expect(screen.getByText("Type and layout")).toBeOnTheScreen();
+    expect(screen.getByRole("header", { name: "Display" })).toBeOnTheScreen();
+    expect(screen.getByRole("image", { name: "Verified" })).toBeOnTheScreen();
+    expect(screen.getByText("Start")).toBeOnTheScreen();
+    expect(screen.getByText("End")).toBeOnTheScreen();
     expect(screen.getByText("Renderer boundary")).toBeOnTheScreen();
     expect(screen.getByText("Interactive composites")).toBeOnTheScreen();
     expect(screen.getByText("1 of 2 modules reviewed")).toBeOnTheScreen();
