@@ -1,11 +1,7 @@
 import type { ReactNode, Ref } from "react";
-import {
-  Pressable,
-  type PressableProps,
-  StyleSheet,
-  type View,
-} from "react-native";
+import { type PressableProps, StyleSheet, type View } from "react-native";
 
+import { InteractivePressable } from "../../../primitives/interactive-pressable";
 import { TextColorContext } from "../../../primitives/text-color";
 import { useTheme } from "../../../theme/theme-provider";
 import { Text } from "../../atoms/text/text";
@@ -50,7 +46,8 @@ function FloatingActionButton({
   const isDisabled = disabled === true;
 
   return (
-    <Pressable
+    <InteractivePressable
+      filled
       {...props}
       accessibilityLabel={accessibilityLabel}
       accessibilityRole="button"
@@ -65,7 +62,6 @@ function FloatingActionButton({
           bottom: theme.spacing[4],
           height: theme.spacing[12],
           left: position === "bottom-left" ? theme.spacing[4] : undefined,
-          opacity: isDisabled ? 0.5 : state.pressed ? 0.8 : 1,
           right: position === "bottom-right" ? theme.spacing[4] : undefined,
           width: theme.spacing[12],
         },
@@ -79,7 +75,7 @@ function FloatingActionButton({
           children
         )}
       </TextColorContext>
-    </Pressable>
+    </InteractivePressable>
   );
 }
 FloatingActionButton.displayName = "FloatingActionButton";

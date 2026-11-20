@@ -6,50 +6,43 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
-### Changed
-
-- **Dark surfaces are pure black** - the default dark theme now renders
-  `--background`, `--muted`, `--card` and `--popover` as `0 0 0` (#000000).
-  Hairline borders separate the surfaces: `--border`, `--secondary` and
-  `--accent` stay `0.2686` (#262626), and `--input` is unchanged. Before,
-  `--muted` was `0.2686` (#262626) and `--card` / `--popover` were `0.1445`
-  (#0a0a0a). A `bg-card` or `bg-popover` surface needs a `border` to show its
-  edge; every shipped one has it, and a test now fails on one that does not.
-  The separators in `DropdownMenu`, `Menubar` and `Select` draw with
-  `bg-border` instead of `bg-muted`, which is the page color now, and a test
-  fails on any one-pixel divider that uses `bg-muted`. Light mode is unchanged.
-  Themes that override these roles (presets, Maia) keep their values; PaaS and
-  any app that reads the dark `--muted`, `--card` or `--popover` directly get
-  black.
-- **Hover, selected and data-state fills use `secondary`** - 32 component files
-  (`Table`, `Tabs` pill, `Toggle`, `Slideshow`, `FilterBar` and others) used
-  `bg-muted` for that feedback, which is now the page color in dark.
-  They use `bg-secondary` with the same opacity. In the default and PaaS themes
-  the fill is the same color as before in light and dark, because `--secondary`
-  equals the old `--muted` there. Theme presets keep a quiet neutral
-  `--secondary` (their `--accent` is a brand color), so text on these fills
-  stays at 6.65 to 12.53:1 in dark. The Maia theme has its own dark `--muted`
-  (`0.2002`) and a core dark `--secondary` (`0.2686`), so its dark hover fills
-  are one step lighter than before.
-  `SegmentedControl`, `ViewSwitcher`, `WorkspaceSwitcher` and the `PricingTable`
-  period toggle draw their track with `bg-secondary` for the same reason: the
-  selected segment is `bg-background` on that track.
-- **Skeletons, tracks and handles use `secondary`** - 29 `bg-muted` fills in 23
-  component files were the whole visual of their element: `Skeleton`, the
-  `ProgressBar`, `Meter`, `Tour`, `Checklist`, `UsageBreakdown` and other
-  progress, meter and usage tracks, the `Drawer` handle, the empty cells of
-  `ActivityHeatmap` and the neutral `GanttChart` bar. They use `bg-secondary`
-  (#262626) with the same opacity, because `bg-muted` is the page color in dark
-  and they would disappear. Chips, code spans and panels keep `bg-muted`: their
-  text and border carry them. A test fails on a `bg-muted` skeleton or bar.
+These entries ship in 0.4.0, which is not published yet (the latest release is
+0.3.0). The release cut adds the version heading and its date.
 
 ### Added
 
+- **Dialog overlay** - `DialogContent` takes `overlay="scrim"` (default, the
+  dimmed veil as before) or `overlay="none"` (no veil; the dialog stays modal).
+  (#601)
+- **Design tokens** - `color.badge-label.*`, `brand.status.*`, `radius.control`
+  (6 px), `radius.surface` (8 px), `size.target.min` (44 px), `size.control-xs`
+  (32 px, and 44 px under a coarse pointer), `opacity.grain` and
+  `opacity.contact`. Only the radius, size and opacity tokens have CSS
+  variables. (#602)
+- **Lock 2 tokens** - `shadow.raised`, `shadow.overlay` and `shadow.floating`
+  (`--shadow-raised`, `--shadow-overlay`, `--shadow-floating`, one list per
+  mode), `spacing.page-gutter`, `spacing.page-gutter-tablet` and
+  `spacing.page-gutter-desktop` (20, 48 and 96 px, as `--spacing-page-gutter*`),
+  `size.page-max` (1440 px) and `size.measure-narrow` (480 px) as
+  `--size-page-max` and `--size-measure-narrow`, and a `spacing.24` step
+  (96 px, no CSS variable). (#614)
+- **Badge v1.3 props** - `tone`, `size`, `border`, `dot` and `variant="soft"`.
+  A status tone colours a dot, not the words. Existing props and defaults
+  render as before. (#610)
+- **ProgressBar `blocks`** - draws ten blocks and fills one per whole 10% of
+  `value / max`; `aria-valuenow` stays exact. (#611)
+- **Lint rule A12** (`vllnt/a12-no-status-text-colour`) - flags a status colour
+  used as text colour in component code. 56 existing files are allowlisted and
+  burn down in #604. (#607)
+- **`warning` tone** - `AlertPulse` (`severity`), `BottomActivityStrip`,
+  `HeatOverlay`, `MetricCluster`, `RuntimeOverviewPanel`, `StickyMetric`,
+  `ThresholdRing` and `TimelineScrubber` (`tone`) accept `warning`, the name the
+  design library uses. (#616)
 - **Product themes stylesheet** - `@vllnt/ui/themes/products.css` ships the
   Maia and PaaS themes as `html[data-theme="maia"]` and
   `html[data-theme="paas"]`, each with a `.dark` block. It is generated from
-  `packages/design/tokens.json`. Load Figtree (Maia) and JetBrains Mono
-  (Maia, PaaS) in your app; the package does not ship the fonts.
+  `packages/design/tokens.json`. Load JetBrains Mono (Maia, PaaS) in your
+  app; the package does not ship the font.
 - **Status and diff colors** - CSS variables `--success`, `--warning`,
   `--info`, their `-foreground` pairs, `--diff-added` and `--diff-removed` in
   `themes/default.css` and `styles.css`, and matching Tailwind colors
@@ -65,23 +58,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
   from prefetching their pages. Left unset, the links keep the router's default
   prefetching, so existing usage is unchanged. A sidebar with dozens of links
   in view otherwise prefetches every one of them on page load.
-
-### Fixed
-
-- **Tap targets** - the NavbarSaas links, the Breadcrumb crumbs, the
-  TableOfContents buttons and the Sidebar family heading link are at least
-  24 px tall (WCAG 2.5.8); they were 20 px.
-
-### Fixed
-
-- **Accordion accessibility** - each trigger now has `aria-controls` pointing
-  at its panel, and each panel is a `region` labelled by its trigger. Closed
-  panels are `inert`, so screen readers no longer read closed answers and Tab
-  skips links inside them. The open and close animation is unchanged.
-
-## [0.4.0] - 2026-10-31
-
-### Added
 
 - **New hooks** - `useFocusContainment` (trap Tab inside a custom modal and
   restore focus on close) and `useEventCallback` (stable callback that always
@@ -120,6 +96,61 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Changed
 
+- **Dark surfaces are pure black** - the default dark theme now renders
+  `--background`, `--muted`, `--card` and `--popover` as `0 0 0` (#000000).
+  Hairline borders separate the surfaces: `--border`, `--secondary` and
+  `--accent` stay `0.2686` (#262626), and `--input` is unchanged. Before,
+  `--muted` was `0.2686` (#262626) and `--card` / `--popover` were `0.1445`
+  (#0a0a0a). A `bg-card` or `bg-popover` surface needs a `border` to show its
+  edge; every shipped one has it, and a test now fails on one that does not.
+  The separators in `DropdownMenu`, `Menubar` and `Select` draw with
+  `bg-border` instead of `bg-muted`, which is the page color now, and a test
+  fails on any one-pixel divider that uses `bg-muted`. Light mode is unchanged.
+  Themes that override these roles (presets, Maia) keep their values; PaaS and
+  any app that reads the dark `--muted`, `--card` or `--popover` directly get
+  black.
+- **Hover, selected and data-state fills use `secondary`** - 32 component files
+  (`Table`, `Tabs` pill, `Toggle`, `Slideshow`, `FilterBar` and others) used
+  `bg-muted` for that feedback, which is now the page color in dark.
+  They use `bg-secondary` with the same opacity. In the default and PaaS themes
+  the fill is the same color as before in light and dark, because `--secondary`
+  equals the old `--muted` there. Theme presets keep a quiet neutral
+  `--secondary` (their `--accent` is a brand color), so text on these fills
+  stays at 6.65 to 12.53:1 in dark. The Maia theme has its own dark `--muted`
+  (`0.2002`) and a core dark `--secondary` (`0.2686`), so its dark hover fills
+  are one step lighter than before.
+  `SegmentedControl`, `ViewSwitcher`, `WorkspaceSwitcher` and the `PricingTable`
+  period toggle draw their track with `bg-secondary` for the same reason: the
+  selected segment is `bg-background` on that track.
+- **Skeletons, tracks and handles use `secondary`** - 29 `bg-muted` fills in 23
+  component files were the whole visual of their element: `Skeleton`, the
+  `ProgressBar`, `Meter`, `Tour`, `Checklist`, `UsageBreakdown` and other
+  progress, meter and usage tracks, the `Drawer` handle, the empty cells of
+  `ActivityHeatmap` and the neutral `GanttChart` bar. They use `bg-secondary`
+  (#262626) with the same opacity, because `bg-muted` is the page color in dark
+  and they would disappear. Chips, code spans and panels keep `bg-muted`: their
+  text and border carry them. A test fails on a `bg-muted` skeleton or bar.
+- **Alert destructive** - the title and body use the foreground colour. The
+  status colour stays on the border and the glyph. (#607)
+- **Badge status chips** use a status dot. (#610)
+- **Maia is Ink, and `--input` follows the design library** - Maia `--primary`
+  is black in light and white in dark (it was pink), Maia uses the core sans
+  font instead of Figtree, and its display and label weights are 600, not 700.
+  The default theme's `--input` is `0.6167` in light (was `0.66`) and `0.5208`
+  in dark (was `0.49`). (#614)
+- **Theme presets meet the input 3:1 rule on muted** - the 12 runtime presets
+  (aura, chatgpt, claude, cyberlime, cyberpunk, dracula, dusk, gemini, matrix,
+  nord, synthwave and tron) get a new `--input` lightness in light and dark, by
+  0.048 at most, with hue and chroma unchanged. The control border now reaches
+  3:1 on background, card, popover and muted. (#620)
+- **`warn` is deprecated** in the eight components above; pass `warning`. `warn`
+  still works and renders the same colour. Removing it would break consumers,
+  so that waits for a breaking release. `HeatOverlay` and `AlertPulse` now
+  default to `warning`. A `data-*` tone attribute echoes the value you pass.
+- **Site header name** - `NavbarSaas` is the one code name for the design
+  library's `organism / Site header`. A `floating` style will join it as an
+  added prop, and `FloatingNavbar` stays a separate component until then.
+  `Display` is the design library's `atom / Heading` with `Level=display`.
 - **Colour tokens meet WCAG AA** (#538). The default light theme uses a darker
   `--muted-foreground`, `--destructive` and `--input`; in the dark theme
   `--destructive` is lighter with a dark foreground and `--input` is lighter, so
@@ -178,6 +209,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Fixed
 
+- **Tap targets** - the NavbarSaas links, the Breadcrumb crumbs, the
+  TableOfContents buttons and the Sidebar family heading link are at least
+  24 px tall (WCAG 2.5.8); they were 20 px.
+- **Accordion accessibility** - each trigger now has `aria-controls` pointing
+  at its panel, and each panel is a `region` labelled by its trigger. Closed
+  panels are `inert`, so screen readers no longer read closed answers and Tab
+  skips links inside them. The open and close animation is unchanged.
+- **Select, SegmentedControl, FloatingToolbar and ProgressBar** - `Select`
+  shows `aria-invalid` with a destructive border. The `Select` menu animation,
+  the `SegmentedControl` selection transition, the `FloatingToolbar` colour
+  transition and the `ProgressBar` transitions stop under
+  `prefers-reduced-motion`. `FloatingToolbar` is one tab stop, and the arrow,
+  Home and End keys move between its actions and skip disabled ones. (#611)
 - **Setup docs** - the Tailwind config in both READMEs, the installation page
   and the agent skill now lists `./node_modules/@vllnt/ui/dist/**/*.js` in
   `content`. Tailwind 3 ignores a preset's `content` once the app sets its own,

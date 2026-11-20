@@ -2,15 +2,10 @@
 
 import { type Ref, useCallback, useId, useState } from "react";
 
-import {
-  Pressable,
-  StyleSheet,
-  Text,
-  View,
-  type ViewProps,
-} from "react-native";
+import { StyleSheet, Text, View, type ViewProps } from "react-native";
 
 import { useAnnounceOnChange } from "../../../primitives/accessibility";
+import { InteractivePressable } from "../../../primitives/interactive-pressable";
 import { typeStyle } from "../../../primitives/type-style";
 import { useTheme } from "../../../theme/theme-provider";
 
@@ -35,11 +30,9 @@ export type ThinkingBlockProps = Omit<ViewProps, "children"> & {
 
 const styles = StyleSheet.create({
   content: { borderLeftWidth: 1 },
-  pressed: { opacity: 0.8 },
   trigger: {
     alignItems: "center",
     flexDirection: "row",
-    minHeight: 44,
   },
 });
 
@@ -103,7 +96,7 @@ function ThinkingBlock({
 
   return (
     <View {...props} ref={ref} style={style}>
-      <Pressable
+      <InteractivePressable
         accessibilityLabel={isExpanded ? labels.collapse : labels.expand}
         accessibilityRole="button"
         accessibilityState={{
@@ -114,11 +107,7 @@ function ThinkingBlock({
         accessibilityValue={{ text: status }}
         disabled={isStreaming}
         onPress={handleToggle}
-        style={({ pressed }) => [
-          styles.trigger,
-          { gap: theme.spacing[2] },
-          pressed ? styles.pressed : undefined,
-        ]}
+        style={[styles.trigger, { gap: theme.spacing[2] }]}
       >
         <Text
           style={typeStyle(theme, "caption", {
@@ -128,7 +117,7 @@ function ThinkingBlock({
         >
           {status}
         </Text>
-      </Pressable>
+      </InteractivePressable>
       {isExpanded ? (
         <ThinkingContent contentId={contentId} thinking={thinking} />
       ) : null}

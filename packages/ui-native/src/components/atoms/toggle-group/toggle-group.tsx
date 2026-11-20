@@ -11,7 +11,6 @@ import {
 } from "react";
 
 import {
-  Pressable,
   type PressableProps,
   StyleSheet,
   Text as NativeText,
@@ -24,6 +23,8 @@ import {
   type ControlSize,
   controlSizeStyle,
 } from "../../../primitives/control-size";
+import { interactionTokens } from "../../../primitives/interaction-state";
+import { InteractivePressable } from "../../../primitives/interactive-pressable";
 import {
   isMultipleSelected,
   type SelectionKey,
@@ -100,8 +101,6 @@ const styles = StyleSheet.create({
   item: {
     alignItems: "center",
     justifyContent: "center",
-    minHeight: 44,
-    minWidth: 44,
   },
   vertical: { alignItems: "stretch", flexDirection: "column" },
 });
@@ -221,7 +220,10 @@ function ToggleGroup(props: ToggleGroupProps) {
       ref={ref}
       style={[
         orientation === "horizontal" ? styles.horizontal : styles.vertical,
-        { gap: theme.spacing[1], opacity: disabled ? 0.5 : 1 },
+        {
+          gap: theme.spacing[1],
+          opacity: disabled ? interactionTokens(theme).disabledOpacity : 1,
+        },
         style,
       ]}
     >
@@ -268,7 +270,7 @@ function ToggleGroupItem({
     );
 
   return (
-    <Pressable
+    <InteractivePressable
       {...props}
       accessibilityHint={accessibilityHint ?? context.groupLabel}
       accessibilityRole="togglebutton"
@@ -283,6 +285,7 @@ function ToggleGroupItem({
         if (!event?.defaultPrevented) context.toggle(value);
       }}
       ref={ref}
+      selected={selected}
       style={(state) => [
         styles.item,
         {
@@ -290,14 +293,13 @@ function ToggleGroupItem({
           borderColor: theme.colors.input,
           borderRadius: theme.radius.md,
           borderWidth: outlined ? 1 : 0,
-          opacity: isDisabled ? 0.5 : state.pressed ? 0.8 : 1,
           ...controlSizeStyle(theme, context.size ?? size ?? "default"),
         },
         typeof style === "function" ? style(state) : style,
       ]}
     >
       {content}
-    </Pressable>
+    </InteractivePressable>
   );
 }
 ToggleGroupItem.displayName = "ToggleGroupItem";

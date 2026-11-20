@@ -3,7 +3,6 @@
 import { createContext, type ReactNode, type Ref, use, useMemo } from "react";
 
 import {
-  Pressable,
   type PressableProps,
   StyleSheet,
   Text as NativeText,
@@ -13,6 +12,8 @@ import {
 
 import { decorativeProps } from "../../../primitives/accessibility";
 import { useGroupDisabled } from "../../../primitives/control-group";
+import { interactionTokens } from "../../../primitives/interaction-state";
+import { InteractivePressable } from "../../../primitives/interactive-pressable";
 import {
   isSingleSelected,
   type SelectionKey,
@@ -62,12 +63,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     width: 20,
   },
-  item: {
-    alignItems: "center",
-    flexDirection: "row",
-    minHeight: 44,
-    minWidth: 44,
-  },
+  item: { alignItems: "center", flexDirection: "row" },
   mark: { height: 10, width: 10 },
   vertical: { alignItems: "stretch", flexDirection: "column" },
 });
@@ -126,7 +122,10 @@ function RadioGroup(groupProps: RadioGroupProps) {
       ref={ref}
       style={[
         orientation === "horizontal" ? styles.horizontal : styles.vertical,
-        { gap: theme.spacing[2], opacity: disabled ? 0.5 : 1 },
+        {
+          gap: theme.spacing[2],
+          opacity: disabled ? interactionTokens(theme).disabledOpacity : 1,
+        },
         style,
       ]}
     >
@@ -136,7 +135,10 @@ function RadioGroup(groupProps: RadioGroupProps) {
 }
 RadioGroup.displayName = "RadioGroup";
 
-/** Accessible native radio keyed by its required stable value prop. */
+/**
+ * Accessible native radio keyed by its required stable value prop. The dot in
+ * the ring is the selection cue that does not rely on colour.
+ */
 function RadioGroupItem({
   accessibilityHint,
   accessibilityState,
@@ -157,7 +159,7 @@ function RadioGroupItem({
   const isDisabled = Boolean(context.disabled || disabled);
 
   return (
-    <Pressable
+    <InteractivePressable
       {...props}
       accessibilityHint={accessibilityHint ?? context.groupLabel}
       accessibilityRole="radio"
@@ -174,10 +176,7 @@ function RadioGroupItem({
       ref={ref}
       style={(state) => [
         styles.item,
-        {
-          gap: theme.spacing[2],
-          opacity: isDisabled ? 0.5 : state.pressed ? 0.8 : 1,
-        },
+        { borderRadius: theme.radius.md, gap: theme.spacing[2] },
         typeof style === "function" ? style(state) : style,
       ]}
     >
@@ -211,7 +210,7 @@ function RadioGroupItem({
       ) : (
         children
       )}
-    </Pressable>
+    </InteractivePressable>
   );
 }
 RadioGroupItem.displayName = "RadioGroupItem";

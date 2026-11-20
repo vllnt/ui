@@ -1,13 +1,8 @@
 import type { Ref } from "react";
-import {
-  Pressable,
-  StyleSheet,
-  Text,
-  View,
-  type ViewProps,
-} from "react-native";
+import { StyleSheet, Text, View, type ViewProps } from "react-native";
 
 import { decorativeProps } from "../../../primitives/accessibility";
+import { InteractivePressable } from "../../../primitives/interactive-pressable";
 import { typeStyle } from "../../../primitives/type-style";
 import { useTheme } from "../../../theme/theme-provider";
 
@@ -62,12 +57,10 @@ const styles = StyleSheet.create({
   action: {
     alignItems: "center",
     justifyContent: "center",
-    minHeight: 44,
-    minWidth: 44,
   },
   centered: { alignItems: "center" },
   row: { alignItems: "center", flexDirection: "row" },
-  sectionAction: { borderWidth: 1, minHeight: 44 },
+  sectionAction: { borderWidth: 1 },
 });
 
 function CompletionAction({
@@ -81,17 +74,17 @@ function CompletionAction({
 }) {
   const theme = useTheme();
   return (
-    <Pressable
+    <InteractivePressable
       accessibilityRole="button"
+      filled
       onPress={onPress}
-      style={({ pressed }) => [
+      style={[
         styles.action,
         {
           backgroundColor: primary
             ? theme.colors.primary
             : theme.colors.secondary,
           borderRadius: theme.radius.md,
-          opacity: pressed ? 0.8 : 1,
           paddingHorizontal: theme.spacing[4],
         },
       ]}
@@ -105,7 +98,7 @@ function CompletionAction({
       >
         {label}
       </Text>
-    </Pressable>
+    </InteractivePressable>
   );
 }
 CompletionAction.displayName = "CompletionAction";
@@ -194,7 +187,7 @@ function TutorialComplete({
         {sections.map((section, index) => {
           const completed = completedSectionIds.includes(section.id);
           return (
-            <Pressable
+            <InteractivePressable
               accessibilityLabel={labels.reviewSection(
                 section.title,
                 completed,
@@ -205,13 +198,11 @@ function TutorialComplete({
               onPress={() => {
                 onGoToSection(section, index);
               }}
-              style={({ pressed }) => [
+              style={[
                 styles.sectionAction,
                 styles.row,
                 {
-                  backgroundColor: pressed
-                    ? theme.colors.muted
-                    : theme.colors.background,
+                  backgroundColor: theme.colors.background,
                   borderColor: theme.colors.border,
                   borderRadius: theme.radius.md,
                   gap: theme.spacing[3],
@@ -244,7 +235,7 @@ function TutorialComplete({
               >
                 ›
               </Text>
-            </Pressable>
+            </InteractivePressable>
           );
         })}
       </View>
@@ -260,21 +251,20 @@ function TutorialComplete({
             {labels.relatedContent}
           </Text>
           {relatedContent.map((item) => (
-            <Pressable
+            <InteractivePressable
               accessibilityLabel={`${item.type}, ${item.title}`}
               accessibilityRole="link"
               key={item.id}
               onPress={() => {
                 onRelatedContentPress(item);
               }}
-              style={({ pressed }) => [
+              style={[
                 styles.sectionAction,
                 styles.row,
                 {
                   borderColor: theme.colors.border,
                   borderRadius: theme.radius.md,
                   gap: theme.spacing[3],
-                  opacity: pressed ? 0.8 : 1,
                   padding: theme.spacing[3],
                 },
               ]}
@@ -290,7 +280,7 @@ function TutorialComplete({
               >
                 {item.title}
               </Text>
-            </Pressable>
+            </InteractivePressable>
           ))}
         </View>
       ) : null}

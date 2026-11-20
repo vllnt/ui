@@ -1,6 +1,11 @@
 import type { ButtonSize, ButtonVariant, NativeTheme } from "@vllnt/ui-core";
 import type { TextStyle, ViewStyle } from "react-native";
 
+import {
+  type InteractionState,
+  interactionTokens,
+} from "../../../primitives/interaction-state";
+
 export type ButtonResolvedStyles = {
   readonly container: ViewStyle;
   readonly text: TextStyle;
@@ -10,20 +15,25 @@ function resolveButtonSizeStyle(
   theme: NativeTheme,
   size: ButtonSize,
 ): ViewStyle {
+  const { targetMin } = interactionTokens(theme);
   const sizes: Record<ButtonSize, ViewStyle> = {
     default: {
-      minHeight: 44,
+      minHeight: targetMin,
       paddingHorizontal: theme.spacing[4],
       paddingVertical: theme.spacing[2],
     },
-    icon: { height: 44, paddingHorizontal: theme.spacing[2], width: 44 },
+    icon: {
+      height: targetMin,
+      paddingHorizontal: theme.spacing[2],
+      width: targetMin,
+    },
     lg: {
       minHeight: 48,
       paddingHorizontal: theme.spacing[8],
       paddingVertical: theme.spacing[3],
     },
     sm: {
-      minHeight: 44,
+      minHeight: targetMin,
       paddingHorizontal: theme.spacing[3],
       paddingVertical: theme.spacing[2],
     },
@@ -79,6 +89,42 @@ function resolveButtonVariantStyles(
   if (variant === "ghost") return transparentStyles(theme.colors.foreground);
   if (variant === "link") return linkStyles(theme);
   return outlineStyles(theme);
+}
+
+/** Variants that paint their own fill, so hover dims them instead of tinting. */
+const FILLED_VARIANTS: ReadonlySet<ButtonVariant> = new Set([
+  "default",
+  "destructive",
+  "secondary",
+]);
+
+/**
+ * Whether a variant paints its own fill.
+ *
+ * @param variant - Button variant.
+ * @returns True for the solid variants.
+ */
+export function isFilledButtonVariant(variant: ButtonVariant): boolean {
+  return FILLED_VARIANTS.has(variant);
+}
+
+/**
+ * Label cue for a ghost button, which has no fill or border to show a state:
+ * the label underlines on hover, focus or press, so the state reads without
+ * colour.
+ *
+ * @param variant - Button variant.
+ * @param state - Current interaction state.
+ * @returns The extra label style, or undefined when there is none.
+ */
+export function buttonStateTextStyle(
+  variant: ButtonVariant,
+  state: InteractionState,
+): TextStyle | undefined {
+  const active = state.hovered || state.focused || state.pressed;
+  return variant === "ghost" && active && !state.disabled
+    ? { textDecorationLine: "underline" }
+    : undefined;
 }
 
 /** Resolves Button's shared variants into native semantic styles. */

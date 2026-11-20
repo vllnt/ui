@@ -7,10 +7,14 @@
     "version",
     "source",
     "color",
+    "brand",
     "typography",
     "spacing",
     "radius",
+    "size",
+    "opacity",
     "elevation",
+    "shadow",
     "motion",
     "iconography",
     "themes"
@@ -37,7 +41,16 @@
           "type": "object",
           "minProperties": 1,
           "additionalProperties": { "$ref": "#/$defs/semanticColor" }
-        }
+        },
+        "badge-label": { "$ref": "#/$defs/tokenGroup" }
+      },
+      "additionalProperties": false
+    },
+    "brand": {
+      "type": "object",
+      "required": ["status"],
+      "properties": {
+        "status": { "$ref": "#/$defs/tokenGroup" }
       },
       "additionalProperties": false
     },
@@ -62,15 +75,31 @@
     },
     "spacing": {
       "type": "object",
-      "required": ["unit", "scale"],
+      "required": [
+        "unit",
+        "scale",
+        "page-gutter",
+        "page-gutter-tablet",
+        "page-gutter-desktop"
+      ],
       "properties": {
         "unit": { "$ref": "#/$defs/cssLength" },
-        "scale": { "$ref": "#/$defs/stringMap" }
+        "scale": { "$ref": "#/$defs/stringMap" },
+        "page-gutter": { "$ref": "#/$defs/token" },
+        "page-gutter-tablet": { "$ref": "#/$defs/token" },
+        "page-gutter-desktop": { "$ref": "#/$defs/token" }
       },
       "additionalProperties": false
     },
     "radius": { "$ref": "#/$defs/stringMap" },
+    "size": { "$ref": "#/$defs/tokenGroup" },
+    "opacity": { "$ref": "#/$defs/tokenGroup" },
     "elevation": { "$ref": "#/$defs/stringMap" },
+    "shadow": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": { "$ref": "#/$defs/shadowToken" }
+    },
     "motion": {
       "type": "object",
       "required": ["duration", "easing", "reducedMotion"],
@@ -148,6 +177,60 @@
       "minProperties": 1,
       "additionalProperties": { "type": "string", "minLength": 1 }
     },
+    "token": {
+      "type": "object",
+      "required": ["value", "role"],
+      "properties": {
+        "value": { "type": "string", "minLength": 1 },
+        "coarse": {
+          "type": "string",
+          "pattern": "^\\{[a-z][a-z0-9.-]*\\}$"
+        },
+        "role": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": false
+    },
+    "shadowLayer": {
+      "type": "object",
+      "required": ["offsetX", "offsetY", "blur", "spread", "color", "inset"],
+      "properties": {
+        "offsetX": { "type": "string", "pattern": "^-?[0-9]+(?:\\.[0-9]+)?$" },
+        "offsetY": { "type": "string", "pattern": "^-?[0-9]+(?:\\.[0-9]+)?$" },
+        "blur": { "type": "string", "pattern": "^[0-9]+(?:\\.[0-9]+)?$" },
+        "spread": { "type": "string", "pattern": "^-?[0-9]+(?:\\.[0-9]+)?$" },
+        "color": { "type": "string", "pattern": "^#[0-9A-F]{8}$" },
+        "inset": { "type": "boolean" }
+      },
+      "additionalProperties": false
+    },
+    "shadowToken": {
+      "type": "object",
+      "required": ["role", "light", "dark"],
+      "properties": {
+        "role": { "type": "string", "minLength": 1 },
+        "light": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/shadowLayer" }
+        },
+        "dark": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/shadowLayer" }
+        }
+      },
+      "additionalProperties": false
+    },
+    "tokenGroup": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {
+        "oneOf": [
+          { "$ref": "#/$defs/token" },
+          { "$ref": "#/$defs/tokenGroup" }
+        ]
+      }
+    },
     "themeColors": {
       "type": "object",
       "minProperties": 1,
@@ -200,7 +283,8 @@
           },
           "additionalProperties": false
         },
-        "radius": { "$ref": "#/$defs/stringMap" }
+        "radius": { "$ref": "#/$defs/stringMap" },
+        "opacity": { "$ref": "#/$defs/stringMap" }
       },
       "additionalProperties": false
     },

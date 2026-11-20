@@ -1,7 +1,7 @@
 import * as React from "react";
 
 import { cn } from "../../../lib/utils";
-import { badgeVariants } from "../../atoms/badge/badge";
+import { Badge, type BadgeProps } from "../../atoms/badge/badge";
 
 export type CreditBadgeStatus = "depleted" | "healthy" | "low" | "overdue";
 
@@ -27,16 +27,16 @@ function getStatusLabel(status: CreditBadgeStatus): string {
   }
 }
 
-function getStatusClasses(status: CreditBadgeStatus): string {
+function getStatusTone(status: CreditBadgeStatus): BadgeProps["tone"] {
   switch (status) {
     case "depleted":
-      return "border-slate-500/30 bg-slate-500/10 text-slate-700 dark:text-slate-300";
+      return "neutral";
     case "healthy":
-      return "border-emerald-500/30 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300";
+      return "success";
     case "low":
-      return "border-amber-500/30 bg-amber-500/10 text-amber-700 dark:text-amber-300";
+      return "warning";
     case "overdue":
-      return "border-destructive/30 bg-destructive/10 text-destructive";
+      return "danger";
   }
 }
 
@@ -49,23 +49,22 @@ export const CreditBadge = ({
   ...props
 }: CreditBadgeProps & { ref?: React.Ref<HTMLSpanElement> }) => {
   return (
-    <span
+    <Badge
       className={cn(
-        badgeVariants({ variant: "outline" }),
-        "gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-medium shadow-none",
-        getStatusClasses(status),
+        "py-1 text-[11px] font-medium shadow-none hover:bg-secondary",
         className,
       )}
+      dot
       ref={reference}
+      tone={getStatusTone(status)}
       {...props}
     >
-      <span aria-hidden="true" className="size-1.5 rounded-full bg-current" />
       <span>
         {amount
           ? `${amount} • ${label ?? getStatusLabel(status)}`
           : (label ?? getStatusLabel(status))}
       </span>
-    </span>
+    </Badge>
   );
 };
 

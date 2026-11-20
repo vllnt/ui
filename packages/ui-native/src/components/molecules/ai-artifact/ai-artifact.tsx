@@ -1,7 +1,6 @@
 import { createContext, type ReactNode, type Ref, use, useMemo } from "react";
 
 import {
-  Pressable,
   type PressableProps,
   StyleSheet,
   Text as NativeText,
@@ -10,6 +9,7 @@ import {
 } from "react-native";
 
 import { announce } from "../../../primitives/accessibility";
+import { InteractivePressable } from "../../../primitives/interactive-pressable";
 import { typeStyle } from "../../../primitives/type-style";
 import { useTheme } from "../../../theme/theme-provider";
 import { Badge } from "../../atoms/badge/badge";
@@ -452,23 +452,20 @@ function AIArtifactVersion({
 }: AIArtifactVersionProps) {
   const theme = useTheme();
   return (
-    <Pressable
+    <InteractivePressable
       {...props}
       accessibilityRole="button"
       accessibilityState={{ ...accessibilityState, selected: active }}
       ref={ref}
+      selected={active}
       style={(state) => [
         {
           backgroundColor: active
             ? theme.colors.primary
-            : state.pressed
-              ? theme.colors.accent
-              : theme.colors.background,
+            : theme.colors.background,
           borderColor: active ? theme.colors.primary : theme.colors.border,
           borderRadius: theme.radius.full,
           borderWidth: 1,
-          minHeight: 44,
-          minWidth: 44,
           paddingHorizontal: theme.spacing[3],
           paddingVertical: theme.spacing[2],
         },
@@ -488,7 +485,7 @@ function AIArtifactVersion({
       ) : (
         label
       )}
-    </Pressable>
+    </InteractivePressable>
   );
 }
 AIArtifactVersion.displayName = "AIArtifactVersion";

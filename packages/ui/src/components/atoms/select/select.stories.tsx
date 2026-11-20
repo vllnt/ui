@@ -43,3 +43,22 @@ export const Default: Story = {
     </div>
   ),
 };
+
+export const Invalid: Story = {
+  render: (args) => (
+    <div className="grid w-[220px] gap-2">
+      <Label htmlFor="select-fruit-invalid">Fruit</Label>
+      <Select {...args}>
+        <SelectTrigger aria-invalid="true" id="select-fruit-invalid">
+          <SelectValue placeholder="Select a fruit" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectGroup>
+            <SelectItem value="apple">Apple</SelectItem>
+            <SelectItem value="banana">Banana</SelectItem>
+          </SelectGroup>
+        </SelectContent>
+      </Select>
+    </div>
+  ),
+};

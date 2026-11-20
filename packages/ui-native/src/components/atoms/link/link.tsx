@@ -2,7 +2,6 @@
 
 import type { ReactNode, Ref } from "react";
 import {
-  Pressable,
   type PressableProps,
   type StyleProp,
   StyleSheet,
@@ -11,6 +10,7 @@ import {
   type View,
 } from "react-native";
 
+import { InteractivePressable } from "../../../primitives/interactive-pressable";
 import {
   defaultLinkingService,
   type LinkingService,
@@ -34,13 +34,10 @@ export type LinkProps = Omit<PressableProps, "children"> & {
 };
 
 const styles = StyleSheet.create({
-  disabled: { opacity: 0.5 },
   root: {
     alignItems: "center",
     alignSelf: "flex-start",
     justifyContent: "center",
-    minHeight: 44,
-    minWidth: 44,
   },
 });
 
@@ -87,7 +84,7 @@ function Link({
     );
 
   return (
-    <Pressable
+    <InteractivePressable
       {...props}
       accessibilityLabel={accessibilityLabel}
       accessibilityRole="link"
@@ -111,13 +108,11 @@ function Link({
       ref={ref}
       style={(state) => [
         styles.root,
-        state.pressed ? { opacity: 0.8 } : undefined,
-        disabled ? styles.disabled : undefined,
         typeof style === "function" ? style(state) : style,
       ]}
     >
       {content}
-    </Pressable>
+    </InteractivePressable>
   );
 }
 Link.displayName = "Link";

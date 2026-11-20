@@ -12,12 +12,26 @@ const alertVariants = cva(
       variant: {
         default: "bg-background text-foreground",
         destructive:
-          "border-destructive/50 text-destructive dark:border-destructive [&>svg]:text-destructive",
+          "border-destructive/50 text-foreground dark:border-destructive [&>svg]:text-destructive",
       },
     },
   },
 );
 
+/**
+ * Callout box with `role="alert"`. The `destructive` variant keeps the title
+ * and body in the foreground colour: status colour sits on the border and on a
+ * direct child `svg` glyph, never on words.
+ *
+ * @example
+ * ```tsx
+ * <Alert variant="destructive">
+ *   <AlertCircle aria-hidden="true" className="size-4" />
+ *   <AlertTitle>Payment failed</AlertTitle>
+ *   <AlertDescription>Check the card number.</AlertDescription>
+ * </Alert>
+ * ```
+ */
 const Alert = ({
   className,
   ref,

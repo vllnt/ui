@@ -3,14 +3,9 @@
 import { useEffect, useId, useRef } from "react";
 
 import type { ReactNode, Ref } from "react";
-import {
-  Animated,
-  Pressable,
-  StyleSheet,
-  View,
-  type ViewProps,
-} from "react-native";
+import { Animated, StyleSheet, View, type ViewProps } from "react-native";
 
+import { InteractivePressable } from "../../../primitives/interactive-pressable";
 import { isSingleSelected } from "../../../primitives/selection";
 import type { ControllableStateOptions } from "../../../primitives/use-controllable-state";
 import { useControllableState } from "../../../primitives/use-controllable-state";
@@ -54,8 +49,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     flex: 1,
     justifyContent: "center",
-    minHeight: 44,
-    minWidth: 44,
   },
 });
 
@@ -82,17 +75,17 @@ function AnimatedTabTrigger({
   }, [opacity, reduceMotion, selected]);
 
   return (
-    <Pressable
+    <InteractivePressable
       accessibilityRole="tab"
       accessibilityState={{ disabled: tab.disabled, selected }}
       disabled={tab.disabled}
       id={`${baseId}-tab-${tab.value}`}
       onPress={onSelect}
+      selected={selected}
       style={[
         styles.trigger,
         {
           borderRadius: theme.radius.md,
-          opacity: tab.disabled ? 0.5 : 1,
           paddingHorizontal: theme.spacing[3],
         },
       ]}
@@ -119,7 +112,7 @@ function AnimatedTabTrigger({
       >
         {tab.label}
       </Text>
-    </Pressable>
+    </InteractivePressable>
   );
 }
 AnimatedTabTrigger.displayName = "AnimatedTabTrigger";

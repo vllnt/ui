@@ -3,7 +3,6 @@
 import { createContext, type ReactNode, type Ref, use, useMemo } from "react";
 
 import {
-  Pressable,
   StyleSheet,
   Text as NativeText,
   View,
@@ -12,6 +11,7 @@ import {
 
 import { useAnnounceOnChange } from "../../../primitives/accessibility";
 import { useGroupDisabled } from "../../../primitives/control-group";
+import { InteractivePressable } from "../../../primitives/interactive-pressable";
 import { typeStyle } from "../../../primitives/type-style";
 import { useTheme } from "../../../theme/theme-provider";
 
@@ -41,7 +41,7 @@ export type FormMessageProps = Omit<ViewProps, "children"> & {
 };
 
 const styles = StyleSheet.create({
-  action: { alignItems: "center", justifyContent: "center", minHeight: 44 },
+  action: { alignItems: "center", justifyContent: "center" },
   root: { width: "100%" },
 });
 
@@ -83,8 +83,9 @@ function FormSubmit({
   const form = use(FormContext);
   if (!form) throw new Error("FormSubmit must be used within Form");
   return (
-    <Pressable
+    <InteractivePressable
       accessibilityHint={form.label}
+      filled
       {...props}
       accessibilityLabel={children}
       accessibilityRole="button"
@@ -97,7 +98,6 @@ function FormSubmit({
         {
           backgroundColor: theme.colors.primary,
           borderRadius: theme.radius.md,
-          opacity: disabled ? 0.5 : 1,
           paddingHorizontal: theme.spacing[4],
         },
         style,
@@ -106,7 +106,7 @@ function FormSubmit({
       <NativeText style={typeStyle(theme, "bodySmall", "primaryForeground")}>
         {children}
       </NativeText>
-    </Pressable>
+    </InteractivePressable>
   );
 }
 FormSubmit.displayName = "FormSubmit";

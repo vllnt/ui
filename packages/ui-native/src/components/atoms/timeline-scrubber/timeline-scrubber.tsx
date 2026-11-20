@@ -2,7 +2,6 @@
 
 import type { Ref } from "react";
 import {
-  Pressable,
   StyleSheet,
   Text as NativeText,
   View,
@@ -13,10 +12,10 @@ import {
   decorativeProps,
   joinAccessibilityText,
 } from "../../../primitives/accessibility";
+import { InteractivePressable } from "../../../primitives/interactive-pressable";
 import { typeStyle } from "../../../primitives/type-style";
 import type { ControllableStateOptions } from "../../../primitives/use-controllable-state";
 import { useControllableState } from "../../../primitives/use-controllable-state";
-import { useReducedMotion } from "../../../primitives/use-reduced-motion";
 import { useTheme } from "../../../theme/theme-provider";
 
 /** Caller-identified timeline milestone. */
@@ -56,8 +55,6 @@ const styles = StyleSheet.create({
   action: {
     alignItems: "center",
     justifyContent: "center",
-    minHeight: 44,
-    minWidth: 44,
   },
   controls: { alignItems: "center", flexDirection: "row" },
   fill: { height: 4 },
@@ -89,7 +86,6 @@ function TimelineScrubber({
   ...props
 }: TimelineScrubberProps) {
   const theme = useTheme();
-  useReducedMotion();
   const safeEnd = end > start ? end : start + 1;
   const safeStep = Number.isFinite(step) && step > 0 ? step : 1;
   const [value, setValue] = useControllableState(valueState);
@@ -133,7 +129,7 @@ function TimelineScrubber({
         </NativeText>
       </View>
       <View style={styles.controls}>
-        <Pressable
+        <InteractivePressable
           accessibilityLabel={labels.decrement}
           accessibilityRole="button"
           onPress={() => {
@@ -142,7 +138,7 @@ function TimelineScrubber({
           style={styles.action}
         >
           <NativeText style={{ color: theme.colors.foreground }}>−</NativeText>
-        </Pressable>
+        </InteractivePressable>
         <View
           {...decorativeProps}
           style={[
@@ -164,7 +160,7 @@ function TimelineScrubber({
             ]}
           />
         </View>
-        <Pressable
+        <InteractivePressable
           accessibilityLabel={labels.increment}
           accessibilityRole="button"
           onPress={() => {
@@ -173,7 +169,7 @@ function TimelineScrubber({
           style={styles.action}
         >
           <NativeText style={{ color: theme.colors.foreground }}>+</NativeText>
-        </Pressable>
+        </InteractivePressable>
       </View>
     </View>
   );

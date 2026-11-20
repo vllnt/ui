@@ -1,8 +1,9 @@
 "use client";
 
 import type { ReactNode, Ref } from "react";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 
+import { InteractivePressable } from "../../../primitives/interactive-pressable";
 import {
   ModalLayer,
   type ModalLayerCloseReason,
@@ -29,7 +30,7 @@ export type PopoverProps = {
 };
 
 const styles = StyleSheet.create({
-  close: { alignItems: "center", justifyContent: "center", minHeight: 44 },
+  close: { alignItems: "center", justifyContent: "center" },
   content: { flex: 1, justifyContent: "center" },
   surface: {
     alignSelf: "center",
@@ -98,9 +99,10 @@ function Popover({
           </Text>
         ) : null}
         {children}
-        <Pressable
+        <InteractivePressable
           accessibilityLabel={cancelLabel}
           accessibilityRole="button"
+          filled
           onPress={() => {
             close("requestClose");
           }}
@@ -115,7 +117,7 @@ function Popover({
           <Text style={{ color: theme.colors.secondaryForeground }}>
             {cancelLabel}
           </Text>
-        </Pressable>
+        </InteractivePressable>
       </View>
     </ModalLayer>
   );

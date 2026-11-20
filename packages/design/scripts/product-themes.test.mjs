@@ -54,6 +54,9 @@ const penpotTypes = [
   "fontFamilies",
   "fontSizes",
   "fontWeights",
+  "opacity",
+  "shadow",
+  "sizing",
   "spacing",
 ];
 
@@ -125,7 +128,10 @@ describe("penpot-tokens.json", () => {
     const roles = semanticVariables.map((variable) => variable.slice(2)).sort();
     for (const name of themeNames) {
       for (const mode of modes) {
-        const colors = penpot[`vllnt/${name}/${mode}`].color;
+        // `badge-label` is a group of references to these roles, not a role.
+        const { "badge-label": badgeLabel, ...colors } =
+          penpot[`vllnt/${name}/${mode}`].color;
+        assert.ok(badgeLabel);
         assert.deepEqual(Object.keys(colors).sort(), roles);
         for (const token of Object.values(colors)) {
           assert.match(token.$value, /^#[\dA-F]{6}$/);
@@ -142,6 +148,16 @@ describe("penpot-tokens.json", () => {
   });
 });
 
+/**
+ * Maia is the Ink direction (owner decision 11 Nov 2026): no accent, the primary is
+ * the ink colour inverted per mode, Inter, no weight 700. The export copy in
+ * `sources/` is the 8 Nov pink export, so three things no longer follow it: the
+ * primary (its `accent`), the sans and display faces, and the 700 weights. Every
+ * other value is still checked against it. The light primary is pure black
+ * (#000000) on purpose (owner, 19 Nov 2026); core keeps #171717.
+ */
+const inkPrimary = { dark: "#FFFFFF", light: "#000000" };
+
 describe("Maia mapping", () => {
   const colorMap = {
     accent: "muted",
@@ -157,7 +173,6 @@ describe("Maia mapping", () => {
     muted: "muted",
     "muted-foreground": "muted-foreground",
     popover: "surface-raised",
-    primary: "accent",
     "primary-foreground": "accent-foreground",
     success: "status.implemented",
     warning: "status.deprecated",
@@ -179,6 +194,16 @@ describe("Maia mapping", () => {
         generated["muted-foreground"].$value,
         exportedHex("status.planned"),
         "neutral status is muted-foreground",
+      );
+    });
+
+    it(`makes the ${mode} primary the ink colour, not the exported pink accent`, () => {
+      const generated = penpot[`vllnt/maia/${mode}`].color;
+      assert.equal(generated.primary.$value, inkPrimary[mode]);
+      assert.equal(generated.primary.$value, generated.foreground.$value);
+      assert.notEqual(
+        generated.primary.$value,
+        maiaExport[`Maia/${mode}`].color.accent.$value.toUpperCase(),
       );
     });
   }
@@ -212,8 +237,9 @@ describe("Maia mapping", () => {
       assert.equal(generated.radius[step].$value, radius[step].$value, step);
     }
     const family = maiaExport["Maia/core"].font.family;
-    assert.deepEqual(generated.font.family.sans.$value, family.sans.$value);
     assert.deepEqual(generated.font.family.mono.$value, family.mono.$value);
+    assert.equal(generated.font.family.sans, undefined, "Maia inherits the core Inter");
+    assert.equal(generated.font.family.display, undefined, "Maia inherits the core display");
   });
 
   it("sets the approved type scale", () => {
@@ -233,9 +259,12 @@ describe("Maia mapping", () => {
         label: "11",
       },
     );
-    assert.equal(weights.display.$value, "700");
+    assert.equal(weights.display.$value, "600");
     assert.equal(weights.heading.$value, "600");
-    assert.equal(weights.label.$value, "700");
+    assert.equal(weights.label.$value, "600");
+    for (const [name, token] of Object.entries(weights)) {
+      assert.notEqual(token.$value, "700", `${name}: Ink uses no weight 700`);
+    }
   });
 });
 
@@ -301,16 +330,10 @@ describe("core fonts", () => {
     assert.equal(penpot["vllnt/core"].font.family.display.$value, "{font.family.sans}");
   });
 
-  it("leaves the product theme stacks unchanged", () => {
-    const figtree =
-      "'Figtree', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif";
+  it("keeps the product theme stacks: Maia inherits the core Inter, PaaS uses JetBrains Mono", () => {
     const jetbrains =
       "'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace";
-    assert.deepEqual(tokens.themes.maia.typography.fontFamily, {
-      sans: figtree,
-      display: figtree,
-      mono: jetbrains,
-    });
+    assert.deepEqual(tokens.themes.maia.typography.fontFamily, { mono: jetbrains });
     assert.deepEqual(tokens.themes.paas.typography.fontFamily, {
       sans: jetbrains,
       display: jetbrains,
@@ -318,14 +341,12 @@ describe("core fonts", () => {
     });
     const doubleQuoted = (stack) => stack.replaceAll("'", '"');
     assert.deepEqual(productsCss.match(/--font-(?:sans|display|mono): .*;/g), [
-      `--font-sans: ${doubleQuoted(figtree)};`,
-      `--font-display: ${doubleQuoted(figtree)};`,
       `--font-mono: ${doubleQuoted(jetbrains)};`,
       `--font-sans: ${doubleQuoted(jetbrains)};`,
       `--font-display: ${doubleQuoted(jetbrains)};`,
       `--font-mono: ${doubleQuoted(jetbrains)};`,
     ]);
-    assert.deepEqual(penpot["vllnt/maia/dark"].font.family.sans.$value, ["Figtree"]);
+    assert.equal(penpot["vllnt/maia/dark"].font.family.sans, undefined);
     assert.deepEqual(penpot["vllnt/maia/dark"].font.family.mono.$value, ["JetBrains Mono"]);
     for (const mode of modes) {
       for (const face of ["sans", "display", "mono"]) {
