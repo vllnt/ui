@@ -1,5 +1,8 @@
+import { resolve } from "node:path";
+
 import { describe, expect, it } from "vitest";
 
+import { readNativeOnlyNames } from "@/lib/native-only";
 import { nativeRegistry } from "@/lib/native-registry";
 
 import { getComponent, searchComponents, TOOLS } from "./route";
@@ -19,8 +22,12 @@ describe("platform-aware MCP tools", () => {
 
   it("filters native-capable components from the manifest", () => {
     const result = searchComponents({ platform: "native", query: "" });
+    const nativeOnlyNames = readNativeOnlyNames(resolve("../.."));
+    const catalogNativeCount = nativeRegistry.components.filter(
+      (component) => !nativeOnlyNames.has(component.name),
+    ).length;
 
-    expect(result.total).toBe(nativeRegistry.components.length);
+    expect(result.total).toBe(catalogNativeCount);
     expect(result.items).toHaveLength(25);
     expect(
       result.items.every((item) => item.platforms.includes("native")),

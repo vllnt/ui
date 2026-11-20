@@ -25,6 +25,7 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { listComponentDirectories } from "../lib/component-directory";
+import { readNativeOnlyNames } from "../lib/native-only";
 import { collectPublicExports, importedNames } from "../lib/public-exports";
 
 const scriptDir = dirname(fileURLToPath(import.meta.url));
@@ -211,7 +212,9 @@ for (const item of nativeItems) {
     errors.push(`Native source for "${item.name}" does not exist.`);
   }
 }
+const nativeOnlyNames = readNativeOnlyNames(repoRoot);
 for (const name of nativeManifest.keys()) {
+  if (nativeOnlyNames.has(name)) continue;
   if (!nativeItems.some((item) => item.name === name)) {
     errors.push(`Native manifest component "${name}" is absent from registry metadata.`);
   }

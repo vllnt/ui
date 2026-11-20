@@ -2062,7 +2062,8 @@
     "description": "Oversized hero/display text driven by the display tokens, with an optional reduced-motion-safe reveal.",
     "name": "display",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
