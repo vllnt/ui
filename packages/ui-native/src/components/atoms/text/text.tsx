@@ -8,7 +8,10 @@ import {
   type TextStyle,
 } from "react-native";
 
-import { TextColorContext } from "../../../primitives/text-color";
+import {
+  resolveTextColor,
+  TextColorContext,
+} from "../../../primitives/text-color";
 import { useTheme } from "../../../theme/theme-provider";
 
 /** Props for token-driven React Native body text. */
@@ -49,11 +52,7 @@ function Text({
       style={[
         scale[size],
         {
-          color:
-            surfaceColor ??
-            (tone === "muted"
-              ? theme.colors.mutedForeground
-              : theme.colors.foreground),
+          color: resolveTextColor(theme, tone, surfaceColor),
           fontWeight: fontWeight[weight],
         },
         style,

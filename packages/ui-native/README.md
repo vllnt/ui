@@ -8,7 +8,7 @@ The package base is **0.1.0**, not a published stable release. Core and Native c
 
 ## Current availability
 
-- 171 native component modules are listed in [`registry.json`](registry.json).
+- 175 native component modules are listed in [`registry.json`](registry.json).
 - `availability` is `source` and `installation.available` is `false`.
 - React 19.1+ and React Native 0.81 or newer are required.
 - CI runs the Android/iOS Metro export of the private Expo catalog. Real-device, VoiceOver, and TalkBack validation remain release gates.

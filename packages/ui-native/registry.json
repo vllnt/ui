@@ -273,6 +273,11 @@
       "source": "src/components/atoms/dialog/dialog.tsx"
     },
     {
+      "name": "display",
+      "compatibility": "portable-options",
+      "source": "src/components/atoms/display/display.tsx"
+    },
+    {
       "name": "document-sibling-nav",
       "compatibility": "native-adapted",
       "source": "src/components/atoms/document-sibling-nav/document-sibling-nav.tsx"
@@ -366,6 +371,11 @@
       "name": "horizontal-scroll-row",
       "compatibility": "native-adapted",
       "source": "src/components/molecules/horizontal-scroll-row/horizontal-scroll-row.tsx"
+    },
+    {
+      "name": "icon",
+      "compatibility": "native-adapted",
+      "source": "src/components/atoms/icon/icon.tsx"
     },
     {
       "name": "inline-input",
@@ -673,6 +683,11 @@
       "source": "src/components/atoms/slideshow/slideshow.tsx"
     },
     {
+      "name": "spacer",
+      "compatibility": "native-adapted",
+      "source": "src/components/atoms/spacer/spacer.tsx"
+    },
+    {
       "name": "spinner",
       "compatibility": "native-adapted",
       "source": "src/components/atoms/spinner/spinner.tsx"
@@ -681,6 +696,11 @@
       "name": "spinning-text",
       "compatibility": "native-adapted",
       "source": "src/components/atoms/spinning-text/spinning-text.tsx"
+    },
+    {
+      "name": "stack",
+      "compatibility": "native-adapted",
+      "source": "src/components/atoms/stack/stack.tsx"
     },
     {
       "name": "stat-card",
