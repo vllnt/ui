@@ -140,6 +140,8 @@ Si la surface est un contrôle, un bouton par exemple, son contour doit atteindr
 
 VLLNT UI teste chacune de ses stories avec axe, en thème clair et en thème sombre. Ce test couvre le composant sur l'arrière-plan de sa story. Il ne peut pas couvrir le vôtre.
 
+Une limite à connaître : aucun composant de verre de VLLNT UI ne réagit aujourd'hui au réglage `prefers-reduced-transparency`. Si vos utilisateurs ont besoin de surfaces opaques, ajoutez votre propre media query, qui remplace le fond par une couleur `card` pleine. Les règles d'accessibilité pour les surfaces translucides sont suivies dans [vllnt/ui#681](https://github.com/vllnt/ui/issues/681).
+
 ## Le mouvement
 
 Le reflet boucle toutes les 8 secondes, avec une courbe ease-in-out. Quand `prefers-reduced-motion: reduce` est actif, la classe `motion-reduce:animate-none` l'arrête, et la surface conserve son flou et son fond.
@@ -164,7 +166,7 @@ Le verre est un motif de surface parmi d'autres, construit sur les tokens. VLLNT
 
 Utilisez le verre là où une surface flotte au-dessus d'une image : un panneau d'en-tête, une incrustation sur un média, un contrôle sur une carte ou un canvas. Écartez-le des écrans denses, comme les tableaux de données, les formulaires et les longs textes, où une surface `card` opaque se lit plus vite.
 
-Le verre revient aussi dans les interfaces spatiales, où les surfaces se placent à des profondeurs différentes. VLLNT UI n'a pas de tokens de profondeur aujourd'hui. Ils sont proposés dans une RFC ouverte, décrite sur la [page Vision](/docs/vision).
+Le verre revient aussi dans les interfaces spatiales et holographiques, où des panneaux translucides se placent à des profondeurs différentes. VLLNT UI n'a pas de tokens de profondeur aujourd'hui. Ils sont proposés dans une RFC ouverte, décrite sur la [page Vision](/docs/vision).
 
 ## Pour aller plus loin
 
