@@ -6,23 +6,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
-### Added
-
-- **Text `family` prop** - `family="mono"` sets body copy in `--font-mono`
-  (JetBrains Mono by default) with the same scale: `size="base"` 16/1.6,
-  `size="lead"` 18/1.7. The default stays `family="sans"`.
-- **`@vllnt/ui/package.json` export** - tools can read the package manifest
-  (for example its version) without `ERR_PACKAGE_PATH_NOT_EXPORTED`.
-
-### Changed
-
-- **Core caption and label weights match the Penpot library** -
-  `font.weight.caption` is 400 (was 500) and `font.weight.label` /
-  `--font-weight-label` is 500 (was 600). No shipped web component reads
-  them; read `--font-weight-label` directly and labels get lighter. The Maia
-  theme keeps its Ink scale (caption 500, label 600). Radius is unchanged:
-  `radius.control` 6 and `radius.surface` 8 are the shared role names.
-
 ## [0.4.0] - 2026-11-20
 
 ### Added
@@ -113,6 +96,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
   `@vllnt/ui`. It writes through the Clipboard API, falls back to a temporary
   textarea and `document.execCommand("copy")` when that API is missing or
   rejects, and resolves to `false` when neither path works. (#576)
+- **Text `family` prop** - `family="mono"` sets body copy in `--font-mono`
+  (JetBrains Mono by default) with the same scale: `size="base"` 16/1.6,
+  `size="lead"` 18/1.7. The default stays `family="sans"`. (#666)
+- **`@vllnt/ui/package.json` export** - tools can read the package manifest
+  (for example its version) without `ERR_PACKAGE_PATH_NOT_EXPORTED`. (#665)
 
 ### Changed
 
@@ -226,6 +214,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
     the ScrollArea viewport is a tab stop only while its content scrolls.
   - TreeView supports Home / End, ArrowRight to the first child and ArrowLeft
     to the parent, and keeps the active row in view.
+- **Core caption and label weights match the Penpot library** -
+  `font.weight.caption` is 400 (was 500) and `font.weight.label` /
+  `--font-weight-label` is 500 (was 600). No shipped web component reads
+  them; read `--font-weight-label` directly and labels get lighter. The Maia
+  theme keeps its Ink scale (caption 500, label 600). Radius is unchanged:
+  `radius.control` 6 and `radius.surface` 8 are the shared role names. (#669)
 
 ### Fixed
 
