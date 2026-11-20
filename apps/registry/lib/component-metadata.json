@@ -6263,6 +6263,10 @@
       {
         "id": "core-text--sizes",
         "name": "Sizes"
+      },
+      {
+        "id": "core-text--mono-family",
+        "name": "Mono Family"
       }
     ],
     "title": "Text"
