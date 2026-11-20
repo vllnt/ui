@@ -5,6 +5,32 @@ Harness-specific aliases (`CLAUDE.md`, `.cursorrules`, `codex.md`, etc.) referen
 
 This file is the **index**. Detailed rules live in [`docs/agents/`](./docs/agents/).
 
+## Vision and goal
+
+**North star.** vllnt/ui is the mandatory UI layer for every vllnt product, in every environment: web, mobile, desktop and, next, spatial. It is the fastest way for humans and AI agents to build UIs. The vllnt brand is the default theme, and every component meets WCAG 2.2 AA.
+
+**Where it is going** (Benoît, 20 Nov 2026). vllnt/ui is also meant to be the foundation library for:
+
+1. **AR and spatial interfaces:** the same components and tokens rendered in 3D space (for example visionOS or WebXR), not a separate kit.
+2. **Dynamic, AI-generated UI:** interfaces that are streamed, composed at runtime by a model or a server, personalised for each user, and updated without a rebuild.
+3. **First-class with the Vercel AI stack:** models can emit vllnt/ui trees through [json-render](https://github.com/vercel-labs/json-render) catalogs, and [AI SDK](https://ai-sdk.dev) generative UI (tool calls in `useChat` message parts, and RSC `streamUI`) renders vllnt/ui components.
+
+Read the long form at [`/docs/vision`](https://ui.vllnt.com/docs/vision) (source: [`apps/registry/content/pages/docs/vision/`](./apps/registry/content/pages/docs/vision/)).
+
+**Design rules that follow.** Apply them to every change. "Today" means it is on `main`; "Roadmap" means it is planned and not shipped. Never describe a roadmap item as available.
+
+| Rule | Today | Roadmap |
+|------|-------|---------|
+| **Describable components.** Give new props plain, serialisable values (strings, numbers, booleans, arrays, plain objects); pass React nodes only through `children` or named slots, and behaviour through event handlers. Every component has a machine-readable descriptor, so an agent or a server can pick and compose it. | `/r/<name>.json` for every component, `/r/registry.json`, `llms.txt`, `llms-full.txt`, the MCP server at `/mcp` (`search_components`, `get_component`, `list_categories`). Every descriptor carries its version and stability; prop definitions and usage examples exist for only a few components so far ([`apps/registry/registry.json`](./apps/registry/registry.json), schema in [`apps/registry/lib/registry.ts`](./apps/registry/lib/registry.ts)). | A complete JSON schema of the props of every component, so a model can produce a valid UI tree and a renderer can check it before rendering. |
+| **Tokens and themes are data.** No hard-coded colours, sizes or fonts in components: use the tokens. A theme is a data layer that can be switched at runtime. | [`packages/design/tokens.json`](./packages/design/tokens.json) generates the CSS variables, the product themes (`data-theme`, [`themes/products.css`](./packages/ui/themes/products.css)), the native tokens and Penpot. | Themes resolved per user at runtime (for example a generated theme for one person), within the accessible token ranges. |
+| **Streaming-safe rendering.** Components render a stable layout before their data arrives, have loading, empty and error states, and don't shift layout when content streams in. | `Skeleton`, `AIStreamingText`, `Reasoning`, `ThinkingBlock` and `AgentActivity`; React Server Components are supported (client components are marked `"use client"`). | A documented contract for partial props, so any component can render from incomplete, streamed data. |
+| **Safe auto-updates.** A consumer on a pinned version can take a new one without breaking. | Semver, a canary on every merge to `main`, stable releases only from reviewed `v*` tags, `latest` never moves backwards, upgrade notes in [`packages/ui/CHANGELOG.md`](./packages/ui/CHANGELOG.md), rollback by `npm deprecate` ([`docs/RELEASING.md`](./docs/RELEASING.md)). | Codemods for breaking changes and a written deprecation window, so updates can be applied automatically. |
+| **Accessibility holds for generated UI.** WCAG 2.2 AA applies to a composed screen, not only to each component. Generated UI must keep labels, focus order, contrast and target sizes. | Storybook runs axe (WCAG 2.0 to 2.2, A and AA) on every story, in light and dark, and fails on any violation. Accessible names have English defaults. | Checks that run on a generated UI tree before it is shown. |
+| **Works with json-render and the AI SDK.** Write each component so a json-render catalog entry (a zod `props` schema plus a `description`) and an AI SDK tool `inputSchema` can describe it, and so it renders from those props alone. Give every async view a loading state (`input-streaming` / `input-available`) and an error state (`output-error`). Check APIs against the published packages, not memory, and only propose dependency versions at least 7 days old. | No adapter ships. The AI family components (`AIStreamingText`, `Reasoning`, `AIToolCallDisplay`, `AISourceCitation`, `ApprovalRequest` and others) are plain React, so you can render AI SDK message parts with them by hand. zod 4 is already in the repo, matching json-render's peer range. | A json-render catalog and registry (like `@json-render/shadcn`), zod prop schemas per component that also fill `/r/<name>.json` `props`, and AI SDK helpers that map `tool-${name}` parts to components: [#672](https://github.com/vllnt/ui/issues/672). |
+| **Platform-agnostic core.** Shared decisions (tokens, component contracts, platform rules) live in [`packages/ui-core`](./packages/ui-core) and [`packages/design`](./packages/design), never inside one renderer. | Web (`@vllnt/ui`) and React Native (`@vllnt/ui-native`) read the same core. Every interactive native component uses one affordance primitive (`InteractivePressable`: pressed, hovered, focused and disabled states, plus a touch-target floor). | Spatial renderers. The [spatial-ready foundations RFC](https://github.com/vllnt/ui/pull/632) (issue [#631](https://github.com/vllnt/ui/issues/631), draft, targets 0.5.0) proposes depth tokens, one affordance contract for pointer, touch and gaze, input-agnostic target sizes (24 px pointer, 44 pt touch, 60 pt spatial) and motion tokens. |
+
+When a change would break one of these rules, say so in the PR body and link the issue that accepts the trade-off.
+
 ---
 
 ## Repository at a glance
