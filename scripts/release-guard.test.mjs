@@ -109,7 +109,9 @@ test("checked-in bases, availability and stable install pin remain coherent", ()
   assert.equal(JSON.parse(read("packages/ui/package.json")).version, "0.4.0");
   for (const name of ["ui-core", "ui-native"]) assert.equal(JSON.parse(read(`packages/${name}/package.json`)).version, "0.1.0");
   const native = JSON.parse(read("packages/ui-native/registry.json"));
-  assert.equal(native.installation.available, false);
+  assert.equal(native.availability, "package");
+  assert.equal(native.installation.available, true);
+  assert.equal(native.installation.command, "pnpm add @vllnt/ui-native@canary");
   assert.match(read("apps/registry/scripts/inline-component-source.ts"), /PUBLISHED_VERSION = "0\.3\.0"/);
 });
 test("workflow guards precede mutations and channels stay explicit", () => {
