@@ -45,9 +45,9 @@ export function articleSocialImage(article: Article): string {
 }
 
 /**
- * Metadata of an article page. The title is used as written, because it
- * already ends with the site name; the canonical is the page's own URL in its
- * own locale, and hreflang lists only the locales the article exists in.
+ * Metadata of an article page. The title appears as written, because it
+ * already ends with the site name. The canonical points to the page's own URL
+ * in its own locale, and hreflang lists the locales that have the article.
  *
  * @param article - the article
  * @param availableLocales - locales that serve this article
@@ -104,7 +104,7 @@ export function articleStructuredData(input: {
   readonly articlesName: string;
   readonly homeName: string;
 }): readonly JsonLdNode[] {
-  const { article } = input;
+  const { article, articlesName, homeName } = input;
   const { date, description, tags, updated } = article.frontmatter;
   const heading = articleHeading(article);
 
@@ -122,10 +122,10 @@ export function articleStructuredData(input: {
     breadcrumbTrailLd(
       article.locale,
       [
-        { name: input.articlesName, path: "/articles" },
+        { name: articlesName, path: "/articles" },
         { name: heading, path: articlePath(article.slug) },
       ],
-      input.homeName,
+      homeName,
     ),
   ];
 }

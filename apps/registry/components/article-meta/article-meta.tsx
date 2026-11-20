@@ -20,8 +20,8 @@ function formatDate(value: string, locale: Locale): string {
 
 /**
  * Status, publication date and, when it differs, the update date of an article,
- * then its tags. Dates are `YYYY-MM-DD` calendar days, so they are formatted in
- * UTC and read the same in every time zone.
+ * then its tags. Dates are `YYYY-MM-DD` calendar days, so the component formats
+ * them in UTC and they read the same in every time zone.
  *
  * @param frontmatter - the article's validated frontmatter
  * @param locale - locale of the labels and the date format
@@ -40,7 +40,8 @@ export async function ArticleMeta({
       <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-muted-foreground">
         <Badge variant="outline">{t(`status.${status}`)}</Badge>
         <span>
-          {t("published")} <time dateTime={date}>{formatDate(date, locale)}</time>
+          {t("published")}{" "}
+          <time dateTime={date}>{formatDate(date, locale)}</time>
         </span>
         {updated === date ? null : (
           <span>

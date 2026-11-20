@@ -8,10 +8,7 @@ import { ComponentCard } from "@/components/component-card";
 import { Footer } from "@/components/footer/footer";
 import { PageShell } from "@/components/page-shell";
 import type { Locale } from "@/i18n/routing";
-import {
-  articleMetadata,
-  articleStructuredData,
-} from "@/lib/article-seo";
+import { articleMetadata, articleStructuredData } from "@/lib/article-seo";
 import {
   articleBody,
   articleHeading,
@@ -27,8 +24,8 @@ type Props = {
 };
 
 /**
- * Only published articles are generated. A draft, an unknown slug or a locale
- * without a file is a 404 that no cache stores.
+ * The build generates the published articles. A draft, an unknown slug or a
+ * locale without a file gets a 404 that no cache stores.
  */
 export const dynamicParams = false;
 

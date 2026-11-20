@@ -13,6 +13,15 @@ afterEach(() => {
   vi.unstubAllEnvs();
 });
 
+async function feedText(
+  locale: string,
+  format: "atom" | "rss",
+): Promise<string> {
+  const response = await articleFeedResponse(locale, format);
+
+  return response.text();
+}
+
 describe("articleFeedResponse", () => {
   it("serves the RSS feed of a locale with its headers", async () => {
     vi.stubEnv("ARTICLES_DIR", FIXTURES);
@@ -45,8 +54,8 @@ describe("articleFeedResponse", () => {
 
   it("serves the French feeds from the French articles and messages", async () => {
     vi.stubEnv("ARTICLES_DIR", FIXTURES);
-    const rss = await (await articleFeedResponse("fr", "rss")).text();
-    const atom = await (await articleFeedResponse("fr", "atom")).text();
+    const rss = await feedText("fr", "rss");
+    const atom = await feedText("fr", "atom");
 
     expect(rss).toContain("<title>Articles VLLNT UI</title>");
     expect(rss).toContain("/fr/articles/fixture-article</link>");
@@ -55,21 +64,21 @@ describe("articleFeedResponse", () => {
     expect(atom).toContain("/fr/articles/fixture-older</id>");
   });
 
-  it("answers 404 for a locale that is not configured", async () => {
-    vi.stubEnv("ARTICLES_DIR", FIXTURES);
-
-    for (const format of ["rss", "atom"] as const) {
+  it.each(["rss", "atom"] as const)(
+    "answers 404 for a locale that is not configured (%s)",
+    async (format) => {
+      vi.stubEnv("ARTICLES_DIR", FIXTURES);
       const response = await articleFeedResponse("de", format);
 
       expect(response.status).toBe(404);
       expect(response.headers.get("cache-control")).toBe("no-store");
-    }
-  });
+    },
+  );
 
   it("serves a valid empty feed when the collection is empty", async () => {
     vi.stubEnv("ARTICLES_DIR", path.join(FIXTURES, "does-not-exist"));
-    const rss = await (await articleFeedResponse("en", "rss")).text();
-    const atom = await (await articleFeedResponse("en", "atom")).text();
+    const rss = await feedText("en", "rss");
+    const atom = await feedText("en", "atom");
 
     expect(rss).toContain("<channel>");
     expect(rss).not.toContain("<item>");

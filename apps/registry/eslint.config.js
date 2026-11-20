@@ -105,8 +105,16 @@ export default [
   },
   {
     /* Data keyed by external names (npm packages, sandbox paths, CSS custom
-       properties) that cannot be camelCase; only keys needing quotes are exempt. */
-    files: ['lib/codesandbox.ts', 'lib/theme-tokens.ts'],
+       properties, feed MIME types, JSON-LD and hreflang keys) that cannot be
+       camelCase; only keys needing quotes are exempt. */
+    files: [
+      'lib/article-seo.test.ts',
+      'lib/article-seo.ts',
+      'lib/codesandbox.ts',
+      'lib/jsonld.test.ts',
+      'lib/sitemap.test.ts',
+      'lib/theme-tokens.ts',
+    ],
     rules: {
       [NAMING_CONVENTION]: [
         'error',

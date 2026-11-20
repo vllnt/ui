@@ -3,11 +3,7 @@ import { fileURLToPath } from "node:url";
 import { afterEach, beforeAll, describe, expect, it, vi } from "vitest";
 
 import { type Article, getPublishedArticles } from "./articles";
-import {
-  buildArticlePages,
-  buildArticlesSection,
-  buildLlmsTxt,
-} from "./llms";
+import { buildArticlePages, buildArticlesSection, buildLlmsTxt } from "./llms";
 
 const FIXTURES = fileURLToPath(
   new URL("../test/fixtures/articles", import.meta.url),
@@ -95,7 +91,9 @@ describe("buildLlmsTxt", () => {
     expect(listed).toBeGreaterThan(docs);
     expect(registry).toBeGreaterThan(listed);
     expect(text).toContain(`${SITE}/articles/fixture-article`);
-    expect(text).toContain("A fixture article that exercises every frontmatter field");
+    expect(text).toContain(
+      "A fixture article that exercises every frontmatter field",
+    );
   });
 
   it("has no Articles section and no article URL without articles", async () => {

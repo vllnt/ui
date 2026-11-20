@@ -13,18 +13,21 @@ type Route = {
 const EXTERNAL = Boolean(process.env.PLAYWRIGHT_BASE_URL);
 const ARTICLE_SLUG = "fixture-article";
 
-const ROUTES: readonly Route[] = [
+const SITE_ROUTES: readonly Route[] = [
   { breadcrumb: "optional", path: "/" },
   { breadcrumb: "required", path: "/components/button" },
   { breadcrumb: "required", path: "/families/form" },
   { breadcrumb: "required", path: "/docs/installation" },
-  ...(EXTERNAL
-    ? []
-    : [
-        { breadcrumb: "required", path: "/articles" },
-        { breadcrumb: "required", path: `/articles/${ARTICLE_SLUG}` },
-      ]),
 ];
+
+const ARTICLE_ROUTES: readonly Route[] = [
+  { breadcrumb: "required", path: "/articles" },
+  { breadcrumb: "required", path: `/articles/${ARTICLE_SLUG}` },
+];
+
+const ROUTES: readonly Route[] = EXTERNAL
+  ? SITE_ROUTES
+  : [...SITE_ROUTES, ...ARTICLE_ROUTES];
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);

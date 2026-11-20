@@ -34,13 +34,13 @@ type PageRouteInput = {
 
 /**
  * What the sitemap needs from the build. Each date is a real date of the
- * content it dates; the build date is only the fallback for a page that has
- * none.
+ * content it dates; the build date serves as the fallback for a page without
+ * one.
  */
 export type SitemapInput = {
   /** Published articles, every locale. */
   readonly articles: readonly Article[];
-  /** When this sitemap was generated. */
+  /** Date of this sitemap build. */
   readonly buildDate: Date;
   /** Date of the newest changelog release, for `/changelog` and `/releases`. */
   readonly changelogDate?: string;
@@ -87,18 +87,8 @@ function localizedEntries(
   );
 }
 
-/**
- * The catalog and installation pages also exist as `?platform=native`
- * variants, which are not listed: a sitemap lists clean URLs, and the
- * `/p/<platform>/...` copies are private routes that the middleware redirects
- * back to the query form, so no clean URL stands in for them.
- */
-function staticRoutes({
-  buildDate,
-  changelogDate,
-}: SitemapInput): MetadataRoute.Sitemap {
-  const changelog = changelogDate ?? buildDate;
-  const routes: readonly PageRouteInput[] = [
+function staticRouteList(changelog: LastModified): readonly PageRouteInput[] {
+  return [
     { changeFrequency: "weekly", path: "/", priority: 1 },
     { changeFrequency: "weekly", path: "/families", priority: 0.9 },
     { changeFrequency: "weekly", path: "/components", priority: 1 },
@@ -124,8 +114,21 @@ function staticRoutes({
     { changeFrequency: "monthly", path: "/vs/assistant-ui", priority: 0.7 },
     { changeFrequency: "monthly", path: "/themes", priority: 0.7 },
   ];
+}
 
-  return routes.flatMap((route) =>
+/**
+ * The catalog and installation pages also exist as `?platform=native`
+ * variants, which are not listed: a sitemap lists clean URLs, and the
+ * `/p/<platform>/...` copies are private routes that the middleware redirects
+ * back to the query form, so no clean URL stands in for them.
+ */
+function staticRoutes({
+  buildDate,
+  changelogDate,
+}: SitemapInput): MetadataRoute.Sitemap {
+  const changelog = changelogDate ?? buildDate;
+
+  return staticRouteList(changelog).flatMap((route) =>
     localizedEntries(route, route.lastModified ?? buildDate),
   );
 }
@@ -144,8 +147,8 @@ function familyRoutes({ buildDate }: SitemapInput): MetadataRoute.Sitemap {
 }
 
 /**
- * `/docs/changelog` permanently redirects to `/changelog`, which is already
- * listed, so the 3xx URL is left out of the sitemap.
+ * `/docs/changelog` permanently redirects to `/changelog`, which the sitemap
+ * already lists, so the sitemap leaves out the 3xx URL.
  */
 function docsRoutes({ buildDate }: SitemapInput): MetadataRoute.Sitemap {
   return DOCS_PAGES.filter((page) => page.slug !== "changelog").flatMap(
@@ -188,7 +191,7 @@ function buildGuideRoutes({ buildDate }: SitemapInput): MetadataRoute.Sitemap {
 }
 
 /**
- * A component page is built from its registry item, and its JSON-LD already
+ * A component page comes from its registry item, and its JSON-LD already
  * reports the registry stamp as `dateModified`, so the sitemap reports the same.
  * Crawl budget concentrates on the AI wedge: AI components rank higher than
  * generic clones, which sit below the default.
@@ -209,13 +212,10 @@ function componentRoutes({
   );
 }
 
-/**
- * The `/articles` index of each locale that has an article, dated by its newest
- * update, and every article page with its own `updated` date and the hreflang
- * alternates of the locales it exists in. An empty collection lists nothing.
- */
-function articleRoutes({ articles }: SitemapInput): MetadataRoute.Sitemap {
-  const indexes = locales.flatMap((locale) => {
+function articleIndexRoutes(
+  articles: readonly Article[],
+): MetadataRoute.Sitemap {
+  return locales.flatMap((locale) => {
     const [newest] = articles
       .filter((article) => article.locale === locale)
       .map((article) => article.frontmatter.updated)
@@ -234,7 +234,12 @@ function articleRoutes({ articles }: SitemapInput): MetadataRoute.Sitemap {
         ]
       : [];
   });
-  const pages = articles.map((article) =>
+}
+
+function articlePageRoutes(
+  articles: readonly Article[],
+): MetadataRoute.Sitemap {
+  return articles.map((article) =>
     entry({
       alternates: {
         languages: languageAlternates(
@@ -248,8 +253,32 @@ function articleRoutes({ articles }: SitemapInput): MetadataRoute.Sitemap {
       url: canonical(articlePath(article.slug), article.locale),
     }),
   );
+}
 
-  return [...indexes, ...pages];
+/**
+ * The `/articles` index of each locale that has an article, dated by its newest
+ * update, and every article page with its own `updated` date and the hreflang
+ * alternates of the locales it exists in. An empty collection lists nothing.
+ */
+function articleRoutes({ articles }: SitemapInput): MetadataRoute.Sitemap {
+  return [...articleIndexRoutes(articles), ...articlePageRoutes(articles)];
+}
+
+const REGISTRY_FILES = [
+  { changeFrequency: "weekly", path: "/r/registry.json", priority: 0.3 },
+  { changeFrequency: "weekly", path: "/r/native/registry.json", priority: 0.3 },
+  { changeFrequency: "monthly", path: "/r/design.json", priority: 0.3 },
+] as const;
+
+function registryFileRoutes(stamp: LastModified): MetadataRoute.Sitemap {
+  return REGISTRY_FILES.map((file) =>
+    entry({
+      changeFrequency: file.changeFrequency,
+      lastModified: stamp,
+      priority: file.priority,
+      url: `${SITE_URL}${file.path}`,
+    }),
+  );
 }
 
 /**
@@ -261,21 +290,9 @@ function registryRoutes({
   registryDate,
 }: SitemapInput): MetadataRoute.Sitemap {
   const stamp = registryDate ?? buildDate;
-  const files = [
-    { changeFrequency: "weekly", path: "/r/registry.json", priority: 0.3 },
-    { changeFrequency: "weekly", path: "/r/native/registry.json", priority: 0.3 },
-    { changeFrequency: "monthly", path: "/r/design.json", priority: 0.3 },
-  ] as const;
 
   return [
-    ...files.map((file) =>
-      entry({
-        changeFrequency: file.changeFrequency,
-        lastModified: stamp,
-        priority: file.priority,
-        url: `${SITE_URL}${file.path}`,
-      }),
-    ),
+    ...registryFileRoutes(stamp),
     entry({
       changeFrequency: "monthly",
       lastModified: buildDate,
@@ -296,7 +313,7 @@ function registryRoutes({
 /**
  * The newest dated entry of a changelog.
  *
- * @param entries - changelog entries; an undated one (Unreleased) is skipped
+ * @param entries - changelog entries; an undated one (Unreleased) does not count
  * @returns The newest date, or `undefined` when no entry has one
  */
 export function latestChangelogDate(
@@ -314,7 +331,7 @@ export function latestChangelogDate(
  * Every public URL of the site. The pages that have a date of their own report
  * it (an article's `updated`, the newest release for the changelog and release
  * pages, the registry stamp for components and registry files); the others
- * report the build date, so one deploy can still be told from the last.
+ * report the build date, so each deploy differs from the last.
  *
  * @param input - published articles and the dates of the build
  * @returns Sitemap entries

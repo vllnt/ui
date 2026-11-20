@@ -52,14 +52,14 @@ describe("sitemap URLs", () => {
   it("keeps the clean catalog and installation pages in both locales", () => {
     const all = urls(dated({ articles }));
 
-    for (const url of [
-      `${SITE}/components`,
-      `${SITE}/fr/components`,
-      `${SITE}/docs/installation`,
-      `${SITE}/fr/docs/installation`,
-    ]) {
-      expect(all).toContain(url);
-    }
+    expect(all).toEqual(
+      expect.arrayContaining([
+        `${SITE}/components`,
+        `${SITE}/fr/components`,
+        `${SITE}/docs/installation`,
+        `${SITE}/fr/docs/installation`,
+      ]),
+    );
   });
 
   it("lists every URL once, absolute and over https", () => {
@@ -138,11 +138,11 @@ describe("sitemap articles", () => {
   });
 });
 
-describe("sitemap lastmod", () => {
-  function lastModified(url: string): unknown {
-    return dated({ articles }).find((entry) => entry.url === url)?.lastModified;
-  }
+function lastModified(url: string): unknown {
+  return dated({ articles }).find((entry) => entry.url === url)?.lastModified;
+}
 
+describe("sitemap lastmod", () => {
   it("dates the changelog and the release page by the newest release", () => {
     expect(lastModified(`${SITE}/changelog`)).toBe(CHANGELOG_DATE);
     expect(lastModified(`${SITE}/releases`)).toBe(CHANGELOG_DATE);

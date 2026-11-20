@@ -30,19 +30,18 @@ beforeAll(async () => {
 });
 
 function isBalanced(xml: string): boolean {
-  const stack: string[] = [];
-
-  for (const match of xml.matchAll(/<(\/?)([\w:]+)[^>]*?(\/?)>/g)) {
+  const tags = [...xml.matchAll(/<(\/?)([\w:]+)[^>]*?(\/?)>/g)].filter(
+    (match) => match[3] !== "/",
+  );
+  const open = tags.reduce<readonly string[] | undefined>((stack, match) => {
+    if (stack === undefined) return;
     const name = match[2] ?? "";
-    if (match[3] === "/") continue;
-    if (match[1] === "/") {
-      if (stack.pop() !== name) return false;
-    } else {
-      stack.push(name);
-    }
-  }
+    if (match[1] !== "/") return [...stack, name];
 
-  return stack.length === 0;
+    return stack.at(-1) === name ? stack.slice(0, -1) : undefined;
+  }, []);
+
+  return open?.length === 0;
 }
 
 function count(text: string, needle: string): number {
@@ -61,14 +60,18 @@ describe("article feed URLs", () => {
     expect(articleFeedUrl("fr", "atom")).toBe(`${SITE}/articles/fr/atom.xml`);
   });
 
-  it("never collides with the release feeds", () => {
-    for (const locale of ["en", "fr"] as const) {
-      for (const format of ["rss", "atom"] as const) {
-        expect(articleFeedPath(locale, format)).not.toBe("/rss.xml");
-        expect(articleFeedPath(locale, format)).not.toBe("/atom.xml");
-      }
-    }
-  });
+  it.each([
+    ["en", "rss"],
+    ["en", "atom"],
+    ["fr", "rss"],
+    ["fr", "atom"],
+  ] as const)(
+    "%s %s never collides with the release feeds",
+    (locale, format) => {
+      expect(articleFeedPath(locale, format)).not.toBe("/rss.xml");
+      expect(articleFeedPath(locale, format)).not.toBe("/atom.xml");
+    },
+  );
 });
 
 describe("buildArticlesRss", () => {
@@ -91,9 +94,9 @@ describe("buildArticlesRss", () => {
     const xml = buildArticlesRss("en", english, CHANNEL);
 
     expect(count(xml, "<item>")).toBe(2);
-    expect(xml.indexOf(`${SITE}/articles/fixture-article</link>`)).toBeGreaterThan(
-      -1,
-    );
+    expect(
+      xml.indexOf(`${SITE}/articles/fixture-article</link>`),
+    ).toBeGreaterThan(-1);
     expect(xml.indexOf("fixture-article</link>")).toBeLessThan(
       xml.indexOf("fixture-older</link>"),
     );
@@ -125,9 +128,7 @@ describe("buildArticlesRss", () => {
 
     expect(xml).toContain("<language>fr-FR</language>");
     expect(xml).toContain(`<link>${SITE}/fr/articles</link>`);
-    expect(xml).toContain(
-      `<link>${SITE}/fr/articles/fixture-article</link>`,
-    );
+    expect(xml).toContain(`<link>${SITE}/fr/articles/fixture-article</link>`);
     expect(xml).toContain(`href="${SITE}/articles/fr/rss.xml"`);
     expect(xml).not.toContain(`<link>${SITE}/articles/fixture-article</link>`);
   });
@@ -170,12 +171,16 @@ describe("buildArticlesAtom", () => {
   it("is a well-formed Atom feed for the locale", () => {
     const xml = buildArticlesAtom("en", english, CHANNEL);
 
-    expect(xml).toContain('<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">');
+    expect(xml).toContain(
+      '<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">',
+    );
     expect(isBalanced(xml)).toBe(true);
     expect(xml).toContain("<title>Channel title</title>");
     expect(xml).toContain("<subtitle>Channel description.</subtitle>");
     expect(xml).toContain(`<id>${SITE}/articles</id>`);
-    expect(xml).toContain(`<link rel="self" href="${SITE}/articles/en/atom.xml" />`);
+    expect(xml).toContain(
+      `<link rel="self" href="${SITE}/articles/en/atom.xml" />`,
+    );
     expect(xml).toContain("<author><name>vllnt</name></author>");
     expect(xml).toContain("<updated>2026-11-02T00:00:00.000Z</updated>");
   });
@@ -190,7 +195,7 @@ describe("buildArticlesAtom", () => {
     expect(xml).toContain(`<id>${SITE}/articles/fixture-article</id>`);
     expect(xml).toContain(`<link href="${SITE}/articles/fixture-article" />`);
     expect(xml).toContain("<published>2026-10-05T00:00:00.000Z</published>");
-    expect(xml).toContain("<category term=\"glass-surfaces\" />");
+    expect(xml).toContain('<category term="glass-surfaces" />');
   });
 
   it("serves the French feed with French URLs and language", () => {

@@ -14,8 +14,8 @@ const SITE = "https://ui.vllnt.com";
 
 /**
  * The release feeds at `/rss.xml` and `/atom.xml` are not part of the articles
- * feature. With published articles present and GitHub unreachable, they must
- * still list exactly the dated releases of the changelog, link only to the
+ * feature. With published articles present and GitHub unreachable, they still
+ * list the dated releases of the changelog and nothing else, link to the
  * release page, and keep their own channel identity.
  */
 beforeEach(() => {
@@ -35,11 +35,19 @@ function count(text: string, needle: string): number {
   return text.split(needle).length - 1;
 }
 
+async function datedReleases(): ReturnType<typeof getReleaseRecords> {
+  const releases = await getReleaseRecords();
+
+  return releases.filter((release) => release.date !== undefined);
+}
+
+function missing(body: string, links: readonly string[]): readonly string[] {
+  return links.filter((link) => !body.includes(link));
+}
+
 describe("release feeds are unchanged by articles", () => {
   it("keeps the RSS channel and lists exactly the dated releases", async () => {
-    const releases = (await getReleaseRecords()).filter(
-      (release) => release.date !== undefined,
-    );
+    const releases = await datedReleases();
     const response = await rssFeed();
     const body = await response.text();
 
@@ -52,18 +60,19 @@ describe("release feeds are unchanged by articles", () => {
     expect(body).toContain("<language>en-US</language>");
     expect(body).not.toContain("xmlns:atom");
     expect(count(body, "<item>")).toBe(releases.length);
-    for (const release of releases) {
-      expect(body).toContain(`<link>${releasePageUrl(release)}</link>`);
-    }
+    expect(
+      missing(
+        body,
+        releases.map((release) => `<link>${releasePageUrl(release)}</link>`),
+      ),
+    ).toEqual([]);
     expect(body).not.toContain(`${SITE}/articles`);
     expect(body).not.toContain(`${SITE}/fr/articles`);
     expect(body).not.toContain("fixture-");
   });
 
   it("keeps the Atom channel and lists exactly the dated releases", async () => {
-    const releases = (await getReleaseRecords()).filter(
-      (release) => release.date !== undefined,
-    );
+    const releases = await datedReleases();
     const response = await atomFeed();
     const body = await response.text();
 
@@ -74,9 +83,12 @@ describe("release feeds are unchanged by articles", () => {
     expect(body).toContain("<title>VLLNT UI Releases</title>");
     expect(body).toContain(`<link rel="self" href="${SITE}/atom.xml" />`);
     expect(count(body, "<entry>")).toBe(releases.length);
-    for (const release of releases) {
-      expect(body).toContain(`<link href="${releasePageUrl(release)}" />`);
-    }
+    expect(
+      missing(
+        body,
+        releases.map((release) => `<link href="${releasePageUrl(release)}" />`),
+      ),
+    ).toEqual([]);
     expect(body).not.toContain(`${SITE}/articles`);
     expect(body).not.toContain(`${SITE}/fr/articles`);
     expect(body).not.toContain("fixture-");

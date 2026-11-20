@@ -78,7 +78,9 @@ describe("robots.txt", () => {
     ];
 
     expect(
-      paths.filter((entry) => blocked.some((prefix) => entry.startsWith(prefix))),
+      paths.filter((entry) =>
+        blocked.some((prefix) => entry.startsWith(prefix)),
+      ),
     ).toEqual([]);
   });
 

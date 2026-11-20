@@ -118,10 +118,11 @@ describe("parseArticleSource", () => {
 
   it.each(["/card.png", "https://example.com/card.png"])(
     "accepts the image source %s",
-    (src) => {
+    (source_) => {
       expect(
-        parse({ ...BASE, image: { alt: "A card", src } }).frontmatter.image,
-      ).toEqual({ alt: "A card", src });
+        parse({ ...BASE, image: { alt: "A card", src: source_ } }).frontmatter
+          .image,
+      ).toEqual({ alt: "A card", src: source_ });
     },
   );
 
@@ -397,7 +398,8 @@ describe("findArticleCoverageIssues", () => {
   it("reports a published article that lacks a locale", async () => {
     const all = await getAllArticles(FIXTURES);
     const missingFrench = all.filter(
-      (article) => !(article.slug === "fixture-older" && article.locale === "fr"),
+      (article) =>
+        !(article.slug === "fixture-older" && article.locale === "fr"),
     );
 
     expect(findArticleCoverageIssues(missingFrench)).toEqual([
