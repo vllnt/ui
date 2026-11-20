@@ -140,7 +140,7 @@ If the surface is a control, such as a button, its edge needs 3:1 against the ba
 
 VLLNT UI tests each of its stories with axe in light and dark themes. That test covers the component on its story backdrop. It cannot cover yours.
 
-One gap to know: no VLLNT UI glass component reacts to the `prefers-reduced-transparency` setting today. If your users need opaque surfaces, add your own media query that replaces the fill with a solid `card` color. Accessibility rules for translucent surfaces are tracked in [vllnt/ui#681](https://github.com/vllnt/ui/issues/681).
+One gap to know: no VLLNT UI glass component reacts to the `prefers-reduced-transparency` or `prefers-contrast` settings today, and none has a solid variant. If your users need opaque surfaces, add your own media query that replaces the fill with a solid `card` color. An automatic solid fallback is planned ([vllnt/ui#684](https://github.com/vllnt/ui/issues/684)), and the accessibility rules for translucent surfaces are tracked in [vllnt/ui#681](https://github.com/vllnt/ui/issues/681).
 
 ## Motion
 
@@ -162,9 +162,9 @@ Pick [Glass Card](/components/glass-card) for a static glassmorphism card. Pick 
 
 ## Where glass fits
 
-Glass is one surface pattern built on the tokens. VLLNT UI has no glass theme, and its documentation site uses flat, neutral surfaces.
+Glass is one surface pattern built on the tokens. Today the default VLLNT UI theme is solid, and there are no glass tokens. Glass is decided as the future default look, with automatic solid fallbacks. That switch is not built yet. It is tracked in [vllnt/ui#684](https://github.com/vllnt/ui/issues/684).
 
-Use glass where a surface floats over imagery: a hero panel, a media overlay, a control on a map or a canvas. Leave it out of dense screens such as data tables, forms and long text, where a solid `card` surface reads faster.
+Until the glass tokens and their contrast tests exist, use glass where a surface floats over imagery: a hero panel, a media overlay, a control on a map or a canvas. Leave it out of dense screens such as data tables, forms and long text, where a solid `card` surface reads faster.
 
 Glass also comes up in spatial and holographic interfaces, where translucent panels sit at different depths. VLLNT UI has no depth tokens today. They are proposed in an open RFC, described on the [vision page](/docs/vision).
 

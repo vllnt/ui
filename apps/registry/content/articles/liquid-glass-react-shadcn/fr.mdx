@@ -140,7 +140,7 @@ Si la surface est un contrôle, un bouton par exemple, son contour doit atteindr
 
 VLLNT UI teste chacune de ses stories avec axe, en thème clair et en thème sombre. Ce test couvre le composant sur l'arrière-plan de sa story. Il ne peut pas couvrir le vôtre.
 
-Une limite à connaître : aucun composant de verre de VLLNT UI ne réagit aujourd'hui au réglage `prefers-reduced-transparency`. Si vos utilisateurs ont besoin de surfaces opaques, ajoutez votre propre media query, qui remplace le fond par une couleur `card` pleine. Les règles d'accessibilité pour les surfaces translucides sont suivies dans [vllnt/ui#681](https://github.com/vllnt/ui/issues/681).
+Une limite à connaître : aucun composant de verre de VLLNT UI ne réagit aujourd'hui aux réglages `prefers-reduced-transparency` ou `prefers-contrast`, et aucun n'a de variante opaque. Si vos utilisateurs ont besoin de surfaces opaques, ajoutez votre propre media query, qui remplace le fond par une couleur `card` pleine. Un repli opaque automatique est prévu ([vllnt/ui#684](https://github.com/vllnt/ui/issues/684)), et les règles d'accessibilité pour les surfaces translucides sont suivies dans [vllnt/ui#681](https://github.com/vllnt/ui/issues/681).
 
 ## Le mouvement
 
@@ -162,9 +162,9 @@ Choisissez [Glass Card](/components/glass-card) pour une carte en glassmorphism 
 
 ## La place du verre
 
-Le verre est un motif de surface parmi d'autres, construit sur les tokens. VLLNT UI n'a pas de thème « verre », et son site de documentation utilise des surfaces plates et neutres.
+Le verre est un motif de surface parmi d'autres, construit sur les tokens. Aujourd'hui, le thème VLLNT UI par défaut est opaque, et il n'existe pas de tokens de verre. Il est décidé que le verre deviendra l'apparence par défaut, avec des replis opaques automatiques. Ce passage n'est pas encore construit. Il est suivi dans [vllnt/ui#684](https://github.com/vllnt/ui/issues/684).
 
-Utilisez le verre là où une surface flotte au-dessus d'une image : un panneau d'en-tête, une incrustation sur un média, un contrôle sur une carte ou un canvas. Écartez-le des écrans denses, comme les tableaux de données, les formulaires et les longs textes, où une surface `card` opaque se lit plus vite.
+Tant que les tokens de verre et leurs tests de contraste n'existent pas, utilisez le verre là où une surface flotte au-dessus d'une image : un panneau d'en-tête, une incrustation sur un média, un contrôle sur une carte ou un canvas. Écartez-le des écrans denses, comme les tableaux de données, les formulaires et les longs textes, où une surface `card` opaque se lit plus vite.
 
 Le verre revient aussi dans les interfaces spatiales et holographiques, où des panneaux translucides se placent à des profondeurs différentes. VLLNT UI n'a pas de tokens de profondeur aujourd'hui. Ils sont proposés dans une RFC ouverte, décrite sur la [page Vision](/docs/vision).
 
