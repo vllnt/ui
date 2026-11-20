@@ -1,15 +1,15 @@
 # SEO and content plan: ui.vllnt.com
 
-Status: draft for the brand check. The writer owns the plan and the copy. The manager owns the routes, technical SEO, the issue, the PR and CI.
+Status: draft for the brand check. Scope widened on 2026-11-20 to follow the vision: voice-first as a core pillar, and 3D and holographic interfaces in the spatial pillar. The writer owns the plan and the copy. The manager owns the routes, technical SEO, the issue, the PR and CI.
 
 Binding inputs: [`BRAND-RULES.md`](./BRAND-RULES.md) (verbatim brand rules), the search data in section 2, and the repository on `main` for every product fact.
 
 ## 1. What this plan decides
 
-1. Five pillars and their clusters, tied to [`/docs/vision`](../../apps/registry/content/pages/docs/vision/en.mdx).
+1. Six pillars and their clusters, tied to [`/docs/vision`](../../apps/registry/content/pages/docs/vision/en.mdx).
 2. One owning page for each target query, so no two pages compete for the same term.
-3. Thirteen new articles under `/articles/<slug>`, in three batches.
-4. Title and meta rewrites for 21 existing pages. Each is marked **manager ships in PR A**.
+3. Fifteen new articles under `/articles/<slug>`, in three batches. Five are written. Ten are planned, including one on voice-first UI and one on holographic UI.
+4. Title and meta rewrites for 22 existing pages. Each is marked **manager ships in PR A**.
 5. Schema, internal links, rollout order and how the result is measured.
 
 Rules that apply to every string in this plan and in the articles:
@@ -18,6 +18,9 @@ Rules that apply to every string in this plan and in the articles:
 - No em dash, no emoji, sentence case, the `…` glyph for an ellipsis.
 - A page says what ships and what is roadmap. "Ships" means it is on `main`.
 - Third parties are named "AI SDK" (by Vercel) and "json-render" (vercel-labs). No partnership is implied.
+- No page describes a platform as further along than the status table in the "Vision and goal" section of [`AGENTS.md`](../../AGENTS.md). On `main` today: web is shipped. React Native is canary. Desktop, native macOS, 3D, holographic interfaces and voice-first are roadmap. AR and spatial are a draft RFC. AI-generated, streamed UI is partly shipped.
+- No page says that web and native read the same core package. `@vllnt/ui-native` imports `@vllnt/ui-core`. `@vllnt/ui` does not: it gets the same tokens as CSS generated from `packages/design`.
+- The public term is "holographic interfaces". No page names a film, a fictional character or a fictional assistant.
 
 ## 2. What the data says
 
@@ -33,7 +36,7 @@ Source: Google Search Console, property `sc-domain:ui.vllnt.com`. 28 days is 202
 Four findings drive the plan.
 
 1. **Demand today is for single components, not for the vision.** The top pages by clicks in 90 days are `/components/timeline-scrubber` (28 clicks, 324 impressions, position 8.7), `/components/globe-3d` (13 / 236 / 20.4), `/components/liquid-glass` (13 / 266 / 10.5) and `/components/gantt-chart` (9 / 271 / 38.8). The revealed queries carry "shadcn" or "react" plus a component name.
-2. **The vision terms have no measured demand yet.** Zero revealed queries in 90 days for "generative", "streaming", "design system", "shadcn registry", "ui kit", "vllnt" and "ui.vllnt". The generative, streamed and spatial pages are strategic. They are written to rank before the demand shows up, and this plan does not promise clicks from them.
+2. **The vision terms have no measured demand yet.** Zero revealed queries in 90 days for "generative", "streaming", "design system", "shadcn registry", "ui kit", "vllnt" and "ui.vllnt". The generative, streamed and spatial pages are strategic. They are written to rank before the demand shows up, and this plan does not promise clicks from them. A second read of the same 90-day window on 2026-11-20 covered the widened vision. Zero revealed queries contain "voice", "speech", "transcript", "talk", "waveform", "microphone", "holographic" or "HUD". The only revealed 3D queries are about the globe: "3d globe ui" (2 impressions) and "3d globe react" (1).
 3. **Several pages rank on page one and get no clicks.** `/design` has 143 impressions at position 7.0 and 0 clicks. `/components/scroll-area` has 81 at position 9.0 and 0 clicks. "timeline scrubber" has 36 impressions at position 8.4 and 0 clicks. The fix is the title and the meta, not a new page.
 4. **The query list is incomplete.** Only 14 clicked query rows are revealed in 90 days, against 163 page clicks. Page-level numbers are the reliable ones. Query numbers show direction.
 
@@ -52,17 +55,25 @@ Each pillar has one hub page. Cluster pages link up to the hub, and the hub link
 |---|---|---|---|
 | P1. Generative UI | `/articles/generative-ui-components-react` | `/articles/ai-sdk-generative-ui-react`, `/articles/json-render-component-catalog`, `/families/ai`, `/build/ai-chat-ui`, `/build/tool-calls-agent-steps`, `/build/ai-artifacts`, `/vs/vercel-ai-sdk` | Low. `/families/ai` 2 clicks / 189 impressions; `/build/ai-chat-ui` 1 / 91 |
 | P2. Streamed and per-user dynamic UI | `/articles/streaming-ui-react` | `/articles/per-user-dynamic-ui`, `/components/ai-streaming-text`, `/components/skeleton`, `/docs/theming`, `/themes` | Low for the pillar terms. `/components/ai-streaming-text` 6 / 42 at 14.29% CTR |
-| P3. Spatial UI and glass | `/docs/vision` | `/articles/spatial-ui-components-react`, `/articles/liquid-glass-react-shadcn`, `/components/liquid-glass`, `/components/glass-card` | Real for glass: "shadcn liquid glass" 3 / 98, "liquid glass shadcn" 2 / 51. None for spatial |
+| P3. Spatial, 3D and holographic UI, and glass | `/docs/vision` | `/articles/spatial-ui-components-react`, `/articles/holographic-ui-react`, `/articles/liquid-glass-react-shadcn`, `/components/liquid-glass`, `/components/glass-card`, `/components/glass-panel`, `/components/glass-progress`, `/components/threshold-ring`, `/components/zoom-hud`, `/components/tilt-card`, `/components/dock` | Real for glass: "shadcn liquid glass" 3 / 98, "liquid glass shadcn" 2 / 51. Small for the HUD parts: `/components/zoom-hud` 0 / 30 at position 9.9, `/components/tilt-card` 0 / 8 at position 2.9. None for spatial, 3D interfaces or holographic |
 | P4. Components people already search for | `/components` | `/articles/react-gantt-chart`, `/articles/timeline-scrubber-react`, `/articles/shadcn-theme-generator`, `/articles/react-3d-globe`, `/articles/react-cookie-consent-banner` and their component pages | The highest on the site. See section 5 |
 | P5. React Native | `/native` | `/articles/react-native-ui-kit`, `/p/native/components` | 81 revealed "react native" queries, 198 impressions, 1 click |
+| P6. Voice-first UI | `/articles/voice-ui-components-react`. Until it ships: `/docs/vision` | `/components/ai-streaming-text`, `/components/ai-message-bubble`, `/articles/streaming-ui-react`, `/articles/ai-sdk-generative-ui-react`, `/articles/json-render-component-catalog` | None. Zero revealed queries on voice, speech, transcript, push-to-talk, waveform or microphone |
 
 How the pillars follow from the vision:
 
-- **P1** is the second half of the vision: an interface composed at runtime from known parts. The pillar explains what makes a part usable by a model, then shows the two open tools the vision names.
+The vision names three shifts: 3D, spatial and holographic interfaces; dynamic, AI-composed UI; and voice-first interfaces. P1 and P6 are the two core pillars, because the vision says that next-generation UI is generated UI plus voice-first UI. The pillar numbers are labels, not ranks.
+
+- **P1** covers the second shift: an interface composed at runtime from known parts. The pillar explains what makes a part usable by a model, then shows the two open tools the vision names.
 - **P2** covers the "stream-safe" and "per user" properties from the vision, with the components that ship for them.
-- **P3** covers the first half of the vision. Spatial is a draft RFC ([#631](https://github.com/vllnt/ui/issues/631), [PR #632](https://github.com/vllnt/ui/pull/632)), so its article has status `roadmap`. Glass is covered only as a pattern built on the existing tokens. It is not a site theme, and the site chrome stays neutral.
+- **P3** covers the first shift. It has three parts, and each one keeps its own status:
+  - **Spatial and AR** are a draft RFC ([#631](https://github.com/vllnt/ui/issues/631), [PR #632](https://github.com/vllnt/ui/pull/632)), so the spatial article has status `roadmap`. No renderer and no depth token exists. Only 2D `elevation` and `shadow` tokens exist today.
+  - **3D** is roadmap. Only pseudo-3D ships: `Globe3D` (an SVG projection) and `TiltCard` (CSS 3D). The scene layer, with React Three Fiber and WebXR as optional peers, is [#678](https://github.com/vllnt/ui/issues/678). The globe queries stay with P4.
+  - **Holographic interfaces** means layered translucent panels in depth, data-dense HUD overlays, radial and orbital menus, input by gesture, gaze and voice, and panels that are streamed live or generated by an agent. The building blocks ship on the web: `GlassPanel`, `GlassCard`, `GlassProgress`, `LiquidGlass`, `ThresholdRing`, `ZoomHUD` and the docks. The holographic components are roadmap ([#679](https://github.com/vllnt/ui/issues/679)), as are gesture and voice input ([#680](https://github.com/vllnt/ui/issues/680)) and the accessibility rules for spatial and translucent UI ([#681](https://github.com/vllnt/ui/issues/681)). Today only `LiquidGlass` handles reduced motion, and no component handles reduced transparency.
+  - **Glass** is covered only as a pattern built on the existing tokens. It is not a site theme, and the site chrome stays neutral.
 - **P4** is where the clicks are. It pays for the strategic pillars by raising traffic now.
 - **P5** is honest capture of an audience that already finds the site. `@vllnt/ui-native` is source preview and canary only.
+- **P6** covers the third shift: the UI follows the voice. Its topics are conversational surfaces, a live transcript and listening states, push-to-talk and wake states, waveform and level indicators, spoken feedback with a text equivalent, and voice-driven streamed UI through the AI SDK and json-render. Nothing ships for it: no voice component, no microphone capture, no transcript, no listening state, no waveform and no speech output. One existing piece helps: `AIStreamingText` announces streamed text through a live region. The components are tracked in [#683](https://github.com/vllnt/ui/issues/683) and the voice input intent in [#680](https://github.com/vllnt/ui/issues/680). The pillar has no demand today, so it gets one article now and more only when components ship.
 
 ## 4. Intent ownership
 
@@ -73,7 +84,7 @@ How the pillars follow from the vision:
 | bntvllnt.com | Personal essays, build in public, first person, French | Any head term owned by a ui.vllnt.com page below | Links to the matching docs page instead |
 | maia.vllnt.com docs | The json-render presentation runtime of Maia | Generic "how to write a catalog" how-tos | ui.vllnt.com links to it and does not restate it |
 
-Checks done: bntvllnt.com has zero query or page hits in 28 and 90 days for every head term in section 5 (generative, spatial, json-render, glassmorphism, liquid glass, streaming UI, AI SDK, shadcn, gantt, timeline scrubber, theme generator). No cannibalisation today.
+Checks done: bntvllnt.com has zero query or page hits in 28 and 90 days for every head term in section 5 (generative, spatial, json-render, glassmorphism, liquid glass, streaming UI, AI SDK, shadcn, gantt, timeline scrubber, theme generator). A second read on 2026-11-20 found none for voice UI, speech, transcript, holographic, HUD or 3D either. No cannibalisation today.
 
 Rule for later: before a new page is added on any of the four sites, check its head term against the table in section 5. If the term has an owner there, the new page links to the owner and picks another term.
 
@@ -98,6 +109,13 @@ Numbers are 90 days: clicks / impressions / CTR / average position. "Strategic" 
 | streaming UI react | Strategic | `/articles/streaming-ui-react` | New, batch 1 |
 | per-user dynamic UI | Strategic | `/articles/per-user-dynamic-ui` | New, batch 3 |
 | spatial UI components, canvas UI components | Strategic | `/articles/spatial-ui-components-react` | New, batch 2 |
+| voice UI components react | Strategic | `/articles/voice-ui-components-react` | New, batch 2 |
+| voice first UI | Strategic | `/articles/voice-ui-components-react` | New, batch 2 |
+| push to talk UI | Strategic | `/articles/voice-ui-components-react` | New, batch 2 |
+| live transcript component | Strategic | `/articles/voice-ui-components-react` | New, batch 2 |
+| holographic UI react, HUD UI components | Strategic | `/articles/holographic-ui-react` | New, batch 3 |
+| 3D UI components react | Strategic | `/articles/holographic-ui-react` | New, batch 3 |
+| zoom controls (component intent) | Page: 0 / 30 / 0% / 9.9 | `/components/zoom-hud` | Rewrite |
 | shadcn liquid glass | 3 / 98 / 3.06% / 10.1 | `/articles/liquid-glass-react-shadcn` | New, batch 1 |
 | liquid glass shadcn | 2 / 51 / 3.92% / 8.2 | `/articles/liquid-glass-react-shadcn` | New, batch 1 |
 | liquid glass (component intent: props, install) | Page: 13 / 266 / 4.89% / 10.5 | `/components/liquid-glass` | Rewrite |
@@ -202,9 +220,10 @@ Status values: `shipped` means everything the page teaches is on `main`. `roadma
 - Title: `Spatial UI components - what React needs for AR | vllnt UI` (58)
 - Meta: `Spatial UI components for AR and visionOS need depth, gaze input and larger targets. What the VLLNT UI spatial RFC proposes, and what ships today: nothing yet.` (159)
 - H1: Spatial UI components: what a React library needs for AR
-- Internal links: `/docs/vision`, `/native`, `/components/canvas-shell`, `/articles/liquid-glass-react-shadcn`.
+- Internal links: `/docs/vision`, `/native`, `/components/canvas-shell`, `/articles/liquid-glass-react-shadcn`, and `/articles/holographic-ui-react` when it ships.
 - Schema: `Article`, `BreadcrumbList`.
 - Constraint: every spatial item is described as proposed in the RFC. No renderer, token or component is described as available.
+- Constraint: 3D is described as it stands. Only pseudo-3D ships (`Globe3D` in SVG, `TiltCard` in CSS 3D). The scene layer is roadmap ([#678](https://github.com/vllnt/ui/issues/678)), with React Three Fiber and WebXR as optional peers.
 
 **B2. `/articles/react-gantt-chart`** (P4, status `shipped`)
 
@@ -243,6 +262,20 @@ Status values: `shipped` means everything the page teaches is on `main`. `roadma
 - Internal links: `/components/globe-3d`, `/families/data-display`, `/components/gantt-chart`.
 - Schema: `Article`, `BreadcrumbList`, `SoftwareSourceCode` for `globe-3d`.
 
+**B6. `/articles/voice-ui-components-react`** (P6 hub, status `mixed`)
+
+- Target: "voice UI components react", "voice first UI", "push to talk UI", "live transcript component". All four are strategic, with no current demand: zero revealed queries in 90 days contain "voice", "speech", "transcript", "talk", "waveform" or "microphone".
+- Title: `Voice UI components in React - voice-first basics | vllnt UI` (60)
+- Meta: `Voice UI components for React: listening states, a live transcript, push-to-talk and a text equivalent for speech. What ships in VLLNT UI today: none yet.` (154)
+- H1: Voice UI components in React: what a voice-first interface needs
+- Reader can build: the text half of a voice turn from parts that ship. A push-to-talk `Button` with a keyboard path and a pressed state, the transcript in `AIMessageBubble`, and the reply as visible text in `AIStreamingText`, whose live region announces it. Microphone capture and speech output stay in the reader's own code.
+- Internal links: `/docs/vision`, `/components/ai-streaming-text`, `/components/ai-message-bubble`, `/articles/streaming-ui-react`, `/articles/generative-ui-components-react`.
+- Schema: `Article`, `BreadcrumbList`.
+- Constraint: no voice component is described as available. The page says in its first section that VLLNT UI ships no microphone capture, transcript, listening state, waveform or speech output, and links [#683](https://github.com/vllnt/ui/issues/683) and [#680](https://github.com/vllnt/ui/issues/680).
+- Constraint: the AI SDK speech and transcription functions are named with their prefix and called experimental: `experimental_transcribe`, `experimental_streamTranscribe`, `experimental_generateSpeech` and `experimental_streamSpeech` (`ai` 7.0.173). Read the AI SDK documentation on the day of writing and check the names again.
+- Constraint: the four accessibility rules are stated as requirements. Every spoken output has visible, selectable text. Every voice action can also be done by keyboard and pointer. Listening is announced, and never shown by color or motion alone. The UI shows when the microphone is live and stops it in one step.
+- Constraint: recheck #683 on the day of writing. If a voice component has landed, the status, the meta ("none yet") and the first section change with it.
+
 ### Batch 3 (planned)
 
 **C1. `/articles/react-native-ui-kit`** (P5, status `mixed`)
@@ -254,6 +287,7 @@ Status values: `shipped` means everything the page teaches is on `main`. `roadma
 - Internal links: `/native`, `/p/native/components`, `/docs/theming`, `/docs/vision`.
 - Schema: `Article`, `BreadcrumbList`.
 - Constraint: state in the first paragraph that `@vllnt/ui-native` is source preview and canary only, with no supported npm `latest`.
+- Constraint: "shared tokens" means tokens and component contracts generated from the same source in `packages/design`. `@vllnt/ui-native` imports `@vllnt/ui-core`. `@vllnt/ui` does not, and gets the same tokens as generated CSS. The page never says that web and native read the same core package.
 
 **C2. `/articles/react-cookie-consent-banner`** (P4, status `shipped`)
 
@@ -274,6 +308,20 @@ Status values: `shipped` means everything the page teaches is on `main`. `roadma
 - Internal links: `/docs/theming`, `/themes`, `/docs/vision`, `/articles/streaming-ui-react`.
 - Schema: `Article`, `BreadcrumbList`.
 - Constraint: runtime theme switching with `data-theme` ships. Per-user themes resolved at runtime are roadmap.
+
+**C4. `/articles/holographic-ui-react`** (P3, status `mixed`)
+
+- Target: "holographic UI react", "HUD UI components", "3D UI components react" (strategic). Nearby pages with impressions: `/components/zoom-hud` 0 / 30 at position 9.9, `/components/tilt-card` 0 / 8 at position 2.9.
+- Title: `Holographic UI in React - glass, HUD and docks | vllnt UI` (57)
+- Meta: `Holographic UI in React from parts that ship: glass panels, a ring gauge, a zoom HUD and docks. Radial menus, depth tokens and a 3D scene layer are roadmap.` (156)
+- H1: Holographic UI in React: glass panels, HUD controls and docks
+- Reader can build: a layered HUD from web parts that ship. `GlassPanel` surfaces, a `ThresholdRing` gauge, a `GlassProgress` bar, a `ZoomHUD` control and a `Dock`.
+- Internal links: `/components/glass-panel`, `/components/threshold-ring`, `/components/zoom-hud`, `/articles/liquid-glass-react-shadcn`, `/docs/vision`.
+- Schema: `Article`, `BreadcrumbList`.
+- Constraint: the page defines "holographic interfaces" the way the vision does, and names no film, fictional character or fictional assistant.
+- Constraint: the roadmap section lists what does not exist, each with its issue. Radial and orbital menus, a data ring, a holo panel and a documented glass layering pattern ([#679](https://github.com/vllnt/ui/issues/679)). Depth tokens ([#631](https://github.com/vllnt/ui/issues/631)). The 3D scene layer ([#678](https://github.com/vllnt/ui/issues/678)). Gesture and voice input ([#680](https://github.com/vllnt/ui/issues/680)).
+- Constraint: the page states the accessibility gap. Only `LiquidGlass` handles reduced motion, and no component handles reduced transparency ([#681](https://github.com/vllnt/ui/issues/681)). It repeats the contrast rules for text on glass from A5.
+- Constraint: one dock component is being renamed to `CommandDock` in [#682](https://github.com/vllnt/ui/issues/682). The article is written after that rename ships, and uses the new name only.
 
 French titles and metas for batches 2 and 3 are written with each article.
 
@@ -304,6 +352,7 @@ Every row below is **manager ships in PR A**. The strings are English. They repl
 | `/components/sidebar` | 1 / 123 / 0.81% / 28.7 | Sidebar - VLLNT UI | `React sidebar component - collapsible navigation | vllnt UI` (59) | `A collapsible React sidebar for app navigation in Next.js: titled sections, collapsible groups and current-page matching. Install it with the shadcn CLI.` (153) |
 | `/components/scroll-area` | 0 / 81 / 0% / 9.0 | Scroll Area - VLLNT UI | `React scroll area - custom scrollbars on Radix | vllnt UI` (57) | `A React scroll area with custom scrollbars, built on Radix. The viewport takes keyboard focus when its content overflows. Install it with the shadcn CLI.` (153) |
 | `/components/cookie-consent` | Query: 0 / 16 / 0% / 17.9 | Cookie Consent - VLLNT UI | `React cookie consent banner - accept or decline | vllnt UI` (58) | `A React cookie consent banner with accept and decline actions, card or bar layouts and an equal-weight button option. Accessible. Install with the shadcn CLI.` (158) |
+| `/components/zoom-hud` | 0 / 30 / 0% / 9.9 | Zoom HUD - VLLNT UI | `Zoom HUD - zoom controls for React canvas views | vllnt UI` (58) | `A zoom HUD for React canvas views: zoom in, zoom out and reset buttons around the current zoom percentage. Labelled buttons, theme tokens, shadcn CLI install.` (158) |
 
 Why each rewrite, in one line:
 
@@ -318,14 +367,14 @@ Why each rewrite, in one line:
 - `/components/ai-tool-call-display`: leads with "tool call UI", the term a searcher uses, not the component name.
 - `/components/timeline-scrubber`: "timeline scrubber ui" ranks 5.1 with 0 clicks. The new title starts with that exact phrase.
 - `/components/gantt-chart`: adds "React" first and "shadcn" for "shadcn gantt" (position 17.4).
-- `/components/liquid-glass`, `/components/glass-card`, `/components/globe-3d`, `/components/floating-navbar`, `/components/sidebar`, `/components/scroll-area`, `/components/cookie-consent`: each falls back to "Name - VLLNT UI" today. Each new title starts with the query.
+- `/components/liquid-glass`, `/components/glass-card`, `/components/globe-3d`, `/components/floating-navbar`, `/components/sidebar`, `/components/scroll-area`, `/components/cookie-consent`, `/components/zoom-hud`: each falls back to "Name - VLLNT UI" today. Each new title starts with the query. `/components/zoom-hud` is the one page in the widened spatial pillar with page-one impressions and no clicks.
 
 Notes for the manager:
 
 1. **Counts in copy.** No rewrite carries a component count except the home meta ("over 300"). A hard number such as 321 goes stale on the next merge. If a number is wanted, read it from the registry at build time.
-2. **Em dashes in existing copy.** Every title in `apps/registry/lib/ai-seo.ts` and `apps/registry/lib/component-seo.ts`, the default title in `app/[locale]/layout.tsx`, and the family titles use an em dash. The brand rules ban it in titles and metas. This plan rewrites the 21 pages above. The remaining entries need a sweep, which is a manager decision for PR A or a follow-up.
-3. **French.** Hand-written component copy is English and applies to the default locale only (`components/[slug]/page.tsx`). French pages fall back to the localized MDX frontmatter. French rewrites for these 21 pages need that data shape to carry a second locale first. The writer supplies the French strings once the manager confirms where they go.
-4. **Facts checked in source for these strings.** `ScrollArea` wraps `@radix-ui/react-scroll-area` and makes the viewport a tab stop on overflow. `Sidebar` imports `next/link` and `next/navigation`, so its meta says Next.js. `CookieConsent` has `card` and `bar` layouts and an `equal` button treatment. `AIToolCallDisplay` has the four statuses listed. `FloatingNavbar` and `LiquidGlass` hold still under `prefers-reduced-motion`.
+2. **Em dashes in existing copy.** Every title in `apps/registry/lib/ai-seo.ts` and `apps/registry/lib/component-seo.ts`, the default title in `app/[locale]/layout.tsx`, and the family titles use an em dash. The brand rules ban it in titles and metas. This plan rewrites the 22 pages above. The remaining entries need a sweep, which is a manager decision for PR A or a follow-up.
+3. **French.** Hand-written component copy is English and applies to the default locale only (`components/[slug]/page.tsx`). French pages fall back to the localized MDX frontmatter. French rewrites for these 22 pages need that data shape to carry a second locale first. The writer supplies the French strings once the manager confirms where they go.
+4. **Facts checked in source for these strings.** `ScrollArea` wraps `@radix-ui/react-scroll-area` and makes the viewport a tab stop on overflow. `Sidebar` imports `next/link` and `next/navigation`, so its meta says Next.js. `CookieConsent` has `card` and `bar` layouts and an `equal` button treatment. `AIToolCallDisplay` has the four statuses listed. `FloatingNavbar` and `LiquidGlass` hold still under `prefers-reduced-motion`. `ZoomHUD` (the export name in source) renders three buttons labelled "Zoom out", "Zoom in" and "Reset zoom" around a percentage, and its current title is assumed from the fallback pattern.
 5. **`/components/sidebar` and `/components/scroll-area`.** Their revealed queries are hidden, so these two rewrites are a best estimate from the page topic. Check their CTR after 28 days and adjust.
 
 ## 8. Schema per page
@@ -355,8 +404,11 @@ Links into the new articles, **manager ships in PR A or with the article routes*
 | `/components/ai-tool-call-display` (142) | `/articles/ai-sdk-generative-ui-react` | Render AI SDK tool parts with this component |
 | `/vs/vercel-ai-sdk` (21) | `/articles/ai-sdk-generative-ui-react` | AI SDK generative UI in React, step by step |
 | `/docs/agents` (47) | `/articles/json-render-component-catalog` | Build a json-render component catalog |
-| `/docs/vision` | A1, A3, A4 and B1 | The article titles |
+| `/docs/vision` | A1, A3, A4, B1, B6 and C4 | The article titles |
 | `/components/ai-streaming-text` (42) | `/articles/streaming-ui-react` | Streaming UI in React without layout shift |
+| `/components/ai-streaming-text` (42) | `/articles/voice-ui-components-react` | Give spoken output a text equivalent |
+| `/components/zoom-hud` (30) | `/articles/holographic-ui-react` | Build a holographic HUD in React |
+| `/components/glass-panel` | `/articles/holographic-ui-react` | Layer glass panels into a HUD |
 | `/components/liquid-glass` (266) | `/articles/liquid-glass-react-shadcn` | How to use liquid glass with shadcn and theme tokens |
 | `/components/glass-card` | `/articles/liquid-glass-react-shadcn` | Glass surfaces built on tokens |
 | `/components/gantt-chart` (271) | `/articles/react-gantt-chart` | Plan a project with the React Gantt chart |
@@ -370,7 +422,9 @@ Links between articles:
 
 - A1 links to A2 and A3. A2 links back to A1. A3 links back to A1 and to A2.
 - A4 links to A1, and to C3 when C3 ships.
-- A5 links to B1 when B1 ships (glass and depth). B1 links to A5 and `/docs/vision`.
+- A5 links to B1 when B1 ships (glass and depth), and to C4 when C4 ships. B1 links to A5 and `/docs/vision`. C4 links to A5 and B1.
+- B6 links to A4 and A1. A1 and A4 link to B6 when B6 ships.
+- The 2-to-5 rule still holds when a link is added later: the new link replaces an existing one, chosen on the day the target ships.
 - B2 and B3 link to each other (both are time-based views).
 - B4 links to C3 (themes as data).
 
@@ -384,8 +438,8 @@ An article never links to a page that is not live. Forward links are added when 
 | 2 | Batch 1 articles A5, A1, A2, A3, A4 (this branch) | Writer, then manager | Brand check, then CI |
 | 3 | Inbound links from section 9 for batch 1 | Manager | With step 2 |
 | 4 | Request indexing for the batch 1 URLs and the rewritten pages with the most impressions (`/design`, `/themes`, `/components/timeline-scrubber`, `/components/liquid-glass`) | Manager | After deploy. No mass submission |
-| 5 | Batch 2: B2, B3, B4, B5, then B1 | Writer | Starts when step 2 merges |
-| 6 | Batch 3: C1, C2, C3 | Writer | C1 waits for a native canary the manager is willing to cite |
+| 5 | Batch 2: B2, B3, B4, B5, then B6, then B1 | Writer | Starts when step 2 merges |
+| 6 | Batch 3: C1, C2, C3, C4 | Writer | C1 waits for a native canary the manager is willing to cite. C4 waits for the dock rename in #682 |
 | 7 | Review at 28 days after step 4 | Writer and manager | Section 11 |
 
 Why this order:
@@ -393,7 +447,9 @@ Why this order:
 - **PR A first** because its rewrites touch pages that already rank. `/design` at position 7.0 and "timeline scrubber ui" at position 5.1 can gain clicks without any new content.
 - **A5 first in batch 1** because it is the only batch 1 article with measured demand (149 impressions on the two main queries, page at position 10.5).
 - **A1, A2, A3, A4 next** because they are the pillars the vision names. They have no measured demand, so they ship early to start ranking.
+- **B6 after the demand articles in batch 2** because voice has no measured demand. It still ships in batch 2, ahead of B1, because voice-first is a core pillar of the vision and the page should start ranking early.
 - **B1 last in batch 2** because spatial is a draft RFC. The article is short and may change when the RFC moves.
+- **C4 in batch 3** because it builds on A5 and B1, and because #679 and #682 may change what the page can show.
 - **C1 late** because the native status may change, and the copy must match it on the day it ships.
 
 ## 11. How the result is measured
@@ -408,6 +464,7 @@ Read at 28 days after indexing, from Search Console, same property, page dimensi
 | Position of `/components/gantt-chart` | 38.8 | Under 30 |
 | CTR on `/components/liquid-glass` plus A5 | 4.89% at position 10.5 | Above 6% combined, no drop in component page clicks |
 | Impressions on A1 to A4 | 0 (new) | Any impressions on the target terms. No click target |
+| Clicks on `/components/zoom-hud` | 0 of 30 impressions at position 9.9 | At least 1 |
 | Site CTR | 2.60% | Above 3% |
 
 These are targets set by the writer, not forecasts from a model. If A5 takes clicks from `/components/liquid-glass` with no combined gain, the article title moves to the how-to phrasing and the component page keeps the head term.
@@ -427,3 +484,5 @@ For the manager:
 3. Decide whether the em dash sweep of `ai-seo.ts` and `component-seo.ts` goes in PR A.
 4. Say where French metadata for existing pages should live, so the French rewrites can be written.
 5. `date` and `updated` in the batch 1 files are the day they were written. Set them to the merge day if that is the rule.
+6. #682 renames a dock component, and its URL with it. The current URL has 9 impressions and 1 click in 90 days across English and French. Ship a permanent redirect from the old URL with the rename, and update the sitemap in the same change.
+7. The export in source is `ZoomHUD`. `AGENTS.md` writes `ZoomHud`. This plan uses the export name. Pick one spelling for prose.
