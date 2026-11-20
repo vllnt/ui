@@ -27,7 +27,7 @@ export const revalidate = 86_400;
 const PATHNAME = "/families";
 const TITLE = "Component families";
 const DESCRIPTION =
-  "Browse VLLNT UI by family — AI, forms, data, overlays, navigation, content, and more. Every component installs independently with the shadcn CLI.";
+  "Browse VLLNT UI by family - AI, forms, data, overlays, navigation, content, and more. Every component installs independently with the shadcn CLI.";
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
@@ -36,7 +36,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     locale,
     og: { description: DESCRIPTION, title: TITLE, type: "page" },
     pathname: PATHNAME,
-    title: `${TITLE} — VLLNT UI`,
+    title: `${TITLE} - VLLNT UI`,
   });
 }
 

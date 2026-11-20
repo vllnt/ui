@@ -299,7 +299,7 @@
       "breadcrumb": "Families",
       "browseAll": "Browse all components",
       "componentCount": "{count, plural, one {# component} other {# components}}",
-      "description": "Browse VLLNT UI by family — AI, forms, data, overlays, navigation, content, and more. Every component installs independently with the shadcn CLI.",
+      "description": "Browse VLLNT UI by family - AI, forms, data, overlays, navigation, content, and more. Every component installs independently with the shadcn CLI.",
       "eyebrow": "Component family",
       "familyCount": "{count, plural, one {# family} other {# families}}",
       "familyTitle": "{label} components",
@@ -393,7 +393,7 @@
         "theme": "Theme"
       },
       "eyebrow": "Theme generator",
-      "metaDescription": "Design a custom VLLNT UI theme in OKLCH — tweak colors and radius, preview live, then export as CSS, a shadcn CLI command, or design tokens.",
+      "metaDescription": "Design a custom VLLNT UI theme in OKLCH - tweak colors and radius, preview live, then export as CSS, a shadcn CLI command, or design tokens.",
       "metaTitle": "Theme Generator",
       "title": "Create a theme"
     },
@@ -455,7 +455,7 @@
       "shadcn": {
         "colAttribute": "Attribute",
         "eyebrow": "Comparison · v{version}",
-        "metaDescription": "VLLNT UI vs shadcn/ui — registry format, component count, agent surface, theming, accessibility. Honest comparison.",
+        "metaDescription": "VLLNT UI vs shadcn/ui - registry format, component count, agent surface, theming, accessibility. Honest comparison.",
         "metaTitle": "VLLNT UI vs shadcn/ui",
         "rows": {
           "a11yPrimitives": {

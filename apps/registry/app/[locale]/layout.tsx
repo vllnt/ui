@@ -101,7 +101,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       },
       index: true,
     },
-    title: "VLLNT UI — Web & React Native UI for AI agents",
+    title: "VLLNT UI - Web & React Native UI for AI agents",
     twitter: {
       card: "summary_large_image",
       creator: "@vllnt",

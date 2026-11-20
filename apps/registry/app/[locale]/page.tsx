@@ -24,7 +24,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     locale,
     og: {
       description: HOME_DESCRIPTION,
-      title: "VLLNT UI — UI components & design system for AI agents",
+      title: "VLLNT UI - UI components & design system for AI agents",
       type: "home",
     },
     pathname: "/",

@@ -85,7 +85,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       type: "page",
     },
     pathname: `/families/${category}`,
-    title: `${group.label} Components — VLLNT UI`,
+    title: `${group.label} Components - VLLNT UI`,
   });
 }
 

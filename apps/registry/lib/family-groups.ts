@@ -401,7 +401,7 @@ const FAMILY_GROUPS: readonly FamilyGroupSet[] = [
     groups: [
       {
         blurb:
-          "React card and layout components — accordions, bento grids, carousels, and expandable cards for organizing page content.",
+          "React card and layout components - accordions, bento grids, carousels, and expandable cards for organizing page content.",
         heading: "Cards & Layout",
         slugs: [
           "accordion",
@@ -420,7 +420,7 @@ const FAMILY_GROUPS: readonly FamilyGroupSet[] = [
       },
       {
         blurb:
-          "Animated text effect components for React — blur, shimmer, scramble, typewriter, and scroll-reveal typography.",
+          "Animated text effect components for React - blur, shimmer, scramble, typewriter, and scroll-reveal typography.",
         heading: "Text Effects",
         slugs: [
           "blur-reveal",
@@ -436,7 +436,7 @@ const FAMILY_GROUPS: readonly FamilyGroupSet[] = [
       },
       {
         blurb:
-          "Content blocks for articles and docs — code blocks, callouts, video embeds, timelines, and MDX rendering.",
+          "Content blocks for articles and docs - code blocks, callouts, video embeds, timelines, and MDX rendering.",
         heading: "Article & Media Blocks",
         slugs: [
           "callout",
@@ -455,7 +455,7 @@ const FAMILY_GROUPS: readonly FamilyGroupSet[] = [
       },
       {
         blurb:
-          "Right-dock inspector panels for canvas objects — property grids, relationships, routing, and runtime overviews.",
+          "Right-dock inspector panels for canvas objects - property grids, relationships, routing, and runtime overviews.",
         heading: "Canvas Inspectors",
         slugs: [
           "object-card",
@@ -469,7 +469,7 @@ const FAMILY_GROUPS: readonly FamilyGroupSet[] = [
       },
       {
         blurb:
-          "Account and billing status components — plan, role, and credit badges plus subscription and wallet cards.",
+          "Account and billing status components - plan, role, and credit badges plus subscription and wallet cards.",
         heading: "Account & Billing Badges",
         slugs: [
           "credit-badge",
@@ -506,7 +506,7 @@ const FAMILY_GROUPS: readonly FamilyGroupSet[] = [
       },
       {
         blurb:
-          "Learning progress components — checklists, steppers, progress trackers, and completion dialogs for tracking course advancement.",
+          "Learning progress components - checklists, steppers, progress trackers, and completion dialogs for tracking course advancement.",
         heading: "Progress & Steps",
         slugs: [
           "checklist",
@@ -518,13 +518,13 @@ const FAMILY_GROUPS: readonly FamilyGroupSet[] = [
       },
       {
         blurb:
-          "Study aid components — annotations, key-concept blocks, pro tips, and learning objectives for educational content.",
+          "Study aid components - annotations, key-concept blocks, pro tips, and learning objectives for educational content.",
         heading: "Study Aids & Callouts",
         slugs: ["annotation", "key-concept", "learning-objectives", "pro-tip"],
       },
       {
         blurb:
-          "Learner utility components — profile sections, search dialogs, and keyboard shortcut helpers for learning platforms.",
+          "Learner utility components - profile sections, search dialogs, and keyboard shortcut helpers for learning platforms.",
         heading: "Learner Utilities",
         slugs: ["profile-section", "search-dialog", "keyboard-shortcuts-help"],
       },
@@ -535,7 +535,7 @@ const FAMILY_GROUPS: readonly FamilyGroupSet[] = [
     groups: [
       {
         blurb:
-          "Historical reference components — civilization overviews, historical figure profiles, and side-by-side era comparisons.",
+          "Historical reference components - civilization overviews, historical figure profiles, and side-by-side era comparisons.",
         heading: "Historical Reference Cards",
         slugs: [
           "civilization-card",
@@ -556,7 +556,7 @@ const FAMILY_GROUPS: readonly FamilyGroupSet[] = [
     groups: [
       {
         blurb:
-          "Decorative animated backgrounds — grid, dot, particle, meteor, and sparkle effects that add ambient motion behind any React section.",
+          "Decorative animated backgrounds - grid, dot, particle, meteor, and sparkle effects that add ambient motion behind any React section.",
         heading: "Background Effects",
         slugs: [
           "animated-grid-pattern",

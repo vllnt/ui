@@ -42,7 +42,7 @@ const FAMILY_COPY: readonly FamilyCopy[] = [
       },
     ],
     intro:
-      "Chat, agents, reasoning, tool calls, citations, and artifacts — the UI surfaces every AI product needs. Accessible React components you own after install, each also readable by AI coding agents as JSON.",
+      "Chat, agents, reasoning, tool calls, citations, and artifacts - the UI surfaces every AI product needs. Accessible React components you own after install, each also readable by AI coding agents as JSON.",
   },
   {
     category: "core",
@@ -59,7 +59,7 @@ const FAMILY_COPY: readonly FamilyCopy[] = [
       },
     ],
     intro:
-      "Core components are the primitives every interface is built from — buttons, inputs, labels, switches, badges, and the layout atoms underneath them. They're unopinionated, accessible, and the foundation the rest of the library composes on.",
+      "Core components are the primitives every interface is built from - buttons, inputs, labels, switches, badges, and the layout atoms underneath them. They're unopinionated, accessible, and the foundation the rest of the library composes on.",
   },
   {
     category: "form",
@@ -76,7 +76,7 @@ const FAMILY_COPY: readonly FamilyCopy[] = [
       },
     ],
     intro:
-      "Form components cover the full input surface — text and search fields, selects, checkboxes, date and time pickers, ratings, and validation — so you can assemble accessible, controlled forms without wiring primitives by hand.",
+      "Form components cover the full input surface - text and search fields, selects, checkboxes, date and time pickers, ratings, and validation - so you can assemble accessible, controlled forms without wiring primitives by hand.",
   },
   {
     category: "overlay",
@@ -88,7 +88,7 @@ const FAMILY_COPY: readonly FamilyCopy[] = [
       },
     ],
     intro:
-      "Overlay components layer content above the page — dialogs, sheets, drawers, popovers, tooltips, and toasts. Focus management and dismissal are handled for you, built on accessible Radix primitives.",
+      "Overlay components layer content above the page - dialogs, sheets, drawers, popovers, tooltips, and toasts. Focus management and dismissal are handled for you, built on accessible Radix primitives.",
   },
   {
     category: "navigation",
@@ -100,7 +100,7 @@ const FAMILY_COPY: readonly FamilyCopy[] = [
       },
     ],
     intro:
-      "Navigation components move people through an app — menus, breadcrumbs, tabs, pagination, docks, rails, and floating navbars. Keyboard-accessible and composable into any shell.",
+      "Navigation components move people through an app - menus, breadcrumbs, tabs, pagination, docks, rails, and floating navbars. Keyboard-accessible and composable into any shell.",
   },
   {
     category: "data",
@@ -112,7 +112,7 @@ const FAMILY_COPY: readonly FamilyCopy[] = [
       },
     ],
     intro:
-      "Data components turn records into something readable — sortable tables, lists, charts, metrics, gauges, and live status boards. Feed them your data and they handle filtering, formatting, and layout.",
+      "Data components turn records into something readable - sortable tables, lists, charts, metrics, gauges, and live status boards. Feed them your data and they handle filtering, formatting, and layout.",
   },
   {
     category: "data-display",
@@ -124,7 +124,7 @@ const FAMILY_COPY: readonly FamilyCopy[] = [
       },
     ],
     intro:
-      "Data-display components visualize spatial and temporal data — 2D maps, 3D globes, choropleths, heatmaps, route maps, and timelines. They render from plain data props, no map tiles or external services required.",
+      "Data-display components visualize spatial and temporal data - 2D maps, 3D globes, choropleths, heatmaps, route maps, and timelines. They render from plain data props, no map tiles or external services required.",
   },
   {
     category: "content",
@@ -136,7 +136,7 @@ const FAMILY_COPY: readonly FamilyCopy[] = [
       },
     ],
     intro:
-      "Content components lay out and animate information — bento grids, cards, testimonials, timelines, expandable panels, and text effects. Use them to build landing pages, docs, and editorial surfaces that stay on the design system.",
+      "Content components lay out and animate information - bento grids, cards, testimonials, timelines, expandable panels, and text effects. Use them to build landing pages, docs, and editorial surfaces that stay on the design system.",
   },
   {
     category: "learning",
@@ -148,7 +148,7 @@ const FAMILY_COPY: readonly FamilyCopy[] = [
       },
     ],
     intro:
-      "Learning components structure guided experiences — curricula, tutorials, flashcards, quizzes, steppers, progress trackers, and tours. Compose them into onboarding flows, courses, and interactive docs.",
+      "Learning components structure guided experiences - curricula, tutorials, flashcards, quizzes, steppers, progress trackers, and tours. Compose them into onboarding flows, courses, and interactive docs.",
   },
   {
     category: "educational",
@@ -160,7 +160,7 @@ const FAMILY_COPY: readonly FamilyCopy[] = [
       },
     ],
     intro:
-      "Educational components support teaching and reference experiences — knowledge checks, historical figure and civilization cards, era comparisons, and parallel timelines. Built for courseware, wikis, and study tools.",
+      "Educational components support teaching and reference experiences - knowledge checks, historical figure and civilization cards, era comparisons, and parallel timelines. Built for courseware, wikis, and study tools.",
   },
   {
     category: "billing",
@@ -177,7 +177,7 @@ const FAMILY_COPY: readonly FamilyCopy[] = [
       },
     ],
     intro:
-      "Billing components render the money side of a product — pricing tables, plan and subscription cards, credit badges, wallets, and transaction history. Drop them in and connect your billing provider; they present cost, usage, and renewal state without prescribing a backend.",
+      "Billing components render the money side of a product - pricing tables, plan and subscription cards, credit badges, wallets, and transaction history. Drop them in and connect your billing provider; they present cost, usage, and renewal state without prescribing a backend.",
   },
   {
     category: "utility",
@@ -189,7 +189,7 @@ const FAMILY_COPY: readonly FamilyCopy[] = [
       },
     ],
     intro:
-      "Utility components are the helpers and effects that finish an interface — spinners, skeletons, copy buttons, QR codes, and visual flourishes like glass, particles, and shimmer. Small pieces that glue the rest together.",
+      "Utility components are the helpers and effects that finish an interface - spinners, skeletons, copy buttons, QR codes, and visual flourishes like glass, particles, and shimmer. Small pieces that glue the rest together.",
   },
 ];
 

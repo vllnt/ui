@@ -68,7 +68,7 @@ export const COMPONENT_SEO: readonly ComponentSeo[] = [
     ],
     related: ["connector-edge", "object-handle", "canvas-view", "canvas-shell"],
     slug: "anchor-port",
-    title: "Anchor Port — node input/output port marker in React | VLLNT UI",
+    title: "Anchor Port - node input/output port marker in React | VLLNT UI",
     whatItIs:
       "Anchor Port is a small presentational marker for the connection points on a canvas node. It renders a colored dot that signals whether a port is an input, an output, or bidirectional, using a distinct tone for each. Side props place it on the top, right, bottom, or left edge, and state props show it as idle, active, or blocked. It carries an image role and a descriptive label, so screen readers announce each port. Reach for it when wiring node-based editors or flow diagrams.",
   },
@@ -94,7 +94,7 @@ export const COMPONENT_SEO: readonly ComponentSeo[] = [
     ],
     related: ["shine-border", "shimmer-button", "spotlight-card"],
     slug: "border-beam",
-    title: "Border Beam — animated glowing border effect in React | VLLNT UI",
+    title: "Border Beam - animated glowing border effect in React | VLLNT UI",
     whatItIs:
       "Border Beam is a decorative overlay that animates a glowing gradient beam traveling around an element's border. Drop it inside a relatively positioned container and it fills the border with a conic-gradient beam masked to the edge, looping continuously. Props control borderWidth, duration, delay, the from and to colors, and a reverse direction. It is aria-hidden and pointer-events-none, so use it to highlight cards, buttons, or panels without affecting interaction.",
   },
@@ -125,7 +125,7 @@ export const COMPONENT_SEO: readonly ComponentSeo[] = [
       "date-field",
     ],
     slug: "calendar",
-    title: "Calendar — date picker calendar in React | VLLNT UI",
+    title: "Calendar - date picker calendar in React | VLLNT UI",
     whatItIs:
       "Calendar is a date picker calendar for React, built on react-day-picker. It renders a month grid for selecting dates and forwards every DayPicker prop, so you can switch between single, multiple, and range selection modes. Styling matches the rest of the system, with outside days shown by default and custom chevron navigation. Use it inline or inside a popover to build date pickers, booking flows, and scheduling interfaces.",
   },
@@ -151,7 +151,7 @@ export const COMPONENT_SEO: readonly ComponentSeo[] = [
     ],
     related: ["card", "accordion", "faq", "code-block"],
     slug: "callout",
-    title: "React Callout Component — info, tip & warning banners | VLLNT UI",
+    title: "React Callout Component - info, tip & warning banners | VLLNT UI",
     whatItIs:
       "Callout is a small boxed component that draws attention to a piece of content — an aside, a tip, a caveat, or a hazard. It renders a left-bordered panel with a title and body, and ships six semantic variants: info, note, tip, success, warning, and danger. Each variant sets its own color and default heading, and you can override the title, pass a custom icon, or add classes. Reach for it in documentation, changelogs, and long-form pages.",
   },
@@ -182,7 +182,7 @@ export const COMPONENT_SEO: readonly ComponentSeo[] = [
       "connector-edge",
     ],
     slug: "canvas-view",
-    title: "Canvas View — pan-and-zoom canvas viewport in React | VLLNT UI",
+    title: "Canvas View - pan-and-zoom canvas viewport in React | VLLNT UI",
     whatItIs:
       "Canvas View is an interactive viewport for spatial surfaces — infinite boards, diagrams, mind maps, and node editors. It manages pan and zoom state so your content moves as a single transformed layer. Users pan by holding space and dragging or using the middle mouse button, and zoom with the plus and minus keys or a modifier-held wheel. It exposes viewport callbacks, an imperative reset handle, min and max zoom bounds, and an overlay slot. Reach for it whenever content outgrows its container.",
   },
@@ -208,7 +208,7 @@ export const COMPONENT_SEO: readonly ComponentSeo[] = [
     ],
     related: ["slideshow", "animated-list", "bento-grid"],
     slug: "carousel",
-    title: "Carousel — swipeable content slider in React | VLLNT UI",
+    title: "Carousel - swipeable content slider in React | VLLNT UI",
     whatItIs:
       "Carousel is a scrollable slider built on Embla Carousel. Compose it from Carousel, CarouselContent, and CarouselItem, then add CarouselPrevious and CarouselNext buttons that disable automatically at the first and last slide. It supports horizontal or vertical orientation, arrow-key navigation, drag and touch swiping, and Embla plugins through the opts, plugins, and setApi props. Use it for image galleries, testimonials, onboarding steps, or product showcases.",
   },
@@ -234,7 +234,7 @@ export const COMPONENT_SEO: readonly ComponentSeo[] = [
     ],
     related: ["quiz", "progress-tracker", "step-by-step"],
     slug: "checklist",
-    title: "Checklist — trackable task list with progress in React | VLLNT UI",
+    title: "Checklist - trackable task list with progress in React | VLLNT UI",
     whatItIs:
       "Checklist is an interactive task list that tracks completion. Each item toggles between checked and unchecked, striking through completed labels and updating a progress bar with a count and percentage. Pass a persistKey to save progress to localStorage across visits, and an onComplete callback fires once every item is checked. Optional titles and per-item descriptions make it suited to onboarding flows, setup guides, and tutorial step tracking.",
   },
@@ -260,7 +260,7 @@ export const COMPONENT_SEO: readonly ComponentSeo[] = [
     ],
     related: ["dialog", "popover", "dropdown-menu"],
     slug: "command",
-    title: "Command — command palette with search in React | VLLNT UI",
+    title: "Command - command palette with search in React | VLLNT UI",
     whatItIs:
       "Command is a command palette built on the cmdk library. It combines a search input, grouped result lists, items, shortcuts, and an empty state, filtering entries as the user types and moving the highlight with arrow keys. Use it for a searchable action menu or a ⌘K launcher that jumps between pages, runs commands, or finds records. CommandDialog wraps the same palette in a Radix dialog so it opens as a centered modal overlay.",
   },
@@ -286,7 +286,7 @@ export const COMPONENT_SEO: readonly ComponentSeo[] = [
     ],
     related: ["table", "data-list", "watchlist"],
     slug: "data-table",
-    title: "Data Table — sorting, filtering & pagination in React | VLLNT UI",
+    title: "Data Table - sorting, filtering & pagination in React | VLLNT UI",
     whatItIs:
       "Data Table is a batteries-included React table built on TanStack Table. Reach for it when a plain table is not enough and you need sorting, a global search box, per-column faceted filters, row selection with checkboxes, and client-side pagination out of the box. You pass column definitions and data; it manages sorting, filter, selection, and page state internally. Toggles let you turn filtering, pagination, or selection off per instance.",
   },
@@ -312,7 +312,7 @@ export const COMPONENT_SEO: readonly ComponentSeo[] = [
     ],
     related: ["context-menu", "popover", "command", "dialog"],
     slug: "dropdown-menu",
-    title: "Dropdown Menu — accessible menu with submenus in React | VLLNT UI",
+    title: "Dropdown Menu - accessible menu with submenus in React | VLLNT UI",
     whatItIs:
       "Dropdown Menu is an accessible menu triggered by a button, built on Radix UI's dropdown-menu primitive. It supports plain items, checkbox items, radio groups, nested submenus, labels, separators, and keyboard shortcuts, with optional inset spacing for alignment. Use it for action menus, account switchers, and command surfaces where users pick an option. Radix provides keyboard navigation, typeahead, focus management, and correct ARIA roles out of the box.",
   },
@@ -338,7 +338,7 @@ export const COMPONENT_SEO: readonly ComponentSeo[] = [
     ],
     related: ["tooltip", "animated-tooltip", "hover-card", "zoom-hud"],
     slug: "edge-label",
-    title: "React Edge Label — pill label for graph edges & flows | VLLNT UI",
+    title: "React Edge Label - pill label for graph edges & flows | VLLNT UI",
     whatItIs:
       "Edge Label is a small pill-shaped tag for annotating the connection between two nodes — the kind of label you place on an edge in a graph, flow, or pipeline to name a stream, handoff, or policy. It renders as an inline, uppercase, letter-spaced badge and takes an emphasis prop with two levels: subtle for muted resting labels and active for a highlighted sky-toned state. It forwards every native span prop for positioning.",
   },
@@ -365,7 +365,7 @@ export const COMPONENT_SEO: readonly ComponentSeo[] = [
     related: ["field", "select", "combobox", "calendar"],
     slug: "form",
     title:
-      "Form — React Hook Form + Zod validation wrapper in React | VLLNT UI",
+      "Form - React Hook Form + Zod validation wrapper in React | VLLNT UI",
     whatItIs:
       'Form is a composable validation wrapper for React built on React Hook Form. It groups a label, control, description, and error message into accessible field units, automatically wiring aria-describedby, aria-invalid, and aria-required and marking error messages with role="alert". Pass a Zod schema for managed validation, or hand it your own useForm instance. Use it whenever you need labelled, validated inputs with consistent error handling across sign-up, settings, or checkout forms.',
   },
@@ -415,7 +415,7 @@ export const COMPONENT_SEO: readonly ComponentSeo[] = [
     ],
     related: ["tooltip", "popover", "animated-tooltip"],
     slug: "hover-card",
-    title: "Hover Card — rich hover preview popover in React | VLLNT UI",
+    title: "Hover Card - rich hover preview popover in React | VLLNT UI",
     whatItIs:
       "Hover Card is a popover built on Radix UI's Hover Card primitive that reveals extra content when a pointer hovers a trigger. Compose it from HoverCard, HoverCardTrigger, and HoverCardContent, which renders a bordered card with configurable align and side offset. Use it to preview linked content — a user profile, a repository, or a footnote — without a click or navigation. Unlike a tooltip, it holds rich layout and media and opens on hover or focus of its trigger.",
   },
@@ -442,7 +442,7 @@ export const COMPONENT_SEO: readonly ComponentSeo[] = [
     related: ["cursor", "comment-pin", "selection-presence", "thread-bubble"],
     slug: "live-cursor",
     title:
-      "React Live Cursor — multiplayer presence cursor component | VLLNT UI",
+      "React Live Cursor - multiplayer presence cursor component | VLLNT UI",
     whatItIs:
       "Live Cursor renders a remote user's pointer on a shared canvas or document, positioned by x and y pixel coordinates, with an optional name-and-status chip beside it. It is pure presentation: your app owns the realtime stream and maps each user to a color, then feeds coordinates in. The wrapper is pointer-events none, so it never blocks the interactions underneath. Use it to build multiplayer cursors for collaborative editors, whiteboards, and design tools.",
   },
@@ -468,7 +468,7 @@ export const COMPONENT_SEO: readonly ComponentSeo[] = [
     ],
     related: ["animated-text", "number-ticker", "border-beam", "meteors"],
     slug: "marquee",
-    title: "React Marquee Component — infinite scrolling logo lane | VLLNT UI",
+    title: "React Marquee Component - infinite scrolling logo lane | VLLNT UI",
     whatItIs:
       "Marquee is a utility that scrolls its children in a continuous, seamless loop — ideal for logo walls, badge rows, testimonials, or status chips. It duplicates the track so the animation never shows a gap, and supports horizontal or vertical direction, reverse, an adjustable gap, a repeat count, and three speed presets (slow, normal, fast) or an explicit duration. Edge fade and pause-on-hover are optional, and it respects prefers-reduced-motion by halting the animation.",
   },
@@ -494,7 +494,7 @@ export const COMPONENT_SEO: readonly ComponentSeo[] = [
     ],
     related: ["flashcard", "exercise", "checklist"],
     slug: "quiz",
-    title: "Quiz — interactive multiple-choice question in React | VLLNT UI",
+    title: "Quiz - interactive multiple-choice question in React | VLLNT UI",
     whatItIs:
       "Quiz is an interactive multiple-choice component for a single question. Learners pick one option and press Check Answer; the component marks the choice correct or incorrect, reveals the right option, and can show a per-option explanation plus an overall result panel. An optional hint toggle and a Try Again reset are built in, and an onAnswer callback reports whether the answer was right. Use it to embed knowledge checks in tutorials, docs, or courseware.",
   },
@@ -520,7 +520,7 @@ export const COMPONENT_SEO: readonly ComponentSeo[] = [
     ],
     related: ["keyboard-shortcuts-help", "tutorial-filters", "tour"],
     slug: "search-dialog",
-    title: "Search Dialog — Cmd+K command palette search in React | VLLNT UI",
+    title: "Search Dialog - Cmd+K command palette search in React | VLLNT UI",
     whatItIs:
       "Search Dialog is a command-palette search built on the Command component. A trigger button and a Cmd/Ctrl+K shortcut open a modal where users type to filter items, with matching text highlighted and results sorted by title. Supply an async docsSearch function to enable Components, Docs, and Everything scope tabs with loading and empty states, and onSelect callbacks handle navigation. Use it for site-wide search, docs lookup, or in-app navigation.",
   },
@@ -547,7 +547,7 @@ export const COMPONENT_SEO: readonly ComponentSeo[] = [
     related: ["button-group", "select", "multi-select"],
     slug: "segmented-control",
     title:
-      "Segmented Control — single-choice mode switcher in React | VLLNT UI",
+      "Segmented Control - single-choice mode switcher in React | VLLNT UI",
     whatItIs:
       "Segmented Control is a single-choice selector that lets users switch between a small set of options, such as modes, views, or filters. Built on Radix Toggle Group, it renders a SegmentedControl with SegmentedControlItem children, exposes value, defaultValue, and onValueChange for controlled or uncontrolled use, and supports sm, default, and lg sizes. The active segment is highlighted, individual items can be disabled, and keyboard focus is handled for you.",
   },
@@ -573,7 +573,7 @@ export const COMPONENT_SEO: readonly ComponentSeo[] = [
     ],
     related: ["native-select", "combobox", "multi-select"],
     slug: "select",
-    title: "Select — accessible dropdown select input in React | VLLNT UI",
+    title: "Select - accessible dropdown select input in React | VLLNT UI",
     whatItIs:
       "Select is a dropdown input built on Radix UI's Select primitive for choosing a single value from a list. Click the trigger to open a portal-rendered menu with keyboard navigation, typeahead, grouped options, labels, separators, and scroll buttons for long lists. Use it in forms when the option set is known and you want a styled, accessible alternative to the native select element. It is composed from Select, SelectTrigger, SelectContent, and SelectItem parts.",
   },
@@ -599,13 +599,13 @@ export const COMPONENT_SEO: readonly ComponentSeo[] = [
     ],
     related: ["dialog", "drawer", "popover", "alert-dialog"],
     slug: "sheet",
-    title: "Sheet — slide-over panel from the screen edge in React | VLLNT UI",
+    title: "Sheet - slide-over panel from the screen edge in React | VLLNT UI",
     whatItIs:
       "Sheet is a slide-over panel that enters from the edge of the screen, built on Radix UI's Dialog primitive. A side variant positions it on the top, right, bottom, or left, and it ships with trigger, content, header, footer, title, description, and close parts. Use it for navigation drawers, filters, quick forms, or detail views that shouldn't take over the whole page. Radix handles focus trapping, escape-to-close, and ARIA.",
   },
   {
     description:
-      "Compose accessible tables in React from header, body, footer, row, and cell primitives — styled semantic markup you fully control. Install via the shadcn CLI.",
+      "Compose accessible tables in React from header, body, footer, row, and cell primitives - styled semantic markup you fully control. Install via the shadcn CLI.",
     faqs: [
       {
         answer:
@@ -625,7 +625,7 @@ export const COMPONENT_SEO: readonly ComponentSeo[] = [
     ],
     related: ["data-table", "data-list", "watchlist"],
     slug: "table",
-    title: "Table — styled semantic HTML table primitives in React | VLLNT UI",
+    title: "Table - styled semantic HTML table primitives in React | VLLNT UI",
     whatItIs:
       "Table is a set of unstyled, composable primitives — Table, TableHeader, TableBody, TableFooter, TableRow, TableHead, TableCell, and TableCaption — that render semantic HTML table markup with consistent styling. Reach for it when you want full control over rows and cells and only need the visual layer, not built-in sorting or pagination. It wraps the table in a horizontally scrollable container and adds hover and selected-row styles you compose yourself.",
   },
@@ -675,7 +675,7 @@ export const COMPONENT_SEO: readonly ComponentSeo[] = [
     ],
     related: ["toggle-group", "switch", "button"],
     slug: "toggle",
-    title: "Toggle — accessible two-state toggle button in React | VLLNT UI",
+    title: "Toggle - accessible two-state toggle button in React | VLLNT UI",
     whatItIs:
       "Toggle is a two-state button built on Radix UI's Toggle primitive. It flips between on and off, exposing the pressed state through data-[state=on] styling so you can theme it with Tailwind. Reach for it when a single control switches one option on or off — bold text, grid versus list view, or mute audio. It ships with default and outline variants plus small, default, and large sizes. For a set of related toggles, use Toggle Group instead.",
   },
@@ -707,7 +707,7 @@ export const COMPONENT_SEO: readonly ComponentSeo[] = [
     ],
     slug: "viewport-bookmarks",
     title:
-      "Viewport Bookmarks — saved-view list for canvases in React | VLLNT UI",
+      "Viewport Bookmarks - saved-view list for canvases in React | VLLNT UI",
     whatItIs:
       "Viewport Bookmarks is a saved-view list for a canvas — the spatial parallel of pinned tabs. Each entry names a stored pan and zoom target, with an optional accent color and a secondary detail line. Rows render as buttons when you pass an onSelect handler, or as read-only text when you do not, and an active id highlights the current view. It ships with an empty state and localizable labels. It is pure presentation; your app owns the bookmark store and the camera animation.",
   },
@@ -734,7 +734,7 @@ export const COMPONENT_SEO: readonly ComponentSeo[] = [
     related: ["view-switcher", "viewport-bookmarks", "tabs", "animated-tabs"],
     slug: "workspace-switcher",
     title:
-      "Workspace Switcher — segmented workspace picker in React | VLLNT UI",
+      "Workspace Switcher - segmented workspace picker in React | VLLNT UI",
     whatItIs:
       "Workspace Switcher is a compact, segmented control for moving between workspaces, canvas views, or operational contexts. It renders each option as a pill inside a radio group, highlighting the active one, and works either controlled or uncontrolled through value and defaultValue props. An onValueChange callback reports selection, and each option can carry a description shown as a tooltip and, on wider screens, inline. Reach for it when users toggle between a handful of top-level contexts rather than navigating a deep menu.",
   },

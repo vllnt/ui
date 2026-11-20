@@ -36,9 +36,9 @@ export type AiComponentSeo = {
 export const AI_SEO: readonly AiComponentSeo[] = [
   {
     description:
-      "Visualize an AI agent's execution chain in React — steps, tools, decisions, and progress. The activity timeline for agentic apps. Install via the shadcn CLI.",
+      "Visualize an AI agent's execution chain in React - steps, tools, decisions, and progress. The activity timeline for agentic apps. Install via the shadcn CLI.",
     slug: "agent-activity",
-    title: "Agent Activity — visualize an AI agent's steps in React | VLLNT UI",
+    title: "Agent Activity - visualize an AI agent's steps in React | VLLNT UI",
     whenToUse:
       "Reach for Agent Activity to show a multi-step agent run as it happens — each step, tool, and decision in sequence. It fits autonomous or long-running agent workflows where users need to follow progress in real time.",
   },
@@ -47,7 +47,7 @@ export const AI_SEO: readonly AiComponentSeo[] = [
       "Rendered output panel for AI-generated content in React: toolbar with copy, edit, download, fullscreen, and version chips. The artifacts/canvas UI. Install via the shadcn CLI.",
     slug: "ai-artifact",
     title:
-      "AI Artifact — render AI-generated output (canvas) in React | VLLNT UI",
+      "AI Artifact - render AI-generated output (canvas) in React | VLLNT UI",
     whenToUse:
       "Use AI Artifact for substantial generated output — code, documents, designs — that deserves its own panel beside the chat. The built-in toolbar and version chips mirror the artifacts / canvas pattern users now expect from AI products.",
   },
@@ -55,7 +55,7 @@ export const AI_SEO: readonly AiComponentSeo[] = [
     description:
       "React prompt composer for AI chat and agents: attachments, auto-expand, toolbar actions, and submit/streaming states. Accessible, install via the shadcn CLI.",
     slug: "ai-chat-input",
-    title: "AI Chat Input — React prompt composer for AI chat apps | VLLNT UI",
+    title: "AI Chat Input - React prompt composer for AI chat apps | VLLNT UI",
     whenToUse:
       "AI Chat Input is the message composer at the bottom of any chat or agent surface. It handles multi-line growth, attachments, and submit/streaming states, so you can wire it straight to your model or agent runtime.",
   },
@@ -64,7 +64,7 @@ export const AI_SEO: readonly AiComponentSeo[] = [
       "Render assistant, user, tool, and system messages in React. Markdown-ready chat bubbles for LLM and agent apps. Accessible, install via the shadcn CLI.",
     slug: "ai-message-bubble",
     title:
-      "AI Message Bubble — chat message UI for LLM apps in React | VLLNT UI",
+      "AI Message Bubble - chat message UI for LLM apps in React | VLLNT UI",
     whenToUse:
       "Use AI Message Bubble to render each turn in a conversation. Role variants (user, assistant, tool, system) keep an LLM transcript readable and consistent with the rest of your design system.",
   },
@@ -72,7 +72,7 @@ export const AI_SEO: readonly AiComponentSeo[] = [
     description:
       "Drop an AI assistant into any app: a slide-out React panel with header, content, and footer slots plus a standalone trigger. Install via the shadcn CLI.",
     slug: "ai-sidebar",
-    title: "AI Sidebar — slide-out AI assistant panel for React | VLLNT UI",
+    title: "AI Sidebar - slide-out AI assistant panel for React | VLLNT UI",
     whenToUse:
       "Add AI Sidebar when you want a co-pilot alongside an existing product UI rather than a full-page chat. The provider + trigger pattern lets any screen open the assistant in context.",
   },
@@ -81,7 +81,7 @@ export const AI_SEO: readonly AiComponentSeo[] = [
       "Display sources and citations for RAG answers in React: title, origin label, and excerpt. Make AI answers verifiable. Accessible, install via the shadcn CLI.",
     slug: "ai-source-citation",
     title:
-      "AI Source Citation — RAG sources & citations UI for React | VLLNT UI",
+      "AI Source Citation - RAG sources & citations UI for React | VLLNT UI",
     whenToUse:
       "Use AI Source Citation to attribute RAG or grounded answers to their sources. Compact reference cards let users verify where an AI response came from — essential for trustworthy retrieval-augmented apps.",
   },
@@ -90,7 +90,7 @@ export const AI_SEO: readonly AiComponentSeo[] = [
       "Render streaming LLM output in React with a live cursor as tokens arrive. The generative-UI text primitive for AI apps. Install via the shadcn CLI.",
     slug: "ai-streaming-text",
     title:
-      "AI Streaming Text — token streaming UI for LLM output in React | VLLNT UI",
+      "AI Streaming Text - token streaming UI for LLM output in React | VLLNT UI",
     whenToUse:
       "Use AI Streaming Text for any partial assistant output that arrives token-by-token. The live cursor signals 'still generating' and keeps long responses readable as they stream in.",
   },
@@ -104,7 +104,7 @@ export const AI_SEO: readonly AiComponentSeo[] = [
     description:
       "Signal the end of an AI task or workflow in React with a completion dialog covering loading, error, and success states. Install via the shadcn CLI.",
     slug: "completion-dialog",
-    title: "Completion Dialog — AI task completion UI for React | VLLNT UI",
+    title: "Completion Dialog - AI task completion UI for React | VLLNT UI",
     whenToUse:
       "Use Completion Dialog to close out an agent task or multi-step workflow with a clear success or error summary, so users know the run finished and what happened.",
   },
@@ -113,7 +113,7 @@ export const AI_SEO: readonly AiComponentSeo[] = [
       "Compare AI model responses side by side in React: optional blind mode, metadata stats, and a vote bar. Evaluate LLMs in your UI. Install via the shadcn CLI.",
     slug: "model-comparison",
     title:
-      "Model Comparison — compare LLM responses side by side in React | VLLNT UI",
+      "Model Comparison - compare LLM responses side by side in React | VLLNT UI",
     whenToUse:
       "Use Model Comparison to evaluate two model responses head-to-head. Blind mode and a vote bar make it suitable for human-preference and eval workflows.",
   },
@@ -122,7 +122,7 @@ export const AI_SEO: readonly AiComponentSeo[] = [
       "Searchable prompt template gallery in React: category filter, variable fill-in form, and onSelect. Ship a reusable prompt library. Install via the shadcn CLI.",
     slug: "prompt-templates",
     title:
-      "Prompt Templates — prompt library UI for AI apps in React | VLLNT UI",
+      "Prompt Templates - prompt library UI for AI apps in React | VLLNT UI",
     whenToUse:
       "Use Prompt Templates to give users a curated, fillable prompt library instead of a blank box. Variable fields turn a saved prompt into a quick form.",
   },
@@ -131,7 +131,7 @@ export const AI_SEO: readonly AiComponentSeo[] = [
       "Collapsible React block that streams an AI's thinking/reasoning steps. Surface chain-of-thought without cluttering the final answer. Install via the shadcn CLI.",
     slug: "thinking-block",
     title:
-      "Thinking Block — show AI reasoning / chain-of-thought in React | VLLNT UI",
+      "Thinking Block - show AI reasoning / chain-of-thought in React | VLLNT UI",
     whenToUse:
       "Use Thinking Block to reveal an agent's reasoning or scratchpad separately from its final answer. Collapsible plus streaming support keeps the transcript clean while staying transparent.",
   },

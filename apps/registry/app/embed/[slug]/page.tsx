@@ -23,7 +23,7 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
 
   return {
     robots: { follow: false, index: false },
-    title: `${title} — VLLNT UI embed`,
+    title: `${title} - VLLNT UI embed`,
   };
 }
 

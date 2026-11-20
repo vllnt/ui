@@ -586,7 +586,7 @@ export default async function ComponentPage(props: Props) {
               <ShareSection
                 shareOn={t("shareOn")}
                 shareTitle={t("shareTitle")}
-                title={`${articleTitle} — VLLNT UI`}
+                title={`${articleTitle} - VLLNT UI`}
                 url={withRef(componentUrl, "share")}
               />
             </div>

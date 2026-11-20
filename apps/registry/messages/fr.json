@@ -299,7 +299,7 @@
       "breadcrumb": "Familles",
       "browseAll": "Parcourir tous les composants",
       "componentCount": "{count, plural, one {# composant} other {# composants}}",
-      "description": "Parcourez VLLNT UI par famille — IA, formulaires, donnees, surfaces, navigation, contenu et plus. Chaque composant s'installe independamment avec la CLI shadcn.",
+      "description": "Parcourez VLLNT UI par famille - IA, formulaires, donnees, surfaces, navigation, contenu et plus. Chaque composant s'installe independamment avec la CLI shadcn.",
       "eyebrow": "Famille de composants",
       "familyCount": "{count, plural, one {# famille} other {# familles}}",
       "familyTitle": "Composants {label}",
@@ -393,7 +393,7 @@
         "theme": "Theme"
       },
       "eyebrow": "Generateur de theme",
-      "metaDescription": "Concevez un theme VLLNT UI personnalise en OKLCH — ajustez les couleurs et le rayon, previsualisez en direct, puis exportez en CSS, commande CLI shadcn ou jetons de design.",
+      "metaDescription": "Concevez un theme VLLNT UI personnalise en OKLCH - ajustez les couleurs et le rayon, previsualisez en direct, puis exportez en CSS, commande CLI shadcn ou jetons de design.",
       "metaTitle": "Generateur de themes",
       "title": "Creer un theme"
     },
@@ -455,7 +455,7 @@
       "shadcn": {
         "colAttribute": "Attribut",
         "eyebrow": "Comparatif · v{version}",
-        "metaDescription": "VLLNT UI vs shadcn/ui — format de registre, nombre de composants, surface agent, theme, accessibilite. Comparatif honnete.",
+        "metaDescription": "VLLNT UI vs shadcn/ui - format de registre, nombre de composants, surface agent, theme, accessibilite. Comparatif honnete.",
         "metaTitle": "VLLNT UI vs shadcn/ui",
         "rows": {
           "a11yPrimitives": {
