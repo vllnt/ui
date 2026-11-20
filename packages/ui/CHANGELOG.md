@@ -14,6 +14,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - **`@vllnt/ui/package.json` export** - tools can read the package manifest
   (for example its version) without `ERR_PACKAGE_PATH_NOT_EXPORTED`.
 
+### Changed
+
+- **Core caption and label weights match the Penpot library** -
+  `font.weight.caption` is 400 (was 500) and `font.weight.label` /
+  `--font-weight-label` is 500 (was 600). No shipped web component reads
+  them; read `--font-weight-label` directly and labels get lighter. The Maia
+  theme keeps its Ink scale (caption 500, label 600). Radius is unchanged:
+  `radius.control` 6 and `radius.surface` 8 are the shared role names.
+
 ## [0.4.0] - 2026-11-20
 
 ### Added
