@@ -6,8 +6,8 @@ import { pageMetadata } from "./og";
 import {
   getSearchCopy,
   listSearchCopy,
-  type SearchCopyPath,
   searchCopyFor,
+  type SearchCopyPath,
 } from "./search-copy";
 
 const EXPECTED_PATHS: readonly SearchCopyPath[] = [
@@ -34,7 +34,7 @@ const EXPECTED_PATHS: readonly SearchCopyPath[] = [
   "/vs/vercel-ai-sdk",
 ];
 
-const EM_DASH = String.fromCodePoint(0x2014);
+const EM_DASH = String.fromCodePoint(0x20_14);
 
 describe("search copy table", () => {
   it("has a row for every page of the rewrite plan", () => {

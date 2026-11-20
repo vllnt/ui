@@ -14,8 +14,8 @@ export type SearchCopy = {
 /**
  * Rewrites of existing page titles and meta descriptions, keyed by the
  * pathname the page passes to `pageMetadata`. A row replaces the page's own
- * `<title>` and meta description on the default locale only; other locales keep
- * their localized copy. The h1 and the social card text are not touched. A
+ * `<title>` and meta description on the default locale; other locales keep
+ * their localized copy. The h1 and the social card text stay as they were. A
  * component page emits its row as written, without the native title and
  * description wrappers.
  *
@@ -136,8 +136,8 @@ export type SearchCopyPath = keyof typeof SEARCH_COPY;
 const COPY_BY_PATH = new Map<string, SearchCopy>(Object.entries(SEARCH_COPY));
 
 /**
- * The row of a page that is known to have one. Hand-written entries
- * (`ai-seo`, `component-seo`) use this so the copy is written once.
+ * The row of a page that has one. Hand-written entries (`ai-seo`,
+ * `component-seo`) read their copy here, so each string exists once.
  *
  * @param pathname - a key of the search copy table
  * @returns The title and meta description of that page

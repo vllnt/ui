@@ -18,10 +18,10 @@ import { getFamilyCopy } from "./family-copy";
 import { listSearchCopy } from "./search-copy";
 import { USE_CASES } from "./use-cases";
 
-const EM_DASH = String.fromCodePoint(0x2014);
+const EM_DASH = String.fromCodePoint(0x20_14);
 const CONTENT = fileURLToPath(new URL("../content", import.meta.url));
 const META_KEY = /meta(?:title|description)$/i;
-const EXTRA_META_KEYS = ["pages.families.description"];
+const EXTRA_META_KEYS = new Set(["pages.families.description"]);
 
 type Text = { readonly label: string; readonly text: string };
 
@@ -39,7 +39,7 @@ function messageTexts(
   if (typeof node === "string") {
     const key = trail.join(".");
     const emitted =
-      META_KEY.test(trail.at(-1) ?? "") || EXTRA_META_KEYS.includes(key);
+      META_KEY.test(trail.at(-1) ?? "") || EXTRA_META_KEYS.has(key);
 
     return emitted ? [{ label: `${locale} ${key}`, text: node }] : [];
   }
