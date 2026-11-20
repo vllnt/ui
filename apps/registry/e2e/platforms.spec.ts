@@ -39,6 +39,21 @@ const nativeComponents = (
     ),
   ) as { components: { name: string }[] }
 ).components.map((component) => component.name);
+// Native modules with no web component (parity.json `nativeOnly`, e.g. Icon,
+// Stack, Spacer) have no catalog page: the catalog previews the web pairing.
+const nativeOnlyNames = new Set(
+  (
+    JSON.parse(
+      readFileSync(
+        new URL("../../../packages/ui-native/parity.json", import.meta.url),
+        "utf8",
+      ),
+    ) as { nativeOnly: { name: string }[] }
+  ).nativeOnly.map((entry) => entry.name),
+);
+const catalogNativeComponents = nativeComponents.filter(
+  (name) => !nativeOnlyNames.has(name),
+);
 
 test.describe("platform-aware component discovery", () => {
   test("redirects the retired native route into the filtered catalog", async ({
@@ -100,7 +115,7 @@ test.describe("platform-aware component discovery", () => {
     ).toMatch(/\/components\?platform=native$/);
     const nativeFirstSection = await main.locator("section").first().boundingBox();
 
-    for (const component of nativeComponents) {
+    for (const component of catalogNativeComponents) {
       await expect(
         main.locator(`a[href="/components/${component}?platform=native"]`),
       ).toHaveCount(1);
@@ -113,10 +128,10 @@ test.describe("platform-aware component discovery", () => {
     const previewRoots = main.locator("article > div");
     const isolatedPreviews = main.locator("article [inert]");
     expect(await main.locator("article iframe").count()).toBeLessThan(
-      nativeComponents.length,
+      catalogNativeComponents.length,
     );
     await expect(previewRoots.first()).toHaveClass(/\[contain:strict\]/);
-    await expect(isolatedPreviews).toHaveCount(nativeComponents.length);
+    await expect(isolatedPreviews).toHaveCount(catalogNativeComponents.length);
     const firstPreviewFrame = isolatedPreviews.first().locator("iframe");
     await expect(firstPreviewFrame).toHaveAttribute(
       "sandbox",

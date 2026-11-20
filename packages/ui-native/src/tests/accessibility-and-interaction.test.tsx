@@ -12,6 +12,7 @@ import { Calendar } from "../components/atoms/calendar/calendar";
 import { Callout } from "../components/atoms/callout/callout";
 import { Carousel } from "../components/atoms/carousel/carousel";
 import { CodeBlock } from "../components/atoms/code-block/code-block";
+import { Dialog } from "../components/atoms/dialog/dialog";
 import { EmptyState } from "../components/atoms/empty-state/empty-state";
 import { Fieldset } from "../components/atoms/fieldset/fieldset";
 import { FileUpload } from "../components/atoms/file-upload/file-upload";
@@ -43,7 +44,6 @@ import { PasswordInput } from "../components/molecules/password-input/password-i
 import { PhoneInput } from "../components/molecules/phone-input/phone-input";
 import { RangeCalendar } from "../components/molecules/range-calendar/range-calendar";
 import { CountdownTimer } from "../components/organisms/countdown-timer/countdown-timer";
-import { ModalLayer } from "../primitives/modal-layer";
 import type { PickedFile } from "../primitives/platform-services";
 
 import {
@@ -106,9 +106,9 @@ it("keeps grouped child controls exposed and associates field labels", async () 
 it("fills modal layers and reports radio selection with checked state", () => {
   renderThemed(
     <>
-      <ModalLayer onClose={jest.fn()} visible>
+      <Dialog closeLabel="Close" defaultOpen title="Modal">
         <Text>Modal content</Text>
-      </ModalLayer>
+      </Dialog>
       <ModelSelector
         defaultOpen
         defaultSelectedModelId="native"
