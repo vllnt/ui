@@ -47,6 +47,7 @@ All notable changes to `@vllnt/ui-native` are documented in this file.
   - `Grid`: `smCols`, `mdCols` and `lgCols` change the column count from 640, 768 and 1024 points of window width, the Tailwind defaults the web components use. Neither `@vllnt/ui-core` nor the web preset defines breakpoint tokens, so `src/primitives/breakpoints` keeps one copy. A breakpoint without a value carries the one below it, as on web.
 
 - Props parity 1, navigation (#655): `variant` (`"link" | "pill" | "underline"`, default `"underline"`) on `Tabs`, shared with `TabsList` and `TabsTrigger` through context, as on web. `underline` keeps the hairline and the bar under the selected tab. `pill` fills the selected tab with the secondary colour, rounds it fully and spaces the tabs. `link` draws plain text and underlines the selected label. Every look keeps the selection frame of the affordance contract, so selection never relies on colour alone. A `TabsList` outside `Tabs` draws the `underline` look.
+- `family` (`"sans" | "mono"`, default `"sans"`) on `Text`, matching web `Text` (#666). `mono` sets the platform monospace face on the same body scale: Menlo on iOS, `monospace` on Android. `sans` keeps the system face. A shared `monospaceFontFamily` in `src/primitives/font-family` replaces the literal `"monospace"` in `CodeBlock`, `Terminal` and `ScrambleText`, which iOS does not recognise as a font name.
 
 ### Changed
 

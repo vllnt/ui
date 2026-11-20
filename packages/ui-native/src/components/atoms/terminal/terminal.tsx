@@ -14,6 +14,7 @@ import {
   decorativeProps,
   useAnnounceOnChange,
 } from "../../../primitives/accessibility";
+import { monospaceFontFamily } from "../../../primitives/font-family";
 import { InteractivePressable } from "../../../primitives/interactive-pressable";
 import type { ClipboardService } from "../../../primitives/platform-services";
 import { typeStyle } from "../../../primitives/type-style";
@@ -162,7 +163,7 @@ function TerminalLineView({
           {...decorativeProps}
           style={{
             color: theme.colors.primary,
-            fontFamily: "monospace",
+            fontFamily: monospaceFontFamily,
             marginRight: theme.spacing[2],
           }}
         >
@@ -173,7 +174,7 @@ function TerminalLineView({
         selectable
         style={typeStyle(theme, "bodySmall", {
           color: line.type === "command" ? "foreground" : "mutedForeground",
-          fontFamily: "monospace",
+          fontFamily: monospaceFontFamily,
           fontStyle: line.type === "comment" ? "italic" : "normal",
         })}
       >
