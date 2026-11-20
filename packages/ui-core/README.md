@@ -5,11 +5,11 @@ Platform-neutral design tokens and portable component contracts shared by the VL
 ## Install
 
 ```bash
-pnpm add @vllnt/ui-core
+pnpm add @vllnt/ui-core@canary
 ```
 
-- `latest` is the stable release, published from a `ui-core-vX.Y.Z` tag by `native-release.yml` with npm provenance.
-- `canary` is published with `@vllnt/ui-native` from every core or native change on `main`, as `<next>-canary.<run>.sha<commit>`.
+- `canary` is published with `@vllnt/ui-native` from every core or native change on `main`, as `<next>-canary.<run>.sha<commit>`. It is the supported install today.
+- Stable releases are published from `ui-core-vX.Y.Z` tags by `native-release.yml`, with npm provenance, and move `latest`. Until the first one, `latest` points at an old name-reservation build: do not install it.
 
 React Native apps install it with `@vllnt/ui-native`, which pins the exact core version it was built with. See [releasing](../../docs/RELEASING.md).
 

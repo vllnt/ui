@@ -5,13 +5,13 @@ Accessible React Native components that share VLLNT UI semantic tokens and porta
 ## Install
 
 ```bash
-pnpm add @vllnt/ui-native @vllnt/ui-core
+pnpm add @vllnt/ui-native@canary @vllnt/ui-core@canary
 ```
 
 `@vllnt/ui-native` pins the exact `@vllnt/ui-core` version it was built with. Peers: `react >=19.1.0 <20` and `react-native >=0.81.0 <1`. It works in Expo; the private catalog app in `apps/native-catalog` is the reference consumer.
 
-- `latest` is the stable release, published from a `ui-native-vX.Y.Z` tag by `native-release.yml` with npm provenance.
-- `canary` is published from every native change on `main` as `<next>-canary.<run>.sha<commit>`: `pnpm add @vllnt/ui-native@canary @vllnt/ui-core@canary`.
+- `canary` is published from every native change on `main` as `<next>-canary.<run>.sha<commit>`. It is the supported install today.
+- Stable releases are published from `ui-native-vX.Y.Z` tags by `native-release.yml`, with npm provenance, and move `latest`. Until the first one, `latest` points at an old name-reservation build: do not install it.
 
 Every canary pair is validated from the npm tarballs before it counts: a clean Expo app and a copy of the catalog install it (with the 7-day package-age gate), typecheck, run the Jest and accessibility suites, and export for iOS and Android. See [releasing](../../docs/RELEASING.md).
 
