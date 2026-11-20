@@ -10,9 +10,30 @@ og:
 
 # Vision
 
-VLLNT UI is the UI layer that every vllnt product is built on: web, mobile and desktop today, spatial next. The aim is to be the fastest way for people and AI agents to build interfaces. The vllnt brand is the default theme, and every component meets WCAG 2.2 AA.
+VLLNT UI is the UI layer that every vllnt product is built on: the web today, React Native at canary, desktop and spatial next. The aim is to be the fastest way for people and AI agents to build interfaces. The vllnt brand is the default theme, and every component meets WCAG 2.2 AA.
 
 We think interfaces are changing in two ways, and we want VLLNT UI to be the foundation for both.
+
+## Platforms
+
+VLLNT UI is meant for every kind of interface. This is where each target stands today.
+
+- **Web (React DOM, Next.js): shipped.** `@vllnt/ui` is on npm, with stable releases and a canary on every change.
+- **Mobile, React Native (iOS, Android, Expo): canary.** `@vllnt/ui-native` publishes canary builds only; there is no stable release yet. Each canary is installed in a clean Expo app and exported for iOS and Android before it counts. See [Native](/native).
+- **Desktop, Electron and Tauri: roadmap.** Nothing desktop-specific exists yet: no desktop tests, packaging or guidance.
+- **Desktop, native macOS apps: roadmap.** There is no SwiftUI or AppKit renderer.
+- **AR and spatial, visionOS and WebXR: proposal.** The spatial foundations are an open RFC ([vllnt/ui#631](https://github.com/vllnt/ui/issues/631)). There is no spatial renderer.
+- **AI-generated, streamed UI: partly shipped.** Descriptors, the MCP server, themes as data and streaming components exist; the json-render and AI SDK adapters do not ([vllnt/ui#672](https://github.com/vllnt/ui/issues/672)).
+
+## One core, one renderer per platform
+
+The rule that makes this possible: the core stays platform-neutral, and each platform is a renderer on top of it.
+
+- **The core** holds what every platform shares: design tokens, component contracts (the names of options and props), platform rules and, later, the props schemas behind each descriptor. It has no runtime dependencies and does not import any renderer.
+- **A renderer** turns the core into real components for one platform: `@vllnt/ui` for the web and `@vllnt/ui-native` for React Native today, and desktop, macOS, visionOS or WebXR renderers later.
+- **Dependencies point one way.** Renderers depend on the core, never the reverse, and one renderer never imports another. A decision two platforms share goes into the core first.
+
+Today, the native package reads its tokens and contracts from `@vllnt/ui-core`, and the web package gets the same tokens as generated CSS. Moving the props schemas into the core is on the roadmap.
 
 ## 1. Spatial interfaces
 
@@ -48,7 +69,7 @@ We want VLLNT UI to be first-class with two open tools from Vercel:
 - **Streaming-ready parts.** `Skeleton` for loading states; `AIStreamingText`, `Reasoning`, `ThinkingBlock` and `AgentActivity` for output that arrives piece by piece. Components work with React Server Components, and client components are marked `"use client"`.
 - **Safe updates.** Semantic versioning, a canary build on every change to `main`, stable releases only from reviewed tags, the `latest` tag never moves backwards, and every release lists its upgrade notes. See [Changelog](/docs/changelog).
 - **Accessibility gate.** Every story is tested with axe against WCAG 2.0 to 2.2, levels A and AA, in light and dark themes. Any violation fails the build.
-- **Shared core for more than one renderer.** `@vllnt/ui` (web) and `@vllnt/ui-native` (React Native) read the same tokens and component contracts from `@vllnt/ui-core`. Every interactive native component shares one affordance primitive for its pressed, hovered, focused and disabled states. See [Native](/native).
+- **Shared core for more than one renderer.** `@vllnt/ui` (web) and `@vllnt/ui-native` (React Native) are generated from the same tokens and component contracts; the native package reads them from `@vllnt/ui-core`. Every interactive native component shares one affordance primitive for its pressed, hovered, focused and disabled states. See [Native](/native).
 
 ## On the roadmap
 

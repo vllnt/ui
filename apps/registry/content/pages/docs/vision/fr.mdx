@@ -10,9 +10,30 @@ og:
 
 # Vision
 
-VLLNT UI est la couche UI sur laquelle reposent tous les produits vllnt : le web, le mobile et le desktop aujourd'hui, le spatial ensuite. L'objectif est d'être le moyen le plus rapide, pour les personnes comme pour les agents IA, de construire des interfaces. La marque vllnt est le thème par défaut, et chaque composant respecte le WCAG 2.2 AA.
+VLLNT UI est la couche UI sur laquelle reposent tous les produits vllnt : le web aujourd'hui, React Native en canary, le desktop et le spatial ensuite. L'objectif est d'être le moyen le plus rapide, pour les personnes comme pour les agents IA, de construire des interfaces. La marque vllnt est le thème par défaut, et chaque composant respecte le WCAG 2.2 AA.
 
 Nous pensons que les interfaces changent de deux façons, et nous voulons que VLLNT UI soit la base des deux.
+
+## Plateformes
+
+VLLNT UI vise tous les types d'interfaces. Voici où en est chaque cible aujourd'hui.
+
+- **Web (React DOM, Next.js) : disponible.** `@vllnt/ui` est publié sur npm, avec des versions stables et une version canary à chaque changement.
+- **Mobile, React Native (iOS, Android, Expo) : en canary.** `@vllnt/ui-native` ne publie que des versions canary ; il n'existe pas encore de version stable. Chaque canary est installée dans une app Expo vierge et exportée pour iOS et Android avant d'être retenue. Voir [Native](/native).
+- **Desktop, Electron et Tauri : sur la feuille de route.** Rien de spécifique au desktop n'existe encore : ni tests, ni packaging, ni guide.
+- **Desktop, apps macOS natives : sur la feuille de route.** Il n'existe pas de moteur de rendu SwiftUI ou AppKit.
+- **Réalité augmentée et spatial, visionOS et WebXR : proposition.** Les fondations spatiales font l'objet d'une RFC ouverte ([vllnt/ui#631](https://github.com/vllnt/ui/issues/631)). Il n'existe pas de moteur de rendu spatial.
+- **UI générée par l'IA et diffusée en continu : en partie disponible.** Les descripteurs, le serveur MCP, les thèmes sous forme de données et les composants de flux continu existent ; les adaptateurs json-render et AI SDK, non ([vllnt/ui#672](https://github.com/vllnt/ui/issues/672)).
+
+## Un socle, un moteur de rendu par plateforme
+
+La règle qui rend cela possible : le socle reste indépendant de toute plateforme, et chaque plateforme est un moteur de rendu posé dessus.
+
+- **Le socle** contient ce que toutes les plateformes partagent : les tokens de design, les contrats de composants (les noms des options et des props), les règles de plateforme et, plus tard, les schémas de props derrière chaque descripteur. Il n'a aucune dépendance à l'exécution et n'importe aucun moteur de rendu.
+- **Un moteur de rendu** transforme le socle en composants réels pour une plateforme : `@vllnt/ui` pour le web et `@vllnt/ui-native` pour React Native aujourd'hui, puis des moteurs de rendu desktop, macOS, visionOS ou WebXR.
+- **Les dépendances vont dans un seul sens.** Les moteurs de rendu dépendent du socle, jamais l'inverse, et aucun moteur de rendu n'en importe un autre. Une décision partagée par deux plateformes entre d'abord dans le socle.
+
+Aujourd'hui, le paquet natif lit ses tokens et ses contrats depuis `@vllnt/ui-core`, et le paquet web reçoit les mêmes tokens sous forme de CSS générée. Déplacer les schémas de props dans le socle est sur la feuille de route.
 
 ## 1. Les interfaces spatiales
 
@@ -48,7 +69,7 @@ Nous voulons que VLLNT UI fonctionne nativement avec deux outils open source de 
 - **Briques prêtes pour le flux continu.** `Skeleton` pour les états de chargement ; `AIStreamingText`, `Reasoning`, `ThinkingBlock` et `AgentActivity` pour un contenu qui arrive par morceaux. Les composants fonctionnent avec les React Server Components, et les composants client sont marqués `"use client"`.
 - **Mises à jour sûres.** Versionnage sémantique, une version canary à chaque changement sur `main`, des versions stables publiées uniquement depuis des tags relus, un tag `latest` qui ne recule jamais, et des notes de mise à niveau pour chaque version. Voir [Changelog](/docs/changelog).
 - **Contrôle d'accessibilité.** Chaque story est testée avec axe selon le WCAG 2.0 à 2.2, niveaux A et AA, en thème clair et sombre. Toute violation fait échouer le build.
-- **Un socle commun à plusieurs moteurs de rendu.** `@vllnt/ui` (web) et `@vllnt/ui-native` (React Native) lisent les mêmes tokens et les mêmes contrats de composants depuis `@vllnt/ui-core`. Chaque composant natif interactif partage une même primitive d'affordance pour ses états pressé, survolé, focus et désactivé. Voir [Native](/native).
+- **Un socle commun à plusieurs moteurs de rendu.** `@vllnt/ui` (web) et `@vllnt/ui-native` (React Native) sont générés à partir des mêmes tokens et des mêmes contrats de composants ; le paquet natif les lit depuis `@vllnt/ui-core`. Chaque composant natif interactif partage une même primitive d'affordance pour ses états pressé, survolé, focus et désactivé. Voir [Native](/native).
 
 ## Sur la feuille de route
 
