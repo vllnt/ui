@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+### Added
+
+- **`@vllnt/ui/package.json` export** - tools can read the package manifest
+  (for example its version) without `ERR_PACKAGE_PATH_NOT_EXPORTED`.
+
 ## [0.4.0] - 2026-11-20
 
 ### Added
