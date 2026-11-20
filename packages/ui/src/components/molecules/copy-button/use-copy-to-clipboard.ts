@@ -2,6 +2,8 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 
+import { copyText } from "../../../lib/copy-text";
+
 const FALLBACK_TIMEOUT_MS = 2000;
 
 /**
@@ -22,7 +24,11 @@ export type UseCopyToClipboardOptions = {
 export type UseCopyToClipboardResult = {
   /** True for `timeout` ms after the most recent successful copy. */
   copied: boolean;
-  /** Writes `value` to the clipboard. Resolves to `true` on success. */
+  /**
+   * Writes `value` to the clipboard. Resolves to `true` on success. Resolves to
+   * `false` when the copy fails and sets `copied` back to `false`. Falls back
+   * to a textarea copy where the async Clipboard API is missing (plain http).
+   */
   copy: (value: string) => Promise<boolean>;
   /** Clears the `copied` flag and pending timer. */
   reset: () => void;
@@ -62,23 +68,17 @@ export function useCopyToClipboard(
 
   const copy = useCallback(
     async (value: string): Promise<boolean> => {
-      try {
-        if (
-          typeof navigator === "undefined" ||
-          typeof navigator.clipboard?.writeText !== "function"
-        ) {
-          return false;
-        }
-        await navigator.clipboard.writeText(value);
-        if (timerRef.current !== undefined) clearTimeout(timerRef.current);
-        setCopied(true);
-        timerRef.current = setTimeout(() => {
-          setCopied(false);
-        }, timeout);
-        return true;
-      } catch {
+      const ok = await copyText(value);
+      if (timerRef.current !== undefined) clearTimeout(timerRef.current);
+      if (!ok) {
+        setCopied(false);
         return false;
       }
+      setCopied(true);
+      timerRef.current = setTimeout(() => {
+        setCopied(false);
+      }, timeout);
+      return true;
     },
     [timeout],
   );

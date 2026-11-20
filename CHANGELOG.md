@@ -88,6 +88,10 @@ These entries ship in 0.4.0, which is not published yet (the latest release is
   that contains them (the registry pins `^0.3.0`, which does not).
   `registry:integrity` now fails when a registry item imports a name that
   `@vllnt/ui` does not export. (#543)
+- **`copyText` helper** - `copyText(value): Promise<boolean>` is exported from
+  `@vllnt/ui`. It writes through the Clipboard API, falls back to a temporary
+  textarea and `document.execCommand("copy")` when that API is missing or
+  rejects, and resolves to `false` when neither path works. (#576)
 
 ### Changed
 
@@ -177,6 +181,19 @@ These entries ship in 0.4.0, which is not published yet (the latest release is
 
 ### Fixed
 
+- **Copy without the Clipboard API** - `useCopyToClipboard` (so `CopyButton`,
+  `CodeBlock`, `Terminal` and the other copy controls) and
+  `AIArtifactCopyButton` fall back to a temporary textarea and
+  `document.execCommand("copy")` when `navigator.clipboard` is missing (plain
+  http, such as a Tailnet IP) or `writeText` rejects. The fallback works inside
+  modal dialogs, alert dialogs, native `dialog` elements and modal menus, keeps
+  the text the user had selected on the page, and returns focus only when it
+  came from the keyboard. `copied` stays `false` when both paths fail.
+  `FlowDiagram` copies a PNG, so it has no text fallback and keeps reporting
+  "Copy failed". (#576)
+- **Close button target size** - the close buttons of `DialogContent`,
+  `SheetContent` and `CompletionDialog` were 16 px. They are at least 24 x 24 px
+  around the same 16 px icon (WCAG 2.5.8). (#576)
 - **Select, SegmentedControl, FloatingToolbar and ProgressBar** - `Select`
   shows `aria-invalid` with a destructive border. The `Select` menu animation,
   the `SegmentedControl` selection transition, the `FloatingToolbar` colour

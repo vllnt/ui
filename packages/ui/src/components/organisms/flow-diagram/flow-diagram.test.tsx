@@ -289,6 +289,20 @@ describe("FlowDiagram", () => {
     expect(screen.getByLabelText("Copied!")).toBeInTheDocument();
   });
 
+  it("reports a failed copy when the Clipboard API is missing", async () => {
+    const errorSpy = vi.spyOn(console, "error").mockImplementation(vi.fn());
+    Object.defineProperty(navigator, "clipboard", {
+      configurable: true,
+      value: undefined,
+    });
+    render(<FlowDiagram allowCopy edges={edges} nodes={nodes} />);
+
+    fireEvent.click(screen.getByLabelText("Copy as image"));
+
+    expect(await screen.findByLabelText("Copy failed")).toBeInTheDocument();
+    errorSpy.mockRestore();
+  });
+
   it("starts no reset timer when a copy finishes after unmount", async () => {
     const pendingWrite: { resolve?: () => void } = {};
     flowRuntime.clipboardWrite.mockReturnValue(
