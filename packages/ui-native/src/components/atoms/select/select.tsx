@@ -12,7 +12,7 @@ import {
 
 import {
   decorativeProps,
-  joinAccessibilityText,
+  requiredHint,
   useAnnounceOnChange,
 } from "../../../primitives/accessibility";
 import { useGroupDisabled } from "../../../primitives/control-group";
@@ -124,10 +124,7 @@ function Select({
   return (
     <View ref={ref} style={style} {...props}>
       <InteractivePressable
-        accessibilityHint={joinAccessibilityText([
-          error,
-          required && requiredLabel,
-        ])}
+        accessibilityHint={requiredHint(error, required, requiredLabel)}
         accessibilityLabel={labels.open}
         accessibilityRole="button"
         accessibilityState={{ disabled, expanded: open }}
