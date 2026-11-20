@@ -419,7 +419,7 @@ A product can add its own runtime above layer 6. The Maia documentation describe
 | Prop definitions | 2 of 321 descriptors (`button`, `combobox`) | Same file |
 | Usage examples | 3 of 321 descriptors | Same file |
 | Accessibility notes | 6 of 321 descriptors | Same file |
-| Agent access | An MCP server at `/mcp` with the tools `search_components`, `get_component` and `list_categories`, plus `llms.txt` and `llms-full.txt` | [`apps/registry/app/mcp/route.ts`](https://github.com/vllnt/ui/blob/main/apps/registry/app/mcp/route.ts) |
+| Agent access | An MCP server at `/mcp` with the tools `search_components`, `get_component`, `list_categories` and `list_platforms`, plus `llms.txt` and `llms-full.txt` | [`apps/registry/app/mcp/route.ts`](https://github.com/vllnt/ui/blob/main/apps/registry/app/mcp/route.ts) |
 | Accessibility gate | Every Storybook story is tested with axe against WCAG 2.0, 2.1 and 2.2 at levels A and AA, in light and dark. A violation fails the run | [`packages/ui/.storybook/test-runner.js`](https://github.com/vllnt/ui/blob/main/packages/ui/.storybook/test-runner.js) |
 | Tokens as data | One `tokens.json` generates the web CSS variables, the product themes, the React Native tokens and the Penpot token sets. A check fails when an output is stale | [`packages/design`](https://github.com/vllnt/ui/tree/main/packages/design) |
 | Runtime theme switch | Product themes and 12 named presets switch through `data-theme` on the document root | [`packages/ui/themes`](https://github.com/vllnt/ui/tree/main/packages/ui/themes) |
