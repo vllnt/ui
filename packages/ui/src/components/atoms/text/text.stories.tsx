@@ -27,3 +27,14 @@ export const Sizes: Story = {
     </div>
   ),
 };
+
+export const MonoFamily: Story = {
+  render: () => (
+    <div className="space-y-3">
+      <Text family="mono" size="lead">
+        Mono lead — 18 px JetBrains Mono, line height 1.7.
+      </Text>
+      <Text family="mono">Mono base — 16 px JetBrains Mono, line height 1.6.</Text>
+    </div>
+  ),
+};
