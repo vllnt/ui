@@ -1024,7 +1024,13 @@ type StateRow = {
   readonly fixture: string;
   readonly key: StateKey;
   readonly name: RegExp | string;
-  readonly role: "button" | "checkbox" | "radio" | "tab" | "togglebutton";
+  readonly role:
+    | "button"
+    | "checkbox"
+    | "menuitem"
+    | "radio"
+    | "tab"
+    | "togglebutton";
   /** Value of the state before the press; the press must flip it. */
   readonly start: boolean;
 };
@@ -1042,6 +1048,13 @@ const STATE_ROWS: readonly StateRow[] = [
     key: "expanded",
     name: "Toggle details",
     role: "button",
+    start: true,
+  },
+  {
+    fixture: "dropdown-menu",
+    key: "expanded",
+    name: "Share",
+    role: "menuitem",
     start: true,
   },
   {

@@ -51,6 +51,7 @@ import { View } from "react-native";
 import { SquareGlyph } from "../../packages/ui-native/src/tests/fixture-data";
 
 import { nativeComponentCount } from "./catalog-metadata";
+import { OverlayDemos } from "./overlay-demos";
 
 const themeSelections: readonly ThemeSelection[] = ["system", "light", "dark"];
 
@@ -302,6 +303,7 @@ export function OverlaySection() {
           Back handling, accessibility escape, and safe-area injection.
         </Text>
       </Dialog>
+      <OverlayDemos />
       <Text size="small" tone="muted">
         Overlay behavior is exercised by the native Jest suite.
       </Text>

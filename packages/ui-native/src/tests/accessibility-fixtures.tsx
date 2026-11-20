@@ -86,6 +86,7 @@ import {
   DocumentSiblingNav,
   Drawer,
   DropdownMenu,
+  type DropdownMenuItem,
   EmptyState,
   Exercise,
   ExpandableCards,
@@ -370,6 +371,28 @@ const menuItems = [
   { id: "copy", label: "Copy" },
   { destructive: true, id: "delete", label: "Delete" },
   { disabled: true, id: "rename", label: "Rename" },
+];
+
+const dropdownItems: readonly DropdownMenuItem[] = [
+  ...menuItems,
+  { checked: true, id: "grid", kind: "checkbox", label: "Show grid" },
+  {
+    id: "view",
+    items: [
+      { id: "list", label: "List" },
+      { id: "cards", label: "Cards" },
+    ],
+    kind: "radio-group",
+    label: "View",
+    value: "list",
+  },
+  {
+    defaultOpen: true,
+    id: "share",
+    items: [{ id: "email", label: "Email" }],
+    kind: "sub",
+    label: "Share",
+  },
 ];
 
 const feedbackAndStatus: Readonly<Record<string, AccessibilityFixture>> = {
@@ -1368,7 +1391,13 @@ const overlays: Readonly<Record<string, AccessibilityFixture>> = {
     </Dialog>
   ),
   drawer: () => (
-    <Drawer closeLabel="Close drawer" defaultOpen title="Drawer">
+    <Drawer
+      closeLabel="Close drawer"
+      defaultOpen
+      handleLabel="Drawer height"
+      snapPoints={[0.4, 1]}
+      title="Drawer"
+    >
       <Text>Drawer body</Text>
     </Drawer>
   ),
@@ -1377,7 +1406,7 @@ const overlays: Readonly<Record<string, AccessibilityFixture>> = {
       cancelLabel="Cancel menu"
       defaultOpen
       defaultSelectedId="copy"
-      items={menuItems}
+      items={dropdownItems}
       label="File actions"
     />
   ),
