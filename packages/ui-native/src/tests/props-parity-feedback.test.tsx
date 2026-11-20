@@ -1,6 +1,6 @@
 import { act, render, screen } from "@testing-library/react-native";
 import { lightTheme } from "@vllnt/ui-core";
-import { Animated, Text, type TextStyle } from "react-native";
+import { Animated, Text } from "react-native";
 
 import { Badge } from "../components/atoms/badge/badge";
 import { Toast } from "../components/atoms/toast/toast";
@@ -8,41 +8,17 @@ import { ProgressBar } from "../components/molecules/progress-bar/progress-bar";
 import { decorativeProps } from "../primitives/accessibility";
 import { withAlpha } from "../primitives/color-alpha";
 
-import { reducedMotion, renderThemed, styleOf } from "./test-utils";
+import {
+  type HostNode,
+  reducedMotion,
+  renderThemed,
+  styleOf,
+  viewsWhere,
+} from "./test-utils";
 
 const { colors, spacing, typography } = lightTheme;
 
-type HostNode = {
-  readonly children: readonly unknown[];
-  readonly props: Readonly<Record<string, unknown>>;
-  readonly type: unknown;
-};
-
 const DOT_SIZE = spacing[1] * 1.5;
-
-function isHostNode(value: unknown): value is HostNode {
-  return (
-    typeof value === "object" &&
-    value !== null &&
-    "children" in value &&
-    Array.isArray(value.children) &&
-    "props" in value &&
-    "type" in value
-  );
-}
-
-function descendants(node: unknown): readonly HostNode[] {
-  return isHostNode(node) ? [node, ...node.children.flatMap(descendants)] : [];
-}
-
-function viewsWhere(
-  root: unknown,
-  test: (style: TextStyle) => boolean,
-): readonly HostNode[] {
-  return descendants(root).filter(
-    (node) => node.type === "View" && test(styleOf(node)),
-  );
-}
 
 function dotOf(badge: unknown): HostNode | undefined {
   return viewsWhere(badge, (style) => style.width === DOT_SIZE)[0];

@@ -121,3 +121,43 @@ export function pressTwice(name: string) {
     fireEvent.press(button);
   });
 }
+
+/** A rendered node as the test renderer exposes it, typed to what tests read. */
+export type HostNode = {
+  readonly children: readonly unknown[];
+  readonly props: Readonly<Record<string, unknown>>;
+  readonly type: unknown;
+};
+
+function isHostNode(value: unknown): value is HostNode {
+  return (
+    typeof value === "object" &&
+    value !== null &&
+    "children" in value &&
+    Array.isArray(value.children) &&
+    "props" in value &&
+    "type" in value
+  );
+}
+
+/**
+ * The node and everything below it, in render order. The node is `unknown`
+ * because the test renderer ships no type declarations.
+ */
+export function descendants(node: unknown): readonly HostNode[] {
+  return isHostNode(node) ? [node, ...node.children.flatMap(descendants)] : [];
+}
+
+/**
+ * The rendered host views at or below `root` whose flattened style passes
+ * `test`, in render order. Use it for parts a component does not expose
+ * through a test ID or an accessibility query.
+ */
+export function viewsWhere(
+  root: unknown,
+  test: (style: TextStyle) => boolean,
+): readonly HostNode[] {
+  return descendants(root).filter(
+    (node) => node.type === "View" && test(styleOf(node)),
+  );
+}

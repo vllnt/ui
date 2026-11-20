@@ -14,6 +14,8 @@ export type DataListDensity = "compact" | "default";
 /** One caller-keyed label and value in a native data list. */
 export type DataListItem = {
   readonly accessibilityLabel?: string;
+  /** Row padding for this item. It takes the list `density` when left out. */
+  readonly density?: DataListDensity;
   readonly id: string;
   readonly label: ReactNode;
   readonly value: ReactNode;
@@ -140,7 +142,7 @@ function DataList({
       ) : (
         items.map((item, index) => (
           <DataRow
-            density={density}
+            density={item.density ?? density}
             isLast={index === items.length - 1}
             item={item}
             key={item.id}

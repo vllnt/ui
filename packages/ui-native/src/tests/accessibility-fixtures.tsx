@@ -527,15 +527,32 @@ const dataDisplay: Readonly<Record<string, AccessibilityFixture>> = {
     />
   ),
   avatar: () => (
-    <Avatar>
-      <AvatarImage
-        accessibilityLabel="Ada Lovelace"
-        source={{ uri: "https://example.com/ada.png" }}
-      />
-      <AvatarFallback>
-        <Text>AL</Text>
-      </AvatarFallback>
-    </Avatar>
+    <>
+      <Avatar>
+        <AvatarImage
+          accessibilityLabel="Ada Lovelace"
+          source={{ uri: "https://example.com/ada.png" }}
+        />
+        <AvatarFallback>
+          <Text>AL</Text>
+        </AvatarFallback>
+      </Avatar>
+      <Avatar presence="online">
+        <AvatarFallback>
+          <Text>GH</Text>
+        </AvatarFallback>
+      </Avatar>
+      <Avatar presence="away" shape="square">
+        <AvatarFallback delayMs={0}>
+          <Text>LN</Text>
+        </AvatarFallback>
+      </Avatar>
+      <Avatar presence="busy" presenceLabels={{ busy: "Do not disturb" }}>
+        <AvatarFallback>
+          <Text>KJ</Text>
+        </AvatarFallback>
+      </Avatar>
+    </>
   ),
   "avatar-group": () => (
     <AvatarGroup
@@ -551,6 +568,7 @@ const dataDisplay: Readonly<Record<string, AccessibilityFixture>> = {
     <DataList
       items={[
         { id: "region", label: "Region", value: "North America" },
+        { density: "compact", id: "plan", label: "Plan", value: "Team" },
         {
           id: "owner",
           label: "Owner",
@@ -1660,10 +1678,17 @@ const layout: Readonly<Record<string, AccessibilityFixture>> = {
     </Form>
   ),
   grid: () => (
-    <Grid cols={2} gap={2}>
-      <Text>One</Text>
-      <Text>Two</Text>
-    </Grid>
+    <>
+      <Grid cols={2} gap={2}>
+        <Text>One</Text>
+        <Text>Two</Text>
+      </Grid>
+      <Grid cols={1} gap={2} lgCols={3} mdCols={2} smCols={2}>
+        <Text>Three</Text>
+        <Text>Four</Text>
+        <Text>Five</Text>
+      </Grid>
+    </>
   ),
   heading: () => (
     <Heading level={2} size={3}>

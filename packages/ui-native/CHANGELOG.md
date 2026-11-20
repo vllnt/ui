@@ -21,6 +21,12 @@ All notable changes to `@vllnt/ui-native` are documented in this file.
   - `Toast`: `altText` on a toast item names its action for screen readers, like web `ToastAction.altText`. It defaults to `actionLabel`.
   - A `withAlpha` helper in `src/primitives/color-alpha` applies an opacity to a theme colour (`bg-primary/5` on web), and `src/primitives/status-tone` holds the status tones that `Badge` and `ProgressBar` share.
 
+- Props parity 1, data display (#655): web props added to `Avatar`, `DataList` and `Grid` with the same names, value sets and defaults.
+  - `Avatar`: `presence` (`"away" | "busy" | "online"`) draws a marker at the bottom-right whose shape differs per status (filled dot, ring, dot with a bar), and `presenceLabels` sets the words screen readers speak (`Online`, `Away`, `Busy` by default). `shape` (`"circle" | "square"`, default `"circle"`) rounds the frame, the image and the fallback together. The frame clips its content, except with `presence`, so the marker can sit past the edge, as on web. `size` stays a number in points; the web size names are not part of this change.
+  - `AvatarFallback`: `delayMs` holds the fallback back for that many milliseconds. `AvatarImage`: `onLoadingStatusChange` reports `loading`, `loaded` and `error`, and `error` at once when there is no `source`.
+  - `DataListItem`: `density` (`"compact" | "default"`) sets one row's padding and takes the list `density` when left out.
+  - `Grid`: `smCols`, `mdCols` and `lgCols` change the column count from 640, 768 and 1024 points of window width, the Tailwind defaults the web components use. Neither `@vllnt/ui-core` nor the web preset defines breakpoint tokens, so `src/primitives/breakpoints` keeps one copy. A breakpoint without a value carries the one below it, as on web.
+
 ### Changed
 
 - `ProgressBar` fills with the `primary` tone by default and `success` when complete, as on web, instead of `foreground` and `primary`. A complete card tints its surface and border with its tone, where it used to switch the border to `primary`. Track height follows the theme spacing scale; the default `md` stays 8 points.
