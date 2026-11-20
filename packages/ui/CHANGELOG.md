@@ -8,6 +8,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Added
 
+- **Text `family` prop** - `family="mono"` sets body copy in `--font-mono`
+  (JetBrains Mono by default) with the same scale: `size="base"` 16/1.6,
+  `size="lead"` 18/1.7. The default stays `family="sans"`.
 - **`@vllnt/ui/package.json` export** - tools can read the package manifest
   (for example its version) without `ERR_PACKAGE_PATH_NOT_EXPORTED`.
 

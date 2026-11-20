@@ -38,6 +38,24 @@ describe("Text", () => {
     );
   });
 
+  it("applies the mono-family token class with the body and lead sizes", () => {
+    const { rerender } = render(<Text family="mono">Mono</Text>);
+    const body = screen.getByText("Mono");
+    expect(body).toHaveClass("font-[family-name:var(--font-mono)]");
+    expect(body).not.toHaveClass("font-[family-name:var(--font-sans)]");
+    expect(body).toHaveClass("text-[length:var(--font-size-body)]");
+    rerender(
+      <Text family="mono" size="lead">
+        Mono
+      </Text>,
+    );
+    expect(screen.getByText("Mono")).toHaveClass(
+      "font-[family-name:var(--font-mono)]",
+      "text-[length:var(--font-size-body-lg)]",
+      "leading-[var(--line-height-body-lg)]",
+    );
+  });
+
   it("defaults to normal weight and applies the weight variant class", () => {
     const { rerender } = render(<Text>Default</Text>);
     expect(screen.getByText("Default")).toHaveClass("font-normal");
