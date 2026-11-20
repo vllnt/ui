@@ -104,7 +104,10 @@ async function VisionBand() {
   const t = await getTranslations("landing.vision");
 
   return (
-    <section aria-labelledby="landing-vision" className="border-b border-border">
+    <section
+      aria-labelledby="landing-vision"
+      className="border-b border-border"
+    >
       <div className="mx-auto max-w-7xl px-4 py-16 lg:px-8">
         <p className="text-sm font-medium text-muted-foreground">
           {t("eyebrow")}
