@@ -28,8 +28,8 @@ function baseFacts() {
           interactive: false, source: SOURCE("molecules", "card"), propsGap: [],
         },
         {
-          name: "table", level: "atoms", status: "native-0.1.0", category: "data-display", foundation: true,
-          missing: true, interactive: false, decision: true, question: "Real table or rows?",
+          name: "display", level: "atoms", status: "native-0.1.0", category: "typography", foundation: true,
+          missing: true, interactive: false,
         },
         {
           name: "prose", level: "atoms", status: "web-only", category: "typography", foundation: true, interactive: false,
@@ -38,17 +38,18 @@ function baseFacts() {
         {
           name: "chart", level: "organisms", status: "later", category: "charts", target: "0.2.0",
           reason: "Needs vector drawing.", dependency: "react-native-svg",
+          decision: true, question: "Which vector library?",
         },
         { name: "cursor", level: "atoms", status: "web-only", category: "motion", reason: "Pointer follower." },
         { name: "kbd", level: "atoms", status: "native-0.1.0", category: "typography", source: SOURCE("atoms", "kbd") },
       ],
       nativeOnly: [
         {
-          name: "icon", category: "icons", foundation: true, status: "planned", interactive: false,
-          reason: "No icon component.", proposedApi: '<Icon name="check" size="sm" | "md" />',
-          decision: true, question: "react-native-svg?",
+          name: "icon", category: "icons", foundation: true, status: "native-0.1.0", missing: true, interactive: false,
+          reason: "No icon component.", proposedApi: '<Icon icon={Check} size="sm" | "md" />',
         },
       ],
+      foundationNotes: ["Tabular data: data-list and item rows cover it."],
     },
     registry: [
       { name: "button", source: SOURCE("atoms", "button") },
@@ -57,7 +58,7 @@ function baseFacts() {
     ],
     schema,
     web: new Map([
-      ["button", "atoms"], ["card", "atoms"], ["table", "atoms"], ["prose", "atoms"], ["chart", "organisms"],
+      ["button", "atoms"], ["card", "atoms"], ["display", "atoms"], ["prose", "atoms"], ["chart", "organisms"],
       ["cursor", "atoms"], ["kbd", "atoms"],
     ]),
   });
@@ -77,7 +78,8 @@ const FAILURES = [
   ["a native module not marked native-0.1.0", (facts) => { Object.assign(entry(facts, "kbd"), { status: "later", target: "0.2.0", reason: "x" }); delete entry(facts, "kbd").source; }, /components\[kbd\]: registry.json has a native module, so the status must be native-0.1.0/],
   ["a native module with no entry at all", (facts) => facts.registry.push({ name: "toast", source: SOURCE("atoms", "toast") }), /native module "toast" must be marked native-0.1.0/],
   ["a native module flagged missing", (facts) => { entry(facts, "kbd").missing = true; entry(facts, "kbd").foundation = true; entry(facts, "kbd").interactive = false; delete entry(facts, "kbd").source; }, /marked missing but registry.json has the module/],
-  ["missing on a non-foundation entry", (facts) => { Object.assign(entry(facts, "table"), { foundation: false }); }, /only foundation entries can be missing/],
+  ["missing on a non-foundation entry", (facts) => { Object.assign(entry(facts, "display"), { foundation: false }); }, /only foundation entries can be missing/],
+  ["a missing entry with a source", (facts) => { entry(facts, "display").source = SOURCE("atoms", "display"); }, /components\[display\]: missing entries have no "source"/],
   ["a stale native source path", (facts) => { entry(facts, "button").source = SOURCE("molecules", "button"); }, /source must be src\/components\/atoms\/button\/button.tsx/],
   ["web-only without a reason", (facts) => { delete entry(facts, "cursor").reason; }, /web-only needs a "reason"/],
   ["later without a reason", (facts) => { delete entry(facts, "chart").reason; }, /later needs a "reason"/],
@@ -96,14 +98,18 @@ const FAILURES = [
   ["an existing foundation entry without propsGap", (facts) => { delete entry(facts, "button").propsGap; }, /foundation entries that exist need "propsGap"/],
   ["a prop in both propsGap and propsRenamed", (facts) => { entry(facts, "button").propsGap.push("onClick"); }, /"onClick" is in both propsGap and propsRenamed/],
   ["propsGap on a non-foundation entry", (facts) => { entry(facts, "kbd").propsGap = []; }, /only foundation entries have "propsGap"/],
-  ["a decision without a question", (facts) => { delete entry(facts, "table").question; }, /decision needs a "question"/],
+  ["a decision without a question", (facts) => { delete entry(facts, "chart").question; }, /decision needs a "question"/],
   ["a question without a decision", (facts) => { entry(facts, "cursor").question = "Why?"; }, /"question" needs "decision": true/],
   ["a duplicate entry", (facts) => facts.parity.components.push(structuredClone(entry(facts, "cursor"))), /components\[cursor\]: duplicate entry/],
   ["an unknown field", (facts) => { entry(facts, "cursor").status2 = "x"; }, /unknown field "status2"/],
   ["an invalid status", (facts) => { entry(facts, "cursor").status = "soon"; }, /"soon" is not one of native-0.1.0, web-only, later/],
   ["an invalid category", (facts) => { entry(facts, "cursor").category = "spatial"; }, /"spatial" is not one of/],
-  ["a native-only entry that is built without a module", (facts) => { facts.parity.nativeOnly[0].status = "built"; }, /nativeOnly\[icon\]: built but registry.json has no such module/],
-  ["a native-only entry that is planned but already in the registry", (facts) => facts.registry.push({ name: "icon", source: SOURCE("atoms", "icon") }), /nativeOnly\[icon\]: registry.json has the module; set status to built/],
+  ["a native-only entry no longer missing and without a module", (facts) => { facts.parity.nativeOnly[0].missing = false; }, /nativeOnly\[icon\]: not marked missing but registry.json has no such module/],
+  ["a native-only entry marked missing but already in the registry", (facts) => facts.registry.push({ name: "icon", source: SOURCE("atoms", "icon") }), /nativeOnly\[icon\]: marked missing but registry.json has the module/],
+  ["a native-only entry with a stale source", (facts) => { Object.assign(facts.parity.nativeOnly[0], { missing: false, source: SOURCE("molecules", "icon") }); facts.registry.push({ name: "icon", source: SOURCE("atoms", "icon") }); }, /nativeOnly\[icon\]: source must be src\/components\/atoms\/icon\/icon.tsx/],
+  ["a native-only entry with a source while missing", (facts) => { facts.parity.nativeOnly[0].source = SOURCE("atoms", "icon"); }, /nativeOnly\[icon\]: missing entries have no "source"/],
+  ["a native-only entry with the old planned status", (facts) => { facts.parity.nativeOnly[0].status = "planned"; }, /nativeOnly\[icon\]\.status: must be "native-0.1.0"/],
+  ["an empty foundation note", (facts) => { facts.parity.foundationNotes = [""]; }, /foundationNotes\[0\]: must not be empty/],
   ["a native-only name that collides with a web component", (facts) => facts.web.set("icon", "atoms"), /nativeOnly\[icon\]: a web component has this name/],
   ["a native-only entry without a proposed API", (facts) => { delete facts.parity.nativeOnly[0].proposedApi; }, /missing required field "proposedApi"/],
 ];
@@ -116,6 +122,44 @@ for (const [name, mutate, pattern] of FAILURES) {
     assert.ok(errors.some((error) => pattern.test(error)), `expected ${pattern}, got:\n${errors.join("\n")}`);
   });
 }
+
+// The change that builds a planned primitive flips "missing" and adds the registry module together.
+const UNFLAGS = [
+  ["missing set to false", (record) => { record.missing = false; }],
+  ["missing removed", (record) => { delete record.missing; }],
+];
+
+for (const [how, unflag] of UNFLAGS) {
+  test(`a native-only primitive flips from planned to built with ${how}`, () => {
+    const facts = baseFacts();
+    assert.deepEqual(validate(facts), [], "planned state");
+    const icon = facts.parity.nativeOnly[0];
+    unflag(icon);
+    icon.source = SOURCE("atoms", "icon");
+    facts.registry.push({ name: "icon", source: icon.source });
+    assert.deepEqual(validate(facts), [], "built state");
+  });
+
+  test(`a missing foundation component flips from planned to built with ${how}`, () => {
+    const facts = baseFacts();
+    const display = entry(facts, "display");
+    unflag(display);
+    Object.assign(display, { source: SOURCE("atoms", "display"), propsGap: [] });
+    facts.registry.push({ name: "display", source: display.source });
+    assert.deepEqual(validate(facts), []);
+  });
+}
+
+test("the doc moves a built native-only primitive from MISSING to exists", () => {
+  const facts = baseFacts();
+  const planned = render(facts.parity, facts.schema);
+  assert.match(planned, /\| `icon` \| — \| — \| MISSING \(native-only\) \|/);
+  assert.match(planned, /\| Native-only primitives \| 1 \| `icon`: no web component behind them \(1 planned, 0 built\)\. \|/);
+  Object.assign(facts.parity.nativeOnly[0], { missing: false, source: SOURCE("atoms", "icon") });
+  const built = render(facts.parity, facts.schema);
+  assert.match(built, /\| `icon` \| — \| atoms\/icon \| exists \(native-only\) \|/);
+  assert.match(built, /\(0 planned, 1 built\)/);
+});
 
 test("the schema keeps foundation categories first and inside the category enum", () => {
   const categories = schema.$defs.category.enum;
@@ -133,16 +177,29 @@ test("renders the spatial note, summary, foundation, categories and decisions in
   assert.match(document, /spatial renderer is not planned/);
   assert.match(document, /\| native-0.1.0, built \| 3 \|/);
   assert.match(document, /\| native-0.1.0, planned \(missing\) \| 1 \|/);
-  assert.match(document, /\| `table` \| atoms \| — \| MISSING \| no \| — \| — \|/);
+  assert.match(document, /\| `display` \| atoms \| — \| MISSING \| no \| — \| — \|/);
+  const foundationStart = document.indexOf("## Foundation");
+  const notePosition = document.indexOf("- Tabular data: data-list and item rows cover it.");
+  assert.ok(notePosition > foundationStart && notePosition < document.indexOf("### ", foundationStart), "foundation notes sit under the Foundation heading, before its tables");
+  assert.match(document, /1\. `chart` \(later 0\.2\.0\): Which vector library\?/);
   assert.match(document, /\| `button` \| atoms \| atoms\/button \| exists \| yes \| `rest`, `pressed`, `disabled` \| `asChildLike`, `loading` \| Renamed: `onClick` → `onPress`\. \|/);
   assert.match(document, /\| `prose` \| atoms \| `heading`, `text` \| mapped \|/);
   assert.match(document, /\| `icon` \| — \| — \| MISSING \(native-only\) \|/);
   assert.match(document, /size="sm" \\\| "md"/, "pipes inside cells are escaped");
   const byCategory = document.slice(document.indexOf("## Components by category"), document.indexOf("## Open decisions"));
-  assert.doesNotMatch(byCategory, /`prose`|`button`|`table`/, "foundation rows are not repeated under categories");
+  assert.doesNotMatch(byCategory, /`prose`|`button`|`display`/, "foundation rows are not repeated under categories");
   assert.match(byCategory, /\| `cursor` \| atoms \| web-only \| — \| — \| Pointer follower\. \|/);
-  assert.match(byCategory, /\| `chart` \| organisms \| later \| 0\.2\.0 \| — \| Needs vector drawing\. Needs: react-native-svg\. \|/);
+  assert.match(byCategory, /\| `chart` \| organisms \| later \| 0\.2\.0 \| — \| Needs vector drawing\. Needs: react-native-svg\. \*\*Decision:\*\* Which vector library\? \|/);
   assert.match(byCategory, /\| `kbd` \| atoms \| native-0\.1\.0 \| — \| atoms\/kbd \|  \|/);
+});
+
+test("renders an empty decision list as None", () => {
+  const facts = baseFacts();
+  Object.assign(entry(facts, "chart"), { decision: undefined, question: undefined });
+  const document = render(facts.parity, facts.schema);
+  assert.match(document, /## Open decisions\n\nNone\.\n/);
+  assert.match(document, /Open decisions: 0\./);
+  assert.doesNotMatch(document, /listed at the end/);
 });
 
 test("the CLI validates, writes and detects a stale PARITY.md on a fixture repo", async () => {

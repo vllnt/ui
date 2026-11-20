@@ -14,7 +14,13 @@
       "description": "The native release the native-0.1.0 status refers to."
     },
     "components": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/component" } },
-    "nativeOnly": { "type": "array", "items": { "$ref": "#/$defs/nativeOnly" } }
+    "nativeOnly": { "type": "array", "items": { "$ref": "#/$defs/nativeOnly" } },
+    "foundationNotes": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "type": "string", "minLength": 1 },
+      "description": "Cross-cutting facts for the Foundation section of PARITY.md, such as a use case that existing components cover instead of a dedicated one."
+    }
   },
   "additionalProperties": false,
   "x-foundationCategories": [
@@ -78,7 +84,7 @@
         },
         "missing": {
           "type": "boolean",
-          "description": "true on a native-0.1.0 foundation entry means planned, not built yet. Remove it when the module lands in registry.json."
+          "description": "true on a native-0.1.0 foundation entry means planned, not built yet. Set it to false or remove it, and add source, in the same change that adds the module to registry.json."
         },
         "source": {
           "type": "string",
@@ -135,8 +141,17 @@
         "category": { "$ref": "#/$defs/category" },
         "foundation": { "type": "boolean" },
         "status": {
-          "enum": ["planned", "built"],
-          "description": "planned: not in registry.json yet. built: has a native module in registry.json."
+          "const": "native-0.1.0",
+          "description": "Native-only primitives ship in 0.1.0, like native-0.1.0 components. missing says whether the module exists yet."
+        },
+        "missing": {
+          "type": "boolean",
+          "description": "true: planned, no module in registry.json yet. Set it to false or remove it, and add source, in the same change that adds the module to registry.json."
+        },
+        "source": {
+          "type": "string",
+          "pattern": "^src/components/(atoms|molecules|organisms)/[a-z][a-z0-9-]*/[a-z][a-z0-9-]*\\.tsx$",
+          "description": "Native module path, identical to the registry.json source. Required once the module is built."
         },
         "interactive": { "type": "boolean" },
         "affordance": {

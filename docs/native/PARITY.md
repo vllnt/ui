@@ -16,16 +16,19 @@ The Affordance column below shows what each existing component styles today; the
 | --- | --- | --- |
 | native-0.1.0, built | 171 | A native module exists in `registry.json`. |
 | native-0.1.0, planned (missing) | 1 | Foundation component that 0.1.0 must add; not built yet. |
-| web-only | 43 | Stays web-only, with a concrete reason and the native equivalent when there is one. |
-| later | 106 | Native releases after 0.1.0: 0.2.0 (18), 0.3.0 (37), 0.4.0 (51). |
+| web-only | 79 | Stays web-only, with a concrete reason and the native equivalent when there is one. |
+| later | 70 | Native releases after 0.1.0: 0.2.0 (20), 0.3.0 (36), 0.4.0 (12), 0.5.0 (2). |
 | **Web components** | **321** | One entry each. |
-| Native-only primitives (planned) | 3 | `icon`, `stack`, `spacer`: no web component behind them. |
+| Native-only primitives | 3 | `icon`, `stack`, `spacer`: no web component behind them (3 planned, 0 built). |
 
-Foundation set: 43 rows, 36 exist on native, 4 are missing, 3 map to a native equivalent. Open decisions: 11 (listed at the end).
+Foundation set: 41 rows, 36 exist on native, 4 missing, 1 mapped to a native equivalent. Open decisions: 0.
 
 ## Foundation
 
-Everything here ships in 0.1.0. **State**: exists = native module today; MISSING = planned, not built; mapped = web-only component covered by the listed native equivalent. **Affordance** lists the contract states the native component styles itself today (rest, hover, focus-visible, pressed, selected, disabled; `unknown` when the source is unclear). **Props gap** lists exported web props with no native counterpart; DOM-only props (className, asChild, HTML attributes, mouse and pointer events) are ignored.
+Everything here ships in 0.1.0. **State**: exists = native module today; MISSING = planned, not built; mapped = web-only component covered by the listed native equivalent. **Affordance** lists the contract states the native component styles itself today (rest, hover, focus-visible, pressed, selected, disabled; `unknown` when the source is unclear); React Native has no `:focus-visible`, so focus-visible means the focus ring drawn on any focus. **Props gap** lists exported web props with no native counterpart; DOM-only props (className, asChild, HTML attributes, mouse and pointer events) are ignored.
+
+- Tabular data in 0.1.0: `data-list` and `item` rows cover it, so `table` is later 0.2.0 and not a foundation component.
+- Typography in 0.1.0: `text`, `heading` and `label` cover it; the `typography` extras (Blockquote, InlineCode, List) are later 0.2.0.
 
 ### Layout
 
@@ -35,41 +38,40 @@ Everything here ships in 0.1.0. **State**: exists = native module today; MISSING
 | `grid` | atoms | atoms/grid | exists | no | — | `smCols`, `mdCols`, `lgCols` |  |
 | `panel` | atoms | atoms/panel | exists | no | — | none |  |
 | `spacer` | — | — | MISSING (native-only) | no | — | — | Fixed or flexible gap between siblings when Stack gap is not enough. Proposed: `<Spacer size={4} />`. size takes a spacing token for a fixed gap; the flex prop makes it absorb free space instead. |
-| `stack` | — | — | MISSING (native-only) | no | — | — | Neither platform has a Stack/Box/Spacer primitive; every native screen re-implements flex rows and gaps. Proposed: `<Stack direction="row" gap={3} align="center" justify="space-between" wrap />`. direction is "row" \| "column"; gap and padding take spacing tokens; renders a plain View with no accessibility role. **Decision:** One Stack with a direction prop, or HStack/VStack aliases too; and is a Box primitive wanted, or do Stack and Panel cover it? |
+| `stack` | — | — | MISSING (native-only) | no | — | — | Native has no layout primitive for rows and columns; every screen re-implements flex rows and gaps. Proposed: `<Stack direction="row" gap={3} align="center" justify="space-between" wrap />`. One Stack, no Box. direction is "row" \| "column"; gap takes spacing tokens; align and justify map to flex alignment and wrap allows flex wrap. Renders a plain View with no accessibility role. |
 
 ### Typography
 
 | Component | Web | Native | State | Interactive | Affordance | Props gap | Notes |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| `display` | atoms | `heading` | mapped | no | — | — | Hero text on the web display tokens with a CSS reveal; native has no Display component. **Decision:** ui-core already defines a display type scale (28 pt) but native has no Display: add one, or use Heading level 1? |
+| `display` | atoms | — | MISSING | no | — | — | A thin Display on ui-core's display type scale (28 pt in the native theme). |
 | `heading` | atoms | atoms/heading | exists | no | — | none |  |
 | `label` | atoms | atoms/label | exists | no | — | none | Dims to 0.7 opacity when disabled, but is not itself pressable. |
 | `prose` | atoms | `heading`, `text` | mapped | no | — | — | Styles raw HTML descendants through CSS selectors; native has no HTML tree, so compose Heading and Text. |
 | `text` | atoms | atoms/text | exists | no | — | none |  |
-| `typography` | atoms | `heading`, `text` | mapped | no | — | — | Semantic HTML text elements (h1-h4, p, lead, muted, blockquote, inline code, list). Native Heading and Text cover headings, lead and muted; blockquote, inline code and list have no native equivalent. **Decision:** Do native apps need Blockquote, InlineCode and List primitives in 0.1.0, or is Text enough? |
 
 ### Icons
 
 | Component | Web | Native | State | Interactive | Affordance | Props gap | Notes |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| `icon` | — | — | MISSING (native-only) | no | — | — | Native has no icon component and no SVG dependency; web uses lucide-react. Button size="icon" and every glyph-bearing component need one. Proposed: `<Icon name="check" size="md" tone="muted" label="Done" />`. Needs: react-native-svg (new peer dependency) or a glyph-font set. name is a lucide-compatible kebab-case key; size is "sm" \| "md" \| "lg" or a number; tone follows the Text tones; omitting label marks the icon decorative (hidden from screen readers). **Decision:** Icon needs vector drawing: add react-native-svg as a new peer dependency in 0.1.0 (it is not in the lockfile today, so it needs a shared-lane deps PR), or ship a glyph-font/Text-based set with no new dependency? |
+| `icon` | — | — | MISSING (native-only) | no | — | — | Native has no icon component; web uses lucide-react. Button size="icon" and every glyph-bearing component need one. Proposed: `<Icon icon={LucideLikeComponent} size="md" tone="muted" label="Done" />`. icon takes any lucide-compatible component, so ui-native adds no icon or SVG dependency and the consumer supplies the component. size is "sm" \| "md" \| "lg" or a number; tone follows the Text tones. The icon is decorative (hidden from screen readers) unless label is set. |
 
 ### Buttons
 
 | Component | Web | Native | State | Interactive | Affordance | Props gap | Notes |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| `button` | atoms | atoms/button | exists | yes | `rest`, `pressed`, `disabled` | none | Icon button is size="icon"; its glyph needs the planned Icon primitive. |
+| `button` | atoms | atoms/button | exists | yes | `rest`, `hover`, `focus-visible`, `pressed`, `disabled` | none | Icon button is size="icon"; its glyph needs the planned Icon primitive. |
 
 ### Forms
 
 | Component | Web | Native | State | Interactive | Affordance | Props gap | Notes |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| `checkbox` | atoms | atoms/checkbox | exists | yes | `rest`, `pressed`, `selected`, `disabled` | `required` |  |
+| `checkbox` | atoms | atoms/checkbox | exists | yes | `rest`, `hover`, `focus-visible`, `pressed`, `selected`, `disabled` | `required` |  |
 | `field` | molecules | molecules/field | exists | no | — | none | Static wrapper for label, hint and error; the control inside carries the states. |
 | `input` | atoms | atoms/input | exists | yes | `rest`, `focus-visible`, `disabled` | none |  |
-| `radio-group` | atoms | atoms/radio-group | exists | yes | `rest`, `pressed`, `selected`, `disabled` | `dir`, `loop`, `name`, `required`, `RadioGroupItem.required` |  |
-| `segmented-control` | atoms | atoms/segmented-control | exists | yes | `rest`, `selected`, `disabled` | `dir`, `orientation`, `loop`, `rovingFocus`, `SegmentedControlItem.size` | Renamed: `value` → `selection.value`, `defaultValue` → `selection.defaultValue`, `onValueChange` → `selection.onChange`, `SegmentedControlItem.value` → `items[].id`. Data-driven: items replace SegmentedControlItem children, and label is required. |
-| `select` | atoms | atoms/select | exists | yes | `rest`, `selected`, `disabled` | `open`, `defaultOpen`, `dir`, `name`, `autoComplete`, `required`, `form` | Renamed: `children` → `options`, `value` → `selection.value`, `defaultValue` → `selection.defaultValue`, `onValueChange` → `selection.onChange`, `SelectItem.value` → `options[].id`, `SelectItem.disabled` → `options[].disabled`, `SelectValue.placeholder` → `labels.placeholder`. Data-driven: options replace SelectItem, SelectGroup, SelectLabel and SelectSeparator, so no grouping or separators. Opens in a bottom panel, so SelectContent positioning props do not apply. Selected is the option row; the trigger has no pressed style. |
+| `radio-group` | atoms | atoms/radio-group | exists | yes | `rest`, `hover`, `focus-visible`, `pressed`, `selected`, `disabled` | `dir`, `loop`, `name`, `required`, `RadioGroupItem.required` |  |
+| `segmented-control` | atoms | atoms/segmented-control | exists | yes | `rest`, `hover`, `focus-visible`, `pressed`, `selected`, `disabled` | `dir`, `orientation`, `loop`, `rovingFocus`, `SegmentedControlItem.size` | Renamed: `value` → `selection.value`, `defaultValue` → `selection.defaultValue`, `onValueChange` → `selection.onChange`, `SegmentedControlItem.value` → `items[].id`. Data-driven: items replace SegmentedControlItem children, and label is required. |
+| `select` | atoms | atoms/select | exists | yes | `rest`, `hover`, `focus-visible`, `pressed`, `selected`, `disabled` | `open`, `defaultOpen`, `dir`, `name`, `autoComplete`, `required`, `form` | Renamed: `children` → `options`, `value` → `selection.value`, `defaultValue` → `selection.defaultValue`, `onValueChange` → `selection.onChange`, `SelectItem.value` → `options[].id`, `SelectItem.disabled` → `options[].disabled`, `SelectValue.placeholder` → `labels.placeholder`. Data-driven: options replace SelectItem, SelectGroup, SelectLabel and SelectSeparator, so no grouping or separators. Opens in a bottom panel, so SelectContent positioning props do not apply. Selected is the option row. |
 | `slider` | atoms | atoms/slider | exists | yes | `rest`, `disabled` | `dir`, `form`, `name`, `orientation`, `inverted`, `minStepsBetweenThumbs`, `onValueCommit` | Single thumb: value, defaultValue and onValueChange use a number, web uses number[]. |
 | `switch` | atoms | atoms/switch | exists | yes | `rest`, `selected` | `defaultChecked`, `required` | Pressed and disabled looks are drawn by the platform Switch, not styled by the component. |
 | `textarea` | atoms | molecules/textarea | exists | yes | `rest`, `focus-visible`, `disabled` | none | Wraps native Input and inherits its states. |
@@ -79,22 +81,22 @@ Everything here ships in 0.1.0. **State**: exists = native module today; MISSING
 | Component | Web | Native | State | Interactive | Affordance | Props gap | Notes |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | `alert` | atoms | atoms/alert | exists | no | — | none |  |
-| `badge` | atoms | atoms/badge | exists | no | — | none |  |
-| `progress-bar` | atoms | molecules/progress-bar | exists | no | — | `label`, `mode`, `showValue`, `size`, `tone`, `valueLabel` |  |
+| `badge` | atoms | atoms/badge | exists | no | — | `border`, `dot`, `size`, `tone` |  |
+| `progress-bar` | atoms | molecules/progress-bar | exists | no | — | `label`, `mode`, `showValue`, `size`, `tone`, `valueLabel`, `blocks` |  |
 | `skeleton` | atoms | atoms/skeleton | exists | no | — | none |  |
 | `spinner` | atoms | atoms/spinner | exists | no | — | none |  |
-| `toast` | atoms | atoms/toast | exists | yes | `rest`, `disabled` | `ToastAction.altText` | Renamed: `variant` → `toasts[].variant`. Data-driven: a toasts array replaces Toast, ToastTitle, ToastDescription, ToastAction and ToastClose, and duration and action are fields of ToastItem. States belong to the action button; the close button has no pressed style. |
+| `toast` | atoms | atoms/toast | exists | yes | `rest`, `hover`, `focus-visible`, `pressed`, `disabled` | `ToastAction.altText` | Renamed: `variant` → `toasts[].variant`. Data-driven: a toasts array replaces Toast, ToastTitle, ToastDescription, ToastAction and ToastClose, and duration and action are fields of ToastItem. The action and close buttons carry the states; only the action can be disabled. |
 
 ### Overlays
 
 | Component | Web | Native | State | Interactive | Affordance | Props gap | Notes |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| `dialog` | atoms | atoms/dialog | exists | yes | `rest`, `pressed` | `modal` | Single component: title, description and closeLabel replace the Dialog parts, and there is no trigger part (the caller owns open state). Pressed is the close button. ModalLayer renders a transparent Modal with no backdrop dim. |
-| `drawer` | atoms | atoms/drawer | exists | yes | `rest`, `pressed` | `activeSnapPoint`, `setActiveSnapPoint`, `snapPoints`, `fadeFromIndex`, `snapToSequentialPoint`, `closeThreshold`, `dismissible`, `handleOnly`, `direction`, `modal`, `nested`, `fixed`, `autoFocus`, `onClose`, `onDrag`, `onRelease`, `onAnimationEnd` | Bottom modal only: no drag or snap points. Single component like Dialog. Web-DOM props not listed: container, noBodyStyles, scrollLockTimeout, disablePreventScroll, preventScrollRestoration, repositionInputs, shouldScaleBackground, setBackgroundColorOnScale. Pressed is the close button. |
-| `dropdown-menu` | atoms | atoms/dropdown-menu | exists | yes | `rest`, `pressed`, `selected`, `disabled` | `dir`, `modal`, `DropdownMenuContent.loop`, `DropdownMenuContent.side`, `DropdownMenuContent.sideOffset`, `DropdownMenuContent.align`, `DropdownMenuContent.alignOffset`, `DropdownMenuItem.inset`, `DropdownMenuItem.textValue`, `DropdownMenuCheckboxItem.checked`, `DropdownMenuCheckboxItem.onCheckedChange`, `DropdownMenuRadioGroup.value`, `DropdownMenuRadioGroup.onValueChange`, `DropdownMenuSub.open`, `DropdownMenuSub.defaultOpen`, `DropdownMenuSub.onOpenChange` | Renamed: `DropdownMenuItem.onSelect` → `onSelect`, `DropdownMenuItem.disabled` → `items[].disabled`. Flat modal list with one selected item (selectedId): no groups, separators, shortcuts, checkbox or radio items, or sub-menus. Radix collision props (arrowPadding, avoidCollisions, collisionBoundary, collisionPadding, sticky, hideWhenDetached, updatePositionStrategy) are not listed. |
-| `popover` | atoms | atoms/popover | exists | yes | `rest` | `modal`, `PopoverContent.side`, `PopoverContent.sideOffset`, `PopoverContent.align`, `PopoverContent.alignOffset` | Centered modal, not anchored to a trigger, and there is no anchor part. Radix collision props (arrowPadding, avoidCollisions, collisionBoundary, collisionPadding, sticky, hideWhenDetached, updatePositionStrategy) are not listed. The close button has a static style, no pressed state. |
-| `sheet` | atoms | atoms/sheet | exists | yes | `rest`, `pressed` | `modal` | Renamed: `SheetContent.side` → `side`, `SheetContent.labels` → `closeLabel`. Single component: title, description and closeLabel replace the Sheet parts, and there is no trigger part. Pressed is the close button. |
-| `tooltip` | atoms | atoms/tooltip | exists | yes | `rest`, `pressed` | `delayDuration`, `disableHoverableContent`, `TooltipProvider.skipDelayDuration`, `TooltipContent.side`, `TooltipContent.sideOffset`, `TooltipContent.align`, `TooltipContent.alignOffset` | Press-to-open trigger; no hover, focus or long-press disclosure. Centered modal, not anchored. Radix collision props (arrowPadding, avoidCollisions, collisionBoundary, collisionPadding, sticky, hideWhenDetached, updatePositionStrategy) are not listed. |
+| `dialog` | atoms | atoms/dialog | exists | yes | `rest`, `hover`, `focus-visible`, `pressed` | `modal`, `DialogContent.overlay` | Single component: title, description and closeLabel replace the Dialog parts, and there is no trigger part (the caller owns open state). The close button carries the states. ModalLayer renders a transparent Modal with no backdrop dim, like web overlay="none"; the veil is the later `scrim` component. |
+| `drawer` | atoms | atoms/drawer | exists | yes | `rest`, `hover`, `focus-visible`, `pressed` | `activeSnapPoint`, `setActiveSnapPoint`, `snapPoints`, `fadeFromIndex`, `snapToSequentialPoint`, `closeThreshold`, `dismissible`, `handleOnly`, `direction`, `modal`, `nested`, `fixed`, `autoFocus`, `onClose`, `onDrag`, `onRelease`, `onAnimationEnd` | Bottom modal only: no drag or snap points. Single component like Dialog. Web-DOM props not listed: container, noBodyStyles, scrollLockTimeout, disablePreventScroll, preventScrollRestoration, repositionInputs, shouldScaleBackground, setBackgroundColorOnScale. The close button carries the states. |
+| `dropdown-menu` | atoms | atoms/dropdown-menu | exists | yes | `rest`, `hover`, `focus-visible`, `pressed`, `selected`, `disabled` | `dir`, `modal`, `DropdownMenuContent.loop`, `DropdownMenuContent.side`, `DropdownMenuContent.sideOffset`, `DropdownMenuContent.align`, `DropdownMenuContent.alignOffset`, `DropdownMenuItem.inset`, `DropdownMenuItem.textValue`, `DropdownMenuCheckboxItem.checked`, `DropdownMenuCheckboxItem.onCheckedChange`, `DropdownMenuRadioGroup.value`, `DropdownMenuRadioGroup.onValueChange`, `DropdownMenuSub.open`, `DropdownMenuSub.defaultOpen`, `DropdownMenuSub.onOpenChange` | Renamed: `DropdownMenuItem.onSelect` → `onSelect`, `DropdownMenuItem.disabled` → `items[].disabled`. Flat modal list with one selected item (selectedId): no groups, separators, shortcuts, checkbox or radio items, or sub-menus. Radix collision props (arrowPadding, avoidCollisions, collisionBoundary, collisionPadding, sticky, hideWhenDetached, updatePositionStrategy) are not listed. |
+| `popover` | atoms | atoms/popover | exists | yes | `rest`, `hover`, `focus-visible`, `pressed` | `modal`, `PopoverContent.side`, `PopoverContent.sideOffset`, `PopoverContent.align`, `PopoverContent.alignOffset` | Centered modal, not anchored to a trigger, and there is no anchor part. Radix collision props (arrowPadding, avoidCollisions, collisionBoundary, collisionPadding, sticky, hideWhenDetached, updatePositionStrategy) are not listed. The close button carries the states. |
+| `sheet` | atoms | atoms/sheet | exists | yes | `rest`, `hover`, `focus-visible`, `pressed` | `modal` | Renamed: `SheetContent.side` → `side`, `SheetContent.labels` → `closeLabel`. Single component: title, description and closeLabel replace the Sheet parts, and there is no trigger part. The close button carries the states. |
+| `tooltip` | atoms | atoms/tooltip | exists | yes | `rest`, `hover`, `focus-visible`, `pressed` | `delayDuration`, `disableHoverableContent`, `TooltipProvider.skipDelayDuration`, `TooltipContent.side`, `TooltipContent.sideOffset`, `TooltipContent.align`, `TooltipContent.alignOffset` | Press-to-open trigger: hover and focus style it but do not open it, and there is no long-press disclosure. Centered modal, not anchored. Radix collision props (arrowPadding, avoidCollisions, collisionBoundary, collisionPadding, sticky, hideWhenDetached, updatePositionStrategy) are not listed. |
 
 ### Navigation
 
@@ -102,8 +104,8 @@ Everything here ships in 0.1.0. **State**: exists = native module today; MISSING
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | `data-list` | atoms | molecules/data-list | exists | no | — | `DataListItem.density` | Renamed: `children` → `items`. Data-driven: items replace DataListItem, DataListLabel and DataListValue. |
 | `item` | atoms | atoms/item | exists | no | — | none | Not pressable on native today. |
-| `list-box` | atoms | atoms/list-box | exists | yes | `rest`, `selected`, `disabled` | none | Renamed: `selectionMode` → `mode`, `children` → `options`, `value` → `selection.value`, `defaultValue` → `selection.defaultValue`, `onValueChange` → `selection.onChange`, `ListBoxItem.value` → `options[].id`, `ListBoxItem.disabled` → `options[].disabled`. Data-driven: options replace ListBoxItem children. selection holds a ReadonlySet of ids, web value is string[]. |
-| `tabs` | atoms | molecules/tabs | exists | yes | `rest`, `pressed`, `selected`, `disabled` | `variant` |  |
+| `list-box` | atoms | atoms/list-box | exists | yes | `rest`, `hover`, `focus-visible`, `pressed`, `selected`, `disabled` | none | Renamed: `selectionMode` → `mode`, `children` → `options`, `value` → `selection.value`, `defaultValue` → `selection.defaultValue`, `onValueChange` → `selection.onChange`, `ListBoxItem.value` → `options[].id`, `ListBoxItem.disabled` → `options[].disabled`. Data-driven: options replace ListBoxItem children. selection holds a ReadonlySet of ids, web value is string[]. |
+| `tabs` | atoms | molecules/tabs | exists | yes | `rest`, `hover`, `focus-visible`, `pressed`, `selected`, `disabled` | `variant` |  |
 | `top-bar` | atoms | molecules/top-bar | exists | no | — | none |  |
 
 ### Data display
@@ -113,7 +115,6 @@ Everything here ships in 0.1.0. **State**: exists = native module today; MISSING
 | `avatar` | atoms | atoms/avatar | exists | no | — | `presence`, `presenceLabels`, `shape`, `AvatarFallback.delayMs`, `AvatarImage.onLoadingStatusChange` | size is a pixel number (default 40); web takes xs, sm, md, lg or xl. |
 | `card` | atoms | atoms/card | exists | no | — | none |  |
 | `separator` | atoms | atoms/separator | exists | no | — | none |  |
-| `table` | atoms | — | MISSING | no | — | — | Web table is a DOM table element; native needs a grid built on View. Planned, not built. **Decision:** Native Table API: a real table (columns, header, horizontal scroll) or rely on data-list and item rows for tabular data? |
 
 ## Components by category
 
@@ -129,14 +130,15 @@ native-0.1.0 2 · web-only 1 · later 0
 | `resizable` | atoms | native-0.1.0 | — | atoms/resizable |  |
 | `scroll-area` | atoms | web-only | — | `ScrollView`, `FlatList` | Custom-styled scrollbars over DOM overflow; native scroll containers are platform-drawn. |
 
-### Typography (2)
+### Typography (3)
 
-native-0.1.0 1 · web-only 0 · later 1
+native-0.1.0 1 · web-only 0 · later 2
 
 | Component | Web | Status | Target | Native / equivalent | Reason and needs |
 | --- | --- | --- | --- | --- | --- |
 | `kbd` | atoms | later | 0.2.0 | — | Key-cap chip with platform-aware modifier expansion. |
 | `truncated-text` | atoms | native-0.1.0 | — | atoms/truncated-text |  |
+| `typography` | atoms | later | 0.2.0 | — | Semantic HTML text elements (h1-h4, p, lead, muted, blockquote, inline code, list). Text, Heading and Label cover 0.1.0; Blockquote, InlineCode and List have no native equivalent yet and come in 0.2.0. |
 
 ### Buttons (5)
 
@@ -221,7 +223,7 @@ native-0.1.0 6 · web-only 2 · later 2
 
 ### Navigation (21)
 
-native-0.1.0 16 · web-only 3 · later 2
+native-0.1.0 16 · web-only 4 · later 1
 
 | Component | Web | Status | Target | Native / equivalent | Reason and needs |
 | --- | --- | --- | --- | --- | --- |
@@ -232,7 +234,7 @@ native-0.1.0 16 · web-only 3 · later 2
 | `document-sibling-nav` | atoms | native-0.1.0 | — | atoms/document-sibling-nav |  |
 | `floating-navbar` | atoms | web-only | — | `top-bar`, `bottom-bar` | Marketing nav bar that hides on window scroll direction. |
 | `floating-toolbar` | atoms | native-0.1.0 | — | atoms/floating-toolbar |  |
-| `jarvis-dock` | atoms | later | 0.4.0 | — | Floating quick-action dock with a command-palette trigger; canvas workspace family. Needs: native bottom-bar and command (exist), canvas-view. |
+| `jarvis-dock` | atoms | web-only | — | — | Floating quick-action dock with a command-palette trigger; canvas workspace family. Pointer-first canvas: web-only for 0.1.0, revisit with spatial. |
 | `link` | atoms | native-0.1.0 | — | atoms/link |  |
 | `menubar` | atoms | native-0.1.0 | — | molecules/menubar |  |
 | `navbar-saas` | organisms | web-only | — | `top-bar` | Marketing navbar built on next/link and next/navigation. |
@@ -247,9 +249,9 @@ native-0.1.0 16 · web-only 3 · later 2
 | `view-switcher` | atoms | native-0.1.0 | — | molecules/view-switcher |  |
 | `workspace-switcher` | atoms | native-0.1.0 | — | molecules/workspace-switcher |  |
 
-### Data display (5)
+### Data display (6)
 
-native-0.1.0 5 · web-only 0 · later 0
+native-0.1.0 5 · web-only 0 · later 1
 
 | Component | Web | Status | Target | Native / equivalent | Reason and needs |
 | --- | --- | --- | --- | --- | --- |
@@ -257,6 +259,7 @@ native-0.1.0 5 · web-only 0 · later 0
 | `presence-stack` | atoms | native-0.1.0 | — | molecules/presence-stack |  |
 | `role-badge` | molecules | native-0.1.0 | — | molecules/role-badge |  |
 | `stat-card` | molecules | native-0.1.0 | — | molecules/stat-card |  |
+| `table` | atoms | later | 0.2.0 | — | Web table is a DOM table element; native needs a grid built on View. data-list and item rows cover tabular data in 0.1.0. |
 | `tree-view` | organisms | native-0.1.0 | — | organisms/tree-view |  |
 
 ### Ai (17)
@@ -338,7 +341,7 @@ native-0.1.0 13 · web-only 10 · later 4
 | `cta-band` | organisms | web-only | — | — | Marketing call-to-action band for landing pages. |
 | `expandable-cards` | atoms | native-0.1.0 | — | molecules/expandable-cards |  |
 | `faq` | atoms | native-0.1.0 | — | molecules/faq |  |
-| `mdx-content` | organisms | web-only | — | — | Compiles MDX at runtime (@mdx-js/mdx, react-markdown) for web content pipelines. **Decision:** Does native need a markdown renderer for tutorial and MDX content (for example react-native-markdown-display), or stay web-only? |
+| `mdx-content` | organisms | web-only | — | — | Compiles MDX at runtime (@mdx-js/mdx, react-markdown) for web content pipelines. No native markdown renderer is planned. |
 | `newsletter-signup` | molecules | web-only | — | `field`, `input`, `button` | Marketing email-capture form. |
 | `share-section` | atoms | native-0.1.0 | — | atoms/share-section |  |
 | `slideshow` | organisms | native-0.1.0 | — | atoms/slideshow |  |
@@ -361,7 +364,7 @@ native-0.1.0 2 · web-only 0 · later 6
 | `credit-badge` | molecules | native-0.1.0 | — | molecules/credit-badge |  |
 | `order-summary` | organisms | later | 0.3.0 | — | Priced rows, total and optional promo code. |
 | `plan-badge` | molecules | native-0.1.0 | — | molecules/plan-badge |  |
-| `pricing-table` | molecules | later | 0.4.0 | — | Plan comparison with feature checklist and CTA. **Decision:** Native paywalls are bound by App Store and Play billing rules; do we want a pricing-table on native at all? |
+| `pricing-table` | molecules | later | 0.3.0 | — | Plan comparison with feature checklist and CTA. |
 | `subscription-card` | organisms | later | 0.3.0 | — | Plan, renewal and usage details. |
 | `transaction-list` | molecules | later | 0.3.0 | — | Credit and debit history with locale-aware currency. |
 | `wallet-card` | organisms | later | 0.3.0 | — | Credit balance with available and pending amounts. |
@@ -372,10 +375,10 @@ native-0.1.0 11 · web-only 0 · later 6
 
 | Component | Web | Status | Target | Native / equivalent | Reason and needs |
 | --- | --- | --- | --- | --- | --- |
-| `access-matrix` | organisms | later | 0.3.0 | — | Permission matrix for admin screens, as a table or one row per subject. Needs: native Table (0.1.0, missing). |
+| `access-matrix` | organisms | later | 0.3.0 | — | Permission matrix for admin screens, as a table or one row per subject. Needs: native Table (0.2.0). |
 | `activity-log` | molecules | native-0.1.0 | — | molecules/activity-log |  |
 | `countdown-timer` | molecules | native-0.1.0 | — | organisms/countdown-timer |  |
-| `data-table` | organisms | later | 0.2.0 | — | Sortable, filterable, selectable table with pagination. Needs: native Table (0.1.0, missing); @tanstack/react-table is headless. |
+| `data-table` | organisms | later | 0.2.0 | — | Sortable, filterable, selectable table with pagination. Needs: native Table (0.2.0); @tanstack/react-table is headless. |
 | `interactive-timeline` | organisms | native-0.1.0 | — | organisms/interactive-timeline |  |
 | `live-feed` | molecules | native-0.1.0 | — | molecules/live-feed |  |
 | `metric-cluster` | atoms | native-0.1.0 | — | molecules/metric-cluster |  |
@@ -398,7 +401,7 @@ native-0.1.0 0 · web-only 1 · later 14
 | --- | --- | --- | --- | --- | --- |
 | `activity-heatmap` | organisms | later | 0.2.0 | — | Colour-scaled cell grid of activity over time. Needs: Views grid; react-native-svg optional. |
 | `candlestick-chart` | organisms | later | 0.3.0 | — | OHLC price chart for finance dashboards. Needs: react-native-svg. |
-| `chart` | organisms | later | 0.2.0 | — | Directory holds area-chart, bar-chart and line-chart (there is no chart.tsx). Needs: react-native-svg. **Decision:** Charts, maps and Icon all want vector drawing: if react-native-svg is accepted for Icon in 0.1.0, do charts and maps ship on it in 0.2.0, or is there another approach? |
+| `chart` | organisms | later | 0.2.0 | — | Directory holds area-chart, bar-chart and line-chart (there is no chart.tsx). Needs: react-native-svg. react-native-svg arrives with 0.2.0; 0.1.0 adds no vector dependency (Icon takes a component the consumer supplies). |
 | `contribution-graph` | organisms | later | 0.2.0 | — | Calendar heatmap of daily activity. Needs: Views grid; react-native-svg optional. |
 | `flow-diagram` | organisms | web-only | — | — | Built on @xyflow/react, a DOM/SVG node-graph library with no React Native port. |
 | `gantt-chart` | organisms | later | 0.3.0 | — | Project timeline with task bars, milestones and a today marker. Needs: horizontal ScrollView, Views. |
@@ -429,47 +432,47 @@ native-0.1.0 0 · web-only 0 · later 8
 
 ### Canvas (37)
 
-native-0.1.0 0 · web-only 0 · later 37
+native-0.1.0 0 · web-only 37 · later 0
 
 | Component | Web | Status | Target | Native / equivalent | Reason and needs |
 | --- | --- | --- | --- | --- | --- |
-| `alert-pulse` | atoms | later | 0.4.0 | — | Canvas workspace family; ships or drops with the canvas-view decision. Needs: canvas-view. |
-| `anchor-port` | atoms | later | 0.4.0 | — | Canvas workspace family; ships or drops with the canvas-view decision. Needs: canvas-view. |
-| `bottom-activity-strip` | atoms | later | 0.4.0 | — | Canvas workspace family; ships or drops with the canvas-view decision. Needs: canvas-view. |
-| `canvas-shell` | templates | later | 0.4.0 | — | Canvas workspace family; ships or drops with the canvas-view decision. Needs: canvas-view. |
-| `canvas-view` | organisms | later | 0.4.0 | — | Pan and zoom viewport with keyboard, wheel and overlay support; anchors the canvas workspace family. Needs: gesture handling (PanResponder or react-native-gesture-handler). **Decision:** Is a native spatial canvas workspace (38 components, pointer-first on web) in scope for ui-native, or do they all become web-only? |
-| `chat-dock-section` | molecules | later | 0.4.0 | — | Canvas workspace family; ships or drops with the canvas-view decision. Needs: canvas-view. |
-| `comment-pin` | atoms | later | 0.4.0 | — | Canvas workspace family; ships or drops with the canvas-view decision. Needs: canvas-view. |
-| `connector-edge` | molecules | later | 0.4.0 | — | Canvas workspace family; ships or drops with the canvas-view decision. Needs: canvas-view, react-native-svg. |
-| `context-lens` | atoms | later | 0.4.0 | — | Canvas workspace family; ships or drops with the canvas-view decision. Needs: canvas-view, react-native-svg. |
-| `edge-label` | atoms | later | 0.4.0 | — | Canvas workspace family; ships or drops with the canvas-view decision. Needs: canvas-view. |
-| `follow-mode` | atoms | later | 0.4.0 | — | Canvas workspace family; ships or drops with the canvas-view decision. Needs: canvas-view. |
-| `group-hull` | atoms | later | 0.4.0 | — | Canvas workspace family; ships or drops with the canvas-view decision. Needs: canvas-view. |
-| `handoff-beacon` | atoms | later | 0.4.0 | — | Canvas workspace family; ships or drops with the canvas-view decision. Needs: canvas-view. |
-| `heat-overlay` | atoms | later | 0.4.0 | — | Canvas workspace family; ships or drops with the canvas-view decision. Needs: canvas-view, react-native-svg. |
-| `infinite-plane` | atoms | later | 0.4.0 | — | Canvas workspace family; ships or drops with the canvas-view decision. Needs: canvas-view. |
-| `left-rail` | atoms | later | 0.4.0 | — | Canvas workspace family; ships or drops with the canvas-view decision. Needs: canvas-view. |
-| `live-cursor` | atoms | later | 0.4.0 | — | Canvas workspace family; ships or drops with the canvas-view decision. Needs: canvas-view. |
-| `mini-map-panel` | atoms | later | 0.4.0 | — | Canvas workspace family; ships or drops with the canvas-view decision. Needs: canvas-view. |
-| `multi-select-lasso` | atoms | later | 0.4.0 | — | Canvas workspace family; ships or drops with the canvas-view decision. Needs: canvas-view. |
-| `object-card` | molecules | later | 0.4.0 | — | Canvas workspace family; ships or drops with the canvas-view decision. Needs: canvas-view. |
-| `object-handle` | atoms | later | 0.4.0 | — | Canvas workspace family; ships or drops with the canvas-view decision. Needs: canvas-view. |
-| `object-inspector` | atoms | later | 0.4.0 | — | Canvas workspace family; ships or drops with the canvas-view decision. Needs: canvas-view. |
-| `playback-ghost` | atoms | later | 0.4.0 | — | Canvas workspace family; ships or drops with the canvas-view decision. Needs: canvas-view. |
-| `policy-delivery-panel` | atoms | later | 0.4.0 | — | Canvas workspace family; ships or drops with the canvas-view decision. Needs: canvas-view. |
-| `property-section` | atoms | later | 0.4.0 | — | Canvas workspace family; ships or drops with the canvas-view decision. Needs: canvas-view. |
-| `relationship-inspector` | atoms | later | 0.4.0 | — | Canvas workspace family; ships or drops with the canvas-view decision. Needs: canvas-view. |
-| `right-dock` | atoms | later | 0.4.0 | — | Canvas workspace family; ships or drops with the canvas-view decision. Needs: canvas-view. |
-| `routing-assignment-panel` | atoms | later | 0.4.0 | — | Canvas workspace family; ships or drops with the canvas-view decision. Needs: canvas-view. |
-| `runtime-overview-panel` | atoms | later | 0.4.0 | — | Canvas workspace family; ships or drops with the canvas-view decision. Needs: canvas-view. |
-| `selection-halo` | atoms | later | 0.4.0 | — | Canvas workspace family; ships or drops with the canvas-view decision. Needs: canvas-view. |
-| `selection-presence` | atoms | later | 0.4.0 | — | Canvas workspace family; ships or drops with the canvas-view decision. Needs: canvas-view. |
-| `snap-guides` | atoms | later | 0.4.0 | — | Canvas workspace family; ships or drops with the canvas-view decision. Needs: canvas-view. |
-| `state-badge-overlay` | atoms | later | 0.4.0 | — | Canvas workspace family; ships or drops with the canvas-view decision. Needs: canvas-view. |
-| `thread-bubble` | atoms | later | 0.4.0 | — | Canvas workspace family; ships or drops with the canvas-view decision. Needs: canvas-view. |
-| `viewport-bookmarks` | atoms | later | 0.4.0 | — | Canvas workspace family; ships or drops with the canvas-view decision. Needs: canvas-view. |
-| `world-breadcrumbs` | atoms | later | 0.4.0 | — | Canvas workspace family; ships or drops with the canvas-view decision. Needs: canvas-view. |
-| `zoom-hud` | molecules | later | 0.4.0 | — | Canvas workspace family; ships or drops with the canvas-view decision. Needs: canvas-view. |
+| `alert-pulse` | atoms | web-only | — | — | Canvas workspace family. Pointer-first canvas: web-only for 0.1.0, revisit with spatial. |
+| `anchor-port` | atoms | web-only | — | — | Canvas workspace family. Pointer-first canvas: web-only for 0.1.0, revisit with spatial. |
+| `bottom-activity-strip` | atoms | web-only | — | — | Canvas workspace family. Pointer-first canvas: web-only for 0.1.0, revisit with spatial. |
+| `canvas-shell` | templates | web-only | — | — | Canvas workspace family. Pointer-first canvas: web-only for 0.1.0, revisit with spatial. |
+| `canvas-view` | organisms | web-only | — | — | Pan and zoom viewport with keyboard, wheel and overlay support; anchors the canvas workspace family. Pointer-first canvas: web-only for 0.1.0, revisit with spatial. |
+| `chat-dock-section` | molecules | web-only | — | — | Canvas workspace family. Pointer-first canvas: web-only for 0.1.0, revisit with spatial. |
+| `comment-pin` | atoms | web-only | — | — | Canvas workspace family. Pointer-first canvas: web-only for 0.1.0, revisit with spatial. |
+| `connector-edge` | molecules | web-only | — | — | Canvas workspace family. Pointer-first canvas: web-only for 0.1.0, revisit with spatial. |
+| `context-lens` | atoms | web-only | — | — | Canvas workspace family. Pointer-first canvas: web-only for 0.1.0, revisit with spatial. |
+| `edge-label` | atoms | web-only | — | — | Canvas workspace family. Pointer-first canvas: web-only for 0.1.0, revisit with spatial. |
+| `follow-mode` | atoms | web-only | — | — | Canvas workspace family. Pointer-first canvas: web-only for 0.1.0, revisit with spatial. |
+| `group-hull` | atoms | web-only | — | — | Canvas workspace family. Pointer-first canvas: web-only for 0.1.0, revisit with spatial. |
+| `handoff-beacon` | atoms | web-only | — | — | Canvas workspace family. Pointer-first canvas: web-only for 0.1.0, revisit with spatial. |
+| `heat-overlay` | atoms | web-only | — | — | Canvas workspace family. Pointer-first canvas: web-only for 0.1.0, revisit with spatial. |
+| `infinite-plane` | atoms | web-only | — | — | Canvas workspace family. Pointer-first canvas: web-only for 0.1.0, revisit with spatial. |
+| `left-rail` | atoms | web-only | — | — | Canvas workspace family. Pointer-first canvas: web-only for 0.1.0, revisit with spatial. |
+| `live-cursor` | atoms | web-only | — | — | Canvas workspace family. Pointer-first canvas: web-only for 0.1.0, revisit with spatial. |
+| `mini-map-panel` | atoms | web-only | — | — | Canvas workspace family. Pointer-first canvas: web-only for 0.1.0, revisit with spatial. |
+| `multi-select-lasso` | atoms | web-only | — | — | Canvas workspace family. Pointer-first canvas: web-only for 0.1.0, revisit with spatial. |
+| `object-card` | molecules | web-only | — | — | Canvas workspace family. Pointer-first canvas: web-only for 0.1.0, revisit with spatial. |
+| `object-handle` | atoms | web-only | — | — | Canvas workspace family. Pointer-first canvas: web-only for 0.1.0, revisit with spatial. |
+| `object-inspector` | atoms | web-only | — | — | Canvas workspace family. Pointer-first canvas: web-only for 0.1.0, revisit with spatial. |
+| `playback-ghost` | atoms | web-only | — | — | Canvas workspace family. Pointer-first canvas: web-only for 0.1.0, revisit with spatial. |
+| `policy-delivery-panel` | atoms | web-only | — | — | Canvas workspace family. Pointer-first canvas: web-only for 0.1.0, revisit with spatial. |
+| `property-section` | atoms | web-only | — | — | Canvas workspace family. Pointer-first canvas: web-only for 0.1.0, revisit with spatial. |
+| `relationship-inspector` | atoms | web-only | — | — | Canvas workspace family. Pointer-first canvas: web-only for 0.1.0, revisit with spatial. |
+| `right-dock` | atoms | web-only | — | — | Canvas workspace family. Pointer-first canvas: web-only for 0.1.0, revisit with spatial. |
+| `routing-assignment-panel` | atoms | web-only | — | — | Canvas workspace family. Pointer-first canvas: web-only for 0.1.0, revisit with spatial. |
+| `runtime-overview-panel` | atoms | web-only | — | — | Canvas workspace family. Pointer-first canvas: web-only for 0.1.0, revisit with spatial. |
+| `selection-halo` | atoms | web-only | — | — | Canvas workspace family. Pointer-first canvas: web-only for 0.1.0, revisit with spatial. |
+| `selection-presence` | atoms | web-only | — | — | Canvas workspace family. Pointer-first canvas: web-only for 0.1.0, revisit with spatial. |
+| `snap-guides` | atoms | web-only | — | — | Canvas workspace family. Pointer-first canvas: web-only for 0.1.0, revisit with spatial. |
+| `state-badge-overlay` | atoms | web-only | — | — | Canvas workspace family. Pointer-first canvas: web-only for 0.1.0, revisit with spatial. |
+| `thread-bubble` | atoms | web-only | — | — | Canvas workspace family. Pointer-first canvas: web-only for 0.1.0, revisit with spatial. |
+| `viewport-bookmarks` | atoms | web-only | — | — | Canvas workspace family. Pointer-first canvas: web-only for 0.1.0, revisit with spatial. |
+| `world-breadcrumbs` | atoms | web-only | — | — | Canvas workspace family. Pointer-first canvas: web-only for 0.1.0, revisit with spatial. |
+| `zoom-hud` | molecules | web-only | — | — | Canvas workspace family. Pointer-first canvas: web-only for 0.1.0, revisit with spatial. |
 
 ### Motion (31)
 
@@ -526,23 +529,13 @@ native-0.1.0 0 · web-only 2 · later 4
 
 | Component | Web | Status | Target | Native / equivalent | Reason and needs |
 | --- | --- | --- | --- | --- | --- |
-| `glass-card` | atoms | later | 0.3.0 | — | Frosted card surface; follows the glass-panel decision. Needs: blur module (e.g. expo-blur) or depth material tokens. |
-| `glass-panel` | atoms | later | 0.3.0 | — | Frosted surface for floating chrome; needs a native blur material. Needs: blur module (e.g. expo-blur) or depth material tokens. **Decision:** Frosted blur needs a native blur module or the 0.5.0 depth/material tokens: wait for the tokens, or add a peer dependency sooner? |
+| `glass-card` | atoms | later | 0.5.0 | — | Frosted card surface; follows glass-panel. Needs: depth tokens from ui-core (planned for @vllnt/ui 0.5.0). |
+| `glass-panel` | atoms | later | 0.5.0 | — | Frosted surface for floating chrome; waits for the depth tokens. Needs: depth tokens from ui-core (planned for @vllnt/ui 0.5.0). |
 | `qr-code` | atoms | later | 0.3.0 | — | QR code from a string. Needs: react-native-svg, qrcode (pure JS). |
 | `table-of-contents` | atoms | web-only | — | — | Builds its list from the page's DOM headings. |
 | `table-of-contents-panel` | atoms | web-only | — | — | Side panel over the DOM-heading table of contents. |
-| `theme-toggle` | molecules | later | 0.2.0 | — | Light/dark toggle; native would drive ThemeProvider colorScheme. Needs: ThemeProvider (exists). **Decision:** ThemeProvider takes a controlled colorScheme; should ui-native ship a stateful theme toggle and persistence, or leave both to the app? |
+| `theme-toggle` | molecules | later | 0.2.0 | — | Light/dark toggle; native would drive ThemeProvider colorScheme. Needs: ThemeProvider (exists). |
 
 ## Open decisions
 
-1. `canvas-view` (later 0.4.0): Is a native spatial canvas workspace (38 components, pointer-first on web) in scope for ui-native, or do they all become web-only?
-2. `chart` (later 0.2.0): Charts, maps and Icon all want vector drawing: if react-native-svg is accepted for Icon in 0.1.0, do charts and maps ship on it in 0.2.0, or is there another approach?
-3. `display` (web-only): ui-core already defines a display type scale (28 pt) but native has no Display: add one, or use Heading level 1?
-4. `glass-panel` (later 0.3.0): Frosted blur needs a native blur module or the 0.5.0 depth/material tokens: wait for the tokens, or add a peer dependency sooner?
-5. `icon` (native-only): Icon needs vector drawing: add react-native-svg as a new peer dependency in 0.1.0 (it is not in the lockfile today, so it needs a shared-lane deps PR), or ship a glyph-font/Text-based set with no new dependency?
-6. `mdx-content` (web-only): Does native need a markdown renderer for tutorial and MDX content (for example react-native-markdown-display), or stay web-only?
-7. `pricing-table` (later 0.4.0): Native paywalls are bound by App Store and Play billing rules; do we want a pricing-table on native at all?
-8. `stack` (native-only): One Stack with a direction prop, or HStack/VStack aliases too; and is a Box primitive wanted, or do Stack and Panel cover it?
-9. `table` (native-0.1.0): Native Table API: a real table (columns, header, horizontal scroll) or rely on data-list and item rows for tabular data?
-10. `theme-toggle` (later 0.2.0): ThemeProvider takes a controlled colorScheme; should ui-native ship a stateful theme toggle and persistence, or leave both to the app?
-11. `typography` (web-only): Do native apps need Blockquote, InlineCode and List primitives in 0.1.0, or is Text enough?
+None.

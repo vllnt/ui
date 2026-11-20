@@ -11,7 +11,7 @@
       "category": "data",
       "reason": "Permission matrix for admin screens, as a table or one row per subject.",
       "target": "0.3.0",
-      "dependency": "native Table (0.1.0, missing)"
+      "dependency": "native Table (0.2.0)"
     },
     {
       "name": "accordion",
@@ -114,20 +114,16 @@
     {
       "name": "alert-pulse",
       "level": "atoms",
-      "status": "later",
+      "status": "web-only",
       "category": "canvas",
-      "reason": "Canvas workspace family; ships or drops with the canvas-view decision.",
-      "target": "0.4.0",
-      "dependency": "canvas-view"
+      "reason": "Canvas workspace family. Pointer-first canvas: web-only for 0.1.0, revisit with spatial."
     },
     {
       "name": "anchor-port",
       "level": "atoms",
-      "status": "later",
+      "status": "web-only",
       "category": "canvas",
-      "reason": "Canvas workspace family; ships or drops with the canvas-view decision.",
-      "target": "0.4.0",
-      "dependency": "canvas-view"
+      "reason": "Canvas workspace family. Pointer-first canvas: web-only for 0.1.0, revisit with spatial."
     },
     {
       "name": "animated-beam",
@@ -247,7 +243,12 @@
       "foundation": true,
       "interactive": false,
       "source": "src/components/atoms/badge/badge.tsx",
-      "propsGap": []
+      "propsGap": [
+        "border",
+        "dot",
+        "size",
+        "tone"
+      ]
     },
     {
       "name": "banner",
@@ -295,11 +296,9 @@
     {
       "name": "bottom-activity-strip",
       "level": "atoms",
-      "status": "later",
+      "status": "web-only",
       "category": "canvas",
-      "reason": "Canvas workspace family; ships or drops with the canvas-view decision.",
-      "target": "0.4.0",
-      "dependency": "canvas-view"
+      "reason": "Canvas workspace family. Pointer-first canvas: web-only for 0.1.0, revisit with spatial."
     },
     {
       "name": "bottom-bar",
@@ -324,6 +323,8 @@
       "interactive": true,
       "affordance": [
         "rest",
+        "hover",
+        "focus-visible",
         "pressed",
         "disabled"
       ],
@@ -364,22 +365,16 @@
     {
       "name": "canvas-shell",
       "level": "templates",
-      "status": "later",
+      "status": "web-only",
       "category": "canvas",
-      "reason": "Canvas workspace family; ships or drops with the canvas-view decision.",
-      "target": "0.4.0",
-      "dependency": "canvas-view"
+      "reason": "Canvas workspace family. Pointer-first canvas: web-only for 0.1.0, revisit with spatial."
     },
     {
       "name": "canvas-view",
       "level": "organisms",
-      "status": "later",
+      "status": "web-only",
       "category": "canvas",
-      "reason": "Pan and zoom viewport with keyboard, wheel and overlay support; anchors the canvas workspace family.",
-      "target": "0.4.0",
-      "dependency": "gesture handling (PanResponder or react-native-gesture-handler)",
-      "decision": true,
-      "question": "Is a native spatial canvas workspace (38 components, pointer-first on web) in scope for ui-native, or do they all become web-only?"
+      "reason": "Pan and zoom viewport with keyboard, wheel and overlay support; anchors the canvas workspace family. Pointer-first canvas: web-only for 0.1.0, revisit with spatial."
     },
     {
       "name": "card",
@@ -428,17 +423,14 @@
       "reason": "Directory holds area-chart, bar-chart and line-chart (there is no chart.tsx).",
       "target": "0.2.0",
       "dependency": "react-native-svg",
-      "decision": true,
-      "question": "Charts, maps and Icon all want vector drawing: if react-native-svg is accepted for Icon in 0.1.0, do charts and maps ship on it in 0.2.0, or is there another approach?"
+      "note": "react-native-svg arrives with 0.2.0; 0.1.0 adds no vector dependency (Icon takes a component the consumer supplies)."
     },
     {
       "name": "chat-dock-section",
       "level": "molecules",
-      "status": "later",
+      "status": "web-only",
       "category": "canvas",
-      "reason": "Canvas workspace family; ships or drops with the canvas-view decision.",
-      "target": "0.4.0",
-      "dependency": "canvas-view"
+      "reason": "Canvas workspace family. Pointer-first canvas: web-only for 0.1.0, revisit with spatial."
     },
     {
       "name": "checkbox",
@@ -449,6 +441,8 @@
       "interactive": true,
       "affordance": [
         "rest",
+        "hover",
+        "focus-visible",
         "pressed",
         "selected",
         "disabled"
@@ -544,11 +538,9 @@
     {
       "name": "comment-pin",
       "level": "atoms",
-      "status": "later",
+      "status": "web-only",
       "category": "canvas",
-      "reason": "Canvas workspace family; ships or drops with the canvas-view decision.",
-      "target": "0.4.0",
-      "dependency": "canvas-view"
+      "reason": "Canvas workspace family. Pointer-first canvas: web-only for 0.1.0, revisit with spatial."
     },
     {
       "name": "comparison",
@@ -568,11 +560,9 @@
     {
       "name": "connector-edge",
       "level": "molecules",
-      "status": "later",
+      "status": "web-only",
       "category": "canvas",
-      "reason": "Canvas workspace family; ships or drops with the canvas-view decision.",
-      "target": "0.4.0",
-      "dependency": "canvas-view, react-native-svg"
+      "reason": "Canvas workspace family. Pointer-first canvas: web-only for 0.1.0, revisit with spatial."
     },
     {
       "name": "content-intro",
@@ -584,11 +574,9 @@
     {
       "name": "context-lens",
       "level": "atoms",
-      "status": "later",
+      "status": "web-only",
       "category": "canvas",
-      "reason": "Canvas workspace family; ships or drops with the canvas-view decision.",
-      "target": "0.4.0",
-      "dependency": "canvas-view, react-native-svg"
+      "reason": "Canvas workspace family. Pointer-first canvas: web-only for 0.1.0, revisit with spatial."
     },
     {
       "name": "context-menu",
@@ -686,7 +674,7 @@
       "category": "data",
       "reason": "Sortable, filterable, selectable table with pagination.",
       "target": "0.2.0",
-      "dependency": "native Table (0.1.0, missing); @tanstack/react-table is headless"
+      "dependency": "native Table (0.2.0); @tanstack/react-table is headless"
     },
     {
       "name": "date-field",
@@ -718,27 +706,26 @@
       "interactive": true,
       "affordance": [
         "rest",
+        "hover",
+        "focus-visible",
         "pressed"
       ],
       "source": "src/components/atoms/dialog/dialog.tsx",
       "propsGap": [
-        "modal"
+        "modal",
+        "DialogContent.overlay"
       ],
-      "note": "Single component: title, description and closeLabel replace the Dialog parts, and there is no trigger part (the caller owns open state). Pressed is the close button. ModalLayer renders a transparent Modal with no backdrop dim."
+      "note": "Single component: title, description and closeLabel replace the Dialog parts, and there is no trigger part (the caller owns open state). The close button carries the states. ModalLayer renders a transparent Modal with no backdrop dim, like web overlay=\"none\"; the veil is the later `scrim` component."
     },
     {
       "name": "display",
       "level": "atoms",
-      "status": "web-only",
+      "status": "native-0.1.0",
       "category": "typography",
-      "reason": "Hero text on the web display tokens with a CSS reveal; native has no Display component.",
-      "nativeEquivalent": [
-        "heading"
-      ],
-      "decision": true,
-      "question": "ui-core already defines a display type scale (28 pt) but native has no Display: add one, or use Heading level 1?",
       "foundation": true,
-      "interactive": false
+      "missing": true,
+      "interactive": false,
+      "note": "A thin Display on ui-core's display type scale (28 pt in the native theme)."
     },
     {
       "name": "dock",
@@ -773,6 +760,8 @@
       "interactive": true,
       "affordance": [
         "rest",
+        "hover",
+        "focus-visible",
         "pressed"
       ],
       "source": "src/components/atoms/drawer/drawer.tsx",
@@ -795,7 +784,7 @@
         "onRelease",
         "onAnimationEnd"
       ],
-      "note": "Bottom modal only: no drag or snap points. Single component like Dialog. Web-DOM props not listed: container, noBodyStyles, scrollLockTimeout, disablePreventScroll, preventScrollRestoration, repositionInputs, shouldScaleBackground, setBackgroundColorOnScale. Pressed is the close button."
+      "note": "Bottom modal only: no drag or snap points. Single component like Dialog. Web-DOM props not listed: container, noBodyStyles, scrollLockTimeout, disablePreventScroll, preventScrollRestoration, repositionInputs, shouldScaleBackground, setBackgroundColorOnScale. The close button carries the states."
     },
     {
       "name": "dropdown-menu",
@@ -806,6 +795,8 @@
       "interactive": true,
       "affordance": [
         "rest",
+        "hover",
+        "focus-visible",
         "pressed",
         "selected",
         "disabled"
@@ -838,11 +829,9 @@
     {
       "name": "edge-label",
       "level": "atoms",
-      "status": "later",
+      "status": "web-only",
       "category": "canvas",
-      "reason": "Canvas workspace family; ships or drops with the canvas-view decision.",
-      "target": "0.4.0",
-      "dependency": "canvas-view"
+      "reason": "Canvas workspace family. Pointer-first canvas: web-only for 0.1.0, revisit with spatial."
     },
     {
       "name": "empty-state",
@@ -954,11 +943,9 @@
     {
       "name": "follow-mode",
       "level": "atoms",
-      "status": "later",
+      "status": "web-only",
       "category": "canvas",
-      "reason": "Canvas workspace family; ships or drops with the canvas-view decision.",
-      "target": "0.4.0",
-      "dependency": "canvas-view"
+      "reason": "Canvas workspace family. Pointer-first canvas: web-only for 0.1.0, revisit with spatial."
     },
     {
       "name": "form",
@@ -999,20 +986,18 @@
       "level": "atoms",
       "status": "later",
       "category": "utility",
-      "reason": "Frosted card surface; follows the glass-panel decision.",
-      "target": "0.3.0",
-      "dependency": "blur module (e.g. expo-blur) or depth material tokens"
+      "reason": "Frosted card surface; follows glass-panel.",
+      "target": "0.5.0",
+      "dependency": "depth tokens from ui-core (planned for @vllnt/ui 0.5.0)"
     },
     {
       "name": "glass-panel",
       "level": "atoms",
       "status": "later",
       "category": "utility",
-      "reason": "Frosted surface for floating chrome; needs a native blur material.",
-      "target": "0.3.0",
-      "dependency": "blur module (e.g. expo-blur) or depth material tokens",
-      "decision": true,
-      "question": "Frosted blur needs a native blur module or the 0.5.0 depth/material tokens: wait for the tokens, or add a peer dependency sooner?"
+      "reason": "Frosted surface for floating chrome; waits for the depth tokens.",
+      "target": "0.5.0",
+      "dependency": "depth tokens from ui-core (planned for @vllnt/ui 0.5.0)"
     },
     {
       "name": "glass-progress",
@@ -1047,20 +1032,16 @@
     {
       "name": "group-hull",
       "level": "atoms",
-      "status": "later",
+      "status": "web-only",
       "category": "canvas",
-      "reason": "Canvas workspace family; ships or drops with the canvas-view decision.",
-      "target": "0.4.0",
-      "dependency": "canvas-view"
+      "reason": "Canvas workspace family. Pointer-first canvas: web-only for 0.1.0, revisit with spatial."
     },
     {
       "name": "handoff-beacon",
       "level": "atoms",
-      "status": "later",
+      "status": "web-only",
       "category": "canvas",
-      "reason": "Canvas workspace family; ships or drops with the canvas-view decision.",
-      "target": "0.4.0",
-      "dependency": "canvas-view"
+      "reason": "Canvas workspace family. Pointer-first canvas: web-only for 0.1.0, revisit with spatial."
     },
     {
       "name": "heading",
@@ -1084,11 +1065,9 @@
     {
       "name": "heat-overlay",
       "level": "atoms",
-      "status": "later",
+      "status": "web-only",
       "category": "canvas",
-      "reason": "Canvas workspace family; ships or drops with the canvas-view decision.",
-      "target": "0.4.0",
-      "dependency": "canvas-view, react-native-svg"
+      "reason": "Canvas workspace family. Pointer-first canvas: web-only for 0.1.0, revisit with spatial."
     },
     {
       "name": "historic-timeline",
@@ -1127,11 +1106,9 @@
     {
       "name": "infinite-plane",
       "level": "atoms",
-      "status": "later",
+      "status": "web-only",
       "category": "canvas",
-      "reason": "Canvas workspace family; ships or drops with the canvas-view decision.",
-      "target": "0.4.0",
-      "dependency": "canvas-view"
+      "reason": "Canvas workspace family. Pointer-first canvas: web-only for 0.1.0, revisit with spatial."
     },
     {
       "name": "inline-input",
@@ -1190,11 +1167,9 @@
     {
       "name": "jarvis-dock",
       "level": "atoms",
-      "status": "later",
+      "status": "web-only",
       "category": "navigation",
-      "reason": "Floating quick-action dock with a command-palette trigger; canvas workspace family.",
-      "target": "0.4.0",
-      "dependency": "native bottom-bar and command (exist), canvas-view"
+      "reason": "Floating quick-action dock with a command-palette trigger; canvas workspace family. Pointer-first canvas: web-only for 0.1.0, revisit with spatial."
     },
     {
       "name": "kbd",
@@ -1256,11 +1231,9 @@
     {
       "name": "left-rail",
       "level": "atoms",
-      "status": "later",
+      "status": "web-only",
       "category": "canvas",
-      "reason": "Canvas workspace family; ships or drops with the canvas-view decision.",
-      "target": "0.4.0",
-      "dependency": "canvas-view"
+      "reason": "Canvas workspace family. Pointer-first canvas: web-only for 0.1.0, revisit with spatial."
     },
     {
       "name": "link",
@@ -1285,6 +1258,9 @@
       "interactive": true,
       "affordance": [
         "rest",
+        "hover",
+        "focus-visible",
+        "pressed",
         "selected",
         "disabled"
       ],
@@ -1304,11 +1280,9 @@
     {
       "name": "live-cursor",
       "level": "atoms",
-      "status": "later",
+      "status": "web-only",
       "category": "canvas",
-      "reason": "Canvas workspace family; ships or drops with the canvas-view decision.",
-      "target": "0.4.0",
-      "dependency": "canvas-view"
+      "reason": "Canvas workspace family. Pointer-first canvas: web-only for 0.1.0, revisit with spatial."
     },
     {
       "name": "live-feed",
@@ -1373,9 +1347,7 @@
       "level": "organisms",
       "status": "web-only",
       "category": "content",
-      "reason": "Compiles MDX at runtime (@mdx-js/mdx, react-markdown) for web content pipelines.",
-      "decision": true,
-      "question": "Does native need a markdown renderer for tutorial and MDX content (for example react-native-markdown-display), or stay web-only?"
+      "reason": "Compiles MDX at runtime (@mdx-js/mdx, react-markdown) for web content pipelines. No native markdown renderer is planned."
     },
     {
       "name": "menubar",
@@ -1417,11 +1389,9 @@
     {
       "name": "mini-map-panel",
       "level": "atoms",
-      "status": "later",
+      "status": "web-only",
       "category": "canvas",
-      "reason": "Canvas workspace family; ships or drops with the canvas-view decision.",
-      "target": "0.4.0",
-      "dependency": "canvas-view"
+      "reason": "Canvas workspace family. Pointer-first canvas: web-only for 0.1.0, revisit with spatial."
     },
     {
       "name": "model-comparison",
@@ -1448,11 +1418,9 @@
     {
       "name": "multi-select-lasso",
       "level": "atoms",
-      "status": "later",
+      "status": "web-only",
       "category": "canvas",
-      "reason": "Canvas workspace family; ships or drops with the canvas-view decision.",
-      "target": "0.4.0",
-      "dependency": "canvas-view"
+      "reason": "Canvas workspace family. Pointer-first canvas: web-only for 0.1.0, revisit with spatial."
     },
     {
       "name": "native-select",
@@ -1507,29 +1475,23 @@
     {
       "name": "object-card",
       "level": "molecules",
-      "status": "later",
+      "status": "web-only",
       "category": "canvas",
-      "reason": "Canvas workspace family; ships or drops with the canvas-view decision.",
-      "target": "0.4.0",
-      "dependency": "canvas-view"
+      "reason": "Canvas workspace family. Pointer-first canvas: web-only for 0.1.0, revisit with spatial."
     },
     {
       "name": "object-handle",
       "level": "atoms",
-      "status": "later",
+      "status": "web-only",
       "category": "canvas",
-      "reason": "Canvas workspace family; ships or drops with the canvas-view decision.",
-      "target": "0.4.0",
-      "dependency": "canvas-view"
+      "reason": "Canvas workspace family. Pointer-first canvas: web-only for 0.1.0, revisit with spatial."
     },
     {
       "name": "object-inspector",
       "level": "atoms",
-      "status": "later",
+      "status": "web-only",
       "category": "canvas",
-      "reason": "Canvas workspace family; ships or drops with the canvas-view decision.",
-      "target": "0.4.0",
-      "dependency": "canvas-view"
+      "reason": "Canvas workspace family. Pointer-first canvas: web-only for 0.1.0, revisit with spatial."
     },
     {
       "name": "order-book",
@@ -1620,20 +1582,16 @@
     {
       "name": "playback-ghost",
       "level": "atoms",
-      "status": "later",
+      "status": "web-only",
       "category": "canvas",
-      "reason": "Canvas workspace family; ships or drops with the canvas-view decision.",
-      "target": "0.4.0",
-      "dependency": "canvas-view"
+      "reason": "Canvas workspace family. Pointer-first canvas: web-only for 0.1.0, revisit with spatial."
     },
     {
       "name": "policy-delivery-panel",
       "level": "atoms",
-      "status": "later",
+      "status": "web-only",
       "category": "canvas",
-      "reason": "Canvas workspace family; ships or drops with the canvas-view decision.",
-      "target": "0.4.0",
-      "dependency": "canvas-view"
+      "reason": "Canvas workspace family. Pointer-first canvas: web-only for 0.1.0, revisit with spatial."
     },
     {
       "name": "popover",
@@ -1643,7 +1601,10 @@
       "foundation": true,
       "interactive": true,
       "affordance": [
-        "rest"
+        "rest",
+        "hover",
+        "focus-visible",
+        "pressed"
       ],
       "source": "src/components/atoms/popover/popover.tsx",
       "propsGap": [
@@ -1653,7 +1614,7 @@
         "PopoverContent.align",
         "PopoverContent.alignOffset"
       ],
-      "note": "Centered modal, not anchored to a trigger, and there is no anchor part. Radix collision props (arrowPadding, avoidCollisions, collisionBoundary, collisionPadding, sticky, hideWhenDetached, updatePositionStrategy) are not listed. The close button has a static style, no pressed state."
+      "note": "Centered modal, not anchored to a trigger, and there is no anchor part. Radix collision props (arrowPadding, avoidCollisions, collisionBoundary, collisionPadding, sticky, hideWhenDetached, updatePositionStrategy) are not listed. The close button carries the states."
     },
     {
       "name": "presence-stack",
@@ -1675,9 +1636,7 @@
       "status": "later",
       "category": "billing",
       "reason": "Plan comparison with feature checklist and CTA.",
-      "target": "0.4.0",
-      "decision": true,
-      "question": "Native paywalls are bound by App Store and Play billing rules; do we want a pricing-table on native at all?"
+      "target": "0.3.0"
     },
     {
       "name": "primary-source-viewer",
@@ -1718,7 +1677,8 @@
         "showValue",
         "size",
         "tone",
-        "valueLabel"
+        "valueLabel",
+        "blocks"
       ]
     },
     {
@@ -1761,11 +1721,9 @@
     {
       "name": "property-section",
       "level": "atoms",
-      "status": "later",
+      "status": "web-only",
       "category": "canvas",
-      "reason": "Canvas workspace family; ships or drops with the canvas-view decision.",
-      "target": "0.4.0",
-      "dependency": "canvas-view"
+      "reason": "Canvas workspace family. Pointer-first canvas: web-only for 0.1.0, revisit with spatial."
     },
     {
       "name": "prose",
@@ -1822,6 +1780,8 @@
       "interactive": true,
       "affordance": [
         "rest",
+        "hover",
+        "focus-visible",
         "pressed",
         "selected",
         "disabled"
@@ -1859,11 +1819,9 @@
     {
       "name": "relationship-inspector",
       "level": "atoms",
-      "status": "later",
+      "status": "web-only",
       "category": "canvas",
-      "reason": "Canvas workspace family; ships or drops with the canvas-view decision.",
-      "target": "0.4.0",
-      "dependency": "canvas-view"
+      "reason": "Canvas workspace family. Pointer-first canvas: web-only for 0.1.0, revisit with spatial."
     },
     {
       "name": "resizable",
@@ -1882,11 +1840,9 @@
     {
       "name": "right-dock",
       "level": "atoms",
-      "status": "later",
+      "status": "web-only",
       "category": "canvas",
-      "reason": "Canvas workspace family; ships or drops with the canvas-view decision.",
-      "target": "0.4.0",
-      "dependency": "canvas-view"
+      "reason": "Canvas workspace family. Pointer-first canvas: web-only for 0.1.0, revisit with spatial."
     },
     {
       "name": "role-badge",
@@ -1907,11 +1863,9 @@
     {
       "name": "routing-assignment-panel",
       "level": "atoms",
-      "status": "later",
+      "status": "web-only",
       "category": "canvas",
-      "reason": "Canvas workspace family; ships or drops with the canvas-view decision.",
-      "target": "0.4.0",
-      "dependency": "canvas-view"
+      "reason": "Canvas workspace family. Pointer-first canvas: web-only for 0.1.0, revisit with spatial."
     },
     {
       "name": "run-timeline",
@@ -1925,11 +1879,9 @@
     {
       "name": "runtime-overview-panel",
       "level": "atoms",
-      "status": "later",
+      "status": "web-only",
       "category": "canvas",
-      "reason": "Canvas workspace family; ships or drops with the canvas-view decision.",
-      "target": "0.4.0",
-      "dependency": "canvas-view"
+      "reason": "Canvas workspace family. Pointer-first canvas: web-only for 0.1.0, revisit with spatial."
     },
     {
       "name": "sankey-chart",
@@ -2011,6 +1963,9 @@
       "interactive": true,
       "affordance": [
         "rest",
+        "hover",
+        "focus-visible",
+        "pressed",
         "selected",
         "disabled"
       ],
@@ -2039,6 +1994,9 @@
       "interactive": true,
       "affordance": [
         "rest",
+        "hover",
+        "focus-visible",
+        "pressed",
         "selected",
         "disabled"
       ],
@@ -2061,25 +2019,21 @@
         "SelectItem.disabled": "options[].disabled",
         "SelectValue.placeholder": "labels.placeholder"
       },
-      "note": "Data-driven: options replace SelectItem, SelectGroup, SelectLabel and SelectSeparator, so no grouping or separators. Opens in a bottom panel, so SelectContent positioning props do not apply. Selected is the option row; the trigger has no pressed style."
+      "note": "Data-driven: options replace SelectItem, SelectGroup, SelectLabel and SelectSeparator, so no grouping or separators. Opens in a bottom panel, so SelectContent positioning props do not apply. Selected is the option row."
     },
     {
       "name": "selection-halo",
       "level": "atoms",
-      "status": "later",
+      "status": "web-only",
       "category": "canvas",
-      "reason": "Canvas workspace family; ships or drops with the canvas-view decision.",
-      "target": "0.4.0",
-      "dependency": "canvas-view"
+      "reason": "Canvas workspace family. Pointer-first canvas: web-only for 0.1.0, revisit with spatial."
     },
     {
       "name": "selection-presence",
       "level": "atoms",
-      "status": "later",
+      "status": "web-only",
       "category": "canvas",
-      "reason": "Canvas workspace family; ships or drops with the canvas-view decision.",
-      "target": "0.4.0",
-      "dependency": "canvas-view"
+      "reason": "Canvas workspace family. Pointer-first canvas: web-only for 0.1.0, revisit with spatial."
     },
     {
       "name": "separator",
@@ -2139,6 +2093,8 @@
       "interactive": true,
       "affordance": [
         "rest",
+        "hover",
+        "focus-visible",
         "pressed"
       ],
       "source": "src/components/atoms/sheet/sheet.tsx",
@@ -2149,7 +2105,7 @@
         "SheetContent.side": "side",
         "SheetContent.labels": "closeLabel"
       },
-      "note": "Single component: title, description and closeLabel replace the Sheet parts, and there is no trigger part. Pressed is the close button."
+      "note": "Single component: title, description and closeLabel replace the Sheet parts, and there is no trigger part. The close button carries the states."
     },
     {
       "name": "shimmer-button",
@@ -2249,11 +2205,9 @@
     {
       "name": "snap-guides",
       "level": "atoms",
-      "status": "later",
+      "status": "web-only",
       "category": "canvas",
-      "reason": "Canvas workspace family; ships or drops with the canvas-view decision.",
-      "target": "0.4.0",
-      "dependency": "canvas-view"
+      "reason": "Canvas workspace family. Pointer-first canvas: web-only for 0.1.0, revisit with spatial."
     },
     {
       "name": "social-fab",
@@ -2319,11 +2273,9 @@
     {
       "name": "state-badge-overlay",
       "level": "atoms",
-      "status": "later",
+      "status": "web-only",
       "category": "canvas",
-      "reason": "Canvas workspace family; ships or drops with the canvas-view decision.",
-      "target": "0.4.0",
-      "dependency": "canvas-view"
+      "reason": "Canvas workspace family. Pointer-first canvas: web-only for 0.1.0, revisit with spatial."
     },
     {
       "name": "static-code",
@@ -2415,14 +2367,10 @@
     {
       "name": "table",
       "level": "atoms",
-      "status": "native-0.1.0",
+      "status": "later",
       "category": "data-display",
-      "foundation": true,
-      "missing": true,
-      "interactive": false,
-      "note": "Web table is a DOM table element; native needs a grid built on View. Planned, not built.",
-      "decision": true,
-      "question": "Native Table API: a real table (columns, header, horizontal scroll) or rely on data-list and item rows for tabular data?"
+      "reason": "Web table is a DOM table element; native needs a grid built on View. data-list and item rows cover tabular data in 0.1.0.",
+      "target": "0.2.0"
     },
     {
       "name": "table-of-contents",
@@ -2447,6 +2395,8 @@
       "interactive": true,
       "affordance": [
         "rest",
+        "hover",
+        "focus-visible",
         "pressed",
         "selected",
         "disabled"
@@ -2568,9 +2518,7 @@
       "category": "utility",
       "reason": "Light/dark toggle; native would drive ThemeProvider colorScheme.",
       "target": "0.2.0",
-      "dependency": "ThemeProvider (exists)",
-      "decision": true,
-      "question": "ThemeProvider takes a controlled colorScheme; should ui-native ship a stateful theme toggle and persistence, or leave both to the app?"
+      "dependency": "ThemeProvider (exists)"
     },
     {
       "name": "thinking-block",
@@ -2582,11 +2530,9 @@
     {
       "name": "thread-bubble",
       "level": "atoms",
-      "status": "later",
+      "status": "web-only",
       "category": "canvas",
-      "reason": "Canvas workspace family; ships or drops with the canvas-view decision.",
-      "target": "0.4.0",
-      "dependency": "canvas-view"
+      "reason": "Canvas workspace family. Pointer-first canvas: web-only for 0.1.0, revisit with spatial."
     },
     {
       "name": "threshold-ring",
@@ -2661,6 +2607,9 @@
       "interactive": true,
       "affordance": [
         "rest",
+        "hover",
+        "focus-visible",
+        "pressed",
         "disabled"
       ],
       "source": "src/components/atoms/toast/toast.tsx",
@@ -2670,7 +2619,7 @@
       "propsRenamed": {
         "variant": "toasts[].variant"
       },
-      "note": "Data-driven: a toasts array replaces Toast, ToastTitle, ToastDescription, ToastAction and ToastClose, and duration and action are fields of ToastItem. States belong to the action button; the close button has no pressed style."
+      "note": "Data-driven: a toasts array replaces Toast, ToastTitle, ToastDescription, ToastAction and ToastClose, and duration and action are fields of ToastItem. The action and close buttons carry the states; only the action can be disabled."
     },
     {
       "name": "toggle",
@@ -2702,6 +2651,8 @@
       "interactive": true,
       "affordance": [
         "rest",
+        "hover",
+        "focus-visible",
         "pressed"
       ],
       "source": "src/components/atoms/tooltip/tooltip.tsx",
@@ -2714,7 +2665,7 @@
         "TooltipContent.align",
         "TooltipContent.alignOffset"
       ],
-      "note": "Press-to-open trigger; no hover, focus or long-press disclosure. Centered modal, not anchored. Radix collision props (arrowPadding, avoidCollisions, collisionBoundary, collisionPadding, sticky, hideWhenDetached, updatePositionStrategy) are not listed."
+      "note": "Press-to-open trigger: hover and focus style it but do not open it, and there is no long-press disclosure. Centered modal, not anchored. Radix collision props (arrowPadding, avoidCollisions, collisionBoundary, collisionPadding, sticky, hideWhenDetached, updatePositionStrategy) are not listed."
     },
     {
       "name": "top-bar",
@@ -2801,17 +2752,10 @@
     {
       "name": "typography",
       "level": "atoms",
-      "status": "web-only",
+      "status": "later",
       "category": "typography",
-      "reason": "Semantic HTML text elements (h1-h4, p, lead, muted, blockquote, inline code, list). Native Heading and Text cover headings, lead and muted; blockquote, inline code and list have no native equivalent.",
-      "nativeEquivalent": [
-        "heading",
-        "text"
-      ],
-      "decision": true,
-      "question": "Do native apps need Blockquote, InlineCode and List primitives in 0.1.0, or is Text enough?",
-      "foundation": true,
-      "interactive": false
+      "reason": "Semantic HTML text elements (h1-h4, p, lead, muted, blockquote, inline code, list). Text, Heading and Label cover 0.1.0; Blockquote, InlineCode and List have no native equivalent yet and come in 0.2.0.",
+      "target": "0.2.0"
     },
     {
       "name": "usage-breakdown",
@@ -2841,11 +2785,9 @@
     {
       "name": "viewport-bookmarks",
       "level": "atoms",
-      "status": "later",
+      "status": "web-only",
       "category": "canvas",
-      "reason": "Canvas workspace family; ships or drops with the canvas-view decision.",
-      "target": "0.4.0",
-      "dependency": "canvas-view"
+      "reason": "Canvas workspace family. Pointer-first canvas: web-only for 0.1.0, revisit with spatial."
     },
     {
       "name": "wallet-card",
@@ -2874,11 +2816,9 @@
     {
       "name": "world-breadcrumbs",
       "level": "atoms",
-      "status": "later",
+      "status": "web-only",
       "category": "canvas",
-      "reason": "Canvas workspace family; ships or drops with the canvas-view decision.",
-      "target": "0.4.0",
-      "dependency": "canvas-view"
+      "reason": "Canvas workspace family. Pointer-first canvas: web-only for 0.1.0, revisit with spatial."
     },
     {
       "name": "world-clock-bar",
@@ -2890,11 +2830,9 @@
     {
       "name": "zoom-hud",
       "level": "molecules",
-      "status": "later",
+      "status": "web-only",
       "category": "canvas",
-      "reason": "Canvas workspace family; ships or drops with the canvas-view decision.",
-      "target": "0.4.0",
-      "dependency": "canvas-view"
+      "reason": "Canvas workspace family. Pointer-first canvas: web-only for 0.1.0, revisit with spatial."
     }
   ],
   "nativeOnly": [
@@ -2902,36 +2840,38 @@
       "name": "icon",
       "category": "icons",
       "foundation": true,
-      "status": "planned",
+      "status": "native-0.1.0",
+      "missing": true,
       "interactive": false,
-      "reason": "Native has no icon component and no SVG dependency; web uses lucide-react. Button size=\"icon\" and every glyph-bearing component need one.",
-      "proposedApi": "<Icon name=\"check\" size=\"md\" tone=\"muted\" label=\"Done\" />",
-      "note": "name is a lucide-compatible kebab-case key; size is \"sm\" | \"md\" | \"lg\" or a number; tone follows the Text tones; omitting label marks the icon decorative (hidden from screen readers).",
-      "dependency": "react-native-svg (new peer dependency) or a glyph-font set",
-      "decision": true,
-      "question": "Icon needs vector drawing: add react-native-svg as a new peer dependency in 0.1.0 (it is not in the lockfile today, so it needs a shared-lane deps PR), or ship a glyph-font/Text-based set with no new dependency?"
+      "reason": "Native has no icon component; web uses lucide-react. Button size=\"icon\" and every glyph-bearing component need one.",
+      "proposedApi": "<Icon icon={LucideLikeComponent} size=\"md\" tone=\"muted\" label=\"Done\" />",
+      "note": "icon takes any lucide-compatible component, so ui-native adds no icon or SVG dependency and the consumer supplies the component. size is \"sm\" | \"md\" | \"lg\" or a number; tone follows the Text tones. The icon is decorative (hidden from screen readers) unless label is set."
     },
     {
       "name": "stack",
       "category": "layout",
       "foundation": true,
-      "status": "planned",
+      "status": "native-0.1.0",
+      "missing": true,
       "interactive": false,
-      "reason": "Neither platform has a Stack/Box/Spacer primitive; every native screen re-implements flex rows and gaps.",
+      "reason": "Native has no layout primitive for rows and columns; every screen re-implements flex rows and gaps.",
       "proposedApi": "<Stack direction=\"row\" gap={3} align=\"center\" justify=\"space-between\" wrap />",
-      "note": "direction is \"row\" | \"column\"; gap and padding take spacing tokens; renders a plain View with no accessibility role.",
-      "decision": true,
-      "question": "One Stack with a direction prop, or HStack/VStack aliases too; and is a Box primitive wanted, or do Stack and Panel cover it?"
+      "note": "One Stack, no Box. direction is \"row\" | \"column\"; gap takes spacing tokens; align and justify map to flex alignment and wrap allows flex wrap. Renders a plain View with no accessibility role."
     },
     {
       "name": "spacer",
       "category": "layout",
       "foundation": true,
-      "status": "planned",
+      "status": "native-0.1.0",
+      "missing": true,
       "interactive": false,
       "reason": "Fixed or flexible gap between siblings when Stack gap is not enough.",
       "proposedApi": "<Spacer size={4} />",
       "note": "size takes a spacing token for a fixed gap; the flex prop makes it absorb free space instead."
     }
+  ],
+  "foundationNotes": [
+    "Tabular data in 0.1.0: `data-list` and `item` rows cover it, so `table` is later 0.2.0 and not a foundation component.",
+    "Typography in 0.1.0: `text`, `heading` and `label` cover it; the `typography` extras (Blockquote, InlineCode, List) are later 0.2.0."
   ]
 }

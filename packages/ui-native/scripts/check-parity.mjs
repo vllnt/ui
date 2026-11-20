@@ -151,7 +151,7 @@ function checkComponent(entry, context, errors) {
     if (entry.missing === true) {
       if (entry.foundation !== true) errors.push(`${label}: only foundation entries can be missing`);
       if (hasOwn(entry, "source")) errors.push(`${label}: missing entries have no "source"`);
-      if (registry.has(entry.name)) errors.push(`${label}: marked missing but registry.json has the module; remove "missing"`);
+      if (registry.has(entry.name)) errors.push(`${label}: marked missing but registry.json has the module; set "missing" to false or remove it, and add "source"`);
     } else {
       if (!registry.has(entry.name)) errors.push(`${label}: native-0.1.0 but registry.json has no such module; mark it missing or fix the status`);
       else if (entry.source !== registry.get(entry.name)) errors.push(`${label}: source must be ${registry.get(entry.name)}`);
@@ -186,8 +186,14 @@ function checkNativeOnly(entry, context, errors) {
   const { foundationCategories, registry, web } = context;
   const label = `nativeOnly[${entry.name}]`;
   if (web.has(entry.name)) errors.push(`${label}: a web component has this name; classify it in components instead`);
-  if (entry.status === "built" && !registry.has(entry.name)) errors.push(`${label}: built but registry.json has no such module`);
-  if (entry.status === "planned" && registry.has(entry.name)) errors.push(`${label}: registry.json has the module; set status to built`);
+  if (entry.missing === true) {
+    if (hasOwn(entry, "source")) errors.push(`${label}: missing entries have no "source"`);
+    if (registry.has(entry.name)) errors.push(`${label}: marked missing but registry.json has the module; set "missing" to false or remove it, and add "source"`);
+  } else if (!registry.has(entry.name)) {
+    errors.push(`${label}: not marked missing but registry.json has no such module; mark it missing or add the module`);
+  } else if (entry.source !== registry.get(entry.name)) {
+    errors.push(`${label}: source must be ${registry.get(entry.name)}`);
+  }
   if (entry.foundation === true && !foundationCategories.includes(entry.category)) {
     errors.push(`${label}: foundation entries use a foundation category`);
   }
@@ -233,7 +239,7 @@ export function validate({ parity, registry, schema, web }) {
 
   for (const name of registrySources.keys()) {
     const entry = parity.components.find((candidate) => candidate.name === name);
-    const builtNativeOnly = parity.nativeOnly.some((candidate) => candidate.name === name && candidate.status === "built");
+    const builtNativeOnly = parity.nativeOnly.some((candidate) => candidate.name === name && candidate.missing !== true);
     const marked = entry ? entry.status === "native-0.1.0" && entry.missing !== true : builtNativeOnly;
     if (!marked) errors.push(`native module "${name}" must be marked native-0.1.0 (or be a built nativeOnly entry) in parity.json`);
   }
@@ -258,8 +264,8 @@ function foundationRow(entry) {
   let state = "exists";
   let nativeCell = "—";
   if (nativeOnly) {
-    state = entry.status === "built" ? "exists (native-only)" : "MISSING (native-only)";
-    if (entry.status === "built") nativeCell = `\`${entry.name}\``;
+    state = entry.missing === true ? "MISSING (native-only)" : "exists (native-only)";
+    if (entry.missing !== true) nativeCell = nativePath(entry);
   } else if (entry.missing) {
     state = "MISSING";
   } else if (entry.status === "web-only") {
@@ -318,7 +324,9 @@ export function render(parity, schema) {
     ...components.filter((entry) => entry.foundation),
     ...nativeOnly.filter((entry) => entry.foundation).map((entry) => ({ ...entry, web: false })),
   ];
-  const missingFoundation = count(foundation, (entry) => entry.missing === true || (entry.web === false && entry.status === "planned"));
+  const missingFoundation = count(foundation, (entry) => entry.missing === true);
+  const nativeOnlyNames = new Set(nativeOnly.map((entry) => entry.name));
+  const nativeOnlyPlanned = count(nativeOnly, (entry) => entry.missing === true);
   const mappedFoundation = count(foundation, (entry) => entry.web !== false && entry.status === "web-only");
 
   const lines = [
@@ -340,15 +348,17 @@ export function render(parity, schema) {
       ["web-only", count(components, (entry) => entry.status === "web-only"), "Stays web-only, with a concrete reason and the native equivalent when there is one."],
       ["later", count(components, (entry) => entry.status === "later"), `Native releases after ${parity.target}: ${laterTargets.map((target) => `${target} (${count(components, (entry) => entry.target === target)})`).join(", ")}.`],
       ["**Web components**", `**${components.length}**`, "One entry each."],
-      ["Native-only primitives (planned)", count(nativeOnly, (entry) => entry.status === "planned"), `${nativeOnly.map((entry) => `\`${entry.name}\``).join(", ")}: no web component behind them.`],
+      ["Native-only primitives", nativeOnly.length, `${nativeOnly.map((entry) => `\`${entry.name}\``).join(", ")}: no web component behind them (${nativeOnlyPlanned} planned, ${nativeOnly.length - nativeOnlyPlanned} built).`],
     ]),
     "",
-    `Foundation set: ${foundation.length} rows, ${foundation.length - missingFoundation - mappedFoundation} exist on native, ${missingFoundation} are missing, ${mappedFoundation} map to a native equivalent. Open decisions: ${decisions.length} (listed at the end).`,
+    `Foundation set: ${foundation.length} rows, ${foundation.length - missingFoundation - mappedFoundation} exist on native, ${missingFoundation} missing, ${mappedFoundation} mapped to a native equivalent. Open decisions: ${decisions.length}${decisions.length > 0 ? " (listed at the end)" : ""}.`,
     "",
     "## Foundation",
     "",
-    "Everything here ships in 0.1.0. **State**: exists = native module today; MISSING = planned, not built; mapped = web-only component covered by the listed native equivalent. **Affordance** lists the contract states the native component styles itself today (rest, hover, focus-visible, pressed, selected, disabled; `unknown` when the source is unclear). **Props gap** lists exported web props with no native counterpart; DOM-only props (className, asChild, HTML attributes, mouse and pointer events) are ignored.",
+    "Everything here ships in 0.1.0. **State**: exists = native module today; MISSING = planned, not built; mapped = web-only component covered by the listed native equivalent. **Affordance** lists the contract states the native component styles itself today (rest, hover, focus-visible, pressed, selected, disabled; `unknown` when the source is unclear); React Native has no `:focus-visible`, so focus-visible means the focus ring drawn on any focus. **Props gap** lists exported web props with no native counterpart; DOM-only props (className, asChild, HTML attributes, mouse and pointer events) are ignored.",
     "",
+    ...(parity.foundationNotes ?? []).map((note) => `- ${note}`),
+    ...((parity.foundationNotes ?? []).length > 0 ? [""] : []),
   ];
 
   for (const category of foundationCategories) {
@@ -366,8 +376,9 @@ export function render(parity, schema) {
   }
 
   lines.push("## Open decisions", "");
+  if (decisions.length === 0) lines.push("None.");
   decisions.forEach((entry, index) => {
-    const where = entry.status === "planned" ? "native-only" : entry.status === "later" ? `later ${entry.target}` : entry.status;
+    const where = nativeOnlyNames.has(entry.name) ? "native-only" : entry.status === "later" ? `later ${entry.target}` : entry.status;
     lines.push(`${index + 1}. \`${entry.name}\` (${where}): ${entry.question}`);
   });
   lines.push("");
