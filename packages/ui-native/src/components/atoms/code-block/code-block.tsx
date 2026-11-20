@@ -11,11 +11,11 @@ import {
 } from "react-native";
 
 import { useAnnounceOnChange } from "../../../primitives/accessibility";
+import { monospaceFontFamily } from "../../../primitives/font-family";
 import { InteractivePressable } from "../../../primitives/interactive-pressable";
 import type { ClipboardService } from "../../../primitives/platform-services";
 import { typeStyle } from "../../../primitives/type-style";
 import { useTheme } from "../../../theme/theme-provider";
-import { monospaceFontFamily } from "../../../primitives/font-family";
 
 /** Caller-localized labels for optional code copying. */
 export type CodeBlockCopyLabels = {

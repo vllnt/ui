@@ -8,13 +8,13 @@ import {
   type TextProps,
 } from "react-native";
 
+import { monospaceFontFamily } from "../../../primitives/font-family";
 import { typeStyle } from "../../../primitives/type-style";
 import {
   type ReducedMotionService,
   useReducedMotion,
 } from "../../../primitives/use-reduced-motion";
 import { useTheme } from "../../../theme/theme-provider";
-import { monospaceFontFamily } from "../../../primitives/font-family";
 
 /** Props for deterministic native scrambled text. */
 export type ScrambleTextProps = Omit<TextProps, "children"> & {

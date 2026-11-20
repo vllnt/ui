@@ -14,11 +14,11 @@ import {
   decorativeProps,
   useAnnounceOnChange,
 } from "../../../primitives/accessibility";
+import { monospaceFontFamily } from "../../../primitives/font-family";
 import { InteractivePressable } from "../../../primitives/interactive-pressable";
 import type { ClipboardService } from "../../../primitives/platform-services";
 import { typeStyle } from "../../../primitives/type-style";
 import { useTheme } from "../../../theme/theme-provider";
-import { monospaceFontFamily } from "../../../primitives/font-family";
 
 /** A native terminal line. */
 export type TerminalLine = {
