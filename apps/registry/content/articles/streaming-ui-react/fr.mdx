@@ -1,0 +1,269 @@
+---
+title: "Streaming UI en React - une mise en page stable | vllnt UI"
+description: "Une UI en streaming avec React, sans décalage de mise en page : réserver l'espace avec Skeleton, diffuser le texte, afficher les appels d'outil. Code à copier."
+date: 2026-11-20
+updated: 2026-11-20
+tags: [streaming-ui, react, layout-shift, accessibility]
+status: shipped
+components: [ai-streaming-text, skeleton, reasoning, ai-tool-call-display, agent-activity]
+---
+
+# Streaming UI en React : garder la mise en page stable pendant que le contenu arrive
+
+Une UI en streaming affiche le contenu pendant qu'il arrive encore : le texte morceau par morceau, un appel d'outil pendant son exécution, un résultat dès qu'il est prêt. La difficulté tient à la mise en page. Chaque nouvel élément peut pousser le reste de la page.
+
+Après cette page, vous saurez construire une vue de réponse en streaming où rien ne saute : un texte qui grandit sur place, un bloc de résultat dont l'espace est réservé, un panneau de raisonnement et une carte d'appel d'outil qui se met à jour dans la même boîte.
+
+Tous les composants de cette page sont livrés dans `@vllnt/ui` aujourd'hui.
+
+## Pourquoi une page en streaming saute
+
+Trois choses déplacent une page pendant que le contenu arrive :
+
+1. **Un bloc apparaît sans espace réservé.** Un graphique ou une carte s'affiche, et tout ce qui se trouve dessous descend.
+2. **Un état remplace une boîte par une boîte plus grande.** Une note « Chargement » d'une ligne devient un résultat de dix lignes.
+3. **Du contenu s'insère au-dessus de ce que l'utilisateur lit.** La ligne qu'il lisait descend.
+
+Les corrections sont les mêmes dans tous les frameworks : donner à chaque bloc sa taille finale avant ses données, changer d'état à l'intérieur d'une seule boîte, et ajouter le nouveau contenu à la fin.
+
+## Les briques
+
+| Rôle | Composant | Ce qui le rend stable |
+|---|---|---|
+| Un texte qui arrive par morceaux | `AIStreamingText` | Grandit vers le bas dans un seul élément. Le curseur reste dans le fil du texte |
+| Un bloc dont vous connaissez la taille | `Skeleton` | Reçoit la largeur et la hauteur finales par `className` |
+| Le raisonnement du modèle | `Reasoning` | S'ouvre tant que `isStreaming` est vrai, dans un panneau doté de son propre bouton |
+| Un appel d'outil | `AIToolCallDisplay` | Une seule carte pour les quatre statuts : `queued`, `running`, `complete`, `error` |
+| Une exécution en plusieurs étapes | `AgentActivity` avec `AgentStep` | Une liste où chaque étape change de statut sur place |
+
+## Étape 1 : installer
+
+```bash
+pnpm add @vllnt/ui
+```
+
+Les composants ont besoin du preset Tailwind et de la feuille de style du paquet.
+
+## Étape 2 : diffuser le texte par morceaux
+
+`AIStreamingText` reçoit le texte déjà arrivé et un indicateur `isStreaming`. Passez-lui une chaîne plus longue à chaque arrivée de données.
+
+Pour l'essayer sans modèle, ce hook révèle un texte fixe quelques caractères à la fois :
+
+```tsx
+"use client";
+
+import { useEffect, useState } from "react";
+
+export function useStreamedText(fullText: string, step = 12) {
+  const [length, setLength] = useState(0);
+
+  useEffect(() => {
+    if (length >= fullText.length) return;
+    const timer = setTimeout(() => {
+      setLength((current) => Math.min(current + step, fullText.length));
+    }, 80);
+    return () => clearTimeout(timer);
+  }, [fullText, length, step]);
+
+  return {
+    isStreaming: length < fullText.length,
+    text: fullText.slice(0, length),
+  };
+}
+```
+
+```tsx
+"use client";
+
+import { AIStreamingText } from "@vllnt/ui";
+
+import { useStreamedText } from "./use-streamed-text";
+
+const ANSWER =
+  "Le chiffre d'affaires a progressé sur chacun des quatre derniers trimestres, et la tendance est régulière.";
+
+export function StreamedText() {
+  const { isStreaming, text } = useStreamedText(ANSWER);
+
+  return <AIStreamingText isStreaming={isStreaming} text={text} />;
+}
+```
+
+Deux détails du composant comptent ici :
+
+- **La région live.** Tant que `isStreaming` est vrai, l'élément porte `aria-live="polite"` : un lecteur d'écran peut annoncer le nouveau texte sans déplacer le focus. À la fin du flux, l'attribut est retiré.
+- **Le curseur.** Il est marqué `aria-hidden`, et son clignotement s'arrête quand `prefers-reduced-motion: reduce` est actif. Désactivez-le avec `showCursor={false}`, ou changez le glyphe avec `cursor`.
+
+Le hook met le texte à jour environ 12 fois par seconde, et non à chaque token. Faites de même avec un vrai flux. Moins de mises à jour, c'est moins de rendus, et une région live polie qui change sans arrêt peut produire une longue file d'annonces.
+
+La [page AI Streaming Text](/components/ai-streaming-text) présente l'aperçu en direct.
+
+## Étape 3 : réserver l'espace avant les données
+
+Quand vous connaissez la taille d'un bloc, tenez cette taille dès le premier rendu. Placez le substitut et le résultat dans le même conteneur, à la même hauteur.
+
+```tsx
+import { Card, CardContent, CardHeader, CardTitle, Skeleton } from "@vllnt/ui";
+
+type Trend = { label: string; value: string };
+
+export function TrendBlock({ trend }: { trend?: Trend }) {
+  return (
+    <div className="h-32 w-full max-w-sm">
+      {trend ? (
+        <Card className="h-full">
+          <CardHeader>
+            <CardTitle>{trend.label}</CardTitle>
+          </CardHeader>
+          <CardContent>{trend.value}</CardContent>
+        </Card>
+      ) : (
+        <Skeleton aria-hidden="true" className="h-full w-full" />
+      )}
+    </div>
+  );
+}
+```
+
+Le conteneur fixe la hauteur une seule fois. `Skeleton` et `Card` la remplissent tous les deux : l'échange modifie des pixels à l'intérieur de la boîte, et rien à l'extérieur.
+
+[Skeleton](/components/skeleton) est un simple `div` animé d'une pulsation. Il n'a ni rôle ni libellé : l'exemple le masque donc aux technologies d'assistance. Indiquez ce qui charge à un endroit qu'un lecteur d'écran peut lire, par exemple le statut de l'appel d'outil de l'étape 4. La pulsation s'arrête quand `prefers-reduced-motion: reduce` est actif.
+
+Quand vous ne pouvez pas connaître la hauteur, réservez un minimum avec `min-h-*`. Le bloc peut encore grandir, mais le premier saut disparaît.
+
+## Étape 4 : changer d'état dans une seule boîte
+
+Un appel d'outil connaît quatre moments : en attente, en cours, terminé, en échec. Affichez un seul `AIToolCallDisplay` pour les quatre, et changez son `status`.
+
+```tsx
+import {
+  AIToolCallDisplay,
+  type AIToolCallStatus,
+  Reasoning,
+} from "@vllnt/ui";
+
+type Run = {
+  isThinking: boolean;
+  output?: string;
+  status: AIToolCallStatus;
+  steps: string[];
+};
+
+export function RunView({ run }: { run: Run }) {
+  return (
+    <div className="space-y-3">
+      <Reasoning isStreaming={run.isThinking} steps={run.steps} />
+      <AIToolCallDisplay
+        input='{"metric":"revenue","period":"4 quarters"}'
+        output={run.output}
+        status={run.status}
+        toolName="getTrend"
+      />
+    </div>
+  );
+}
+```
+
+La carte est à l'écran dès le statut `queued`. La sortie s'ajoute à l'intérieur quand l'outil répond : la carte grandit donc par son propre bord inférieur.
+
+`Reasoning` s'ouvre tant que `isStreaming` est vrai et affiche l'en-tête « Reasoning ». Quand l'indicateur repasse à faux, l'en-tête devient « Reasoned » et le panneau reste dans l'état où l'utilisateur l'a laissé. Passez `duration`, en secondes, pour afficher le temps écoulé.
+
+## Étape 5 : assembler dans l'ordre du flux
+
+Affichez les parties dans l'ordre où le flux les produit : raisonnement, appel d'outil, bloc de résultat, texte. Chaque nouvelle partie s'ajoute sous la précédente.
+
+```tsx
+"use client";
+
+import { AIMessageBubble, AIStreamingText } from "@vllnt/ui";
+
+import { RunView } from "./run-view";
+import { TrendBlock } from "./trend-block";
+import { useStreamedText } from "./use-streamed-text";
+
+const ANSWER =
+  "Le chiffre d'affaires a progressé sur chacun des quatre derniers trimestres, et la tendance est régulière.";
+
+export function StreamedAnswer() {
+  const { isStreaming, text } = useStreamedText(ANSWER);
+  const isDone = !isStreaming;
+
+  return (
+    <AIMessageBubble author="Assistant" messageRole="assistant">
+      <RunView
+        run={{
+          isThinking: false,
+          output: "4 trimestres renvoyés",
+          status: "complete",
+          steps: ["Lire la question", "Choisir l'indicateur de chiffre d'affaires"],
+        }}
+      />
+      <TrendBlock
+        trend={
+          isDone
+            ? { label: "Chiffre d'affaires", value: "4 trimestres de hausse" }
+            : undefined
+        }
+      />
+      <AIStreamingText isStreaming={isStreaming} text={text} />
+    </AIMessageBubble>
+  );
+}
+```
+
+Dans cette démonstration, le bloc de résultat se résout à la fin du texte, ce qui vous laisse observer l'échange. Dans une application, chaque prop vient de l'état de votre flux.
+
+## Une exécution en plusieurs étapes
+
+Pour un agent qui avance dans une liste d'étapes, `AgentActivity` affiche toute l'exécution sous forme de liste. Chaque `AgentStep` reçoit un `status` : `pending`, `running`, `completed`, `error` ou `skipped`.
+
+```tsx
+import {
+  AgentActivity,
+  AgentStep,
+  AgentStepDuration,
+  AgentStepProgress,
+  AgentStepTitle,
+} from "@vllnt/ui";
+
+export function ResearchRun() {
+  return (
+    <AgentActivity elapsed="3.2s" status="running">
+      <AgentStep status="completed">
+        <AgentStepTitle>Chercher dans la documentation</AgentStepTitle>
+        <AgentStepDuration>1.1s</AgentStepDuration>
+      </AgentStep>
+      <AgentStep status="running">
+        <AgentStepTitle>Lire 4 pages</AgentStepTitle>
+        <AgentStepProgress label="Pages lues" value={50} />
+      </AgentStep>
+      <AgentStep status="pending">
+        <AgentStepTitle>Rédiger la réponse</AgentStepTitle>
+      </AgentStep>
+    </AgentActivity>
+  );
+}
+```
+
+Affichez dès le départ, avec le statut `pending`, les étapes que vous connaissez déjà. La liste a alors sa longueur complète, et une étape qui démarre change d'icône et de couleur, pas la hauteur de la liste.
+
+Tant que `status` vaut `running`, la liste est une région live polie, avec le rôle `log`. La [page Agent Activity](/components/agent-activity) documente les autres parties, comme `AgentStepDetail`.
+
+## Les règles à retenir
+
+1. **La taille avant les données.** Fixez la hauteur quand vous la connaissez, ou un minimum quand vous ne la connaissez pas.
+2. **Une boîte par élément.** Chargement, résultat et erreur partagent un conteneur. Ne démontez pas une boîte pour en monter une autre de taille différente.
+3. **Ajouter à la fin.** Les nouvelles parties se placent sous les précédentes. Sortez la zone de saisie du flux, fixée en bas de la vue.
+4. **Ne suivre le flux que si le lecteur le suit.** Faites défiler vers le contenu le plus récent tant que le lecteur est en bas. S'il remonte, arrêtez.
+5. **Mettre à jour par morceaux.** Quelques mises à jour par seconde paraissent fluides et coûtent moins qu'une mise à jour par token.
+6. **Respecter la réduction des animations.** Le curseur et la pulsation du squelette s'arrêtent déjà. Donnez à vos propres animations la variante `motion-reduce:`.
+
+## Ce qu'aucun composant ne fait
+
+Aucun composant VLLNT UI ne lit un flux à votre place. Les composants reçoivent des props, et votre code transforme le flux en props. Un contrat commun pour afficher n'importe quel composant à partir de données partielles figure sur la feuille de route, et il n'est pas livré aujourd'hui.
+
+## Pour aller plus loin
+
+- Lisez [les composants d'UI générative en React](/articles/generative-ui-components-react) pour connaître les propriétés qui rendent un composant sûr à diffuser.
+- Consultez la [page Vision](/docs/vision) pour le contrat prévu sur les props partielles.
