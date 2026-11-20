@@ -11,8 +11,8 @@ const TEXT_HEADERS = new Headers([
 export const dynamic = "force-static";
 export const revalidate = 86_400;
 
-function getLlmsTxt(): Response {
-  return new Response(buildLlmsTxt(), { headers: TEXT_HEADERS });
+async function getLlmsTxt(): Promise<Response> {
+  return new Response(await buildLlmsTxt(), { headers: TEXT_HEADERS });
 }
 
 export { getLlmsTxt as GET };

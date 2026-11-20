@@ -1,3 +1,5 @@
+import { fileURLToPath } from "node:url";
+
 import { defineConfig, devices } from "@playwright/test";
 
 const PORT = 41599;
@@ -27,6 +29,11 @@ export default defineConfig({
     : {
         webServer: {
           command: `pnpm dev --port ${PORT}`,
+          env: {
+            ARTICLES_DIR: fileURLToPath(
+              new URL("./test/fixtures/articles", import.meta.url),
+            ),
+          },
           url: BASE_URL,
           reuseExistingServer: !process.env.CI,
           timeout: 120_000,
