@@ -6,6 +6,7 @@ All notable changes to `@vllnt/ui-native` are documented in this file.
 
 ### Added
 
+- Foundation components `Icon`, `Stack`, `Spacer` and `Display` (atoms), the four 0.1.0 foundations the parity matrix listed as missing. `Icon` draws any lucide-compatible component the caller passes (`size` of `"sm" | "md" | "lg"` or points, `tone` as on `Text`) and adds no icon or SVG dependency; it is hidden from screen readers unless `label` makes it an accessible image. `Stack` is a plain `View` with `direction`, `gap`, `align`, `justify` and `wrap`. `Spacer` is a fixed (`size`) or free-space-absorbing (`flex`) gap that screen readers skip. `Display` sets text on the theme display scale with the web `as` and `animated` props: `h1` and `h2` are headers, and the rise-in reveal is skipped under reduced motion. `Text` and `Icon` now share one tone-to-colour helper.
 - Affordance contract (#633): `InteractivePressable` and `interactionStyle` in `src/primitives` give a control one state set (rest, hover, focus, pressed, selected, disabled) from local `interactionTokens`, with a focus ring, a non-colour selected border and the 44-point floor. No state changes a control's size: the focus ring is an outline and a selectable control draws its selected border as a frame inside its box. `Button`, `Toggle`, `Checkbox`, `RadioGroup` and `SegmentedControl` use it, replacing their literal pressed (0.8) and disabled (0.5) opacities; a ghost `Button` underlines its label on hover, focus and press. Public props and exports are unchanged. A lint rule bans raw `Pressable` in `src/components` outside a shrinking allowlist, and the accessibility contract gains reduced-motion (C1), state-flip (C3) and static-surface (R11) rules.
 
 ### Changed
@@ -16,7 +17,7 @@ All notable changes to `@vllnt/ui-native` are documented in this file.
 
 ### Added
 
-- Experimental source-only React Native renderer with 171 component modules spanning foundation, forms, data, content, AI, learning, motion, utilities, controls, overlays, and navigation.
+- Experimental source-only React Native renderer with 175 component modules spanning foundation, forms, data, content, AI, learning, motion, utilities, controls, overlays, and navigation.
 - Shared light, dark, and system theme support generated from canonical design tokens.
 - Controlled/uncontrolled state, caller-owned selection, reduced-motion observation, native modal layering, safe-area injection, and typed platform-service adapters.
 - Machine-readable availability, compatibility, source, peer dependency, and installation metadata in `registry.json`.

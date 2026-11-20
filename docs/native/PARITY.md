@@ -14,14 +14,14 @@ The Affordance column below shows what each existing component styles today; the
 
 | Status | Count | Meaning |
 | --- | --- | --- |
-| native-0.1.0, built | 171 | A native module exists in `registry.json`. |
-| native-0.1.0, planned (missing) | 1 | Foundation component that 0.1.0 must add; not built yet. |
+| native-0.1.0, built | 172 | A native module exists in `registry.json`. |
+| native-0.1.0, planned (missing) | 0 | Foundation component that 0.1.0 must add; not built yet. |
 | web-only | 79 | Stays web-only, with a concrete reason and the native equivalent when there is one. |
 | later | 70 | Native releases after 0.1.0: 0.2.0 (20), 0.3.0 (36), 0.4.0 (12), 0.5.0 (2). |
 | **Web components** | **321** | One entry each. |
-| Native-only primitives | 3 | `icon`, `stack`, `spacer`: no web component behind them (3 planned, 0 built). |
+| Native-only primitives | 3 | `icon`, `stack`, `spacer`: no web component behind them (0 planned, 3 built). |
 
-Foundation set: 41 rows, 36 exist on native, 4 missing, 1 mapped to a native equivalent. Open decisions: 0.
+Foundation set: 41 rows, 40 exist on native, 0 missing, 1 mapped to a native equivalent. Open decisions: 0.
 
 ## Foundation
 
@@ -37,14 +37,14 @@ Everything here ships in 0.1.0. **State**: exists = native module today; MISSING
 | `aspect-ratio` | atoms | atoms/aspect-ratio | exists | no | — | none |  |
 | `grid` | atoms | atoms/grid | exists | no | — | `smCols`, `mdCols`, `lgCols` |  |
 | `panel` | atoms | atoms/panel | exists | no | — | none |  |
-| `spacer` | — | — | MISSING (native-only) | no | — | — | Fixed or flexible gap between siblings when Stack gap is not enough. Proposed: `<Spacer size={4} />`. size takes a spacing token for a fixed gap; the flex prop makes it absorb free space instead. |
-| `stack` | — | — | MISSING (native-only) | no | — | — | Native has no layout primitive for rows and columns; every screen re-implements flex rows and gaps. Proposed: `<Stack direction="row" gap={3} align="center" justify="space-between" wrap />`. One Stack, no Box. direction is "row" \| "column"; gap takes spacing tokens; align and justify map to flex alignment and wrap allows flex wrap. Renders a plain View with no accessibility role. |
+| `spacer` | — | atoms/spacer | exists (native-only) | no | — | — | Fixed or flexible gap between siblings when Stack gap is not enough. Proposed: `<Spacer size={4} />`. size takes a spacing token for a fixed gap; the flex prop makes it absorb free space instead. |
+| `stack` | — | atoms/stack | exists (native-only) | no | — | — | Native has no layout primitive for rows and columns; every screen re-implements flex rows and gaps. Proposed: `<Stack direction="row" gap={3} align="center" justify="space-between" wrap />`. One Stack, no Box. direction is "row" \| "column"; gap takes spacing tokens; align and justify map to flex alignment and wrap allows flex wrap. Renders a plain View with no accessibility role. |
 
 ### Typography
 
 | Component | Web | Native | State | Interactive | Affordance | Props gap | Notes |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| `display` | atoms | — | MISSING | no | — | — | A thin Display on ui-core's display type scale (28 pt in the native theme). |
+| `display` | atoms | atoms/display | exists | no | — | none | Display text on the theme's display type scale (60 pt in the default native theme, 28 pt in Maia). `as` "h1" and "h2" set the header role; `animated` plays a rise-in reveal that reduced motion skips. |
 | `heading` | atoms | atoms/heading | exists | no | — | none |  |
 | `label` | atoms | atoms/label | exists | no | — | none | Dims to 0.7 opacity when disabled, but is not itself pressable. |
 | `prose` | atoms | `heading`, `text` | mapped | no | — | — | Styles raw HTML descendants through CSS selectors; native has no HTML tree, so compose Heading and Text. |
@@ -54,7 +54,7 @@ Everything here ships in 0.1.0. **State**: exists = native module today; MISSING
 
 | Component | Web | Native | State | Interactive | Affordance | Props gap | Notes |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| `icon` | — | — | MISSING (native-only) | no | — | — | Native has no icon component; web uses lucide-react. Button size="icon" and every glyph-bearing component need one. Proposed: `<Icon icon={LucideLikeComponent} size="md" tone="muted" label="Done" />`. icon takes any lucide-compatible component, so ui-native adds no icon or SVG dependency and the consumer supplies the component. size is "sm" \| "md" \| "lg" or a number; tone follows the Text tones. The icon is decorative (hidden from screen readers) unless label is set. |
+| `icon` | — | atoms/icon | exists (native-only) | no | — | — | Native has no icon component; web uses lucide-react. Button size="icon" and every glyph-bearing component need one. Proposed: `<Icon icon={LucideLikeComponent} size="md" tone="muted" label="Done" />`. icon takes any lucide-compatible component, so ui-native adds no icon or SVG dependency and the consumer supplies the component. size is "sm" \| "md" \| "lg" or a number; tone follows the Text tones. The icon is decorative (hidden from screen readers) unless label is set. |
 
 ### Buttons
 

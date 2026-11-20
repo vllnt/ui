@@ -82,6 +82,7 @@ import {
   DatePicker,
   DateRangePicker,
   Dialog,
+  Display,
   DocumentSiblingNav,
   Drawer,
   DropdownMenu,
@@ -108,6 +109,7 @@ import {
   Grid,
   Heading,
   HorizontalScrollRow,
+  Icon,
   InlineInput,
   Input,
   InputGroup,
@@ -187,8 +189,10 @@ import {
   Skeleton,
   Slider,
   Slideshow,
+  Spacer,
   Spinner,
   SpinningText,
+  Stack,
   StatCard,
   StatusBoard,
   StatusIndicator,
@@ -236,7 +240,12 @@ import {
   WorldClockBar,
 } from "../index";
 
-import { codePreviewTabs, gridListOptions, searchLabels } from "./fixture-data";
+import {
+  codePreviewTabs,
+  gridListOptions,
+  searchLabels,
+  SquareGlyph,
+} from "./fixture-data";
 
 /** Renders one representative, consumer-labelled use of a component. */
 export type AccessibilityFixture = () => ReactElement;
@@ -1508,6 +1517,11 @@ const layout: Readonly<Record<string, AccessibilityFixture>> = {
       </CollapsibleContent>
     </Collapsible>
   ),
+  display: () => (
+    <Display animated as="h1">
+      Ship faster
+    </Display>
+  ),
   "expandable-cards": () => (
     <ExpandableCards
       cards={[{ content: <Text>Card body</Text>, id: "card", title: "Card" }]}
@@ -1568,6 +1582,13 @@ const layout: Readonly<Record<string, AccessibilityFixture>> = {
       Account
     </Heading>
   ),
+  icon: () => (
+    <Stack align="center" direction="row" gap={2}>
+      <Icon icon={SquareGlyph} label="Verified" />
+      <Icon icon={SquareGlyph} size="sm" tone="muted" />
+      <Text>Account</Text>
+    </Stack>
+  ),
   item: () => (
     <Item variant="outline">
       <ItemMedia decorative>
@@ -1611,6 +1632,19 @@ const layout: Readonly<Record<string, AccessibilityFixture>> = {
       <Separator />
       <Separator accessibilityLabel="Section break" decorative={false} />
     </>
+  ),
+  spacer: () => (
+    <Stack direction="row">
+      <Text>Left</Text>
+      <Spacer flex size={4} />
+      <Text>Right</Text>
+    </Stack>
+  ),
+  stack: () => (
+    <Stack align="center" direction="row" gap={3} justify="space-between" wrap>
+      <Text>One</Text>
+      <Text>Two</Text>
+    </Stack>
   ),
   text: () => <Text>Body copy</Text>,
   "tldr-section": () => (
