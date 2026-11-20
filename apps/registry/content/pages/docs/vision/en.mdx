@@ -73,6 +73,16 @@ For that, VLLNT UI needs:
 
 None of this ships yet. It is tracked in [vllnt/ui#683](https://github.com/vllnt/ui/issues/683).
 
+## Glass by default
+
+Glass is to become the default look of VLLNT UI everywhere, page chrome and this site included. Underneath, the base stays the same: black and white, Inter and JetBrains Mono.
+
+- **Readable first.** Panels that carry text use enough blur and tint, or opacity, to meet WCAG 2.2 AA contrast.
+- **Solid when needed.** A solid surface replaces glass automatically when the user asks for reduced transparency or more contrast, on low-power devices, and on native platforms without blur. Every glass component also ships a solid variant.
+- **Within a budget.** Blur costs rendering time, so the number of blurred layers and their radius have a performance budget.
+
+This is decided but not built yet: today the default theme is solid. The switch is tracked in [vllnt/ui#684](https://github.com/vllnt/ui/issues/684).
+
 ## Working with the Vercel AI stack
 
 We want VLLNT UI to be first-class with two open tools from Vercel:
@@ -113,6 +123,10 @@ Each of these is open work, tracked in its own issue. Nothing here ships yet.
 
 - **Voice-first components:** a conversational surface, a live transcript, a listening indicator, push-to-talk, waveform and level meters, and spoken feedback with a text equivalent ([vllnt/ui#683](https://github.com/vllnt/ui/issues/683)).
 - **Voice-driven streamed UI** through the AI SDK, whose speech and transcription functions are still experimental, and through json-render ([vllnt/ui#672](https://github.com/vllnt/ui/issues/672)).
+
+### Glass by default
+
+- **Glass tokens and the default switch:** blur, tint and opacity tokens, glass as the default theme, automatic solid fallbacks, contrast tests on glass and a `backdrop-filter` performance budget ([vllnt/ui#684](https://github.com/vllnt/ui/issues/684)).
 - **A complete props schema** for every component, so a model can produce a valid UI tree and a renderer can check it before showing it.
 - **A partial-props contract,** so any component can render from incomplete, streamed data.
 - **Per-user themes resolved at runtime,** kept inside the accessible token ranges.
