@@ -1,10 +1,11 @@
 ---
 title: Vision
-description: Où va VLLNT UI. La couche UI des interfaces spatiales et des interfaces composées par l'IA, diffusées en continu et adaptées à chaque utilisateur, et ce qui est disponible aujourd'hui.
+seoTitle: "Vision : UI générative, vocale et spatiale | VLLNT UI"
+description: "Où va VLLNT UI : UI générative avec json-render et l'AI SDK, voix, 3D, AR et interfaces holographiques, verre par défaut, et ce qui est disponible aujourd'hui."
 type: docs
 og:
-  title: Vision
-  description: Le cap de VLLNT UI, des interfaces spatiales à l'UI dynamique composée par l'IA
+  title: "Vision : UI générative, vocale et spatiale | VLLNT UI"
+  description: "Où va VLLNT UI : UI générative avec json-render et l'AI SDK, voix, 3D, AR et interfaces holographiques, verre par défaut, et ce qui est disponible aujourd'hui."
   type: docs
 ---
 
@@ -12,7 +13,7 @@ og:
 
 VLLNT UI est la couche UI sur laquelle reposent tous les produits vllnt : le web aujourd'hui, React Native en canary, le desktop et le spatial ensuite. L'objectif est d'être le moyen le plus rapide, pour les personnes comme pour les agents IA, de construire des interfaces. La marque vllnt est le thème par défaut, et chaque composant respecte le WCAG 2.2 AA.
 
-Nous pensons que les interfaces changent de trois façons, et nous voulons que VLLNT UI soit la base de chacune.
+Les interfaces changent sur cinq axes : génératives, vocales, 3D, AR et spatiales, holographiques. VLLNT UI est conçu pour être la base des cinq.
 
 ## Plateformes
 
@@ -24,7 +25,7 @@ VLLNT UI vise tous les types d'interfaces. Voici où en est chaque cible aujourd
 - **Desktop, apps macOS natives : sur la feuille de route.** Il n'existe pas de moteur de rendu SwiftUI ou AppKit.
 - **3D, scènes dans la page : sur la feuille de route.** Seules des briques en pseudo-3D sont disponibles aujourd'hui : `Globe3D` (une projection SVG) et `TiltCard` (3D en CSS). Il n'existe pas encore de couche de scène WebGL.
 - **Réalité augmentée et spatial, visionOS et WebXR : proposition.** Les fondations spatiales font l'objet d'une RFC ouverte ([vllnt/ui#631](https://github.com/vllnt/ui/issues/631)). Il n'existe pas de moteur de rendu spatial.
-- **Interfaces holographiques interactives : sur la feuille de route.** Les briques de base sont disponibles sur le web : surfaces en verre, jauge circulaire, contrôles de HUD et docks. Les composants holographiques eux-mêmes n'existent pas encore.
+- **Interfaces holographiques interactives : sur la feuille de route.** Certaines briques sont disponibles sur le web : des surfaces façon verre (`GlassPanel`, `GlassCard`, `LiquidGlass`), une jauge circulaire (`ThresholdRing`), des contrôles de HUD (`ZoomHud`) et des docks. Elles utilisent des valeurs de flou locales ; les tokens de verre viendront avec [vllnt/ui#684](https://github.com/vllnt/ui/issues/684). Les composants holographiques eux-mêmes n'existent pas encore.
 - **UI générée par l'IA et diffusée en continu : en partie disponible.** Les descripteurs, le serveur MCP, les thèmes sous forme de données et les composants de flux continu existent ; les adaptateurs json-render et AI SDK, non ([vllnt/ui#672](https://github.com/vllnt/ui/issues/672)).
 - **UI pensée pour la voix : sur la feuille de route.** Aucun composant vocal n'est encore disponible : ni transcription, ni état d'écoute, ni forme d'onde, ni sortie vocale. Le texte diffusé en continu est déjà annoncé par une région live dans `AIStreamingText`.
 
@@ -94,9 +95,9 @@ Nous voulons que VLLNT UI fonctionne nativement avec deux outils open source de 
 
 ## Ce qui est disponible aujourd'hui
 
-- **Composants descriptibles.** Chaque composant a un descripteur JSON à `/r/<name>.json`, indexé dans `/r/registry.json`. Les agents peuvent aussi utiliser `/llms.txt`, `/llms-full.txt` et le serveur MCP à `/mcp` (`search_components`, `get_component`, `list_categories`). Chaque descripteur indique sa version et sa stabilité ; les définitions de props et les exemples d'usage n'existent encore que pour quelques composants. Voir [Agents](/docs/agents).
+- **Composants descriptibles.** Chaque composant a un descripteur JSON à `/r/<name>.json`, indexé dans `/r/registry.json`. Les agents peuvent aussi utiliser `/llms.txt`, `/llms-full.txt` et le [serveur MCP](/docs/agents) à `/mcp` (`search_components`, `get_component`, `list_categories`). Chaque descripteur indique sa version et sa stabilité ; les définitions de props et les exemples d'usage n'existent encore que pour quelques composants. Voir [Agents](/docs/agents).
 - **Tokens et thèmes sous forme de données.** Une seule source de tokens génère les variables CSS, les thèmes produits (changés à l'exécution avec `data-theme`), les tokens React Native et les bibliothèques Penpot. Voir [Theming](/docs/theming).
-- **Briques prêtes pour le flux continu.** `Skeleton` pour les états de chargement ; `AIStreamingText`, `Reasoning`, `ThinkingBlock` et `AgentActivity` pour un contenu qui arrive par morceaux. Les composants fonctionnent avec les React Server Components, et les composants client sont marqués `"use client"`.
+- **Briques prêtes pour le flux continu.** [`Skeleton`](/components/skeleton) pour les états de chargement ; [`AIStreamingText`](/components/ai-streaming-text), `Reasoning`, `ThinkingBlock` et `AgentActivity` pour un contenu qui arrive par morceaux. Voir les [composants IA](/families/ai). Les composants fonctionnent avec les React Server Components, et les composants client sont marqués `"use client"`.
 - **Mises à jour sûres.** Versionnage sémantique, une version canary à chaque changement sur `main`, des versions stables publiées uniquement depuis des tags relus, un tag `latest` qui ne recule jamais, et des notes de mise à niveau pour chaque version. Voir [Changelog](/docs/changelog).
 - **Contrôle d'accessibilité.** Chaque story est testée avec axe selon le WCAG 2.0 à 2.2, niveaux A et AA, en thème clair et sombre. Toute violation fait échouer le build.
 - **Un socle commun à plusieurs moteurs de rendu.** `@vllnt/ui` (web) et `@vllnt/ui-native` (React Native) sont générés à partir des mêmes tokens et des mêmes contrats de composants ; le paquet natif les lit depuis `@vllnt/ui-core`. Chaque composant natif interactif partage une même primitive d'affordance pour ses états pressé, survolé, focus et désactivé. Voir [Native](/native).
