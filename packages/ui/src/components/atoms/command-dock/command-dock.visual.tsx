@@ -1,14 +1,14 @@
 import { expect, test } from "@playwright/experimental-ct-react";
 
-import { JarvisDock } from "./jarvis-dock";
+import { CommandDock } from "./command-dock";
 
 const noop = (): void => undefined;
 
-test.describe("JarvisDock Visual", () => {
+test.describe("CommandDock Visual", () => {
   test("default", async ({ mount }) => {
     const component = await mount(
       <div className="flex items-center justify-center bg-muted/40 p-8">
-        <JarvisDock
+        <CommandDock
           actions={[
             {
               glyph: "+",
@@ -49,6 +49,6 @@ test.describe("JarvisDock Visual", () => {
         />
       </div>,
     );
-    await expect(component).toHaveScreenshot("jarvis-dock-default.png");
+    await expect(component).toHaveScreenshot("command-dock-default.png");
   });
 });

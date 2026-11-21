@@ -32,7 +32,7 @@ const REQUIRED_BLOCKS = [
 ] as const;
 
 type Registry = {
-  items: { name: string; type: string }[];
+  items: { name: string; stability?: string; type: string }[];
 };
 
 function componentSlugs(): string[] {
@@ -40,7 +40,10 @@ function componentSlugs(): string[] {
     readFileSync(path.join(REGISTRY_ROOT, "registry.json"), "utf8"),
   ) as Registry;
   return registry.items
-    .filter((item) => item.type === "registry:component")
+    .filter(
+      (item) =>
+        item.type === "registry:component" && item.stability !== "deprecated",
+    )
     .map((item) => item.name)
     .sort();
 }

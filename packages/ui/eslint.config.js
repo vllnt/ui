@@ -135,6 +135,14 @@ export default [
     },
   },
   {
+    // The deprecated JarvisDock aliases stay exported for one release
+    // (vllnt/ui#682), so the barrel and the alias test have to name them.
+    files: ['src/components/index.ts', '**/command-dock/command-dock.test.tsx'],
+    rules: {
+      '@typescript-eslint/no-deprecated': 'off',
+    },
+  },
+  {
     files: ['**/*.test.{ts,tsx}', 'src/test-setup.ts'],
     rules: {
       'max-lines-per-function': 'off',

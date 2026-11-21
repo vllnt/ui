@@ -36,12 +36,12 @@ const MIGRATED_FILLS: readonly (readonly [string, readonly string[]])[] = [
   ],
   ["atoms/checklist/checklist.tsx", ["hover:bg-secondary/50"]],
   [
-    "atoms/curriculum/curriculum.tsx",
-    ["bg-secondary/30", "hover:bg-secondary/40", "hover:bg-secondary/50"],
+    "atoms/command-dock/command-dock.tsx",
+    ["hover:bg-secondary/40", "hover:bg-secondary/40"],
   ],
   [
-    "atoms/jarvis-dock/jarvis-dock.tsx",
-    ["hover:bg-secondary/40", "hover:bg-secondary/40"],
+    "atoms/curriculum/curriculum.tsx",
+    ["bg-secondary/30", "hover:bg-secondary/40", "hover:bg-secondary/50"],
   ],
   [
     "atoms/keyboard-shortcuts-help/keyboard-shortcuts-help.tsx",

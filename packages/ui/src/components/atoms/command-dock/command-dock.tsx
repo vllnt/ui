@@ -9,9 +9,9 @@ import { cn } from "../../../lib/utils";
  *
  * @public
  */
-export type JarvisDockTone = "danger" | "neutral" | "primary" | "success";
+export type CommandDockTone = "danger" | "neutral" | "primary" | "success";
 
-const TONE_CLASS: Record<JarvisDockTone, string> = {
+const TONE_CLASS: Record<CommandDockTone, string> = {
   danger: "text-red-600 dark:text-red-400",
   neutral: "text-foreground",
   primary: "text-blue-600 dark:text-blue-400",
@@ -23,7 +23,7 @@ const TONE_CLASS: Record<JarvisDockTone, string> = {
  *
  * @public
  */
-export type JarvisDockAction = {
+export type CommandDockAction = {
   /** Optional badge value rendered as a small dot or count. */
   badge?: ReactNode;
   /** Glyph rendered above the label (single character or icon). */
@@ -35,7 +35,7 @@ export type JarvisDockAction = {
   /** Click handler. */
   onActivate: () => void;
   /** Optional tone. Defaults to `"neutral"`. */
-  tone?: JarvisDockTone;
+  tone?: CommandDockTone;
 };
 
 /**
@@ -43,34 +43,34 @@ export type JarvisDockAction = {
  *
  * @public
  */
-export type JarvisDockLabels = {
+export type CommandDockLabels = {
   /** Aria-label for the command-palette trigger. Defaults to `"Open command palette"`. */
   paletteTrigger?: string;
-  /** Aria-label for the dock. Defaults to `"Jarvis dock"`. */
+  /** Aria-label for the dock. Defaults to `"Command dock"`. */
   region?: string;
 };
 
 const DEFAULT_LABELS = {
   paletteTrigger: "Open command palette",
-  region: "Jarvis dock",
-} as const satisfies Required<JarvisDockLabels>;
+  region: "Command dock",
+} as const satisfies Required<CommandDockLabels>;
 
 /**
- * Props for {@link JarvisDock}.
+ * Props for {@link CommandDock}.
  *
  * @public
  */
-export type JarvisDockProps = {
+export type CommandDockProps = {
   /** Action buttons in render order. */
-  actions: JarvisDockAction[];
+  actions: CommandDockAction[];
   /** Localizable strings. */
-  labels?: JarvisDockLabels;
+  labels?: CommandDockLabels;
   /** Optional handler for the "..." command-palette trigger. */
   onOpenPalette?: () => void;
 } & ComponentPropsWithoutRef<"nav">;
 
 const ActionButton = (props: {
-  action: JarvisDockAction;
+  action: CommandDockAction;
 }): React.ReactElement => {
   const { action } = props;
   const tone = action.tone ?? "neutral";
@@ -80,8 +80,8 @@ const ActionButton = (props: {
   return (
     <button
       className="group relative flex size-12 flex-col items-center justify-center gap-0.5 rounded-md border border-transparent text-[10px] uppercase tracking-wide text-muted-foreground transition-colors hover:border-border hover:bg-secondary/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-      data-jarvis-action={action.id}
-      data-jarvis-tone={tone}
+      data-command-action={action.id}
+      data-command-tone={tone}
       onClick={handleActivateAction}
       type="button"
     >
@@ -98,7 +98,7 @@ const ActionButton = (props: {
       {action.badge ? (
         <span
           className="absolute right-1 top-1 inline-flex min-h-[14px] min-w-[14px] items-center justify-center rounded-full bg-foreground px-1 text-[9px] font-medium text-background"
-          data-jarvis-badge
+          data-command-badge
         >
           {action.badge}
         </span>
@@ -115,7 +115,7 @@ const ActionButton = (props: {
  *
  * @example
  * ```tsx
- * <JarvisDock
+ * <CommandDock
  *   actions={[
  *     { id: "summon", glyph: "+", label: "Summon", tone: "primary",
  *       onActivate: () => spawnAgent() },
@@ -128,10 +128,10 @@ const ActionButton = (props: {
  *
  * @public
  */
-export const JarvisDock = ({
+export const CommandDock = ({
   ref,
   ...props
-}: JarvisDockProps & { ref?: React.Ref<HTMLElement> }) => {
+}: CommandDockProps & { ref?: React.Ref<HTMLElement> }) => {
   const { actions, className, labels, onOpenPalette, ...rest } = props;
   const resolvedLabels = { ...DEFAULT_LABELS, ...labels };
   const handlePalette = (): void => {
@@ -144,7 +144,7 @@ export const JarvisDock = ({
         "inline-flex items-center gap-1 rounded-2xl border bg-background/90 p-1.5 shadow-md backdrop-blur",
         className,
       )}
-      data-jarvis-dock
+      data-command-dock
       ref={ref}
       {...rest}
     >
@@ -157,7 +157,7 @@ export const JarvisDock = ({
           <button
             aria-label={resolvedLabels.paletteTrigger}
             className="flex size-12 items-center justify-center rounded-md border border-transparent text-base text-muted-foreground transition-colors hover:border-border hover:bg-secondary/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-            data-jarvis-palette-trigger
+            data-command-palette-trigger
             onClick={handlePalette}
             type="button"
           >
@@ -168,4 +168,29 @@ export const JarvisDock = ({
     </nav>
   );
 };
-JarvisDock.displayName = "JarvisDock";
+CommandDock.displayName = "CommandDock";
+
+/**
+ * @deprecated Use CommandDock. The release after next removes JarvisDock (see vllnt/ui#682).
+ */
+export const JarvisDock = CommandDock;
+
+/**
+ * @deprecated Use CommandDockAction. The release after next removes JarvisDockAction (see vllnt/ui#682).
+ */
+export type JarvisDockAction = CommandDockAction;
+
+/**
+ * @deprecated Use CommandDockLabels. The release after next removes JarvisDockLabels (see vllnt/ui#682).
+ */
+export type JarvisDockLabels = CommandDockLabels;
+
+/**
+ * @deprecated Use CommandDockProps. The release after next removes JarvisDockProps (see vllnt/ui#682).
+ */
+export type JarvisDockProps = CommandDockProps;
+
+/**
+ * @deprecated Use CommandDockTone. The release after next removes JarvisDockTone (see vllnt/ui#682).
+ */
+export type JarvisDockTone = CommandDockTone;

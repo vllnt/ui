@@ -22,6 +22,7 @@ type RegistryItem = {
   categories?: string[];
   description?: string;
   name: string;
+  stability?: string;
   title?: string;
   type: string;
 };
@@ -93,7 +94,10 @@ Explore every variant and state in the interactive Storybook:
 
 function main(): void {
   const components = registry.items
-    .filter((item) => item.type === "registry:component")
+    .filter(
+      (item) =>
+        item.type === "registry:component" && item.stability !== "deprecated",
+    )
     .sort((a, b) => a.name.localeCompare(b.name));
 
   let written = 0;

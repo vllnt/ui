@@ -6,6 +6,7 @@ import { legacyHostRedirectUrl } from "@/lib/legacy-host-redirect";
 import { markdownPathname, prefersMarkdown } from "@/lib/markdown-negotiation";
 import { publicVariant } from "@/lib/platform-variant";
 import { variantPathname } from "@/lib/platform-variant-rewrite";
+import { renamedComponentRedirect } from "@/lib/renamed-components";
 
 const intlMiddleware = createMiddleware(routing);
 
@@ -35,6 +36,11 @@ function variantRedirect(request: NextRequest): NextResponse | undefined {
   url.searchParams.set("platform", target.platform);
 
   return NextResponse.redirect(url, 308);
+}
+
+/** A permanent redirect for a page that moved: a renamed component or a private variant URL. */
+function movedPage(request: NextRequest): NextResponse | undefined {
+  return renamedComponentRedirect(request) ?? variantRedirect(request);
 }
 
 /**
@@ -106,7 +112,7 @@ export default function middleware(request: NextRequest): NextResponse {
     return NextResponse.next();
   }
 
-  const answer = variantRedirect(request) ?? markdownTwin(request);
+  const answer = movedPage(request) ?? markdownTwin(request);
   if (answer) return answer;
 
   const response = intlMiddleware(request);
