@@ -34,7 +34,7 @@ const BASE: Record<string, unknown> = {
   description: "A description.",
   status: "shipped",
   tags: ["fixtures"],
-  title: "A title | vllnt UI",
+  title: "A title | VLLNT UI",
 };
 
 function without(key: string): Record<string, unknown> {
@@ -73,7 +73,7 @@ describe("parseArticleSource", () => {
       draft: false,
       status: "shipped",
       tags: ["fixtures"],
-      title: "A title | vllnt UI",
+      title: "A title | VLLNT UI",
       updated: "2026-10-05",
     });
     expect(article).toMatchObject({ locale: "en", slug: "a-slug" });

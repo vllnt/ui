@@ -32,12 +32,12 @@ describe("buildArticlesSection", () => {
     expect(section?.links.slice(0, 2)).toEqual([
       {
         notes: articles[0]?.frontmatter.description,
-        title: "Fixture article on glass surfaces | vllnt UI",
+        title: "Fixture article on glass surfaces | VLLNT UI",
         url: `${SITE}/articles/fixture-article`,
       },
       {
         notes: articles[2]?.frontmatter.description,
-        title: "Fixture older article | vllnt UI",
+        title: "Fixture older article | VLLNT UI",
         url: `${SITE}/articles/fixture-older`,
       },
     ]);
@@ -67,7 +67,7 @@ describe("buildArticlePages", () => {
     ]);
     expect(pages[1]).toEqual({
       content: `${articles[2]?.frontmatter.description}\n\nThe body of the older fixture article.`,
-      title: "Fixture older article | vllnt UI",
+      title: "Fixture older article | VLLNT UI",
       url: `${SITE}/articles/fixture-older`,
     });
   });

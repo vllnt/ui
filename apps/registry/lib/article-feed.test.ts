@@ -110,7 +110,7 @@ describe("buildArticlesRss", () => {
     );
     expect(xml).toContain("<pubDate>Mon, 05 Oct 2026 00:00:00 GMT</pubDate>");
     expect(xml).toContain(
-      "<title>Fixture article on glass surfaces | vllnt UI</title>",
+      "<title>Fixture article on glass surfaces | VLLNT UI</title>",
     );
     expect(xml).toContain("<category>glass-surfaces</category>");
   });

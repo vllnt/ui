@@ -380,7 +380,7 @@ export function articleUrl(article: Article): string {
 
 /**
  * The page heading: the body's leading `#` heading when it has one, otherwise
- * the title without the ` | vllnt UI` site suffix.
+ * the title without the ` | VLLNT UI` site suffix.
  *
  * @param article - the article
  * @returns The heading text

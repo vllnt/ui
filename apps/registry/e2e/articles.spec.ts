@@ -14,7 +14,7 @@ test.skip(
 const NEWEST = "fixture-article";
 const OLDER = "fixture-older";
 const DRAFT = "fixture-draft";
-const NEWEST_TITLE = "Fixture article on glass surfaces | vllnt UI";
+const NEWEST_TITLE = "Fixture article on glass surfaces | VLLNT UI";
 
 function consoleErrors(page: Page): string[] {
   const errors: string[] = [];
@@ -113,7 +113,7 @@ for (const locale of ["en", "fr"] as const) {
         await expect(page).toHaveTitle(NEWEST_TITLE);
       } else {
         await expect(page).toHaveTitle(
-          "Article de test sur les surfaces en verre | vllnt UI",
+          "Article de test sur les surfaces en verre | VLLNT UI",
         );
       }
       await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
@@ -140,7 +140,7 @@ for (const locale of ["en", "fr"] as const) {
         "content",
         locale === "en"
           ? NEWEST_TITLE
-          : "Article de test sur les surfaces en verre | vllnt UI",
+          : "Article de test sur les surfaces en verre | VLLNT UI",
       );
       await expect(page.locator('meta[name="robots"][content*="noindex"]')).toHaveCount(
         0,

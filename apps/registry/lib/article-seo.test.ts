@@ -37,13 +37,13 @@ describe("articleMetadata", () => {
   it("uses the title as written, so the site name appears once", () => {
     const metadata = articleMetadata(withImage, ["en", "fr"]);
 
-    expect(metadata.title).toBe("Fixture article on glass surfaces | vllnt UI");
-    expect(String(metadata.title).match(/vllnt UI/g)).toHaveLength(1);
+    expect(metadata.title).toBe("Fixture article on glass surfaces | VLLNT UI");
+    expect(String(metadata.title).match(/VLLNT UI/g)).toHaveLength(1);
     expect(metadata.openGraph).toMatchObject({
-      title: "Fixture article on glass surfaces | vllnt UI",
+      title: "Fixture article on glass surfaces | VLLNT UI",
     });
     expect(metadata.twitter).toMatchObject({
-      title: "Fixture article on glass surfaces | vllnt UI",
+      title: "Fixture article on glass surfaces | VLLNT UI",
     });
   });
 
