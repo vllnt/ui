@@ -75,6 +75,9 @@ jobs:
       # The web packages and everything they depend on; the native packages build in
       # "Native Package Gates".
       - name: Build
+        # SOURCE_COMMIT is what Coolify passes in production; the registry turns it into Next's deploymentId.
+        env:
+          SOURCE_COMMIT: ${{ github.sha }}
         run: pnpm turbo build --concurrency=2 --filter='@vllnt/ui-registry...' --filter='@vllnt/ui...'
 
       - name: Check bundle size budgets
@@ -114,16 +117,18 @@ jobs:
 
       # The build above produced the registry. Serve it as production would, on
       # localhost (the standalone server redirects in a loop on 127.0.0.1), and run
-      # the guards for cookie-free public pages, cache headers and layout shift.
+      # the guards for cookie-free public pages, cache headers, layout shift and
+      # client navigation (content types, RSC caching, the locale-switch loop).
       - name: Check cookies, caching and layout shift on the production build
         working-directory: apps/registry
         env:
           PLAYWRIGHT_BASE_URL: http://localhost:3100
+          SOURCE_COMMIT: ${{ github.sha }}
         run: |
           pnpm exec next start --hostname localhost --port 3100 &
           for _ in $(seq 1 60); do curl -fs http://localhost:3100/healthz > /dev/null && break; sleep 1; done
           curl -fs http://localhost:3100/healthz > /dev/null
-          pnpm exec playwright test e2e/static-catalog.spec.ts e2e/shell-stability.spec.ts
+          pnpm exec playwright test e2e/static-catalog.spec.ts e2e/shell-stability.spec.ts e2e/client-navigation.spec.ts e2e/thumbnail-embeds.spec.ts
 
   changes:
     name: Detect affected areas

@@ -11,6 +11,7 @@ import {
 } from "@vllnt/ui";
 import { ChevronDown, Languages } from "lucide-react";
 import { useTranslations } from "next-intl";
+import type React from "react";
 
 import { useForwardedQuery } from "@/components/forwarded-query";
 import { GitHubMark } from "@/components/github-mark";
@@ -22,19 +23,61 @@ import {
   usePathname,
   useRouter,
 } from "@/i18n/routing";
-import { languageSwitchLocale } from "@/lib/locale-switch";
 import { getPlatform, withPlatformQuery } from "@/lib/platform";
 import { publicPagePathname } from "@/lib/platform-variant";
 import { localizePathname } from "@/lib/seo";
 import registryData from "@/registry.json";
 
 const GITHUB_URL = "https://github.com/vllnt/ui";
+/** next-intl's default locale cookie name. */
+const LOCALE_COOKIE = "NEXT_LOCALE";
 
 type HeaderProps = {
   readonly locale: Locale;
 };
 
 const NO_QUERY = new URLSearchParams();
+
+type LocaleLinkProps = Omit<React.ComponentProps<"a">, "href"> & {
+  readonly current: boolean;
+  readonly href: string;
+  readonly locale: Locale;
+};
+
+/**
+ * A language choice. It loads the page in the chosen language as a new
+ * document at its canonical URL (`/docs`, `/fr/docs`), after storing the choice
+ * in the cookie the middleware reads.
+ *
+ * A plain link, not a client navigation: after a soft navigation from
+ * `/fr/...` to an unprefixed English URL, Next's router guessed the English
+ * route shape wrong and refetched missing prefetch segments without end.
+ */
+function LocaleLink({
+  children,
+  current,
+  href,
+  locale,
+  ...props
+}: LocaleLinkProps) {
+  return (
+    <a
+      {...props}
+      aria-current={current ? "page" : undefined}
+      href={href}
+      hrefLang={locale}
+      lang={locale}
+      onClick={() => {
+        // The cookie must exist before the request for an unprefixed URL, or
+        // the middleware sends a French browser back to /fr.
+
+        document.cookie = `${LOCALE_COOKIE}=${locale}; path=/; samesite=lax`;
+      }}
+    >
+      {children}
+    </a>
+  );
+}
 
 /**
  * Site header. Its links keep the browser query, which the page can read after
@@ -117,126 +160,142 @@ export function Header({ locale }: HeaderProps) {
   }, []);
 
   return (
-    <NavbarSaas
-      brand={
-        <Link
-          className="truncate text-xl font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-          href={preserveQuery("/")}
-        >
-          VLLNT UI
-        </Link>
-      }
-      closeSidebarLabel={t("closeNavigation")}
-      navItems={navItems}
-      openSidebarLabel={t("openNavigation")}
-      rightSlot={
-        <div className="flex min-w-0 items-center gap-1 sm:gap-2">
-          <div className="w-9 shrink-0 max-sm:[&_button]:size-9 max-sm:[&_button]:justify-center max-sm:[&_button]:px-0 max-sm:[&_button_span]:sr-only max-sm:[&_button_svg]:mr-0 sm:w-auto">
-            <SearchDialog
-              buttonText={t("searchButton")}
-              buttonTextMobile={t("searchButton")}
-              docsEmptyText={t("searchDocsEmpty")}
-              docsGroupHeading={t("searchDocsGroup")}
-              docsSearch={searchPagefind}
-              emptyText={t("searchEmpty")}
-              groupHeading={t("searchGroup")}
-              items={searchItems}
-              onDocsSelect={(item) => {
-                router.push(preserveQuery(item.href ?? item.id));
-              }}
-              onSelect={(item) => {
-                router.push(
-                  preserveQuery(
-                    item.href ??
-                      localizePathname(`/components/${item.id}`, locale),
-                  ),
-                );
-              }}
-              searchPlaceholder={t("searchPlaceholder")}
-            />
-          </div>
-          <div className="hidden lg:block">
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button className="min-h-11" size="sm" variant="outline">
-                  {t("whatsNew")}
-                  <ChevronDown className="size-4" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuItem asChild>
-                  <Link href={preserveQuery("/releases")}>{t("releases")}</Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link href={preserveQuery("/changelog")}>
-                    {t("changelog")}
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  {/* react-doctor-disable-next-line react-doctor/nextjs-no-a-element -- the RSS feed is a non-localized XML file, not a page */}
-                  <a href="/rss.xml">{t("rssFeed")}</a>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
-          <div className="md:hidden">
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button
-                  aria-label={`${common("locale")}: ${locale.toUpperCase()}`}
-                  className="size-9"
-                  size="icon"
-                  variant="outline"
-                >
-                  <Languages aria-hidden="true" className="size-4" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                {routing.locales.map((entry) => (
-                  <DropdownMenuItem asChild key={entry}>
-                    <Link
-                      aria-current={entry === locale ? "page" : undefined}
-                      href={preserveQuery(pathname)}
-                      locale={languageSwitchLocale(entry, locale)}
-                      prefetch={false}
-                    >
-                      {entry.toUpperCase()}
+    <>
+      <a
+        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-md focus:bg-background focus:px-4 focus:py-3 focus:text-sm focus:font-medium focus:ring-2 focus:ring-ring"
+        href="#main"
+        onClick={(event) => {
+          // Pages render one <main>; focus it so the next Tab starts in the content.
+          const main = document.querySelector("main");
+          if (!main) return;
+          event.preventDefault();
+          main.tabIndex = -1;
+          main.focus();
+        }}
+      >
+        {t("skipToContent")}
+      </a>
+      <NavbarSaas
+        brand={
+          <Link
+            className="shrink-0 whitespace-nowrap text-xl font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            href={preserveQuery("/")}
+          >
+            VLLNT UI
+          </Link>
+        }
+        closeSidebarLabel={t("closeNavigation")}
+        navItems={navItems}
+        openSidebarLabel={t("openNavigation")}
+        rightSlot={
+          <div className="flex min-w-0 items-center gap-1 sm:gap-2">
+            <div className="w-9 shrink-0 max-sm:[&_button]:size-9 max-sm:[&_button]:justify-center max-sm:[&_button]:px-0 max-sm:[&_button_span]:sr-only max-sm:[&_button_svg]:mr-0 sm:w-auto lg:[&_button]:w-48 2xl:[&_button]:w-64">
+              <SearchDialog
+                buttonText={t("searchButton")}
+                buttonTextMobile={t("searchButton")}
+                docsEmptyText={t("searchDocsEmpty")}
+                docsGroupHeading={t("searchDocsGroup")}
+                docsSearch={searchPagefind}
+                emptyText={t("searchEmpty")}
+                groupHeading={t("searchGroup")}
+                items={searchItems}
+                onDocsSelect={(item) => {
+                  router.push(preserveQuery(item.href ?? item.id));
+                }}
+                onSelect={(item) => {
+                  router.push(
+                    preserveQuery(
+                      item.href ??
+                        localizePathname(`/components/${item.id}`, locale),
+                    ),
+                  );
+                }}
+                searchPlaceholder={t("searchPlaceholder")}
+              />
+            </div>
+            {/* Shown from 1536 px, where the search button also widens back to 256 px: below that the nav links need the room (with DejaVu, the default Linux font, the row overflowed at 1280 px). The footer and /docs/changelog link the same pages. */}
+            <div className="hidden 2xl:block">
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button className="min-h-11" size="sm" variant="outline">
+                    {t("whatsNew")}
+                    <ChevronDown className="size-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem asChild>
+                    <Link href={preserveQuery("/releases")}>
+                      {t("releases")}
                     </Link>
                   </DropdownMenuItem>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
+                  <DropdownMenuItem asChild>
+                    <Link href={preserveQuery("/changelog")}>
+                      {t("changelog")}
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <a href="/rss.xml">{t("rssFeed")}</a>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+            <div className="md:hidden">
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    aria-label={`${common("locale")}: ${locale.toUpperCase()}`}
+                    className="size-9"
+                    size="icon"
+                    variant="outline"
+                  >
+                    <Languages aria-hidden="true" className="size-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  {routing.locales.map((entry) => (
+                    <DropdownMenuItem asChild key={entry}>
+                      <LocaleLink
+                        current={entry === locale}
+                        href={preserveQuery(localizePathname(pathname, entry))}
+                        locale={entry}
+                      >
+                        {entry.toUpperCase()}
+                      </LocaleLink>
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+            <div className="hidden items-center rounded-md border border-border md:flex">
+              <Languages
+                aria-hidden="true"
+                className="ml-2 size-4 text-muted-foreground"
+              />
+              {routing.locales.map((entry) => (
+                <LocaleLink
+                  className="inline-flex min-h-11 items-center px-2 text-xs font-medium uppercase text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring aria-[current=page]:text-foreground"
+                  current={entry === locale}
+                  href={preserveQuery(localizePathname(pathname, entry))}
+                  key={entry}
+                  locale={entry}
+                >
+                  {entry}
+                </LocaleLink>
+              ))}
+            </div>
+            <a
+              aria-label={t("githubLabel")}
+              className="hidden size-11 items-center justify-center rounded-md text-muted-foreground hover:bg-secondary hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:inline-flex"
+              href={GITHUB_URL}
+              rel="noreferrer"
+              target="_blank"
+            >
+              <GitHubMark className="size-4" />
+            </a>
           </div>
-          <div className="hidden items-center rounded-md border border-border md:flex">
-            <Languages
-              aria-hidden="true"
-              className="ml-2 size-4 text-muted-foreground"
-            />
-            {routing.locales.map((entry) => (
-              <Link
-                aria-current={entry === locale ? "page" : undefined}
-                className="inline-flex min-h-11 items-center px-2 text-xs font-medium uppercase text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring aria-[current=page]:text-foreground"
-                href={preserveQuery(pathname)}
-                key={entry}
-                locale={languageSwitchLocale(entry, locale)}
-                prefetch={false}
-              >
-                {entry}
-              </Link>
-            ))}
-          </div>
-          <a
-            aria-label={t("githubLabel")}
-            className="hidden size-11 items-center justify-center rounded-md text-muted-foreground hover:bg-secondary hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:inline-flex"
-            href={GITHUB_URL}
-            rel="noreferrer"
-            target="_blank"
-          >
-            <GitHubMark className="size-4" />
-          </a>
-        </div>
-      }
-      sidebarId="site-sidebar"
-    />
+        }
+        sidebarId="site-sidebar"
+      />
+    </>
   );
 }

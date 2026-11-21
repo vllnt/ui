@@ -1,5 +1,7 @@
 import { expect, test } from "@playwright/test";
 
+import { DOCUMENT_CACHE_CONTROL } from "../lib/response-policy";
+
 const PRODUCTION_ONLY =
   "Cache-Control of prerendered pages is only meaningful on a production build; run with PLAYWRIGHT_BASE_URL against `next start`.";
 
@@ -74,11 +76,14 @@ test.describe("public pages stay cookie-free and cacheable", () => {
   ]) {
     test(`${path} is served from the prerender cache`, async ({ request }) => {
       test.skip(!process.env.PLAYWRIGHT_BASE_URL, PRODUCTION_ONLY);
-      const response = await request.get(path);
+      // A page load: only a request for HTML gets a shareable answer.
+      const response = await request.get(path, {
+        headers: { accept: "text/html,*/*;q=0.8" },
+      });
 
       expect(response.status()).toBe(200);
-      expect(response.headers()["cache-control"]).toMatch(/^s-maxage=\d+/);
-      expect(response.headers()["cache-control"]).not.toContain("no-store");
+      expect(response.headers()["x-nextjs-cache"]).toMatch(/HIT|STALE/);
+      expect(response.headers()["cache-control"]).toBe(DOCUMENT_CACHE_CONTROL);
     });
   }
 });

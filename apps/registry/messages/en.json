@@ -96,6 +96,7 @@
     "searchEmpty": "No results found.",
     "searchGroup": "Components",
     "searchPlaceholder": "Search docs and components...",
+    "skipToContent": "Skip to content",
     "whatsNew": "What's new"
   },
   "landing": {
@@ -304,6 +305,12 @@
       "description": "Learn how to use VLLNT UI components in your projects.",
       "nav": "Documentation pages",
       "title": "Documentation"
+    },
+    "error": {
+      "title": "Something went wrong",
+      "description": "This page failed to load. Reloading usually fixes it, for example right after a new version of the site goes live.",
+      "retry": "Try again",
+      "reload": "Reload the page"
     },
     "families": {
       "agentDescription": "The registry is exposed as structured data, so coding agents pick the right component without scraping HTML.",
