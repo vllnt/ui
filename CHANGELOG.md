@@ -255,6 +255,11 @@ Release automation can regenerate this file from Conventional Commits with
 - Accessible names, ARIA structure, APG keyboard patterns (tabs, radio groups,
   listbox, tree, dialogs and focus return), reduced motion and hard-coded
   palette contrast across the Web components flagged by the #535 audit. (#543)
+- **Avatar fallback in dark** - `AvatarFallback` and the `PresenceStack`
+  overflow chip fill their disc with `bg-secondary` (#262626). They used
+  `bg-muted`, which is the page colour (#000000) in dark, so the disc
+  disappeared and only the initials showed. Light mode is unchanged. A test
+  fails if either goes back to `bg-muted`. (#686)
 
 ## [0.3.0] - 2026-06-26
 
