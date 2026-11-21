@@ -84,19 +84,23 @@ function getServerLacksObserverSnapshot(): boolean {
   return false;
 }
 
-function getSandbox(previewOrigin: string): string {
-  return previewOrigin ? "allow-scripts allow-same-origin" : "allow-scripts";
-}
+/**
+ * The preview is the site's own `/embed/*` page, so it keeps its origin
+ * (`allow-same-origin`). An opaque origin breaks it: the production edge sends
+ * `Cross-Origin-Resource-Policy: same-site` on every response, and the browser
+ * then blocks each `/_next/static` script and stylesheet for an opaque frame.
+ */
+const PREVIEW_SANDBOX = "allow-scripts allow-same-origin";
 
 /**
  * Mounts each Web preview in a sandboxed document while its card is near the
  * viewport, then releases that document outside the observer buffer. The iframe
  * boundary contains component CSS, portals, and runtime effects.
  *
- * Production grants script execution to an opaque iframe origin. Local
- * development uses the alternate loopback host so Turbopack can serve assets
- * while the preview remains cross-origin from the catalog. Navigation, forms,
- * popups, and parent interaction remain blocked in both modes.
+ * Local development loads the preview from the alternate loopback host, so
+ * Turbopack can serve assets while the preview stays cross-origin from the
+ * catalog. Navigation, forms, popups and parent interaction stay blocked by the
+ * sandbox, and the wrapper is `inert`.
  */
 export function ComponentThumbnail({
   componentName,
@@ -140,7 +144,6 @@ export function ComponentThumbnail({
   }, []);
 
   const previewUrl = `${previewOrigin}/embed/${encodeURIComponent(componentName)}?mode=thumbnail&theme=${theme}`;
-  const sandbox = getSandbox(previewOrigin);
 
   return (
     <div
@@ -156,7 +159,7 @@ export function ComponentThumbnail({
           <iframe
             className="size-full border-0 bg-background"
             loading="lazy"
-            sandbox={sandbox}
+            sandbox={PREVIEW_SANDBOX}
             src={previewUrl}
             tabIndex={-1}
             title={t("previewTitle", { name: title })}

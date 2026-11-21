@@ -96,6 +96,7 @@
     "searchEmpty": "Aucun resultat trouve.",
     "searchGroup": "Composants",
     "searchPlaceholder": "Rechercher docs et composants...",
+    "skipToContent": "Aller au contenu",
     "whatsNew": "Nouveautes"
   },
   "landing": {
@@ -304,6 +305,12 @@
       "description": "Apprenez a utiliser les composants VLLNT UI dans vos projets.",
       "nav": "Pages de documentation",
       "title": "Documentation"
+    },
+    "error": {
+      "title": "Une erreur est survenue",
+      "description": "Cette page n'a pas pu se charger. Un rechargement règle en général le problème, par exemple juste après la mise en ligne d'une nouvelle version du site.",
+      "retry": "Réessayer",
+      "reload": "Recharger la page"
     },
     "families": {
       "agentDescription": "Le registre est expose comme donnees structurees, afin que les agents de code choisissent le bon composant sans scraper le HTML.",
