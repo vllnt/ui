@@ -36,8 +36,8 @@ export async function getSidebarSections(
       items: [
         { href: localizePathname("/", locale), title: t("getStarted") },
         {
-          href: localizePathname("/philosophy", locale),
-          title: t("philosophy"),
+          href: localizePathname("/vision", locale),
+          title: t("vision"),
         },
         {
           href: localizePathname("/components", locale),

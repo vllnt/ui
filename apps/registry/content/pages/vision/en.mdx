@@ -93,6 +93,45 @@ We want VLLNT UI to be first-class with two open tools from Vercel:
 
 **Today** no adapter ships. VLLNT UI components are plain React components, so you can already render AI SDK message parts with the AI family (`AIStreamingText`, `Reasoning`, `AIToolCallDisplay`, `AISourceCitation`, `ApprovalRequest` and more) in your own code. **Next** is a json-render catalog, zod prop schemas for every component, and helpers that map AI SDK tool parts to components with their loading and error states: [vllnt/ui#672](https://github.com/vllnt/ui/issues/672).
 
+## Principles
+
+VLLNT UI is built on a set of core principles that guide every design decision and implementation choice. All components follow these principles. When you use VLLNT UI, you're not just adding components. You're adopting a philosophy of clean, fast, and purposeful design.
+
+### Minimalist design
+
+Less is more. Every component is designed with simplicity at its core. We believe that good design should be invisible. It should work seamlessly without drawing unnecessary attention to itself. Our components are:
+
+- Clean and uncluttered
+- Focused on essential functionality
+- Free from decorative elements
+- Purposeful in every detail
+
+### Dark mode first
+
+Dark mode isn't an afterthought. It's the primary design direction. Every component is crafted with dark backgrounds in mind, ensuring optimal readability and visual comfort. Light mode is available, but dark mode is where VLLNT UI truly shines.
+
+- Designed for low-light environments
+- Reduced eye strain
+- Modern aesthetic
+- Professional appearance
+
+### No emoji style
+
+We maintain a professional, text-based approach. Emojis and decorative icons are kept to a minimum, ensuring our components remain timeless and universally applicable.
+
+- Text-first communication
+- Professional tone
+- Universal compatibility
+- Clean typography
+
+### Technical excellence
+
+Beyond aesthetics, VLLNT UI prioritizes:
+
+- **Type safety:** built with TypeScript for reliability
+- **Customization:** easy to extend and modify
+- **Modern standards:** built on the latest web technologies
+
 ## What ships today
 
 - **Describable components.** Every component has a JSON descriptor at `/r/<name>.json`, indexed in `/r/registry.json`. Agents can also use `/llms.txt`, `/llms-full.txt` and the [MCP server](/docs/agents) at `/mcp` (`search_components`, `get_component`, `list_categories`). Every descriptor carries its version and stability; prop definitions and usage examples exist for only a few components so far. See [Agents](/docs/agents).

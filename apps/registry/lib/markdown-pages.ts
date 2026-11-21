@@ -125,8 +125,8 @@ function targetMarkdown(
     case "home":
       return buildLlmsTxt();
 
-    case "philosophy":
-      return pageMarkdown("philosophy", locale);
+    case "vision":
+      return pageMarkdown("vision", locale);
   }
 }
 

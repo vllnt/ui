@@ -96,6 +96,15 @@ describe("buildLlmsTxt", () => {
     );
   });
 
+  it("lists the merged Vision page once and no retired URL", async () => {
+    const text = await buildLlmsTxt([]);
+
+    expect(text.split(`${SITE}/vision)`)).toHaveLength(2);
+    expect(text).toContain(`[Vision](${SITE}/vision)`);
+    expect(text).not.toContain("/philosophy");
+    expect(text).not.toContain("/docs/vision");
+  });
+
   it("has no Articles section and no article URL without articles", async () => {
     const text = await buildLlmsTxt([]);
 

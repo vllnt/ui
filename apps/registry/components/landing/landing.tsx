@@ -159,7 +159,7 @@ async function VisionBand() {
         </div>
         <Link
           className="mt-8 inline-flex min-h-11 items-center gap-2 rounded-md border border-border px-5 text-sm font-medium hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-          href="/docs/vision"
+          href="/vision"
         >
           {t("readVision")}
           <ArrowRight aria-hidden="true" className="size-4" />

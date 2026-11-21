@@ -48,6 +48,8 @@ const REDIRECTS: readonly { from: string; to: string }[] = [
     to: "/components/button?platform=native",
   },
   { from: "/design.md", to: "/DESIGN.md" },
+  { from: "/philosophy", to: "/vision" },
+  { from: "/fr/docs/vision", to: "/fr/vision" },
 ];
 
 const REQUEST_KINDS = [
@@ -93,6 +95,53 @@ describe("middleware redirects", () => {
       expect(response.headers.get("set-cookie")).toBeNull();
     },
   );
+
+  it.each([
+    { from: "/philosophy", to: "/vision" },
+    { from: "/fr/philosophy", to: "/fr/vision" },
+    { from: "/docs/vision", to: "/vision" },
+    { from: "/fr/docs/vision", to: "/fr/vision" },
+    { from: "/en/philosophy", to: "/vision" },
+    { from: "/en/docs/vision", to: "/vision" },
+  ])(
+    "sends the merged page $from permanently to $to without a cookie",
+    ({ from, to }) => {
+      const response = call(from, PAGE_HEADERS);
+      const location = new URL(response.headers.get("location") ?? "", ORIGIN);
+
+      expect(response.status).toBe(308);
+      expect(location.pathname).toBe(to);
+      expect(response.headers.get("set-cookie")).toBeNull();
+    },
+  );
+
+  it("keeps the query on a merged page", () => {
+    const response = call("/philosophy?ref=nav");
+
+    expect(response.status).toBe(308);
+    expect(response.headers.get("location")).toBe(`${ORIGIN}/vision?ref=nav`);
+  });
+
+  it("redirects a merged page before it can answer as markdown", () => {
+    const response = call("/docs/vision", { accept: "text/markdown" });
+
+    expect(response.status).toBe(308);
+    expect(
+      new URL(response.headers.get("location") ?? "", ORIGIN).pathname,
+    ).toBe("/vision");
+    expect(response.headers.get("x-middleware-rewrite")).toBeNull();
+  });
+
+  it.each([
+    "/Philosophy",
+    "/DOCS/VISION",
+    "/docs/vision/extra",
+    "/philosophy-x",
+  ])("does not redirect %s: the match is exact and case-sensitive", (path) => {
+    const response = call(path, PAGE_HEADERS);
+
+    expect(response.headers.get("location")).toBeNull();
+  });
 
   it("keeps the query of the request on a moved page", () => {
     const response = call("/p/native/components/button?tab=code");
@@ -176,6 +225,17 @@ describe("middleware pages", () => {
 });
 
 describe("middleware markdown twin", () => {
+  it.each([
+    { path: "/vision", rewrite: "/md/en/vision" },
+    { path: "/fr/vision", rewrite: "/md/fr/vision" },
+  ])("answers markdown for $path with the Vision page", ({ path, rewrite }) => {
+    const response = call(path, { accept: "text/markdown" });
+
+    expect(response.headers.get("x-middleware-rewrite")).toBe(
+      `${ORIGIN}${rewrite}`,
+    );
+  });
+
   it("answers markdown with Accept and the router headers in Vary, and keeps the route's own caching", () => {
     const response = call("/docs", { accept: "text/markdown" });
 

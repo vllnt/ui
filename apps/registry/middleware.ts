@@ -5,10 +5,11 @@ import { routing } from "@/i18n/routing";
 import { defaultLocalePrefixTarget } from "@/lib/default-locale-redirect";
 import { legacyHostRedirectUrl } from "@/lib/legacy-host-redirect";
 import { markdownPathname, prefersMarkdown } from "@/lib/markdown-negotiation";
-import { publicVariant } from "@/lib/platform-variant";
+import { publicVariant, splitLocale } from "@/lib/platform-variant";
 import { variantPathname } from "@/lib/platform-variant-rewrite";
 import { renamedComponentRedirect } from "@/lib/renamed-components";
 import { applyResponsePolicy } from "@/lib/response-policy";
+import { localizePathname } from "@/lib/seo";
 
 const intlMiddleware = createMiddleware(routing);
 
@@ -40,9 +41,35 @@ function variantRedirect(request: NextRequest): NextResponse | undefined {
   return NextResponse.redirect(url, 308);
 }
 
-/** A permanent redirect for a page that moved: a renamed component or a private variant URL. */
+/** The pages that merged into `/vision`, without a locale prefix. */
+const MERGED_INTO_VISION: ReadonlySet<string> = new Set([
+  "/philosophy",
+  "/docs/vision",
+]);
+
+/**
+ * Sends a page that merged into `/vision` to it, in the locale of the request.
+ * The match is exact and case-sensitive: a `redirects()` entry in
+ * `next.config.mjs` matches case-insensitively, which is why the site
+ * redirects here.
+ */
+function visionRedirect(request: NextRequest): NextResponse | undefined {
+  const path = splitLocale(request.nextUrl.pathname);
+  if (!MERGED_INTO_VISION.has(path.pathname)) return undefined;
+
+  const target = request.nextUrl.clone();
+  target.pathname = localizePathname("/vision", path.locale);
+
+  return NextResponse.redirect(target, 308);
+}
+
+/** A permanent redirect for a page that moved: a renamed component, a private variant URL or a page merged into `/vision`. */
 function movedPage(request: NextRequest): NextResponse | undefined {
-  return renamedComponentRedirect(request) ?? variantRedirect(request);
+  return (
+    renamedComponentRedirect(request) ??
+    variantRedirect(request) ??
+    visionRedirect(request)
+  );
 }
 
 /**

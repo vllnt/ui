@@ -129,7 +129,7 @@ describe("frontmatterPageMetadata", () => {
         title: "Vision",
         type: "docs",
       },
-      { locale: "en", pathname: "/docs/vision" },
+      { locale: "en", pathname: "/vision" },
     );
 
     expect(metadata).toMatchObject({

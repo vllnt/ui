@@ -62,6 +62,17 @@ describe("sitemap URLs", () => {
     );
   });
 
+  it("lists the merged Vision page in both locales and no URL that redirects to it", () => {
+    const all = urls(dated({ articles }));
+
+    expect(all).toEqual(
+      expect.arrayContaining([`${SITE}/vision`, `${SITE}/fr/vision`]),
+    );
+    expect(
+      all.filter((url) => /\/(philosophy|docs\/vision)$/.test(url)),
+    ).toEqual([]);
+  });
+
   it("lists every URL once, absolute and over https", () => {
     const all = urls(dated({ articles }));
 
