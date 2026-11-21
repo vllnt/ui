@@ -3,13 +3,32 @@
 import { useId, useState } from "react";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@vllnt/ui";
-import type { KeyboardEvent, ReactNode } from "react";
+import dynamic from "next/dynamic";
+import type { KeyboardEvent } from "react";
 
 type SourceTab = {
-  readonly content: ReactNode;
+  readonly code: string;
   readonly id: string;
   readonly label: string;
+  readonly language?: string;
 };
+
+/** Reserves the code box height while the highlighter chunk loads. */
+function SourceCodeLoading() {
+  return (
+    <div
+      aria-hidden="true"
+      className="h-40 rounded-lg border border-border bg-[#282c34]"
+    />
+  );
+}
+
+// A separate chunk: a page loads the highlighter when a source panel first
+// renders (server rendering still writes the highlighted HTML).
+const SourceCodeView = dynamic(
+  () => import("./source-code-view").then((module) => module.SourceCodeView),
+  { loading: SourceCodeLoading },
+);
 
 type ComponentSourceTabsProps = {
   readonly label: string;
@@ -82,7 +101,10 @@ export function ComponentSourceTabs({
           key={source.id}
           value={source.id}
         >
-          {source.content}
+          <SourceCodeView
+            code={source.code}
+            language={source.language ?? "typescript"}
+          />
         </TabsContent>
       ))}
     </Tabs>
