@@ -27,6 +27,35 @@ function getNumberTickerFormatter(
   return formatter;
 }
 
+const REDUCED_MOTION_QUERY = "(prefers-reduced-motion: reduce)";
+
+function subscribeReducedMotion(onChange: () => void): () => void {
+  const query =
+    typeof window.matchMedia === "function"
+      ? window.matchMedia(REDUCED_MOTION_QUERY)
+      : undefined;
+  query?.addEventListener("change", onChange);
+  return () => {
+    query?.removeEventListener("change", onChange);
+  };
+}
+
+function getReducedMotion(): boolean {
+  return (
+    typeof window.matchMedia === "function" &&
+    window.matchMedia(REDUCED_MOTION_QUERY).matches
+  );
+}
+
+/** Whether the user asks for reduced motion; `false` on the server. */
+function usePrefersReducedMotion(): boolean {
+  return React.useSyncExternalStore(
+    subscribeReducedMotion,
+    getReducedMotion,
+    () => false,
+  );
+}
+
 export const NumberTicker = ({
   className,
   delay = 0,
@@ -39,15 +68,10 @@ export const NumberTicker = ({
   ...props
 }: NumberTickerProps & { ref?: React.Ref<HTMLSpanElement> }) => {
   const [currentValue, setCurrentValue] = React.useState(() => from);
+  const skipAnimation = usePrefersReducedMotion() || duration <= 0;
 
   React.useEffect(() => {
-    const reducedMotion =
-      typeof window !== "undefined" &&
-      typeof window.matchMedia === "function" &&
-      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-    if (reducedMotion || duration <= 0) {
-      setCurrentValue(value);
+    if (skipAnimation) {
       return;
     }
 
@@ -78,7 +102,7 @@ export const NumberTicker = ({
       window.clearTimeout(timeoutId);
       window.cancelAnimationFrame(animationFrame);
     };
-  }, [delay, duration, from, value]);
+  }, [delay, duration, from, skipAnimation, value]);
 
   const formatter = getNumberTickerFormatter(locale, formatOptions);
 
@@ -88,7 +112,7 @@ export const NumberTicker = ({
       ref={ref}
       {...props}
     >
-      {formatter.format(currentValue)}
+      {formatter.format(skipAnimation ? value : currentValue)}
     </span>
   );
 };

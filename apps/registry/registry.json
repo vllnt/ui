@@ -1696,7 +1696,8 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.3.0"
+        "@vllnt/ui@^0.3.0",
+        "react-syntax-highlighter@^16.1.2"
       ],
       "category": "content",
       "version": "0.3.0",

@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useId, useState } from "react";
+import { Children, useCallback, useEffect, useId, useState } from "react";
 
 import { Brain, ChevronDown } from "lucide-react";
 
@@ -81,13 +81,8 @@ function ReasoningContent({
     >
       {hasSteps ? (
         <ol className="list-decimal space-y-1 pl-4">
-          {steps.map((step, index) => (
-            <li
-              className="whitespace-pre-wrap"
-              key={`${index}-${step.slice(0, 12)}`}
-            >
-              {step}
-            </li>
+          {Children.map(steps, (step) => (
+            <li className="whitespace-pre-wrap">{step}</li>
           ))}
         </ol>
       ) : (
@@ -138,12 +133,10 @@ export const Reasoning = ({
   }, [isStreaming]);
 
   const handleToggle = useCallback(() => {
-    setIsOpen((previous) => {
-      const next = !previous;
-      onOpenChange?.(next);
-      return next;
-    });
-  }, [onOpenChange]);
+    const next = !isOpen;
+    setIsOpen(next);
+    onOpenChange?.(next);
+  }, [isOpen, onOpenChange]);
 
   return (
     <div

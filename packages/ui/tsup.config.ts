@@ -8,8 +8,8 @@ const relativeSpecifierPattern =
   /(\b(?:from|import)\s*(?:\(\s*)?)(["'])(\.\.?\/[^"'?#]+)\2/g;
 const dependencyDeepSpecifiers = new Map([
   [
-    "react-syntax-highlighter/dist/esm/prism",
-    "react-syntax-highlighter/dist/esm/prism.js",
+    "react-syntax-highlighter/dist/esm/prism-light",
+    "react-syntax-highlighter/dist/esm/prism-light.js",
   ],
   [
     "react-syntax-highlighter/dist/esm/styles/prism",
@@ -24,6 +24,16 @@ const dependencyDeepSpecifiers = new Map([
     "react-syntax-highlighter/dist/esm/styles/prism/one-light.js",
   ],
 ]);
+
+// One file per Prism grammar, imported by src/lib/code-highlighter.ts.
+const prismLanguagePrefix =
+  "react-syntax-highlighter/dist/esm/languages/prism/";
+
+function resolveDependencyDeepSpecifier(specifier: string): string | undefined {
+  return specifier.startsWith(prismLanguagePrefix) && !specifier.endsWith(".js")
+    ? `${specifier}.js`
+    : dependencyDeepSpecifiers.get(specifier);
+}
 
 async function listJavaScriptFiles(directory: string): Promise<string[]> {
   const entries = await readdir(directory, { withFileTypes: true });
@@ -68,7 +78,7 @@ async function makeEsmSpecifiersResolvable(): Promise<void> {
           /(\b(?:from|import)\s*(?:\(\s*)?)(["'])([^"']+)\2/g,
           (match, prefix: string, quote: string, specifier: string) => {
             const resolvableSpecifier =
-              dependencyDeepSpecifiers.get(specifier);
+              resolveDependencyDeepSpecifier(specifier);
             return resolvableSpecifier
               ? `${prefix}${quote}${resolvableSpecifier}${quote}`
               : match;

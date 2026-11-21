@@ -162,7 +162,7 @@ function TocProgress({
       </div>
       <div className="mt-2 h-2 rounded-full bg-secondary">
         <div
-          className="h-full rounded-full bg-primary transition-all duration-300"
+          className="h-full rounded-full bg-primary transition-[width] duration-300"
           style={{ width: `${completionPercent}%` }}
         />
       </div>
@@ -273,6 +273,7 @@ function TableOfContentsPanelImpl({
       aria-labelledby="toc-title"
       aria-modal="true"
       className="fixed inset-0 z-50"
+      // react-doctor-disable-next-line react-doctor/prefer-html-dialog -- useFocusContainment traps Tab, useEscapeKey closes and useBodyScrollLock locks scroll; a native <dialog> top layer would also sit above portalled popovers and toasts
       role="dialog"
     >
       {/* Backdrop */}

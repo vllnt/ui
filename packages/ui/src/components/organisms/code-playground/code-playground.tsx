@@ -3,6 +3,7 @@
 import { Check, Code, Copy, FileCode } from "lucide-react";
 import type { ReactNode } from "react";
 
+import { keyByOccurrence } from "../../../lib/occurrence-keys";
 import type { HeadingTag } from "../../../lib/types";
 import { cn } from "../../../lib/utils";
 import { Button } from "../../atoms/button/button";
@@ -105,14 +106,16 @@ export function CodePlayground({
         <pre className="p-4 text-sm font-mono">
           {showLineNumbers ? (
             <code>
-              {lines.map((line, index) => (
-                <CodeLine
-                  highlightLines={highlightLines}
-                  key={`${line}-${index + 1}`}
-                  line={line}
-                  lineNumber={index + 1}
-                />
-              ))}
+              {keyByOccurrence(lines, (line) => line).map(
+                ({ item: line, key }, position) => (
+                  <CodeLine
+                    highlightLines={highlightLines}
+                    key={key}
+                    line={line}
+                    lineNumber={position + 1}
+                  />
+                ),
+              )}
             </code>
           ) : (
             <code>{code}</code>

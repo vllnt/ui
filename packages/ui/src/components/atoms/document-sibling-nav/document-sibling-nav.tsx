@@ -177,7 +177,11 @@ export const DocumentSiblingNav = ({
   if (!previous && !next) return null;
 
   const resolvedVariant: DocumentSiblingNavVariant = variant ?? "with-title";
-  const resolvedLabels = { ...DEFAULT_LABELS, ...labels };
+  const resolvedLabels = {
+    navigation: labels?.navigation ?? DEFAULT_LABELS.navigation,
+    next: labels?.next ?? DEFAULT_LABELS.next,
+    previous: labels?.previous ?? DEFAULT_LABELS.previous,
+  };
 
   return (
     <nav

@@ -74,6 +74,22 @@ describe("DocumentSiblingNav", () => {
     ).toBeInTheDocument();
   });
 
+  it("keeps the default caption for a label passed as undefined", () => {
+    render(
+      <DocumentSiblingNav
+        labels={{ next: undefined, previous: "Précédent" }}
+        next={BAR}
+        previous={FOO}
+      />,
+    );
+    expect(
+      screen.getByRole("link", { name: /Précédent.*Foo post/ }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("link", { name: /Newer.*Bar post/ }),
+    ).toBeInTheDocument();
+  });
+
   it("forwards anchorProps to the rendered <a>", () => {
     render(
       <DocumentSiblingNav

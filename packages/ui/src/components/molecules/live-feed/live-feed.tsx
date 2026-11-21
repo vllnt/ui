@@ -4,6 +4,7 @@ import * as React from "react";
 
 import { normalizeDate } from "../../../lib/format";
 import { useLiveDate } from "../../../lib/use-live-date";
+import { useMounted } from "../../../lib/use-mounted";
 import { cn } from "../../../lib/utils";
 import { Badge } from "../../atoms/badge/badge";
 import {
@@ -42,7 +43,45 @@ const MINUTE_MS = 60 * SECOND_MS;
 const HOUR_MS = 60 * MINUTE_MS;
 const DAY_MS = 24 * HOUR_MS;
 
-function formatRelative(eventDate: Date, now: Date): string {
+const SHORT_DATE_OPTIONS: Intl.DateTimeFormatOptions = {
+  day: "numeric",
+  month: "short",
+};
+
+const ABSOLUTE_OPTIONS: Intl.DateTimeFormatOptions = {
+  hour: "numeric",
+  minute: "2-digit",
+  month: "short",
+  second: "2-digit",
+};
+
+type DateFormatters = {
+  absolute: Intl.DateTimeFormat;
+  shortDate: Intl.DateTimeFormat;
+};
+
+const LOCAL_FORMATTERS: DateFormatters = {
+  absolute: new Intl.DateTimeFormat("en-US", ABSOLUTE_OPTIONS),
+  shortDate: new Intl.DateTimeFormat("en-US", SHORT_DATE_OPTIONS),
+};
+
+/** Server render and hydration use UTC so both sides print the same text. */
+const UTC_FORMATTERS: DateFormatters = {
+  absolute: new Intl.DateTimeFormat("en-US", {
+    ...ABSOLUTE_OPTIONS,
+    timeZone: "UTC",
+  }),
+  shortDate: new Intl.DateTimeFormat("en-US", {
+    ...SHORT_DATE_OPTIONS,
+    timeZone: "UTC",
+  }),
+};
+
+function formatRelative(
+  eventDate: Date,
+  now: Date,
+  shortDate: Intl.DateTimeFormat,
+): string {
   const deltaMs = now.getTime() - eventDate.getTime();
 
   if (deltaMs < 5 * SECOND_MS) {
@@ -65,23 +104,7 @@ function formatRelative(eventDate: Date, now: Date): string {
     return `${Math.floor(deltaMs / DAY_MS)}d ago`;
   }
 
-  return SHORT_DATE_FORMATTER.format(eventDate);
-}
-
-const SHORT_DATE_FORMATTER = new Intl.DateTimeFormat("en-US", {
-  day: "numeric",
-  month: "short",
-});
-
-const ABSOLUTE_FORMATTER = new Intl.DateTimeFormat("en-US", {
-  hour: "numeric",
-  minute: "2-digit",
-  month: "short",
-  second: "2-digit",
-});
-
-function formatAbsolute(eventDate: Date): string {
-  return ABSOLUTE_FORMATTER.format(eventDate);
+  return shortDate.format(eventDate);
 }
 
 function sortEventsDesc(events: LiveFeedEvent[]): LiveFeedEvent[] {
@@ -94,10 +117,12 @@ function sortEventsDesc(events: LiveFeedEvent[]): LiveFeedEvent[] {
 
 function LiveFeedRow({
   event,
+  formatters,
   isLatest,
   now,
 }: {
   event: LiveFeedEvent;
+  formatters: DateFormatters;
   isLatest: boolean;
   now: Date;
 }) {
@@ -118,9 +143,9 @@ function LiveFeedRow({
           <time
             className="whitespace-nowrap text-xs text-muted-foreground"
             dateTime={eventDate.toISOString()}
-            title={formatAbsolute(eventDate)}
+            title={formatters.absolute.format(eventDate)}
           >
-            {formatRelative(eventDate, now)}
+            {formatRelative(eventDate, now, formatters.shortDate)}
           </time>
         </div>
         {event.message ? (
@@ -151,6 +176,7 @@ export const LiveFeed = ({
   ...props
 }: LiveFeedProps & { ref?: React.Ref<HTMLDivElement> }) => {
   const liveNow = useLiveDate(now, tickMs);
+  const formatters = useMounted() ? LOCAL_FORMATTERS : UTC_FORMATTERS;
   const visibleEvents = React.useMemo(
     () => sortEventsDesc(events).slice(0, maxItems),
     [events, maxItems],
@@ -186,6 +212,7 @@ export const LiveFeed = ({
             {visibleEvents.map((event, index) => (
               <LiveFeedRow
                 event={event}
+                formatters={formatters}
                 isLatest={index === 0}
                 key={event.id}
                 now={liveNow}

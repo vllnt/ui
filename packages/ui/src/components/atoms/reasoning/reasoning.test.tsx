@@ -1,3 +1,5 @@
+import { StrictMode } from "react";
+
 import { fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
@@ -20,6 +22,21 @@ describe("Reasoning", () => {
     fireEvent.click(screen.getByRole("button"));
     expect(screen.getByText("Parse the request")).toBeInTheDocument();
     expect(onOpenChange).toHaveBeenCalledWith(true);
+  });
+
+  it("reports each toggle once under StrictMode", () => {
+    const onOpenChange = vi.fn();
+    render(
+      <StrictMode>
+        <Reasoning onOpenChange={onOpenChange} steps={["Parse the request"]} />
+      </StrictMode>,
+    );
+    fireEvent.click(screen.getByRole("button"));
+    expect(onOpenChange).toHaveBeenCalledTimes(1);
+    expect(onOpenChange).toHaveBeenLastCalledWith(true);
+    fireEvent.click(screen.getByRole("button"));
+    expect(onOpenChange).toHaveBeenCalledTimes(2);
+    expect(onOpenChange).toHaveBeenLastCalledWith(false);
   });
 
   it("auto-expands while streaming", () => {

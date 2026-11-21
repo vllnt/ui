@@ -50,6 +50,21 @@ describe("StaticCode", () => {
     expect(screen.getByText(/greeting/)).toBeInTheDocument();
   });
 
+  it("highlights the default language with token spans", () => {
+    const { container } = render(<StaticCode code={SNIPPET} />);
+    expect(container.querySelectorAll("code .token").length).toBeGreaterThan(0);
+  });
+
+  it("renders an unregistered language as plain text without errors", () => {
+    const error = vi.spyOn(console, "error").mockImplementation(() => null);
+    const { container } = render(
+      <StaticCode code="fn main() {}" language="rust" />,
+    );
+    expect(container.querySelectorAll("code .token")).toHaveLength(0);
+    expect(container.querySelector("code")?.textContent).toBe("fn main() {}");
+    expect(error).not.toHaveBeenCalled();
+  });
+
   it("renders the copy island button", () => {
     render(<StaticCode code={SNIPPET} />);
     expect(

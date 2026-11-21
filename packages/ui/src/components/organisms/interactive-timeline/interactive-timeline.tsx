@@ -15,6 +15,7 @@ import {
   useSyncExternalStore,
 } from "react";
 
+import { useMounted } from "../../../lib/use-mounted";
 import { cn } from "../../../lib/utils";
 
 const MIN_ZOOM = 1;
@@ -213,12 +214,31 @@ function dateToOffset(date: Date, start: number, span: number): number {
   return (date.getTime() - start) / span;
 }
 
-function formatDate(date: Date): string {
-  return date.toLocaleDateString(undefined, {
-    day: "2-digit",
-    month: "short",
-    year: "numeric",
-  });
+const DATE_OPTIONS: Intl.DateTimeFormatOptions = {
+  day: "2-digit",
+  month: "short",
+  year: "numeric",
+};
+
+/**
+ * Fixed en-US locale in the runtime's own time zone: it prints the same text
+ * on the server and during hydration, so the axis never mismatches. A fixed
+ * UTC zone would shift dates built as `new Date(y, m, d)` by a day east of UTC.
+ */
+const HYDRATION_DATE_FORMATTER = new Intl.DateTimeFormat("en-US", DATE_OPTIONS);
+
+function formatViewerDate(date: Date): string {
+  return date.toLocaleDateString(undefined, DATE_OPTIONS);
+}
+
+function formatHydrationDate(date: Date): string {
+  // react-doctor-disable-next-line react-doctor/no-locale-format-in-render -- explicit en-US locale; the time zone stays the runtime's on purpose (see HYDRATION_DATE_FORMATTER)
+  return HYDRATION_DATE_FORMATTER.format(date);
+}
+
+/** en-US until mount, then the viewer's own locale. */
+function useDateFormatter(): (date: Date) => string {
+  return useMounted() ? formatViewerDate : formatHydrationDate;
 }
 
 function dayCount(start: number, end: number): number {
@@ -271,6 +291,8 @@ type AxisProps = {
 };
 
 function Axis({ endTime, startTime, ticks }: AxisProps): ReactNode {
+  const formatDate = useDateFormatter();
+
   return (
     <div
       aria-hidden="true"
@@ -375,6 +397,8 @@ type EventTooltipProps = {
 };
 
 function EventTooltip({ event, tooltipId }: EventTooltipProps): ReactNode {
+  const formatDate = useDateFormatter();
+
   return (
     <span
       className="pointer-events-none absolute left-1/2 top-5 hidden -translate-x-1/2 whitespace-nowrap rounded border bg-popover px-2 py-1 text-[11px] font-medium text-popover-foreground shadow-md group-hover:block group-focus-visible:block"

@@ -95,8 +95,8 @@ function useRovingTabStop(selectedValues: string[], children: React.ReactNode) {
     if (focusInside && tabStop !== undefined && values.includes(tabStop)) {
       return;
     }
-    const preferred =
-      values.find((entry) => selectedValues.includes(entry)) ?? values[0];
+    const selected = new Set(selectedValues);
+    const preferred = values.find((entry) => selected.has(entry)) ?? values[0];
     if (preferred !== tabStop) setTabStop(preferred);
   }, [children, selectedValues, tabStop]);
 

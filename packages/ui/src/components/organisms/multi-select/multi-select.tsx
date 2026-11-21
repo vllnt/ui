@@ -131,6 +131,8 @@ function OptionList({
   searchPlaceholder,
   selectedValues,
 }: OptionListProps) {
+  const selectedSet = new Set(selectedValues);
+
   return (
     <Command>
       {searchable ? <CommandInput placeholder={searchPlaceholder} /> : null}
@@ -139,7 +141,7 @@ function OptionList({
         <CommandGroup>
           <div>
             {options.map((option) => {
-              const isSelected = selectedValues.includes(option.value);
+              const isSelected = selectedSet.has(option.value);
 
               return (
                 <CommandItem
@@ -317,10 +319,11 @@ const MultiSelect = ({
   const contentId = React.useId();
   const { handleOpenChange, open, selectedValues, setSelectedValues } =
     useMultiSelectState({ defaultValue, onOpenChange, onValueChange, value });
-  const selectedOptions = React.useMemo(
-    () => options.filter((option) => selectedValues.includes(option.value)),
-    [options, selectedValues],
-  );
+  const selectedOptions = React.useMemo(() => {
+    const selectedSet = new Set(selectedValues);
+
+    return options.filter((option) => selectedSet.has(option.value));
+  }, [options, selectedValues]);
 
   const handleSelect = React.useCallback(
     (nextValue: string) => {

@@ -34,6 +34,7 @@ export default defineMain({
 
   // The token is read at build time; a build without it ships no beacon.
   managerHead: (head) =>
+    // react-doctor-disable-next-line react-doctor/public-env-secret-name -- a Cloudflare Web Analytics site token is a public id served in the page HTML, not a credential; the name is the build-arg contract shared with both Dockerfiles and the registry
     `${head ?? ''}${cfBeaconTag(process.env.NEXT_PUBLIC_CF_BEACON_TOKEN)}`,
 
   viteFinal(config) {

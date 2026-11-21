@@ -1,7 +1,8 @@
 "use client";
 
+import { Children, type ReactNode } from "react";
+
 import { CheckCircle2, Clock, GraduationCap, Target } from "lucide-react";
-import type { ReactNode } from "react";
 
 import type { HeadingTag } from "../../../lib/types";
 
@@ -34,11 +35,8 @@ export function LearningObjectives({
         ) : null}
       </div>
       <ul className="space-y-2">
-        {objectives.map((objective, index) => (
-          <li
-            className="flex items-start gap-2"
-            key={`${objective}-${index.toString()}`}
-          >
+        {Children.map(objectives, (objective) => (
+          <li className="flex items-start gap-2">
             <CheckCircle2 className="size-4 text-primary flex-shrink-0 mt-0.5" />
             <span className="text-sm text-muted-foreground">{objective}</span>
           </li>
@@ -73,11 +71,8 @@ export function Prerequisites({
         ) : null}
       </div>
       <ul className="space-y-2">
-        {items.map((item, index) => (
-          <li
-            className="flex items-start gap-2 text-sm text-muted-foreground"
-            key={`${item}-${index.toString()}`}
-          >
+        {Children.map(items, (item) => (
+          <li className="flex items-start gap-2 text-sm text-muted-foreground">
             <span className="text-primary">•</span>
             {item}
           </li>
@@ -111,11 +106,8 @@ export function Summary({
             Key Takeaways
           </p>
           <ul className="space-y-1">
-            {keyTakeaways.map((takeaway, index) => (
-              <li
-                className="flex items-start gap-2 text-sm"
-                key={`${takeaway}-${index.toString()}`}
-              >
+            {Children.map(keyTakeaways, (takeaway) => (
+              <li className="flex items-start gap-2 text-sm">
                 <CheckCircle2 className="size-4 text-green-600 dark:text-green-500 flex-shrink-0 mt-0.5" />
                 <span className="text-muted-foreground">{takeaway}</span>
               </li>

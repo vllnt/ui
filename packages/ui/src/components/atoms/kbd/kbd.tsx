@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  Children,
   type ComponentPropsWithoutRef,
   type ReactNode,
   useSyncExternalStore,
@@ -207,7 +208,6 @@ export const Kbd = ({
       .filter(Boolean);
     const keys = tokens.map((token) => ({
       label: formatToken(token, isMac),
-      token,
     }));
     return (
       <span
@@ -215,16 +215,17 @@ export const Kbd = ({
         className="inline-flex items-center gap-1"
         role="img"
       >
-        {keys.map(({ label, token }, index) => (
-          <kbd
-            className={keyClassName}
-            key={`${token}-${index.toString()}`}
-            ref={index === 0 ? ref : undefined}
-            {...(index === 0 ? rest : {})}
-          >
-            {withBrackets(renderLabel(label), variant)}
-          </kbd>
-        ))}
+        {Children.toArray(
+          keys.map(({ label }, index) => (
+            <kbd
+              className={keyClassName}
+              ref={index === 0 ? ref : undefined}
+              {...(index === 0 ? rest : {})}
+            >
+              {withBrackets(renderLabel(label), variant)}
+            </kbd>
+          )),
+        )}
       </span>
     );
   }

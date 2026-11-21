@@ -54,6 +54,17 @@ const DEFAULT_LABELS: Required<ContentIntroLabels> = {
 
 const EMPTY_CONTENT_INTRO_LABELS: ContentIntroLabels = {};
 
+function resolveLabels(
+  labels: ContentIntroLabels,
+): Required<ContentIntroLabels> {
+  return {
+    continueLabel: labels.continueLabel ?? DEFAULT_LABELS.continueLabel,
+    startLabel: labels.startLabel ?? DEFAULT_LABELS.startLabel,
+    tableOfContentsLabel:
+      labels.tableOfContentsLabel ?? DEFAULT_LABELS.tableOfContentsLabel,
+  };
+}
+
 type ContentIntroBodyProps = {
   source: () => ReactNode;
 };
@@ -237,7 +248,7 @@ function ContentIntroImpl({
   titleAs: TitleHeading = "h2",
   tocLabelAs: TocHeading = "h3",
 }: ContentIntroProps): React.ReactNode {
-  const mergedLabels = { ...DEFAULT_LABELS, ...labels };
+  const mergedLabels = resolveLabels(labels);
   const hasProgress = completedSections.size > 0;
   useEnterToStart(onStart);
 

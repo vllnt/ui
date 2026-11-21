@@ -69,6 +69,7 @@ export const ScrollProgress = ({
         className,
       )}
       ref={ref}
+      // react-doctor-disable-next-line react-doctor/prefer-tag-over-role -- the public props and ref use div types, and a native <progress> would change both
       role="progressbar"
       style={{ width: `${progress}%`, ...style }}
       {...props}

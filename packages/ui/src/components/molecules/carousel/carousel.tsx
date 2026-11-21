@@ -114,6 +114,7 @@ function useCarouselLogic({
       return;
     }
 
+    // react-doctor-disable-next-line react-doctor/no-pass-data-to-parent, react-doctor/no-pass-live-state-to-parent -- setApi is the documented public contract and embla creates its api inside its own effect, so the parent receives it after mount
     setApi(api);
   }, [api, setApi]);
 

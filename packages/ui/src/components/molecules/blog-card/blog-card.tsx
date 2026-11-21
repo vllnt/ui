@@ -31,6 +31,58 @@ type ContentCardProps = {
   updatedLabel?: string;
 };
 
+type ContentCardMetaProps = Pick<
+  ContentCardProps,
+  "formatDate" | "lang" | "post" | "showBadge" | "showDate" | "updatedLabel"
+>;
+
+function formatPostDate(
+  { formatDate, lang, showDate }: Omit<ContentCardMetaProps, "post">,
+  value?: string,
+): string | undefined {
+  return showDate && value && formatDate && lang
+    ? formatDate(value, lang)
+    : undefined;
+}
+
+function ContentCardMeta({
+  post,
+  showBadge,
+  updatedLabel,
+  ...dateOptions
+}: ContentCardMetaProps) {
+  const badgeLabel = showBadge ? post.tags?.[0] : undefined;
+  const date = formatPostDate(dateOptions, post.date);
+  const updatedDate = formatPostDate(dateOptions, post.updatedDate);
+
+  if (
+    badgeLabel === undefined &&
+    date === undefined &&
+    updatedDate === undefined
+  ) {
+    return null;
+  }
+
+  return (
+    <div className="flex items-center gap-2 mb-2">
+      {badgeLabel === undefined ? null : (
+        <Badge className="text-xs" variant="secondary">
+          {badgeLabel}
+        </Badge>
+      )}
+      {date === undefined ? null : (
+        <span className="text-xs text-muted-foreground">{date}</span>
+      )}
+      {updatedDate === undefined ? null : (
+        <span className="text-xs text-muted-foreground">
+          {updatedLabel ? `${updatedLabel} ` : ""}
+          {updatedDate}
+        </span>
+      )}
+    </div>
+  );
+}
+
 export function ContentCard({
   formatDate,
   href,
@@ -42,37 +94,18 @@ export function ContentCard({
   showReadMore = true,
   updatedLabel,
 }: ContentCardProps) {
-  const shouldShowBadge = showBadge && post.tags && post.tags.length > 0;
-  const shouldShowDate = showDate && post.date && formatDate && lang;
-  const shouldShowUpdatedDate =
-    showDate && post.updatedDate && formatDate && lang;
-  const shouldShowHeaderMeta =
-    shouldShowBadge || shouldShowDate || shouldShowUpdatedDate;
-
   return (
     <Link className="block h-full" href={href}>
       <Card className="h-full flex flex-col hover:shadow-lg transition-shadow cursor-pointer">
         <CardHeader>
-          {shouldShowHeaderMeta ? (
-            <div className="flex items-center gap-2 mb-2">
-              {shouldShowBadge ? (
-                <Badge className="text-xs" variant="secondary">
-                  {post.tags?.[0]}
-                </Badge>
-              ) : null}
-              {shouldShowDate && post.date && lang ? (
-                <span className="text-xs text-muted-foreground">
-                  {formatDate(post.date, lang)}
-                </span>
-              ) : null}
-              {shouldShowUpdatedDate && post.updatedDate && lang ? (
-                <span className="text-xs text-muted-foreground">
-                  {updatedLabel ? `${updatedLabel} ` : ""}
-                  {formatDate(post.updatedDate, lang)}
-                </span>
-              ) : null}
-            </div>
-          ) : null}
+          <ContentCardMeta
+            formatDate={formatDate}
+            lang={lang}
+            post={post}
+            showBadge={showBadge}
+            showDate={showDate}
+            updatedLabel={updatedLabel}
+          />
           <CardTitle className="text-lg line-clamp-2">{post.title}</CardTitle>
           <CardDescription className="line-clamp-3">
             {post.description}

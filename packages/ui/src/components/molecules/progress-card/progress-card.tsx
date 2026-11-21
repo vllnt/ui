@@ -4,6 +4,7 @@ import { memo, useEffect, useState } from "react";
 
 import type { ReactNode } from "react";
 
+import { keyByOccurrence } from "../../../lib/occurrence-keys";
 import { useMounted } from "../../../lib/use-mounted";
 import { Badge } from "../../atoms/badge/badge";
 import {
@@ -132,12 +133,8 @@ function ContentCardImpl({
           {/* Tags */}
           {tags.length > 0 ? (
             <div className="flex flex-wrap gap-1">
-              {tags.map((tag, index) => (
-                <Badge
-                  className="text-xs"
-                  key={`${tag}-${index.toString()}`}
-                  variant="outline"
-                >
+              {keyByOccurrence(tags, (tag) => tag).map(({ item: tag, key }) => (
+                <Badge className="text-xs" key={key} variant="outline">
                   {tag}
                 </Badge>
               ))}

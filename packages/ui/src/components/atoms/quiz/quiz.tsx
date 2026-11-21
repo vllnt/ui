@@ -1,6 +1,6 @@
 "use client";
 
-import { type ReactNode, useState } from "react";
+import { Children, type ReactNode, useState } from "react";
 
 import type { HeadingTag } from "../../../lib/types";
 import { cn } from "../../../lib/utils";
@@ -46,6 +46,36 @@ function QuizResultIcon({
   );
 }
 
+type OptionOutcome = "correct" | "incorrect" | "missed" | "none" | "selected";
+
+const CHECK_PATH = "M5 13l4 4L19 7";
+const CROSS_PATH = "M6 18L18 6M6 6l12 12";
+
+const OPTION_OUTCOME_CLASS: Record<OptionOutcome, string> = {
+  correct: "border-green-500 bg-green-500/10",
+  incorrect: "border-red-500 bg-red-500/10",
+  missed: "border-green-500/50 bg-green-500/5",
+  none: "",
+  selected: "border-primary bg-primary/10",
+};
+
+const OPTION_OUTCOME_ICON: Partial<Record<OptionOutcome, QuizResultIconProps>> =
+  {
+    correct: { className: "size-4 text-green-500", d: CHECK_PATH },
+    incorrect: { className: "size-4 text-red-500", d: CROSS_PATH },
+    missed: { className: "size-4 text-green-500/50", d: CHECK_PATH },
+  };
+
+function getOptionOutcome(
+  isCorrect: boolean,
+  isSelected: boolean,
+  submitted: boolean,
+): OptionOutcome {
+  if (!submitted) return isSelected ? "selected" : "none";
+  if (isSelected) return isCorrect ? "correct" : "incorrect";
+  return isCorrect ? "missed" : "none";
+}
+
 function QuizOptionButton({
   index,
   onSelect,
@@ -53,19 +83,17 @@ function QuizOptionButton({
   selectedIndex,
   submitted,
 }: QuizOptionButtonProps): React.ReactNode {
-  const isSelected = selectedIndex === index;
-  const showResult = submitted && isSelected;
+  const outcome = getOptionOutcome(
+    Boolean(option.correct),
+    selectedIndex === index,
+    submitted,
+  );
+  const icon = OPTION_OUTCOME_ICON[outcome];
   return (
     <button
       className={cn(
         "w-full text-left p-3 rounded-md border transition-colors hover:bg-secondary/50 focus:outline-none focus:ring-2 focus:ring-primary",
-        isSelected && !submitted && "border-primary bg-primary/10",
-        showResult && option.correct && "border-green-500 bg-green-500/10",
-        showResult && !option.correct && "border-red-500 bg-red-500/10",
-        submitted &&
-          !isSelected &&
-          option.correct &&
-          "border-green-500/50 bg-green-500/5",
+        OPTION_OUTCOME_CLASS[outcome],
       )}
       disabled={submitted}
       onClick={() => {
@@ -75,25 +103,7 @@ function QuizOptionButton({
     >
       <div className="flex items-center justify-between">
         <span className="text-sm">{option.label}</span>
-        {showResult ? (
-          option.correct ? (
-            <QuizResultIcon
-              className="size-4 text-green-500"
-              d="M5 13l4 4L19 7"
-            />
-          ) : (
-            <QuizResultIcon
-              className="size-4 text-red-500"
-              d="M6 18L18 6M6 6l12 12"
-            />
-          )
-        ) : null}
-        {submitted && !isSelected && option.correct ? (
-          <QuizResultIcon
-            className="size-4 text-green-500/50"
-            d="M5 13l4 4L19 7"
-          />
-        ) : null}
+        {icon ? <QuizResultIcon {...icon} /> : null}
       </div>
       {submitted && option.explanation ? (
         <p className="text-xs text-muted-foreground mt-2">
@@ -262,18 +272,19 @@ export function Quiz({
     <div className={cn("my-6 rounded-lg border bg-card p-6", className)}>
       <QuizHeader Heading={Heading} question={question} />
       <div className="space-y-2 mb-4">
-        {options.map((opt, index) => (
-          <QuizOptionButton
-            index={index}
-            key={`quiz-option-${index}-${opt.label}`}
-            onSelect={(index_) => {
-              if (!submitted) setSelectedIndex(index_);
-            }}
-            option={opt}
-            selectedIndex={selectedIndex}
-            submitted={submitted}
-          />
-        ))}
+        {Children.toArray(
+          options.map((opt, index) => (
+            <QuizOptionButton
+              index={index}
+              onSelect={(index_) => {
+                if (!submitted) setSelectedIndex(index_);
+              }}
+              option={opt}
+              selectedIndex={selectedIndex}
+              submitted={submitted}
+            />
+          )),
+        )}
       </div>
       {hint && !submitted ? (
         <QuizHint

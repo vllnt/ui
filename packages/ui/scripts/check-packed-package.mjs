@@ -1,4 +1,5 @@
 import { spawnSync } from "node:child_process";
+import { readFileSync, statSync } from "node:fs";
 import {
   mkdir,
   mkdtemp,
@@ -6,7 +7,6 @@ import {
   readdir,
   realpath,
   rm,
-  stat,
   symlink,
   writeFile,
 } from "node:fs/promises";
@@ -30,21 +30,21 @@ function run(command, arguments_, cwd = packageDirectory) {
   return result.stdout.trim();
 }
 
-async function assertFile(path, field) {
+function assertFile(path, field) {
   try {
-    const metadata = await stat(path);
+    const metadata = statSync(path);
     if (!metadata.isFile()) throw new Error();
   } catch {
     throw new Error(`Packed ${field} target is missing: ${path}`);
   }
 }
 
-async function assertExportTargets(value, path, packedDirectory) {
+function assertExportTargets(value, path, packedDirectory) {
   if (typeof value === "string") {
     if (!value.startsWith("./") || value.startsWith("./src/")) {
       throw new Error(`Packed ${path} has an invalid target: ${value}.`);
     }
-    await assertFile(join(packedDirectory, value), path);
+    assertFile(join(packedDirectory, value), path);
     return;
   }
 
@@ -52,11 +52,9 @@ async function assertExportTargets(value, path, packedDirectory) {
     throw new Error(`Packed ${path} must contain file targets.`);
   }
 
-  await Promise.all(
-    Object.entries(value).map(([key, target]) =>
-      assertExportTargets(target, `${path}.${key}`, packedDirectory),
-    ),
-  );
+  for (const [key, target] of Object.entries(value)) {
+    assertExportTargets(target, `${path}.${key}`, packedDirectory);
+  }
 }
 
 function assertNoLocalProtocols(value, path = "package.json") {
@@ -99,10 +97,10 @@ async function assertResolvableRelativeSpecifiers(packedDirectory) {
   const files = await listJavaScriptFiles(join(packedDirectory, "dist"));
 
   for (const file of files) {
-    const source = await readFile(file, "utf8");
+    const source = readFileSync(file, "utf8");
     for (const match of source.matchAll(relativeSpecifierPattern)) {
       const specifier = match[3];
-      await assertFile(
+      assertFile(
         resolve(dirname(file), specifier),
         `ESM specifier ${specifier} in ${file}`,
       );
@@ -237,10 +235,10 @@ try {
     if (typeof target !== "string" || !target.startsWith("./dist/")) {
       throw new Error(`Packed ${field} must target dist; received ${target}.`);
     }
-    await assertFile(join(packedDirectory, target), field);
+    assertFile(join(packedDirectory, target), field);
   }
 
-  await assertExportTargets(manifest.exports, "exports", packedDirectory);
+  assertExportTargets(manifest.exports, "exports", packedDirectory);
 
   const rootImport = manifest.exports?.["."]?.import;
   const presetImport = manifest.exports?.["./tailwind-preset"]?.import;

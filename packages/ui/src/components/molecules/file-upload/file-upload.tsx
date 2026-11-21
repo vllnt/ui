@@ -4,6 +4,7 @@ import * as React from "react";
 
 import { FileUp, UploadCloud, X } from "lucide-react";
 
+import { keyByOccurrence } from "../../../lib/occurrence-keys";
 import { cn } from "../../../lib/utils";
 import { Button } from "../../atoms/button/button";
 
@@ -191,6 +192,9 @@ function FileUploadDropzone({
   );
 }
 
+const fileIdentity = (file: File): string =>
+  `${file.name}-${file.lastModified.toString()}-${file.size.toString()}`;
+
 function FileUploadList({
   files,
   onRemove,
@@ -204,10 +208,10 @@ function FileUploadList({
 
   return (
     <ul className="space-y-2">
-      {files.map((file, index) => (
+      {keyByOccurrence(files, fileIdentity).map(({ item: file, key }) => (
         <FileListItem
           file={file}
-          key={`${file.name}-${file.lastModified.toString()}-${file.size.toString()}-${index.toString()}`}
+          key={key}
           onRemove={() => {
             onRemove(file);
           }}

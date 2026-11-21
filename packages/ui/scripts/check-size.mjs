@@ -95,6 +95,7 @@ const rows = [];
 try {
   for (const check of budget.checks) {
     writeFileSync(entryFile, entrySource(check.export));
+    // react-doctor-disable-next-line react-doctor/async-await-in-loop -- every check rewrites the one shared entry file and rebuilds the shared esbuild context, so the checks must run one at a time
     const result = await contexts[check.withLazy ? "withLazy" : "eager"].rebuild();
     const scripts = result.outputFiles.filter((file) =>
       file.path.endsWith(".js"),

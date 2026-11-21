@@ -16,7 +16,7 @@ export const FlowFullscreen = memo(function FlowFullscreen({
   isOpen,
   onClose,
 }: FlowFullscreenProps) {
-  const dialogRef = useRef<HTMLDivElement>(null);
+  const dialogRef = useRef<HTMLDialogElement>(null);
   useFocusContainment(dialogRef, isOpen);
   useEscapeKey(onClose, { enabled: isOpen, target: "document" });
 
@@ -26,15 +26,15 @@ export const FlowFullscreen = memo(function FlowFullscreen({
   if (typeof document === "undefined") return null;
 
   return createPortal(
-    <div
+    <dialog
       aria-label="Flow diagram fullscreen view"
       aria-modal="true"
       className={cn(
-        "fixed inset-0 z-[9999] flex flex-col bg-background",
+        "fixed inset-0 z-[9999] m-0 flex size-full max-w-none flex-col bg-background text-foreground",
         "animate-in fade-in duration-200",
       )}
+      open
       ref={dialogRef}
-      role="dialog"
     >
       {/* Header with close button */}
       <div className="flex h-12 items-center justify-end border-b border-border px-4">
@@ -50,7 +50,7 @@ export const FlowFullscreen = memo(function FlowFullscreen({
       </div>
       {/* Content */}
       <div className="flex-1 overflow-hidden">{children}</div>
-    </div>,
+    </dialog>,
     document.body,
   );
 });

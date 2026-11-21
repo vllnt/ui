@@ -1,7 +1,8 @@
 "use client";
 
+import { Children, type ReactNode } from "react";
+
 import { ArrowRight, Check, Minus, X } from "lucide-react";
-import type { ReactNode } from "react";
 
 import type { HeadingTag } from "../../../lib/types";
 import { cn } from "../../../lib/utils";
@@ -77,11 +78,8 @@ export function Comparison({
             {before.title}
           </div>
           <ul className="p-4 space-y-2">
-            {before.items.map((item, index) => (
-              <li
-                className="flex items-start gap-2 text-sm"
-                key={`${item}-${index.toString()}`}
-              >
+            {Children.map(before.items, (item) => (
+              <li className="flex items-start gap-2 text-sm">
                 <BeforeIcon
                   className={cn(
                     "size-4 mt-0.5 flex-shrink-0",
@@ -103,11 +101,8 @@ export function Comparison({
             {after.title}
           </div>
           <ul className="p-4 space-y-2">
-            {after.items.map((item, index) => (
-              <li
-                className="flex items-start gap-2 text-sm"
-                key={`${item}-${index.toString()}`}
-              >
+            {Children.map(after.items, (item) => (
+              <li className="flex items-start gap-2 text-sm">
                 <AfterIcon
                   className={cn(
                     "size-4 mt-0.5 flex-shrink-0",
