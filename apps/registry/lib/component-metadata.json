@@ -1560,6 +1560,34 @@
     ],
     "title": "Command"
   },
+  "command-dock": {
+    "category": "navigation",
+    "defaultStoryId": "canvas-commanddock--default",
+    "description": "Floating bottom dock with quick-action buttons + a command-palette trigger.",
+    "name": "command-dock",
+    "platforms": [
+      "web"
+    ],
+    "stories": [
+      {
+        "id": "canvas-commanddock--default",
+        "name": "Default"
+      },
+      {
+        "id": "canvas-commanddock--no-palette",
+        "name": "No Palette"
+      },
+      {
+        "id": "canvas-commanddock--actions-only",
+        "name": "Actions Only"
+      },
+      {
+        "id": "canvas-commanddock--with-badges",
+        "name": "With Badges"
+      }
+    ],
+    "title": "Command Dock"
+  },
   "comment-pin": {
     "category": "utility",
     "defaultStoryId": "canvas-commentpin--default",
@@ -3085,34 +3113,6 @@
       }
     ],
     "title": "Item"
-  },
-  "jarvis-dock": {
-    "category": "navigation",
-    "defaultStoryId": "canvas-jarvisdock--default",
-    "description": "Floating bottom dock with quick-action buttons + a command-palette trigger.",
-    "name": "jarvis-dock",
-    "platforms": [
-      "web"
-    ],
-    "stories": [
-      {
-        "id": "canvas-jarvisdock--default",
-        "name": "Default"
-      },
-      {
-        "id": "canvas-jarvisdock--no-palette",
-        "name": "No Palette"
-      },
-      {
-        "id": "canvas-jarvisdock--actions-only",
-        "name": "Actions Only"
-      },
-      {
-        "id": "canvas-jarvisdock--with-badges",
-        "name": "With Badges"
-      }
-    ],
-    "title": "Jarvis Dock"
   },
   "kbd": {
     "category": "core",

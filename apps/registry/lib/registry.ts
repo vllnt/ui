@@ -142,7 +142,17 @@ export const registrySchema = z.object({
 
 export type Registry = z.infer<typeof registrySchema>;
 
-export const registry: Registry = registrySchema.parse(registryData);
+const shipped: Registry = registrySchema.parse(registryData);
+
+/**
+ * The components the site lists, counts and builds pages for. A deprecated item
+ * is an alias that installs the files of its `replacedBy` item: `/r/<name>.json`
+ * keeps serving it, but it has no page of its own and is not a second component.
+ */
+export const registry: Registry = {
+  ...shipped,
+  items: shipped.items.filter((item) => item.stability !== "deprecated"),
+};
 
 /** The registry component whose `name` is `slug`, if any. */
 export function findComponent(slug: string): RegistryComponent | undefined {

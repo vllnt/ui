@@ -98,6 +98,7 @@ export function Header({ locale }: HeaderProps) {
   >((items, item) => {
     if (
       item.type !== "registry:component" ||
+      item.stability === "deprecated" ||
       !item.platforms.includes(activePlatform ?? "web")
     ) {
       return items;

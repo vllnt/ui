@@ -36,6 +36,7 @@ type RegistryItem = {
   files: { path: string; type: string }[];
   name: string;
   platforms: ("native" | "web")[];
+  stability?: string;
   title?: string;
   type: string;
 };
@@ -245,7 +246,17 @@ function buildEntries(
   };
 }
 
-const registry = JSON.parse(readFileSync(registryPath, "utf8")) as Registry;
+const shippedRegistry = JSON.parse(
+  readFileSync(registryPath, "utf8"),
+) as Registry;
+
+/**
+ * A deprecated item is an install-only alias of the item that replaces it. It
+ * has no page, story or slug of its own, so it stays out of both outputs.
+ */
+const registry: Registry = {
+  items: shippedRegistry.items.filter((item) => item.stability !== "deprecated"),
+};
 const metadata: Record<string, ComponentMetadata> = {};
 
 let withStories = 0;

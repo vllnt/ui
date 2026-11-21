@@ -1,11 +1,17 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 
-import { JarvisDock, type JarvisDockAction } from "./jarvis-dock";
+import {
+  CommandDock as BarrelCommandDock,
+  JarvisDock,
+  type JarvisDockProps,
+} from "../../index";
+
+import { CommandDock, type CommandDockAction } from "./command-dock";
 
 const buildActions = (
-  overrides: Partial<JarvisDockAction> = {},
-): JarvisDockAction[] => [
+  overrides: Partial<CommandDockAction> = {},
+): CommandDockAction[] => [
   {
     glyph: "+",
     id: "summon",
@@ -23,26 +29,26 @@ const buildActions = (
   },
 ];
 
-describe("JarvisDock", () => {
+describe("CommandDock", () => {
   it("renders labelled buttons and the palette trigger only when onOpenPalette is provided", () => {
     const { container, rerender } = render(
-      <JarvisDock actions={buildActions()} />,
+      <CommandDock actions={buildActions()} />,
     );
     expect(screen.getByText("Summon")).toBeInTheDocument();
     expect(screen.getByText("Review")).toBeInTheDocument();
     expect(
-      container.querySelector("[data-jarvis-palette-trigger]"),
+      container.querySelector("[data-command-palette-trigger]"),
     ).not.toBeInTheDocument();
-    rerender(<JarvisDock actions={buildActions()} onOpenPalette={vi.fn()} />);
+    rerender(<CommandDock actions={buildActions()} onOpenPalette={vi.fn()} />);
     expect(
-      container.querySelector("[data-jarvis-palette-trigger]"),
+      container.querySelector("[data-command-palette-trigger]"),
     ).toBeInTheDocument();
   });
 
   it("invokes onActivate for an untoned action and renders its badge", () => {
     const handleActivate = vi.fn();
     render(
-      <JarvisDock
+      <CommandDock
         actions={[
           {
             badge: "3",
@@ -61,8 +67,26 @@ describe("JarvisDock", () => {
 
   it("invokes onOpenPalette when the palette trigger is clicked", () => {
     const handleOpen = vi.fn();
-    render(<JarvisDock actions={buildActions()} onOpenPalette={handleOpen} />);
+    render(<CommandDock actions={buildActions()} onOpenPalette={handleOpen} />);
     fireEvent.click(screen.getByLabelText("Open command palette"));
     expect(handleOpen).toHaveBeenCalledTimes(1);
+  });
+});
+
+describe("JarvisDock (deprecated alias of CommandDock)", () => {
+  it("is the same component, exported from the package barrel", () => {
+    expect(JarvisDock).toBe(CommandDock);
+    expect(BarrelCommandDock).toBe(CommandDock);
+  });
+
+  it("renders the same markup as CommandDock, and its props type is the CommandDock one", () => {
+    const props: JarvisDockProps = {
+      actions: buildActions(),
+      onOpenPalette: vi.fn(),
+    };
+    const current = render(<CommandDock {...props} />);
+    const deprecated = render(<JarvisDock {...props} />);
+    expect(deprecated.container.innerHTML).toBe(current.container.innerHTML);
+    expect(screen.getAllByLabelText("Command dock")).toHaveLength(2);
   });
 });

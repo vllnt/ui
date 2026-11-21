@@ -523,6 +523,13 @@
       "source": "src/components/atoms/command/command.tsx"
     },
     {
+      "name": "command-dock",
+      "level": "atoms",
+      "status": "web-only",
+      "category": "navigation",
+      "reason": "Floating quick-action dock with a command-palette trigger; canvas workspace family. Pointer-first canvas: web-only for 0.1.0, revisit with spatial."
+    },
+    {
       "name": "comment-pin",
       "level": "atoms",
       "status": "web-only",
@@ -1131,13 +1138,6 @@
       "source": "src/components/atoms/item/item.tsx",
       "propsGap": [],
       "note": "Not pressable on native today."
-    },
-    {
-      "name": "jarvis-dock",
-      "level": "atoms",
-      "status": "web-only",
-      "category": "navigation",
-      "reason": "Floating quick-action dock with a command-palette trigger; canvas workspace family. Pointer-first canvas: web-only for 0.1.0, revisit with spatial."
     },
     {
       "name": "kbd",

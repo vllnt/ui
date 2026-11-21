@@ -1966,6 +1966,28 @@
       }
     },
     {
+      "name": "command-dock",
+      "type": "registry:component",
+      "title": "Command Dock",
+      "description": "Floating bottom dock with quick-action buttons + a command-palette trigger.",
+      "files": [
+        {
+          "path": "registry/default/command-dock/command-dock.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.3.0"
+      ],
+      "category": "navigation",
+      "version": "0.3.0",
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
+    },
+    {
       "name": "comment-pin",
       "type": "registry:component",
       "title": "Comment Pin",
@@ -3870,10 +3892,10 @@
       "name": "jarvis-dock",
       "type": "registry:component",
       "title": "Jarvis Dock",
-      "description": "Floating bottom dock with quick-action buttons + a command-palette trigger.",
+      "description": "Deprecated alias of command-dock. Installs the same files; use command-dock.",
       "files": [
         {
-          "path": "registry/default/jarvis-dock/jarvis-dock.tsx",
+          "path": "registry/default/command-dock/command-dock.tsx",
           "type": "registry:component"
         }
       ],
@@ -3883,7 +3905,8 @@
       ],
       "category": "navigation",
       "version": "0.3.0",
-      "stability": "stable",
+      "stability": "deprecated",
+      "replacedBy": "command-dock",
       "platforms": [
         "web"
       ]

@@ -1501,12 +1501,17 @@ export {
   type HeatPoint,
 } from "./atoms/heat-overlay/heat-overlay";
 export {
+  CommandDock,
+  type CommandDockAction,
+  type CommandDockLabels,
+  type CommandDockProps,
+  type CommandDockTone,
   JarvisDock,
   type JarvisDockAction,
   type JarvisDockLabels,
   type JarvisDockProps,
   type JarvisDockTone,
-} from "./atoms/jarvis-dock/jarvis-dock";
+} from "./atoms/command-dock/command-dock";
 export {
   LiveCursor,
   type LiveCursorLabels,

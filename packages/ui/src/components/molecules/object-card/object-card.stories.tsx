@@ -19,7 +19,7 @@ const meta = {
       ports={<AnchorPort aria-label="Output port" state="active" />}
       state="running"
       summary="Durable runtime object tracking prompts, tools, handoffs, and artifact outputs."
-      title="Jarvis orchestration agent"
+      title="Orchestration agent"
     />
   ),
   title: "Canvas/ObjectCard",

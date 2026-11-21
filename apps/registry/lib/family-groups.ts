@@ -221,7 +221,7 @@ const FAMILY_GROUPS: readonly FamilyGroupSet[] = [
         blurb:
           "macOS-style docks and pinned bottom bars that host quick actions and calm canvas chrome.",
         heading: "Docks & Bottom Bars",
-        slugs: ["dock", "jarvis-dock", "bottom-bar"],
+        slugs: ["dock", "command-dock", "bottom-bar"],
       },
       {
         blurb:

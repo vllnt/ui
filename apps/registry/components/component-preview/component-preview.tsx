@@ -109,6 +109,7 @@ import {
   ColorPicker,
   Combobox,
   CommandDialog,
+  CommandDock,
   CommandEmpty,
   CommandGroup,
   CommandInput,
@@ -235,7 +236,6 @@ import {
   ItemContent,
   ItemDescription,
   ItemTitle,
-  JarvisDock,
   Kbd,
   KeyboardShortcutsHelp,
   KeyConcept,
@@ -5088,9 +5088,9 @@ function FloatingNavbarPreview() {
   );
 }
 
-function JarvisDockPreview() {
+function CommandDockPreview() {
   return (
-    <JarvisDock
+    <CommandDock
       actions={[
         {
           glyph: "+",
@@ -5459,6 +5459,7 @@ const PREVIEWS: Record<string, React.ComponentType> = {
   "color-picker": ColorPickerPreview,
   combobox: ComboboxPreview,
   command: CommandPreview,
+  "command-dock": CommandDockPreview,
   "comment-pin": CommentPinPreview,
   comparison: ComparisonPreview,
   "context-lens": ContextLensPreview,
@@ -5519,7 +5520,6 @@ const PREVIEWS: Record<string, React.ComponentType> = {
   "input-otp": InputOTPPreview,
   "interactive-timeline": InteractiveTimelinePreview,
   item: ItemPreview,
-  "jarvis-dock": JarvisDockPreview,
   kbd: KbdPreview,
   "key-concept": KeyConceptPreview,
   "keyboard-shortcuts-help": KeyboardShortcutsHelpPreview,

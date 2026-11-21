@@ -230,11 +230,11 @@ native-0.1.0 16 · web-only 4 · later 1
 | `animated-tabs` | atoms | native-0.1.0 | — | molecules/animated-tabs |  |
 | `bottom-bar` | atoms | native-0.1.0 | — | atoms/bottom-bar |  |
 | `breadcrumb` | atoms | native-0.1.0 | — | molecules/breadcrumb |  |
+| `command-dock` | atoms | web-only | — | — | Floating quick-action dock with a command-palette trigger; canvas workspace family. Pointer-first canvas: web-only for 0.1.0, revisit with spatial. |
 | `dock` | atoms | web-only | — | `bottom-bar` | macOS-style dock whose icons magnify near the pointer. |
 | `document-sibling-nav` | atoms | native-0.1.0 | — | atoms/document-sibling-nav |  |
 | `floating-navbar` | atoms | web-only | — | `top-bar`, `bottom-bar` | Marketing nav bar that hides on window scroll direction. |
 | `floating-toolbar` | atoms | native-0.1.0 | — | atoms/floating-toolbar |  |
-| `jarvis-dock` | atoms | web-only | — | — | Floating quick-action dock with a command-palette trigger; canvas workspace family. Pointer-first canvas: web-only for 0.1.0, revisit with spatial. |
 | `link` | atoms | native-0.1.0 | — | atoms/link |  |
 | `menubar` | atoms | native-0.1.0 | — | molecules/menubar |  |
 | `navbar-saas` | organisms | web-only | — | `top-bar` | Marketing navbar built on next/link and next/navigation. |

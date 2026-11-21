@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 
 import { withWrapper } from "../../../../.storybook/decorators";
 
-import { JarvisDock } from "./jarvis-dock";
+import { CommandDock } from "./command-dock";
 
 const noop = (): void => undefined;
 
@@ -36,10 +36,10 @@ const meta = {
     ],
     onOpenPalette: noop,
   },
-  component: JarvisDock,
+  component: CommandDock,
   decorators: [withWrapper("flex items-center justify-center bg-muted/40 p-8")],
-  title: "Canvas/JarvisDock",
-} satisfies Meta<typeof JarvisDock>;
+  title: "Canvas/CommandDock",
+} satisfies Meta<typeof CommandDock>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;

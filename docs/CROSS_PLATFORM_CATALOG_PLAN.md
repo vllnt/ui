@@ -267,7 +267,7 @@ These may have native value, but porting them without a product, renderer, data,
 
 - Core/content: `cookie-consent`, `kbd`, `qr-code`, `display`, `bento-grid`, `blog-card`, `timeline`, `object-card`, `object-inspector`, `policy-delivery-panel`, `property-section`, `relationship-inspector`, `routing-assignment-panel`, `runtime-overview-panel`, `subscription-card`, `wallet-card`
 - Form: `scope-selector`, `newsletter-signup`
-- Overlay/navigation: `edge-label`, `zoom-hud`, `navbar-saas`, `floating-navbar`, `left-rail`, `right-dock`, `jarvis-dock`, `viewport-bookmarks`, `world-breadcrumbs`
+- Overlay/navigation: `edge-label`, `zoom-hud`, `navbar-saas`, `floating-navbar`, `left-rail`, `right-dock`, `command-dock`, `viewport-bookmarks`, `world-breadcrumbs`
 - Charts/market/tables: `area-chart`, `bar-chart`, `line-chart`, `pie-chart`, `radar-chart`, `gauge-chart`, `sankey-chart`, `flow-diagram`, `candlestick-chart`, `order-book`, `market-treemap`, `ticker-tape`, `watchlist`, `data-table`, `table`, `usage-breakdown`, `comparison`, `metric-gauge`, `threshold-ring`, `sparkline-grid`, `activity-heatmap`, `contribution-graph`, `bottom-activity-strip`, `run-timeline`, `heat-overlay`, `gantt-chart`, `mini-map-panel`
 - Maps/timelines/canvas display: `choropleth-map`, `geography-quiz-map`, `globe-3d`, `heat-map-overlay`, `map-2d`, `map-timeline`, `route-map`, `story-map`, `chronological-timeline`, `historic-timeline`, `animated-beam`, `follow-mode`, `handoff-beacon`, `selection-halo`, `snap-guides`, `primary-source-viewer`
 - AI: `ai-sidebar`, `chat-dock-section`, `prompt-templates`, `model-comparison`

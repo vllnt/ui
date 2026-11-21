@@ -1,9 +1,9 @@
 import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
-import * as Stories from './jarvis-dock.stories'
+import * as Stories from './command-dock.stories'
 
 <Meta of={Stories} />
 
-# JarvisDock
+# CommandDock
 
 Floating bottom dock for the spatial canvas. Renders a compact row of agent / quick-action buttons plus a trailing command-palette trigger (⌘). Pure presentation; the host wires \`onActivate\` per action and \`onOpenPalette\` for the palette button.
 
@@ -14,19 +14,19 @@ Pairs with the right-dock inspector primitives (\`ObjectInspector\`, \`PropertyS
 ## Installation
 
 ```bash
-pnpm dlx shadcn@latest add https://ui.vllnt.com/r/jarvis-dock.json
+pnpm dlx shadcn@latest add https://ui.vllnt.com/r/command-dock.json
 ```
 
 ## Import
 
 ```tsx
-import { JarvisDock } from '@vllnt/ui'
+import { CommandDock } from '@vllnt/ui'
 ```
 
 ## Usage
 
 ```tsx
-<JarvisDock
+<CommandDock
   actions={[
     { id: "summon", glyph: "+", label: "Summon", tone: "primary",
       onActivate: () => spawnAgent() },
@@ -58,4 +58,4 @@ Each action accepts an optional \`badge\` slot — a count, dot, or short label 
 ## Notes
 
 - Tone classes map: \`neutral\` (foreground) · \`primary\` (blue) · \`success\` (emerald) · \`danger\` (red).
-- Each action button emits \`data-jarvis-action\` (= id) + \`data-jarvis-tone\`. The wrapper emits \`data-jarvis-dock\`. Badges emit \`data-jarvis-badge\`. The palette trigger emits \`data-jarvis-palette-trigger\`.
+- Each action button emits \`data-command-action\` (= id) + \`data-command-tone\`. The wrapper emits \`data-command-dock\`. Badges emit \`data-command-badge\`. The palette trigger emits \`data-command-palette-trigger\`.
