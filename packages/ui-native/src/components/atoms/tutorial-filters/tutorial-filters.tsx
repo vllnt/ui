@@ -159,6 +159,7 @@ function TutorialFilters({
   const hasFilters = Boolean(
     currentDifficulty || currentTags.length > 0 || searchQuery,
   );
+  const currentTagSet = new Set(currentTags);
 
   return (
     <View {...props} ref={ref} style={[{ gap: theme.spacing[4] }, style]}>
@@ -251,12 +252,12 @@ function TutorialFilters({
                 key={tag}
                 label={tag}
                 onPress={() => {
-                  const nextTags = currentTags.includes(tag)
+                  const nextTags = currentTagSet.has(tag)
                     ? currentTags.filter((current) => current !== tag)
                     : [...currentTags, tag];
                   onFilterChange({ tags: nextTags });
                 }}
-                selected={currentTags.includes(tag)}
+                selected={currentTagSet.has(tag)}
                 type="checkbox"
               />
             ))}

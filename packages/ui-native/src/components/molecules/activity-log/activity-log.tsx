@@ -197,6 +197,31 @@ function ActivityControls({
 }
 ActivityControls.displayName = "ActivityControls";
 
+function ActivityEntries({
+  emptyMessage,
+  items,
+}: {
+  readonly emptyMessage: string;
+  readonly items: readonly ActivityLogItem[];
+}) {
+  if (items.length === 0) {
+    return (
+      <Text size="small" tone="muted">
+        {emptyMessage}
+      </Text>
+    );
+  }
+  return (
+    <ScrollView accessibilityRole="list">
+      {/* react-doctor-disable-next-line react-doctor/rn-no-scrollview-mapped-list -- one page of at most pageSize rows inside the host's scroll view, where a vertical FlatList logs RN's nested VirtualizedList error */}
+      {items.map((item) => (
+        <ActivityRow item={item} key={item.id} />
+      ))}
+    </ScrollView>
+  );
+}
+ActivityEntries.displayName = "ActivityEntries";
+
 function defaultPageLabel(page: number, totalPages: number) {
   return `Page ${page} of ${totalPages}`;
 }
@@ -251,17 +276,7 @@ function ActivityLog({
         position={position}
         title={title}
       />
-      {items.length === 0 ? (
-        <Text size="small" tone="muted">
-          {emptyMessage}
-        </Text>
-      ) : (
-        <ScrollView accessibilityRole="list">
-          {visibleItems.map((item) => (
-            <ActivityRow item={item} key={item.id} />
-          ))}
-        </ScrollView>
-      )}
+      <ActivityEntries emptyMessage={emptyMessage} items={visibleItems} />
       {items.length > 0 ? (
         <ActivityControls
           currentPage={currentPage}

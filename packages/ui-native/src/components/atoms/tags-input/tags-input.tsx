@@ -53,10 +53,12 @@ const styles = StyleSheet.create({
 });
 
 function normalize(tags: readonly string[]): readonly string[] {
-  return tags.reduce<readonly string[]>((result, tag) => {
+  const unique = new Set<string>();
+  for (const tag of tags) {
     const next = tag.trim();
-    return next && !result.includes(next) ? [...result, next] : result;
-  }, []);
+    if (next) unique.add(next);
+  }
+  return [...unique];
 }
 
 /** Native tag editor that commits text via keyboard action or an explicit button. */

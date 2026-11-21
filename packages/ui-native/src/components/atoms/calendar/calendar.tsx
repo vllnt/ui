@@ -86,19 +86,28 @@ function sameDay(left?: Date, right?: Date): boolean {
     left.getDate() === right.getDate()
   );
 }
-function buildMonthDays(month: Date): readonly (Date | undefined)[] {
+/** One grid cell: a real day, or a blank that aligns day 1 under its weekday. */
+type MonthCell = { readonly date: Date | undefined; readonly key: string };
+
+function buildMonthDays(month: Date): readonly MonthCell[] {
   const first = startOfMonth(month);
-  const prefix = Array.from<undefined>({ length: first.getDay() });
   const dayCount = localDate(
     first.getFullYear(),
     first.getMonth() + 1,
     0,
   ).getDate();
   return [
-    ...prefix,
-    ...Array.from({ length: dayCount }, (_unused, index) =>
-      localDate(first.getFullYear(), first.getMonth(), index + 1),
-    ),
+    ...Array.from({ length: first.getDay() }, (_unused, weekday) => ({
+      date: undefined,
+      key: `blank-${weekday}`,
+    })),
+    ...Array.from({ length: dayCount }, (_unused, index) => {
+      const date = localDate(first.getFullYear(), first.getMonth(), index + 1);
+      return {
+        date,
+        key: `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`,
+      };
+    }),
   ];
 }
 
@@ -195,8 +204,8 @@ function Calendar({
             </NativeText>
           </View>
         ))}
-        {days.map((date, index) => {
-          if (!date) return <View key={`empty-${index}`} style={styles.day} />;
+        {days.map(({ date, key }) => {
+          if (!date) return <View key={key} style={styles.day} />;
           const dateDisabled = disabled || isDateDisabled?.(date) === true;
           const dateSelected =
             isDateSelected?.(date) ?? sameDay(date, selectedDate);
@@ -214,7 +223,7 @@ function Calendar({
                   : { text: describeDate(date) }
               }
               disabled={dateDisabled}
-              key={`${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`}
+              key={key}
               onPress={() => {
                 setSelectedDate(date);
               }}

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useId, useRef } from "react";
+import { useEffect, useId, useState } from "react";
 
 import type { ReactNode, Ref } from "react";
 import { Animated, StyleSheet, View, type ViewProps } from "react-native";
@@ -60,7 +60,10 @@ function AnimatedTabTrigger({
   tab,
 }: AnimatedTabTriggerProps) {
   const theme = useTheme();
-  const opacity = useRef(new Animated.Value(selected ? 1 : 0)).current;
+  const [opacity, setOpacity] = useState(
+    () => new Animated.Value(selected ? 1 : 0),
+  );
+  void setOpacity;
 
   useEffect(() => {
     const animation = Animated.timing(opacity, {

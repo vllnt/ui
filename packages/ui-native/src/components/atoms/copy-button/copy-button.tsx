@@ -156,6 +156,7 @@ function CopyButton({
   useEffect(() => {
     if (previousStatus.current !== status) {
       previousStatus.current = status;
+      // react-doctor-disable-next-line react-doctor/no-pass-data-to-parent, react-doctor/no-pass-live-state-to-parent -- status also changes when the clipboard prop appears or disappears, not only in handlers, so one effect reports every change
       onStatusChange?.(status);
     }
   }, [onStatusChange, status]);

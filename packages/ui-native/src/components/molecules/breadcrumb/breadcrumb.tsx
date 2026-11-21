@@ -65,6 +65,7 @@ function Breadcrumb({
         horizontal
         showsHorizontalScrollIndicator={false}
       >
+        {/* react-doctor-disable-next-line react-doctor/rn-no-scrollview-mapped-list -- horizontal trail of a handful of crumbs; every crumb is a screen-reader stop and must stay mounted */}
         {items.map((item, index) => {
           const current = index === items.length - 1;
           const interactive =

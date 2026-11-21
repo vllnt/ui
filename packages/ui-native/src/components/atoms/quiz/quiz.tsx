@@ -65,6 +65,174 @@ const styles = StyleSheet.create({
   root: { borderWidth: 1 },
 });
 
+type QuizOptionRowProps = {
+  readonly index: number;
+  readonly labels: QuizLabels;
+  readonly nativeID: string;
+  readonly onSelect: (id: string) => void;
+  readonly option: QuizOption;
+  readonly selected: boolean;
+  readonly submitted: boolean;
+};
+
+function QuizOptionRow({
+  index,
+  labels,
+  nativeID,
+  onSelect,
+  option,
+  selected,
+  submitted,
+}: QuizOptionRowProps) {
+  const theme = useTheme();
+  const correctAnswer = submitted && option.correct === true;
+  const incorrectSelection = submitted && selected && !option.correct;
+  let borderColor = theme.colors.border;
+  if (incorrectSelection) borderColor = theme.colors.destructive;
+  else if (correctAnswer || selected) borderColor = theme.colors.primary;
+  let outcome: undefined | { readonly text: string };
+  if (correctAnswer) outcome = { text: labels.correct };
+  else if (incorrectSelection) outcome = { text: labels.incorrect };
+  return (
+    <InteractivePressable
+      accessibilityHint={submitted ? option.explanation : labels.options}
+      accessibilityLabel={labels.option(option, index)}
+      accessibilityRole="radio"
+      accessibilityState={{ checked: selected, disabled: submitted }}
+      accessibilityValue={outcome}
+      nativeID={nativeID}
+      onPress={() => {
+        if (!submitted) onSelect(option.id);
+      }}
+      selected={selected}
+      style={[
+        styles.option,
+        {
+          backgroundColor: selected
+            ? theme.colors.accent
+            : theme.colors.background,
+          borderColor,
+          borderRadius: theme.radius.md,
+          padding: theme.spacing[3],
+        },
+      ]}
+    >
+      <Text
+        style={typeStyle(
+          theme,
+          "bodySmall",
+          incorrectSelection ? "destructive" : "foreground",
+        )}
+      >
+        {option.label}
+      </Text>
+      {submitted && option.explanation ? (
+        <Text
+          style={typeStyle(theme, "caption", {
+            color: "mutedForeground",
+            marginTop: theme.spacing[2],
+          })}
+        >
+          {option.explanation}
+        </Text>
+      ) : null}
+    </InteractivePressable>
+  );
+}
+QuizOptionRow.displayName = "QuizOptionRow";
+
+type QuizHintProps = {
+  readonly hint: string | undefined;
+  readonly labels: QuizLabels;
+  readonly onReveal: () => void;
+  readonly submitted: boolean;
+  readonly target: Ref<View>;
+  readonly visible: boolean;
+};
+
+function QuizHint({
+  hint,
+  labels,
+  onReveal,
+  submitted,
+  target,
+  visible,
+}: QuizHintProps) {
+  const theme = useTheme();
+  if (!hint || submitted) return null;
+  if (!visible) {
+    return (
+      <InteractivePressable
+        accessibilityRole="button"
+        onPress={onReveal}
+        style={styles.action}
+      >
+        <Text style={typeStyle(theme, "bodySmall", "foreground")}>
+          {labels.hint}
+        </Text>
+      </InteractivePressable>
+    );
+  }
+  return (
+    <View
+      accessibilityLabel={joinAccessibilityText([labels.hint, hint], ": ")}
+      accessible
+      ref={target}
+      style={{
+        backgroundColor: theme.colors.muted,
+        borderRadius: theme.radius.md,
+        padding: theme.spacing[3],
+      }}
+    >
+      <Text style={typeStyle(theme, "caption", "mutedForeground")}>
+        {labels.hint}
+      </Text>
+      <Text style={typeStyle(theme, "bodySmall", "foreground")}>{hint}</Text>
+    </View>
+  );
+}
+QuizHint.displayName = "QuizHint";
+
+function QuizResult({
+  explanation,
+  isCorrect,
+  result,
+}: {
+  readonly explanation: ReactNode;
+  readonly isCorrect: boolean;
+  readonly result: string;
+}) {
+  const theme = useTheme();
+  return (
+    <View
+      style={{
+        backgroundColor: isCorrect ? theme.colors.accent : theme.colors.muted,
+        borderRadius: theme.radius.md,
+        gap: theme.spacing[2],
+        padding: theme.spacing[3],
+      }}
+    >
+      <Text
+        accessibilityLiveRegion="polite"
+        style={typeStyle(theme, "bodySmall", {
+          color: isCorrect ? "foreground" : "destructive",
+          fontWeight: theme.typography.fontWeight.heading,
+        })}
+      >
+        {result}
+      </Text>
+      {typeof explanation === "string" || typeof explanation === "number" ? (
+        <Text style={typeStyle(theme, "bodySmall", "foreground")}>
+          {explanation}
+        </Text>
+      ) : (
+        explanation
+      )}
+    </View>
+  );
+}
+QuizResult.displayName = "QuizResult";
+
 /**
  * Accessible native quiz with explicit controlled and uncontrolled state.
  * After submission each option speaks whether it is correct (not only its
@@ -140,136 +308,36 @@ function Quiz({
         {question}
       </Text>
       <View accessibilityRole="radiogroup" style={{ gap: theme.spacing[2] }}>
-        {options.map((option, index) => {
-          const selected = option.id === activeId;
-          const correctAnswer = isSubmitted && option.correct === true;
-          const incorrectSelection = isSubmitted && selected && !option.correct;
-          return (
-            <InteractivePressable
-              accessibilityHint={
-                isSubmitted ? option.explanation : labels.options
-              }
-              accessibilityLabel={labels.option(option, index)}
-              accessibilityRole="radio"
-              accessibilityState={{ checked: selected, disabled: isSubmitted }}
-              accessibilityValue={
-                correctAnswer
-                  ? { text: labels.correct }
-                  : incorrectSelection
-                    ? { text: labels.incorrect }
-                    : undefined
-              }
-              key={option.id}
-              nativeID={`${generatedId}-option-${option.id}`}
-              onPress={() => {
-                if (!isSubmitted) setActiveId(option.id);
-              }}
-              selected={selected}
-              style={[
-                styles.option,
-                {
-                  backgroundColor: selected
-                    ? theme.colors.accent
-                    : theme.colors.background,
-                  borderColor: incorrectSelection
-                    ? theme.colors.destructive
-                    : correctAnswer || selected
-                      ? theme.colors.primary
-                      : theme.colors.border,
-                  borderRadius: theme.radius.md,
-                  padding: theme.spacing[3],
-                },
-              ]}
-            >
-              <Text
-                style={typeStyle(
-                  theme,
-                  "bodySmall",
-                  incorrectSelection ? "destructive" : "foreground",
-                )}
-              >
-                {option.label}
-              </Text>
-              {isSubmitted && option.explanation ? (
-                <Text
-                  style={typeStyle(theme, "caption", {
-                    color: "mutedForeground",
-                    marginTop: theme.spacing[2],
-                  })}
-                >
-                  {option.explanation}
-                </Text>
-              ) : null}
-            </InteractivePressable>
-          );
-        })}
+        {options.map((option, index) => (
+          <QuizOptionRow
+            index={index}
+            key={option.id}
+            labels={labels}
+            nativeID={`${generatedId}-option-${option.id}`}
+            onSelect={setActiveId}
+            option={option}
+            selected={option.id === activeId}
+            submitted={isSubmitted}
+          />
+        ))}
       </View>
-      {hint && !isSubmitted ? (
-        isHintVisible ? (
-          <View
-            accessibilityLabel={joinAccessibilityText(
-              [labels.hint, hint],
-              ": ",
-            )}
-            accessible
-            ref={hintFocus.target}
-            style={{
-              backgroundColor: theme.colors.muted,
-              borderRadius: theme.radius.md,
-              padding: theme.spacing[3],
-            }}
-          >
-            <Text style={typeStyle(theme, "caption", "mutedForeground")}>
-              {labels.hint}
-            </Text>
-            <Text style={typeStyle(theme, "bodySmall", "foreground")}>
-              {hint}
-            </Text>
-          </View>
-        ) : (
-          <InteractivePressable
-            accessibilityRole="button"
-            onPress={() => {
-              hintFocus.request();
-              setHintVisible(true);
-            }}
-            style={styles.action}
-          >
-            <Text style={typeStyle(theme, "bodySmall", "foreground")}>
-              {labels.hint}
-            </Text>
-          </InteractivePressable>
-        )
-      ) : null}
+      <QuizHint
+        hint={hint}
+        labels={labels}
+        onReveal={() => {
+          hintFocus.request();
+          setHintVisible(true);
+        }}
+        submitted={isSubmitted}
+        target={hintFocus.target}
+        visible={isHintVisible}
+      />
       {isSubmitted ? (
-        <View
-          style={{
-            backgroundColor: isCorrect
-              ? theme.colors.accent
-              : theme.colors.muted,
-            borderRadius: theme.radius.md,
-            gap: theme.spacing[2],
-            padding: theme.spacing[3],
-          }}
-        >
-          <Text
-            accessibilityLiveRegion="polite"
-            style={typeStyle(theme, "bodySmall", {
-              color: isCorrect ? "foreground" : "destructive",
-              fontWeight: theme.typography.fontWeight.heading,
-            })}
-          >
-            {result}
-          </Text>
-          {typeof explanation === "string" ||
-          typeof explanation === "number" ? (
-            <Text style={typeStyle(theme, "bodySmall", "foreground")}>
-              {explanation}
-            </Text>
-          ) : (
-            explanation
-          )}
-        </View>
+        <QuizResult
+          explanation={explanation}
+          isCorrect={isCorrect}
+          result={result}
+        />
       ) : null}
       <InteractivePressable
         accessibilityRole="button"

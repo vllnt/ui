@@ -102,11 +102,13 @@ function useProgressTrackerContext(): ProgressTrackerContextValue {
   return context;
 }
 
+const NO_MODULES: readonly ProgressTrackerModuleItem[] = [];
+
 /** Native progress tracker context and layout root. */
 function ProgressTrackerRoot({
   children,
   labels,
-  modules = [],
+  modules = NO_MODULES,
   overallProgress,
   ref,
   streak = 0,

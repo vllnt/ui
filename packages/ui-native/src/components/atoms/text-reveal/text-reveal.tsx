@@ -8,6 +8,7 @@ import {
   type ViewProps,
 } from "react-native";
 
+import { keyByOccurrence } from "../../../primitives/occurrence-keys";
 import { typeStyle } from "../../../primitives/type-style";
 import {
   type ReducedMotionService,
@@ -49,6 +50,7 @@ function TextReveal({
   const theme = useTheme();
   const reduceMotion = useReducedMotion(reducedMotionService);
   const words = children.split(/\s+/).filter((word) => word.length > 0);
+  const keyedWords = keyByOccurrence(words, (word) => word);
   const resolvedProgress = reduceMotion ? 1 : clamp(progress);
 
   return (
@@ -59,11 +61,11 @@ function TextReveal({
       ref={ref}
       style={[styles.root, { columnGap: theme.spacing[1] }, style]}
     >
-      {words.map((word, index) => (
+      {keyedWords.map(({ item: word, key }, index) => (
         <NativeText
           accessibilityElementsHidden
           importantForAccessibility="no-hide-descendants"
-          key={`${word}-${index.toString()}`}
+          key={key}
           style={typeStyle(theme, "bodySmall", {
             color: "foreground",
             opacity: wordOpacity(resolvedProgress, words.length, index),

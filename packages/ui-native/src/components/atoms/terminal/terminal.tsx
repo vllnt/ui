@@ -16,6 +16,7 @@ import {
 } from "../../../primitives/accessibility";
 import { monospaceFontFamily } from "../../../primitives/font-family";
 import { InteractivePressable } from "../../../primitives/interactive-pressable";
+import { keyByOccurrence } from "../../../primitives/occurrence-keys";
 import type { ClipboardService } from "../../../primitives/platform-services";
 import { typeStyle } from "../../../primitives/type-style";
 import { useTheme } from "../../../theme/theme-provider";
@@ -193,6 +194,10 @@ function TerminalLines({
   readonly prompt: string;
 }) {
   const theme = useTheme();
+  const keyedLines = keyByOccurrence(
+    lines,
+    (line) => `${line.type}-${line.content}`,
+  );
   return (
     <ScrollView
       contentContainerStyle={{
@@ -202,12 +207,8 @@ function TerminalLines({
       horizontal
     >
       <View style={{ gap: theme.spacing[1] }}>
-        {lines.map((line, index) => (
-          <TerminalLineView
-            key={`${line.type}-${line.content}-${index.toString()}`}
-            line={line}
-            prompt={prompt}
-          />
+        {keyedLines.map(({ item: line, key }) => (
+          <TerminalLineView key={key} line={line} prompt={prompt} />
         ))}
       </View>
     </ScrollView>

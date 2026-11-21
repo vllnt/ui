@@ -137,7 +137,8 @@ function StepByStepRoot({
       onCompletedStepIdsChange,
     ),
   );
-  const currentCompletedIds = [...new Set(completedIds)].filter((id) =>
+  const completedIdSet = new Set(completedIds);
+  const currentCompletedIds = [...completedIdSet].filter((id) =>
     steps.some((step) => step.props.id === id),
   );
   if (interactive && !labels)
@@ -164,7 +165,7 @@ function StepByStepRoot({
         </View>
       ) : null}
       {steps.map((step, index) => {
-        const completed = completedIds.includes(step.props.id);
+        const completed = completedIdSet.has(step.props.id);
         if (!interactive) {
           return cloneElement(step, {
             key: step.props.id,

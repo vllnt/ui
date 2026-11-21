@@ -1,13 +1,15 @@
 "use client";
 
-import { type Ref, useRef, useState } from "react";
+import { type Ref, useRef } from "react";
 
 import {
   type AccessibilityActionEvent,
   type GestureResponderEvent,
+  type StyleProp,
   StyleSheet,
   View,
   type ViewProps,
+  type ViewStyle,
 } from "react-native";
 
 import { useGroupDisabled } from "../../../primitives/control-group";
@@ -116,6 +118,63 @@ function normalizeValue(
   return clamp(stepped, min, max);
 }
 
+/** Non-finite bounds and non-positive steps would render NaN styles. */
+function resolveBounds(
+  minProperty: number,
+  maxProperty: number,
+  stepProperty: number,
+) {
+  const min = Number.isFinite(minProperty) ? minProperty : 0;
+  const max = Number.isFinite(maxProperty) ? maxProperty : min + 100;
+  const step =
+    Number.isFinite(stepProperty) && stepProperty > 0 ? stepProperty : 1;
+  return { min, step, upperBound: Math.max(min, max) };
+}
+
+type SliderPartStyles = {
+  readonly fill: StyleProp<ViewStyle>;
+  readonly thumb: StyleProp<ViewStyle>;
+  readonly track: StyleProp<ViewStyle>;
+};
+
+function sliderPartStyles(
+  axis: SliderAxis,
+  theme: ReturnType<typeof useTheme>,
+  {
+    edgeOffset,
+    ratio,
+  }: { readonly edgeOffset: number; readonly ratio: number },
+): SliderPartStyles {
+  const { vertical } = axis;
+  return {
+    fill: [
+      vertical ? styles.verticalFill : styles.fill,
+      { backgroundColor: theme.colors.primary },
+      vertical ? { height: `${ratio * 100}%` } : { width: `${ratio * 100}%` },
+    ],
+    thumb: [
+      vertical ? styles.verticalThumb : styles.thumb,
+      {
+        backgroundColor: theme.colors.background,
+        borderColor: theme.colors.primary,
+        borderRadius: theme.radius.full,
+        borderWidth: 2,
+      },
+      vertical
+        ? { top: `${edgeOffset * 100}%` }
+        : { left: `${edgeOffset * 100}%` },
+    ],
+    track: [
+      vertical ? styles.verticalTrack : styles.track,
+      {
+        backgroundColor: theme.colors.secondary,
+        borderRadius: theme.radius.full,
+        flexDirection: fillDirection(axis),
+      },
+    ],
+  };
+}
+
 /**
  * Native slider with adjustable actions and a simple track gesture, running
  * along either axis. It intentionally supports one value and does not claim
@@ -143,12 +202,11 @@ function Slider({
 }: SliderProps) {
   const disabled = useGroupDisabled(ownDisabled);
   const theme = useTheme();
-  // Non-finite bounds and non-positive steps would render NaN styles.
-  const min = Number.isFinite(minProperty) ? minProperty : 0;
-  const max = Number.isFinite(maxProperty) ? maxProperty : min + 100;
-  const step =
-    Number.isFinite(stepProperty) && stepProperty > 0 ? stepProperty : 1;
-  const upperBound = Math.max(min, max);
+  const { min, step, upperBound } = resolveBounds(
+    minProperty,
+    maxProperty,
+    stepProperty,
+  );
   const initialValue = normalizeValue(
     value ?? defaultValue ?? min,
     min,
@@ -169,13 +227,13 @@ function Slider({
         },
   );
   const currentValue = normalizeValue(storedValue, min, upperBound, step);
-  const [trackSize, setTrackSize] = useState({ height: 0, width: 0 });
+  const trackSize = useRef({ height: 0, width: 0 });
   const dragged = useRef<{ latest: number; start: number }>(undefined);
   const axis = axisOf(orientation, inverted);
-  const trackLength = axis.vertical ? trackSize.height : trackSize.width;
   const range = upperBound - min;
   const ratio = range === 0 ? 0 : (currentValue - min) / range;
   const edgeOffset = axis.reversed ? 1 - ratio : ratio;
+  const parts = sliderPartStyles(axis, theme, { edgeOffset, ratio });
 
   const update = (nextValue: number): number => {
     const next = normalizeValue(nextValue, min, upperBound, step);
@@ -183,6 +241,9 @@ function Slider({
     return next;
   };
   const updateFromGesture = (event: GestureResponderEvent) => {
+    const trackLength = axis.vertical
+      ? trackSize.current.height
+      : trackSize.current.width;
     if (trackLength <= 0) return;
     const { locationX, locationY } = event.nativeEvent;
     const gestureOffset = clamp(
@@ -233,7 +294,7 @@ function Slider({
       onAccessibilityAction={handleAccessibilityAction}
       onLayout={(event) => {
         const { height, width } = event.nativeEvent.layout;
-        setTrackSize({ height, width });
+        trackSize.current = { height, width };
       }}
       onResponderGrant={startDrag}
       onResponderMove={updateFromGesture}
@@ -250,40 +311,14 @@ function Slider({
       <View
         accessibilityElementsHidden
         importantForAccessibility="no-hide-descendants"
-        style={[
-          axis.vertical ? styles.verticalTrack : styles.track,
-          {
-            backgroundColor: theme.colors.secondary,
-            borderRadius: theme.radius.full,
-            flexDirection: fillDirection(axis),
-          },
-        ]}
+        style={parts.track}
       >
-        <View
-          style={[
-            axis.vertical ? styles.verticalFill : styles.fill,
-            { backgroundColor: theme.colors.primary },
-            axis.vertical
-              ? { height: `${ratio * 100}%` }
-              : { width: `${ratio * 100}%` },
-          ]}
-        />
+        <View style={parts.fill} />
       </View>
       <View
         accessibilityElementsHidden
         importantForAccessibility="no-hide-descendants"
-        style={[
-          axis.vertical ? styles.verticalThumb : styles.thumb,
-          {
-            backgroundColor: theme.colors.background,
-            borderColor: theme.colors.primary,
-            borderRadius: theme.radius.full,
-            borderWidth: 2,
-          },
-          axis.vertical
-            ? { top: `${edgeOffset * 100}%` }
-            : { left: `${edgeOffset * 100}%` },
-        ]}
+        style={parts.thumb}
       />
     </View>
   );

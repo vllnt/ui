@@ -125,6 +125,7 @@ function TutorialComplete({
     ? 0
     : Math.min(100, Math.max(0, Math.round(completionPercent)));
   const complete = percent === 100;
+  const completedIdSet = new Set(completedSectionIds);
   return (
     <View {...props} ref={ref} style={[{ gap: theme.spacing[6] }, style]}>
       <View style={[styles.centered, { gap: theme.spacing[3] }]}>
@@ -185,7 +186,7 @@ function TutorialComplete({
           {labels.reviewSections}
         </Text>
         {sections.map((section, index) => {
-          const completed = completedSectionIds.includes(section.id);
+          const completed = completedIdSet.has(section.id);
           return (
             <InteractivePressable
               accessibilityLabel={labels.reviewSection(
