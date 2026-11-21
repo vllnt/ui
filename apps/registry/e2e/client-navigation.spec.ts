@@ -167,6 +167,8 @@ test.describe("client navigation", () => {
   });
 });
 
+const BEACON_TAG = /<script[^>]+static\.cloudflareinsights\.com\/beacon/g;
+
 test.describe("response headers", () => {
   test.beforeEach(() => {
     test.skip(!process.env.PLAYWRIGHT_BASE_URL, PRODUCTION_ONLY);
@@ -225,7 +227,7 @@ test.describe("response headers", () => {
     }
   });
 
-  test("the page carries the deploy id, the chunk recovery script and no site-side beacon", async ({
+  test("the page carries the deploy id, the chunk recovery script and one beacon only with a token", async ({
     request,
   }) => {
     const html = await (
@@ -234,7 +236,12 @@ test.describe("response headers", () => {
     const commit = process.env.SOURCE_COMMIT;
 
     expect(html).toContain("__vllntRecoverChunk");
-    expect(html).not.toContain("static.cloudflareinsights.com");
+    // The app is the only beacon source (the zone auto-install is off): one tag
+    // when the build had a token, none without. Against production, set
+    // NEXT_PUBLIC_CF_BEACON_TOKEN to any value.
+    expect(html.match(BEACON_TAG) ?? []).toHaveLength(
+      process.env.NEXT_PUBLIC_CF_BEACON_TOKEN ? 1 : 0,
+    );
     if (commit) {
       // Next tags asset URLs with the deployment id: an old page asks for its own build.
       expect(html).toMatch(new RegExp(`/_next/static/[^"]+\\?dpl=${commit}`));
@@ -301,7 +308,11 @@ test.describe("header on wide screens", () => {
           };
         });
 
-        expect(layout).toEqual({ clipped: [], pageOverflow: 0, rowOverflow: 0 });
+        expect(layout).toEqual({
+          clipped: [],
+          pageOverflow: 0,
+          rowOverflow: 0,
+        });
       });
     }
   }
