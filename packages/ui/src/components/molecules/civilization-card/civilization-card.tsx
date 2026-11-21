@@ -1,5 +1,6 @@
+import { Children, type ComponentPropsWithoutRef, type ReactNode } from "react";
+
 import { Globe } from "lucide-react";
-import type { ComponentPropsWithoutRef, ReactNode } from "react";
 
 import { cn } from "../../../lib/utils";
 import { Badge } from "../../atoms/badge/badge";
@@ -272,21 +273,14 @@ function CivilizationListBlock({
       </h4>
       {variant === "badge" ? (
         <div className="flex flex-wrap gap-1.5">
-          {items.map((item, index) => (
-            <Badge key={`${heading}-${index.toString()}`} variant="secondary">
-              {item}
-            </Badge>
+          {Children.map(items, (item) => (
+            <Badge variant="secondary">{item}</Badge>
           ))}
         </div>
       ) : (
         <ul className="flex flex-col gap-1 text-sm text-foreground">
-          {items.map((item, index) => (
-            <li
-              className="leading-tight"
-              key={`${heading}-${index.toString()}`}
-            >
-              {item}
-            </li>
+          {Children.map(items, (item) => (
+            <li className="leading-tight">{item}</li>
           ))}
         </ul>
       )}

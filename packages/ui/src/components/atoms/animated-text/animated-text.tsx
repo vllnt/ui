@@ -4,19 +4,15 @@ import * as React from "react";
 
 import { cn } from "../../../lib/utils";
 
-const glyphSegmenterCache: { segmenter?: Intl.Segmenter | null } = {};
+const glyphSegmenter =
+  typeof Intl.Segmenter === "function"
+    ? new Intl.Segmenter(undefined, { granularity: "grapheme" })
+    : null;
 
 /** Splits by grapheme when `Intl.Segmenter` exists, otherwise by code point. */
 function splitGlyphs(text: string): string[] {
-  if (glyphSegmenterCache.segmenter === undefined) {
-    glyphSegmenterCache.segmenter =
-      typeof Intl.Segmenter === "function"
-        ? new Intl.Segmenter(undefined, { granularity: "grapheme" })
-        : null;
-  }
-  const { segmenter } = glyphSegmenterCache;
-  return segmenter
-    ? Array.from(segmenter.segment(text), ({ segment }) => segment)
+  return glyphSegmenter
+    ? Array.from(glyphSegmenter.segment(text), ({ segment }) => segment)
     : (text.match(/./gsu) ?? []);
 }
 

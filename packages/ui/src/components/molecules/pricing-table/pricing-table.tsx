@@ -13,6 +13,7 @@ import {
 
 import { Check, X } from "lucide-react";
 
+import { keyByOccurrence } from "../../../lib/occurrence-keys";
 import { cn } from "../../../lib/utils";
 import { Button, type ButtonProps } from "../../atoms/button/button";
 
@@ -186,11 +187,12 @@ function PlanPrice({
 function PlanFeatures({ features }: { features: PricingFeature[] }): ReactNode {
   return (
     <ul className="flex flex-col gap-2">
-      {features.map((feature, index) => (
-        <FeatureRow
-          feature={feature}
-          key={`${typeof feature.label === "string" ? feature.label : index.toString()}-${index.toString()}`}
-        />
+      {keyByOccurrence(
+        features,
+        (feature) =>
+          `${typeof feature.label === "string" ? feature.label : ""}|${String(feature.included)}`,
+      ).map(({ item: feature, key }) => (
+        <FeatureRow feature={feature} key={key} />
       ))}
     </ul>
   );

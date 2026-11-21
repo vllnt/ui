@@ -3,6 +3,7 @@ import * as React from "react";
 import { ArrowDownRight, ArrowUpRight } from "lucide-react";
 
 import { formatChange } from "../../../lib/format";
+import { keyByOccurrence } from "../../../lib/occurrence-keys";
 import type { HeadingTag } from "../../../lib/types";
 import { cn } from "../../../lib/utils";
 
@@ -132,12 +133,8 @@ export const MarketTreemap = ({
         </p>
       </div>
       <div className="grid auto-rows-[120px] grid-cols-1 gap-3 md:auto-rows-[120px] md:grid-cols-4">
-        {items.map((item, index) => (
-          <MarketTreemapTile
-            item={item}
-            key={`${item.label}-${index.toString()}`}
-            maxValue={maxValue}
-          />
+        {keyByOccurrence(items, (item) => item.label).map(({ item, key }) => (
+          <MarketTreemapTile item={item} key={key} maxValue={maxValue} />
         ))}
       </div>
     </div>

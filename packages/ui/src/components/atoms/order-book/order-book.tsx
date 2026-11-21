@@ -1,5 +1,6 @@
 import * as React from "react";
 
+import { keyByOccurrence } from "../../../lib/occurrence-keys";
 import type { HeadingTag } from "../../../lib/types";
 import { cn } from "../../../lib/utils";
 
@@ -42,6 +43,45 @@ function formatNumber(value: number, precision = 2): string {
   return formatter.format(value);
 }
 
+type BookLevelRowProps = {
+  readonly barClassName: string;
+  readonly level: OrderBookLevel;
+  readonly precision: number;
+  readonly priceClassName: string;
+  readonly width: string;
+};
+
+function BookLevelRow({
+  barClassName,
+  level,
+  precision,
+  priceClassName,
+  width,
+}: BookLevelRowProps) {
+  return (
+    <div className="relative overflow-hidden rounded-xl border border-transparent px-3 py-2">
+      <div
+        className={cn(
+          "absolute inset-y-0 right-0 rounded-xl border",
+          barClassName,
+        )}
+        style={{ width }}
+      />
+      <div className="relative grid grid-cols-[1.2fr_1fr_1fr] gap-3 text-sm tabular-nums">
+        <span className={cn("font-medium", priceClassName)}>
+          {formatNumber(level.price, precision)}
+        </span>
+        <span className="text-right text-foreground">
+          {formatNumber(level.size, 3)}
+        </span>
+        <span className="text-right text-muted-foreground">
+          {formatNumber(level.total ?? 0, 3)}
+        </span>
+      </div>
+    </div>
+  );
+}
+
 function BookSide({
   accent,
   levels,
@@ -80,34 +120,18 @@ function BookSide({
           <span className="text-right">Total</span>
         </div>
         <div className="space-y-1">
-          {levels.map((level, index) => {
-            const width = `${((level.total ?? 0) / maxTotal) * 100}%`;
-            return (
-              <div
-                className="relative overflow-hidden rounded-xl border border-transparent px-3 py-2"
-                key={`${accent}-${level.price}-${index.toString()}`}
-              >
-                <div
-                  className={cn(
-                    "absolute inset-y-0 right-0 rounded-xl border",
-                    barClassName,
-                  )}
-                  style={{ width }}
-                />
-                <div className="relative grid grid-cols-[1.2fr_1fr_1fr] gap-3 text-sm tabular-nums">
-                  <span className={cn("font-medium", priceClassName)}>
-                    {formatNumber(level.price, precision)}
-                  </span>
-                  <span className="text-right text-foreground">
-                    {formatNumber(level.size, 3)}
-                  </span>
-                  <span className="text-right text-muted-foreground">
-                    {formatNumber(level.total ?? 0, 3)}
-                  </span>
-                </div>
-              </div>
-            );
-          })}
+          {keyByOccurrence(levels, (level) => String(level.price)).map(
+            ({ item: level, key }) => (
+              <BookLevelRow
+                barClassName={barClassName}
+                key={key}
+                level={level}
+                precision={precision}
+                priceClassName={priceClassName}
+                width={`${((level.total ?? 0) / maxTotal) * 100}%`}
+              />
+            ),
+          )}
         </div>
       </div>
     </div>

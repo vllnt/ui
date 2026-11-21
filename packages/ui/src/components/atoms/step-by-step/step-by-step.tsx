@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { Children, isValidElement, useState } from "react";
 
-import type { ReactNode } from "react";
+import type { ReactElement, ReactNode } from "react";
 
 import type { HeadingTag } from "../../../lib/types";
 import { cn } from "../../../lib/utils";
@@ -137,22 +137,23 @@ function StepByStepTitleIcon(): React.ReactNode {
   );
 }
 
-function StaticStepList({ steps }: { steps: ReactNode[] }): React.ReactNode {
+/** The `Step` elements among `children`; empty, boolean and text nodes drop out. */
+function collectSteps(children: ReactNode): ReactElement<StepProps>[] {
+  return Children.toArray(children).filter(isValidElement<StepProps>);
+}
+
+function StaticStepList({
+  steps,
+}: {
+  steps: ReactElement<StepProps>[];
+}): React.ReactNode {
   return (
     <div className="space-y-0">
-      {steps.map((step, index) => {
-        const stepElement = step as React.ReactElement<StepProps>;
-        const stepKey = `${stepElement.props.title}-${index + 1}`;
-        return (
-          <Step
-            key={stepKey}
-            number={index + 1}
-            title={stepElement.props.title}
-          >
-            {stepElement.props.children}
-          </Step>
-        );
-      })}
+      {steps.map((step, index) => (
+        <Step key={step.key} number={index + 1} title={step.props.title}>
+          {step.props.children}
+        </Step>
+      ))}
     </div>
   );
 }
@@ -179,7 +180,7 @@ const StepByStep = Object.assign(
     const [completedSteps, setCompletedSteps] = useState<Set<number>>(
       new Set(),
     );
-    const steps = Array.isArray(children) ? children : [children];
+    const steps = collectSteps(children);
 
     const toggleStep = (index: number): void => {
       const newCompleted = new Set(completedSteps);
@@ -218,14 +219,14 @@ const StepByStep = Object.assign(
             <InteractiveStep
               isCompleted={completedSteps.has(index)}
               isLast={index === steps.length - 1}
-              key={`${(step as React.ReactElement<StepProps>).props.title}-${index + 1}`}
+              key={step.key}
               onToggle={() => {
                 toggleStep(index);
               }}
               stepNumber={index + 1}
-              title={(step as React.ReactElement<StepProps>).props.title}
+              title={step.props.title}
             >
-              {(step as React.ReactElement<StepProps>).props.children}
+              {step.props.children}
             </InteractiveStep>
           ))}
         </div>

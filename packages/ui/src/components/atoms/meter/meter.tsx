@@ -75,6 +75,7 @@ const Meter = ({
         className,
       )}
       ref={ref}
+      // react-doctor-disable-next-line react-doctor/prefer-tag-over-role -- a native <meter> cannot render the segment blocks (its children are fallback content); the div props and ref are public API
       role="meter"
       {...props}
     >

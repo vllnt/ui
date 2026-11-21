@@ -2,6 +2,7 @@
 
 import {
   createContext,
+  useCallback,
   useContext,
   useEffect,
   useRef,
@@ -13,6 +14,7 @@ import { ChevronDown, ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
+import { keyByOccurrence } from "../../../lib/occurrence-keys";
 import { useMounted } from "../../../lib/use-mounted";
 import { cn } from "../../../lib/utils";
 import { useSidebar } from "../../atoms/sidebar-provider/sidebar-provider";
@@ -67,50 +69,86 @@ const getMobileSnapshot = () =>
 
 const getServerMobileSnapshot = () => false;
 
-const subscribeToViewportResize = (onStoreChange: () => void) => {
-  window.addEventListener("resize", onStoreChange);
-
-  return () => {
-    window.removeEventListener("resize", onStoreChange);
-  };
-};
-
+/**
+ * Tracks the viewport class. The drawer opens on desktop and closes on mobile,
+ * once on subscribe and again each time a resize crosses the breakpoint.
+ */
 function useMobile(setOpen: (open: boolean) => void) {
-  const isMobile = useSyncExternalStore(
-    subscribeToViewportResize,
+  const subscribe = useCallback(
+    (onStoreChange: () => void) => {
+      let wasMobile = getMobileSnapshot();
+      setOpen(!wasMobile);
+
+      const onResize = () => {
+        const isMobile = getMobileSnapshot();
+        if (isMobile !== wasMobile) {
+          wasMobile = isMobile;
+          setOpen(!isMobile);
+        }
+        onStoreChange();
+      };
+
+      window.addEventListener("resize", onResize);
+      return () => {
+        window.removeEventListener("resize", onResize);
+      };
+    },
+    [setOpen],
+  );
+
+  return useSyncExternalStore(
+    subscribe,
     getMobileSnapshot,
     getServerMobileSnapshot,
   );
+}
 
-  useEffect(() => {
-    setOpen(!isMobile);
-  }, [isMobile, setOpen]);
+const getServerFadeSnapshot = () => false;
 
-  return isMobile;
+const isScrolledDown = (container: HTMLElement | null) =>
+  container !== null && container.scrollTop > 0;
+
+const hasMoreBelow = (container: HTMLElement | null) =>
+  container !== null &&
+  container.scrollTop < container.scrollHeight - container.clientHeight - 1;
+
+function noop(): void {
+  /* intentional no-op: there is no container to unsubscribe from */
+}
+
+function subscribeToScroll(
+  containerReference: React.RefObject<HTMLElement | null>,
+  onStoreChange: () => void,
+) {
+  const container = containerReference.current;
+  if (!container) {
+    return noop;
+  }
+
+  container.addEventListener("scroll", onStoreChange, { passive: true });
+  return () => {
+    container.removeEventListener("scroll", onStoreChange);
+  };
 }
 
 function useScrollFade(
   containerReference: React.RefObject<HTMLElement | null>,
 ) {
-  const [showTopFade, setShowTopFade] = useState(false);
-  const [showBottomFade, setShowBottomFade] = useState(false);
-
-  useEffect(() => {
-    const container = containerReference.current;
-    if (!container) return;
-
-    const checkScroll = () => {
-      const { clientHeight, scrollHeight, scrollTop } = container;
-      setShowTopFade(scrollTop > 0);
-      setShowBottomFade(scrollTop < scrollHeight - clientHeight - 1);
-    };
-
-    checkScroll();
-    container.addEventListener("scroll", checkScroll, { passive: true });
-    return () => {
-      container.removeEventListener("scroll", checkScroll);
-    };
-  }, [containerReference]);
+  const subscribe = useCallback(
+    (onStoreChange: () => void) =>
+      subscribeToScroll(containerReference, onStoreChange),
+    [containerReference],
+  );
+  const showTopFade = useSyncExternalStore(
+    subscribe,
+    () => isScrolledDown(containerReference.current),
+    getServerFadeSnapshot,
+  );
+  const showBottomFade = useSyncExternalStore(
+    subscribe,
+    () => hasMoreBelow(containerReference.current),
+    getServerFadeSnapshot,
+  );
 
   return { showBottomFade, showTopFade };
 }
@@ -210,12 +248,15 @@ function FamilyList({
         Components
       </div>
       <div className="space-y-0.5">
-        {sections.map((section, index) =>
+        {keyByOccurrence(
+          sections,
+          (section) => `${section.href ?? ""}|${section.title ?? ""}`,
+        ).map(({ item: section, key }) =>
           section.href ? (
             <SidebarLink
               className={FAMILY_ROW_CLASS}
               href={section.href}
-              key={`${section.title ?? ""}-${index.toString()}`}
+              key={key}
               onClick={() => {
                 if (isMobile) {
                   onNavigate();
@@ -227,7 +268,7 @@ function FamilyList({
           ) : (
             <button
               className={FAMILY_ROW_CLASS}
-              key={`${section.title ?? ""}-${index.toString()}`}
+              key={key}
               onClick={() => {
                 onOpen(section.title ?? "");
               }}

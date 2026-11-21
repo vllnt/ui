@@ -18,7 +18,10 @@ describe("AlertDialog", () => {
     render(
       <AlertDialog>
         <AlertDialogTrigger>Delete</AlertDialogTrigger>
-        <AlertDialogContent>Body</AlertDialogContent>
+        <AlertDialogContent>
+          <AlertDialogTitle>Title</AlertDialogTitle>
+          Body
+        </AlertDialogContent>
       </AlertDialog>,
     );
     expect(screen.getByText("Delete")).toBeInTheDocument();

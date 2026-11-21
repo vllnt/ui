@@ -76,7 +76,8 @@ const DatePicker = ({
         >
           <CalendarIcon aria-hidden="true" className="mr-2 size-4" />
           {selectedDate
-            ? defaultDateFormatter.format(selectedDate)
+            ? // react-doctor-disable-next-line react-doctor/no-locale-format-in-render -- the value is a calendar day built in this runtime (new Date(y, m, d)); the fixed en-US locale in the runtime's own time zone prints the same day on server and client, while a fixed UTC zone would shift it by a day east of UTC
+              defaultDateFormatter.format(selectedDate)
             : placeholder}
         </Button>
       </PopoverTrigger>

@@ -1,6 +1,6 @@
 "use client";
 
-import { memo, useCallback, useEffect, useRef, useState } from "react";
+import { memo, useCallback, useEffect, useId, useRef, useState } from "react";
 
 import type { ReactNode } from "react";
 import { createPortal } from "react-dom";
@@ -73,7 +73,7 @@ function SlideshowProgress({ progress }: { progress: number }) {
   return (
     <div className="absolute top-0 left-0 right-0 h-1 bg-secondary z-10">
       <div
-        className="h-full bg-foreground transition-all duration-300 ease-out"
+        className="h-full bg-foreground transition-[width] duration-300 ease-out"
         style={{ width: `${progress}%` }}
       />
     </div>
@@ -175,11 +175,6 @@ function SlideshowHeader({
   );
 }
 
-/** True when the event started inside the sections panel, not on the backdrop. */
-function isFromPanel(panel: HTMLElement | null, target: EventTarget): boolean {
-  return panel !== null && target instanceof Node && panel.contains(target);
-}
-
 function SlideshowToc({
   as: SectionsHeading = "h3",
   completedSections,
@@ -199,41 +194,27 @@ function SlideshowToc({
   onNavigate: (index: number) => void;
   sections: SlideshowSection[];
 }) {
-  const panelRef = useRef<HTMLDivElement>(null);
+  const panelRef = useRef<HTMLDialogElement>(null);
+  const headingId = useId();
   useFocusContainment(panelRef, isOpen);
 
   if (!isOpen) return null;
 
-  // Events from inside the panel stop here so they neither close the panel
-  // nor bubble further up.
   return (
-    <div
-      className="absolute inset-0 z-20 flex animate-in fade-in-0 duration-200"
-      onClick={(event) => {
-        if (isFromPanel(panelRef.current, event.target)) {
-          event.stopPropagation();
-          return;
-        }
-        onClose();
-      }}
-      onKeyDown={(event) => {
-        if (isFromPanel(panelRef.current, event.target)) {
-          event.stopPropagation();
-          return;
-        }
-        if (event.key === "Enter" || event.key === " ") onClose();
-      }}
-      role="button"
-      tabIndex={0}
-    >
-      <div className="absolute inset-0 bg-background/40" />
+    <div className="absolute inset-0 z-20 flex animate-in fade-in-0 duration-200">
       <div
-        className="relative w-full sm:max-w-sm bg-background border-r border-border h-full overflow-auto shadow-2xl"
+        aria-hidden="true"
+        className="absolute inset-0 bg-background/40"
+        onClick={onClose}
+      />
+      <dialog
+        aria-labelledby={headingId}
+        className="relative m-0 w-full sm:max-w-sm bg-background text-foreground border-r border-border h-full overflow-auto shadow-2xl"
+        open
         ref={panelRef}
-        role="dialog"
       >
         <div className="sticky top-0 flex items-center justify-between px-4 py-3 border-b border-border bg-background">
-          <SectionsHeading className="font-semibold">
+          <SectionsHeading className="font-semibold" id={headingId}>
             {labels.sectionsLabel}
           </SectionsHeading>
           <button
@@ -311,7 +292,7 @@ function SlideshowToc({
             );
           })}
         </div>
-      </div>
+      </dialog>
     </div>
   );
 }

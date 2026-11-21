@@ -581,6 +581,51 @@ type FormControlProps = React.ComponentPropsWithoutRef<typeof Slot> & {
   required?: boolean;
 };
 
+type MessageDescriptionState = Pick<
+  ReturnType<typeof useFormField>,
+  "error" | "formMessageId" | "hasMessage" | "hasMessageSlot" | "invalid"
+>;
+
+function getMessageDescriptionId({
+  error,
+  formMessageId,
+  hasMessage,
+  hasMessageSlot,
+  invalid,
+}: MessageDescriptionState): string | undefined {
+  if (error === undefined) {
+    return hasMessage && invalid ? formMessageId : undefined;
+  }
+
+  return hasMessageSlot && hasVisibleContent(error.message)
+    ? formMessageId
+    : undefined;
+}
+
+type ControlState = {
+  disabled: boolean;
+  invalid: boolean;
+  required: boolean;
+};
+
+function getControlStateProps(
+  props: Pick<
+    FormControlProps,
+    "aria-disabled" | "aria-invalid" | "aria-required"
+  >,
+  { disabled, invalid, required }: ControlState,
+) {
+  return {
+    "aria-disabled": props["aria-disabled"] ?? (disabled || undefined),
+    "aria-invalid": props["aria-invalid"] ?? (invalid || undefined),
+    "aria-required": props["aria-required"] ?? (required || undefined),
+    "data-disabled": disabled ? "true" : undefined,
+    "data-invalid": invalid ? "true" : undefined,
+    disabled: disabled || undefined,
+    required: required || undefined,
+  };
+}
+
 const FormControl = ({
   disabled: controlDisabled,
   id: _id,
@@ -588,53 +633,24 @@ const FormControl = ({
   required: controlRequired,
   ...props
 }: FormControlProps & { ref?: React.Ref<HTMLElement> }) => {
-  const {
-    disabled,
-    error,
-    formDescriptionId,
-    formItemId,
-    formMessageId,
-    hasDescription,
-    hasMessage,
-    hasMessageSlot,
-    invalid,
-    required,
-  } = useFormField();
+  const field = useFormField();
   const { formState } = useFormContext();
-  const hasErrorMessage = hasVisibleContent(error?.message);
   const describedBy = composeIds(
     props["aria-describedby"],
-    hasDescription ? formDescriptionId : undefined,
-    error === undefined
-      ? hasMessage && invalid
-        ? formMessageId
-        : undefined
-      : hasMessageSlot && hasErrorMessage
-        ? formMessageId
-        : undefined,
+    field.hasDescription ? field.formDescriptionId : undefined,
+    getMessageDescriptionId(field),
   );
-  const effectiveDisabled =
-    controlDisabled ?? (disabled || formState.isSubmitting);
-  const effectiveRequired = controlRequired ?? required;
-  const nativeConstraintProps: {
-    disabled?: boolean;
-    required?: boolean;
-  } = {
-    disabled: effectiveDisabled || undefined,
-    required: effectiveRequired || undefined,
-  };
 
   return (
     <Slot
       {...props}
-      {...nativeConstraintProps}
+      {...getControlStateProps(props, {
+        disabled: controlDisabled ?? (field.disabled || formState.isSubmitting),
+        invalid: field.invalid,
+        required: controlRequired ?? field.required,
+      })}
       aria-describedby={describedBy}
-      aria-disabled={props["aria-disabled"] ?? (effectiveDisabled || undefined)}
-      aria-invalid={props["aria-invalid"] ?? (invalid || undefined)}
-      aria-required={props["aria-required"] ?? (effectiveRequired || undefined)}
-      data-disabled={effectiveDisabled ? "true" : undefined}
-      data-invalid={invalid ? "true" : undefined}
-      id={formItemId}
+      id={field.formItemId}
       ref={ref}
     />
   );

@@ -15,7 +15,10 @@ describe("Drawer", () => {
     render(
       <Drawer>
         <DrawerTrigger>Open</DrawerTrigger>
-        <DrawerContent>Body</DrawerContent>
+        <DrawerContent>
+          <DrawerTitle>Title</DrawerTitle>
+          Body
+        </DrawerContent>
       </Drawer>,
     );
     expect(screen.getByText("Open")).toBeInTheDocument();

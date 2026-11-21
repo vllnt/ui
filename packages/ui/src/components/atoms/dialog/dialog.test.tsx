@@ -18,7 +18,10 @@ describe("Dialog", () => {
     render(
       <Dialog>
         <DialogTrigger>Open</DialogTrigger>
-        <DialogContent>Body</DialogContent>
+        <DialogContent>
+          <DialogTitle>Title</DialogTitle>
+          Body
+        </DialogContent>
       </Dialog>,
     );
     expect(screen.getByText("Open")).toBeInTheDocument();

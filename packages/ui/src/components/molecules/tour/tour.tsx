@@ -61,7 +61,7 @@ function TourHeader({
       </div>
       <div className="h-1 rounded-full bg-secondary">
         <div
-          className="h-full rounded-full bg-primary transition-all"
+          className="h-full rounded-full bg-primary transition-[width]"
           style={{ width: `${progress}%` }}
         />
       </div>

@@ -94,7 +94,12 @@ export type CodeBlockProps = {
   children: ReactNode;
   /** Class name merged onto the root element. */
   className?: string;
-  /** Prism language used to highlight the code. Defaults to `"typescript"`. */
+  /**
+   * Prism language used to highlight the code. Defaults to `"typescript"`.
+   * Highlights tsx, typescript (ts), jsx, javascript (js), json, bash (sh,
+   * shell, zsh), css, markdown (md), diff, yaml (yml), python (py), markup
+   * (html, xml) and sql. Any other language, and `text`, renders as plain text.
+   */
   language?: string;
   /** Show the language label over the code. Ignored when `title` renders a header, which always shows it. */
   showLanguage?: boolean;
@@ -127,6 +132,67 @@ function extractTextFromChildren(node: ReactNode): string {
     return extractTextFromChildren(node.props.children as ReactNode);
   }
   return String(node ?? "");
+}
+
+function keepPlainText(): void {
+  /* intentional no-op: the plain text fallback stays when the chunk fails */
+}
+
+/**
+ * Loads the Prism light build and its fixed language set. Every import is a
+ * package specifier: the generated registry shim of this file keeps them as
+ * they are, so it needs no other export of `@vllnt/ui`. The language list must
+ * equal the one in lib/code-highlighter (code-block-languages.test.tsx checks).
+ */
+async function loadHighlighter(): Promise<
+  ComponentType<SyntaxHighlighterProps>
+> {
+  const [
+    { default: PrismLight },
+    bash,
+    css,
+    diff,
+    javascript,
+    json,
+    jsx,
+    markdown,
+    markup,
+    python,
+    sql,
+    tsx,
+    typescript,
+    yaml,
+  ] = await Promise.all([
+    import("react-syntax-highlighter/dist/esm/prism-light"),
+    import("react-syntax-highlighter/dist/esm/languages/prism/bash"),
+    import("react-syntax-highlighter/dist/esm/languages/prism/css"),
+    import("react-syntax-highlighter/dist/esm/languages/prism/diff"),
+    import("react-syntax-highlighter/dist/esm/languages/prism/javascript"),
+    import("react-syntax-highlighter/dist/esm/languages/prism/json"),
+    import("react-syntax-highlighter/dist/esm/languages/prism/jsx"),
+    import("react-syntax-highlighter/dist/esm/languages/prism/markdown"),
+    import("react-syntax-highlighter/dist/esm/languages/prism/markup"),
+    import("react-syntax-highlighter/dist/esm/languages/prism/python"),
+    import("react-syntax-highlighter/dist/esm/languages/prism/sql"),
+    import("react-syntax-highlighter/dist/esm/languages/prism/tsx"),
+    import("react-syntax-highlighter/dist/esm/languages/prism/typescript"),
+    import("react-syntax-highlighter/dist/esm/languages/prism/yaml"),
+  ]);
+  PrismLight.registerLanguage("bash", bash.default);
+  PrismLight.registerLanguage("css", css.default);
+  PrismLight.registerLanguage("diff", diff.default);
+  PrismLight.registerLanguage("javascript", javascript.default);
+  PrismLight.registerLanguage("json", json.default);
+  PrismLight.registerLanguage("jsx", jsx.default);
+  PrismLight.registerLanguage("markdown", markdown.default);
+  PrismLight.registerLanguage("markup", markup.default);
+  PrismLight.registerLanguage("python", python.default);
+  PrismLight.registerLanguage("sql", sql.default);
+  PrismLight.registerLanguage("tsx", tsx.default);
+  PrismLight.registerLanguage("typescript", typescript.default);
+  PrismLight.registerLanguage("yaml", yaml.default);
+  PrismLight.alias("bash", "zsh");
+  return PrismLight;
 }
 
 function findScrollableParent(
@@ -163,10 +229,12 @@ export function CodeBlock({
   wrap = false,
 }: CodeBlockProps & { ref?: Ref<HTMLDivElement> }) {
   const { copied, copy } = useCopyToClipboard();
-  // The Prism build is dynamic-imported on mount, by deep path rather than
-  // the package root (which also pulls highlight.js and every theme), so the
-  // @vllnt/ui barrel's static graph never reaches it. Token colours come
-  // from CSS variables (CODE_THEME). Null until the chunk loads.
+  // The Prism light build and its fixed language set are dynamic-imported on
+  // mount (loadHighlighter), by deep path rather than the package root (which
+  // also pulls highlight.js and every theme), so the @vllnt/ui barrel's static
+  // graph never reaches them. Token colours come from CSS variables
+  // (CODE_THEME). Null until the chunk loads, and it stays null (plain text)
+  // if the chunk fails to load.
   const [highlighter, setHighlighter] = useState<LoadedHighlighter | null>(
     null,
   );
@@ -176,10 +244,12 @@ export function CodeBlock({
 
   useEffect(() => {
     let active = true;
-    void import("react-syntax-highlighter/dist/esm/prism").then((prism) => {
-      if (!active) return;
-      setHighlighter({ SyntaxHighlighter: prism.default });
-    });
+    void loadHighlighter()
+      .then((SyntaxHighlighter) => {
+        if (!active) return;
+        setHighlighter({ SyntaxHighlighter });
+      })
+      .catch(keepPlainText);
     return () => {
       active = false;
     };

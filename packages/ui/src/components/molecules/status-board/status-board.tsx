@@ -1,5 +1,6 @@
 import * as React from "react";
 
+import { keyByOccurrence } from "../../../lib/occurrence-keys";
 import type { HeadingTag } from "../../../lib/types";
 import { cn } from "../../../lib/utils";
 import { Badge } from "../../atoms/badge/badge";
@@ -97,10 +98,10 @@ function getColumnsClassName(columns: 2 | 3 | 4): string {
 
 function getSummary(items: StatusBoardItem[]) {
   const counts = items.reduce<Record<StatusBoardStatus, number>>(
-    (summary, item) => ({
-      ...summary,
-      [item.status]: summary[item.status] + 1,
-    }),
+    (summary, item) => {
+      summary[item.status] += 1;
+      return summary;
+    },
     {
       critical: 0,
       healthy: 0,
@@ -207,11 +208,8 @@ export const StatusBoard = ({
       </div>
 
       <div className={cn("grid gap-4", getColumnsClassName(columns))}>
-        {items.map((item, index) => (
-          <StatusBoardCard
-            item={item}
-            key={`${item.label}-${index.toString()}`}
-          />
+        {keyByOccurrence(items, (item) => item.label).map(({ item, key }) => (
+          <StatusBoardCard item={item} key={key} />
         ))}
       </div>
     </div>

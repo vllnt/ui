@@ -376,7 +376,7 @@ function OverviewRing({
             aria-valuemax={100}
             aria-valuemin={0}
             aria-valuenow={overallProgress}
-            className="stroke-primary transition-all duration-500"
+            className="stroke-primary transition-[stroke-dashoffset] duration-500"
             cx="60"
             cy="60"
             fill="none"

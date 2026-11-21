@@ -154,4 +154,17 @@ describe("Slideshow navigation timer", () => {
     fireEvent.click(close);
     expect(opener).toHaveFocus();
   });
+
+  it("closes the table of contents when the backdrop is clicked", () => {
+    renderSlideshow();
+    fireEvent.click(
+      screen.getByRole("button", { name: "Open table of contents" }),
+    );
+
+    const backdrop = screen.getByRole("dialog").previousElementSibling;
+    expect(backdrop).toHaveAttribute("aria-hidden", "true");
+    if (backdrop) fireEvent.click(backdrop);
+
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+  });
 });

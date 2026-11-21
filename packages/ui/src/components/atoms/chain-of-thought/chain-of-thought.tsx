@@ -1,3 +1,5 @@
+import { Children } from "react";
+
 import { cva, type VariantProps } from "class-variance-authority";
 import { Check, LoaderCircle, X } from "lucide-react";
 
@@ -123,14 +125,15 @@ export const ChainOfThought = ({
   steps,
 }: ChainOfThoughtProps & { ref?: React.Ref<HTMLOListElement> }) => (
   <ol className={cn("flex flex-col", className)} ref={ref}>
-    {steps.map((step, index) => (
-      <ChainOfThoughtItem
-        index={index}
-        isLast={index === steps.length - 1}
-        key={`${index}-${step.title}`}
-        step={step}
-      />
-    ))}
+    {Children.toArray(
+      steps.map((step, index) => (
+        <ChainOfThoughtItem
+          index={index}
+          isLast={index === steps.length - 1}
+          step={step}
+        />
+      )),
+    )}
   </ol>
 );
 ChainOfThought.displayName = "ChainOfThought";

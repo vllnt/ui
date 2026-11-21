@@ -87,6 +87,20 @@ describe("OrderSummary lines", () => {
 
     expect(container.querySelectorAll("dt")).toHaveLength(3);
   });
+
+  it("renders repeated labels without duplicate-key errors", () => {
+    const error = vi.spyOn(console, "error").mockImplementation(() => null);
+    const { container } = renderSummary({
+      lines: [
+        { label: "Discount", value: "-$5.00" },
+        { label: "Discount", value: "-$2.00" },
+      ],
+    });
+
+    expect(container.querySelectorAll("dt")).toHaveLength(3);
+    expect(error).not.toHaveBeenCalled();
+    error.mockRestore();
+  });
 });
 
 describe("OrderSummary shell", () => {

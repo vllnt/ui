@@ -100,7 +100,7 @@ describe("useFocusContainment", () => {
           {open ? (
             <div ref={reference}>
               {/* eslint-disable-next-line jsx-a11y/no-autofocus */}
-              <input aria-label="field" autoFocus />
+              <input aria-label="Email address" autoFocus />
               <button
                 onClick={() => {
                   setOpen(false);
@@ -118,7 +118,9 @@ describe("useFocusContainment", () => {
     const opener = screen.getByRole("button", { name: "opener" });
     opener.focus();
     fireEvent.click(opener);
-    expect(screen.getByRole("textbox", { name: "field" })).toHaveFocus();
+    expect(
+      screen.getByRole("textbox", { name: "Email address" }),
+    ).toHaveFocus();
     fireEvent.click(screen.getByRole("button", { name: "close" }));
     expect(opener).toHaveFocus();
   });

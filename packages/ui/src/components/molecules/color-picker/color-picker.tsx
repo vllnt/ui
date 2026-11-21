@@ -2,6 +2,7 @@
 
 import * as React from "react";
 
+import { keyByOccurrence } from "../../../lib/occurrence-keys";
 import { cn } from "../../../lib/utils";
 import { Button } from "../../atoms/button/button";
 import { Input } from "../../atoms/input/input";
@@ -54,23 +55,25 @@ type SwatchGridProps = {
 function SwatchGrid({ onSelect, selected, swatches }: SwatchGridProps) {
   return (
     <div className="grid grid-cols-6 gap-2" role="group">
-      {swatches.map((swatch, index) => (
-        <button
-          aria-label={swatch}
-          aria-pressed={swatch.toLowerCase() === selected.toLowerCase()}
-          className={cn(
-            "size-7 rounded-md border outline-none ring-offset-background focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
-            swatch.toLowerCase() === selected.toLowerCase() &&
-              "ring-2 ring-ring",
-          )}
-          key={`${swatch}-${index.toString()}`}
-          onClick={() => {
-            onSelect(swatch);
-          }}
-          style={{ backgroundColor: swatch }}
-          type="button"
-        />
-      ))}
+      {keyByOccurrence(swatches, (swatch) => swatch).map(
+        ({ item: swatch, key }) => (
+          <button
+            aria-label={swatch}
+            aria-pressed={swatch.toLowerCase() === selected.toLowerCase()}
+            className={cn(
+              "size-7 rounded-md border outline-none ring-offset-background focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+              swatch.toLowerCase() === selected.toLowerCase() &&
+                "ring-2 ring-ring",
+            )}
+            key={key}
+            onClick={() => {
+              onSelect(swatch);
+            }}
+            style={{ backgroundColor: swatch }}
+            type="button"
+          />
+        ),
+      )}
     </div>
   );
 }

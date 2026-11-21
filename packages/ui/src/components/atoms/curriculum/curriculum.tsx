@@ -123,7 +123,7 @@ function ProgressBar({
     <div className="mt-1 flex items-center gap-2">
       <div className="h-1.5 max-w-[120px] flex-1 overflow-hidden rounded-full bg-secondary">
         <div
-          className="h-full rounded-full bg-primary transition-all"
+          className="h-full rounded-full bg-primary transition-[width]"
           style={{ width: `${progressPct}%` }}
         />
       </div>

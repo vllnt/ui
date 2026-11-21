@@ -4,7 +4,6 @@ import { Suspense, useEffect, useRef, useState } from "react";
 
 import { useRouter, useSearchParams } from "next/navigation";
 
-import { useDebounce } from "../../../lib/use-debounce";
 import { useEventCallback } from "../../../lib/use-event-callback";
 import { Button } from "../../atoms/button/button";
 import { Input } from "../../atoms/input/input";
@@ -47,6 +46,9 @@ function SearchBarFallback({
   );
 }
 
+const COMMIT_DELAY_MS = 300;
+const TYPING_RESET_DELAY_MS = 350;
+
 function SearchBarInner({
   className,
   onSearch,
@@ -56,20 +58,50 @@ function SearchBarInner({
   const searchParameters = useSearchParams();
   const initialQuery = searchParameters.get("search") ?? "";
   const [query, setQuery] = useState(initialQuery);
-  const debouncedQuery = useDebounce(query, 300);
-  const isInitialMount = useRef(true);
   const isUserTyping = useRef(false);
 
   const typingTimeoutReference = useRef<NodeJS.Timeout | undefined>(undefined);
-  const lastSetSearchParameterReference = useRef<string>("");
-  const lastDebouncedQueryReference = useRef<string>("");
+  const commitTimeoutReference = useRef<NodeJS.Timeout | undefined>(undefined);
+  const initialTrimmedQuery = initialQuery.trim();
+  const lastSetSearchParameterReference = useRef<string>(initialTrimmedQuery);
+  const lastDebouncedQueryReference = useRef<string>(initialTrimmedQuery);
 
-  // The effect below depends on whether `onSearch` exists, never on its
-  // identity: this event callback always calls the latest prop, so a parent
-  // passing a fresh callback does not re-run the effect.
-  const hasOnSearch = Boolean(onSearch);
-  const emitSearch = useEventCallback((nextQuery: string) => {
-    onSearch?.(nextQuery);
+  const replaceSearchParameter = (trimmedQuery: string) => {
+    const parameters = new URLSearchParams(searchParameters);
+    if (trimmedQuery) {
+      parameters.set("search", trimmedQuery);
+    } else {
+      parameters.delete("search");
+    }
+    lastSetSearchParameterReference.current = trimmedQuery;
+    router.replace(`?${parameters.toString()}`);
+  };
+
+  // Runs from a timer started by typing. The event callback reads the latest
+  // props, router and URL when the timer fires, so a parent passing a fresh
+  // `onSearch` neither restarts the debounce nor re-emits the same query.
+  const commitQuery = useEventCallback((nextQuery: string) => {
+    const trimmedQuery = nextQuery.trim();
+
+    // Skip if this is the same value we already processed
+    if (trimmedQuery === lastDebouncedQueryReference.current) {
+      return;
+    }
+
+    lastDebouncedQueryReference.current = trimmedQuery;
+
+    if (onSearch) {
+      onSearch(trimmedQuery);
+      return;
+    }
+
+    // Skip if URL already matches the debounced query
+    if (trimmedQuery === (searchParameters.get("search") ?? "")) {
+      lastSetSearchParameterReference.current = trimmedQuery;
+      return;
+    }
+
+    replaceSearchParameter(trimmedQuery);
   });
 
   // Sync query with URL search params (e.g., on browser back/forward)
@@ -95,75 +127,30 @@ function SearchBarInner({
     };
   }, [searchParameters, query]); // Include query to properly sync state
 
-  // Update URL when debounced query changes
-  useEffect(() => {
-    // Skip initial mount to avoid unnecessary URL update
-    if (isInitialMount.current) {
-      isInitialMount.current = false;
-      const initialTrimmed = debouncedQuery.trim();
-      lastDebouncedQueryReference.current = initialTrimmed;
-      lastSetSearchParameterReference.current = initialTrimmed;
-      return;
-    }
-
-    const trimmedQuery = debouncedQuery.trim();
-
-    // Skip if this is the same value we already processed
-    if (trimmedQuery === lastDebouncedQueryReference.current) {
-      return;
-    }
-
-    lastDebouncedQueryReference.current = trimmedQuery;
-
-    if (hasOnSearch) {
-      emitSearch(trimmedQuery);
-      return;
-    }
-
-    // Check current URL to avoid unnecessary updates
-    const currentUrlParameter = searchParameters.get("search") ?? "";
-
-    // Skip if URL already matches the debounced query
-    if (trimmedQuery === currentUrlParameter) {
-      lastSetSearchParameterReference.current = trimmedQuery;
-      return;
-    }
-
-    const parameters = new URLSearchParams(searchParameters);
-    if (trimmedQuery) {
-      parameters.set("search", trimmedQuery);
-    } else {
-      parameters.delete("search");
-    }
-    const newUrl = parameters.toString();
-    lastSetSearchParameterReference.current = trimmedQuery;
-    // router.replace is the App Router client-side navigation primitive;
-    // react-doctor's nextjs-no-client-side-redirect targets window.location.
-    router.replace(`?${newUrl}`);
-  }, [debouncedQuery, emitSearch, hasOnSearch, router, searchParameters]);
-
-  // Cleanup timeout on unmount
+  // Cleanup timeouts on unmount
   useEffect(() => {
     return () => {
-      if (typingTimeoutReference.current) {
-        clearTimeout(typingTimeoutReference.current);
-      }
+      clearTimeout(typingTimeoutReference.current);
+      clearTimeout(commitTimeoutReference.current);
     };
   }, []);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const nextQuery = event.target.value;
     isUserTyping.current = true;
-    setQuery(event.target.value);
-
-    // Clear existing timeout
-    if (typingTimeoutReference.current) {
-      clearTimeout(typingTimeoutReference.current);
-    }
+    setQuery(nextQuery);
 
     // Reset typing flag after debounce delay + buffer
+    clearTimeout(typingTimeoutReference.current);
     typingTimeoutReference.current = setTimeout(() => {
       isUserTyping.current = false;
-    }, 350);
+    }, TYPING_RESET_DELAY_MS);
+
+    // Commit the query once typing pauses
+    clearTimeout(commitTimeoutReference.current);
+    commitTimeoutReference.current = setTimeout(() => {
+      commitQuery(nextQuery);
+    }, COMMIT_DELAY_MS);
   };
 
   const handleSubmit = (event: React.SyntheticEvent) => {
@@ -171,23 +158,13 @@ function SearchBarInner({
     isUserTyping.current = false;
 
     // Clear typing timeout
-    if (typingTimeoutReference.current) {
-      clearTimeout(typingTimeoutReference.current);
-    }
+    clearTimeout(typingTimeoutReference.current);
 
     const trimmedQuery = query.trim();
     if (onSearch) {
       onSearch(trimmedQuery);
     } else {
-      const parameters = new URLSearchParams(searchParameters);
-      if (trimmedQuery) {
-        parameters.set("search", trimmedQuery);
-      } else {
-        parameters.delete("search");
-      }
-      const newUrl = parameters.toString();
-      lastSetSearchParameterReference.current = trimmedQuery;
-      router.replace(`?${newUrl}`);
+      replaceSearchParameter(trimmedQuery);
     }
   };
 

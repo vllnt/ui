@@ -44,4 +44,13 @@ describe("Terminal keys", () => {
     expect(error).not.toHaveBeenCalled();
     error.mockRestore();
   });
+
+  it("keeps a streaming line's row when its content grows", () => {
+    const { rerender } = render(
+      <Terminal lines={[{ content: "Build", type: "output" }]} />,
+    );
+    const row = screen.getByText("Build").parentElement;
+    rerender(<Terminal lines={[{ content: "Building...", type: "output" }]} />);
+    expect(screen.getByText("Building...").parentElement).toBe(row);
+  });
 });

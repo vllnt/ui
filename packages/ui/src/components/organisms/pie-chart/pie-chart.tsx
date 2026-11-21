@@ -1,5 +1,6 @@
 import * as React from "react";
 
+import { keyByOccurrence } from "../../../lib/occurrence-keys";
 import { cn } from "../../../lib/utils";
 
 /**
@@ -200,18 +201,20 @@ export const PieChart = ({
         viewBox={`0 0 ${size} ${size}`}
         width={size}
       >
-        {slices.map((slice, index) => (
-          <PieSlice
-            fill={colors?.[index] ?? slice.color ?? color}
-            fillOpacity={
-              colors || slice.color ? 1 : sliceOpacity(index, slices.length)
-            }
-            fullCircle={fullCircle}
-            geom={geom}
-            key={`${slice.label}-${index}`}
-            slice={slice}
-          />
-        ))}
+        {keyByOccurrence(slices, (slice) => slice.label).map(
+          ({ item: slice, key }, index) => (
+            <PieSlice
+              fill={colors?.[index] ?? slice.color ?? color}
+              fillOpacity={
+                colors || slice.color ? 1 : sliceOpacity(index, slices.length)
+              }
+              fullCircle={fullCircle}
+              geom={geom}
+              key={key}
+              slice={slice}
+            />
+          ),
+        )}
       </svg>
     </div>
   );
