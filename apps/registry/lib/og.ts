@@ -134,17 +134,19 @@ export function pageMetadata({
 
 /** Page metadata for an MDX page; the `og` frontmatter overrides the social card. */
 export function frontmatterPageMetadata(
-  { description, og, title, type }: PageFrontmatter,
+  { description, og, seoTitle, title, type }: PageFrontmatter,
   options: { readonly locale: Locale; readonly pathname: string },
 ): Metadata {
+  const documentTitle = seoTitle ?? title;
+
   return pageMetadata({
     ...options,
     description,
     og: {
       description: og?.description ?? description,
-      title: og?.title ?? title,
+      title: og?.title ?? documentTitle,
       type: og?.type ?? type,
     },
-    title,
+    title: documentTitle,
   });
 }

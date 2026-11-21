@@ -76,6 +76,23 @@ describe("frontmatterPageMetadata", () => {
       title: "Page title",
     });
   });
+
+  it("uses seoTitle for the document and social titles, keeping title for the H1", () => {
+    const metadata = frontmatterPageMetadata(
+      {
+        description: "Page desc",
+        seoTitle: "Vision: generative UI | VLLNT UI",
+        title: "Vision",
+        type: "docs",
+      },
+      { locale: "en", pathname: "/docs/vision" },
+    );
+
+    expect(metadata).toMatchObject({
+      openGraph: { title: "Vision: generative UI | VLLNT UI" },
+      title: "Vision: generative UI | VLLNT UI",
+    });
+  });
 });
 
 describe("generateTwitterMetadata", () => {
