@@ -22,6 +22,11 @@ All notable changes to `@vllnt/ui-core` are documented in this file.
 
 - README documents the install command.
 
+- Core type weights follow the Penpot library: `fontWeight.caption` is 400
+  (was 500) and `fontWeight.label` is 500 (was 600), in `designTokens`,
+  `nativeTokens`, `tamaguiTokens` and the PaaS product theme, which uses the
+  core weights. The Maia theme keeps its own 500 and 600.
+
 - The PaaS product theme's dark `card`, `popover` and `muted` are now
   `#000000` (`productThemes.paas` and `tamaguiThemes.paas_dark`), following
   the web's pure-black dark surfaces. `nativeTokens` and `tamaguiTokens` keep
