@@ -189,7 +189,7 @@ export function Header({ locale }: HeaderProps) {
         openSidebarLabel={t("openNavigation")}
         rightSlot={
           <div className="flex min-w-0 items-center gap-1 sm:gap-2">
-            <div className="w-9 shrink-0 max-sm:[&_button]:size-9 max-sm:[&_button]:justify-center max-sm:[&_button]:px-0 max-sm:[&_button_span]:sr-only max-sm:[&_button_svg]:mr-0 sm:w-auto">
+            <div className="w-9 shrink-0 max-sm:[&_button]:size-9 max-sm:[&_button]:justify-center max-sm:[&_button]:px-0 max-sm:[&_button_span]:sr-only max-sm:[&_button_svg]:mr-0 sm:w-auto lg:[&_button]:w-48 2xl:[&_button]:w-64">
               <SearchDialog
                 buttonText={t("searchButton")}
                 buttonTextMobile={t("searchButton")}
@@ -213,7 +213,7 @@ export function Header({ locale }: HeaderProps) {
                 searchPlaceholder={t("searchPlaceholder")}
               />
             </div>
-            {/* Shown from 1536 px: below that the nav links need the room, and the footer and /docs/changelog link the same pages. */}
+            {/* Shown from 1536 px, where the search button also widens back to 256 px: below that the nav links need the room (with DejaVu, the default Linux font, the row overflowed at 1280 px). The footer and /docs/changelog link the same pages. */}
             <div className="hidden 2xl:block">
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
