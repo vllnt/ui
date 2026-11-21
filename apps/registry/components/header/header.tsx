@@ -234,6 +234,7 @@ export function Header({ locale }: HeaderProps) {
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
+                    {/* react-doctor-disable-next-line react-doctor/nextjs-no-a-element -- /rss.xml is an XML feed, not a Next page; the router cannot render it */}
                     <a href="/rss.xml">{t("rssFeed")}</a>
                   </DropdownMenuItem>
                 </DropdownMenuContent>
