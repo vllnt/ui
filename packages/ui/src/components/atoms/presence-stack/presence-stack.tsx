@@ -179,7 +179,7 @@ const renderOverflow = (input: {
   const text = `+${input.count}`;
   const aria = `${input.count} ${input.labels.overflowSuffix}`;
   const className =
-    "relative -ml-2 inline-flex h-7 min-w-7 items-center justify-center rounded-full border-2 border-background bg-muted px-1.5 text-[10px] font-semibold text-muted-foreground shadow-sm";
+    "relative -ml-2 inline-flex h-7 min-w-7 items-center justify-center rounded-full border-2 border-background bg-secondary px-1.5 text-[10px] font-semibold text-muted-foreground shadow-sm";
   if (input.handlerProvided) {
     return (
       <button

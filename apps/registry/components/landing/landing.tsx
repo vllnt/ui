@@ -1,6 +1,8 @@
 import { Badge } from "@vllnt/ui";
 import {
   ArrowRight,
+  Layers,
+  Mic,
   Monitor,
   Smartphone,
   Sparkles,
@@ -94,6 +96,74 @@ async function Hero({
             </li>
           ))}
         </ul>
+      </div>
+    </section>
+  );
+}
+
+async function VisionBand() {
+  const t = await getTranslations("landing.vision");
+
+  return (
+    <section
+      aria-labelledby="landing-vision"
+      className="border-b border-border"
+    >
+      <div className="mx-auto max-w-7xl px-4 py-16 lg:px-8">
+        <p className="text-sm font-medium text-muted-foreground">
+          {t("eyebrow")}
+        </p>
+        <h2 className="mt-2 text-3xl font-semibold" id="landing-vision">
+          {t("title")}
+        </h2>
+        <p className="mt-4 max-w-2xl text-lg text-muted-foreground">
+          {t("description")}
+        </p>
+        <div className="mt-8 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          <article className="rounded-lg border border-border bg-card p-6">
+            <div className="flex items-center justify-between gap-3">
+              <div className="flex items-center gap-2">
+                <Layers aria-hidden="true" className="size-5" />
+                <h3 className="text-xl font-semibold">{t("spatialTitle")}</h3>
+              </div>
+              <Badge variant="outline">{t("roadmap")}</Badge>
+            </div>
+            <p className="mt-4 text-sm text-muted-foreground">
+              {t("spatialDescription")}
+            </p>
+          </article>
+          <article className="rounded-lg border border-border bg-card p-6">
+            <div className="flex items-center justify-between gap-3">
+              <div className="flex items-center gap-2">
+                <Sparkles aria-hidden="true" className="size-5" />
+                <h3 className="text-xl font-semibold">{t("dynamicTitle")}</h3>
+              </div>
+              <Badge variant="outline">{t("partlyShipped")}</Badge>
+            </div>
+            <p className="mt-4 text-sm text-muted-foreground">
+              {t("dynamicDescription")}
+            </p>
+          </article>
+          <article className="rounded-lg border border-border bg-card p-6">
+            <div className="flex items-center justify-between gap-3">
+              <div className="flex items-center gap-2">
+                <Mic aria-hidden="true" className="size-5" />
+                <h3 className="text-xl font-semibold">{t("voiceTitle")}</h3>
+              </div>
+              <Badge variant="outline">{t("roadmap")}</Badge>
+            </div>
+            <p className="mt-4 text-sm text-muted-foreground">
+              {t("voiceDescription")}
+            </p>
+          </article>
+        </div>
+        <Link
+          className="mt-8 inline-flex min-h-11 items-center gap-2 rounded-md border border-border px-5 text-sm font-medium hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          href="/docs/vision"
+        >
+          {t("readVision")}
+          <ArrowRight aria-hidden="true" className="size-4" />
+        </Link>
       </div>
     </section>
   );
@@ -406,6 +476,7 @@ export async function Landing() {
   return (
     <>
       <Hero componentCount={componentCount} version={latest} />
+      <VisionBand />
       <RendererChoices />
       <Stats
         categoryCount={categoryCount}

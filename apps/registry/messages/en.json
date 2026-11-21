@@ -100,7 +100,7 @@
   },
   "landing": {
     "agent": {
-      "description": "Every component ships as a machine-readable JSON descriptor with name, version, stability, accessibility schema, usage examples, and prop definitions. Agents discover the registry through three surfaces.",
+      "description": "Every component ships as a machine-readable JSON descriptor with its name, version, stability, platforms, files and dependencies. Accessibility notes, usage examples and prop definitions are being added component by component. Agents discover the registry through three surfaces.",
       "eyebrow": "Agent-first",
       "llmsDescription": "Concise index per the llmstxt.org spec - sections, links, descriptions.",
       "llmsFullDescription": "Full registry context in one fetch - docs + per-component descriptors.",
@@ -173,6 +173,20 @@
       "rsc": "Works in Next.js App Router",
       "tailwind": "Tailwind CSS 3.4",
       "typescript": "TypeScript"
+    },
+    "vision": {
+      "eyebrow": "Vision",
+      "title": "The UI layer for generative, voice-first, spatial and holographic interfaces.",
+      "description": "Today one shared core renders VLLNT UI on the web and in React Native. Next, the same components and tokens are planned to render in AR and spatial apps, and to be composed by AI at runtime: streamed to the screen, fitted to each user, and updated without a rebuild.",
+      "spatialTitle": "Spatial",
+      "spatialDescription": "Depth, hand and gaze input, and larger targets, on the same components. Proposed for 0.5.0 in an open RFC; nothing spatial ships yet.",
+      "dynamicTitle": "Generative UI",
+      "dynamicDescription": "Machine-readable descriptors, the MCP server, themes as data and streaming states ship today. A full props schema and per-user themes are on the roadmap. Integration with Vercel json-render and the AI SDK is on the roadmap too.",
+      "roadmap": "Roadmap",
+      "partlyShipped": "Partly shipped",
+      "readVision": "Read the vision",
+      "voiceTitle": "Voice-first",
+      "voiceDescription": "The UI follows the voice: live transcript, listening and push-to-talk states, waveform, and spoken answers that always have a text equivalent. Nothing voice-specific ships yet."
     }
   },
   "pages": {

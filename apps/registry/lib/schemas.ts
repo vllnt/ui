@@ -12,6 +12,8 @@ const ogImageFrontmatterSchema = z.object({
 export const pageFrontmatterSchema = z.object({
   description: z.string().min(1),
   og: ogImageFrontmatterSchema.optional(),
+  /** Document `<title>` when it should differ from the on-page H1 (`title`). */
+  seoTitle: z.string().min(1).optional(),
   title: z.string().min(1),
   type: ogTypeSchema.default("page"),
 });

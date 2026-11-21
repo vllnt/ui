@@ -35,7 +35,9 @@ const SKELETON_OR_BAR = /^(?:animate-pulse|h-(?:0\.5|1|1\.5|2))$/;
  * also finds.
  */
 const SECONDARY_STRUCTURAL_FILLS: readonly (readonly [string, number])[] = [
+  ["atoms/avatar/avatar.tsx", 1], // fallback disc
   ["atoms/meter/meter.tsx", 2], // track and empty segment
+  ["atoms/presence-stack/presence-stack.tsx", 1], // overflow disc
   ["atoms/progress-bar/progress-bar.tsx", 3], // track variants and two skeletons
   ["atoms/tldr-section/tldr-section.tsx", 4], // skeleton lines
   ["organisms/activity-heatmap/activity-heatmap.tsx", 1], // empty cell

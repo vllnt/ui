@@ -25,6 +25,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
   `data-jarvis-*` selectors to `data-command-*`, and install with
   `pnpm dlx shadcn@latest add https://ui.vllnt.com/r/command-dock.json`. (#682)
 
+### Fixed
+
+- **Avatar fallback in dark** - `AvatarFallback` and the `PresenceStack`
+  overflow chip fill their disc with `bg-secondary` (#262626). They used
+  `bg-muted`, which is the page colour (#000000) in dark, so the disc
+  disappeared and only the initials showed. Light mode is unchanged. A test
+  fails if either goes back to `bg-muted`. (#686)
+
 ## [0.4.0] - 2026-11-20
 
 ### Added
