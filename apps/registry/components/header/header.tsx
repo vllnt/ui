@@ -178,7 +178,7 @@ export function Header({ locale }: HeaderProps) {
       <NavbarSaas
         brand={
           <Link
-            className="truncate text-xl font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            className="shrink-0 whitespace-nowrap text-xl font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             href={preserveQuery("/")}
           >
             VLLNT UI
@@ -213,7 +213,8 @@ export function Header({ locale }: HeaderProps) {
                 searchPlaceholder={t("searchPlaceholder")}
               />
             </div>
-            <div className="hidden lg:block">
+            {/* Shown from 1536 px: below that the nav links need the room, and the footer and /docs/changelog link the same pages. */}
+            <div className="hidden 2xl:block">
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button className="min-h-11" size="sm" variant="outline">

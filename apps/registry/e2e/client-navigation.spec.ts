@@ -266,3 +266,43 @@ test.describe("keyboard", () => {
     await expect(page.locator("main")).toBeFocused();
   });
 });
+
+test.describe("header on wide screens", () => {
+  for (const width of [1280, 1366, 1400, 1440, 1536]) {
+    for (const path of ["/", "/fr"]) {
+      test(`${path} at ${width.toString()} px shows the whole brand and every control`, async ({
+        page,
+      }) => {
+        await page.setViewportSize({ height: 900, width });
+        await page.goto(path);
+        await page.waitForLoadState("networkidle");
+
+        const layout = await page.evaluate(() => {
+          const header = document.querySelector("header");
+          const row = header?.querySelector(":scope > div > div");
+          const clipped = [...(header?.querySelectorAll("a, button") ?? [])]
+            .filter((element) => {
+              const box = element.getBoundingClientRect();
+
+              return (
+                box.width > 0 &&
+                (element.scrollWidth > element.clientWidth + 1 ||
+                  box.left < 0 ||
+                  box.right > window.innerWidth)
+              );
+            })
+            .map((element) => element.textContent?.trim() ?? "");
+
+          return {
+            clipped,
+            pageOverflow:
+              document.documentElement.scrollWidth - window.innerWidth,
+            rowOverflow: row ? row.scrollWidth - row.clientWidth : -1,
+          };
+        });
+
+        expect(layout).toEqual({ clipped: [], pageOverflow: 0, rowOverflow: 0 });
+      });
+    }
+  }
+});
