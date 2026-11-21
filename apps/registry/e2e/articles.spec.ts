@@ -65,7 +65,9 @@ for (const locale of ["en", "fr"] as const) {
 
       await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
       const hrefs = await page
-        .locator(`main a[href$="/articles/${NEWEST}"], main a[href$="/articles/${OLDER}"]`)
+        .locator(
+          `main a[href$="/articles/${NEWEST}"], main a[href$="/articles/${OLDER}"]`,
+        )
         .evaluateAll((links) =>
           links.map((link) => link.getAttribute("href") ?? ""),
         );
@@ -73,15 +75,20 @@ for (const locale of ["en", "fr"] as const) {
         `${prefix}/articles/${NEWEST}`,
         `${prefix}/articles/${OLDER}`,
       ]);
-      await expect(page.locator(`main a[href$="/articles/${DRAFT}"]`)).toHaveCount(
-        0,
-      );
+      await expect(
+        page.locator(`main a[href$="/articles/${DRAFT}"]`),
+      ).toHaveCount(0);
 
       await expect(
-        page.locator('link[rel="alternate"][type="application/rss+xml"]'),
+        // the layout also advertises the site-wide release feeds
+        page.locator(
+          'link[rel="alternate"][type="application/rss+xml"][href*="/articles/"]',
+        ),
       ).toHaveAttribute("href", new RegExp(`/articles/${locale}/rss\\.xml$`));
       await expect(
-        page.locator('link[rel="alternate"][type="application/atom+xml"]'),
+        page.locator(
+          'link[rel="alternate"][type="application/atom+xml"][href*="/articles/"]',
+        ),
       ).toHaveAttribute("href", new RegExp(`/articles/${locale}/atom\\.xml$`));
       expect(errors).toEqual([]);
     });
@@ -91,9 +98,15 @@ for (const locale of ["en", "fr"] as const) {
     }) => {
       const errors = consoleErrors(page);
       await page.goto(`${prefix}/articles`);
-      await page.locator(`main a[href$="/articles/${NEWEST}"]`).first().click();
-
-      await expect(page).toHaveURL(new RegExp(`${prefix}/articles/${NEWEST}$`));
+      // A click that lands before the page hydrates is dropped; retry until it navigates.
+      const articleUrl = new RegExp(`${prefix}/articles/${NEWEST}$`);
+      await expect(async () => {
+        await page
+          .locator(`main a[href$="/articles/${NEWEST}"]`)
+          .first()
+          .click();
+        await expect(page).toHaveURL(articleUrl, { timeout: 5000 });
+      }).toPass({ timeout: 20_000 });
       await expect(page.getByRole("heading", { level: 1 })).toHaveText(
         /glass surfaces|surfaces en verre/i,
       );
@@ -142,9 +155,9 @@ for (const locale of ["en", "fr"] as const) {
           ? NEWEST_TITLE
           : "Article de test sur les surfaces en verre | VLLNT UI",
       );
-      await expect(page.locator('meta[name="robots"][content*="noindex"]')).toHaveCount(
-        0,
-      );
+      await expect(
+        page.locator('meta[name="robots"][content*="noindex"]'),
+      ).toHaveCount(0);
     });
 
     test("an article without a hosted image uses the generated social card", async ({
@@ -164,7 +177,9 @@ for (const locale of ["en", "fr"] as const) {
       await page.goto(`${prefix}/articles/${NEWEST}`);
       const nodes = await jsonLdNodes(page);
       const article = nodes.find((node) => node["@type"] === "Article");
-      const breadcrumb = nodes.find((node) => node["@type"] === "BreadcrumbList");
+      const breadcrumb = nodes.find(
+        (node) => node["@type"] === "BreadcrumbList",
+      );
 
       expect(article).toMatchObject({
         dateModified: "2026-11-02",
