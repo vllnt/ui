@@ -70,6 +70,22 @@ jobs:
         working-directory: packages/ui
         run: pnpm build-storybook
 
+      # The Cloudflare zone injects its own Web Analytics beacon; a tag from the
+      # build posts to cloudflareinsights.com and is rejected, so none may ship.
+      - name: Guard against a site-side Cloudflare beacon
+        working-directory: packages/ui
+        run: |
+          test -f storybook-static/index.html
+          status=0
+          hits=$(grep -rlE 'cloudflareinsights|data-cf-beacon' --include='*.html' storybook-static) || status=$?
+          if [ "$status" -eq 0 ]; then
+            echo "::error::Cloudflare beacon found in the built Storybook HTML:"
+            echo "$hits"
+            exit 1
+          fi
+          # grep exits 1 when nothing matches; anything else is a real error.
+          test "$status" -eq 1
+
       - name: Upload Storybook artifact
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
