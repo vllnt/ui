@@ -1,5 +1,3 @@
-import { StaticCode } from "@vllnt/ui";
-
 import { ComponentSourceTabs } from "./component-source-tabs";
 
 export type ComponentSource = {
@@ -14,16 +12,12 @@ type ComponentSourceCodeProps = {
   readonly sources: readonly ComponentSource[];
 };
 
-function renderSource(source: ComponentSource) {
-  return (
-    <StaticCode
-      className="max-h-[25rem]"
-      code={source.code}
-      language={source.language ?? "typescript"}
-    />
-  );
-}
-
+/**
+ * Passes the raw source text to the client tabs, which highlight it. A
+ * server-highlighted tree would put one element per token into the page
+ * payload (about 1.2 MB on the largest component pages) even for a tab that is
+ * never opened.
+ */
 export function ComponentSourceCode({
   label,
   sources,
@@ -34,18 +28,7 @@ export function ComponentSourceCode({
   return (
     <ComponentSourceTabs
       label={label}
-      sources={[
-        {
-          content: renderSource(firstSource),
-          id: firstSource.id,
-          label: firstSource.label,
-        },
-        ...additionalSources.map((source) => ({
-          content: renderSource(source),
-          id: source.id,
-          label: source.label,
-        })),
-      ]}
+      sources={[firstSource, ...additionalSources]}
     />
   );
 }
