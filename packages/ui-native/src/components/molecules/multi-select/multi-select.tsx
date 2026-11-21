@@ -1,9 +1,10 @@
 "use client";
 
-import { type Ref, useMemo, useState } from "react";
+import { type Ref, useCallback, useMemo, useState } from "react";
 
 import {
-  ScrollView,
+  FlatList,
+  type ListRenderItemInfo,
   StyleSheet,
   Text as NativeText,
   View,
@@ -59,6 +60,50 @@ const styles = StyleSheet.create({
   trigger: { borderWidth: 1, justifyContent: "center" },
 });
 
+type MultiSelectOptionRowProps = {
+  readonly disabled: boolean | undefined;
+  readonly onToggle: (option: MultiSelectOption) => void;
+  readonly option: MultiSelectOption;
+  readonly selected: boolean;
+};
+
+function MultiSelectOptionRow({
+  disabled,
+  onToggle,
+  option,
+  selected,
+}: MultiSelectOptionRowProps) {
+  const theme = useTheme();
+  return (
+    <InteractivePressable
+      accessibilityLabel={option.label}
+      accessibilityRole="checkbox"
+      accessibilityState={{ checked: selected, disabled }}
+      disabled={disabled}
+      onPress={() => {
+        onToggle(option);
+      }}
+      selected={selected}
+      style={[
+        styles.option,
+        {
+          backgroundColor: selected
+            ? theme.colors.accent
+            : theme.colors.background,
+          borderRadius: theme.radius.sm,
+          paddingHorizontal: theme.spacing[3],
+        },
+      ]}
+    >
+      <NativeText style={typeStyle(theme, "bodySmall", "foreground")}>
+        {selected ? "✓ " : ""}
+        {option.label}
+      </NativeText>
+    </InteractivePressable>
+  );
+}
+MultiSelectOptionRow.displayName = "MultiSelectOptionRow";
+
 /**
  * Native multi-select with optional real text filtering and modal options. The
  * trigger speaks the selected options (or placeholder) as its value, and the
@@ -98,6 +143,23 @@ function MultiSelect({
         .includes(normalizedQuery),
     );
   }, [options, query]);
+  const toggleOption = useCallback(
+    (option: MultiSelectOption) => {
+      setSelectedIds(toggleMultipleSelected(selectedIds, option, getId));
+    },
+    [getId, selectedIds, setSelectedIds],
+  );
+  const renderOption = useCallback(
+    ({ item }: ListRenderItemInfo<MultiSelectOption>) => (
+      <MultiSelectOptionRow
+        disabled={disabled || item.disabled}
+        onToggle={toggleOption}
+        option={item}
+        selected={selectedIds.has(item.id)}
+      />
+    ),
+    [disabled, selectedIds, toggleOption],
+  );
   const noResults = visibleOptions.length === 0;
   useAnnounceOnChange(
     query.trim()
@@ -189,46 +251,11 @@ function MultiSelect({
               value={query}
             />
           ) : null}
-          <ScrollView keyboardShouldPersistTaps="handled">
-            {visibleOptions.map((option) => {
-              const selected = selectedIds.has(option.id);
-              return (
-                <InteractivePressable
-                  accessibilityLabel={option.label}
-                  accessibilityRole="checkbox"
-                  accessibilityState={{
-                    checked: selected,
-                    disabled: disabled || option.disabled,
-                  }}
-                  disabled={disabled || option.disabled}
-                  key={option.id}
-                  onPress={() => {
-                    setSelectedIds(
-                      toggleMultipleSelected(selectedIds, option, getId),
-                    );
-                  }}
-                  selected={selected}
-                  style={[
-                    styles.option,
-                    {
-                      backgroundColor: selected
-                        ? theme.colors.accent
-                        : theme.colors.background,
-                      borderRadius: theme.radius.sm,
-                      paddingHorizontal: theme.spacing[3],
-                    },
-                  ]}
-                >
-                  <NativeText
-                    style={typeStyle(theme, "bodySmall", "foreground")}
-                  >
-                    {selected ? "✓ " : ""}
-                    {option.label}
-                  </NativeText>
-                </InteractivePressable>
-              );
-            })}
-            {noResults ? (
+          <FlatList
+            data={visibleOptions}
+            keyboardShouldPersistTaps="handled"
+            keyExtractor={(option) => option.id}
+            ListEmptyComponent={
               <NativeText
                 accessibilityLiveRegion="polite"
                 style={typeStyle(theme, "bodySmall", {
@@ -238,8 +265,9 @@ function MultiSelect({
               >
                 {labels.empty}
               </NativeText>
-            ) : null}
-          </ScrollView>
+            }
+            renderItem={renderOption}
+          />
           <InteractivePressable
             accessibilityLabel={labels.close}
             accessibilityRole="button"

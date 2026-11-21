@@ -1,9 +1,10 @@
 "use client";
 
-import { type Ref, useMemo } from "react";
+import { type Ref, useCallback, useMemo } from "react";
 
 import {
-  ScrollView,
+  FlatList,
+  type ListRenderItemInfo,
   StyleSheet,
   Text as NativeText,
   View,
@@ -86,6 +87,52 @@ const styles = StyleSheet.create({
   },
 });
 
+type SelectOptionRowProps = {
+  readonly disabled: boolean;
+  readonly onSelect: (id: string) => void;
+  readonly option: SelectOption;
+  readonly selected: boolean;
+};
+
+function SelectOptionRow({
+  disabled,
+  onSelect,
+  option,
+  selected,
+}: SelectOptionRowProps) {
+  const theme = useTheme();
+  return (
+    <InteractivePressable
+      accessibilityLabel={option.label}
+      accessibilityRole="radio"
+      accessibilityState={{ checked: selected, disabled }}
+      disabled={disabled}
+      onPress={() => {
+        onSelect(option.id);
+      }}
+      selected={selected}
+      style={[
+        styles.option,
+        {
+          backgroundColor: selected
+            ? theme.colors.accent
+            : theme.colors.background,
+          borderRadius: theme.radius.sm,
+          paddingHorizontal: theme.spacing[3],
+        },
+      ]}
+    >
+      <NativeText style={typeStyle(theme, "bodySmall", "foreground")}>
+        {option.label}
+      </NativeText>
+      {selected ? (
+        <NativeText style={{ color: theme.colors.foreground }}>✓</NativeText>
+      ) : null}
+    </InteractivePressable>
+  );
+}
+SelectOptionRow.displayName = "SelectOptionRow";
+
 /**
  * Accessible native picker that presents options in a modal list. The trigger
  * speaks `labels.open` as its name and the selected option (or placeholder) as
@@ -120,6 +167,24 @@ function Select({
   );
   const error = invalid ? errorText : undefined;
   useAnnounceOnChange(error, { liveRegion: true });
+  const chooseOption = useCallback(
+    (id: string) => {
+      setSelectedId(id);
+      setModalOpen(false);
+    },
+    [setModalOpen, setSelectedId],
+  );
+  const renderOption = useCallback(
+    ({ item }: ListRenderItemInfo<SelectOption>) => (
+      <SelectOptionRow
+        disabled={disabled || item.disabled === true}
+        onSelect={chooseOption}
+        option={item}
+        selected={item.id === selectedId}
+      />
+    ),
+    [chooseOption, disabled, selectedId],
+  );
 
   return (
     <View ref={ref} style={style} {...props}>
@@ -206,50 +271,11 @@ function Select({
           >
             {labels.options}
           </NativeText>
-          <ScrollView>
-            {options.map((option) => {
-              const selected = option.id === selectedId;
-              const optionDisabled = disabled || option.disabled === true;
-              return (
-                <InteractivePressable
-                  accessibilityLabel={option.label}
-                  accessibilityRole="radio"
-                  accessibilityState={{
-                    checked: selected,
-                    disabled: optionDisabled,
-                  }}
-                  disabled={optionDisabled}
-                  key={option.id}
-                  onPress={() => {
-                    setSelectedId(option.id);
-                    setModalOpen(false);
-                  }}
-                  selected={selected}
-                  style={[
-                    styles.option,
-                    {
-                      backgroundColor: selected
-                        ? theme.colors.accent
-                        : theme.colors.background,
-                      borderRadius: theme.radius.sm,
-                      paddingHorizontal: theme.spacing[3],
-                    },
-                  ]}
-                >
-                  <NativeText
-                    style={typeStyle(theme, "bodySmall", "foreground")}
-                  >
-                    {option.label}
-                  </NativeText>
-                  {selected ? (
-                    <NativeText style={{ color: theme.colors.foreground }}>
-                      ✓
-                    </NativeText>
-                  ) : null}
-                </InteractivePressable>
-              );
-            })}
-          </ScrollView>
+          <FlatList
+            data={options}
+            keyExtractor={(option) => option.id}
+            renderItem={renderOption}
+          />
           <InteractivePressable
             accessibilityLabel={labels.close}
             accessibilityRole="button"

@@ -736,6 +736,23 @@ describe("Select open, defaultOpen and required", () => {
         .accessibilityHint,
     ).toBeUndefined();
   });
+
+  it("marks the chosen option in a long virtualized list after reopening", () => {
+    const manyOptions = Array.from({ length: 12 }, (_, index) => ({
+      id: `option-${index + 1}`,
+      label: `Option ${index + 1}`,
+    }));
+    render(selectWith({ options: manyOptions }));
+    fireEvent.press(screen.getByRole("button", { name: "Choose status" }));
+    fireEvent.press(screen.getByRole("radio", { name: "Option 2" }));
+    fireEvent.press(screen.getByRole("button", { name: "Choose status" }));
+    expect(
+      screen.getByRole("radio", { name: "Option 2" }).props.accessibilityState,
+    ).toMatchObject({ checked: true });
+    expect(
+      screen.getByRole("radio", { name: "Option 1" }).props.accessibilityState,
+    ).toMatchObject({ checked: false });
+  });
 });
 
 function MenuState(props: { readonly items: readonly DropdownMenuItem[] }) {

@@ -106,6 +106,7 @@ function TimePicker({
     choose: (item: string) => void,
   ) => (
     <ScrollView style={{ flex: 1 }}>
+      {/* react-doctor-disable-next-line react-doctor/rn-no-scrollview-mapped-list -- fixed 24 hour options and at most 60 minute options; every radio must stay mounted for screen readers */}
       {options.map((option) => (
         <InteractivePressable
           accessibilityLabel={
