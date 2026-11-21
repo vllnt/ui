@@ -6,33 +6,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
-### Changed
-
-- **`JarvisDock` is now `CommandDock`** - the floating bottom dock with
-  quick-action buttons and a command-palette trigger. Props and behavior are
-  the same. The `data-jarvis-*` attributes are now `data-command-*` and the
-  default region label is "Command dock". The registry item is `command-dock`
-  and its page is `/components/command-dock`; `/components/jarvis-dock`
-  redirects there (308). (#682)
-
-### Deprecated
-
-- **`JarvisDock` and the `jarvis-dock` registry item** - renamed to
-  `CommandDock` / `command-dock`. The aliases (`JarvisDock`, `JarvisDockAction`,
-  `JarvisDockLabels`, `JarvisDockProps`, `JarvisDockTone`, and
-  `/r/jarvis-dock.json`) stay for one release and are removed in the release
-  after next. To migrate, import `CommandDock` instead of `JarvisDock`, rename
-  `data-jarvis-*` selectors to `data-command-*`, and install with
-  `pnpm dlx shadcn@latest add https://ui.vllnt.com/r/command-dock.json`. (#682)
-
-### Fixed
-
-- **Avatar fallback in dark** - `AvatarFallback` and the `PresenceStack`
-  overflow chip fill their disc with `bg-secondary` (#262626). They used
-  `bg-muted`, which is the page colour (#000000) in dark, so the disc
-  disappeared and only the initials showed. Light mode is unchanged. A test
-  fails if either goes back to `bg-muted`. (#686)
-
 ## [0.4.0] - 2026-11-20
 
 ### Added
@@ -247,6 +220,22 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
   them; read `--font-weight-label` directly and labels get lighter. The Maia
   theme keeps its Ink scale (caption 500, label 600). Radius is unchanged:
   `radius.control` 6 and `radius.surface` 8 are the shared role names. (#669)
+- **`JarvisDock` is now `CommandDock`** - the floating bottom dock with
+  quick-action buttons and a command-palette trigger. Props and behavior are
+  the same. The `data-jarvis-*` attributes are now `data-command-*` and the
+  default region label is "Command dock". The registry item is `command-dock`
+  and its page is `/components/command-dock`; `/components/jarvis-dock`
+  redirects there (308). (#682)
+
+### Deprecated
+
+- **`JarvisDock` and the `jarvis-dock` registry item** - renamed to
+  `CommandDock` / `command-dock`. The aliases (`JarvisDock`, `JarvisDockAction`,
+  `JarvisDockLabels`, `JarvisDockProps`, `JarvisDockTone`, and
+  `/r/jarvis-dock.json`) stay for one release and are removed in the release
+  after next. To migrate, import `CommandDock` instead of `JarvisDock`, rename
+  `data-jarvis-*` selectors to `data-command-*`, and install with
+  `pnpm dlx shadcn@latest add https://ui.vllnt.com/r/command-dock.json`. (#682)
 
 ### Fixed
 
@@ -308,6 +297,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Accessible names, ARIA structure, APG keyboard patterns (tabs, radio groups,
   listbox, tree, dialogs and focus return), reduced motion and hard-coded
   palette contrast across the Web components flagged by the #535 audit. (#543)
+- **Avatar fallback in dark** - `AvatarFallback` and the `PresenceStack`
+  overflow chip fill their disc with `bg-secondary` (#262626). They used
+  `bg-muted`, which is the page colour (#000000) in dark, so the disc
+  disappeared and only the initials showed. Light mode is unchanged. A test
+  fails if either goes back to `bg-muted`. (#686)
 
 ## [0.3.0] - 2026-06-26
 
