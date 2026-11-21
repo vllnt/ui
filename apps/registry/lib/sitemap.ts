@@ -100,7 +100,7 @@ function staticRouteList(changelog: LastModified): readonly PageRouteInput[] {
       priority: 0.8,
     },
     { changeFrequency: "weekly", path: "/docs", priority: 0.8 },
-    { changeFrequency: "monthly", path: "/philosophy", priority: 0.6 },
+    { changeFrequency: "monthly", path: "/vision", priority: 0.8 },
     { changeFrequency: "monthly", path: "/design", priority: 0.8 },
     {
       changeFrequency: "weekly",

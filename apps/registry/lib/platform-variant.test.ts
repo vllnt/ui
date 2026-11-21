@@ -37,7 +37,7 @@ describe("variantPathname", () => {
     ["/docs/installation", "web"],
     ["/families", "web"],
     ["/families/ai", "web"],
-    ["/docs/philosophy", "native"],
+    ["/vision", "native"],
     ["/components/button/playground", "native"],
     ["/templates", "native"],
     ["/", "native"],

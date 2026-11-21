@@ -15,7 +15,7 @@ export type MarkdownTarget =
   | { readonly kind: "docs"; readonly slug: string }
   | { readonly kind: "docs-index" }
   | { readonly kind: "home" }
-  | { readonly kind: "philosophy" };
+  | { readonly kind: "vision" };
 
 /** The changelog page appends the CHANGELOG.md files when it renders, so MDX alone would be partial. */
 const MARKDOWN_DOCS = new Set(
@@ -69,7 +69,7 @@ export function prefersMarkdown(accept: null | string | undefined): boolean {
 export function markdownTarget(pathname: string): MarkdownTarget | undefined {
   if (pathname === "/") return { kind: "home" };
   if (pathname === "/design") return { kind: "design" };
-  if (pathname === "/philosophy") return { kind: "philosophy" };
+  if (pathname === "/vision") return { kind: "vision" };
   if (pathname === "/docs") return { kind: "docs-index" };
   if (pathname === "/components") return { kind: "components-index" };
   const [, section, slug, ...rest] = pathname.split("/");
@@ -94,7 +94,7 @@ export function markdownPathnames(): string[] {
   return [
     "/",
     "/design",
-    "/philosophy",
+    "/vision",
     "/docs",
     "/components",
     ...[...MARKDOWN_DOCS].map((slug) => `/docs/${slug}`),

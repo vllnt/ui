@@ -50,6 +50,7 @@
     "@vllnt/eslint-config": "^2.0.0",
     "@vllnt/typescript": "^2.0.0",
     "autoprefixer": "^10.6.1",
+    "axe-core": "4.12.1",
     "eslint": "^9.39.5",
     "pagefind": "^1.5.2",
     "postcss": "^8.5.31",

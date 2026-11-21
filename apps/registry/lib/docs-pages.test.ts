@@ -2,6 +2,13 @@ import { describe, expect, it } from "vitest";
 
 import { DOCS_PAGES, getDocsPage, getDocsPath } from "@/lib/docs-pages";
 
+describe("DOCS_PAGES", () => {
+  it("does not list Vision, which lives at the top level at /vision", () => {
+    expect(getDocsPage("vision")).toBeUndefined();
+    expect(DOCS_PAGES.map((page) => page.slug)).not.toContain("vision");
+  });
+});
+
 describe("getDocsPath", () => {
   it("points the changelog at its final URL, not at the redirecting docs path", () => {
     const changelog = getDocsPage("changelog");

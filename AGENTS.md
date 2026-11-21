@@ -39,7 +39,7 @@ This file is the **index**. Detailed rules live in [`docs/agents/`](./docs/agent
 - Dependencies point one way: a renderer depends on the core, never the reverse, and no renderer imports another. A decision two platforms share goes into the core first.
 - Today, honestly: `@vllnt/ui-native` reads tokens and contracts from `@vllnt/ui-core`; `@vllnt/ui` gets the same tokens as CSS generated from `packages/design` and does not import `@vllnt/ui-core`. Descriptors (`/r/*.json`) are built by the registry app; moving their platform-neutral part (props schemas) into the core is roadmap ([#672](https://github.com/vllnt/ui/issues/672)).
 
-Read the long form at [`/docs/vision`](https://ui.vllnt.com/docs/vision) (source: [`apps/registry/content/pages/docs/vision/`](./apps/registry/content/pages/docs/vision/)).
+Read the long form at [`/vision`](https://ui.vllnt.com/vision) (source: [`apps/registry/content/pages/vision/`](./apps/registry/content/pages/vision/)).
 
 **Design rules that follow.** Apply them to every change. "Today" means it is on `main`; "Roadmap" means it is planned and not shipped. Never describe a roadmap item as available.
 
@@ -145,7 +145,7 @@ from `routing.locales`. The default locale (`en`) is unprefixed; others are path
 | Track | For | Where |
 |-------|-----|-------|
 | next-intl messages | UI chrome: nav, buttons, labels, form fields, breadcrumbs, stat labels, structured-page prose | [`messages/<locale>.json`](./apps/registry/messages), consumed with `useTranslations` (client) / `getTranslations` (server) |
-| MDX per locale | Long-form document pages: docs, philosophy | `content/pages/<slug>/<locale>.mdx`, loaded by `lib/content.ts` |
+| MDX per locale | Long-form document pages: docs, vision | `content/pages/<slug>/<locale>.mdx`, loaded by `lib/content.ts` |
 | Articles | Indexable how-tos, comparisons, roadmap notes (own frontmatter, feeds, `draft` flag) | `content/articles/<slug>/<locale>.mdx`, loaded by `lib/articles.ts`; see the Articles section of [`apps/registry/README.md`](./apps/registry/README.md) |
 
 **Rules for agents touching the registry UI:**

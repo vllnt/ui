@@ -316,6 +316,8 @@ test.describe("agent readiness", () => {
   for (const path of [
     "/",
     "/design",
+    "/vision",
+    "/fr/vision",
     "/docs/installation",
     "/components/button",
     "/fr/components/button",

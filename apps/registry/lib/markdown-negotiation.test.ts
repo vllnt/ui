@@ -44,7 +44,7 @@ describe("markdownTarget", () => {
   it("finds the pages that have authored markdown behind them", () => {
     expect(markdownTarget("/")).toEqual({ kind: "home" });
     expect(markdownTarget("/design")).toEqual({ kind: "design" });
-    expect(markdownTarget("/philosophy")).toEqual({ kind: "philosophy" });
+    expect(markdownTarget("/vision")).toEqual({ kind: "vision" });
     expect(markdownTarget("/docs")).toEqual({ kind: "docs-index" });
     expect(markdownTarget("/components")).toEqual({
       kind: "components-index",

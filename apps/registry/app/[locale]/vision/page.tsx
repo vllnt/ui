@@ -17,20 +17,19 @@ type Props = {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
-  const { frontmatter } = await getPageContent("philosophy", locale);
+  const { frontmatter } = await getPageContent("vision", locale);
 
   return frontmatterPageMetadata(frontmatter, {
     locale,
-    pathname: "/philosophy",
+    pathname: "/vision",
   });
 }
 
-export default async function PhilosophyPage({ params }: Props) {
+export default async function VisionPage({ params }: Props) {
   const { locale } = await params;
   setRequestLocale(locale);
-  const [{ content, frontmatter }, t, common] = await Promise.all([
-    getPageContent("philosophy", locale),
-    getTranslations("pages.philosophy"),
+  const [{ content, frontmatter }, common] = await Promise.all([
+    getPageContent("vision", locale),
     getTranslations("common"),
   ]);
 
@@ -39,22 +38,24 @@ export default async function PhilosophyPage({ params }: Props) {
       jsonLd={[
         breadcrumbTrailLd(
           locale,
-          [{ name: frontmatter.title, path: "/philosophy" }],
+          [{ name: frontmatter.title, path: "/vision" }],
           common("home"),
         ),
         techArticleLd({
           description: frontmatter.description,
           inLanguage: locale,
           title: frontmatter.title,
-          url: canonical("/philosophy", locale),
+          url: canonical("/vision", locale),
         }),
       ]}
       sections={await getSidebarSections(undefined, locale)}
     >
       <div className="container mx-auto px-4 py-16 lg:px-8">
         <div className="mb-8">
-          <h1 className="text-4xl font-semibold mb-4">{t("title")}</h1>
-          <p className="text-muted-foreground text-lg">{t("description")}</p>
+          <h1 className="text-4xl font-semibold mb-4">{frontmatter.title}</h1>
+          <p className="text-muted-foreground text-lg">
+            {frontmatter.description}
+          </p>
         </div>
 
         <MDXContent content={stripLeadingMarkdownHeading(content)} />

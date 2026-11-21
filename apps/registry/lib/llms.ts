@@ -74,9 +74,10 @@ const DOCS_SECTION: LlmsSection = {
       url: `${SITE_URL}${getDocsPath(page)}`,
     })),
     {
-      notes: "design principles and component patterns",
-      title: "Philosophy",
-      url: `${SITE_URL}/philosophy`,
+      notes:
+        "where VLLNT UI is going: generative UI with json-render and the AI SDK, voice-first, 3D, AR and holographic interfaces, glass by default, what ships today, and the design principles",
+      title: "Vision",
+      url: `${SITE_URL}/vision`,
     },
     {
       notes: "brand, tokens, accessibility, and UI rules",

@@ -93,6 +93,45 @@ Nous voulons que VLLNT UI fonctionne nativement avec deux outils open source de 
 
 **Aujourd'hui**, aucun adaptateur n'est disponible. Les composants VLLNT UI sont de simples composants React : vous pouvez déjà afficher les parties de message de l'AI SDK avec la famille IA (`AIStreamingText`, `Reasoning`, `AIToolCallDisplay`, `AISourceCitation`, `ApprovalRequest` et d'autres) dans votre propre code. **Ensuite** viendront un catalogue json-render, des schémas de props zod pour chaque composant, et des helpers qui relient les parties d'outil de l'AI SDK aux composants, avec leurs états de chargement et d'erreur : [vllnt/ui#672](https://github.com/vllnt/ui/issues/672).
 
+## Principes
+
+VLLNT UI repose sur des principes simples qui guident chaque décision de conception et chaque choix d'implémentation. Tous les composants suivent ces principes. Utiliser VLLNT UI, ce n'est pas seulement ajouter des composants : c'est adopter une philosophie de design propre, rapide et intentionnel.
+
+### Design minimaliste
+
+Moins, mais mieux. Chaque composant vise la simplicité. Un bon design doit devenir invisible : il fonctionne sans attirer inutilement l'attention. Nos composants sont :
+
+- Clairs et sans surcharge
+- Centrés sur les fonctionnalités essentielles
+- Sans décoration gratuite
+- Intentionnels dans chaque détail
+
+### Dark mode d'abord
+
+Le mode sombre n'est pas un ajout tardif : c'est la direction principale. Chaque composant est conçu pour les fonds sombres, avec une lisibilité et un confort visuel solides. Le mode clair existe, mais VLLNT UI brille surtout en sombre.
+
+- Conçu pour les environnements peu lumineux
+- Fatigue visuelle réduite
+- Esthétique moderne
+- Apparence professionnelle
+
+### Pas de style emoji
+
+Nous gardons une approche professionnelle, basée sur le texte. Les emojis et les icônes décoratives restent rares, pour que les composants restent durables et universels.
+
+- Communication textuelle
+- Ton professionnel
+- Compatibilité universelle
+- Typographie propre
+
+### Excellence technique
+
+Au-delà de l'apparence, VLLNT UI privilégie :
+
+- **Sûreté du typage :** TypeScript pour la fiabilité
+- **Personnalisation :** extension et modification faciles
+- **Standards modernes :** construit sur les technologies web actuelles
+
 ## Ce qui est disponible aujourd'hui
 
 - **Composants descriptibles.** Chaque composant a un descripteur JSON à `/r/<name>.json`, indexé dans `/r/registry.json`. Les agents peuvent aussi utiliser `/llms.txt`, `/llms-full.txt` et le [serveur MCP](/docs/agents) à `/mcp` (`search_components`, `get_component`, `list_categories`). Chaque descripteur indique sa version et sa stabilité ; les définitions de props et les exemples d'usage n'existent encore que pour quelques composants. Voir [Agents](/docs/agents).

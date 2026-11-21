@@ -8,7 +8,6 @@
     "github": "GitHub",
     "home": "Accueil",
     "locale": "Langue",
-    "philosophy": "Philosophie",
     "platformAll": "Tous",
     "platformNative": "Natif",
     "platformSelectorLabel": "Filtrer par implementation",
@@ -33,7 +32,6 @@
     "llmsTxt": "llms.txt",
     "maintainedBy": "Maintenu par",
     "mcp": "MCP",
-    "philosophy": "Philosophie",
     "registryJson": "JSON du registre",
     "releases": "Versions",
     "reportBug": "Signaler un bug",
@@ -42,6 +40,7 @@
     "rssFeed": "Flux RSS",
     "sponsor": "Sponsoriser",
     "storybook": "Storybook",
+    "vision": "Vision",
     "native": "React Native",
     "nativeRegistryJson": "JSON du registre natif"
   },
@@ -83,10 +82,10 @@
     "navDesign": "Design",
     "navDocs": "Docs",
     "navGetStarted": "Demarrer",
-    "navPhilosophy": "Philosophie",
     "navRequest": "Demander",
     "navTemplates": "Modeles",
     "navThemes": "Themes",
+    "navVision": "Vision",
     "openNavigation": "Ouvrir la navigation",
     "releases": "Versions",
     "rssFeed": "Flux RSS",
@@ -341,10 +340,6 @@
       "description": "Cette route n'existe pas. Essayez l'un des composants populaires ci-dessous ou retournez a l'index.",
       "popular": "Composants populaires",
       "title": "Page introuvable"
-    },
-    "philosophy": {
-      "description": "Les principes qui guident la conception et le developpement de VLLNT UI.",
-      "title": "Philosophie"
     },
     "playground": {
       "backToComponent": "Retour au composant",
@@ -671,9 +666,9 @@
     "getStarted": "Demarrer",
     "navigationLabel": "Navigation du site",
     "overview": "Vue d ensemble",
-    "philosophy": "Philosophie",
     "requestComponent": "Demander un composant",
     "templates": "Modeles",
-    "themes": "Themes"
+    "themes": "Themes",
+    "vision": "Vision"
   }
 }

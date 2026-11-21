@@ -20,7 +20,7 @@ An agent can read this library as text and JSON, without scraping pages. The sit
 | `https://ui.vllnt.com/mcp` | An MCP server. It speaks JSON-RPC 2.0 over HTTP POST and has four read-only tools: `search_components`, `get_component`, `list_categories`, `list_platforms`. A GET returns server info. |
 | `https://ui.vllnt.com/.well-known/api-catalog` | A catalog of these APIs (RFC 9727 linkset). |
 
-The home page, the design and philosophy pages, and most docs and component pages also answer in Markdown. Send `Accept: text/markdown` to the same URL. A wildcard `Accept` does not select Markdown; the header must name `text/markdown`.
+The home page, the design and vision pages, and most docs and component pages also answer in Markdown. Send `Accept: text/markdown` to the same URL. A wildcard `Accept` does not select Markdown; the header must name `text/markdown`.
 
 ```bash
 curl -H "Accept: text/markdown" https://ui.vllnt.com/components/button

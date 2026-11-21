@@ -40,7 +40,7 @@ const COLUMNS: readonly FooterColumn[] = [
         labelKey: "native",
       },
       { href: "/docs", kind: "route", labelKey: "docs" },
-      { href: "/philosophy", kind: "route", labelKey: "philosophy" },
+      { href: "/vision", kind: "route", labelKey: "vision" },
       { href: "/design", kind: "route", labelKey: "design" },
     ],
     titleKey: "library",

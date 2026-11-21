@@ -36,7 +36,7 @@ const REFERENCE_PAGES: readonly {
     slug: `docs/${page.slug}`,
     title: page.title,
   })),
-  { href: "/philosophy", slug: "philosophy", title: "Philosophy" },
+  { href: "/vision", slug: "vision", title: "Vision" },
   { href: "/components", slug: "components", title: "Components Overview" },
 ];
 

@@ -106,8 +106,8 @@ export function Header({ locale }: HeaderProps) {
       title: t("navDocs"),
     },
     {
-      href: preserveQuery(localizePathname("/philosophy", locale)),
-      title: t("navPhilosophy"),
+      href: preserveQuery(localizePathname("/vision", locale)),
+      title: t("navVision"),
     },
     {
       href: preserveQuery(localizePathname("/design", locale)),
