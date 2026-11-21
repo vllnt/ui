@@ -13,6 +13,7 @@ import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
 import type React from "react";
 
+import { ChunkReloadGuard } from "@/components/chunk-reload-guard";
 import { ForwardedQueryProvider } from "@/components/forwarded-query";
 import { Header } from "@/components/header";
 import { routing } from "@/i18n/routing";
@@ -136,6 +137,7 @@ export default async function LocaleLayout({ children, params }: Props) {
         />
       </head>
       <body className="h-full overflow-hidden">
+        <ChunkReloadGuard />
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"

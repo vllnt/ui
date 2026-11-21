@@ -7,6 +7,7 @@ import { markdownPathname, prefersMarkdown } from "@/lib/markdown-negotiation";
 import { publicVariant } from "@/lib/platform-variant";
 import { variantPathname } from "@/lib/platform-variant-rewrite";
 import { renamedComponentRedirect } from "@/lib/renamed-components";
+import { applyResponsePolicy } from "@/lib/response-policy";
 
 const intlMiddleware = createMiddleware(routing);
 
@@ -65,8 +66,6 @@ function platformVariant(
   return rewritten;
 }
 
-const VARY_ON_ACCEPT = new Headers([["Vary", "Accept"]]);
-
 /**
  * A page with a markdown twin answers `Accept: text/markdown` with the twin at
  * the same URL, and the answer says it varies by `Accept`.
@@ -77,12 +76,34 @@ function markdownTwin(request: NextRequest): NextResponse | undefined {
   const target = markdownPathname(request.nextUrl.pathname);
   if (!target) return undefined;
 
-  return NextResponse.rewrite(new URL(target, request.url), {
-    headers: VARY_ON_ACCEPT,
+  return NextResponse.rewrite(new URL(target, request.url));
+}
+
+/** Whether the middleware answered with the markdown twin of the page. */
+function isMarkdownRewrite(response: NextResponse): boolean {
+  const target = response.headers.get("x-middleware-rewrite");
+
+  return target !== null && new URL(target).pathname.startsWith("/md/");
+}
+
+/** Every answer goes through the caching rules in `@/lib/response-policy`. */
+export default function middleware(request: NextRequest): NextResponse {
+  const { pathname } = request.nextUrl;
+  // Any other casing of /design.md is the route handler's own answer.
+  if (pathname !== "/design.md" && pathname.toLowerCase() === "/design.md") {
+    return NextResponse.next();
+  }
+  const answer = pathname.startsWith("/embed/")
+    ? NextResponse.next()
+    : route(request);
+
+  return applyResponsePolicy(request, answer, {
+    hasMarkdownTwin: Boolean(markdownPathname(pathname)),
+    isMarkdownTwin: isMarkdownRewrite(answer),
   });
 }
 
-export default function middleware(request: NextRequest): NextResponse {
+function route(request: NextRequest): NextResponse {
   const canonicalUrl = legacyHostRedirectUrl(
     request.headers.get("x-forwarded-host") ??
       request.headers.get("host") ??
@@ -108,10 +129,6 @@ export default function middleware(request: NextRequest): NextResponse {
     return NextResponse.redirect(target, 308);
   }
 
-  if (pathname.toLowerCase() === "/design.md") {
-    return NextResponse.next();
-  }
-
   const answer = movedPage(request) ?? markdownTwin(request);
   if (answer) return answer;
 
@@ -127,9 +144,6 @@ export default function middleware(request: NextRequest): NextResponse {
    */
   response.headers.delete("set-cookie");
   response.headers.delete("x-middleware-set-cookie");
-  // A page with a markdown twin answers by Accept, so its HTML says so too:
-  // a shared cache must not hand the HTML to an agent that asked for markdown.
-  if (markdownPathname(pathname)) response.headers.append("Vary", "Accept");
 
   return platformVariant(request, response);
 }
@@ -137,6 +151,7 @@ export default function middleware(request: NextRequest): NextResponse {
 export const config = {
   matcher: [
     "/design.md",
+    "/embed/:path*",
     "/((?!api|healthz|_next|_vercel|mcp|embed|apple-icon|r/|\\.well-known/|atom\\.xml|rss\\.xml|design\\.txt|llms\\.txt|llms-full\\.txt|sitemap\\.xml|robots\\.txt|manifest\\.webmanifest|.*\\.[^/]+$).*)",
   ],
 };
