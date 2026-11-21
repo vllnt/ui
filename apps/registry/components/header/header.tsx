@@ -22,6 +22,7 @@ import {
   usePathname,
   useRouter,
 } from "@/i18n/routing";
+import { languageSwitchLocale } from "@/lib/locale-switch";
 import { getPlatform, withPlatformQuery } from "@/lib/platform";
 import { publicPagePathname } from "@/lib/platform-variant";
 import { localizePathname } from "@/lib/seo";
@@ -172,6 +173,7 @@ export function Header({ locale }: HeaderProps) {
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
+                  {/* react-doctor-disable-next-line react-doctor/nextjs-no-a-element -- the RSS feed is a non-localized XML file, not a page */}
                   <a href="/rss.xml">{t("rssFeed")}</a>
                 </DropdownMenuItem>
               </DropdownMenuContent>
@@ -195,7 +197,7 @@ export function Header({ locale }: HeaderProps) {
                     <Link
                       aria-current={entry === locale ? "page" : undefined}
                       href={preserveQuery(pathname)}
-                      locale={entry}
+                      locale={languageSwitchLocale(entry, locale)}
                       prefetch={false}
                     >
                       {entry.toUpperCase()}
@@ -216,7 +218,7 @@ export function Header({ locale }: HeaderProps) {
                 className="inline-flex min-h-11 items-center px-2 text-xs font-medium uppercase text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring aria-[current=page]:text-foreground"
                 href={preserveQuery(pathname)}
                 key={entry}
-                locale={entry}
+                locale={languageSwitchLocale(entry, locale)}
                 prefetch={false}
               >
                 {entry}

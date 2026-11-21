@@ -29,6 +29,17 @@ type Props = {
   readonly params: Promise<{ locale: string }>;
 };
 
+const DEFAULT_SITE_URL = "https://ui.vllnt.com";
+
+/** The site origin from the build environment; a malformed value falls back to the default instead of failing every page render. */
+function siteBaseUrl(): URL {
+  try {
+    return new URL(process.env.NEXT_PUBLIC_SITE_URL ?? DEFAULT_SITE_URL);
+  } catch {
+    return new URL(DEFAULT_SITE_URL);
+  }
+}
+
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
 }
@@ -79,9 +90,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       "llms.txt",
       "open source",
     ],
-    metadataBase: new URL(
-      process.env.NEXT_PUBLIC_SITE_URL ?? "https://ui.vllnt.com",
-    ),
+    metadataBase: siteBaseUrl(),
     openGraph: {
       alternateLocale: alternateOgLocales(locale),
       locale: ogLocale(locale),

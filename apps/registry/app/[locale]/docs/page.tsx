@@ -31,21 +31,26 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function DocumentationPage({ params }: Props) {
   const { locale } = await params;
   setRequestLocale(locale);
-  const { content } = await getPageContent("docs", locale);
-  const t = await getTranslations("pages.docs");
-  const c = await getTranslations("common");
-  // Localize each doc card from the page's own MDX frontmatter (en/fr).
-  const documentLinks = await Promise.all(
-    DOCS_PAGES.map(async (page) => {
-      const { frontmatter } = await getPageContent(`docs/${page.slug}`, locale);
-      return {
-        description: frontmatter.description,
-        href: getDocsPath(page),
-        slug: page.slug,
-        title: frontmatter.title,
-      };
-    }),
-  );
+  const [{ content }, t, c, documentLinks] = await Promise.all([
+    getPageContent("docs", locale),
+    getTranslations("pages.docs"),
+    getTranslations("common"),
+    // Localize each doc card from the page's own MDX frontmatter (en/fr).
+    Promise.all(
+      DOCS_PAGES.map(async (page) => {
+        const { frontmatter } = await getPageContent(
+          `docs/${page.slug}`,
+          locale,
+        );
+        return {
+          description: frontmatter.description,
+          href: getDocsPath(page),
+          slug: page.slug,
+          title: frontmatter.title,
+        };
+      }),
+    ),
+  ]);
 
   return (
     <>

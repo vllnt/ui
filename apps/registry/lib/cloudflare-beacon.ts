@@ -11,6 +11,7 @@ const SITE_TOKEN = /^[\da-f]{32}$/i;
  * load no beacon and send no data.
  */
 export function cloudflareBeaconToken(
+  // react-doctor-disable-next-line react-doctor/public-env-secret-name -- the Cloudflare Web Analytics site token is a public identifier: the beacon snippet ships it in every page's HTML by design, and the deploy environment owns the variable name
   value: string | undefined = process.env.NEXT_PUBLIC_CF_BEACON_TOKEN,
 ): string | undefined {
   const token = value?.trim();

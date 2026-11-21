@@ -175,6 +175,22 @@ test.describe("the query still reaches shell links", () => {
     ).not.toHaveCount(0);
   });
 
+  test("shell links drop parameters that are not a platform variant", async ({
+    page,
+  }) => {
+    await page.goto("/components/button?component=x&ref=e2e");
+
+    await expect(
+      page.locator("header a", { hasText: "Components" }).first(),
+    ).toHaveAttribute("href", "/components");
+    await expect(
+      page.locator("header a[href*='component='], header a[href*='ref=']"),
+    ).toHaveCount(0);
+    await expect(
+      page.locator("aside a[href*='component='], aside a[href*='ref=']"),
+    ).toHaveCount(0);
+  });
+
   test("switching platform on a page updates the header links without a reload", async ({
     page,
   }) => {

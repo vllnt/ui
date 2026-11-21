@@ -171,6 +171,7 @@ export default async function DesignPage({ params }: Props) {
                 </dd>
               </div>
             </dl>
+            {/* react-doctor-disable-next-line react-doctor/nextjs-no-a-element -- /r/design.json is a non-localized registry asset, not a page */}
             <a
               className="mt-4 inline-flex min-h-6 items-center text-sm font-medium text-primary underline underline-offset-4"
               href="/r/design.json"

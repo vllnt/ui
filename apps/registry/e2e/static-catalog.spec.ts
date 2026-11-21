@@ -127,6 +127,42 @@ test.describe("language choice", () => {
   });
 });
 
+test.describe("default-locale prefix", () => {
+  test("/en/* answers a permanent redirect to the unprefixed URL", async ({
+    request,
+  }) => {
+    for (const { from, to } of [
+      { from: "/en", to: "/" },
+      { from: "/en/docs/cli", to: "/docs/cli" },
+      { from: "/en/components/button", to: "/components/button" },
+      { from: "/en/components?platform=native", to: "/components?platform=native" },
+    ]) {
+      const response = await request.get(from, { maxRedirects: 0 });
+
+      expect(response.status(), from).toBe(308);
+      expect(response.headers().location, from).toBe(to);
+      expect(response.headers()["set-cookie"], from).toBeUndefined();
+    }
+  });
+
+  test("a path that only starts with the letters en is not redirected", async ({
+    request,
+  }) => {
+    const response = await request.get("/english", { maxRedirects: 0 });
+
+    expect(response.status()).toBe(404);
+  });
+});
+
+test.describe("favicon", () => {
+  test("/favicon.ico redirects to the brand icon", async ({ request }) => {
+    const response = await request.get("/favicon.ico", { maxRedirects: 0 });
+
+    expect(response.status()).toBe(307);
+    expect(response.headers().location).toBe("/icon.svg");
+  });
+});
+
 test.describe("platform variants", () => {
   test("serve the platform from the clean URL with a platform query", async ({
     page,

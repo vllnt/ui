@@ -5,6 +5,8 @@ import * as React from "react";
 import { ToggleGroup, ToggleGroupItem } from "@vllnt/ui";
 import { useTranslations } from "next-intl";
 
+import { storybookSandbox } from "@/lib/storybook-sandbox";
+
 const STORYBOOK_URL =
   process.env.NEXT_PUBLIC_STORYBOOK_URL ?? "http://localhost:6006";
 
@@ -110,14 +112,39 @@ function PreviewThemeControls({
   );
 }
 
+function subscribeToNothing(): () => void {
+  return function unsubscribe() {
+    // The page origin never changes, so there is nothing to unsubscribe from.
+  };
+}
+
+function readPageOrigin(): string | undefined {
+  return window.location.origin;
+}
+
+function readServerPageOrigin(): string | undefined {
+  return;
+}
+
+/** The origin of the embedding page: `undefined` on the server and until hydration. */
+function usePageOrigin(): string | undefined {
+  return React.useSyncExternalStore(
+    subscribeToNothing,
+    readPageOrigin,
+    readServerPageOrigin,
+  );
+}
+
 function StorybookIframe({
   componentName,
   height,
   iframeSource,
+  sandbox,
 }: {
   componentName: string;
   height: number;
   iframeSource: string;
+  sandbox: string;
 }): React.ReactElement {
   const [isLoaded, setIsLoaded] = React.useState(false);
   const t = useTranslations("shared.storybookEmbed");
@@ -138,7 +165,7 @@ function StorybookIframe({
         onLoad={() => {
           setIsLoaded(true);
         }}
-        sandbox="allow-scripts allow-same-origin"
+        sandbox={sandbox}
         src={iframeSource}
         style={{
           height,
@@ -160,6 +187,7 @@ export function StorybookEmbed({
   const [previewTheme, setPreviewTheme] = React.useState<null | PreviewTheme>(
     null,
   );
+  const pageOrigin = usePageOrigin();
   const resolvedStoryId = storyId ?? toStoryId(componentName);
 
   React.useEffect(() => {
@@ -214,12 +242,13 @@ export function StorybookEmbed({
         }}
         value={previewTheme ?? "light"}
       />
-      {iframeSource ? (
+      {iframeSource && pageOrigin ? (
         <StorybookIframe
           componentName={componentName}
           height={height}
           iframeSource={iframeSource}
           key={iframeSource}
+          sandbox={storybookSandbox(iframeSource, pageOrigin)}
         />
       ) : (
         <div aria-hidden="true" className="bg-secondary" style={{ height }} />

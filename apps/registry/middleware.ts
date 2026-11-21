@@ -2,6 +2,7 @@ import { type NextRequest, NextResponse } from "next/server";
 import createMiddleware from "next-intl/middleware";
 
 import { routing } from "@/i18n/routing";
+import { defaultLocalePrefixTarget } from "@/lib/default-locale-redirect";
 import { legacyHostRedirectUrl } from "@/lib/legacy-host-redirect";
 import { markdownPathname, prefersMarkdown } from "@/lib/markdown-negotiation";
 import { publicVariant } from "@/lib/platform-variant";
@@ -44,6 +45,24 @@ function movedPage(request: NextRequest): NextResponse | undefined {
 }
 
 /**
+ * Sends `/en/...` (the default locale spelled with a prefix) to the unprefixed
+ * URL. The redirect is permanent, so crawlers settle on one URL; next-intl's
+ * own redirect for this path is temporary (307). Like every other public GET,
+ * it sets no cookie.
+ */
+function defaultLocalePrefixRedirect(
+  request: NextRequest,
+): NextResponse | undefined {
+  const pathname = defaultLocalePrefixTarget(request.nextUrl.pathname);
+  if (pathname === undefined) return undefined;
+
+  const url = request.nextUrl.clone();
+  url.pathname = pathname;
+
+  return NextResponse.redirect(url, 308);
+}
+
+/**
  * Prerendered pages cannot read `?platform=`, so the middleware rewrites a
  * platform query to the prerendered copy for that platform. Redirects pass through.
  */
@@ -82,6 +101,15 @@ function markdownTwin(request: NextRequest): NextResponse | undefined {
   });
 }
 
+/** The redirects and rewrites decided from the path alone, before next-intl runs. */
+function pathAnswer(request: NextRequest): NextResponse | undefined {
+  return (
+    movedPage(request) ??
+    defaultLocalePrefixRedirect(request) ??
+    markdownTwin(request)
+  );
+}
+
 export default function middleware(request: NextRequest): NextResponse {
   const canonicalUrl = legacyHostRedirectUrl(
     request.headers.get("x-forwarded-host") ??
@@ -112,7 +140,7 @@ export default function middleware(request: NextRequest): NextResponse {
     return NextResponse.next();
   }
 
-  const answer = movedPage(request) ?? markdownTwin(request);
+  const answer = pathAnswer(request);
   if (answer) return answer;
 
   const response = intlMiddleware(request);

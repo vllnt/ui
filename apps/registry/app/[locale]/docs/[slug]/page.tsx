@@ -19,7 +19,7 @@ import {
 } from "@/lib/jsonld";
 import { stripLeadingMarkdownHeading } from "@/lib/markdown";
 import { frontmatterPageMetadata } from "@/lib/og";
-import { getPlatform, withPlatformQuery } from "@/lib/platform";
+import { canonicalPlatformPath, getPlatform } from "@/lib/platform";
 import { canonical, localizePathname } from "@/lib/seo";
 import { getSidebarSections } from "@/lib/sidebar-sections";
 
@@ -95,7 +95,7 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
 
   return frontmatterPageMetadata(frontmatter, {
     locale,
-    pathname: withPlatformQuery(getDocsPath(docsPage), {}, platform),
+    pathname: canonicalPlatformPath(getDocsPath(docsPage), platform),
   });
 }
 
@@ -123,7 +123,7 @@ export default async function DocsSlugPage(props: Props) {
     docsPage.slug === "changelog"
       ? `${contentWithoutDuplicateTitle}\n\n${await readChangelog()}`
       : contentWithoutDuplicateTitle;
-  const docsPath = withPlatformQuery(getDocsPath(docsPage), {}, platform);
+  const docsPath = canonicalPlatformPath(getDocsPath(docsPage), platform);
   const pageUrl = canonical(docsPath, locale);
   const c = await getTranslations("common");
 

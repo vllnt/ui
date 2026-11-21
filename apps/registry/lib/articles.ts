@@ -348,9 +348,10 @@ export function findArticleCoverageIssues(
     const present = articles
       .filter((article) => article.slug === slug)
       .map((article) => article.locale);
+    const presentLocales = new Set<string>(present);
 
     return locales
-      .filter((locale) => !present.includes(locale))
+      .filter((locale) => !presentLocales.has(locale))
       .map(
         (locale) =>
           `article "${slug}" is missing ${locale}.mdx (present: ${present.join(", ")})`,

@@ -127,6 +127,24 @@ test.describe("i18n language switcher", () => {
   });
 });
 
+test.describe("default-locale prefix", () => {
+  test("an English page never links to the /en/ prefix", async ({ page }) => {
+    for (const route of [
+      "/",
+      "/components",
+      "/components/button",
+      "/docs/installation",
+    ]) {
+      await page.goto(route);
+
+      await expect(
+        page.locator('a[href="/en"], a[href^="/en/"]'),
+        route,
+      ).toHaveCount(0);
+    }
+  });
+});
+
 test.describe("i18n renders real French", () => {
   test("home hero + footer are French", async ({ page }) => {
     await page.goto("/fr");

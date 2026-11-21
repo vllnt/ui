@@ -39,6 +39,18 @@ for (const locale of ["en", "fr"]) {
       page.locator('meta[name="twitter:description"]'),
     ).toHaveAttribute("content", /0\.4\.0.*npm/);
 
+    // A forwarded or crawler-added query never reaches the canonical URL.
+    await page.goto(`${prefix}/components/button?component=x&platform=web`);
+    await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
+      "href",
+      new RegExp(`${prefix}/components/button$`),
+    );
+    await page.goto(`${prefix}/components?platform=web&component=x`);
+    await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
+      "href",
+      new RegExp(`${prefix}/components$`),
+    );
+
     await page.goto(`${prefix}/components/mdx-content`);
     await expect(page).not.toHaveTitle(/React Native/);
     await expect(page.locator('meta[name="description"]')).not.toHaveAttribute(
@@ -55,5 +67,11 @@ for (const locale of ["en", "fr"]) {
     await expect(
       page.locator('main a[href$="/components?platform=native"]').first(),
     ).toHaveAttribute("href", `${prefix}/components?platform=native`);
+
+    await page.goto(`${prefix}/docs/installation`);
+    await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
+      "href",
+      new RegExp(`${prefix}/docs/installation$`),
+    );
   });
 }

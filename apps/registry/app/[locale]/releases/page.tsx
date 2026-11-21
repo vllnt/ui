@@ -156,9 +156,11 @@ function releaseJsonLdItem(
 export default async function ReleasesPage({ params }: Props) {
   const { locale } = await params;
   setRequestLocale(locale);
-  const t = await getTranslations("pages.releases");
-  const common = await getTranslations("common");
-  const releases = await getReleaseRecords();
+  const [t, common, releases] = await Promise.all([
+    getTranslations("pages.releases"),
+    getTranslations("common"),
+    getReleaseRecords(),
+  ]);
 
   return (
     <PageShell
@@ -199,6 +201,7 @@ export default async function ReleasesPage({ params }: Props) {
               <Link href="/changelog">{t("changelogLink")}</Link>
             </Button>
             <Button asChild variant="outline">
+              {/* react-doctor-disable-next-line react-doctor/nextjs-no-a-element -- the Atom feed is a non-localized XML file, not a page */}
               <a href="/atom.xml">{t("atomLink")}</a>
             </Button>
           </div>

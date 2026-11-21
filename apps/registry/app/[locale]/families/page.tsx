@@ -48,13 +48,13 @@ export default async function FamiliesPage({ params }: Props) {
   const platform = getPlatform(platformParameter);
   const query = variantQuery(platform);
   const platformsByName = new Map(
-    registry.items.map((item) => [item.name, item.platforms]),
+    registry.items.map((item) => [item.name, new Set(item.platforms)]),
   );
   const visibleGroups = groupedComponents
     .map((group) => ({
       ...group,
       items: group.items.filter((item) =>
-        platformsByName.get(item.name)?.includes(platform ?? "web"),
+        platformsByName.get(item.name)?.has(platform ?? "web"),
       ),
     }))
     .filter((group) => group.items.length > 0);

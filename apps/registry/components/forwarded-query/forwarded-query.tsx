@@ -12,6 +12,8 @@ import {
 
 import { useSearchParams } from "next/navigation";
 
+import { forwardedParameters } from "@/lib/platform";
+
 const ForwardedQueryContext = createContext<undefined | URLSearchParams>(
   undefined,
 );
@@ -29,6 +31,7 @@ function QueryReader({ onChange }: QueryReaderProps): null {
   const query = useSearchParams().toString();
 
   useEffect(() => {
+    // react-doctor-disable-next-line react-doctor/no-pass-data-to-parent -- the provider cannot read the query itself: useSearchParams in the shell would push the whole prerendered shell to the client; this suspended leaf is the sole reader, and the update after hydration is the intended extra render
     onChange(query);
   }, [onChange, query]);
 
@@ -36,11 +39,11 @@ function QueryReader({ onChange }: QueryReaderProps): null {
 }
 
 /**
- * Makes the browser query available to shell links (header, sidebar) without
- * those components reading it themselves. The build renders the shell and the
- * browser hydrates it in place with `undefined`; once the browser URL is
- * readable the query arrives as an update, so no element gets replaced and
- * nothing shifts.
+ * Gives shell links (header, sidebar) the platform variant of the browser
+ * query without those components reading it themselves (see
+ * `forwardedParameters`). The build renders the shell and the browser hydrates
+ * it in place with `undefined`; once the browser URL is readable the query
+ * arrives as an update, so no element gets replaced and nothing shifts.
  */
 export function ForwardedQueryProvider({
   children,
@@ -49,7 +52,10 @@ export function ForwardedQueryProvider({
 }) {
   const [query, setQuery] = useState<string | undefined>();
   const parameters = useMemo(
-    () => (query === undefined ? undefined : new URLSearchParams(query)),
+    () =>
+      query === undefined
+        ? undefined
+        : forwardedParameters(new URLSearchParams(query)),
     [query],
   );
 
@@ -64,10 +70,11 @@ export function ForwardedQueryProvider({
 }
 
 /**
- * The query string of the current browser URL, for links that keep it.
+ * The parameters of the current browser URL that links carry: the `native`
+ * platform variant, nothing else.
  *
  * @returns `undefined` during the build render and the hydration render, then
- * the current parameters once the browser URL is readable
+ * the carried parameters once the browser URL is readable
  */
 export function useForwardedQuery(): undefined | URLSearchParams {
   return use(ForwardedQueryContext);

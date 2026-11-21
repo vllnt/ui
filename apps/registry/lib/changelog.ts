@@ -144,11 +144,13 @@ function changelogCandidates(): readonly string[] {
 }
 
 async function readChangelog(): Promise<string> {
-  return changelogCandidates().reduce<Promise<string>>(
-    async (found, candidate) =>
-      (await found) || readFile(candidate, "utf8").catch(() => ""),
-    Promise.resolve(""),
+  const contents = await Promise.all(
+    changelogCandidates().map((candidate) =>
+      readFile(candidate, "utf8").catch(() => ""),
+    ),
   );
+
+  return contents.find(Boolean) ?? "";
 }
 
 function parseHeading(line: string): Heading | undefined {

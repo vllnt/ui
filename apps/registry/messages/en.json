@@ -638,6 +638,7 @@
       "copyEmbedCode": "Copy embed code",
       "copyLink": "Copy link",
       "embed": "Embed",
+      "embedCodeLabel": "Embed code",
       "embedDescription": "Paste this into any blog or docs page to embed a live preview with a link back to VLLNT UI.",
       "embedTitle": "Embed {title}",
       "linkCopied": "Link copied!",
