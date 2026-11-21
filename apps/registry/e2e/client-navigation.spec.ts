@@ -218,7 +218,10 @@ test.describe("response headers", () => {
     });
     const headers = response.headers();
 
-    expect(response.status()).toBe(307);
+    // `/en/*` is a permanent move to the unprefixed URL; the uncached policy
+    // still keeps a shared cache from storing it.
+    expect(response.status()).toBe(308);
+    expect(headers.location).toMatch(/^\/docs(\?|$)/);
     expect(headers["cache-control"]).toBe(UNCACHED);
     for (const name of NEXT_ROUTER_VARY) {
       expect(headers["vary"]?.toLowerCase()).toContain(name);
