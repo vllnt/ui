@@ -234,7 +234,7 @@ const AvatarFallback = ({
   return (
     <AvatarPrimitive.Fallback
       className={cn(
-        "flex h-full w-full items-center justify-center bg-muted",
+        "flex h-full w-full items-center justify-center bg-secondary",
         avatarShapeVariants({ shape }),
         className,
       )}
