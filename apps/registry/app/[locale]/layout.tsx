@@ -12,7 +12,6 @@ import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
 import type React from "react";
 
-import { CloudflareBeacon } from "@/components/cloudflare-beacon";
 import { ForwardedQueryProvider } from "@/components/forwarded-query";
 import { Header } from "@/components/header";
 import { routing } from "@/i18n/routing";
@@ -167,7 +166,6 @@ export default async function LocaleLayout({ children, params }: Props) {
             </div>
           </SidebarProvider>
         </ThemeProvider>
-        <CloudflareBeacon />
         {/* These scripts exist on Vercel's platform; on any other host they 404 on every page. */}
         {process.env.VERCEL === "1" ? (
           <>

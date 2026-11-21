@@ -16,10 +16,6 @@ RUN pnpm install --frozen-lockfile --filter "@vllnt/ui-registry..." --include-wo
 ARG NEXT_PUBLIC_STORYBOOK_URL=https://storybook.vllnt.com
 ENV NEXT_PUBLIC_STORYBOOK_URL=$NEXT_PUBLIC_STORYBOOK_URL
 
-# Cloudflare Web Analytics site token (public, not a secret). Empty = no beacon.
-ARG NEXT_PUBLIC_CF_BEACON_TOKEN=
-ENV NEXT_PUBLIC_CF_BEACON_TOKEN=$NEXT_PUBLIC_CF_BEACON_TOKEN
-
 # Commit being built (Coolify passes it as a build arg). It becomes Next's
 # deploymentId, so a page from an older deploy hard-navigates instead of
 # loading chunks this image does not have. Empty = no deployment id.

@@ -167,8 +167,6 @@ test.describe("client navigation", () => {
   });
 });
 
-const BEACON_TAG = /<script[^>]+static\.cloudflareinsights\.com\/beacon/g;
-
 test.describe("response headers", () => {
   test.beforeEach(() => {
     test.skip(!process.env.PLAYWRIGHT_BASE_URL, PRODUCTION_ONLY);
@@ -227,7 +225,7 @@ test.describe("response headers", () => {
     }
   });
 
-  test("the page carries the deploy id, the chunk recovery script and one beacon only with a token", async ({
+  test("the page carries the deploy id and the chunk recovery script", async ({
     request,
   }) => {
     const html = await (
@@ -236,12 +234,6 @@ test.describe("response headers", () => {
     const commit = process.env.SOURCE_COMMIT;
 
     expect(html).toContain("__vllntRecoverChunk");
-    // The app is the only beacon source (the zone auto-install is off): one tag
-    // when the build had a token, none without. Against production, set
-    // NEXT_PUBLIC_CF_BEACON_TOKEN to any value.
-    expect(html.match(BEACON_TAG) ?? []).toHaveLength(
-      process.env.NEXT_PUBLIC_CF_BEACON_TOKEN ? 1 : 0,
-    );
     if (commit) {
       // Next tags asset URLs with the deployment id: an old page asks for its own build.
       expect(html).toMatch(new RegExp(`/_next/static/[^"]+\\?dpl=${commit}`));
@@ -257,6 +249,27 @@ test.describe("response headers", () => {
     await expect(
       page.getByRole("heading", { level: 1, name: "Page not found" }),
     ).toBeVisible();
+  });
+});
+
+test.describe("analytics beacon", () => {
+  // The zone's Web Analytics auto-install is the only beacon: it posts to the
+  // site's own /cdn-cgi/rum. A tag from the app posts to cloudflareinsights.com,
+  // which rejects it. The app renders none, whatever NEXT_PUBLIC_CF_BEACON_TOKEN
+  // says. Behind Cloudflare (a cf-ray header) the zone's tag is in the page, so
+  // the check needs the origin.
+  test("the site renders no beacon tag of its own", async ({ request }) => {
+    const response = await request.get("/docs", {
+      headers: { accept: BROWSER_ACCEPT },
+    });
+    test.skip(
+      Boolean(response.headers()["cf-ray"]),
+      "Behind Cloudflare the zone injects its own beacon; run against the origin.",
+    );
+    const html = await response.text();
+
+    expect(html).not.toContain("static.cloudflareinsights.com");
+    expect(html).not.toContain("data-cf-beacon");
   });
 });
 
