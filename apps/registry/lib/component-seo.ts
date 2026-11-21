@@ -421,6 +421,32 @@ export const COMPONENT_SEO: readonly ComponentSeo[] = [
   },
   {
     description:
+      "Liquid Glass for shadcn/ui: a frosted glass surface with a slow liquid sheen in your theme colors. Respects reduced motion. Install via the shadcn CLI.",
+    faqs: [
+      {
+        answer:
+          "Liquid Glass is a React surface component: a rounded, bordered card with a backdrop blur and a gradient sheen that drifts across it, colored from your primary and accent theme tokens.",
+        question: "What is Liquid Glass?",
+      },
+      {
+        answer:
+          "Run `pnpm dlx shadcn@latest add https://ui.vllnt.com/r/liquid-glass.json` to copy it into your project via the shadcn CLI, then wrap any content in LiquidGlass.",
+        question: "How do I add Liquid Glass to a shadcn project?",
+      },
+      {
+        answer:
+          "Yes. When the user prefers reduced motion, the sheen stays still and the frosted surface remains. The sheen layer is hidden from screen readers and ignores pointer events, so it never blocks clicks.",
+        question: "Does Liquid Glass respect reduced motion?",
+      },
+    ],
+    related: ["glass-card", "glass-panel", "border-beam"],
+    slug: "liquid-glass",
+    title: "Liquid Glass — shadcn glassmorphism card for React | VLLNT UI",
+    whatItIs:
+      "Liquid Glass is a glassmorphism surface for React and shadcn/ui projects. It renders a rounded, bordered card with a backdrop blur over whatever sits behind it, and an 8-second gradient sheen that drifts across the glass in your primary and accent theme colors. Reach for it for hero cards, feature tiles, or floating panels over imagery. It accepts every div prop and a ref, so you size and pad it with className. The sheen stops when the user prefers reduced motion.",
+  },
+  {
+    description:
       "Show remote users' cursors on a shared canvas in your React app, positioned by x/y with a name and status chip. Pointer-events safe. Install via the shadcn CLI.",
     faqs: [
       {
