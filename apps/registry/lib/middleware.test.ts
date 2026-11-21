@@ -75,6 +75,25 @@ describe("middleware redirects", () => {
     },
   );
 
+  it.each([
+    { from: "/en", to: "/" },
+    { from: "/en/docs/cli", to: "/docs/cli" },
+    {
+      from: "/en/components?platform=native",
+      to: "/components?platform=native",
+    },
+  ])(
+    "sends the prefixed default locale $from permanently to $to without a cookie",
+    ({ from, to }) => {
+      const response = call(from, PAGE_HEADERS);
+      const location = new URL(response.headers.get("location") ?? "", ORIGIN);
+
+      expect(response.status).toBe(308);
+      expect(`${location.pathname}${location.search}`).toBe(to);
+      expect(response.headers.get("set-cookie")).toBeNull();
+    },
+  );
+
   it("keeps the query of the request on a moved page", () => {
     const response = call("/p/native/components/button?tab=code");
 

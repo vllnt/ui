@@ -8,7 +8,12 @@ import { Link, type Locale } from "@/i18n/routing";
 import { getPageContent } from "@/lib/content";
 import { breadcrumbTrailLd, collectionPageLd } from "@/lib/jsonld";
 import { frontmatterPageMetadata, pageMetadata } from "@/lib/og";
-import { getPlatform, variantQuery, withPlatformQuery } from "@/lib/platform";
+import {
+  canonicalPlatformPath,
+  getPlatform,
+  variantQuery,
+  withPlatformQuery,
+} from "@/lib/platform";
 import { registry } from "@/lib/registry";
 import { canonical } from "@/lib/seo";
 import {
@@ -30,11 +35,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     getTranslations({ locale, namespace: "pages.components" }),
   ]);
 
-  if (getPlatform(platform, "all") !== "native") {
-    return frontmatterPageMetadata(frontmatter, {
-      locale,
-      pathname: "/components",
-    });
+  const selectedPlatform = getPlatform(platform, "all");
+  const pathname = canonicalPlatformPath("/components", selectedPlatform);
+
+  if (selectedPlatform !== "native") {
+    return frontmatterPageMetadata(frontmatter, { locale, pathname });
   }
 
   return pageMetadata({
@@ -44,7 +49,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       title: t("nativeMetaTitle"),
       type: frontmatter.og?.type ?? frontmatter.type,
     },
-    pathname: "/components?platform=native",
+    pathname,
   });
 }
 
@@ -56,14 +61,14 @@ export default async function ComponentsPage({ params }: Props) {
   const selectedPlatform = getPlatform(platform, "all");
   const query = variantQuery(selectedPlatform);
   const platformsByName = new Map(
-    registry.items.map((item) => [item.name, item.platforms]),
+    registry.items.map((item) => [item.name, new Set(item.platforms)]),
   );
   const visibleGroups = groupedComponents
     .map((group) => ({
       ...group,
       items: selectedPlatform
         ? group.items.filter((item) =>
-            platformsByName.get(item.name)?.includes(selectedPlatform),
+            platformsByName.get(item.name)?.has(selectedPlatform),
           )
         : group.items,
     }))
@@ -73,9 +78,10 @@ export default async function ComponentsPage({ params }: Props) {
     0,
   );
   const nativeFilter = selectedPlatform === "native";
-  const catalogPathname = nativeFilter
-    ? "/components?platform=native"
-    : "/components";
+  const catalogPathname = canonicalPlatformPath(
+    "/components",
+    selectedPlatform,
+  );
   const catalogDescription = t("description", { count: visibleCount });
 
   return (

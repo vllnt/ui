@@ -1,62 +1,46 @@
-import { readFile } from "node:fs/promises";
-import path from "node:path";
-
-import {
-  Breadcrumb,
-  MDXContent,
-  ShareSection,
-  StaticCode,
-  TableOfContents,
-} from "@vllnt/ui";
-import { ExternalLink } from "lucide-react";
+import { MDXContent, ShareSection } from "@vllnt/ui";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
-import { ComponentCard } from "@/components/component-card";
 import { buildComponentMdxKit } from "@/components/component-mdx";
-import {
-  type ComponentSource,
-  ComponentSourceCode,
-} from "@/components/component-source-code";
-import { PlatformBadges } from "@/components/platform-badges";
-import { PlatformComparison } from "@/components/platform-comparison";
 import { PlatformSidebar } from "@/components/platform-sidebar";
-import { PreviewPlaygroundTabs } from "@/components/playground";
-import { QuickAdd } from "@/components/quick-add";
-import { ShareEmbedBar } from "@/components/share-embed-bar";
-import { Link, type Locale, routing } from "@/i18n/routing";
+import { type Locale, routing } from "@/i18n/routing";
 import { getAiSeo } from "@/lib/ai-seo";
 import { getComponentContent } from "@/lib/component-content";
-import { findComponentDirectory } from "@/lib/component-directory";
 import { componentMeta } from "@/lib/component-meta";
 import { getComponentSeo } from "@/lib/component-seo";
-import {
-  breadcrumbTrailLd,
-  faqPageLd,
-  jsonLdScriptAttributes,
-  softwareSourceCodeLd,
-  techArticleLd,
-} from "@/lib/jsonld";
-import { generateOGImageURL, pageMetadata } from "@/lib/og";
-import { getPlatform, variantQuery, withPlatformQuery } from "@/lib/platform";
+import { pageMetadata } from "@/lib/og";
+import { getPlatform } from "@/lib/platform";
 import { findComponent, registry } from "@/lib/registry";
-import { canonical, localizePathname } from "@/lib/seo";
+import { canonical } from "@/lib/seo";
 import { oembedUrl, withRef } from "@/lib/share";
 import {
-  familyPath,
   getCategoryForComponent,
   getSidebarSections,
   groupedComponents,
 } from "@/lib/sidebar-sections";
-import { getRegistryGeneratedAt } from "@/lib/stats";
+
+import {
+  buildComponentArticle,
+  getComponentCopy,
+  getRelatedComponents,
+  loadComponentSources,
+} from "./component-page-data";
+import {
+  ComponentFallbackSections,
+  ComponentFaqSection,
+  ComponentHeader,
+  ComponentJsonLd,
+  ComponentRelatedSection,
+  ComponentSourceSection,
+  ComponentToc,
+  ComponentUsageBlock,
+} from "./component-page-sections";
 
 type Props = {
   params: Promise<{ locale: Locale; platform?: string; slug: string }>;
 };
-
-const STORYBOOK_URL =
-  process.env.NEXT_PUBLIC_STORYBOOK_URL ?? "http://localhost:6006";
 
 export const revalidate = 86_400;
 
@@ -135,217 +119,65 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
 export default async function ComponentPage(props: Props) {
   const { locale, platform: platformParameter, slug } = await props.params;
   setRequestLocale(locale);
-  const t = await getTranslations("pages.component");
-  const common = await getTranslations("common");
-  const shared = await getTranslations("shared");
   const component = findComponent(slug);
 
   if (!component) {
     notFound();
   }
 
+  const category = getCategoryForComponent(slug);
+  const [t, localized, sidebarSections] = await Promise.all([
+    getTranslations("pages.component"),
+    getComponentContent(slug, locale),
+    getSidebarSections(category, locale),
+  ]);
   const meta = componentMeta[slug];
-  const aiSeo = getAiSeo(slug);
-  const componentSeo = getComponentSeo(slug);
-  const isDefaultLocale = locale === routing.defaultLocale;
-  // ai-seo / component-seo copy is hand-written English. Render it on the
-  // default locale; other locales get the localized MDX body instead. (The
-  // curated `related` slugs are language-neutral and always apply.)
-  const seoCopy = isDefaultLocale ? componentSeo : undefined;
-  const whenToUse = isDefaultLocale ? aiSeo?.whenToUse : undefined;
-  const displayTitle = meta?.title ?? component.title ?? component.name;
-  const displayDescription =
-    (isDefaultLocale
-      ? (aiSeo?.description ?? componentSeo?.description)
-      : undefined) ??
-    meta?.description ??
-    component.description ??
-    "";
   const platform = getPlatform(platformParameter, "all");
-  const query = variantQuery(platform);
-
-  // The browser preview stays on the Web implementation. Paired Native source
-  // is available from the source selector when this component supports it.
-  let componentCode = "";
-  try {
-    const isChartComponent = ["area-chart", "bar-chart", "line-chart"].includes(
-      component.name,
-    );
-
-    const componentDirectory = findComponentDirectory(
-      path.join(
-        process.cwd(),
-        "..",
-        "..",
-        "packages",
-        "ui",
-        "src",
-        "components",
-      ),
-      isChartComponent ? "chart" : component.name,
-    );
-
-    if (componentDirectory) {
-      componentCode = await readFile(
-        path.join(componentDirectory, `${component.name}.tsx`),
-        "utf8",
-      );
-    }
-  } catch {
-    // Source file not found — skip code section
-  }
-
-  let nativeCode = "";
-  if (component.native) {
-    try {
-      nativeCode = await readFile(
-        path.join(
-          process.cwd(),
-          "..",
-          "..",
-          "packages",
-          "ui-native",
-          component.native.source,
-        ),
-        "utf8",
-      );
-    } catch {
-      // Native source file not found — leave the Web source without a platform tab.
-    }
-  }
-
-  const webSource: ComponentSource | undefined = componentCode
-    ? {
-        code: componentCode,
-        id: "react",
-        label: t("sourceReact"),
-      }
-    : undefined;
-  const nativeSource: ComponentSource | undefined = nativeCode
-    ? {
-        code: nativeCode,
-        id: "react-native",
-        label: t("sourceReactNative"),
-      }
-    : undefined;
-  const sources = (
-    platform === "native"
-      ? [nativeSource, webSource]
-      : [webSource, nativeSource]
-  ).filter((source): source is ComponentSource => source !== undefined);
-
+  const copy = getComponentCopy(slug, component, locale);
+  const sources = await loadComponentSources(component, platform, {
+    react: t("sourceReact"),
+    reactNative: t("sourceReactNative"),
+  });
   const installCommand =
     platform === "native" && component.native
       ? t("nativeSourceOnlyCommand")
       : `pnpm dlx shadcn@latest add https://ui.vllnt.com/r/${component.name}.json`;
-
-  const localizedComponent = await getComponentContent(slug, locale);
-  const componentMdx = localizedComponent;
-  const hasSources = sources.length > 0;
   const mdxKit = buildComponentMdxKit({
     component,
-    hasSources,
+    hasSources: sources.length > 0,
     installCommand,
     sourceLinkLabel: t("viewSource"),
     storybookLabel: t("viewInStorybook"),
     storyId: meta?.defaultStoryId,
   });
-
-  const componentCategory = getCategoryForComponent(slug);
-  const familyGroup = componentCategory
-    ? groupedComponents.find((group) => group.category === componentCategory)
-    : undefined;
-  // Hand-curated related slugs (component-seo) beat the family fallback.
-  const relatedSlugs = (
-    componentSeo && componentSeo.related.length > 0
-      ? componentSeo.related
-      : (familyGroup?.items ?? []).map((item) => item.name)
-  )
-    .filter((name) => name !== component.name)
-    .slice(0, 6);
-  const relatedComponents = relatedSlugs.filter((name) =>
-    registry.items.some(
-      (item) =>
-        item.name === name && (!platform || item.platforms.includes(platform)),
-    ),
+  const familyGroup = groupedComponents.find(
+    (group) => group.category === category,
   );
-
-  const sections = [
-    ...(meta?.defaultStoryId ? [{ id: "preview", title: t("preview") }] : []),
-    { id: "platform-comparison", title: t("platformComparison") },
-    { id: "installation", title: t("installation") },
-    ...(hasSources && !meta?.defaultStoryId
-      ? [{ id: "code", title: t("code") }]
-      : []),
-    ...(meta?.defaultStoryId
-      ? [{ id: "storybook", title: t("storybook") }]
-      : []),
-    ...(relatedComponents.length > 0
-      ? [{ id: "related", title: t("related") }]
-      : []),
-    ...(seoCopy?.faqs.length ? [{ id: "faq", title: t("faq") }] : []),
-  ] as { id: string; title: string }[];
-
-  const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://ui.vllnt.com";
-  const articleTitle = localizedComponent?.frontmatter.title ?? displayTitle;
-  const purposeDescription =
-    localizedComponent?.frontmatter.description ?? displayDescription;
-  const articleDescription = component.native
-    ? t("nativeMetaDescription", {
-        description: purposeDescription,
-        title: articleTitle,
-      })
-    : purposeDescription;
-  const componentPath = `/components/${component.name}`;
-  const componentUrl = canonical(componentPath, locale);
-  const ogImage = `${SITE_URL}${generateOGImageURL({
-    category: componentCategory ?? undefined,
-    description: articleDescription,
-    title: articleTitle,
-    type: "component",
-  })}`;
-  const registryGeneratedAt = getRegistryGeneratedAt();
+  const relatedComponents = getRelatedComponents({
+    component,
+    componentSeo: copy.componentSeo,
+    familyGroup,
+    platform,
+  });
+  const article = buildComponentArticle({
+    category,
+    component,
+    copy,
+    describeNative: (values) => t("nativeMetaDescription", values),
+    locale,
+    localized,
+  });
+  const faqs = copy.seoCopy?.faqs ?? [];
 
   return (
     <>
-      <script
-        {...jsonLdScriptAttributes([
-          softwareSourceCodeLd({
-            description: articleDescription,
-            image: ogImage,
-            keywords: localizedComponent?.frontmatter.keywords,
-            locale,
-            name: component.name,
-            platforms: component.platforms,
-            title: articleTitle,
-          }),
-          techArticleLd({
-            dateModified: registryGeneratedAt,
-            description: articleDescription,
-            image: ogImage,
-            inLanguage: locale,
-            keywords: localizedComponent?.frontmatter.keywords,
-            title: articleTitle,
-            url: componentUrl,
-          }),
-          ...(seoCopy?.faqs.length ? [faqPageLd(seoCopy.faqs)] : []),
-          breadcrumbTrailLd(
-            locale,
-            [
-              { name: common("components"), path: "/components" },
-              { name: articleTitle, path: componentPath },
-            ],
-            common("home"),
-          ),
-        ])}
+      <ComponentJsonLd
+        article={article}
+        component={component}
+        faqs={faqs}
+        locale={locale}
       />
-      <PlatformSidebar
-        platform={platform}
-        sections={await getSidebarSections(
-          getCategoryForComponent(slug),
-          locale,
-        )}
-      />
+      <PlatformSidebar platform={platform} sections={sidebarSections} />
       <main
         className="flex-1 overflow-y-auto bg-background overflow-x-hidden"
         data-pagefind-ignore={platformParameter === undefined ? undefined : ""}
@@ -353,246 +185,57 @@ export default async function ComponentPage(props: Props) {
         <div className="mx-auto max-w-7xl px-4 py-8 lg:px-8">
           <div className="grid grid-cols-1 xl:grid-cols-[minmax(0,1fr)_200px] gap-8">
             <div className="min-w-0">
-              {/* Header */}
-              <div className="mb-8">
-                <Breadcrumb
-                  className="mb-4 text-muted-foreground"
-                  items={[
-                    {
-                      href: withPlatformQuery(
-                        localizePathname("/", locale),
-                        query,
-                        platform,
-                      ),
-                      label: common("home"),
-                    },
-                    {
-                      href: withPlatformQuery(
-                        localizePathname("/components", locale),
-                        query,
-                        platform,
-                      ),
-                      label: common("components"),
-                    },
-                    ...(familyGroup
-                      ? [
-                          {
-                            href: withPlatformQuery(
-                              localizePathname(
-                                familyPath(familyGroup.category),
-                                locale,
-                              ),
-                              query,
-                              platform,
-                            ),
-                            label: familyGroup.label,
-                          },
-                        ]
-                      : []),
-                    { label: articleTitle },
-                  ]}
-                />
-                <h1 className="text-4xl font-semibold mb-2">{articleTitle}</h1>
-                <p className="mb-4 text-lg text-muted-foreground">
-                  {articleDescription}
-                </p>
-                <PlatformBadges
-                  className="mb-4 flex flex-wrap items-center gap-2"
-                  platforms={component.platforms}
-                />
-                <div className="flex flex-wrap items-center gap-3">
-                  <QuickAdd
-                    componentName={component.name}
-                    platform={platform}
-                  />
-                  <ShareEmbedBar
-                    pageUrl={componentUrl}
-                    slug={component.name}
-                    title={articleTitle}
-                  />
-                  <Link
-                    className="inline-flex min-h-11 items-center rounded-md border border-border px-4 text-sm font-medium hover:bg-secondary"
-                    href={withPlatformQuery(
-                      `/report?component=${component.name}`,
-                      query,
-                      platform,
-                    )}
-                  >
-                    {t("reportBug")}
-                  </Link>
-                </div>
-              </div>
-
-              {/* When to use in an AI app */}
-              {whenToUse ? (
-                <div className="mb-8 rounded-lg border border-border bg-muted/30 p-6">
-                  <h2 className="text-sm font-medium uppercase tracking-wide text-muted-foreground">
-                    {t("whenToUseTitle")}
-                  </h2>
-                  <p className="mt-3 text-base leading-relaxed">{whenToUse}</p>
-                  <Link
-                    className="mt-4 inline-flex items-center gap-1 text-sm font-medium text-foreground underline"
-                    href={withPlatformQuery("/families/ai", query, platform)}
-                  >
-                    {t("browseAiComponents")}
-                    <ExternalLink className="size-3" />
-                  </Link>
-                </div>
-              ) : null}
-
-              {/* Usage block for non-AI components */}
-              {!whenToUse && seoCopy?.whatItIs ? (
-                <div className="mb-8 rounded-lg border border-border bg-muted/30 p-6">
-                  <h2 className="text-sm font-medium uppercase tracking-wide text-muted-foreground">
-                    {t("whatItIsTitle")}
-                  </h2>
-                  <p className="mt-3 text-base leading-relaxed">
-                    {seoCopy.whatItIs}
-                  </p>
-                  {familyGroup ? (
-                    <Link
-                      className="mt-4 inline-flex items-center gap-1 text-sm font-medium text-foreground underline"
-                      href={withPlatformQuery(
-                        familyPath(familyGroup.category),
-                        query,
-                        platform,
-                      )}
-                    >
-                      {familyGroup.label}
-                      <ExternalLink className="size-3" />
-                    </Link>
-                  ) : null}
-                </div>
-              ) : null}
-
-              {meta?.defaultStoryId ? (
-                <PreviewPlaygroundTabs
-                  code={
-                    sources.length > 0 ? (
-                      <ComponentSourceCode
-                        label={t("sourceImplementationLabel")}
-                        sources={sources}
-                      />
-                    ) : null
-                  }
-                  componentName={component.name}
-                  storyId={meta.defaultStoryId}
-                />
-              ) : hasSources ? (
-                <div className="mb-8 scroll-mt-8" id="code">
-                  <ComponentSourceCode
-                    label={t("sourceImplementationLabel")}
-                    sources={sources}
-                  />
-                </div>
-              ) : null}
-
-              {componentMdx ? (
+              <ComponentHeader
+                article={article}
+                component={component}
+                familyGroup={familyGroup}
+                locale={locale}
+                platform={platform}
+              />
+              <ComponentUsageBlock
+                familyGroup={familyGroup}
+                platform={platform}
+                seoCopy={copy.seoCopy}
+                whenToUse={copy.whenToUse}
+              />
+              <ComponentSourceSection
+                componentName={component.name}
+                sources={sources}
+                storyId={meta?.defaultStoryId}
+              />
+              {localized ? (
                 <MDXContent
                   components={mdxKit}
-                  content={componentMdx.content}
+                  content={localized.content}
                   enableMDX
                 />
               ) : (
-                <>
-                  <PlatformComparison component={component} />
-
-                  <div className="mb-8 scroll-mt-8" id="installation">
-                    <h2 className="text-2xl font-semibold mb-4">
-                      {t("installation")}
-                    </h2>
-                    <StaticCode code={installCommand} language="bash" />
-                  </div>
-
-                  {meta?.defaultStoryId ? (
-                    <div className="mb-8 scroll-mt-8" id="storybook">
-                      <h2 className="text-2xl font-semibold mb-4">
-                        {t("storybook")}
-                      </h2>
-                      <p className="text-muted-foreground mb-4">
-                        {t("storybookDescription")}
-                      </p>
-                      <a
-                        className="inline-flex min-h-11 items-center gap-2 rounded-md bg-primary px-4 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
-                        href={`${STORYBOOK_URL}/?path=/story/${meta.defaultStoryId}`}
-                        rel="noopener noreferrer"
-                        target="_blank"
-                      >
-                        {t("viewInStorybook")}
-                        <ExternalLink className="size-4" />
-                      </a>
-                      {meta.stories.length > 1 ? (
-                        <div className="mt-4">
-                          <p className="text-sm text-muted-foreground mb-2">
-                            {t("storiesAvailable", {
-                              count: meta.stories.length,
-                            })}
-                          </p>
-                          <div className="flex flex-wrap gap-2">
-                            {meta.stories.map((story) => (
-                              <a
-                                className="inline-flex min-h-11 items-center rounded-md border px-3 text-sm transition-colors hover:bg-secondary"
-                                href={`${STORYBOOK_URL}/?path=/story/${story.id}`}
-                                key={story.id}
-                                rel="noopener noreferrer"
-                                target="_blank"
-                              >
-                                {story.name}
-                              </a>
-                            ))}
-                          </div>
-                        </div>
-                      ) : null}
-                    </div>
-                  ) : null}
-                </>
+                <ComponentFallbackSections
+                  component={component}
+                  installCommand={installCommand}
+                  meta={meta}
+                />
               )}
-
-              {relatedComponents.length > 0 ? (
-                <section className="mb-8 scroll-mt-8" id="related">
-                  <h2 className="text-2xl font-semibold mb-4">
-                    {t("related")}
-                  </h2>
-                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                    {relatedComponents.map((relatedSlug) => (
-                      <ComponentCard
-                        key={relatedSlug}
-                        locale={locale}
-                        platform={platform}
-                        query={query}
-                        slug={relatedSlug}
-                      />
-                    ))}
-                  </div>
-                </section>
-              ) : null}
-
-              {seoCopy?.faqs.length ? (
-                <section className="mb-8 scroll-mt-8" id="faq">
-                  <h2 className="text-2xl font-semibold mb-4">{t("faq")}</h2>
-                  <dl className="space-y-6">
-                    {seoCopy.faqs.map((faq) => (
-                      <div key={faq.question}>
-                        <dt className="font-medium">{faq.question}</dt>
-                        <dd className="mt-2 text-muted-foreground">
-                          {faq.answer}
-                        </dd>
-                      </div>
-                    ))}
-                  </dl>
-                </section>
-              ) : null}
-
+              <ComponentRelatedSection
+                locale={locale}
+                platform={platform}
+                slugs={relatedComponents}
+              />
+              <ComponentFaqSection faqs={faqs} />
               <ShareSection
                 shareOn={t("shareOn")}
                 shareTitle={t("shareTitle")}
-                title={`${articleTitle} — VLLNT UI`}
-                url={withRef(componentUrl, "share")}
+                title={`${article.title} — VLLNT UI`}
+                url={withRef(article.url, "share")}
               />
             </div>
 
-            {/* Table of Contents */}
-            <TableOfContents label={shared("onThisPage")} sections={sections} />
+            <ComponentToc
+              hasFaq={faqs.length > 0}
+              hasRelated={relatedComponents.length > 0}
+              hasSources={sources.length > 0}
+              hasStory={Boolean(meta?.defaultStoryId)}
+            />
           </div>
         </div>
       </main>

@@ -8,6 +8,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { useForwardedQuery } from "@/components/forwarded-query";
 import { getPathname, usePathname } from "@/i18n/routing";
 import {
+  forwardedParameters,
   getPlatform,
   type PlatformContext,
   withPlatformQuery,
@@ -40,14 +41,15 @@ function usePublicPathname(): string {
   return getPathname({ href: publicPagePathname(pathname), locale });
 }
 
-/** Preserves capability-filter and unrelated query state across sidebar links. */
+/** Keeps the platform variant across sidebar links; other query state stays on its page. */
 export function PlatformSidebar({ platform, sections }: PlatformSidebarProps) {
   const t = useTranslations("sidebar");
   const forwardedQuery = useForwardedQuery();
   const publicPathname = usePublicPathname();
   const platformSections = useMemo(() => {
     const parameters =
-      forwardedQuery ?? new URLSearchParams(platform ? { platform } : {});
+      forwardedQuery ??
+      forwardedParameters(new URLSearchParams(platform ? { platform } : {}));
     const selectedPlatform = getPlatform(
       parameters.get("platform") ?? undefined,
       "all",

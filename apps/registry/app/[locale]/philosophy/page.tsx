@@ -28,9 +28,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function PhilosophyPage({ params }: Props) {
   const { locale } = await params;
   setRequestLocale(locale);
-  const { content, frontmatter } = await getPageContent("philosophy", locale);
-  const t = await getTranslations("pages.philosophy");
-  const common = await getTranslations("common");
+  const [{ content, frontmatter }, t, common] = await Promise.all([
+    getPageContent("philosophy", locale),
+    getTranslations("pages.philosophy"),
+    getTranslations("common"),
+  ]);
 
   return (
     <PageShell

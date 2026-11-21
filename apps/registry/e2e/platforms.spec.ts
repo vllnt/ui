@@ -158,7 +158,7 @@ test.describe("platform-aware component discovery", () => {
     expect(webFirstSection?.y).toBeCloseTo(nativeFirstSection?.y ?? 0, 2);
   });
 
-  test("keeps the platform in page links and the full query in navigation", async ({
+  test("carries only the native platform through page links and navigation", async ({
     page,
   }) => {
     await page.goto("/components?platform=native&ref=e2e");
@@ -172,34 +172,44 @@ test.describe("platform-aware component discovery", () => {
     await page.goto(`${firstComponentHref}&ref=e2e`);
     await expect(page).toHaveURL(/\/components\/.+\?platform=native&ref=e2e$/);
 
+    // `ref` stays on the page that received it; shell links carry the platform only.
     const sidebar = page.getByRole("complementary");
     const sidebarButton = sidebar.getByRole("link", {
       name: "Button",
       exact: true,
     });
-    await expect(sidebarButton).toHaveAttribute("href", /ref=e2e/);
+    await expect(sidebarButton).toHaveAttribute(
+      "href",
+      "/components/button?platform=native",
+    );
     await clickUntilUrl(
       page,
       sidebarButton,
-      "/components/button?platform=native&ref=e2e",
+      "/components/button?platform=native",
     );
 
     const headerComponents = page
       .getByRole("link", { name: "Components", exact: true })
       .first();
-    await expect(headerComponents).toHaveAttribute("href", /ref=e2e/);
+    await expect(headerComponents).toHaveAttribute(
+      "href",
+      "/components?platform=native",
+    );
     await clickUntilUrl(
       page,
       headerComponents,
-      "/components?platform=native&ref=e2e",
+      "/components?platform=native",
     );
 
     const frenchLink = page.getByRole("link", { name: "fr", exact: true });
-    await expect(frenchLink).toHaveAttribute("href", /ref=e2e/);
+    await expect(frenchLink).toHaveAttribute(
+      "href",
+      "/fr/components?platform=native",
+    );
     await clickUntilUrl(
       page,
       frenchLink,
-      "/fr/components?platform=native&ref=e2e",
+      "/fr/components?platform=native",
     );
   });
 

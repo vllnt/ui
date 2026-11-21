@@ -67,7 +67,8 @@ const DOCS_SECTION: LlmsSection = {
       title: "Documentation",
       url: `${SITE_URL}/docs`,
     },
-    ...DOCS_PAGES.map((page) => ({
+    // The Changelog entry below already lists /changelog, where this page lives.
+    ...DOCS_PAGES.filter((page) => page.slug !== "changelog").map((page) => ({
       notes: page.description,
       title: page.title,
       url: `${SITE_URL}${getDocsPath(page)}`,

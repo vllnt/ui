@@ -185,8 +185,9 @@ function checkMessageWiring(defaultLocale: string): void {
     );
   }
 
+  const definedNamespaces = new Set(topLevelNamespaces);
   for (const namespace of referencedNamespaces) {
-    if (!topLevelNamespaces.includes(namespace)) {
+    if (!definedNamespaces.has(namespace)) {
       fail(
         "message-wiring",
         `namespace "${namespace}" is referenced in source but not defined in ${defaultLocale}.json`,

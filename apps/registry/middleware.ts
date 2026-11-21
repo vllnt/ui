@@ -2,6 +2,7 @@ import { type NextRequest, NextResponse } from "next/server";
 import createMiddleware from "next-intl/middleware";
 
 import { routing } from "@/i18n/routing";
+import { defaultLocalePrefixTarget } from "@/lib/default-locale-redirect";
 import { legacyHostRedirectUrl } from "@/lib/legacy-host-redirect";
 import { markdownPathname, prefersMarkdown } from "@/lib/markdown-negotiation";
 import { publicVariant } from "@/lib/platform-variant";
@@ -42,6 +43,24 @@ function variantRedirect(request: NextRequest): NextResponse | undefined {
 /** A permanent redirect for a page that moved: a renamed component or a private variant URL. */
 function movedPage(request: NextRequest): NextResponse | undefined {
   return renamedComponentRedirect(request) ?? variantRedirect(request);
+}
+
+/**
+ * Sends `/en/...` (the default locale spelled with a prefix) to the unprefixed
+ * URL. The redirect is permanent, so crawlers settle on one URL; next-intl's
+ * own redirect for this path is temporary (307). Like every other public GET,
+ * it sets no cookie.
+ */
+function defaultLocalePrefixRedirect(
+  request: NextRequest,
+): NextResponse | undefined {
+  const pathname = defaultLocalePrefixTarget(request.nextUrl.pathname);
+  if (pathname === undefined) return undefined;
+
+  const url = request.nextUrl.clone();
+  url.pathname = pathname;
+
+  return NextResponse.redirect(url, 308);
 }
 
 /**
@@ -129,7 +148,10 @@ function route(request: NextRequest): NextResponse {
     return NextResponse.redirect(target, 308);
   }
 
-  const answer = movedPage(request) ?? markdownTwin(request);
+  const answer =
+    movedPage(request) ??
+    defaultLocalePrefixRedirect(request) ??
+    markdownTwin(request);
   if (answer) return answer;
 
   const response = intlMiddleware(request);

@@ -186,6 +186,7 @@ export default async function ChangelogPage({
             </p>
           </div>
           <Button asChild variant="outline">
+            {/* react-doctor-disable-next-line react-doctor/nextjs-no-a-element -- the RSS feed is a non-localized XML file, not a page */}
             <a href="/rss.xml">{t("rssLink")}</a>
           </Button>
         </div>

@@ -1,6 +1,11 @@
 import { describe, expect, it } from "vitest";
 
-import { getPlatform, withPlatformQuery } from "@/lib/platform";
+import {
+  canonicalPlatformPath,
+  forwardedParameters,
+  getPlatform,
+  withPlatformQuery,
+} from "@/lib/platform";
 
 describe("getPlatform", () => {
   it("defaults page context to web", () => {
@@ -42,5 +47,59 @@ describe("withPlatformQuery", () => {
         "all",
       ),
     ).toBe("/components?search=button");
+  });
+});
+
+describe("forwardedParameters", () => {
+  it("carries the native platform variant", () => {
+    expect(
+      forwardedParameters(new URLSearchParams("platform=native")).toString(),
+    ).toBe("platform=native");
+  });
+
+  it("drops the web platform, which a clean URL already shows", () => {
+    expect(
+      forwardedParameters(new URLSearchParams("platform=web")).toString(),
+    ).toBe("");
+  });
+
+  it("never carries component, ref or unknown parameters", () => {
+    const query = new URLSearchParams(
+      "component=button&ref=e2e&utm_source=x&platform=native&platform=web",
+    );
+
+    expect(forwardedParameters(query).toString()).toBe("platform=native");
+    expect(
+      forwardedParameters(
+        new URLSearchParams("component=button&ref=e2e"),
+      ).toString(),
+    ).toBe("");
+  });
+
+  it("ignores an unknown platform value", () => {
+    expect(
+      forwardedParameters(new URLSearchParams("platform=bogus")).toString(),
+    ).toBe("");
+  });
+});
+
+describe("canonicalPlatformPath", () => {
+  it("keeps the native variant, which has its own content", () => {
+    expect(canonicalPlatformPath("/components", "native")).toBe(
+      "/components?platform=native",
+    );
+    expect(canonicalPlatformPath("/docs/installation", "native")).toBe(
+      "/docs/installation?platform=native",
+    );
+  });
+
+  it("uses the clean URL for web and for the unfiltered view", () => {
+    expect(canonicalPlatformPath("/components", "web")).toBe("/components");
+    expect(
+      canonicalPlatformPath("/components", getPlatform(undefined, "all")),
+    ).toBe("/components");
+    expect(canonicalPlatformPath("/docs/installation", "web")).toBe(
+      "/docs/installation",
+    );
   });
 });

@@ -71,6 +71,10 @@ export function getDocsPage(slug: string): DocsPage | undefined {
   return DOCS_PAGES.find((page) => page.slug === slug);
 }
 
+/**
+ * Public URL of a docs page. `/docs/changelog` answers with a permanent
+ * redirect to `/changelog`, so links point at the final URL.
+ */
 export function getDocsPath(page: DocsPage): string {
-  return `/docs/${page.slug}`;
+  return page.slug === "changelog" ? "/changelog" : `/docs/${page.slug}`;
 }

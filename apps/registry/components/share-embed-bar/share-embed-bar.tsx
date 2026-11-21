@@ -128,6 +128,7 @@ function EmbedDialog({
           <DialogDescription>{t("embedDescription")}</DialogDescription>
         </DialogHeader>
         <textarea
+          aria-label={t("embedCodeLabel")}
           className="h-32 w-full resize-none rounded-md border border-border bg-muted/30 p-3 font-mono text-xs text-foreground"
           readOnly
           spellCheck={false}

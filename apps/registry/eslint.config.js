@@ -4,9 +4,15 @@ const NAMING_CONVENTION = '@typescript-eslint/naming-convention'
 
 /* The preset's project-wide naming-convention options. Rule options replace
    rather than merge, so the scoped overrides below extend this list. */
-const [, ...namingConventionOptions] = nextjs.find(
+const projectNamingConfig = nextjs.find(
   (config) => !config.files && config.rules?.[NAMING_CONVENTION],
-).rules[NAMING_CONVENTION]
+)
+if (!projectNamingConfig) {
+  throw new Error(
+    `@vllnt/eslint-config nextjs preset has no project-wide ${NAMING_CONVENTION} rule`,
+  )
+}
+const [, ...namingConventionOptions] = projectNamingConfig.rules[NAMING_CONVENTION]
 
 export default [
   {

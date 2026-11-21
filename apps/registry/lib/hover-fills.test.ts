@@ -19,7 +19,7 @@ const STATE_VARIANT =
  * (#000000), so a muted hover fill does not show.
  */
 const MIGRATED_HOVERS: readonly (readonly [string, number])[] = [
-  ["app/[locale]/components/[slug]/page.tsx", 2],
+  ["app/[locale]/components/[slug]/component-page-sections.tsx", 2],
   ["app/[locale]/components/[slug]/playground/page.tsx", 1],
   ["app/[locale]/families/[category]/page.tsx", 1],
   ["app/[locale]/not-found.tsx", 3],

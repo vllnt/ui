@@ -23,6 +23,22 @@ export function variantQuery(platform: PlatformContext): PlatformQuery {
   return platform ? { platform } : {};
 }
 
+/**
+ * The query a shell link (header, sidebar, language switch) carries from the
+ * current URL to its target: the `native` platform variant and nothing else.
+ * `web` is what a clean URL already shows, so links leave it out. Any other
+ * parameter (`component`, `ref`, a crawler's `utm_*`) stays on the page that
+ * received it. Carrying everything would copy one stray parameter onto every
+ * link and mint an unbounded set of duplicate URLs for crawlers to follow.
+ */
+export function forwardedParameters(query: URLSearchParams): URLSearchParams {
+  const platform = getPlatform(query.get("platform") ?? undefined, "all");
+
+  return platform === "native"
+    ? new URLSearchParams({ platform })
+    : new URLSearchParams();
+}
+
 function appendQuery(
   target: URLSearchParams,
   query: PlatformQuery | URLSearchParams,
@@ -76,4 +92,22 @@ export function withPlatformQuery(
 
   const serialized = parameters.toString();
   return `${pathname}${serialized ? `?${serialized}` : ""}${hash ? `#${hash}` : ""}`;
+}
+
+/**
+ * The path a page declares as its own URL (canonical, structured data). The
+ * `native` variant of a catalog or installation page has its own content,
+ * title and sitemap entry, so it keeps `?platform=native`. `web` is what the
+ * clean URL already shows, and the unfiltered view is the clean URL, so
+ * neither carries a query.
+ */
+export function canonicalPlatformPath(
+  pathname: string,
+  platform: PlatformContext,
+): string {
+  return withPlatformQuery(
+    pathname,
+    {},
+    platform === "native" ? "native" : "all",
+  );
 }

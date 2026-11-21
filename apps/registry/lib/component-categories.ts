@@ -58,9 +58,10 @@ function groupComponentsByCategory(
     return accumulator;
   }, new Map<ComponentCategory, { name: string; title: string }[]>());
 
+  const knownCategories = new Set(categoryOrder);
   const orderedCategories = [
     ...categoryOrder.filter((cat) => grouped.has(cat)),
-    ...[...grouped.keys()].filter((cat) => !categoryOrder.includes(cat)),
+    ...[...grouped.keys()].filter((cat) => !knownCategories.has(cat)),
   ];
 
   return orderedCategories.map((category) => ({

@@ -645,6 +645,7 @@
       "copyEmbedCode": "Copier le code d'integration",
       "copyLink": "Copier le lien",
       "embed": "Integrer",
+      "embedCodeLabel": "Code d'integration",
       "embedDescription": "Collez ceci dans un blog ou une page de docs pour integrer un apercu en direct avec un lien vers VLLNT UI.",
       "embedTitle": "Integrer {title}",
       "linkCopied": "Lien copie !",
