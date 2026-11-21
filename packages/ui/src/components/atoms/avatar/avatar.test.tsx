@@ -67,7 +67,7 @@ describe("Avatar default render", () => {
       "items-center",
       "justify-center",
       "rounded-full",
-      "bg-muted",
+      "bg-secondary",
     );
     expect(fallback.className).not.toContain("text-");
   });
