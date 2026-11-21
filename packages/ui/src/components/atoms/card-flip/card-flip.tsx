@@ -89,6 +89,7 @@ export const CardFlip = ({
         }
       }}
       ref={ref}
+      // react-doctor-disable-next-line react-doctor/prefer-tag-over-role -- the faces are block-level and may hold interactive content, which a native <button> cannot contain; the div props and ref are public API
       role="button"
       tabIndex={0}
       {...props}

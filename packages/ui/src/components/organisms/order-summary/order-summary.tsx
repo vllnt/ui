@@ -4,6 +4,7 @@ import * as React from "react";
 
 import { cva } from "class-variance-authority";
 
+import { keyByOccurrence } from "../../../lib/occurrence-keys";
 import { cn } from "../../../lib/utils";
 import { Button } from "../../atoms/button/button";
 import { Card } from "../../atoms/card/card";
@@ -157,9 +158,11 @@ type SummaryRowsProps = {
 function SummaryRows({ lines, total }: SummaryRowsProps): React.JSX.Element {
   return (
     <dl className="flex flex-col gap-2 text-sm">
-      {lines.map((line, index) => (
-        <SummaryRow key={`${String(index)}-${line.label}`} line={line} />
-      ))}
+      {keyByOccurrence(lines, (line) => line.label).map(
+        ({ item: line, key }) => (
+          <SummaryRow key={key} line={line} />
+        ),
+      )}
       <SummaryRow emphasis line={total} />
     </dl>
   );

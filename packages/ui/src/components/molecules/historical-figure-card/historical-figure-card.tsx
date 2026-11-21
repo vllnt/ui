@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  Children,
   type ComponentPropsWithoutRef,
   type ReactNode,
   useCallback,
@@ -9,6 +10,7 @@ import {
 
 import { ChevronDown, User } from "lucide-react";
 
+import { keyByOccurrence } from "../../../lib/occurrence-keys";
 import { cn } from "../../../lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "../../atoms/avatar/avatar";
 import { Badge } from "../../atoms/badge/badge";
@@ -120,6 +122,19 @@ const DEFAULT_LABELS = {
   works: "Notable works",
 } as const satisfies Required<HistoricalFigureCardLabels>;
 
+function resolveLabels(
+  labels: HistoricalFigureCardLabels = {},
+): Required<HistoricalFigureCardLabels> {
+  return {
+    collapseBio: labels.collapseBio ?? DEFAULT_LABELS.collapseBio,
+    connections: labels.connections ?? DEFAULT_LABELS.connections,
+    expandBio: labels.expandBio ?? DEFAULT_LABELS.expandBio,
+    fields: labels.fields ?? DEFAULT_LABELS.fields,
+    lifespan: labels.lifespan ?? DEFAULT_LABELS.lifespan,
+    works: labels.works ?? DEFAULT_LABELS.works,
+  };
+}
+
 function formatYear(year: number | undefined): string | undefined {
   if (year === undefined) return undefined;
   if (year < 0) return `${Math.abs(year).toString()} BC`;
@@ -201,10 +216,8 @@ function FigureChips({ heading, items }: FigureChipsProps): ReactNode {
         {heading}
       </h4>
       <div className="flex flex-wrap gap-1.5">
-        {items.map((item, index) => (
-          <Badge key={`chip-${index.toString()}`} variant="secondary">
-            {item}
-          </Badge>
+        {Children.map(items, (item) => (
+          <Badge variant="secondary">{item}</Badge>
         ))}
       </div>
     </div>
@@ -224,10 +237,8 @@ function FigureWorksList({ heading, items }: FigureWorksListProps): ReactNode {
         {heading}
       </h4>
       <ul className="flex flex-col gap-1 text-sm text-foreground">
-        {items.map((item, index) => (
-          <li className="leading-tight" key={`work-${index.toString()}`}>
-            {item}
-          </li>
+        {Children.map(items, (item) => (
+          <li className="leading-tight">{item}</li>
         ))}
       </ul>
     </div>
@@ -238,6 +249,20 @@ type FigureConnectionsProps = {
   heading: string;
   items: HistoricalFigureCardConnection[];
 };
+
+function nodeText(node: ReactNode): string {
+  return typeof node === "string" || typeof node === "number"
+    ? String(node)
+    : "";
+}
+
+function connectionKey({
+  href,
+  name,
+  relation,
+}: HistoricalFigureCardConnection): string {
+  return `${href ?? ""}|${nodeText(name)}|${nodeText(relation)}`;
+}
 
 function FigureConnections({
   heading,
@@ -250,31 +275,33 @@ function FigureConnections({
         {heading}
       </h4>
       <ul className="flex flex-col gap-1.5 text-sm">
-        {items.map((connection, index) => {
-          const labelNode = connection.href ? (
-            <a
-              className="font-medium text-foreground underline-offset-4 hover:underline"
-              href={connection.href}
-            >
-              {connection.name}
-            </a>
-          ) : (
-            <span className="font-medium text-foreground">
-              {connection.name}
-            </span>
-          );
-          return (
-            <li
-              className="flex items-baseline justify-between gap-3"
-              key={`connection-${index.toString()}`}
-            >
-              {labelNode}
-              <span className="text-xs text-muted-foreground">
-                {connection.relation}
+        {keyByOccurrence(items, connectionKey).map(
+          ({ item: connection, key }) => {
+            const labelNode = connection.href ? (
+              <a
+                className="font-medium text-foreground underline-offset-4 hover:underline"
+                href={connection.href}
+              >
+                {connection.name}
+              </a>
+            ) : (
+              <span className="font-medium text-foreground">
+                {connection.name}
               </span>
-            </li>
-          );
-        })}
+            );
+            return (
+              <li
+                className="flex items-baseline justify-between gap-3"
+                key={key}
+              >
+                {labelNode}
+                <span className="text-xs text-muted-foreground">
+                  {connection.relation}
+                </span>
+              </li>
+            );
+          },
+        )}
       </ul>
     </div>
   );
@@ -447,7 +474,7 @@ export const HistoricalFigureCard = ({
     ...rest
   } = props;
 
-  const resolvedLabels = { ...DEFAULT_LABELS, ...labels };
+  const resolvedLabels = resolveLabels(labels);
 
   return (
     <article

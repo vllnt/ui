@@ -8,28 +8,28 @@
     {
       "name": "CodeBlock (up front)",
       "export": "CodeBlock",
-      "maxBytes": 32300
+      "maxBytes": 34800
     },
     {
       "name": "CodeBlock (with lazy highlighter)",
       "export": "CodeBlock",
       "withLazy": true,
-      "maxBytes": 771600
+      "maxBytes": 117800
     },
     {
       "name": "TutorialMDX (up front)",
       "export": "TutorialMDX",
-      "maxBytes": 205600
+      "maxBytes": 199900
     },
     {
       "name": "StaticCode (up front)",
       "export": "StaticCode",
-      "maxBytes": 747200
+      "maxBytes": 124800
     },
     {
       "name": "MDXContent (up front)",
       "export": "MDXContent",
-      "maxBytes": 1279500
+      "maxBytes": 631300
     },
     {
       "name": "FlowDiagram (up front)",
@@ -40,7 +40,7 @@
     {
       "name": "* (every export, up front)",
       "export": "*",
-      "maxBytes": 2803900
+      "maxBytes": 2176900
     }
   ]
 }

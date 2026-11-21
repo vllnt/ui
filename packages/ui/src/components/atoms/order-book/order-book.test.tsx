@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 
 import { OrderBook } from "./order-book";
 
@@ -37,5 +37,25 @@ describe("OrderBook number formatting", () => {
     expect(screen.getAllByText("4.200")).toHaveLength(2);
     expect(screen.getByText("185.03")).toBeInTheDocument();
     expect(screen.getByText("21.700")).toBeInTheDocument();
+  });
+
+  it("renders unaggregated levels that share a price without duplicate keys", () => {
+    const errors = vi.spyOn(console, "error").mockImplementation(() => null);
+    render(
+      <OrderBook
+        asks={[
+          { price: 185.24, size: 1 },
+          { price: 185.24, size: 2 },
+        ]}
+        bids={bids}
+      />,
+    );
+    expect(screen.getAllByText("185.24")).toHaveLength(2);
+    expect(
+      errors.mock.calls.some((call) =>
+        call.some((part) => String(part).includes("same key")),
+      ),
+    ).toBe(false);
+    errors.mockRestore();
   });
 });

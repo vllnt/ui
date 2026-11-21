@@ -4,6 +4,7 @@ import { memo, useCallback, useTransition } from "react";
 
 import type { TransitionStartFunction } from "react";
 
+import { keyByOccurrence } from "../../../lib/occurrence-keys";
 import { cn } from "../../../lib/utils";
 import { Badge } from "../../atoms/badge/badge";
 
@@ -146,6 +147,8 @@ function TagFilter({
 }): React.ReactNode {
   if (tags.length === 0) return null;
 
+  const activeTags = new Set(currentTags);
+
   return (
     <div>
       <div className="flex items-center gap-2 mb-2">
@@ -161,8 +164,8 @@ function TagFilter({
         ) : null}
       </div>
       <div className="flex flex-wrap gap-2">
-        {tags.map((tag, index) => {
-          const isActive = currentTags.includes(tag);
+        {keyByOccurrence(tags, (tag) => tag).map(({ item: tag, key }) => {
+          const isActive = activeTags.has(tag);
           return (
             <Badge
               className={cn(
@@ -171,7 +174,7 @@ function TagFilter({
                   ? "bg-primary text-primary-foreground border-transparent"
                   : "hover:bg-secondary",
               )}
-              key={`${tag}-${index.toString()}`}
+              key={key}
               onClick={() => {
                 onTagToggle(tag);
               }}
@@ -221,8 +224,8 @@ function ActiveFiltersSummary({
           {difficultyLabel}
         </Badge>
       ) : null}
-      {currentTags.map((tag, index) => (
-        <Badge key={`${tag}-${index.toString()}`} variant="secondary">
+      {keyByOccurrence(currentTags, (tag) => tag).map(({ item: tag, key }) => (
+        <Badge key={key} variant="secondary">
           {tag}
         </Badge>
       ))}
@@ -253,6 +256,19 @@ const DEFAULT_LABELS: Required<FilterBarLabels> = {
 };
 
 const EMPTY_FILTER_BAR_LABELS: FilterBarLabels = {};
+
+function resolveLabels(labels: FilterBarLabels): Required<FilterBarLabels> {
+  return {
+    activeFilters: labels.activeFilters ?? DEFAULT_LABELS.activeFilters,
+    clearAll: labels.clearAll ?? DEFAULT_LABELS.clearAll,
+    clearTags: labels.clearTags ?? DEFAULT_LABELS.clearTags,
+    difficultyLabel: labels.difficultyLabel ?? DEFAULT_LABELS.difficultyLabel,
+    searchLabel: labels.searchLabel ?? DEFAULT_LABELS.searchLabel,
+    searchPlaceholder:
+      labels.searchPlaceholder ?? DEFAULT_LABELS.searchPlaceholder,
+    tagsLabel: labels.tagsLabel ?? DEFAULT_LABELS.tagsLabel,
+  };
+}
 
 type FilterBarHandlerOptions = {
   currentTags: string[];
@@ -316,7 +332,7 @@ function FilterBarImpl({
   tags,
 }: FilterBarProps): React.ReactNode {
   const [isPending, startTransition] = useTransition();
-  const mergedLabels = { ...DEFAULT_LABELS, ...labels };
+  const mergedLabels = resolveLabels(labels);
 
   const {
     handleClearAll,

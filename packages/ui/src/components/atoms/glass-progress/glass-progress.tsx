@@ -46,7 +46,7 @@ export const GlassProgress = ({
       {...props}
     >
       <div
-        className="h-full rounded-full bg-primary transition-all"
+        className="h-full rounded-full bg-primary transition-[width]"
         style={{ width: `${clamped}%` }}
       />
     </div>

@@ -2,6 +2,7 @@
 
 import { memo } from "react";
 
+import { keyByOccurrence } from "../../../lib/occurrence-keys";
 import { Badge } from "../../atoms/badge/badge";
 
 export type TutorialFiltersLabels = {
@@ -125,6 +126,8 @@ function TagFilter({
     return null;
   }
 
+  const activeTags = new Set(currentTags);
+
   return (
     <div>
       <div className="flex items-center gap-2 mb-2">
@@ -140,8 +143,8 @@ function TagFilter({
         ) : null}
       </div>
       <div className="flex flex-wrap gap-2" data-testid="tag-filter-list">
-        {tags.map((tag, index) => {
-          const isActive = currentTags.includes(tag);
+        {keyByOccurrence(tags, (tag) => tag).map(({ item: tag, key }) => {
+          const isActive = activeTags.has(tag);
           return (
             <Badge
               className={`cursor-pointer transition-all ${
@@ -149,7 +152,7 @@ function TagFilter({
                   ? "bg-primary text-primary-foreground border-transparent"
                   : "hover:bg-secondary"
               }`}
-              key={`${tag}-${index.toString()}`}
+              key={key}
               onClick={() => {
                 onTagToggle(tag);
               }}
@@ -189,8 +192,8 @@ function ActiveFiltersSummary({
           {labels.difficulty[currentDifficulty] || currentDifficulty}
         </Badge>
       ) : null}
-      {currentTags.map((tag, index) => (
-        <Badge key={`${tag}-${index.toString()}`} variant="secondary">
+      {keyByOccurrence(currentTags, (tag) => tag).map(({ item: tag, key }) => (
+        <Badge key={key} variant="secondary">
           {tag}
         </Badge>
       ))}

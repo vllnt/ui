@@ -6,6 +6,34 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+### Added
+
+- **`keyByOccurrence`** - keys items that have no id and may repeat: the key is
+  the identity text plus the number of identical items before it, so an equal
+  item keeps its key when others change around it.
+
+### Changed
+
+- **Smaller code highlighter** - `CodeBlock` and `StaticCode` use the Prism
+  light build with a fixed language set, not the full build that bundles every
+  language. `StaticCode` drops from about 682 KB to 121 KB minified, the lazy
+  `CodeBlock` chunk from about 681 KB to 115 KB, and an import of every export
+  from about 2.67 MB to 2.11 MB. The set is `tsx`, `typescript` (`ts`), `jsx`,
+  `javascript` (`js`), `json`, `bash` (`sh`, `shell`, `zsh`), `css`, `markdown`
+  (`md`), `diff`, `yaml` (`yml`), `python` (`py`), `markup` (`html`, `xml`) and
+  `sql`. Any other language, and `text`, renders as plain text without an
+  error.
+
+### Fixed
+
+- **StepByStep** - `null`, `false` and text children no longer crash the list
+  or render an empty step; numbering and the completed count skip them.
+- **Reasoning** - `onOpenChange` fires once per toggle under React StrictMode.
+- **DocumentSiblingNav** - a label passed as `undefined` keeps its default.
+- **List keys** - lists that key items by label (OrderSummary, StatusBoard,
+  FilterBar, PieChart and others) no longer warn or drop rows when two items
+  share a label.
+
 ## [0.4.0] - 2026-11-20
 
 ### Added

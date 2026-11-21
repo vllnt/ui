@@ -1,6 +1,6 @@
-import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { oneDark } from "react-syntax-highlighter/dist/esm/styles/prism";
 
+import { CodeHighlighter } from "../../../lib/code-highlighter";
 import { cn } from "../../../lib/utils";
 
 import { StaticCodeCopy } from "./static-code-copy";
@@ -16,6 +16,8 @@ export type StaticCodeProps = {
  * (react-syntax-highlighter rendered on the server) so the client never loads
  * or runs the highlighter. The copy button is the one client island. Uses a
  * fixed dark theme to stay deterministic without reading the client theme.
+ * Highlights the languages registered in `lib/code-highlighter.ts`; any other
+ * language renders as plain text.
  */
 export function StaticCode({
   className,
@@ -29,7 +31,7 @@ export function StaticCode({
         className,
       )}
     >
-      <SyntaxHighlighter
+      <CodeHighlighter
         customStyle={{
           background: "transparent",
           fontSize: "0.875rem",
@@ -41,7 +43,7 @@ export function StaticCode({
         style={oneDark}
       >
         {code}
-      </SyntaxHighlighter>
+      </CodeHighlighter>
       <StaticCodeCopy value={code} />
     </div>
   );

@@ -18,7 +18,9 @@
  *   - `from "../<sibling>/<sibling>"`             → `from "@vllnt/ui"`
  *   - `from "../../<level>/<sibling>/<sibling>"`  → `from "@vllnt/ui"`
  *   - `from "../<sibling>"`                       → `from "@vllnt/ui"`
- *   - `import("../<sibling>")` (same sibling paths) → `import("@vllnt/ui")`
+ *   - `import("../<sibling>")` (same sibling paths) → `import("@vllnt/ui")`, only
+ *     for the components in ALLOWED_DYNAMIC_RELATIVE_IMPORTS; any other relative
+ *     `import()` throws (a lazy chunk must import a package specifier)
  *   - `import { A } from "./<helper>"`            → `from "@vllnt/ui"` when every
  *     binding is a public export
  *
@@ -39,13 +41,14 @@ import {
   rmSync,
   writeFileSync,
 } from "node:fs";
-import { dirname, join } from "node:path";
+import { dirname, join, relative } from "node:path";
 import { fileURLToPath } from "node:url";
 
 import {
   COMPONENT_LEVELS,
   findComponentDirectory,
 } from "../lib/component-directory";
+import { assertNoDynamicRelativeImports } from "../lib/dynamic-relative-imports";
 import { readNativeOnlyNames } from "../lib/native-only";
 import { collectPublicExports } from "../lib/public-exports";
 import type {
@@ -65,6 +68,14 @@ const componentsRoot = join(repoRoot, "packages/ui/src/components");
 const shimsRoot = join(repoRoot, "apps/registry/registry/default");
 
 const PACKAGE_NAME = "@vllnt/ui";
+
+// Dynamic relative imports the rewrite resolves correctly, by component: the
+// target is a sibling whose public export is read by name (FlowDiagram). Any
+// other relative `import()` fails the build, see lib/dynamic-relative-imports.
+const ALLOWED_DYNAMIC_RELATIVE_IMPORTS = new Map<string, ReadonlySet<string>>([
+  ["tutorial-mdx", new Set(["../flow-diagram"])],
+]);
+
 const RESERVED_REGISTRY_NAMES = new Set([
   "utils",
   "types",
@@ -259,6 +270,11 @@ for (const item of registry.items) {
   }
 
   const sourceCode = readFileSync(source.path, "utf8");
+  assertNoDynamicRelativeImports(
+    sourceCode,
+    relative(repoRoot, source.path),
+    ALLOWED_DYNAMIC_RELATIVE_IMPORTS.get(item.name),
+  );
   const code = rewriteImports(sourceCode);
 
   // Write rewritten source to shim path

@@ -37,7 +37,7 @@ import { CodeBlock } from '@vllnt/ui'
 | ---- | ---- | -------- | ----------- |
 | `children` | `ReactNode` | Yes | Source code. Nested elements contribute their text. |
 | `className` | `string` | No | Merged onto the root element. |
-| `language` | `string` | No | Prism language. Defaults to `typescript`. |
+| `language` | `string` | No | Prism language. Defaults to `typescript`. Highlights `tsx`, `typescript` (`ts`), `jsx`, `javascript` (`js`), `json`, `bash` (`sh`, `shell`, `zsh`), `css`, `markdown` (`md`), `diff`, `yaml` (`yml`), `python` (`py`), `markup` (`html`, `xml`) and `sql`. Any other language, and `text`, renders as plain text. |
 | `showLanguage` | `boolean` | No | Shows the language label over the code. Ignored when `title` renders a header, which always shows it. |
 | `showLineNumbers` | `boolean` | No | Numbers every line. Defaults to `false`. Numbers are not part of the copied text. |
 | `title` | `ReactNode` | No | File name or label. Renders a header row with the title, the language label and the Copy button. Empty renders no header. |

@@ -52,61 +52,60 @@ export const SparklineGrid = (props: SparklineGridProps) => {
       ref={reference}
       {...rest}
     >
-      {items.map((item, index) => {
-        const isPositive = item.change >= 0;
-        const TrendIcon = isPositive ? ArrowUpRight : ArrowDownRight;
-        const strokeClass = isPositive
-          ? "text-emerald-700 dark:text-emerald-400"
-          : "text-rose-700 dark:text-rose-400";
+      {React.Children.toArray(
+        items.map((item) => {
+          const isPositive = item.change >= 0;
+          const TrendIcon = isPositive ? ArrowUpRight : ArrowDownRight;
+          const strokeClass = isPositive
+            ? "text-emerald-700 dark:text-emerald-400"
+            : "text-rose-700 dark:text-rose-400";
 
-        return (
-          <section
-            className="rounded-2xl border border-border bg-card/80 p-4 shadow-sm"
-            key={`${item.label}-${index.toString()}`}
-          >
-            <div className="mb-4 flex items-start justify-between gap-3">
-              <div>
-                <p className="text-sm font-medium text-muted-foreground">
-                  {item.label}
-                </p>
-                <p className="mt-1 text-2xl font-semibold tracking-tight text-foreground">
-                  {item.value}
-                </p>
+          return (
+            <section className="rounded-2xl border border-border bg-card/80 p-4 shadow-sm">
+              <div className="mb-4 flex items-start justify-between gap-3">
+                <div>
+                  <p className="text-sm font-medium text-muted-foreground">
+                    {item.label}
+                  </p>
+                  <p className="mt-1 text-2xl font-semibold tracking-tight text-foreground">
+                    {item.value}
+                  </p>
+                </div>
+                <div
+                  className={cn(
+                    "inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-xs font-medium tabular-nums",
+                    isPositive
+                      ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-700 dark:text-emerald-400"
+                      : "border-rose-500/30 bg-rose-500/10 text-rose-700 dark:text-rose-400",
+                  )}
+                >
+                  <TrendIcon className="size-3.5" />
+                  {formatChange(item.change)}
+                </div>
               </div>
-              <div
-                className={cn(
-                  "inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-xs font-medium tabular-nums",
-                  isPositive
-                    ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-700 dark:text-emerald-400"
-                    : "border-rose-500/30 bg-rose-500/10 text-rose-700 dark:text-rose-400",
-                )}
-              >
-                <TrendIcon className="size-3.5" />
-                {formatChange(item.change)}
+              <div className="rounded-xl border border-border/60 bg-muted/20 p-3">
+                <svg
+                  aria-label={`${item.label} sparkline`}
+                  className="h-16 w-full"
+                  role="img"
+                  viewBox="0 0 120 48"
+                >
+                  <path
+                    className={strokeClass}
+                    d={buildSparklinePath(item.data, 120, 48)}
+                    fill="none"
+                    stroke="currentColor"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2.5"
+                    vectorEffect="non-scaling-stroke"
+                  />
+                </svg>
               </div>
-            </div>
-            <div className="rounded-xl border border-border/60 bg-muted/20 p-3">
-              <svg
-                aria-label={`${item.label} sparkline`}
-                className="h-16 w-full"
-                role="img"
-                viewBox="0 0 120 48"
-              >
-                <path
-                  className={strokeClass}
-                  d={buildSparklinePath(item.data, 120, 48)}
-                  fill="none"
-                  stroke="currentColor"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2.5"
-                  vectorEffect="non-scaling-stroke"
-                />
-              </svg>
-            </div>
-          </section>
-        );
-      })}
+            </section>
+          );
+        }),
+      )}
     </div>
   );
 };

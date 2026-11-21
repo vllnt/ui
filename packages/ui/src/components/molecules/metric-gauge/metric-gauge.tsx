@@ -1,5 +1,6 @@
 import * as React from "react";
 
+import { keyByOccurrence } from "../../../lib/occurrence-keys";
 import { cn } from "../../../lib/utils";
 import { Badge } from "../../atoms/badge/badge";
 import {
@@ -183,10 +184,13 @@ function GaugeDial({
 function GaugeLegend({ thresholds }: { thresholds: MetricGaugeThreshold[] }) {
   return (
     <div className="flex flex-wrap gap-2">
-      {thresholds.map((threshold, index) => (
+      {keyByOccurrence(
+        thresholds,
+        (threshold) => `${threshold.label}-${threshold.value.toString()}`,
+      ).map(({ item: threshold, key }) => (
         <div
           className="flex items-center gap-2 rounded-md border px-2.5 py-1 text-xs"
-          key={`${threshold.label}-${index.toString()}`}
+          key={key}
         >
           <span
             aria-hidden="true"

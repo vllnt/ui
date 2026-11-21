@@ -2,6 +2,7 @@ import * as React from "react";
 
 import { cva, type VariantProps } from "class-variance-authority";
 
+import { keyByOccurrence } from "../../../lib/occurrence-keys";
 import { cn } from "../../../lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "../../atoms/avatar/avatar";
 
@@ -81,10 +82,13 @@ const AvatarGroup = ({
       ref={reference}
       {...props}
     >
-      {visibleItems.map((item, index) => (
+      {keyByOccurrence(
+        visibleItems,
+        (item) => `${item.src ?? ""}|${item.alt}|${item.fallback}`,
+      ).map(({ item, key }, index) => (
         <Avatar
           className={avatarItemVariants({ size })}
-          key={`${item.src ?? item.alt}-${index.toString()}`}
+          key={key}
           style={{ zIndex: visibleItems.length - index }}
         >
           {item.src ? <AvatarImage alt={item.alt} src={item.src} /> : null}

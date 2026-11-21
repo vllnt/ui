@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 
 import { HistoricalFigureCard } from "./historical-figure-card";
 
@@ -93,5 +93,27 @@ describe("HistoricalFigureCard", () => {
     expect(
       screen.getByRole("button", { name: "Hide biography" }),
     ).toBeInTheDocument();
+  });
+
+  it("keys connections with element names and relations without duplicates", () => {
+    const errors = vi.spyOn(console, "error").mockImplementation(() => null);
+    render(
+      <HistoricalFigureCard
+        birth={{ year: 1452 }}
+        connections={[
+          { name: <b>Plato</b>, relation: <i>Teacher</i> },
+          { name: <b>Aristotle</b>, relation: <i>Student</i> },
+        ]}
+        name={NAME}
+      />,
+    );
+    expect(screen.getByText("Plato")).toBeInTheDocument();
+    expect(screen.getByText("Aristotle")).toBeInTheDocument();
+    expect(
+      errors.mock.calls.some((call) =>
+        call.some((part) => String(part).includes("same key")),
+      ),
+    ).toBe(false);
+    errors.mockRestore();
   });
 });

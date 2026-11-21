@@ -1,6 +1,6 @@
 "use client";
 
-import { memo, useEffect, useRef } from "react";
+import { Children, memo, useEffect, useRef } from "react";
 
 import type { ReactNode } from "react";
 
@@ -51,24 +51,25 @@ function ShortcutsList({
 }: Pick<KeyboardShortcutsHelpProps, "shortcuts">): React.ReactNode {
   return (
     <div className="space-y-3">
-      {shortcuts.map((shortcut, index) => (
-        <div
-          className="flex items-center justify-between text-sm"
-          key={`${shortcut.description}-${index.toString()}`}
-        >
-          <span className="text-muted-foreground">{shortcut.description}</span>
-          <div className="flex gap-1">
-            {shortcut.keys.map((key) => (
-              <kbd
-                className="inline-flex h-6 min-w-[24px] items-center justify-center rounded border border-border bg-muted px-1.5 font-mono text-xs"
-                key={key}
-              >
-                {key}
-              </kbd>
-            ))}
+      {Children.toArray(
+        shortcuts.map((shortcut) => (
+          <div className="flex items-center justify-between text-sm">
+            <span className="text-muted-foreground">
+              {shortcut.description}
+            </span>
+            <div className="flex gap-1">
+              {shortcut.keys.map((key) => (
+                <kbd
+                  className="inline-flex h-6 min-w-[24px] items-center justify-center rounded border border-border bg-muted px-1.5 font-mono text-xs"
+                  key={key}
+                >
+                  {key}
+                </kbd>
+              ))}
+            </div>
           </div>
-        </div>
-      ))}
+        )),
+      )}
     </div>
   );
 }
@@ -107,6 +108,7 @@ function KeyboardShortcutsHelpImpl({
       aria-modal="true"
       className="fixed inset-0 z-50 flex items-center justify-center"
       ref={dialogRef}
+      // react-doctor-disable-next-line react-doctor/prefer-html-dialog -- useFocusContainment traps Tab, useEscapeKey closes and useBodyScrollLock locks scroll; a native <dialog> top layer would also sit above portalled popovers and toasts
       role="dialog"
     >
       {/* Backdrop */}

@@ -32,10 +32,9 @@ export const AnimatedList = ({
 
   return (
     <div className={cn("flex flex-col gap-2", className)} ref={ref} {...props}>
-      {items.map((child, index) => (
+      {React.Children.map(items, (child, index) => (
         <span
           className="block animate-in fade-in-0 slide-in-from-bottom-2 motion-reduce:animate-none"
-          key={index}
           style={{
             animationDelay: `${index * delay}ms`,
             animationFillMode: "both",

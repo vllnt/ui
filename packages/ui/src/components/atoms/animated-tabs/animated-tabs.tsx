@@ -125,7 +125,7 @@ export const AnimatedTabs = ({
     >
       <span
         aria-hidden="true"
-        className="absolute top-1 z-0 h-[calc(100%-0.5rem)] rounded-md bg-primary transition-all duration-300 ease-out motion-reduce:transition-none"
+        className="absolute top-1 z-0 h-[calc(100%-0.5rem)] rounded-md bg-primary transition-[left,width] duration-300 ease-out motion-reduce:transition-none"
         style={{ left: indicator.left, width: indicator.width }}
       />
       {tabs.map((tab, index) => (

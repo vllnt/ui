@@ -382,6 +382,7 @@ const CookieConsent = ({
         className,
       )}
       ref={reference}
+      // react-doctor-disable-next-line react-doctor/prefer-html-dialog -- a non-modal banner placed by utility classes; native <dialog> UA defaults (auto margin, fit-content size) would move it, and role plus aria-label already name it
       role="dialog"
       {...props}
     >
