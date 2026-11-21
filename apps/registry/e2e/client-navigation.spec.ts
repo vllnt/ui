@@ -225,6 +225,23 @@ test.describe("response headers", () => {
     }
   });
 
+  test("the page carries the deploy id, the chunk recovery script and no site-side beacon", async ({
+    request,
+  }) => {
+    const html = await (
+      await request.get("/docs", { headers: { accept: BROWSER_ACCEPT } })
+    ).text();
+    const commit = process.env.SOURCE_COMMIT;
+
+    expect(html).toContain("__vllntRecoverChunk");
+    expect(html).not.toContain("static.cloudflareinsights.com");
+    if (commit) {
+      // Next tags asset URLs with the deployment id: an old page asks for its own build.
+      expect(html).toMatch(new RegExp(`/_next/static/[^"]+\\?dpl=${commit}`));
+      expect(html).toContain(`chunk-reload:${commit}:`);
+    }
+  });
+
   test("an unknown page gets the site's 404", async ({ page }) => {
     const response = await page.goto("/components/does-not-exist-xyz");
 

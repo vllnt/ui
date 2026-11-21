@@ -7,6 +7,10 @@ const withNextIntl = createNextIntlPlugin('./i18n/request.ts')
 const nextConfig = {
   // Thumbnail iframes use the alternate loopback host for cross-origin isolation.
   allowedDevOrigins: ['127.0.0.1', 'localhost'],
+  // The commit being built (a Coolify build arg). When the server runs a newer
+  // deploy than the page, client navigations become full page loads instead of
+  // asking for chunks this build does not have.
+  deploymentId: process.env.SOURCE_COMMIT || undefined,
   output: 'standalone',
   // Emit browser source maps in production so Lighthouse "valid-source-maps" passes
   productionBrowserSourceMaps: true,
