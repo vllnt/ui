@@ -4,6 +4,7 @@ import { z } from "zod";
 import type { Locale } from "@/i18n/routing";
 import { ogTypeSchema, type PageFrontmatter } from "@/lib/schemas";
 import {
+  absoluteUrl,
   alternateOgLocales,
   canonical,
   languageAlternates,
@@ -97,6 +98,8 @@ export function generateTwitterMetadata(
 type PageMetadataInput = Metadata & {
   /** Path the canonical + hreflang alternates point at; defaults to `pathname`. */
   readonly canonicalPath?: string;
+  /** A hosted social image that replaces the generated `/api/og` card. */
+  readonly image?: { readonly alt: string; readonly src: string };
   readonly locale: Locale;
   /** Social card parameters; `title`/`description` also default the page's. */
   readonly og: OGImageParametersInput;
@@ -111,12 +114,18 @@ type PageMetadataInput = Metadata & {
 export function pageMetadata({
   alternates,
   canonicalPath,
+  image,
   locale,
   og,
   pathname,
   ...metadata
 }: PageMetadataInput): Metadata {
   const canonicalPathname = canonicalPath ?? pathname;
+  const openGraph = generateOGMetadata(og, { locale, pathname });
+  const twitter = generateTwitterMetadata(og);
+  const hostedImage = image
+    ? [{ alt: image.alt, url: absoluteUrl(image.src) }]
+    : undefined;
 
   return {
     description: og.description,
@@ -127,8 +136,8 @@ export function pageMetadata({
       languages: languageAlternates(canonicalPathname),
       ...alternates,
     },
-    openGraph: generateOGMetadata(og, { locale, pathname }),
-    twitter: generateTwitterMetadata(og),
+    openGraph: hostedImage ? { ...openGraph, images: hostedImage } : openGraph,
+    twitter: hostedImage ? { ...twitter, images: hostedImage } : twitter,
   };
 }
 

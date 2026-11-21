@@ -14,6 +14,10 @@
  *   3. Message wiring    - every top-level message namespace is actually consumed
  *      by a `useTranslations` / `getTranslations` call, and every referenced
  *      namespace is defined. Dead namespaces are drift waiting to happen.
+ *   4. Article coverage  - every published article under `content/articles/`
+ *      (or `ARTICLES_DIR`) exists in every locale, and every article file has
+ *      valid frontmatter. A draft file counts as present; an article whose
+ *      files are all drafts is exempt.
  *
  * Usage: pnpm -F @vllnt/ui-registry i18n:check
  */
@@ -22,6 +26,7 @@ import { readdirSync, readFileSync, statSync } from "node:fs";
 import path from "node:path";
 
 import { defaultLocale, locales } from "../i18n/locales";
+import { findArticleCoverageIssues, getAllArticles } from "../lib/articles";
 
 const REGISTRY_ROOT = path.join(import.meta.dirname, "..");
 const MESSAGES_DIR = path.join(REGISTRY_ROOT, "messages");
@@ -190,12 +195,27 @@ function checkMessageWiring(defaultLocale: string): void {
   }
 }
 
-function main(): void {
+async function checkArticleCoverage(): Promise<void> {
+  try {
+    const articles = await getAllArticles();
+    for (const message of findArticleCoverageIssues(articles)) {
+      fail("articles-coverage", message);
+    }
+  } catch (error) {
+    fail(
+      "articles-frontmatter",
+      error instanceof Error ? error.message : String(error),
+    );
+  }
+}
+
+async function main(): Promise<void> {
   console.log(`i18n:check - locales: ${locales.join(", ")} (default: ${defaultLocale})`);
 
   checkMessageParity(defaultLocale, locales);
   checkMdxCoverage(locales);
   checkMessageWiring(defaultLocale);
+  await checkArticleCoverage();
 
   if (failures.length === 0) {
     console.log("i18n surfaces are in parity across all locales.");
@@ -216,4 +236,4 @@ function main(): void {
   process.exit(1);
 }
 
-main();
+await main();

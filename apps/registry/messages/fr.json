@@ -190,6 +190,26 @@
     }
   },
   "pages": {
+    "articles": {
+      "atom": "Atom",
+      "empty": "Aucun article pour le moment. Les nouveaux articles apparaitront ici.",
+      "feedDescription": "Guides pratiques, comparatifs et notes de feuille de route pour creer des interfaces pretes pour les agents avec VLLNT UI.",
+      "feedTitle": "Articles VLLNT UI",
+      "intro": "Guides pratiques, comparatifs et notes de feuille de route pour creer des interfaces pretes pour les agents.",
+      "metaDescription": "Guides pratiques, comparatifs honnetes et notes de feuille de route pour creer des interfaces pretes pour les agents avec le registre de composants VLLNT UI.",
+      "metaTitle": "Articles - guides pratiques et comparatifs | VLLNT UI",
+      "published": "Publie le",
+      "relatedComponents": "Composants associes",
+      "rss": "RSS",
+      "status": {
+        "mixed": "Livre et prevu",
+        "roadmap": "Feuille de route",
+        "shipped": "Livre"
+      },
+      "subscribe": "S'abonner",
+      "title": "Articles",
+      "updated": "Mis a jour le"
+    },
     "build": {
       "breadcrumb": "UI pour les agents IA",
       "browseAll": "Parcourir tous les composants d'agents IA",

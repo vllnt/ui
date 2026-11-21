@@ -129,6 +129,62 @@ Component source lives in `packages/ui`, not here. The files under `registry/def
 
    This writes the shim at the `files[].path` above (gitignored) and restamps `registry.json` and `lib/component-metadata.json`. Commit those two files; CI's `registry:check` fails if they drift from source.
 
+## Articles
+
+Articles are long-form how-tos, comparisons and roadmap notes. They are a
+separate collection from the component and docs pages, and they are indexable.
+
+**Where:** `content/articles/<kebab-slug>/<locale>.mdx`, one file per locale
+(`en`, `fr`). The loader is `lib/articles.ts`; it validates the frontmatter and
+fails the build on anything invalid.
+
+**Frontmatter** (unknown keys are rejected):
+
+| Field | Required | Rule |
+|-------|----------|------|
+| `title` | yes | Used as written for `<title>` and the social title. It must already end with the site name; no suffix is added. |
+| `description` | yes | The meta description and the card text. |
+| `date` | yes | ISO date (`2026-10-05`). |
+| `updated` | no | ISO date, not before `date`. Defaults to `date`. Drives sitemap `lastmod` and `dateModified`. |
+| `tags` | yes | Kebab-case words. |
+| `status` | yes | `shipped`, `roadmap` or `mixed`. |
+| `components` | no | Registry component names. An unknown name fails the build. |
+| `image` | no | `{ src, alt }`; `alt` is required. Without it the `/api/og` card is used. |
+| `draft` | no | `true` keeps the article out of every public surface. Default `false`. |
+
+**Drafts.** A draft is excluded in the loader, so it has no page and every
+environment answers `404`. It is absent from the `/articles` index, the sitemap,
+the article feeds, `llms.txt` and `llms-full.txt`. Remove `draft: true` (or set
+it to `false`) to publish. A draft file counts as present for the locale
+coverage check, so a draft can land one locale at a time; a published article
+needs every locale.
+
+**URLs and feeds.**
+
+| URL | What |
+|-----|------|
+| `/articles`, `/fr/articles` | Index, newest first, with an empty state |
+| `/articles/<slug>`, `/fr/articles/<slug>` | One article |
+| `/articles/<locale>/rss.xml`, `/articles/<locale>/atom.xml` | Article feeds per locale |
+| `/rss.xml`, `/atom.xml` | Release feeds. Not articles; unchanged |
+
+Every article page and the index advertise their locale's feeds with
+`<link rel="alternate">`. Each page is canonical to itself in its own locale;
+hreflang lists only the locales the article exists in, with `x-default` on the
+default locale.
+
+**Checks.**
+
+```bash
+pnpm i18n:check                       # frontmatter + one file per locale
+pnpm vitest run lib/articles.test.ts  # loader and schema
+pnpm exec playwright test e2e/articles.spec.ts e2e/breadcrumbs.spec.ts
+```
+
+Tests read `test/fixtures/articles` (a published pair and a draft), never
+`content/articles`. Set `ARTICLES_DIR` to point the loader at another folder;
+`playwright.config.ts` does this for the dev server it starts.
+
 ## Available Components
 
 - Badge

@@ -58,6 +58,32 @@ describe("robots.txt", () => {
     expect(restricted).toEqual([]);
   });
 
+  it("does not block the articles index, an article or an article feed", async () => {
+    const { groups } = await readRobots();
+    const blocked = groups
+      .filter((lines) => lines[0]?.startsWith("User-Agent:"))
+      .flatMap((lines) =>
+        lines
+          .filter((line) => line.startsWith("Disallow:"))
+          .map((line) => line.slice("Disallow:".length).trim())
+          .filter((prefix) => prefix !== ""),
+      );
+    const paths = [
+      "/articles",
+      "/articles/an-article",
+      "/fr/articles",
+      "/fr/articles/an-article",
+      "/articles/en/rss.xml",
+      "/articles/fr/atom.xml",
+    ];
+
+    expect(
+      paths.filter((entry) =>
+        blocked.some((prefix) => entry.startsWith(prefix)),
+      ),
+    ).toEqual([]);
+  });
+
   it("points at the sitemap and the host", async () => {
     const { text } = await readRobots();
 

@@ -140,12 +140,13 @@ The registry site (`apps/registry`) is multilingual via
 from `routing.locales`. The default locale (`en`) is unprefixed; others are path
 -prefixed (`/fr/...`) under the `as-needed` strategy.
 
-**Two content tracks — pick by shape, never mix them for the same string:**
+**Content tracks - pick by shape, never mix them for the same string:**
 
 | Track | For | Where |
 |-------|-----|-------|
 | next-intl messages | UI chrome: nav, buttons, labels, form fields, breadcrumbs, stat labels, structured-page prose | [`messages/<locale>.json`](./apps/registry/messages), consumed with `useTranslations` (client) / `getTranslations` (server) |
 | MDX per locale | Long-form document pages: docs, philosophy | `content/pages/<slug>/<locale>.mdx`, loaded by `lib/content.ts` |
+| Articles | Indexable how-tos, comparisons, roadmap notes (own frontmatter, feeds, `draft` flag) | `content/articles/<slug>/<locale>.mdx`, loaded by `lib/articles.ts`; see the Articles section of [`apps/registry/README.md`](./apps/registry/README.md) |
 
 **Rules for agents touching the registry UI:**
 
