@@ -1,0 +1,16 @@
+# .privacy-baseline - optional committed file for the required
+# Privacy Guard commit-metadata check.
+#
+# A baseline is allowed only for historical exposure the owner has
+# accepted, recorded in the security-findings ledger. With this file
+# present, the required check scans <sha>..HEAD on push (the SHA itself
+# is excluded, as with git two-dot ranges). Pull requests still scan the
+# PR range. A present but invalid file fails the check. With no file,
+# the required check scans only the pushed range.
+#
+# Full 40-character commit SHA. Do not put personal values in the reason.
+#
+# Required keys (no others):
+sha: cdaadd8f64c25f7d97c94afcc2e88701bdef74e3
+reason: accepted historical trailers; no rewrite
+decided: 2026-11-22

@@ -1,7 +1,7 @@
 # Privacy Guard: keeps personal addresses, private hostnames and secrets out of
 # new commits. Required status check name: "Privacy Guard".
 #
-# Adapted from vllnt/skills at 8aa4c829fc9ba8af94da1395eca1eda5fdd253b5
+# Adapted from vllnt/skills at 730840554d16160fefc701a544492d06e52fb4e5
 # (references/capabilities/release-readiness/templates/privacy-guard.yml).
 #
 # Checks:
@@ -10,8 +10,10 @@
 #     hostnames or addresses in commit messages (scripts/check-commit-emails.sh)
 #   - the tracked tree against .privacy-denylist (scripts/privacy-denylist.sh)
 #
-# Only new commits are gated: a pull request's commits, or the pushed range on
-# main. Known exposure is allowlisted by commit SHA in .privacy-commit-allowlist.
+# Only new commits are gated: a pull request's commits, or on main the commits
+# after the accepted baseline in .privacy-baseline (the baseline commit and
+# everything before it are not scanned). A present but invalid baseline fails
+# the check. Without a baseline file, the pushed range is checked.
 # Runs on every pull request (no path filter) so it can be a required check.
 # Logs never print matched values. This file holds no personal data.
 
@@ -49,10 +51,17 @@ jobs:
           SHA: ${{ github.sha }}
         run: |
           set -euo pipefail
-          # Pull request: the commits it adds. Push to main: the pushed range.
+          # A committed .privacy-baseline is validated on every run: an invalid
+          # file makes this step fail (exit 2). The step prints no values.
+          baseline="$(bash scripts/check-commit-emails.sh --print-baseline)"
+          # Pull request: the commits it adds. Push to main: the commits after
+          # the baseline when there is one, otherwise the pushed range.
           # First push of a ref (no previous tip): the history of that commit.
           if [[ "$EVENT_NAME" == "pull_request" ]]; then
             range="${PR_BASE}..${PR_HEAD}"
+          elif [[ -n "$baseline" ]]; then
+            echo "commit-metadata range: ${baseline:0:12}..HEAD"
+            range="${baseline}..${SHA}"
           elif [[ -n "${BEFORE:-}" && "$BEFORE" != 0000000000000000000000000000000000000000 ]]; then
             range="${BEFORE}..${SHA}"
           else

@@ -46,10 +46,12 @@ refute() {
   fi
 }
 
-TAILNET="box.example-net.ts"".net"
-OVH_VPS="vps-abc123fe"".vps.ovh.net"
-HETZNER="node-1"".hetzner.cloud"
-HETZNER_DED="static.12.34.56.clients.your-server"".de"
+# Assembled at runtime; fragments so the file itself does not contain
+# contiguous provider suffixes that extra denylist patterns may match.
+TAILNET="box.example-tailnet.ts"".net"
+OVH_VPS="v""ps-abc123fe.v""ps.ov""h.net"
+HETZNER="node-1.hetz""ner.clo""ud"
+HETZNER_DED="static.12.34.56.clients.your-ser""ver.de"
 
 plant "Plain documentation."
 check "clean tree passes" 0 NOOP=1
