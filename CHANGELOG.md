@@ -40,8 +40,8 @@ Release automation can regenerate this file from Conventional Commits with
   borders) and `vllnt-glass-scrim`. Apps that use these classes load
   `@vllnt/ui/styles.css`.
 - **Dark default tint** - the dark default glass tint is `#1C1C1CB2` to
-  `#1414149C` (4.51:1 for the foreground), not the Penpot recipe's `#1C1C1CAF`
-  to `#14141499` (4.34:1).
+  `#1414149C` (4.51:1 for the foreground), not the first recipe draft's
+  `#1C1C1CAF` to `#14141499` (4.34:1).
 
 ## [0.4.0] - 2026-11-20
 

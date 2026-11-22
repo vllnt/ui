@@ -353,7 +353,7 @@ Glass is the default material of chrome-bearing surfaces. A glass part is a tint
 
 The r5 tokens stay: `material.glass.opacity.{sm,md,lg,xl,default}` (0.6, 0.72, 0.82, 0.9, lg), `material.glass.tint`, `.highlight`, `.hairline`, `color.glass-border`, `material.highlight.top` and `depth.z-0` to `z-4`. The scrim behind a dialog or sheet uses `material.glass.tint` at 0.8 and `blur.glass.sm`.
 
-The dark default tint is `#1C1C1CB2` to `#1414149C`. The recipe's `#1C1C1CAF` to `#14141499` gives 4.34:1 for the code foreground (`oklch(0.9848 0 0)`, rgb 250) over a white backdrop, so the code raises it to 4.51:1. The recipe's own tools measure with pure white text.
+The dark default tint is `#1C1C1CB2` to `#1414149C`. The first draft of the recipe used `#1C1C1CAF` to `#14141499`, which gives 4.34:1 for the code foreground (`oklch(0.9848 0 0)`, rgb 250) over a white backdrop; the settled values give 4.51:1. The recipe scripts measure with pure white text, the tests and the table below with the code foreground.
 
 **Two tints.** Pick one per part and write it as a class.
 

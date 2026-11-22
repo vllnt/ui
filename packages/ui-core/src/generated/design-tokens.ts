@@ -701,12 +701,12 @@ export const designTokens = {
       "tint-top": {
         "light": "#FFFFFFA3",
         "dark": "#1C1C1CB2",
-        "role": "Default glass tint, top stop. Foreground text only: no muted text, placeholder or control border. Dark is raised from the recipe's #1C1C1CAF so foreground text keeps 4.5:1 over a white backdrop"
+        "role": "Default glass tint, top stop. Foreground text only: no muted text, placeholder or control border. Dark is #1C1C1CB2, not the first recipe draft's #1C1C1CAF, so foreground text keeps 4.5:1 over a white backdrop (4.51:1, against 4.34:1)"
       },
       "tint-bottom": {
         "light": "#FFFFFF80",
         "dark": "#1414149C",
-        "role": "Default glass tint, bottom stop. Dark is raised from the recipe's #14141499 for the same reason"
+        "role": "Default glass tint, bottom stop. Dark is #1414149C, not the first recipe draft's #14141499, for the same reason"
       },
       "tint-dense-top": {
         "light": "#FFFFFFE6",

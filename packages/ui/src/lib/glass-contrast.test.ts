@@ -211,7 +211,7 @@ describe("the recipe's AA method, with the code foreground", () => {
     {
       expected: 4.34,
       mode: "dark",
-      name: "dark default at the recipe values",
+      name: "dark default at the first recipe draft values",
       tint: { bottom: "#14141499", top: "#1C1C1CAF" },
     },
     {
@@ -234,7 +234,7 @@ describe("the recipe's AA method, with the code foreground", () => {
     ).toBeCloseTo(fixture.expected, 2);
   });
 
-  it("fails the recipe's dark default tint and passes the raised one, which is why the code raises it", () => {
+  it("fails the first recipe draft's dark default tint and passes the settled one", () => {
     const recipe = worst(
       recipeStacks("dark", { bottom: "#14141499", top: "#1C1C1CAF" }),
       foreground.dark,
