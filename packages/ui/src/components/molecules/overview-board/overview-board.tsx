@@ -3,25 +3,29 @@
 import { AlertCircle, ArrowRight, Inbox, ListTodo, Siren } from "lucide-react";
 import type { ReactNode } from "react";
 
+import type { MaterialProps } from "../../../lib/material";
 import { cn } from "../../../lib/utils";
 import { Button } from "../../atoms/button/button";
 
 export type OverviewCardTone = "danger" | "default" | "warning";
 
-export type OverviewCardProps = React.ComponentPropsWithoutRef<"section"> & {
-  ctaLabel?: ReactNode;
-  description: ReactNode;
-  handleCtaClick?: () => void;
-  heading: ReactNode;
-  icon?: ReactNode;
-  metric: ReactNode;
-  tone?: OverviewCardTone;
-};
+export type OverviewCardProps = MaterialProps &
+  React.ComponentPropsWithoutRef<"section"> & {
+    ctaLabel?: ReactNode;
+    description: ReactNode;
+    handleCtaClick?: () => void;
+    heading: ReactNode;
+    icon?: ReactNode;
+    metric: ReactNode;
+    tone?: OverviewCardTone;
+  };
 
 const toneClassNames: Record<OverviewCardTone, string> = {
-  danger: "border-red-500/30 bg-red-500/8",
-  default: "border-border/70 bg-background/80",
-  warning: "border-amber-500/30 bg-amber-500/8",
+  danger:
+    "border-red-500/30 bg-red-500/8 shadow-[0_8px_30px_oklch(var(--foreground)/0.06)]",
+  default: "vllnt-glass vllnt-glass-dense",
+  warning:
+    "border-amber-500/30 bg-amber-500/8 shadow-[0_8px_30px_oklch(var(--foreground)/0.06)]",
 };
 
 const toneAccentClassNames: Record<OverviewCardTone, string> = {
@@ -37,6 +41,7 @@ const OverviewCard = ({
   handleCtaClick,
   heading,
   icon,
+  material = "glass",
   metric,
   ref,
   tone = "default",
@@ -44,10 +49,11 @@ const OverviewCard = ({
 }: OverviewCardProps & { ref?: React.Ref<HTMLElement> }) => (
   <section
     className={cn(
-      "flex min-h-[172px] flex-col gap-4 rounded-2xl border p-5 shadow-[0_8px_30px_oklch(var(--foreground)/0.06)] backdrop-blur-xl",
+      "flex min-h-[172px] flex-col gap-4 rounded-2xl border p-5",
       toneClassNames[tone],
       className,
     )}
+    data-material={material}
     ref={ref}
     {...props}
   >

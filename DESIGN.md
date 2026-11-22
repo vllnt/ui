@@ -306,7 +306,7 @@ Cards, popovers, dialogs use `radius-md`. Pills, avatars use `radius-full`. Long
 
 ## 7. Elevation
 
-Use sparingly. Most components are flat with `border` + `bg-background`.
+Use sparingly. Chrome-bearing surfaces (bars, panels, menus, popovers, dialogs, sheets, docks, map overlays) are glass by default, see "Glass material" below. Other components are flat with `border` + `bg-background`.
 
 | Token | Value |
 |-------|-------|
@@ -331,6 +331,87 @@ No coloured shadows. No multi-layered glow effects.
 |-------|-------|
 | `--opacity-grain` | 1 (PaaS theme: 0) |
 | `--opacity-contact` | 1 (PaaS theme: 0) |
+
+### Glass material
+
+Glass is the default material of chrome-bearing surfaces. A glass part is a tint drawn top to bottom, a white sheen over it, a backdrop blur, a 1 px outer edge and a two-layer shadow. Solid is the same part with an opaque `card` tint, no blur, no sheen and the `raised` or `floating` shadow. The tokens follow the Penpot glass-default recipe (r5 and r8); tone follows the theme (light or dark), never the backdrop.
+
+| Token | Variable | Light | Dark |
+|-------|----------|-------|------|
+| `blur.glass.default` | `--blur-glass-default` | 20px | 20px |
+| `blur.glass.sm`, `md`, `lg` | `--blur-glass-sm`, `-md`, `-lg` | 8px, 12px, 24px | same |
+| `material.glass.tint-top` | `--material-glass-tint-top` | `#FFFFFFA3` | `#1C1C1CB2` |
+| `material.glass.tint-bottom` | `--material-glass-tint-bottom` | `#FFFFFF80` | `#1414149C` |
+| `material.glass.tint-dense-top` | `--material-glass-tint-dense-top` | `#FFFFFFE6` | `#121212E0` |
+| `material.glass.tint-dense-bottom` | `--material-glass-tint-dense-bottom` | `#FFFFFFD6` | `#121212D1` |
+| `material.glass.hairline-edge` | `--material-glass-hairline-edge` | `#00000014` | `#FFFFFF1A` |
+| `material.glass.sheen-opacity` | `--material-glass-sheen-opacity` | 1 | 0.17 |
+| `shadow.glass` | `--shadow-glass` | `0 1px 2px #0000000D, 0 4px 14px #0000000F` | `0 1px 2px #00000066, 0 4px 14px #0000004D` |
+| `shadow.glass-floating` | `--shadow-glass-floating` | `0 1px 2px #00000014, 0 10px 28px #0000001F` | `0 1px 2px #00000080, 0 10px 28px #00000080` |
+| `color.glass-muted-foreground` | `--color-glass-muted-foreground` | `#404040` | `#D4D4D4` |
+| `color.glass-input` | `--color-glass-input` | `#595959` | `#A3A3A3` |
+
+The r5 tokens stay: `material.glass.opacity.{sm,md,lg,xl,default}` (0.6, 0.72, 0.82, 0.9, lg), `material.glass.tint`, `.highlight`, `.hairline`, `color.glass-border`, `material.highlight.top` and `depth.z-0` to `z-4`. The scrim behind a dialog or sheet uses `material.glass.tint` at 0.8 and `blur.glass.sm`.
+
+The dark default tint is `#1C1C1CB2` to `#1414149C`. The recipe's `#1C1C1CAF` to `#14141499` gives 4.34:1 for the code foreground (`oklch(0.9848 0 0)`, rgb 250) over a white backdrop, so the code raises it to 4.51:1. The recipe's own tools measure with pure white text.
+
+**Two tints.** Pick one per part and write it as a class.
+
+| Class | Use | May hold |
+|-------|-----|----------|
+| `vllnt-glass` | Islands, bars, buttons, chips | Foreground text only |
+| `vllnt-glass vllnt-glass-dense` | Panels with body text, anything with muted or placeholder text, menus, popovers, any part whose border identifies a control | Foreground, `glass-muted-foreground`, `glass-input` borders |
+| `vllnt-glass-floating` (with or without `vllnt-glass-dense`) | Parts that open above the page: docks, menus, popovers, dialogs, sheets. Same tint rules, `shadow.glass-floating` | as above |
+| `vllnt-glass-scrim` | The dim behind a dialog or sheet. No text, no border | nothing |
+
+Inside glass, `text-muted-foreground` and `border-input` read `glass-muted-foreground` and `glass-input` (Tailwind preset). Muted text on the default tint fails AA, so it belongs on the dense tint. The hairline edge is decorative; a border that identifies a control uses `glass-input`. A theme preset has its own foreground, so under a preset the default tint is the dense tint.
+
+**The `material` prop.** Every glass component takes `material="glass" | "solid"`, default `"glass"`. It writes `data-material`, and `[data-material="solid"]` redeclares the glass variables with the solid values, so the part and everything inside it turn solid. `DialogContent` passes it to its overlay. `ProgressiveBlur` draws no blur when solid.
+
+```tsx
+<GlassPanel material="solid">Always opaque</GlassPanel>
+```
+
+**Automatic solid.** CSS redeclares the same variables, with no script, when any of these holds:
+
+| Condition | Source |
+|-----------|--------|
+| `prefers-reduced-transparency: reduce` | Operating system setting |
+| `prefers-contrast: more` | Operating system setting |
+| `forced-colors: active` | Windows high contrast |
+| No `backdrop-filter` or `-webkit-backdrop-filter` | `@supports not (...)` |
+| `html[data-glass="off"]` | App switch |
+
+The glass classes live in `styles.css`; an app that loads only `themes/default.css` has the tokens but not the classes.
+
+**Low power.** The library does not read the battery. An app that wants solid on weak devices sets the switch itself:
+
+```js
+const lowPower = navigator.hardwareConcurrency <= 4 || navigator.connection?.saveData === true;
+document.documentElement.dataset.glass = lowPower ? "off" : "on";
+```
+
+**Contrast.** `packages/ui/src/lib/glass-contrast.test.ts` measures every theme in light and dark: WCAG relative luminance, sRGB blend with alphas as stored, every point from the top to the bottom of the part, over white, mid-grey `#808080` and black, on both the CSS gradient and the flat top tint. Text needs 4.5:1, a control boundary 3:1. Worst case, default theme:
+
+| Text on glass | Tint | Light | Dark | Needs |
+|---------------|------|-------|------|-------|
+| Foreground | Default | 6.14 | 4.51 | 4.5 |
+| Foreground | Dense | 14.29 | 8.79 | 4.5 |
+| `glass-muted-foreground` | Dense | 7.48 | 6.19 | 4.5 |
+| `glass-input` border | Dense | 5.06 | 3.64 | 3 |
+| `glass-muted-foreground` | Default | 3.22 | 3.17 | fails, so muted text takes the dense tint |
+
+The dark default foreground is the tightest figure (white backdrop, top of the part). Status colours (destructive, success, warning, info) are not part of this check.
+
+**Backdrop-filter budget.**
+
+| Rule | Value | Enforced by |
+|------|-------|-------------|
+| Largest blur radius | `blur.glass.lg`, 24px | `glass-budget.test.ts`, `tokens:check` |
+| Blur source | A `--blur-glass-*` token, never `backdrop-blur-*` or a literal radius | `glass-budget.test.ts` |
+| Blurred layers on screen at once | 5 at most, the scrim counts, a `ProgressiveBlur` counts as its `layers` | Design rule |
+| Glass inside glass | Allowed; each nested part adds a layer | Design rule |
+| Every glass part switchable to solid | `data-material` on every glass component | `glass-budget.test.ts` |
 
 ---
 
@@ -402,6 +483,7 @@ No coloured shadows. No multi-layered glow effects.
 - Live regions for async state changes (`aria-live="polite"` for toasts, `assertive` for errors).
 - Color is **never** the only signal — pair with icon, text, or pattern.
 - Animations respect `prefers-reduced-motion`.
+- Glass turns solid under `prefers-reduced-transparency`, `prefers-contrast: more` and `forced-colors: active`, and text on glass meets AA in both tints (see "Glass material").
 - Components shipping a defined ARIA pattern (combobox, dialog, menu, tabs) declare their full keyboard map in `meta.json` per #255.
 
 ### Touch targets
@@ -442,6 +524,7 @@ The Penpot libraries keep one `size.target.min` and `size.control-xs` per densit
 | Auto-play hero video | Performance + motion sensitivity |
 | Modal on modal | Restructure the flow |
 | `eslint-disable` to bypass a rule | Fix the root cause |
+| `backdrop-blur-*` utilities or a literal `backdrop-filter` radius | Skips the blur tokens, the 24px budget and the solid fallbacks; use `vllnt-glass` |
 
 ---
 

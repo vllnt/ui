@@ -5,6 +5,7 @@ import * as React from "react";
 import { ArrowDownRight, ArrowUpRight, Dot, Pause, Play } from "lucide-react";
 
 import { formatChange } from "../../../lib/format";
+import type { MaterialProps } from "../../../lib/material";
 import { keyByOccurrence } from "../../../lib/occurrence-keys";
 import { cn } from "../../../lib/utils";
 import { Badge } from "../../atoms/badge/badge";
@@ -35,7 +36,8 @@ export type TickerTapeProps = {
   pauseControl?: boolean;
   pauseOnHover?: boolean;
   speedSeconds?: number;
-} & React.HTMLAttributes<HTMLDivElement>;
+} & MaterialProps &
+  React.HTMLAttributes<HTMLDivElement>;
 
 const tickerTapeKeyframes = `
 @keyframes ticker-tape-scroll {
@@ -134,6 +136,7 @@ export const TickerTape = ({
   className,
   items,
   labels,
+  material = "glass",
   pauseControl = true,
   pauseOnHover = true,
   ref: reference,
@@ -149,9 +152,10 @@ export const TickerTape = ({
     <div
       aria-label="TickerTape"
       className={cn(
-        "relative overflow-hidden rounded-2xl border border-border bg-card/70 backdrop-blur-sm",
+        "vllnt-glass vllnt-glass-dense relative overflow-hidden rounded-2xl border",
         className,
       )}
+      data-material={material}
       ref={reference}
       role="region"
       {...props}

@@ -2,10 +2,12 @@
 
 import * as React from "react";
 
+import type { MaterialProps } from "../../../lib/material";
 import { cn } from "../../../lib/utils";
 
-/** Props for {@link FloatingNavbar}. */
-export type FloatingNavbarProps = React.ComponentPropsWithoutRef<"nav">;
+/** Props for {@link FloatingNavbar}. `material="solid"` opts out of glass. */
+export type FloatingNavbarProps = MaterialProps &
+  React.ComponentPropsWithoutRef<"nav">;
 
 function usePrefersReducedMotion(): boolean {
   const [reduced, setReduced] = React.useState(false);
@@ -78,6 +80,7 @@ function useScrollVisibility(reduced: boolean): boolean {
 export const FloatingNavbar = ({
   children,
   className,
+  material = "glass",
   ref,
   ...props
 }: FloatingNavbarProps & { ref?: React.Ref<HTMLElement> }) => {
@@ -87,10 +90,11 @@ export const FloatingNavbar = ({
   return (
     <nav
       className={cn(
-        "fixed inset-x-0 top-4 z-50 mx-auto flex w-fit items-center gap-4 rounded-full border bg-card/70 px-6 py-2 shadow-lg backdrop-blur transition-transform duration-300",
+        "vllnt-glass-floating fixed inset-x-0 top-4 z-50 mx-auto flex w-fit items-center gap-4 rounded-full border px-6 py-2 transition-transform duration-300",
         visible ? "" : "-translate-y-[150%]",
         className,
       )}
+      data-material={material}
       ref={ref}
       {...props}
     >

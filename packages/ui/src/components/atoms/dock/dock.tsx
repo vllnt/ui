@@ -2,10 +2,11 @@
 
 import * as React from "react";
 
+import type { MaterialProps } from "../../../lib/material";
 import { cn } from "../../../lib/utils";
 
-/** Props for {@link Dock}. */
-export type DockProps = React.ComponentPropsWithoutRef<"div">;
+/** Props for {@link Dock}. `material="solid"` opts out of glass. */
+export type DockProps = MaterialProps & React.ComponentPropsWithoutRef<"div">;
 
 /** Props for {@link DockIcon}. */
 export type DockIconProps = React.ComponentPropsWithoutRef<"div">;
@@ -156,6 +157,7 @@ function useDockMagnifier(): {
 export const Dock = ({
   children,
   className,
+  material = "glass",
   ref,
   ...props
 }: DockProps & { ref?: React.Ref<HTMLDivElement> }) => {
@@ -165,9 +167,10 @@ export const Dock = ({
     <DockMagnifierContext.Provider value={magnifier}>
       <div
         className={cn(
-          "flex items-end gap-2 rounded-2xl border bg-card/60 p-2 backdrop-blur",
+          "vllnt-glass-floating flex items-end gap-2 rounded-2xl border p-2",
           className,
         )}
+        data-material={material}
         onPointerLeave={() => {
           trackPointer(null);
         }}

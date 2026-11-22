@@ -225,9 +225,19 @@ const shadowLayer = (offsetY, blur, color, inset = false) => ({
 /**
  * The libraries' shadow tokens (lock 2 readback, 18 Nov 2026): `vllnt/core` holds the
  * light value, `vllnt/mode/dark` the dark one. The additive and increased-contrast
- * sets hold no shadow (every layer is transparent); code has no such mode.
+ * sets hold no shadow (every layer is transparent); code has no such mode. `glass`
+ * and `glass-floating` are the two glass shadows of the glass-default r8 recipe
+ * (22 Nov 2026).
  */
 const libraryShadows = {
+  glass: {
+    dark: [shadowLayer(1, 2, "#00000066"), shadowLayer(4, 14, "#0000004D")],
+    light: [shadowLayer(1, 2, "#0000000D"), shadowLayer(4, 14, "#0000000F")],
+  },
+  "glass-floating": {
+    dark: [shadowLayer(1, 2, "#00000080"), shadowLayer(10, 28, "#00000080")],
+    light: [shadowLayer(1, 2, "#00000014"), shadowLayer(10, 28, "#0000001F")],
+  },
   floating: {
     dark: [shadowLayer(16, 40, "#00000099"), shadowLayer(1, 0, "#FFFFFF29", true)],
     light: [shadowLayer(16, 40, "#0000002E")],
@@ -247,9 +257,9 @@ const libraryShadows = {
 };
 
 describe("shadow tokens (K-shadow-overlay)", () => {
-  it("sets raised, overlay and floating on vllnt/core with the library's light layers", () => {
+  it("sets raised, overlay, floating and the two glass shadows on vllnt/core with the library's light layers", () => {
     const core = penpot["vllnt/core"].shadow;
-    assert.deepEqual(Object.keys(core).sort(), Object.keys(libraryShadows));
+    assert.deepEqual(Object.keys(core).sort(), Object.keys(libraryShadows).sort());
     for (const [name, layers] of Object.entries(libraryShadows)) {
       assert.deepEqual(core[name], { $type: "shadow", $value: layers.light }, name);
     }

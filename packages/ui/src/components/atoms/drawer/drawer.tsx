@@ -2,6 +2,7 @@
 
 import { Drawer as DrawerPrimitive } from "vaul";
 
+import type { MaterialProps } from "../../../lib/material";
 import { cn } from "../../../lib/utils";
 
 /**
@@ -46,18 +47,21 @@ DrawerOverlay.displayName = DrawerPrimitive.Overlay.displayName;
 const DrawerContent = ({
   children,
   className,
+  material = "glass",
   ref,
   ...props
-}: React.ComponentPropsWithoutRef<typeof DrawerPrimitive.Content> & {
-  ref?: React.Ref<React.ComponentRef<typeof DrawerPrimitive.Content>>;
-}) => (
+}: MaterialProps &
+  React.ComponentPropsWithoutRef<typeof DrawerPrimitive.Content> & {
+    ref?: React.Ref<React.ComponentRef<typeof DrawerPrimitive.Content>>;
+  }) => (
   <DrawerPortal>
     <DrawerOverlay />
     <DrawerPrimitive.Content
       className={cn(
-        "fixed inset-x-0 bottom-0 z-50 mt-24 flex h-auto flex-col rounded-t-[10px] border bg-background",
+        "vllnt-glass-floating vllnt-glass-dense fixed inset-x-0 bottom-0 z-50 mt-24 flex h-auto flex-col rounded-t-[10px] border",
         className,
       )}
+      data-material={material}
       ref={ref}
       {...props}
     >

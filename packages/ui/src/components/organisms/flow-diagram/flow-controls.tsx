@@ -85,6 +85,7 @@ function getCopyTitle(status: CopyStatus | undefined): string {
 export const FlowControls = memo(function FlowControls({
   className,
   copyStatus,
+  material = "glass",
   onCopy,
   onFitView,
   onFullscreen,
@@ -96,9 +97,10 @@ export const FlowControls = memo(function FlowControls({
   return (
     <div
       className={cn(
-        "absolute bottom-4 left-4 z-10 flex flex-col gap-1 rounded-md border border-border bg-background/90 p-1 backdrop-blur-sm",
+        "vllnt-glass absolute bottom-4 left-4 z-10 flex flex-col gap-1 rounded-md border p-1",
         className,
       )}
+      data-material={material}
     >
       <ControlButton
         icon={<Plus className="size-4" />}

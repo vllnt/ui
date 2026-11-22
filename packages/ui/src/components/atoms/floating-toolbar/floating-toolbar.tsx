@@ -7,6 +7,7 @@ import {
   useState,
 } from "react";
 
+import type { MaterialProps } from "../../../lib/material";
 import { moveRovingFocus } from "../../../lib/roving-focus";
 import { cn } from "../../../lib/utils";
 
@@ -85,7 +86,8 @@ export type FloatingToolbarProps = {
   x: number;
   /** Y coordinate in container px (bottom edge of the toolbar — the bar floats above this point). */
   y: number;
-} & Omit<ComponentPropsWithoutRef<"div">, "style">;
+} & MaterialProps &
+  Omit<ComponentPropsWithoutRef<"div">, "style">;
 
 /**
  * Compact action bar that floats above a selection. Pair with
@@ -112,6 +114,7 @@ export type FloatingToolbarProps = {
  * @public
  */
 export const FloatingToolbar = ({
+  material = "glass",
   ref,
   ...props
 }: FloatingToolbarProps & { ref?: React.Ref<HTMLDivElement> }) => {
@@ -127,10 +130,11 @@ export const FloatingToolbar = ({
     <div
       aria-label={resolvedLabels.region}
       className={cn(
-        "absolute z-30 flex -translate-y-full items-center gap-1 rounded-md border border-border bg-background/95 p-1 shadow-md backdrop-blur",
+        "vllnt-glass-floating absolute z-30 flex -translate-y-full items-center gap-1 rounded-md border p-1",
         className,
       )}
       data-floating-toolbar
+      data-material={material}
       ref={ref}
       role="toolbar"
       style={{ left: `${x.toString()}px`, top: `${y.toString()}px` }}

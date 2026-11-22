@@ -30,7 +30,11 @@ OKLCH colors to sRGB for React Native, where OKLCH is not reliably supported.
 The Tamagui objects (`tamaguiTokens`, `tamaguiThemes`) are plain data in the
 shape `createTokens` and `createTamagui({ themes })` take; no Tamagui package is
 a dependency. The Penpot file has sets `vllnt/core` and `vllnt/<theme>/<mode>`,
-a Dark and Light theme per product, and `$metadata.tokenSetOrder`.
+a Dark and Light theme per product, a `vllnt/material/solid` set that holds the
+solid values of every glass token, and `$metadata.tokenSetOrder`. The themes
+`material/Solid`, `transparency/Reduced` and `contrast/Increased` enable that
+set; the last two mirror the CSS fallbacks for `prefers-reduced-transparency`
+and `prefers-contrast: more`.
 
 ## Sources
 
@@ -74,6 +78,21 @@ The token file follows `tokens.schema.json`:
   shared site shell (20 below 768 px, 48 from 768 px, 96 from 1200 px).
 - `size.page-max`: the maximum width of the page column (1440 px).
 - `size.measure-narrow`: the narrow text column width (480 px).
+- `blur.glass`: backdrop blur radii (`sm`, `md`, `lg`, `default`), written as
+  `--blur-glass-*`. `lg` is the ceiling of the backdrop-filter budget in
+  `DESIGN.md`; the generator fails when another step is larger.
+- `material.glass`: the glass tints and edge. Each leaf is `{ role, light, dark }`
+  with a `#RRGGBBAA` value per mode (`tint-top`, `tint-bottom`, `tint-dense-top`,
+  `tint-dense-bottom`, `hairline-edge`, `sheen-opacity`); the older opacity steps
+  and OKLCH tint keep their shape. `material.solid` lists the value each glass
+  variable takes when the material is solid, in the CSS fallbacks and in the
+  Penpot solid set. Every glass variable needs a solid entry.
+- `shadow.glass` and `shadow.glass-floating`: the two-layer glass shadows, with
+  the other library shadows. Their solid values are `shadow.raised` and
+  `shadow.floating`.
+- `color.glass-muted-foreground` and `color.glass-input`: the muted text and
+  control border colours that pass AA on the dense glass tint. They are read
+  inside glass only; see "Glass material" in `DESIGN.md`.
 - `motion`: allowed durations, easing, and reduced-motion behavior.
 - `iconography`: icon library, sizes, stroke, and color policy.
 

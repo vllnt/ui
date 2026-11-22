@@ -13,6 +13,7 @@ import {
   useState,
 } from "react";
 
+import type { MaterialProps } from "../../../lib/material";
 import { cn } from "../../../lib/utils";
 
 const VIEWBOX_WIDTH = 1000;
@@ -280,17 +281,20 @@ function Stage({
  */
 export const GeographyQuizMapPrompt = ({
   className,
+  material = "glass",
   ref,
   ...rest
-}: ComponentPropsWithoutRef<"div"> & { ref?: React.Ref<HTMLDivElement> }) => {
+}: MaterialProps &
+  ComponentPropsWithoutRef<"div"> & { ref?: React.Ref<HTMLDivElement> }) => {
   const { current, phase } = useQuizContext();
   if (phase !== "playing" || !current) return null;
   return (
     <div
       className={cn(
-        "absolute inset-x-3 top-3 z-10 rounded-md border bg-background/95 px-3 py-2 text-center text-sm font-medium text-foreground shadow-sm backdrop-blur",
+        "vllnt-glass absolute inset-x-3 top-3 z-10 rounded-md border px-3 py-2 text-center text-sm font-medium text-foreground",
         className,
       )}
+      data-material={material}
       data-quiz-prompt
       ref={ref}
       {...rest}
@@ -308,9 +312,11 @@ GeographyQuizMapPrompt.displayName = "GeographyQuizMapPrompt";
  */
 export const GeographyQuizMapScore = ({
   className,
+  material = "glass",
   ref,
   ...rest
-}: ComponentPropsWithoutRef<"div"> & { ref?: React.Ref<HTMLDivElement> }) => {
+}: MaterialProps &
+  ComponentPropsWithoutRef<"div"> & { ref?: React.Ref<HTMLDivElement> }) => {
   const { answers, totalQuestions } = useQuizContext();
   const correct = answers.filter((entry) => entry.correct).length;
   const accuracy =
@@ -318,9 +324,10 @@ export const GeographyQuizMapScore = ({
   return (
     <div
       className={cn(
-        "absolute right-3 top-3 z-10 rounded-md border bg-background/95 px-2 py-1 text-xs font-medium text-foreground shadow-sm backdrop-blur",
+        "vllnt-glass absolute right-3 top-3 z-10 rounded-md border px-2 py-1 text-xs font-medium text-foreground",
         className,
       )}
+      data-material={material}
       data-quiz-score
       ref={ref}
       {...rest}
@@ -339,18 +346,21 @@ GeographyQuizMapScore.displayName = "GeographyQuizMapScore";
  */
 export const GeographyQuizMapResults = ({
   className,
+  material = "glass",
   ref,
   ...rest
-}: ComponentPropsWithoutRef<"div"> & { ref?: React.Ref<HTMLDivElement> }) => {
+}: MaterialProps &
+  ComponentPropsWithoutRef<"div"> & { ref?: React.Ref<HTMLDivElement> }) => {
   const { answers, phase, totalQuestions } = useQuizContext();
   if (phase !== "complete") return null;
   const correct = answers.filter((entry) => entry.correct).length;
   return (
     <div
       className={cn(
-        "absolute inset-3 z-20 flex flex-col gap-3 overflow-auto rounded-md border bg-background/95 p-4 text-sm text-foreground shadow-md backdrop-blur",
+        "vllnt-glass vllnt-glass-dense absolute inset-3 z-20 flex flex-col gap-3 overflow-auto rounded-md border p-4 text-sm text-foreground",
         className,
       )}
+      data-material={material}
       data-quiz-results
       ref={ref}
       {...rest}

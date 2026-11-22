@@ -4,6 +4,7 @@ import { memo, useEffect, useRef } from "react";
 
 import type { ReactNode } from "react";
 
+import type { MaterialProps } from "../../../lib/material";
 import type { HeadingTag } from "../../../lib/types";
 import { useBodyScrollLock } from "../../../lib/use-body-scroll-lock";
 import { useEscapeKey } from "../../../lib/use-escape-key";
@@ -32,7 +33,7 @@ export type TableOfContentsPanelProps = {
   sections: TOCSection[];
   title?: string;
   totalSections: number;
-};
+} & MaterialProps;
 
 function useTocPanelBehavior(
   isOpen: boolean,
@@ -64,7 +65,7 @@ function TocBackdrop({ onClose }: { onClose: () => void }): React.ReactNode {
   return (
     <div
       aria-hidden="true"
-      className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+      className="vllnt-glass-scrim absolute inset-0"
       data-testid="toc-backdrop"
       onClick={onClose}
     />
@@ -255,6 +256,7 @@ function TableOfContentsPanelImpl({
   completionCount,
   currentSectionIndex,
   isOpen,
+  material = "glass",
   onClose,
   onReset,
   onSelectSection,
@@ -273,6 +275,7 @@ function TableOfContentsPanelImpl({
       aria-labelledby="toc-title"
       aria-modal="true"
       className="fixed inset-0 z-50"
+      data-material={material}
       // react-doctor-disable-next-line react-doctor/prefer-html-dialog -- useFocusContainment traps Tab, useEscapeKey closes and useBodyScrollLock locks scroll; a native <dialog> top layer would also sit above portalled popovers and toasts
       role="dialog"
     >
@@ -282,7 +285,7 @@ function TableOfContentsPanelImpl({
       {/* Panel */}
       <div
         className={cn(
-          "absolute right-0 top-0 h-full w-full max-w-md bg-background shadow-xl",
+          "vllnt-glass vllnt-glass-dense absolute right-0 top-0 h-full w-full max-w-md border-l",
           className,
         )}
         ref={panelRef}

@@ -14,6 +14,7 @@ import { ChevronDown, ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
+import type { MaterialProps } from "../../../lib/material";
 import { keyByOccurrence } from "../../../lib/occurrence-keys";
 import { useMounted } from "../../../lib/use-mounted";
 import { cn } from "../../../lib/utils";
@@ -52,7 +53,7 @@ export type SidebarProps = {
    */
   prefetch?: boolean;
   sections: SidebarSection[];
-};
+} & MaterialProps;
 
 /** The `prefetch` prop of the nearest Sidebar, read by every link it renders. */
 const PrefetchContext = createContext<boolean | undefined>(undefined);
@@ -588,7 +589,7 @@ function getAsideClassName({
   open,
 }: AsideClassNameOptions): string {
   return cn(
-    "fixed lg:relative top-16 lg:top-0 bottom-0 lg:bottom-auto left-0 z-40 lg:h-full bg-background transition-[transform,width] duration-300 ease-in-out",
+    "vllnt-glass vllnt-glass-dense fixed lg:relative top-16 lg:top-0 bottom-0 lg:bottom-auto left-0 z-40 lg:h-full transition-[transform,width] duration-300 ease-in-out",
     "flex flex-col",
     "overflow-hidden",
     "shrink-0",
@@ -729,6 +730,7 @@ export function Sidebar({
   ariaLabel = "Sidebar navigation",
   closeLabel = "Close sidebar",
   id = "site-sidebar",
+  material = "glass",
   pathname: pathnameOverride,
   prefetch,
   sections,
@@ -741,9 +743,7 @@ export function Sidebar({
   const returnFocusReference = useRef<HTMLElement | null>(null);
   const scrollContainerReference = useRef<HTMLElement>(null);
   const sidebarReference = useRef<HTMLElement>(null);
-  const { showBottomFade, showTopFade } = useScrollFade(
-    scrollContainerReference,
-  );
+  const scrollFades = useScrollFade(scrollContainerReference);
 
   useSidebarFocus({
     isMobile,
@@ -771,15 +771,13 @@ export function Sidebar({
       {/* Sidebar */}
       <aside
         className={getAsideClassName({ collapsed, isMobile, open })}
+        data-material={material}
         id={id}
         inert={(isMobile && !open) || collapsed ? true : undefined}
         ref={sidebarReference}
       >
         <div className="relative flex-1 overflow-hidden">
-          <ScrollFades
-            showBottomFade={showBottomFade}
-            showTopFade={showTopFade}
-          />
+          <ScrollFades {...scrollFades} />
 
           <nav
             aria-label={ariaLabel}

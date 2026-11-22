@@ -116,11 +116,11 @@ const cssShadowLayer = (layer) =>
 
 /** Leaves of a nested `{ value, role }` token group as `[path, leaf]` pairs. */
 function tokenLeaves(group, path) {
-  return Object.entries(group).flatMap(([key, node]) =>
-    typeof node.value === "string"
-      ? [[[...path, key], node]]
-      : tokenLeaves(node, [...path, key]),
-  );
+  return Object.entries(group).flatMap(([key, node]) => {
+    if (typeof node.value === "string") return [[[...path, key], node]];
+    if (typeof node.light === "string") return [];
+    return tokenLeaves(node, [...path, key]);
+  });
 }
 
 /** `--size-target-min` for the path `["size", "target", "min"]`. */
@@ -131,6 +131,122 @@ const referencePath = (reference) => /^\{([a-z][a-z0-9.-]*)\}$/.exec(reference)?
 
 const sizeLeaves = tokenLeaves(designTokens.size, ["size"]);
 const opacityLeaves = tokenLeaves(designTokens.opacity, ["opacity"]);
+
+// Glass material (#684). Names and values follow the Penpot libraries (glass
+// default r5): token `a.b.c` is the CSS variable `--a-b-c` and the Penpot token
+// `a.b.c`.
+const glassLeaves = [
+  ...tokenLeaves(designTokens.blur, ["blur"]),
+  ...tokenLeaves(designTokens.material.glass, ["material", "glass"]),
+  ...tokenLeaves(designTokens.depth, ["depth"]),
+];
+
+const isReference = (value) => value.startsWith("{");
+const isHexAlpha = (value) => /^#[0-9A-F]{8}$/.test(value);
+
+/** Tokens with a light and a dark value; the libraries keep them in the mode sets. */
+const glassModeTokens = [
+  [["color", "glass-border"], designTokens.color["glass-border"]],
+  [["color", "glass-input"], designTokens.color["glass-input"]],
+  [["color", "glass-muted-foreground"], designTokens.color["glass-muted-foreground"]],
+  [["material", "highlight", "top"], designTokens.material.highlight.top],
+  ...Object.entries(designTokens.material.glass)
+    .filter(([, node]) => typeof node.light === "string")
+    .map(([key, node]) => [["material", "glass", key], node]),
+];
+
+/** Tokens drawn at a glass opacity are written as bare OKLCH channels, so the caller adds the alpha. */
+const channelTokens = new Set(["material.glass.tint"]);
+
+/** Semantic colour role names (`card`, `muted-foreground`), the CSS variables without `--`. */
+const semanticRoleNames = new Set(
+  Object.values(designTokens.color.semantic).map((color) => color.cssVariable.slice(2)),
+);
+
+/** A `{...}` token reference as a CSS value: a semantic role is an `oklch()` colour, anything else its variable. */
+function cssReference(reference, channels) {
+  const path = referencePath(reference);
+  assert(path !== undefined, `${reference} is not a token reference.`);
+  if (path[0] === "color" && path.length === 2 && semanticRoleNames.has(path[1])) {
+    return channels ? `var(--${path[1]})` : `oklch(var(--${path[1]}))`;
+  }
+  return `var(${pathVariable(path)})`;
+}
+
+const cssGlassValue = (path, value) =>
+  isReference(value) ? cssReference(value, channelTokens.has(path.join("."))) : value;
+
+/** The Penpot type of a glass token, from its path. */
+function glassPenpotType(path) {
+  const leaf = path.at(-1);
+  if (path[0] === "blur" || leaf === "offset") return "number";
+  if (path[0] === "shadow" || leaf === "shadow") return "shadow";
+  if (path.includes("opacity") || leaf.endsWith("opacity") || (path[0] === "depth" && leaf === "tint")) {
+    return "opacity";
+  }
+  return "color";
+}
+
+/** The shadow `depth.z-0.shadow` carries in the libraries: one transparent layer. */
+const noShadow = [
+  { offsetX: "0", offsetY: "0", blur: "0", spread: "0", color: "#00000000", inset: false },
+];
+
+/** A glass token's Penpot value: references pass through, lengths become numbers. */
+function penpotGlassToken(path, value) {
+  const type = glassPenpotType(path);
+  if (isReference(value)) return penpotToken(value, type);
+  if (type === "number") return penpotToken(penpotNumber(value), type);
+  if (type === "shadow") return penpotToken(noShadow, type);
+  return penpotToken(value, type);
+}
+
+/** A nested `{ value, role }` glass group as Penpot tokens. */
+function penpotGlassGroup(group, path) {
+  const single = Object.fromEntries(
+    Object.entries(group).filter(([, node]) => typeof node.light !== "string"),
+  );
+  return mapValues(single, (node, key) =>
+    typeof node.value === "string"
+      ? penpotGlassToken([...path, key], node.value)
+      : penpotGlassGroup(node, [...path, key]),
+  );
+}
+
+/** The `vllnt/material/solid` set: a dotted token name to its solid value, nested for Penpot. */
+function penpotSolidSet() {
+  const set = {};
+  for (const [name, value] of Object.entries(designTokens.material.solid)) {
+    const path = name.split(".");
+    const parent = path
+      .slice(0, -1)
+      .reduce((node, key) => (node[key] ??= {}), set);
+    parent[path.at(-1)] = penpotGlassToken(path, value);
+  }
+  return set;
+}
+
+const solidSetName = "vllnt/material/solid";
+
+/** A mode colour as a Penpot value: `#RRGGBBAA` as written, OKLCH channels as hex. */
+const penpotModeColor = (value) =>
+  isHexAlpha(value) ? value : oklchToHex(value).toUpperCase();
+
+/** A per-mode glass token for one mode: an opacity as written, a colour as hex. */
+function penpotModeToken(path, value) {
+  const type = glassPenpotType(path);
+  return penpotToken(type === "opacity" ? value : penpotModeColor(value), type);
+}
+
+/** The per-mode glass tokens under `root` (`material`) for one mode, nested by path. */
+function penpotModeGroup(root, mode) {
+  const group = {};
+  for (const [path, token] of glassModeTokens.filter(([tokenPath]) => tokenPath[0] === root)) {
+    const parent = path.slice(1, -1).reduce((node, key) => (node[key] ??= {}), group);
+    parent[path.at(-1)] = penpotModeToken(path, token[mode]);
+  }
+  return group;
+}
 
 function validateChannels(label, value) {
   const channels = value.split(/\s+/).map(Number);
@@ -236,6 +352,67 @@ function validateTokenGroups(colorRoles) {
   }
 }
 
+/** Glass tokens: references resolve, the budget ceiling holds, and solid overrides every glass token. */
+function validateGlassTokens() {
+  const known = new Set([
+    ...glassLeaves.map(([path]) => path.join(".")),
+    ...glassModeTokens.map(([path]) => path.join(".")),
+    ...Object.keys(designTokens.shadow).map((name) => `shadow.${name}`),
+    ...[...semanticRoleNames].map((role) => `color.${role}`),
+  ]);
+  for (const [path, leaf] of glassLeaves) {
+    const name = path.join(".");
+    if (isReference(leaf.value)) {
+      assert(
+        known.has(referencePath(leaf.value)?.join(".")),
+        `${name} references ${leaf.value}, which is not a token.`,
+      );
+    } else if (path[0] === "blur" || path.at(-1) === "offset") {
+      assert(/^[0-9]+(?:\.[0-9]+)?px$/.test(leaf.value), `${name} must be a px length.`);
+    } else if (path.includes("opacity")) {
+      assert(isOpacity(leaf.value), `${name} must be a number from 0 to 1.`);
+    }
+  }
+  for (const [path, token] of glassModeTokens) {
+    for (const mode of modes) {
+      const valid =
+        glassPenpotType(path) === "opacity"
+          ? isOpacity(token[mode])
+          : isHexAlpha(token[mode]) || /^[0-9.]+ [0-9.]+ [0-9.]+$/.test(token[mode]);
+      assert(valid, `${path.join(".")}.${mode} must be #RRGGBBAA, OKLCH channels or an opacity.`);
+    }
+  }
+
+  const blurs = glassLeaves.filter(([path]) => path[0] === "blur").map(([, leaf]) => parseFloat(leaf.value));
+  assert(
+    Math.max(...blurs) === parseFloat(designTokens.blur.glass.lg.value),
+    "blur.glass.lg must be the largest blur step: it is the backdrop-filter budget ceiling.",
+  );
+
+  const solid = Object.keys(designTokens.material.solid);
+  const overridable = [
+    ...glassLeaves.map(([path]) => path.join(".")),
+    ...glassModeTokens.map(([path]) => path.join(".")),
+    "shadow.glass",
+    "shadow.glass-floating",
+  ].filter(
+    (name) =>
+      name.startsWith("blur.") ||
+      name.startsWith("shadow.") ||
+      (name.startsWith("material.glass.") && name !== "material.glass.opacity.default"),
+  );
+  assert(
+    solid.slice().sort().join() === overridable.slice().sort().join(),
+    `material.solid must override exactly: ${overridable.join(", ")}.`,
+  );
+  for (const [name, value] of Object.entries(designTokens.material.solid)) {
+    assert(
+      !isReference(value) || known.has(referencePath(value)?.join(".")),
+      `material.solid.${name} references ${value}, which is not a token.`,
+    );
+  }
+}
+
 function validateSource() {
   assert(designTokens.name === "VLLNT UI", 'tokens.json name must be "VLLNT UI".');
   assert(
@@ -274,6 +451,7 @@ function validateSource() {
   validateTokenGroups(
     new Set(colorEntries.map(([, color]) => color.cssVariable.slice(2))),
   );
+  validateGlassTokens();
   validateThemes();
 
   for (const [component, contract] of Object.entries(
@@ -332,6 +510,109 @@ function scalarLines(indentation) {
     ...[...sizeLeaves, ...opacityLeaves].map(
       ([path, leaf]) => `${indentation}${pathVariable(path)}: ${leaf.value};`,
     ),
+    ...glassLines(glassLeaves, indentation),
+    ...glassModeLines("light", indentation),
+  ];
+}
+
+/** Glass tokens as CSS variables; a reference becomes `var()` of the token it names. */
+function glassLines(leaves, indentation) {
+  return leaves.map(
+    ([path, leaf]) => `${indentation}${pathVariable(path)}: ${cssGlassValue(path, leaf.value)};`,
+  );
+}
+
+/** Glass colours that differ per mode, as CSS variables for one mode. */
+function glassModeLines(mode, indentation) {
+  return glassModeTokens.map(
+    ([path, token]) => `${indentation}${pathVariable(path)}: ${token[mode]};`,
+  );
+}
+
+/**
+ * Dark scope: the glass tokens that point at a mode-dependent value. A `var()`
+ * resolves where it is declared, so a nested `.dark` scope has to declare them
+ * again to read the dark roles.
+ */
+function glassDarkLines(indentation) {
+  return [
+    ...glassModeLines("dark", indentation),
+    ...glassLines(
+      glassLeaves.filter(([, leaf]) => isReference(leaf.value)),
+      indentation,
+    ),
+  ];
+}
+
+/**
+ * Glass tokens that follow the ones the solid set overrides (the default
+ * opacity, the depth tints). A `var()` resolves where it is declared, so a
+ * `data-material="solid"` surface has to declare them again to follow its own
+ * values instead of the root's.
+ */
+function solidDerivedLeaves() {
+  const overridden = new Set(Object.keys(designTokens.material.solid));
+  const derived = [];
+  let grew = true;
+  while (grew) {
+    grew = false;
+    for (const leaf of glassLeaves) {
+      const name = leaf[0].join(".");
+      const target = isReference(leaf[1].value) ? referencePath(leaf[1].value).join(".") : undefined;
+      if (!overridden.has(name) && !derived.includes(leaf) && overridden.has(target)) {
+        derived.push(leaf);
+        overridden.add(name);
+        grew = true;
+      }
+    }
+  }
+  return derived;
+}
+
+/**
+ * The vllnt/material/solid set as CSS variables. Besides the tokens it
+ * restores two things the Penpot set leaves to the component: the glass text
+ * roles fall back to the base roles, and the filter is removed instead of
+ * blurred by 0, so no backdrop root is created.
+ */
+function solidLines(indentation) {
+  return [
+    ...Object.entries(designTokens.material.solid).map(([name, value]) => {
+      const path = name.split(".");
+      return `${indentation}${pathVariable(path)}: ${cssGlassValue(path, value)};`;
+    }),
+    ...glassLines(solidDerivedLeaves(), indentation),
+    `${indentation}--color-glass-input: var(--input);`,
+    `${indentation}--color-glass-muted-foreground: var(--muted-foreground);`,
+    `${indentation}--vllnt-glass-backdrop: none;`,
+  ];
+}
+
+/** Conditions that turn glass into solid, with no script. Each one is a CSS at-rule. */
+const solidConditions = [
+  "@media (prefers-reduced-transparency: reduce), (prefers-contrast: more), (forced-colors: active)",
+  "@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)))",
+];
+
+/** Automatic solid fallbacks, the `data-glass="off"` app switch and the per-surface `data-material="solid"`. */
+function solidBlocks(indentation) {
+  const inner = `${indentation}  `;
+  const body = `${inner}  `;
+  return [
+    `${indentation}/* Solid material: the vllnt/material/solid values replace the glass tokens. */`,
+    ...solidConditions.flatMap((condition) => [
+      `${indentation}${condition} {`,
+      `${inner}:root,`,
+      `${inner}.dark {`,
+      ...solidLines(body),
+      `${inner}}`,
+      `${indentation}}`,
+    ]),
+    `${indentation}:root[data-glass="off"],`,
+    `${indentation}:root[data-glass="off"] .dark,`,
+    `${indentation}[data-material="solid"] {`,
+    ...solidLines(inner),
+    `${indentation}}`,
   ];
 }
 
@@ -373,8 +654,10 @@ function renderDefaultTheme() {
     ".dark {",
     ...declarationLines("dark", "  "),
     ...shadowLines("dark", "  "),
+    ...glassDarkLines("  "),
     "}",
     ...coarsePointerLines(""),
+    ...solidBlocks(""),
     "",
   ].join("\n");
 }
@@ -402,8 +685,10 @@ function renderStylesThemeBlock() {
     "  .dark {",
     ...declarationLines("dark", "    "),
     ...shadowLines("dark", "    "),
+    ...glassDarkLines("    "),
     "  }",
     ...coarsePointerLines("  "),
+    ...solidBlocks("  "),
     "}",
     "",
     "",
@@ -767,19 +1052,25 @@ function penpotTokens() {
   const setNames = [
     "vllnt/core",
     ...themeNames.flatMap((name) => modes.map((mode) => `vllnt/${name}/${mode}`)),
+    solidSetName,
   ];
 
   const colorReference = (value) => penpotToken(value, "color");
 
   const sets = {
     "vllnt/core": {
+      blur: penpotGlassGroup(designTokens.blur, ["blur"]),
       brand: {
         status: penpotGroup(designTokens.brand.status, colorReference),
       },
+      depth: penpotGlassGroup(designTokens.depth, ["depth"]),
       font: {
         family: mapValues(core.fontFamily, penpotFamily),
         size: mapValues(core.scale, (step) => penpotSize(step.fontSize)),
         weight: mapValues(core.fontWeight, penpotWeight),
+      },
+      material: {
+        glass: penpotGlassGroup(designTokens.material.glass, ["material", "glass"]),
       },
       opacity: penpotGroup(designTokens.opacity, (value) =>
         penpotToken(value, "opacity"),
@@ -819,11 +1110,17 @@ function penpotTokens() {
               ),
             ]),
           ),
+          ...Object.fromEntries(
+            glassModeTokens
+              .filter(([path]) => path[0] === "color")
+              .map(([path, token]) => [path[1], penpotModeToken(path, token[mode])]),
+          ),
           "badge-label": penpotGroup(
             designTokens.color["badge-label"],
             colorReference,
           ),
         },
+        material: penpotModeGroup("material", mode),
         ...(mode === "dark" && {
           shadow: mapValues(designTokens.shadow, (token) =>
             penpotToken(token.dark, "shadow"),
@@ -834,20 +1131,37 @@ function penpotTokens() {
     }
   }
 
-  const themes = themeNames.flatMap((name) =>
-    modes.map((mode) => ({
-      group: name,
-      name: mode === "dark" ? "Dark" : "Light",
+  sets[solidSetName] = penpotSolidSet();
+
+  const themes = [
+    ...themeNames.flatMap((name) =>
+      modes.map((mode) => ({
+        group: name,
+        name: mode === "dark" ? "Dark" : "Light",
+        selectedTokenSets: Object.fromEntries(
+          setNames.map((setName) => [
+            setName,
+            setName === "vllnt/core" || setName === `vllnt/${name}/${mode}`
+              ? "enabled"
+              : "disabled",
+          ]),
+        ),
+      })),
+    ),
+    // The libraries' material/Solid, transparency/Reduced and contrast/Increased
+    // themes all switch the solid set on.
+    ...[
+      ["material", "Solid"],
+      ["transparency", "Reduced"],
+      ["contrast", "Increased"],
+    ].map(([group, name]) => ({
+      group,
+      name,
       selectedTokenSets: Object.fromEntries(
-        setNames.map((setName) => [
-          setName,
-          setName === "vllnt/core" || setName === `vllnt/${name}/${mode}`
-            ? "enabled"
-            : "disabled",
-        ]),
+        setNames.map((setName) => [setName, setName === solidSetName ? "enabled" : "disabled"]),
       ),
     })),
-  );
+  ];
 
   return `${JSON.stringify(
     { ...sets, $themes: themes, $metadata: { tokenSetOrder: setNames } },

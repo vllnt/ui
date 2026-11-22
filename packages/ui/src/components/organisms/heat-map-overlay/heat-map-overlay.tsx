@@ -7,6 +7,7 @@ import {
   useMemo,
 } from "react";
 
+import type { MaterialProps } from "../../../lib/material";
 import { cn } from "../../../lib/utils";
 
 const VIEWBOX_WIDTH = 1000;
@@ -99,7 +100,8 @@ export type HeatMapOverlayProps = {
   opacity?: number;
   /** Top heat-blob radius in viewBox units. Defaults to `30`. Per-point radius scales with `weight`. */
   radius?: number;
-} & ComponentPropsWithoutRef<"section">;
+} & MaterialProps &
+  ComponentPropsWithoutRef<"section">;
 
 type ProjectedPoint = {
   raw: HeatMapPoint;
@@ -302,6 +304,7 @@ export const HeatMapOverlay = ({
     data,
     gradient = DEFAULT_GRADIENT,
     labels,
+    material = "glass",
     opacity = 0.7,
     radius = 30,
     ...rest
@@ -323,6 +326,7 @@ export const HeatMapOverlay = ({
         "relative aspect-[2/1] w-full overflow-hidden rounded-2xl border bg-background text-foreground",
         className,
       )}
+      data-material={material}
       ref={ref}
       {...rest}
     >
@@ -338,7 +342,7 @@ export const HeatMapOverlay = ({
         radius={radius}
       />
       {children ? (
-        <div className="absolute bottom-3 left-3 z-10 max-w-xs rounded-md border bg-background/95 px-3 py-2 text-xs text-foreground shadow-sm backdrop-blur">
+        <div className="vllnt-glass vllnt-glass-dense absolute bottom-3 left-3 z-10 max-w-xs rounded-md border px-3 py-2 text-xs text-foreground">
           {children}
         </div>
       ) : null}

@@ -1,6 +1,7 @@
 import { ArrowUpRight, MessageSquareText } from "lucide-react";
 import type { ReactNode } from "react";
 
+import type { MaterialProps } from "../../../lib/material";
 import { cn } from "../../../lib/utils";
 import { Button } from "../../atoms/button/button";
 
@@ -10,17 +11,19 @@ export type ChatDockMessage = {
   speaker: ReactNode;
 };
 
-export type ChatDockSectionProps = React.ComponentPropsWithoutRef<"section"> & {
-  composerPlaceholder?: string;
-  contextLabel?: ReactNode;
-  messages: ChatDockMessage[];
-  title?: ReactNode;
-};
+export type ChatDockSectionProps = MaterialProps &
+  React.ComponentPropsWithoutRef<"section"> & {
+    composerPlaceholder?: string;
+    contextLabel?: ReactNode;
+    messages: ChatDockMessage[];
+    title?: ReactNode;
+  };
 
 const ChatDockSection = ({
   className,
   composerPlaceholder = "Ask about runs, errors, or pending work…",
   contextLabel,
+  material = "glass",
   messages,
   ref,
   title = "Assistant",
@@ -28,9 +31,10 @@ const ChatDockSection = ({
 }: ChatDockSectionProps & { ref?: React.Ref<HTMLElement> }) => (
   <section
     className={cn(
-      "flex flex-col gap-4 rounded-2xl border border-border/70 bg-background/75 p-4 shadow-[0_10px_35px_oklch(var(--foreground)/0.06)] backdrop-blur-xl",
+      "vllnt-glass vllnt-glass-dense flex flex-col gap-4 rounded-2xl border p-4",
       className,
     )}
+    data-material={material}
     ref={ref}
     {...props}
   >

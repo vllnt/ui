@@ -4,6 +4,7 @@ import { Children, memo, useEffect, useRef } from "react";
 
 import type { ReactNode } from "react";
 
+import type { MaterialProps } from "../../../lib/material";
 import type { HeadingTag } from "../../../lib/types";
 import { useBodyScrollLock } from "../../../lib/use-body-scroll-lock";
 import { useEscapeKey } from "../../../lib/use-escape-key";
@@ -25,7 +26,7 @@ export type KeyboardShortcutsHelpProps = {
   onClose: () => void;
   shortcuts: readonly KeyboardShortcut[];
   title?: string;
-};
+} & MaterialProps;
 
 function DefaultCloseIcon(): React.ReactNode {
   return (
@@ -74,12 +75,46 @@ function ShortcutsList({
   );
 }
 
+type ShortcutsHeaderProps = {
+  as: HeadingTag;
+  closeButtonRef: React.Ref<HTMLButtonElement>;
+  closeIcon?: ReactNode;
+  onClose: () => void;
+  title: string;
+};
+
+function ShortcutsHeader({
+  as: Heading,
+  closeButtonRef,
+  closeIcon,
+  onClose,
+  title,
+}: ShortcutsHeaderProps): React.ReactNode {
+  return (
+    <div className="flex items-center justify-between mb-4">
+      <Heading className="text-lg font-semibold" id="shortcuts-title">
+        {title}
+      </Heading>
+      <button
+        aria-label="Close shortcuts help"
+        className="flex size-8 items-center justify-center rounded-md hover:bg-secondary"
+        onClick={onClose}
+        ref={closeButtonRef}
+        type="button"
+      >
+        {closeIcon ?? <DefaultCloseIcon />}
+      </button>
+    </div>
+  );
+}
+
 function KeyboardShortcutsHelpImpl({
   as: Heading = "h2",
   className,
   closeIcon,
   footer,
   isOpen,
+  material = "glass",
   onClose,
   shortcuts,
   title = "Keyboard Shortcuts",
@@ -107,6 +142,7 @@ function KeyboardShortcutsHelpImpl({
       aria-labelledby="shortcuts-title"
       aria-modal="true"
       className="fixed inset-0 z-50 flex items-center justify-center"
+      data-material={material}
       ref={dialogRef}
       // react-doctor-disable-next-line react-doctor/prefer-html-dialog -- useFocusContainment traps Tab, useEscapeKey closes and useBodyScrollLock locks scroll; a native <dialog> top layer would also sit above portalled popovers and toasts
       role="dialog"
@@ -114,32 +150,24 @@ function KeyboardShortcutsHelpImpl({
       {/* Backdrop */}
       <div
         aria-hidden="true"
-        className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+        className="vllnt-glass-scrim absolute inset-0"
         onClick={onClose}
       />
 
       {/* Modal */}
       <div
         className={cn(
-          "relative z-10 w-full max-w-sm rounded-lg bg-background p-6 shadow-xl mx-4",
+          "vllnt-glass-floating vllnt-glass-dense relative z-10 w-full max-w-sm rounded-lg border p-6 mx-4",
           className,
         )}
       >
-        {/* Header */}
-        <div className="flex items-center justify-between mb-4">
-          <Heading className="text-lg font-semibold" id="shortcuts-title">
-            {title}
-          </Heading>
-          <button
-            aria-label="Close shortcuts help"
-            className="flex size-8 items-center justify-center rounded-md hover:bg-secondary"
-            onClick={onClose}
-            ref={closeButtonRef}
-            type="button"
-          >
-            {closeIcon ?? <DefaultCloseIcon />}
-          </button>
-        </div>
+        <ShortcutsHeader
+          as={Heading}
+          closeButtonRef={closeButtonRef}
+          closeIcon={closeIcon}
+          onClose={onClose}
+          title={title}
+        />
 
         {/* Shortcuts List */}
         <ShortcutsList shortcuts={shortcuts} />

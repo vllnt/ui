@@ -1,5 +1,7 @@
 import type { Edge, FitViewOptions, Node } from "@xyflow/react";
 
+import type { Material } from "../../../lib/material";
+
 export type FlowDiagramNode = {
   data: {
     description?: string;
@@ -41,6 +43,8 @@ export type FlowControlsProps = {
   className?: string;
   /** Current copy operation status */
   copyStatus?: CopyStatus;
+  /** Surface material. Defaults to `"glass"`; `"solid"` opts out of glass. */
+  material?: Material;
   /** Callback to copy diagram as image */
   onCopy?: () => void;
   /** Callback to fit/center view */

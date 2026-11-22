@@ -131,7 +131,7 @@ export const StateBadgeOverlay = ({
     <div
       aria-label={`${resolvedLabels.region}: ${STATE_LABEL[state]}`}
       className={cn(
-        "pointer-events-none absolute z-20 inline-flex items-center gap-1 rounded-full border border-border bg-secondary px-2 py-0.5 text-[10px] font-medium uppercase tracking-wide text-foreground shadow-sm backdrop-blur",
+        "pointer-events-none absolute z-20 inline-flex items-center gap-1 rounded-full border border-border bg-secondary px-2 py-0.5 text-[10px] font-medium uppercase tracking-wide text-foreground shadow-sm",
         className,
       )}
       data-state-anchor={anchor}

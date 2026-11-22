@@ -15,6 +15,9 @@
     "opacity",
     "elevation",
     "shadow",
+    "blur",
+    "material",
+    "depth",
     "motion",
     "iconography",
     "themes"
@@ -42,6 +45,9 @@
           "minProperties": 1,
           "additionalProperties": { "$ref": "#/$defs/semanticColor" }
         },
+        "glass-border": { "$ref": "#/$defs/modeColor" },
+        "glass-input": { "$ref": "#/$defs/modeColor" },
+        "glass-muted-foreground": { "$ref": "#/$defs/modeColor" },
         "badge-label": { "$ref": "#/$defs/tokenGroup" }
       },
       "additionalProperties": false
@@ -99,6 +105,48 @@
       "type": "object",
       "minProperties": 1,
       "additionalProperties": { "$ref": "#/$defs/shadowToken" }
+    },
+    "blur": {
+      "type": "object",
+      "required": ["glass"],
+      "properties": { "glass": { "$ref": "#/$defs/tokenGroup" } },
+      "additionalProperties": false
+    },
+    "material": {
+      "type": "object",
+      "required": ["glass", "highlight", "solid"],
+      "properties": {
+        "glass": {
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": {
+            "oneOf": [
+              { "$ref": "#/$defs/token" },
+              { "$ref": "#/$defs/tokenGroup" },
+              { "$ref": "#/$defs/modeToken" }
+            ]
+          }
+        },
+        "highlight": {
+          "type": "object",
+          "required": ["top"],
+          "properties": { "top": { "$ref": "#/$defs/modeColor" } },
+          "additionalProperties": false
+        },
+        "solid": {
+          "type": "object",
+          "minProperties": 1,
+          "propertyNames": { "pattern": "^[a-z][a-z0-9.-]*$" },
+          "additionalProperties": { "type": "string", "minLength": 1 }
+        }
+      },
+      "additionalProperties": false
+    },
+    "depth": {
+      "type": "object",
+      "minProperties": 1,
+      "propertyNames": { "pattern": "^z-[0-9]+$" },
+      "additionalProperties": { "$ref": "#/$defs/tokenGroup" }
     },
     "motion": {
       "type": "object",
@@ -160,6 +208,51 @@
     "oklchChannel": {
       "type": "string",
       "pattern": "^(?:0(?:\\.[0-9]+)?|1(?:\\.0+)?) (?:0(?:\\.[0-9]+)?|1(?:\\.0+)?) -?[0-9]+(?:\\.[0-9]+)?$"
+    },
+    "hexAlphaColor": {
+      "type": "string",
+      "pattern": "^#[0-9A-F]{8}$"
+    },
+    "opacityValue": {
+      "type": "string",
+      "pattern": "^(?:0(?:\\.[0-9]+)?|1(?:\\.0+)?)$"
+    },
+    "modeToken": {
+      "type": "object",
+      "required": ["light", "dark", "role"],
+      "properties": {
+        "light": { "$ref": "#/$defs/modeValue" },
+        "dark": { "$ref": "#/$defs/modeValue" },
+        "role": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": false
+    },
+    "modeValue": {
+      "oneOf": [
+        { "$ref": "#/$defs/oklchChannel" },
+        { "$ref": "#/$defs/hexAlphaColor" },
+        { "$ref": "#/$defs/opacityValue" }
+      ]
+    },
+    "modeColor": {
+      "type": "object",
+      "required": ["light", "dark", "role"],
+      "properties": {
+        "light": {
+          "oneOf": [
+            { "$ref": "#/$defs/oklchChannel" },
+            { "$ref": "#/$defs/hexAlphaColor" }
+          ]
+        },
+        "dark": {
+          "oneOf": [
+            { "$ref": "#/$defs/oklchChannel" },
+            { "$ref": "#/$defs/hexAlphaColor" }
+          ]
+        },
+        "role": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": false
     },
     "semanticColor": {
       "type": "object",

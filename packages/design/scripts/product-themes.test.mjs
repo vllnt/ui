@@ -48,12 +48,19 @@ const productsCss = readText("../ui/themes/products.css");
 
 const modes = ["dark", "light"];
 const themeNames = ["maia", "paas"];
+/** Material themes (glass tokens): they enable the solid set on top of core. */
+const materialThemes = [
+  "material/Solid",
+  "transparency/Reduced",
+  "contrast/Increased",
+];
 const penpotTypes = [
   "borderRadius",
   "color",
   "fontFamilies",
   "fontSizes",
   "fontWeights",
+  "number",
   "opacity",
   "shadow",
   "sizing",
@@ -80,12 +87,13 @@ const semanticVariables = Object.values(tokens.color.semantic).map(
 );
 
 describe("penpot-tokens.json", () => {
-  it("orders one core set and a dark and light set per product theme", () => {
+  it("orders one core set, a dark and light set per product theme, then the solid material set", () => {
     const expected = [
       "vllnt/core",
       ...themeNames.flatMap((name) =>
         modes.map((mode) => `vllnt/${name}/${mode}`),
       ),
+      "vllnt/material/solid",
     ];
     assert.deepEqual(penpot.$metadata.tokenSetOrder, expected);
     assert.deepEqual(
@@ -97,9 +105,14 @@ describe("penpot-tokens.json", () => {
   it("groups a Dark and a Light theme per product, enabling core plus one set", () => {
     assert.deepEqual(
       penpot.$themes.map(({ group, name }) => `${group}/${name}`),
-      themeNames.flatMap((name) => [`${name}/Dark`, `${name}/Light`]),
+      [
+        ...themeNames.flatMap((name) => [`${name}/Dark`, `${name}/Light`]),
+        ...materialThemes,
+      ],
     );
-    for (const theme of penpot.$themes) {
+    for (const theme of penpot.$themes.filter(
+      ({ group }) => themeNames.includes(group),
+    )) {
       const enabled = Object.entries(theme.selectedTokenSets)
         .filter(([, state]) => state === "enabled")
         .map(([set]) => set);
@@ -129,9 +142,13 @@ describe("penpot-tokens.json", () => {
     for (const name of themeNames) {
       for (const mode of modes) {
         // `badge-label` is a group of references to these roles, not a role.
-        const { "badge-label": badgeLabel, ...colors } =
+        const { "badge-label": badgeLabel, ...allColors } =
           penpot[`vllnt/${name}/${mode}`].color;
         assert.ok(badgeLabel);
+        // `glass-*` are the glass material roles, covered by glass-tokens.test.mjs.
+        const colors = Object.fromEntries(
+          Object.entries(allColors).filter(([key]) => !key.startsWith("glass-")),
+        );
         assert.deepEqual(Object.keys(colors).sort(), roles);
         for (const token of Object.values(colors)) {
           assert.match(token.$value, /^#[\dA-F]{6}$/);
