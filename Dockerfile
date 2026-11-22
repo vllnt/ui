@@ -30,7 +30,14 @@ ENV NEXT_PUBLIC_RYBBIT_HOST=$NEXT_PUBLIC_RYBBIT_HOST
 ARG NEXT_PUBLIC_RYBBIT_SITE_ID=
 ENV NEXT_PUBLIC_RYBBIT_SITE_ID=$NEXT_PUBLIC_RYBBIT_SITE_ID
 
-RUN pnpm --filter @vllnt/ui-registry build
+# Coolify passes the deploy address as a build argument and copies production
+# variables into PR previews. A preview (pr-<n>-<app>.preview.vllnt.com) must not
+# count as a visit, so its build drops the Rybbit variables. An unset address
+# changes nothing.
+ARG COOLIFY_URL=
+ARG COOLIFY_FQDN=
+RUN case "$COOLIFY_URL $COOLIFY_FQDN" in *.preview.vllnt.com*) export NEXT_PUBLIC_RYBBIT_HOST= NEXT_PUBLIC_RYBBIT_SITE_ID= ;; esac \
+  && pnpm --filter @vllnt/ui-registry build
 
 # ---
 
