@@ -18,12 +18,15 @@ COPY apps ./apps
 # Install only what's needed for storybook build (workspace-aware)
 RUN pnpm install --frozen-lockfile --filter @vllnt/ui --filter @vllnt/ui... --include-workspace-root
 
-# Rybbit analytics: the host (an https origin) and the site id. Coolify passes
-# both as build arguments and the Storybook config reads them while it builds.
-# Empty = no analytics tag.
-ARG NEXT_PUBLIC_RYBBIT_HOST=
+# Rybbit analytics: the host (an https origin) and the site id. The Storybook
+# config reads them while it builds. This image is the storybook.vllnt.com
+# production build only (CI and local builds run build-storybook directly and
+# set neither), so the defaults are the production values; a Coolify build
+# argument still overrides them, and an empty one turns the tag off.
+# Checked live by .github/workflows/production-analytics.yml.
+ARG NEXT_PUBLIC_RYBBIT_HOST=https://edge.vllnt.com
 ENV NEXT_PUBLIC_RYBBIT_HOST=$NEXT_PUBLIC_RYBBIT_HOST
-ARG NEXT_PUBLIC_RYBBIT_SITE_ID=
+ARG NEXT_PUBLIC_RYBBIT_SITE_ID=54106b17cb82
 ENV NEXT_PUBLIC_RYBBIT_SITE_ID=$NEXT_PUBLIC_RYBBIT_SITE_ID
 
 # Build storybook → packages/ui/storybook-static

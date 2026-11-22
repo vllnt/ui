@@ -39,6 +39,9 @@ jobs:
       - name: Check the native health alert
         run: node --test scripts/native-health.test.mjs
 
+      - name: Check the Rybbit tag checker
+        run: node --test scripts/check-rybbit-tag.test.mjs
+
   # WEB lane (docs/agents/LANES.md): @vllnt/ui, the registry and Storybook, plus the shared
   # packages they build on.
   web:

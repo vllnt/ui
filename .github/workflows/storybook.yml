@@ -10,6 +10,7 @@ on:
       - "packages/ui/styles.css"
       - "packages/ui/themes/**"
       - ".github/workflows/storybook.yml"
+      - "scripts/check-rybbit-tag.mjs"
   push:
     branches: [main]
     paths:
@@ -19,6 +20,7 @@ on:
       - "packages/ui/styles.css"
       - "packages/ui/themes/**"
       - ".github/workflows/storybook.yml"
+      - "scripts/check-rybbit-tag.mjs"
 
 permissions:
   contents: read
@@ -85,6 +87,11 @@ jobs:
           fi
           # grep exits 1 when nothing matches; anything else is a real error.
           test "$status" -eq 1
+
+      # Rybbit loads in the production image only (apps/storybook/Dockerfile);
+      # a CI or preview build must carry no tag, or tests would count as visits.
+      - name: Guard against Rybbit in a non-production build
+        run: node scripts/check-rybbit-tag.mjs packages/ui/storybook-static/index.html --none
 
       - name: Upload Storybook artifact
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
