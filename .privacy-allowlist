@@ -1,0 +1,43 @@
+# Regexes matched against "path:line:token" of each denylist hit. Keep entries narrow
+# and anchor them: a token is allowed only if the whole token matches.
+
+# Addresses on reserved or noreply domains, and the SSH remote user
+:[0-9]+:[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+\.(test|invalid|example)$
+:[0-9]+:[A-Za-z0-9._%+-]+@example\.(com|org|net)$
+:[0-9]+:[A-Za-z0-9._%+-]+@users\.noreply\.github\.com$
+:[0-9]+:noreply@github\.com$
+:[0-9]+:git@github\.com$
+
+# CI runner home directories
+:[0-9]+:.?/home/(runner|user)$
+
+# vllnt/ui fixtures and design data. Each entry names the file and the token.
+
+# Sample addresses in component demos, stories and tests
+^(apps/registry/components/component-preview/component-preview\.tsx|packages/ui/src/components/molecules/(form/form\.test|form/form\.visual\.fixture|newsletter-signup/newsletter-signup\.stories)\.tsx):[0-9]+:(name|you)@company\.com$
+^apps/registry/components/component-preview/component-preview\.tsx:[0-9]+:ada@vllnt\.com$
+
+# Fictional 555 phone number in the phone input demo and tests
+:[0-9]+:555 000 1234$
+
+# MRR label in a stat card test
+^packages/ui/src/components/molecules/stat-card/stat-card\.test\.tsx:[0-9]+:MRR" value="\$42$
+
+# npm author address in the lockfile
+^pnpm-lock\.yaml:[0-9]+:i@izs\.me$
+
+# Package specifier that reads as an address in a release guard test
+^scripts/release-guard\.test\.mjs:[0-9]+:ui-core@0\.1\.0-canary\.1\.shaaaaaaaaaaaa$
+
+# Fake home directory in a test fixture
+^apps/native-catalog/scripts/verify-published\.test\.mjs:[0-9]+:.?/home/x$
+
+# Penpot design ids (team, project, file and shape ids), not account or device ids
+^design/penpot/(STATUS\.md|snapshots/[0-9-]+/[a-z]+\.json):[0-9]+:[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
+^(ROADMAP\.md|packages/design/sources/README\.md|scripts/penpot_snapshot\.py):[0-9]+:[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
+
+# Penpot root shape id is all zeros; the snapshot script matches its last group too
+^scripts/penpot_snapshot\.py:[0-9]+:0{12}$
+
+# Visual baselines are binary images and can hold digit-currency byte runs by chance
+^packages/ui/\.snapshots/[^:]+\.png:[0-9]+:

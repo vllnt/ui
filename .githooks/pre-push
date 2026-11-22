@@ -1,0 +1,46 @@
+#!/usr/bin/env sh
+# Optional pre-push hook: run the commit-metadata email check on the range
+# about to be pushed. Recommended, not a substitute for the required
+# Privacy Guard CI check.
+#
+# Enabled by `git config core.hooksPath .githooks`, which the root package.json
+# "prepare" script runs on `pnpm install`. Skip once with: git push --no-verify
+
+set -u
+
+root="$(git rev-parse --show-toplevel)" || exit 1
+checker="$root/scripts/check-commit-emails.sh"
+if [ ! -x "$checker" ] && [ ! -f "$checker" ]; then
+  echo "pre-push: scripts/check-commit-emails.sh is missing; skip" >&2
+  exit 0
+fi
+
+# stdin: <local-ref> <local-sha> <remote-ref> <remote-sha>  (one line per ref)
+fail=0
+while read -r local_ref local_sha remote_ref remote_sha; do
+  [ -n "${local_sha:-}" ] || continue
+  # Deletion: nothing to check.
+  if [ "$local_sha" = "0000000000000000000000000000000000000000" ]; then
+    continue
+  fi
+  if [ "${remote_sha:-}" = "0000000000000000000000000000000000000000" ] || [ -z "${remote_sha:-}" ]; then
+    # New remote branch: check what it adds over origin/main, not the whole history.
+    if git rev-parse --verify -q origin/main > /dev/null; then
+      range="origin/main..${local_sha}"
+    else
+      range="$local_sha"
+    fi
+  else
+    range="${remote_sha}..${local_sha}"
+  fi
+  if ! PRIVACY_COMMIT_RANGE="$range" bash "$checker"; then
+    fail=1
+  fi
+done
+
+if [ "$fail" -ne 0 ]; then
+  echo "pre-push: commit metadata check failed; values withheld." >&2
+  echo "Use a GitHub noreply author, and do not put personal emails in trailers." >&2
+  exit 1
+fi
+exit 0

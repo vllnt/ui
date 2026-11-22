@@ -102,6 +102,12 @@ External shared configs (separate npm packages): `@vllnt/eslint-config`, `@vllnt
 
 ---
 
+## Privacy Guard
+
+Required PR check (job `Privacy Guard`, [`.github/workflows/privacy-guard.yml`](./.github/workflows/privacy-guard.yml)). Commit author, committer and trailer emails must be GitHub noreply addresses, and no personal address or private hostname may enter a commit or the tracked tree. Check locally with `PRIVACY_COMMIT_RANGE=origin/main..HEAD bash scripts/check-commit-emails.sh` and `bash scripts/privacy-denylist.sh`; [`.githooks/pre-push`](./.githooks/pre-push) runs the email check on push. Details: [CONTRIBUTING.md](./CONTRIBUTING.md#privacy-guard).
+
+---
+
 ## React health (react-doctor)
 
 [react-doctor](https://github.com/millionco/react-doctor) scans React-specific
