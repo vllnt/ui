@@ -245,6 +245,7 @@ The app uses Next.js standalone output mode. Deploy to any platform supporting N
 - **MDX**: Enabled via `@next/mdx` for component documentation
 - **Transpilation**: `@vllnt/ui` package is transpiled automatically
 - **CSS Chunking**: Strict mode enabled for optimal performance
+- **Analytics**: `NEXT_PUBLIC_RYBBIT_HOST` (an https origin) and `NEXT_PUBLIC_RYBBIT_SITE_ID` are read at build time, here and by the Storybook build; with both set, the pages carry one Rybbit `<script defer>`, and either one empty or unset means no script (previews, local builds)
 
 ## Related Packages
 

@@ -4,6 +4,8 @@ import { fileURLToPath } from 'node:url'
 import { defineMain } from '@storybook/react-vite/node'
 import remarkGfm from 'remark-gfm'
 
+import { rybbitManagerHead } from './rybbit'
+
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
 export default defineMain({
@@ -29,6 +31,13 @@ export default defineMain({
     '@chromatic-com/storybook',
     '@github-ui/storybook-addon-performance-panel',
   ],
+
+  /**
+   * Rybbit analytics, in the manager page only: its URL changes on every story
+   * (one pageview each) and the preview iframe would count the same visit twice.
+   * The host and site id are read at build time; a build without both ships no tag.
+   */
+  managerHead: rybbitManagerHead,
 
   viteFinal(config) {
     return {

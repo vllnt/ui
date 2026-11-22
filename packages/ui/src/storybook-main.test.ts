@@ -1,11 +1,21 @@
 import main from "../.storybook/main";
+import { rybbitManagerHead } from "../.storybook/rybbit";
+
+afterEach(() => {
+  vi.unstubAllEnvs();
+});
 
 describe("Storybook main config", () => {
-  // The Cloudflare zone injects the Web Analytics beacon. A tag from this
-  // config posts to the wrong endpoint and fails. A manager head is where
-  // the old tag lived, so adding one must change this test on purpose. The
-  // built-HTML grep in storybook.yml checks what ships.
-  it("sets no manager head, so no analytics tag rides in it", () => {
-    expect(main.managerHead).toBeUndefined();
+  it("builds the manager head with the Rybbit head, so the tag rides in the manager page only", () => {
+    expect(main.managerHead).toBe(rybbitManagerHead);
+  });
+
+  it("never adds a Cloudflare beacon to the head, whatever the Rybbit variables say", () => {
+    vi.stubEnv("NEXT_PUBLIC_RYBBIT_HOST", "https://analytics.example.test");
+    vi.stubEnv("NEXT_PUBLIC_RYBBIT_SITE_ID", "test-site-id");
+
+    expect(rybbitManagerHead("")).not.toMatch(
+      /cloudflareinsights|data-cf-beacon/,
+    );
   });
 });

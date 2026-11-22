@@ -22,6 +22,14 @@ ENV NEXT_PUBLIC_STORYBOOK_URL=$NEXT_PUBLIC_STORYBOOK_URL
 ARG SOURCE_COMMIT=
 ENV SOURCE_COMMIT=$SOURCE_COMMIT
 
+# Rybbit analytics: the host (an https origin) and the site id. Coolify passes
+# both as build arguments and Next inlines them into the pages while it builds.
+# Empty = no analytics script. The runtime stage never sees them.
+ARG NEXT_PUBLIC_RYBBIT_HOST=
+ENV NEXT_PUBLIC_RYBBIT_HOST=$NEXT_PUBLIC_RYBBIT_HOST
+ARG NEXT_PUBLIC_RYBBIT_SITE_ID=
+ENV NEXT_PUBLIC_RYBBIT_SITE_ID=$NEXT_PUBLIC_RYBBIT_SITE_ID
+
 RUN pnpm --filter @vllnt/ui-registry build
 
 # ---
