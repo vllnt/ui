@@ -7,7 +7,7 @@ const TAG = `<script defer data-site-id="${SITE_ID}" src="${HOST}/api/script.js"
 
 /** The number of script tags in a piece of markup. */
 function scriptCount(html: string): number {
-  return html.match(/<script\b/g)?.length ?? 0;
+  return html.match(/<script\b/gi)?.length ?? 0;
 }
 
 afterEach(() => {
@@ -60,7 +60,7 @@ describe("Storybook Rybbit tag", () => {
 
     expect(tag).toContain(attribute);
     expect(scriptCount(tag)).toBe(1);
-    expect(tag.match(/<\/script>/g)).toHaveLength(1);
+    expect(tag.match(/<\/script\s*>/gi)).toHaveLength(1);
   });
 });
 

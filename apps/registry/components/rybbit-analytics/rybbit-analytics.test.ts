@@ -30,7 +30,7 @@ function render(host: string | undefined, siteId: string | undefined): string {
 }
 
 function scriptTags(html: string): string[] {
-  return [...html.matchAll(/<script\b[^>]*>/g)].map((match) => match[0]);
+  return [...html.matchAll(/<script\b[^>]*>/gi)].map((match) => match[0]);
 }
 
 /** The value of one attribute of a tag, with the HTML escapes undone. */
@@ -87,7 +87,7 @@ describe("RybbitAnalytics with both variables set", () => {
     const tags = scriptTags(html);
 
     expect(tags).toHaveLength(1);
-    expect(html.match(/<script\b/g)).toHaveLength(1);
+    expect(html.match(/<script\b/gi)).toHaveLength(1);
     expect(attribute(tags[0] ?? "", "src")).toBe(SCRIPT_SRC);
     expect(attribute(tags[0] ?? "", "data-site-id")).toBe(SITE_ID);
     expect(tags[0]).toMatch(/\sdefer(=""|\s|>)/);
@@ -101,14 +101,14 @@ describe("RybbitAnalytics with both variables set", () => {
   });
 
   it("is a script tag with no body, as the server HTML holds it", () => {
-    expect(render(HOST, SITE_ID)).toMatch(/^<script\b.*><\/script>$/);
+    expect(render(HOST, SITE_ID)).toMatch(/^<script\b.*><\/script\s*>$/i);
   });
 
   it.each([
     ["a trailing slash", `${HOST}/`],
     ["a path", `${HOST}/proxy/analytics`],
     ["a query and a fragment", `${HOST}/?x=1#y`],
-    ["credentials", "https://user:pass@analytics.example.test/"],
+    ["credentials", `https://user:pass@${new URL(HOST).host}/`],
     ["surrounding blanks", `  ${HOST}\n`],
   ])("keeps only the origin of a host with %s", (_, host) => {
     const tag = scriptTags(render(host, SITE_ID))[0] ?? "";
@@ -132,7 +132,7 @@ describe("RybbitAnalytics with both variables set", () => {
     const tag = scriptTags(html)[0] ?? "";
 
     expect(scriptTags(html)).toHaveLength(1);
-    expect(html.match(/<script\b/g)).toHaveLength(1);
+    expect(html.match(/<script\b/gi)).toHaveLength(1);
     expect(attribute(tag, "data-site-id")).toBe(siteId);
     expect(attributeNames(tag).toSorted()).toEqual(TAG_ATTRIBUTES);
   });
