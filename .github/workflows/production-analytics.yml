@@ -1,0 +1,46 @@
+name: Production Analytics
+
+# Checks the live production HTML of each public site: exactly one Rybbit tag
+# (https://edge.vllnt.com/api/script.js, defer) with that site's id, and no
+# site-side Cloudflare beacon. Site ids are public. Builds without the Rybbit
+# variables (CI, previews, local) are checked for no tag by storybook.yml and
+# the registry e2e, so this runs against production only: daily and by hand
+# after a deploy. One request per site; the edge bans bursts.
+
+on:
+  schedule:
+    - cron: "17 6 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    name: Rybbit tag on ${{ matrix.site.name }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    strategy:
+      fail-fast: false
+      matrix:
+        site:
+          - name: ui.vllnt.com
+            url: https://ui.vllnt.com/
+            id: cd7d5e0b544a
+          - name: storybook.vllnt.com
+            url: https://storybook.vllnt.com/
+            id: 54106b17cb82
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .node-version
+
+      - name: Check the live page
+        env:
+          URL: ${{ matrix.site.url }}
+          SITE_ID: ${{ matrix.site.id }}
+        run: node scripts/check-rybbit-tag.mjs "$URL" --site-id "$SITE_ID"

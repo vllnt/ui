@@ -274,6 +274,26 @@ test.describe("analytics beacon", () => {
     expect(html).not.toContain("static.cloudflareinsights.com");
     expect(html).not.toContain("data-cf-beacon");
   });
+
+  // Rybbit loads only when the build has NEXT_PUBLIC_RYBBIT_HOST and
+  // NEXT_PUBLIC_RYBBIT_SITE_ID, which production sets and the e2e build does
+  // not, so tests never count as visits. Production is checked live by
+  // .github/workflows/production-analytics.yml.
+  test("a build without the Rybbit variables renders no Rybbit tag", async ({
+    request,
+  }) => {
+    const response = await request.get("/docs", {
+      headers: { accept: BROWSER_ACCEPT },
+    });
+    test.skip(
+      Boolean(response.headers()["cf-ray"]),
+      "Production renders the tag; production-analytics.yml checks it.",
+    );
+    const html = await response.text();
+
+    expect(html).not.toContain("/api/script.js");
+    expect(html).not.toContain("data-site-id");
+  });
 });
 
 test.describe("keyboard", () => {
