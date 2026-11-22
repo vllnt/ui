@@ -14,6 +14,7 @@ import type React from "react";
 
 import { ForwardedQueryProvider } from "@/components/forwarded-query";
 import { Header } from "@/components/header";
+import { RybbitAnalytics } from "@/components/rybbit-analytics";
 import { routing } from "@/i18n/routing";
 import { chunkRecoveryScript } from "@/lib/chunk-reload";
 import {
@@ -182,6 +183,8 @@ export default async function LocaleLayout({ children, params }: Props) {
             <SpeedInsights />
           </>
         ) : null}
+        {/* The Rybbit script: a production build sets both variables, any other build renders nothing. */}
+        <RybbitAnalytics />
       </body>
     </html>
   );

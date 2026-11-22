@@ -4,13 +4,16 @@ import "@vllnt/ui/themes/default.css";
 import type { Metadata } from "next";
 import Link from "next/link";
 
+import { RybbitAnalytics } from "@/components/rybbit-analytics";
+
 import "./globals.css";
 
 /**
  * The 404 for URLs outside any known route, and for unknown slugs on routes
  * with `dynamicParams = false`: Next answers those from the root, before the
- * locale layout runs, so this page brings its own document. Inside a locale,
- * `[locale]/not-found.tsx` answers instead.
+ * locale layout runs, so this page brings its own document, and its own
+ * Rybbit script (a dead inbound link counts as a visit). Inside a locale,
+ * `[locale]/not-found.tsx` answers instead, under the locale layout.
  */
 export const metadata: Metadata = {
   description: "We couldn't find the page you were looking for.",
@@ -57,6 +60,7 @@ export default function RootNotFound() {
             ))}
           </ul>
         </main>
+        <RybbitAnalytics />
       </body>
     </html>
   );

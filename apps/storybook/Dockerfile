@@ -18,6 +18,14 @@ COPY apps ./apps
 # Install only what's needed for storybook build (workspace-aware)
 RUN pnpm install --frozen-lockfile --filter @vllnt/ui --filter @vllnt/ui... --include-workspace-root
 
+# Rybbit analytics: the host (an https origin) and the site id. Coolify passes
+# both as build arguments and the Storybook config reads them while it builds.
+# Empty = no analytics tag.
+ARG NEXT_PUBLIC_RYBBIT_HOST=
+ENV NEXT_PUBLIC_RYBBIT_HOST=$NEXT_PUBLIC_RYBBIT_HOST
+ARG NEXT_PUBLIC_RYBBIT_SITE_ID=
+ENV NEXT_PUBLIC_RYBBIT_SITE_ID=$NEXT_PUBLIC_RYBBIT_SITE_ID
+
 # Build storybook → packages/ui/storybook-static
 RUN pnpm --filter @vllnt/ui build-storybook
 
