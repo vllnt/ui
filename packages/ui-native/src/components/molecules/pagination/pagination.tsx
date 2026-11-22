@@ -158,6 +158,7 @@ function Pagination({
           safeCurrent <= 1,
           false,
         )}
+        {/* react-doctor-disable-next-line react-doctor/rn-no-scrollview-mapped-list -- horizontal row capped by maxVisiblePages (default 5, at most 100); every control must stay mounted for screen readers */}
         {pages.map((page) =>
           action(page, String(page), false, page === safeCurrent),
         )}

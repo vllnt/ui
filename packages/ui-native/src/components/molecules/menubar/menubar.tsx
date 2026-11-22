@@ -138,6 +138,7 @@ function Menubar({
       ]}
     >
       <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+        {/* react-doctor-disable-next-line react-doctor/rn-no-scrollview-mapped-list -- horizontal bar of a handful of top-level menus; every menu button must stay mounted for screen readers */}
         {menus.map((menu) => {
           const expanded = isSingleSelected(
             activeId,

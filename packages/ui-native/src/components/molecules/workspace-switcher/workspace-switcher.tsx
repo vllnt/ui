@@ -78,6 +78,7 @@ function WorkspaceSwitcher({
         horizontal
         showsHorizontalScrollIndicator={false}
       >
+        {/* react-doctor-disable-next-line react-doctor/rn-no-scrollview-mapped-list -- horizontal radiogroup of a handful of workspaces; every radio must stay mounted for screen readers */}
         {workspaces.map((workspace) => {
           const active = isSingleSelected(
             selectedValue,

@@ -74,11 +74,10 @@ function TestimonialCard({
   readonly testimonial: AnimatedTestimonial;
 }) {
   const theme = useTheme();
-  const [animateOnMount, setAnimateOnMount] = useState(animate);
+  const animateOnMount = useRef(animate);
   const [progress, setProgress] = useState(
     () => new Animated.Value(animate && !reduceMotion ? 0 : 1),
   );
-  void setAnimateOnMount;
   void setProgress;
   const animationConsumed = useRef(false);
 
@@ -89,7 +88,7 @@ function TestimonialCard({
       progress.setValue(1);
       return;
     }
-    if (!animateOnMount || animationConsumed.current) return;
+    if (!animateOnMount.current || animationConsumed.current) return;
 
     animationConsumed.current = true;
     const animation = Animated.timing(progress, {
@@ -102,7 +101,7 @@ function TestimonialCard({
       animation.stop();
       progress.setValue(1);
     };
-  }, [animateOnMount, progress, reduceMotion]);
+  }, [progress, reduceMotion]);
   return (
     <Animated.View
       style={{

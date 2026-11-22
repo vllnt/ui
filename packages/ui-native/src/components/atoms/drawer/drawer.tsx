@@ -17,6 +17,7 @@ import {
   type LayoutChangeEvent,
   PanResponder,
   type PanResponderGestureState,
+  type StyleProp,
   StyleSheet,
   Text,
   useWindowDimensions,
@@ -202,6 +203,209 @@ function axisOf(gesture: PanResponderGestureState, vertical: boolean) {
     : { cross: gesture.dy, distance: gesture.dx, speed: gesture.vx };
 }
 
+function useDrawerResponder(gesture: GestureState, travel: Animated.Value) {
+  const latest = useRef<GestureState>(undefined);
+  useLayoutEffect(() => {
+    latest.current = gesture;
+  });
+
+  return useMemo(() => {
+    const deltaOf = (movement: PanResponderGestureState) => {
+      const state = latest.current;
+      if (!state) return 0;
+      const { distance } = axisOf(movement, state.vertical);
+      return clampDelta(state.sign * distance, {
+        activeIndex: state.activeIndex,
+        dismissible: state.dismissible,
+        sizes: state.sizes,
+      });
+    };
+    return PanResponder.create({
+      onMoveShouldSetPanResponder: (_event, movement) => {
+        const state = latest.current;
+        if (!state?.enabled) return false;
+        const { cross, distance } = axisOf(movement, state.vertical);
+        return (
+          Math.abs(distance) > DRAG_SLOP && Math.abs(distance) > Math.abs(cross)
+        );
+      },
+      onPanResponderGrant: () => {
+        travel.stopAnimation();
+      },
+      onPanResponderMove: (event, movement) => {
+        const state = latest.current;
+        if (!state) return;
+        const delta = deltaOf(movement);
+        travel.setValue(
+          state.sign * (state.restFor(state.activeIndex) + delta),
+        );
+        const size = state.sizes[state.activeIndex] ?? 1;
+        state.onDrag?.(event, Math.min(Math.max(delta / size, 0), 1));
+      },
+      onPanResponderRelease: (event, movement) => {
+        const state = latest.current;
+        if (!state) return;
+        state.settle(
+          resolveRelease({
+            activeIndex: state.activeIndex,
+            closeThreshold: state.closeThreshold,
+            delta: deltaOf(movement),
+            dismissible: state.dismissible,
+            sequential: state.sequential,
+            sizes: state.sizes,
+            velocity: state.sign * axisOf(movement, state.vertical).speed,
+          }),
+          event,
+        );
+      },
+      onPanResponderTerminate: (event) => {
+        const state = latest.current;
+        if (!state) return;
+        state.settle({ close: false, index: state.activeIndex }, event);
+      },
+    }).panHandlers;
+  }, [travel]);
+}
+
+function useDrawerGeometry({
+  activeSnap,
+  direction,
+  measured,
+  snapPoints,
+}: {
+  readonly activeSnap: null | SnapPoint;
+  readonly direction: DrawerDirection;
+  readonly measured: number;
+  readonly snapPoints: DrawerProps["snapPoints"];
+}) {
+  const windowSize = useWindowDimensions();
+  const vertical = direction === "top" || direction === "bottom";
+  const sign = direction === "bottom" || direction === "right" ? 1 : -1;
+  const axis = vertical ? windowSize.height : windowSize.width;
+  const snaps = resolveSnapPoints(snapPoints ?? [], axis);
+  const hasSnaps = snaps.length > 0;
+  const sizes = hasSnaps ? snaps.map((snap) => snap.size) : [measured];
+  const largest = sizes.at(-1) ?? 0;
+  const found = snaps.findIndex((snap) => snap.point === activeSnap);
+  const activeIndex = Math.max(found, 0);
+  const restFor = (index: number) => largest - (sizes[index] ?? 0);
+  return {
+    activeIndex,
+    hasSnaps,
+    largest,
+    rest: restFor(activeIndex),
+    restFor,
+    shownPercent: Math.round(
+      ((sizes[activeIndex] ?? 0) / Math.max(axis, 1)) * 100,
+    ),
+    sign,
+    sizes,
+    snaps,
+    vertical,
+  };
+}
+
+function DrawerHandle({
+  activeIndex,
+  barStyle,
+  label,
+  onSnap,
+  percent,
+  snapCount,
+}: {
+  readonly activeIndex: number;
+  readonly barStyle: StyleProp<ViewStyle>;
+  readonly label: string;
+  readonly onSnap: (index: number) => void;
+  readonly percent: number;
+  readonly snapCount: number;
+}) {
+  if (snapCount <= 1) return <View {...decorativeProps} style={barStyle} />;
+  const step = (offset: -1 | 1) => {
+    onSnap(Math.min(Math.max(activeIndex + offset, 0), snapCount - 1));
+  };
+  return (
+    <InteractivePressable
+      accessibilityActions={[{ name: "increment" }, { name: "decrement" }]}
+      accessibilityLabel={label}
+      accessibilityRole="adjustable"
+      accessibilityValue={{
+        max: snapCount - 1,
+        min: 0,
+        now: activeIndex,
+        text: `${percent}%`,
+      }}
+      onAccessibilityAction={(event) => {
+        if (event.nativeEvent.actionName === "increment") step(1);
+        if (event.nativeEvent.actionName === "decrement") step(-1);
+      }}
+      onPress={() => {
+        onSnap((activeIndex + 1) % snapCount);
+      }}
+      style={styles.handleSlot}
+    >
+      <View {...decorativeProps} style={barStyle} />
+    </InteractivePressable>
+  );
+}
+DrawerHandle.displayName = "DrawerHandle";
+
+function DrawerBody({
+  children,
+  closeLabel,
+  description,
+  onClose,
+  title,
+  titleRef,
+}: {
+  readonly children: ReactNode;
+  readonly closeLabel: string;
+  readonly description: string | undefined;
+  readonly onClose: () => void;
+  readonly title: string;
+  readonly titleRef: Ref<Text>;
+}) {
+  const theme = useTheme();
+  return (
+    <View style={[styles.body, { gap: theme.spacing[4] }]}>
+      <Text
+        accessibilityRole="header"
+        ref={titleRef}
+        style={typeStyle(theme, "bodyLarge", {
+          color: "foreground",
+          fontWeight: theme.typography.fontWeight.heading,
+        })}
+      >
+        {title}
+      </Text>
+      {description ? (
+        <Text style={typeStyle(theme, "bodySmall", "mutedForeground")}>
+          {description}
+        </Text>
+      ) : null}
+      {children}
+      <InteractivePressable
+        accessibilityLabel={closeLabel}
+        accessibilityRole="button"
+        filled
+        onPress={onClose}
+        style={[
+          styles.close,
+          {
+            backgroundColor: theme.colors.secondary,
+            borderRadius: theme.radius.md,
+          },
+        ]}
+      >
+        <Text style={{ color: theme.colors.secondaryForeground }}>
+          {closeLabel}
+        </Text>
+      </InteractivePressable>
+    </View>
+  );
+}
+DrawerBody.displayName = "DrawerBody";
+
 /**
  * Edge modal presentation with web drawer behaviour: snap points, drag to
  * snap or dismiss, direction and `dismissible`. Native dismissal maps back to
@@ -237,7 +441,6 @@ function Drawer({
 }: DrawerProps) {
   const theme = useTheme();
   const reduceMotion = useReducedMotion();
-  const windowSize = useWindowDimensions();
   const [visible, setVisible] = useControllableState(
     controllableOptions(open, defaultOpen, onOpenChange),
   );
@@ -253,20 +456,18 @@ function Drawer({
   const travel = useMemo(() => new Animated.Value(0), []);
   const titleRef = useFocusWhenShown<Text>(visible && autoFocus);
 
-  const vertical = direction === "top" || direction === "bottom";
-  const sign = direction === "bottom" || direction === "right" ? 1 : -1;
-  const axis = vertical ? windowSize.height : windowSize.width;
-  const snaps = resolveSnapPoints(snapPoints ?? [], axis);
-  const hasSnaps = snaps.length > 0;
-  const sizes = hasSnaps ? snaps.map((snap) => snap.size) : [measured];
-  const largest = sizes.at(-1) ?? 0;
-  const found = snaps.findIndex((snap) => snap.point === activeSnap);
-  const activeIndex = Math.max(found, 0);
-  const restFor = (index: number) => largest - (sizes[index] ?? 0);
-  const rest = restFor(activeIndex);
-  const shownPercent = Math.round(
-    ((sizes[activeIndex] ?? 0) / Math.max(axis, 1)) * 100,
-  );
+  const {
+    activeIndex,
+    hasSnaps,
+    largest,
+    rest,
+    restFor,
+    shownPercent,
+    sign,
+    sizes,
+    snaps,
+    vertical,
+  } = useDrawerGeometry({ activeSnap, direction, measured, snapPoints });
 
   const moveTo = useCallback(
     (target: number, done?: () => void) => {
@@ -315,13 +516,12 @@ function Drawer({
     setReleased((count) => count + 1);
   };
 
-  const latest = useRef<GestureState>(undefined);
-  useLayoutEffect(() => {
-    latest.current = {
+  const panHandlers = useDrawerResponder(
+    {
       activeIndex,
       closeThreshold,
       dismissible,
-      enabled: hasSnaps ? snaps.length > 1 || dismissible : dismissible,
+      enabled: snaps.length > 1 || dismissible,
       onDrag,
       onRelease,
       restFor,
@@ -330,72 +530,13 @@ function Drawer({
       sign,
       sizes,
       vertical,
-    };
-  });
-
-  const responder = useMemo(() => {
-    const deltaOf = (gesture: PanResponderGestureState) => {
-      const state = latest.current;
-      if (!state) return 0;
-      const { distance } = axisOf(gesture, state.vertical);
-      return clampDelta(state.sign * distance, {
-        activeIndex: state.activeIndex,
-        dismissible: state.dismissible,
-        sizes: state.sizes,
-      });
-    };
-    return PanResponder.create({
-      onMoveShouldSetPanResponder: (_event, gesture) => {
-        const state = latest.current;
-        if (!state?.enabled) return false;
-        const { cross, distance } = axisOf(gesture, state.vertical);
-        return (
-          Math.abs(distance) > DRAG_SLOP && Math.abs(distance) > Math.abs(cross)
-        );
-      },
-      onPanResponderGrant: () => {
-        travel.stopAnimation();
-      },
-      onPanResponderMove: (event, gesture) => {
-        const state = latest.current;
-        if (!state) return;
-        const delta = deltaOf(gesture);
-        travel.setValue(
-          state.sign * (state.restFor(state.activeIndex) + delta),
-        );
-        const size = state.sizes[state.activeIndex] ?? 1;
-        state.onDrag?.(event, Math.min(Math.max(delta / size, 0), 1));
-      },
-      onPanResponderRelease: (event, gesture) => {
-        const state = latest.current;
-        if (!state) return;
-        state.settle(
-          resolveRelease({
-            activeIndex: state.activeIndex,
-            closeThreshold: state.closeThreshold,
-            delta: deltaOf(gesture),
-            dismissible: state.dismissible,
-            sequential: state.sequential,
-            sizes: state.sizes,
-            velocity: state.sign * axisOf(gesture, state.vertical).speed,
-          }),
-          event,
-        );
-      },
-      onPanResponderTerminate: (event) => {
-        const state = latest.current;
-        if (!state) return;
-        state.settle({ close: false, index: state.activeIndex }, event);
-      },
-    });
-  }, [travel]);
+    },
+    travel,
+  );
 
   const goToSnap = (index: number) => {
     const next = snaps[index];
     if (next) setActiveSnap(next.point);
-  };
-  const stepSnap = (step: -1 | 1) => {
-    goToSnap(Math.min(Math.max(activeIndex + step, 0), snaps.length - 1));
   };
 
   const layout = layoutFor(
@@ -407,7 +548,6 @@ function Drawer({
     vertical ? styles.verticalBar : styles.horizontalBar,
     { backgroundColor: theme.colors.muted, borderRadius: theme.radius.full },
   ];
-  const panHandlers = responder.panHandlers;
 
   return (
     <ModalLayer
@@ -448,72 +588,26 @@ function Drawer({
           accessible={false}
           style={styles.handleSlot}
         >
-          {snaps.length > 1 ? (
-            <InteractivePressable
-              accessibilityActions={[
-                { name: "increment" },
-                { name: "decrement" },
-              ]}
-              accessibilityLabel={handleLabel ?? title}
-              accessibilityRole="adjustable"
-              accessibilityValue={{
-                max: snaps.length - 1,
-                min: 0,
-                now: activeIndex,
-                text: `${shownPercent}%`,
-              }}
-              onAccessibilityAction={(event) => {
-                if (event.nativeEvent.actionName === "increment") stepSnap(1);
-                if (event.nativeEvent.actionName === "decrement") stepSnap(-1);
-              }}
-              onPress={() => {
-                goToSnap((activeIndex + 1) % snaps.length);
-              }}
-              style={styles.handleSlot}
-            >
-              <View {...decorativeProps} style={barStyle} />
-            </InteractivePressable>
-          ) : (
-            <View {...decorativeProps} style={barStyle} />
-          )}
+          <DrawerHandle
+            activeIndex={activeIndex}
+            barStyle={barStyle}
+            label={handleLabel ?? title}
+            onSnap={goToSnap}
+            percent={shownPercent}
+            snapCount={snaps.length}
+          />
         </View>
-        <View style={[styles.body, { gap: theme.spacing[4] }]}>
-          <Text
-            accessibilityRole="header"
-            ref={titleRef}
-            style={typeStyle(theme, "bodyLarge", {
-              color: "foreground",
-              fontWeight: theme.typography.fontWeight.heading,
-            })}
-          >
-            {title}
-          </Text>
-          {description ? (
-            <Text style={typeStyle(theme, "bodySmall", "mutedForeground")}>
-              {description}
-            </Text>
-          ) : null}
+        <DrawerBody
+          closeLabel={closeLabel}
+          description={description}
+          onClose={() => {
+            closeFromUser("requestClose");
+          }}
+          title={title}
+          titleRef={titleRef}
+        >
           {children}
-          <InteractivePressable
-            accessibilityLabel={closeLabel}
-            accessibilityRole="button"
-            filled
-            onPress={() => {
-              closeFromUser("requestClose");
-            }}
-            style={[
-              styles.close,
-              {
-                backgroundColor: theme.colors.secondary,
-                borderRadius: theme.radius.md,
-              },
-            ]}
-          >
-            <Text style={{ color: theme.colors.secondaryForeground }}>
-              {closeLabel}
-            </Text>
-          </InteractivePressable>
-        </View>
+        </DrawerBody>
       </Animated.View>
     </ModalLayer>
   );

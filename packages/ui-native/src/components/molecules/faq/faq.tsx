@@ -113,6 +113,7 @@ function FAQ({
   const [open, setOpen] = useControllableState(
     controllableOptions(openIds, defaultOpenIds, onOpenIdsChange),
   );
+  const openIdSet = new Set(open);
   return (
     <View
       {...props}
@@ -156,7 +157,7 @@ function FAQ({
                 : open.filter((id) => id !== item.id);
               setOpen(ids);
             }}
-            open={open.includes(item.id)}
+            open={openIdSet.has(item.id)}
             reducedMotionService={reducedMotionService}
           />
         ))}

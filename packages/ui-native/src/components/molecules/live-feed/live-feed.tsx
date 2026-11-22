@@ -263,6 +263,7 @@ function LiveFeed({
         </Text>
       ) : (
         <ScrollView accessibilityRole="list">
+          {/* react-doctor-disable-next-line react-doctor/rn-no-scrollview-mapped-list -- capped at maxItems (default 50) inside the host's scroll view, where a vertical FlatList logs RN's nested VirtualizedList error */}
           {visibleEvents.map((event) => (
             <LiveFeedRow event={event} key={event.id} now={liveNow} />
           ))}

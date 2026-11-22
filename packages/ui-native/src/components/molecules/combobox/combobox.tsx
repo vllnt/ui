@@ -1,9 +1,10 @@
 "use client";
 
-import { type Ref, useMemo, useState } from "react";
+import { type Ref, useCallback, useMemo, useState } from "react";
 
 import {
-  ScrollView,
+  FlatList,
+  type ListRenderItemInfo,
   StyleSheet,
   Text as NativeText,
   View,
@@ -17,6 +18,7 @@ import {
 import { useGroupDisabled } from "../../../primitives/control-group";
 import { InteractivePressable } from "../../../primitives/interactive-pressable";
 import { ModalLayer } from "../../../primitives/modal-layer";
+import { screenReaderListProps } from "../../../primitives/screen-reader-list";
 import { typeStyle } from "../../../primitives/type-style";
 import type { ControllableStateOptions } from "../../../primitives/use-controllable-state";
 import { useControllableState } from "../../../primitives/use-controllable-state";
@@ -71,6 +73,52 @@ const styles = StyleSheet.create({
   },
 });
 
+type ComboboxOptionRowProps = {
+  readonly disabled: boolean | undefined;
+  readonly onSelect: (id: string) => void;
+  readonly option: ComboboxOption;
+  readonly selected: boolean;
+};
+
+function ComboboxOptionRow({
+  disabled,
+  onSelect,
+  option,
+  selected,
+}: ComboboxOptionRowProps) {
+  const theme = useTheme();
+  return (
+    <InteractivePressable
+      accessibilityLabel={option.label}
+      accessibilityRole="radio"
+      accessibilityState={{ checked: selected, disabled }}
+      disabled={disabled}
+      onPress={() => {
+        if (!disabled) onSelect(option.id);
+      }}
+      selected={selected}
+      style={[
+        styles.option,
+        {
+          backgroundColor: selected
+            ? theme.colors.accent
+            : theme.colors.background,
+          borderRadius: theme.radius.sm,
+          paddingHorizontal: theme.spacing[3],
+        },
+      ]}
+    >
+      <NativeText style={typeStyle(theme, "bodySmall", "foreground")}>
+        {option.label}
+      </NativeText>
+      {selected ? (
+        <NativeText style={{ color: theme.colors.foreground }}>✓</NativeText>
+      ) : null}
+    </InteractivePressable>
+  );
+}
+ComboboxOptionRow.displayName = "ComboboxOptionRow";
+
 /**
  * Searchable native picker presented as a keyboard-aware modal list. The open
  * list is titled by a `labels.options` header, and filtered result counts
@@ -106,11 +154,32 @@ function Combobox({
         .includes(normalizedQuery),
     );
   }, [options, query]);
-  const setModalOpen = (nextOpen: boolean) => {
-    setOpen(nextOpen);
-    if (!nextOpen) setQuery("");
-    onOpenChange?.(nextOpen);
-  };
+  const setModalOpen = useCallback(
+    (nextOpen: boolean) => {
+      setOpen(nextOpen);
+      if (!nextOpen) setQuery("");
+      onOpenChange?.(nextOpen);
+    },
+    [onOpenChange],
+  );
+  const chooseOption = useCallback(
+    (id: string) => {
+      setSelectedId(id);
+      setModalOpen(false);
+    },
+    [setModalOpen, setSelectedId],
+  );
+  const renderOption = useCallback(
+    ({ item }: ListRenderItemInfo<ComboboxOption>) => (
+      <ComboboxOptionRow
+        disabled={disabled || item.disabled}
+        onSelect={chooseOption}
+        option={item}
+        selected={item.id === selectedId}
+      />
+    ),
+    [chooseOption, disabled, selectedId],
+  );
   const noResults = visibleOptions.length === 0;
   useAnnounceOnChange(
     query.trim()
@@ -202,50 +271,12 @@ function Combobox({
             style={[styles.search, { minHeight: 44 }]}
             value={query}
           />
-          <ScrollView keyboardShouldPersistTaps="handled">
-            {visibleOptions.map((option) => {
-              const selected = option.id === selectedId;
-              return (
-                <InteractivePressable
-                  accessibilityLabel={option.label}
-                  accessibilityRole="radio"
-                  accessibilityState={{
-                    checked: selected,
-                    disabled: disabled || option.disabled,
-                  }}
-                  disabled={disabled || option.disabled}
-                  key={option.id}
-                  onPress={() => {
-                    if (disabled || option.disabled) return;
-                    setSelectedId(option.id);
-                    setModalOpen(false);
-                  }}
-                  selected={selected}
-                  style={[
-                    styles.option,
-                    {
-                      backgroundColor: selected
-                        ? theme.colors.accent
-                        : theme.colors.background,
-                      borderRadius: theme.radius.sm,
-                      paddingHorizontal: theme.spacing[3],
-                    },
-                  ]}
-                >
-                  <NativeText
-                    style={typeStyle(theme, "bodySmall", "foreground")}
-                  >
-                    {option.label}
-                  </NativeText>
-                  {selected ? (
-                    <NativeText style={{ color: theme.colors.foreground }}>
-                      ✓
-                    </NativeText>
-                  ) : null}
-                </InteractivePressable>
-              );
-            })}
-            {noResults ? (
+          <FlatList
+            {...screenReaderListProps(visibleOptions.length)}
+            data={visibleOptions}
+            keyboardShouldPersistTaps="handled"
+            keyExtractor={(option) => option.id}
+            ListEmptyComponent={
               <NativeText
                 accessibilityLiveRegion="polite"
                 style={typeStyle(theme, "bodySmall", {
@@ -255,8 +286,9 @@ function Combobox({
               >
                 {labels.empty}
               </NativeText>
-            ) : null}
-          </ScrollView>
+            }
+            renderItem={renderOption}
+          />
           <InteractivePressable
             accessibilityLabel={labels.close}
             accessibilityRole="button"

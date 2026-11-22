@@ -26,16 +26,18 @@ for (const level of LEVELS) {
 }
 components.sort((left, right) => left.name.localeCompare(right.name));
 
-const missing = [];
-const exports = [];
-for (const { name, path } of components) {
-  try {
-    await readFile(join(packageDirectory, "src", `${path}.tsx`), "utf8");
-    exports.push(`export * from "./${path}";`);
-  } catch {
-    missing.push(name);
-  }
-}
+const hasSource = await Promise.all(
+  components.map(({ path }) =>
+    readFile(join(packageDirectory, "src", `${path}.tsx`), "utf8").then(
+      () => true,
+      () => false,
+    ),
+  ),
+);
+const missing = components.filter((_, index) => !hasSource[index]).map(({ name }) => name);
+const exports = components
+  .filter((_, index) => hasSource[index])
+  .map(({ path }) => `export * from "./${path}";`);
 
 if (missing.length > 0) {
   throw new Error(

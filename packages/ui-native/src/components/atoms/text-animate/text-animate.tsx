@@ -11,6 +11,7 @@ import {
 } from "react-native";
 
 import { decorativeProps } from "../../../primitives/accessibility";
+import { keyByOccurrence } from "../../../primitives/occurrence-keys";
 import { typeStyle } from "../../../primitives/type-style";
 import {
   type ReducedMotionService,
@@ -96,6 +97,10 @@ function TextAnimate({
   const theme = useTheme();
   const reduceMotion = useReducedMotion(reducedMotionService);
   const segments = useMemo(() => splitText(children, by), [by, children]);
+  const keyedSegments = useMemo(
+    () => keyByOccurrence(segments, (segment) => segment),
+    [segments],
+  );
   const [progress, setProgress] = useState(
     () => new Animated.Value(visible ? 1 : 0),
   );
@@ -126,11 +131,11 @@ function TextAnimate({
       ref={ref}
       style={[styles.root, style]}
     >
-      {segments.map((segment, index) => (
+      {keyedSegments.map(({ item: segment, key }, index) => (
         <Segment
           animation={animation}
           index={index}
-          key={`${segment}-${index.toString()}`}
+          key={key}
           progress={progress}
           total={segments.length}
           value={segment}

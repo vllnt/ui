@@ -80,6 +80,7 @@ function InputOTP({
   const complete = value.length === length;
   const wasComplete = useRef(complete);
   useEffect(() => {
+    // react-doctor-disable-next-line react-doctor/no-pass-data-to-parent, react-doctor/no-pass-live-state-to-parent -- the code also completes when a controlled value is set by the parent, which no input handler sees
     if (complete && !wasComplete.current) onComplete?.(value);
     wasComplete.current = complete;
   }, [complete, onComplete, value]);

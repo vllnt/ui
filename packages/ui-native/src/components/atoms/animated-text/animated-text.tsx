@@ -17,6 +17,7 @@ import {
   type TextProps,
 } from "react-native";
 
+import { keyByOccurrence } from "../../../primitives/occurrence-keys";
 import type { ReducedMotionService } from "../../../primitives/use-reduced-motion";
 import { useReducedMotion } from "../../../primitives/use-reduced-motion";
 import { useTheme } from "../../../theme/theme-provider";
@@ -51,25 +52,18 @@ export type AnimatedTextProps = Omit<TextProps, "children"> & {
 const styles = StyleSheet.create({
   segment: { opacity: 0 },
 });
-const glyphSegmenterCache: { segmenter?: Intl.Segmenter | null } = {};
 
-/** Returns a grapheme segmenter, or `null` on engines without one (Hermes). */
-function getGlyphSegmenter(): Intl.Segmenter | null {
-  if (glyphSegmenterCache.segmenter === undefined) {
-    glyphSegmenterCache.segmenter =
-      typeof Intl !== "undefined" && typeof Intl.Segmenter === "function"
-        ? new Intl.Segmenter(undefined, { granularity: "grapheme" })
-        : null;
-  }
-  return glyphSegmenterCache.segmenter;
-}
+/** Grapheme segmenter, or `null` on engines without one (Hermes). */
+const glyphSegmenter =
+  typeof Intl !== "undefined" && typeof Intl.Segmenter === "function"
+    ? new Intl.Segmenter(undefined, { granularity: "grapheme" })
+    : null;
 
 /** Splits by grapheme when `Intl.Segmenter` exists, otherwise by code point. */
 function splitGlyphs(text: string): string[] {
-  const segmenter = getGlyphSegmenter();
   // Spread the string's code point iterator; no-misused-spread forbids spreading the string itself.
-  if (segmenter === null) return [...text[Symbol.iterator]()];
-  return Array.from(segmenter.segment(text), ({ segment }) => segment);
+  if (glyphSegmenter === null) return [...text[Symbol.iterator]()];
+  return Array.from(glyphSegmenter.segment(text), ({ segment }) => segment);
 }
 
 function getSegments(text: string, splitBy: AnimatedTextSplit): string[] {
@@ -273,6 +267,7 @@ function AnimatedText({
     () => getSegments(text, resolvedSplit),
     [resolvedSplit, text],
   );
+  const keyedSegments = keyByOccurrence(segments, (segment) => segment);
   const revealRanks = useMemo(
     () => getRevealRanks(direction, segments),
     [direction, segments],
@@ -298,12 +293,12 @@ function AnimatedText({
       ref={ref}
       style={[{ color: theme.colors.foreground }, style]}
     >
-      {segments.map((segment, index) => {
+      {keyedSegments.map(({ item: segment, key }, index) => {
         const value = segmentValues[index];
         return value ? (
           <AnimatedTextSegment
             color={theme.colors.foreground}
-            key={`${segment}-${index}`}
+            key={key}
             segment={segment}
             value={value}
           />

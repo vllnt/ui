@@ -2,7 +2,8 @@
 
 import type { ReactNode, Ref } from "react";
 import {
-  ScrollView,
+  FlatList,
+  type ListRenderItemInfo,
   StyleSheet,
   Text,
   View,
@@ -16,6 +17,7 @@ import {
   type ModalLayerCloseReason,
   type ModalLayerPresentationProps,
 } from "../../../primitives/modal-layer";
+import { screenReaderListProps } from "../../../primitives/screen-reader-list";
 import { typeStyle } from "../../../primitives/type-style";
 import {
   controllableOptions,
@@ -84,6 +86,52 @@ const styles = StyleSheet.create({
     width: "92%",
   },
 });
+
+function ShortcutRow({ shortcut }: { readonly shortcut: KeyboardShortcut }) {
+  const theme = useTheme();
+  return (
+    <View
+      accessibilityLabel={`${shortcut.description}: ${shortcut.keys.join(" + ")}`}
+      accessible
+      style={[styles.row, { gap: theme.spacing[3] }]}
+    >
+      <Text
+        style={typeStyle(theme, "bodySmall", {
+          color: "mutedForeground",
+          flex: 1,
+        })}
+      >
+        {shortcut.description}
+      </Text>
+      <View
+        {...decorativeProps}
+        style={{ flexDirection: "row", gap: theme.spacing[1] }}
+      >
+        {shortcut.keys.map((key, index) => (
+          <View
+            key={`${shortcut.id}-${index}`}
+            style={[
+              styles.key,
+              {
+                backgroundColor: theme.colors.muted,
+                borderColor: theme.colors.border,
+                borderRadius: theme.radius.sm,
+                paddingHorizontal: theme.spacing[2],
+              },
+            ]}
+          >
+            <Text style={typeStyle(theme, "caption", "foreground")}>{key}</Text>
+          </View>
+        ))}
+      </View>
+    </View>
+  );
+}
+ShortcutRow.displayName = "ShortcutRow";
+
+function renderShortcut({ item }: ListRenderItemInfo<KeyboardShortcut>) {
+  return <ShortcutRow shortcut={item} />;
+}
 
 /**
  * Displays host-provided guidance for connected hardware keyboards. It does not
@@ -166,48 +214,13 @@ function KeyboardShortcutsHelp({
         <Text style={typeStyle(theme, "bodySmall", "mutedForeground")}>
           {labels.hardwareKeyboardGuidance}
         </Text>
-        <ScrollView contentContainerStyle={{ gap: theme.spacing[2] }}>
-          {shortcuts.map((shortcut) => (
-            <View
-              accessibilityLabel={`${shortcut.description}: ${shortcut.keys.join(" + ")}`}
-              accessible
-              key={shortcut.id}
-              style={[styles.row, { gap: theme.spacing[3] }]}
-            >
-              <Text
-                style={typeStyle(theme, "bodySmall", {
-                  color: "mutedForeground",
-                  flex: 1,
-                })}
-              >
-                {shortcut.description}
-              </Text>
-              <View
-                {...decorativeProps}
-                style={{ flexDirection: "row", gap: theme.spacing[1] }}
-              >
-                {shortcut.keys.map((key, index) => (
-                  <View
-                    key={`${shortcut.id}-${index}`}
-                    style={[
-                      styles.key,
-                      {
-                        backgroundColor: theme.colors.muted,
-                        borderColor: theme.colors.border,
-                        borderRadius: theme.radius.sm,
-                        paddingHorizontal: theme.spacing[2],
-                      },
-                    ]}
-                  >
-                    <Text style={typeStyle(theme, "caption", "foreground")}>
-                      {key}
-                    </Text>
-                  </View>
-                ))}
-              </View>
-            </View>
-          ))}
-        </ScrollView>
+        <FlatList
+          {...screenReaderListProps(shortcuts.length)}
+          contentContainerStyle={{ gap: theme.spacing[2] }}
+          data={shortcuts}
+          keyExtractor={(shortcut) => shortcut.id}
+          renderItem={renderShortcut}
+        />
         {footer ? <View style={{ alignItems: "center" }}>{footer}</View> : null}
       </View>
     </ModalLayer>
