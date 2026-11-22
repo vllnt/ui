@@ -18,6 +18,7 @@ import {
 import { useGroupDisabled } from "../../../primitives/control-group";
 import { InteractivePressable } from "../../../primitives/interactive-pressable";
 import { ModalLayer } from "../../../primitives/modal-layer";
+import { screenReaderListProps } from "../../../primitives/screen-reader-list";
 import { typeStyle } from "../../../primitives/type-style";
 import type { ControllableStateOptions } from "../../../primitives/use-controllable-state";
 import { useControllableState } from "../../../primitives/use-controllable-state";
@@ -271,6 +272,7 @@ function Combobox({
             value={query}
           />
           <FlatList
+            {...screenReaderListProps(visibleOptions.length)}
             data={visibleOptions}
             keyboardShouldPersistTaps="handled"
             keyExtractor={(option) => option.id}

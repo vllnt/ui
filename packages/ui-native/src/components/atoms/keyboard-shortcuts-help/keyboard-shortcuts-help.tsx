@@ -17,6 +17,7 @@ import {
   type ModalLayerCloseReason,
   type ModalLayerPresentationProps,
 } from "../../../primitives/modal-layer";
+import { screenReaderListProps } from "../../../primitives/screen-reader-list";
 import { typeStyle } from "../../../primitives/type-style";
 import {
   controllableOptions,
@@ -214,6 +215,7 @@ function KeyboardShortcutsHelp({
           {labels.hardwareKeyboardGuidance}
         </Text>
         <FlatList
+          {...screenReaderListProps(shortcuts.length)}
           contentContainerStyle={{ gap: theme.spacing[2] }}
           data={shortcuts}
           keyExtractor={(shortcut) => shortcut.id}

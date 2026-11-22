@@ -19,6 +19,7 @@ import {
 import { useGroupDisabled } from "../../../primitives/control-group";
 import { InteractivePressable } from "../../../primitives/interactive-pressable";
 import { ModalLayer } from "../../../primitives/modal-layer";
+import { screenReaderListProps } from "../../../primitives/screen-reader-list";
 import { typeStyle } from "../../../primitives/type-style";
 import type { ControllableStateOptions } from "../../../primitives/use-controllable-state";
 import {
@@ -272,6 +273,7 @@ function Select({
             {labels.options}
           </NativeText>
           <FlatList
+            {...screenReaderListProps(options.length)}
             data={options}
             keyExtractor={(option) => option.id}
             renderItem={renderOption}

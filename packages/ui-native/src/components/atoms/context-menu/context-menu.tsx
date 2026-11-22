@@ -16,6 +16,7 @@ import {
   ModalLayer,
   type ModalLayerCloseReason,
 } from "../../../primitives/modal-layer";
+import { screenReaderListProps } from "../../../primitives/screen-reader-list";
 import type { SelectionKey } from "../../../primitives/selection";
 import { typeStyle } from "../../../primitives/type-style";
 import {
@@ -184,6 +185,7 @@ function ContextMenu({
           {label}
         </Text>
         <FlatList
+          {...screenReaderListProps(items.length)}
           data={items}
           keyExtractor={(item) => String(item.id)}
           renderItem={renderItem}

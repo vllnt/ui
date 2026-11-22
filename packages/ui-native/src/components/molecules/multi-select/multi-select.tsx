@@ -15,6 +15,7 @@ import { useAnnounceOnChange } from "../../../primitives/accessibility";
 import { useGroupDisabled } from "../../../primitives/control-group";
 import { InteractivePressable } from "../../../primitives/interactive-pressable";
 import { ModalLayer } from "../../../primitives/modal-layer";
+import { screenReaderListProps } from "../../../primitives/screen-reader-list";
 import { toggleMultipleSelected } from "../../../primitives/selection";
 import { typeStyle } from "../../../primitives/type-style";
 import type { ControllableStateOptions } from "../../../primitives/use-controllable-state";
@@ -252,6 +253,7 @@ function MultiSelect({
             />
           ) : null}
           <FlatList
+            {...screenReaderListProps(visibleOptions.length)}
             data={visibleOptions}
             keyboardShouldPersistTaps="handled"
             keyExtractor={(option) => option.id}
