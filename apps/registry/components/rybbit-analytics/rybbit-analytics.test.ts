@@ -101,7 +101,11 @@ describe("RybbitAnalytics with both variables set", () => {
   });
 
   it("is a script tag with no body, as the server HTML holds it", () => {
-    expect(render(HOST, SITE_ID)).toMatch(/^<script\b.*><\/script\s*>$/i);
+    const html = render(HOST, SITE_ID);
+
+    expect(html.startsWith("<script ")).toBe(true);
+    expect(html.endsWith("></script>")).toBe(true);
+    expect(html.indexOf(">")).toBe(html.length - "></script>".length);
   });
 
   it.each([
