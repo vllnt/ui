@@ -24,3 +24,12 @@ it("GlassProgress has a default accessible name that consumers can override", ()
     screen.getByRole("progressbar", { name: "Upload" }),
   ).toBeInTheDocument();
 });
+
+it("GlassProgress draws the default tint, not the dense one, and opts out with material=solid", () => {
+  const { container, rerender } = render(<GlassProgress value={40} />);
+  expect(container.firstChild).toHaveClass("vllnt-glass");
+  expect(container.firstChild).not.toHaveClass("vllnt-glass-dense");
+  expect(container.firstChild).toHaveAttribute("data-material", "glass");
+  rerender(<GlassProgress material="solid" value={40} />);
+  expect(container.firstChild).toHaveAttribute("data-material", "solid");
+});

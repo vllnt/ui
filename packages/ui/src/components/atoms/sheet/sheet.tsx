@@ -4,6 +4,7 @@ import * as SheetPrimitive from "@radix-ui/react-dialog";
 import { cva, type VariantProps } from "class-variance-authority";
 import { X } from "lucide-react";
 
+import type { MaterialProps } from "../../../lib/material";
 import { cn } from "../../../lib/utils";
 
 const Sheet = SheetPrimitive.Root;
@@ -33,7 +34,7 @@ const SheetOverlay = ({
 SheetOverlay.displayName = SheetPrimitive.Overlay.displayName;
 
 const sheetVariants = cva(
-  "fixed z-50 gap-4 bg-background p-6 shadow-lg transition ease-in-out data-[state=closed]:duration-300 data-[state=open]:duration-500 data-[state=open]:animate-in data-[state=closed]:animate-out",
+  "vllnt-glass-floating vllnt-glass-dense fixed z-50 gap-4 p-6 transition ease-in-out data-[state=closed]:duration-300 data-[state=open]:duration-500 data-[state=open]:animate-in data-[state=closed]:animate-out",
   {
     defaultVariants: {
       side: "right",
@@ -64,13 +65,15 @@ export type SheetLabels = {
 export type SheetContentProps = {
   /** Localizable strings. */
   labels?: SheetLabels;
-} & React.ComponentPropsWithoutRef<typeof SheetPrimitive.Content> &
+} & MaterialProps &
+  React.ComponentPropsWithoutRef<typeof SheetPrimitive.Content> &
   VariantProps<typeof sheetVariants>;
 
 const SheetContent = ({
   children,
   className,
   labels,
+  material = "glass",
   ref,
   side = "right",
   ...props
@@ -81,6 +84,7 @@ const SheetContent = ({
     <SheetOverlay />
     <SheetPrimitive.Content
       className={cn(sheetVariants({ side }), className)}
+      data-material={material}
       ref={ref}
       {...props}
     >

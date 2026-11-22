@@ -18,7 +18,7 @@ const config = {
       },
       colors: {
         border: 'oklch(var(--border) / <alpha-value>)',
-        input: 'oklch(var(--input) / <alpha-value>)',
+        input: 'oklch(var(--vllnt-glass-input, var(--input)) / <alpha-value>)',
         ring: 'oklch(var(--ring) / <alpha-value>)',
         background: 'oklch(var(--background) / <alpha-value>)',
         foreground: 'oklch(var(--foreground) / <alpha-value>)',
@@ -36,7 +36,7 @@ const config = {
         },
         muted: {
           DEFAULT: 'oklch(var(--muted) / <alpha-value>)',
-          foreground: 'oklch(var(--muted-foreground) / <alpha-value>)',
+          foreground: 'oklch(var(--vllnt-glass-muted-foreground, var(--muted-foreground)) / <alpha-value>)',
         },
         accent: {
           DEFAULT: 'oklch(var(--accent) / <alpha-value>)',

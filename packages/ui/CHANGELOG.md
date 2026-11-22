@@ -8,12 +8,39 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Added
 
+- **Glass tokens** - `blur.glass.default` (20 px), `material.glass.tint-top`,
+  `tint-bottom`, `tint-dense-top`, `tint-dense-bottom`, `hairline-edge` and
+  `sheen-opacity` (one value per mode), `shadow.glass`, `shadow.glass-floating`,
+  `color.glass-muted-foreground` and `color.glass-input`, with CSS variables, a
+  `material.solid` value for each, and Penpot sets for solid, reduced
+  transparency and increased contrast.
+- **`material` prop** - every glass component takes `material="glass" | "solid"`
+  (default `"glass"`) and writes `data-material`. `Material` and `MaterialProps`
+  are exported types.
+- **Automatic solid fallbacks** - glass turns solid under
+  `prefers-reduced-transparency`, `prefers-contrast: more`, `forced-colors:
+  active`, without `backdrop-filter`, and under `html[data-glass="off"]`. No
+  script runs, and the library does not read the battery.
+- **Glass checks** - WCAG 2.2 AA contrast tests for text and control borders on
+  both tints in every theme, and a backdrop-filter budget test: no
+  `backdrop-blur-*`, no blur radius above `blur.glass.lg` (24 px).
 - **`keyByOccurrence`** - keys items that have no id and may repeat: the key is
   the identity text plus the number of identical items before it, so an equal
   item keeps its key when others change around it.
 
 ### Changed
 
+- **Glass is the default material** - bars, panels, menus, popovers, dialogs,
+  sheets, docks and map overlays draw a frosted surface (tint, sheen, 20 px
+  blur, edge, two-layer shadow) instead of an opaque one. Pass
+  `material="solid"` to keep the previous look. The classes `vllnt-glass-md` and
+  `vllnt-glass-sm` are replaced by `vllnt-glass`, `vllnt-glass-floating`,
+  `vllnt-glass-dense` (denser tint for body text, muted text and control
+  borders) and `vllnt-glass-scrim`. Apps that use these classes load
+  `@vllnt/ui/styles.css`.
+- **Dark default tint** - the dark default glass tint is `#1C1C1CB2` to
+  `#1414149C` (4.51:1 for the foreground), not the first recipe draft's
+  `#1C1C1CAF` to `#14141499` (4.34:1).
 - **Smaller code highlighter** - `CodeBlock` and `StaticCode` use the Prism
   light build with a fixed language set, not the full build that bundles every
   language. `StaticCode` drops from about 682 KB to 121 KB minified, the lazy

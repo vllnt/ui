@@ -10,3 +10,11 @@ it("GlassCard renders its children and applies a custom class name", () => {
   expect(screen.getByText("Content")).toBeInTheDocument();
   expect(container.firstChild).toHaveClass("custom-class");
 });
+
+it("GlassCard is glass by default and opts out with material=solid", () => {
+  const { container, rerender } = render(<GlassCard>Content</GlassCard>);
+  expect(container.firstChild).toHaveAttribute("data-material", "glass");
+  expect(container.firstChild).toHaveClass("vllnt-glass", "vllnt-glass-dense");
+  rerender(<GlassCard material="solid">Content</GlassCard>);
+  expect(container.firstChild).toHaveAttribute("data-material", "solid");
+});

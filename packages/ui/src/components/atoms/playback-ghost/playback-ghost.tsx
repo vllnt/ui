@@ -146,7 +146,7 @@ export const PlaybackGhost = ({
     >
       <span
         aria-hidden="true"
-        className="absolute inset-0 rounded-md border border-dashed border-border/70 bg-background/40 backdrop-blur-sm"
+        className="absolute inset-0 rounded-md border border-dashed border-border/70 bg-background/40"
         data-playback-ghost-frame
         style={{ opacity: safeOpacity }}
       />

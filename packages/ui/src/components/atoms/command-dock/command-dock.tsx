@@ -2,6 +2,7 @@
 
 import type { ComponentPropsWithoutRef, ReactNode } from "react";
 
+import type { MaterialProps } from "../../../lib/material";
 import { cn } from "../../../lib/utils";
 
 /**
@@ -67,7 +68,8 @@ export type CommandDockProps = {
   labels?: CommandDockLabels;
   /** Optional handler for the "..." command-palette trigger. */
   onOpenPalette?: () => void;
-} & ComponentPropsWithoutRef<"nav">;
+} & MaterialProps &
+  ComponentPropsWithoutRef<"nav">;
 
 const ActionButton = (props: {
   action: CommandDockAction;
@@ -132,7 +134,14 @@ export const CommandDock = ({
   ref,
   ...props
 }: CommandDockProps & { ref?: React.Ref<HTMLElement> }) => {
-  const { actions, className, labels, onOpenPalette, ...rest } = props;
+  const {
+    actions,
+    className,
+    labels,
+    material = "glass",
+    onOpenPalette,
+    ...rest
+  } = props;
   const resolvedLabels = { ...DEFAULT_LABELS, ...labels };
   const handlePalette = (): void => {
     onOpenPalette?.();
@@ -141,10 +150,11 @@ export const CommandDock = ({
     <nav
       aria-label={resolvedLabels.region}
       className={cn(
-        "inline-flex items-center gap-1 rounded-2xl border bg-background/90 p-1.5 shadow-md backdrop-blur",
+        "vllnt-glass-floating vllnt-glass-dense inline-flex items-center gap-1 rounded-2xl border p-1.5",
         className,
       )}
       data-command-dock
+      data-material={material}
       ref={ref}
       {...rest}
     >

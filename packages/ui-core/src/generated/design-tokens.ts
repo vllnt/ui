@@ -174,6 +174,21 @@ export const designTokens = {
         "role": "Focus ring"
       }
     },
+    "glass-border": {
+      "light": "#00000024",
+      "dark": "#FFFFFF2E",
+      "role": "Hairline of a glass surface, with alpha. Material token material.glass.hairline points at it"
+    },
+    "glass-input": {
+      "light": "0.464 0 0",
+      "dark": "0.7155 0 0",
+      "role": "Control boundary inside a glass surface (3:1 against the glass over a white, black or mid backdrop). Replaces input within glass"
+    },
+    "glass-muted-foreground": {
+      "light": "0.3715 0 0",
+      "dark": "0.8699 0 0",
+      "role": "Secondary text inside a glass surface (4.5:1 against the glass over a white, black or mid backdrop). Replaces muted-foreground within glass"
+    },
     "badge-label": {
       "danger": {
         "value": "{color.destructive}",
@@ -547,6 +562,272 @@ export const designTokens = {
           "inset": true
         }
       ]
+    },
+    "glass": {
+      "role": "Two-layer shadow of a glass part: bars, panels, cards, chips",
+      "light": [
+        {
+          "offsetX": "0",
+          "offsetY": "1",
+          "blur": "2",
+          "spread": "0",
+          "color": "#0000000D",
+          "inset": false
+        },
+        {
+          "offsetX": "0",
+          "offsetY": "4",
+          "blur": "14",
+          "spread": "0",
+          "color": "#0000000F",
+          "inset": false
+        }
+      ],
+      "dark": [
+        {
+          "offsetX": "0",
+          "offsetY": "1",
+          "blur": "2",
+          "spread": "0",
+          "color": "#00000066",
+          "inset": false
+        },
+        {
+          "offsetX": "0",
+          "offsetY": "4",
+          "blur": "14",
+          "spread": "0",
+          "color": "#0000004D",
+          "inset": false
+        }
+      ]
+    },
+    "glass-floating": {
+      "role": "Stronger two-layer shadow of a floating glass part: docks, menus, popovers, dialogs, sheets",
+      "light": [
+        {
+          "offsetX": "0",
+          "offsetY": "1",
+          "blur": "2",
+          "spread": "0",
+          "color": "#00000014",
+          "inset": false
+        },
+        {
+          "offsetX": "0",
+          "offsetY": "10",
+          "blur": "28",
+          "spread": "0",
+          "color": "#0000001F",
+          "inset": false
+        }
+      ],
+      "dark": [
+        {
+          "offsetX": "0",
+          "offsetY": "1",
+          "blur": "2",
+          "spread": "0",
+          "color": "#00000080",
+          "inset": false
+        },
+        {
+          "offsetX": "0",
+          "offsetY": "10",
+          "blur": "28",
+          "spread": "0",
+          "color": "#00000080",
+          "inset": false
+        }
+      ]
+    }
+  },
+  "blur": {
+    "glass": {
+      "sm": {
+        "value": "8px",
+        "role": "Backdrop blur radius of a small glass layer: scrims, chips, tracks (8)"
+      },
+      "md": {
+        "value": "12px",
+        "role": "Backdrop blur radius of a medium glass layer: cards, overlays on content (12)"
+      },
+      "lg": {
+        "value": "24px",
+        "role": "Backdrop blur radius of the budget ceiling (24): no glass layer blurs more"
+      },
+      "default": {
+        "value": "20px",
+        "role": "Backdrop blur radius of a glass part: panels, bars, menus, dialogs (20). Mirrors the backgroundBlur 20 of the Penpot Glass board"
+      }
+    }
+  },
+  "material": {
+    "glass": {
+      "opacity": {
+        "sm": {
+          "value": "0.6",
+          "role": "Glass tint opacity, step sm. Not for text-bearing surfaces"
+        },
+        "md": {
+          "value": "0.72",
+          "role": "Glass tint opacity, step md"
+        },
+        "lg": {
+          "value": "0.82",
+          "role": "Glass tint opacity, step lg. The floor for text on glass over a worst-case backdrop"
+        },
+        "xl": {
+          "value": "0.9",
+          "role": "Glass tint opacity, step xl: floating surfaces"
+        },
+        "default": {
+          "value": "{material.glass.opacity.lg}",
+          "role": "Glass tint opacity of a surface that does not pick a step"
+        }
+      },
+      "tint": {
+        "value": "{color.background}",
+        "role": "Glass tint colour: the page background, drawn at a glass opacity"
+      },
+      "highlight": {
+        "value": "{material.highlight.top}",
+        "role": "1 px light line along the top edge of a glass surface"
+      },
+      "hairline": {
+        "value": "{color.glass-border}",
+        "role": "Border colour of a glass surface"
+      },
+      "tint-top": {
+        "light": "#FFFFFFA3",
+        "dark": "#1C1C1CB2",
+        "role": "Default glass tint, top stop. Foreground text only: no muted text, placeholder or control border. Dark is #1C1C1CB2, not the first recipe draft's #1C1C1CAF, so foreground text keeps 4.5:1 over a white backdrop (4.51:1, against 4.34:1)"
+      },
+      "tint-bottom": {
+        "light": "#FFFFFF80",
+        "dark": "#1414149C",
+        "role": "Default glass tint, bottom stop. Dark is #1414149C, not the first recipe draft's #14141499, for the same reason"
+      },
+      "tint-dense-top": {
+        "light": "#FFFFFFE6",
+        "dark": "#121212E0",
+        "role": "Dense glass tint, top stop: panels with body text, muted text, a placeholder or a control-identifying border"
+      },
+      "tint-dense-bottom": {
+        "light": "#FFFFFFD6",
+        "dark": "#121212D1",
+        "role": "Dense glass tint, bottom stop"
+      },
+      "hairline-edge": {
+        "light": "#00000014",
+        "dark": "#FFFFFF1A",
+        "role": "Outer 1 px edge of a glass part, ink 8% on light and white 10% on dark. Decorative only: a control border uses color.glass-input"
+      },
+      "sheen-opacity": {
+        "light": "1",
+        "dark": "0.17",
+        "role": "Opacity of the white sheen drawn over the tint: the specular gradient and the inner highlight. Dark scales the light values by 0.17"
+      }
+    },
+    "highlight": {
+      "top": {
+        "light": "#FFFFFFCC",
+        "dark": "#FFFFFF2E",
+        "role": "Top edge highlight of a glass surface, with alpha"
+      }
+    },
+    "solid": {
+      "material.glass.opacity.sm": "1",
+      "material.glass.opacity.md": "1",
+      "material.glass.opacity.lg": "1",
+      "material.glass.opacity.xl": "1",
+      "material.glass.tint": "{color.card}",
+      "material.glass.highlight": "{color.border}",
+      "material.glass.hairline": "{color.border}",
+      "material.glass.tint-top": "{color.card}",
+      "material.glass.tint-bottom": "{color.card}",
+      "material.glass.tint-dense-top": "{color.card}",
+      "material.glass.tint-dense-bottom": "{color.card}",
+      "material.glass.hairline-edge": "{color.border}",
+      "material.glass.sheen-opacity": "0",
+      "shadow.glass": "{shadow.raised}",
+      "shadow.glass-floating": "{shadow.floating}",
+      "blur.glass.sm": "0px",
+      "blur.glass.md": "0px",
+      "blur.glass.lg": "0px",
+      "blur.glass.default": "0px"
+    }
+  },
+  "depth": {
+    "z-0": {
+      "offset": {
+        "value": "0px",
+        "role": "Depth step 0 offset: flat, on the page"
+      },
+      "shadow": {
+        "value": "none",
+        "role": "Depth step 0 shadow: none"
+      },
+      "tint": {
+        "value": "{material.glass.opacity.default}",
+        "role": "Depth step 0 glass tint opacity"
+      }
+    },
+    "z-1": {
+      "offset": {
+        "value": "2px",
+        "role": "Depth step 1 offset: raised surface"
+      },
+      "shadow": {
+        "value": "{shadow.raised}",
+        "role": "Depth step 1 shadow"
+      },
+      "tint": {
+        "value": "{material.glass.opacity.default}",
+        "role": "Depth step 1 glass tint opacity"
+      }
+    },
+    "z-2": {
+      "offset": {
+        "value": "8px",
+        "role": "Depth step 2 offset: overlay (dialog, popover, menu)"
+      },
+      "shadow": {
+        "value": "{shadow.overlay}",
+        "role": "Depth step 2 shadow"
+      },
+      "tint": {
+        "value": "{material.glass.opacity.default}",
+        "role": "Depth step 2 glass tint opacity"
+      }
+    },
+    "z-3": {
+      "offset": {
+        "value": "16px",
+        "role": "Depth step 3 offset: floating surface (dock, floating bar)"
+      },
+      "shadow": {
+        "value": "{shadow.floating}",
+        "role": "Depth step 3 shadow"
+      },
+      "tint": {
+        "value": "{material.glass.opacity.xl}",
+        "role": "Depth step 3 glass tint opacity"
+      }
+    },
+    "z-4": {
+      "offset": {
+        "value": "32px",
+        "role": "Depth step 4 offset: topmost surface"
+      },
+      "shadow": {
+        "value": "{shadow.floating}",
+        "role": "Depth step 4 shadow"
+      },
+      "tint": {
+        "value": "{material.glass.opacity.xl}",
+        "role": "Depth step 4 glass tint opacity"
+      }
     }
   },
   "motion": {

@@ -1,15 +1,17 @@
 import * as React from "react";
 
+import type { MaterialProps } from "../../../lib/material";
 import { cn } from "../../../lib/utils";
 
 /**
  * Props for {@link GlassProgress}. The progressbar takes the name
  * `"Progress"` unless you pass `aria-label` or `aria-labelledby`.
  */
-export type GlassProgressProps = React.ComponentPropsWithoutRef<"div"> & {
-  /** Completion percentage between `0` and `100`. */
-  value: number;
-};
+export type GlassProgressProps = MaterialProps &
+  React.ComponentPropsWithoutRef<"div"> & {
+    /** Completion percentage between `0` and `100`. */
+    value: number;
+  };
 
 function clampPercent(value: number): number {
   return Math.min(Math.max(value, 0), 100);
@@ -25,6 +27,7 @@ function clampPercent(value: number): number {
  */
 export const GlassProgress = ({
   className,
+  material = "glass",
   ref,
   value,
   ...props
@@ -38,9 +41,10 @@ export const GlassProgress = ({
       aria-valuemin={0}
       aria-valuenow={clamped}
       className={cn(
-        "relative h-2 w-full overflow-hidden rounded-full border border-border/50 bg-secondary/40 backdrop-blur",
+        "vllnt-glass relative h-2 w-full overflow-hidden rounded-full border",
         className,
       )}
+      data-material={material}
       ref={ref}
       role="progressbar"
       {...props}

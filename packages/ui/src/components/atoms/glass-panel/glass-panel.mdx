@@ -37,5 +37,6 @@ import { GlassPanel } from '@vllnt/ui'
 
 ## Notes
 
-- The panel keeps its own background so it reads as a discrete surface even when the canvas behind it is busy.
-- Stack with \`backdrop-blur\` parents sparingly — too many overlapping frosted layers reduce readability.
+- The panel uses the default glass tint. Add the `vllnt-glass-dense` class for body text, muted text or a control border, which need the denser tint to stay AA.
+- `material="solid"` draws an opaque panel. The panel also turns solid on its own under `prefers-reduced-transparency`, `prefers-contrast: more`, `forced-colors: active`, without `backdrop-filter` support, and under `html[data-glass="off"]`.
+- Keep few frosted layers on screen at once; the budget in `DESIGN.md` allows 5.

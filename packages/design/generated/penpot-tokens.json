@@ -1,5 +1,25 @@
 {
   "vllnt/core": {
+    "blur": {
+      "glass": {
+        "sm": {
+          "$value": "8",
+          "$type": "number"
+        },
+        "md": {
+          "$value": "12",
+          "$type": "number"
+        },
+        "lg": {
+          "$value": "24",
+          "$type": "number"
+        },
+        "default": {
+          "$value": "20",
+          "$type": "number"
+        }
+      }
+    },
     "brand": {
       "status": {
         "candidate": {
@@ -51,6 +71,87 @@
             "$value": "{color.destructive}",
             "$type": "color"
           }
+        }
+      }
+    },
+    "depth": {
+      "z-0": {
+        "offset": {
+          "$value": "0",
+          "$type": "number"
+        },
+        "shadow": {
+          "$value": [
+            {
+              "offsetX": "0",
+              "offsetY": "0",
+              "blur": "0",
+              "spread": "0",
+              "color": "#00000000",
+              "inset": false
+            }
+          ],
+          "$type": "shadow"
+        },
+        "tint": {
+          "$value": "{material.glass.opacity.default}",
+          "$type": "opacity"
+        }
+      },
+      "z-1": {
+        "offset": {
+          "$value": "2",
+          "$type": "number"
+        },
+        "shadow": {
+          "$value": "{shadow.raised}",
+          "$type": "shadow"
+        },
+        "tint": {
+          "$value": "{material.glass.opacity.default}",
+          "$type": "opacity"
+        }
+      },
+      "z-2": {
+        "offset": {
+          "$value": "8",
+          "$type": "number"
+        },
+        "shadow": {
+          "$value": "{shadow.overlay}",
+          "$type": "shadow"
+        },
+        "tint": {
+          "$value": "{material.glass.opacity.default}",
+          "$type": "opacity"
+        }
+      },
+      "z-3": {
+        "offset": {
+          "$value": "16",
+          "$type": "number"
+        },
+        "shadow": {
+          "$value": "{shadow.floating}",
+          "$type": "shadow"
+        },
+        "tint": {
+          "$value": "{material.glass.opacity.xl}",
+          "$type": "opacity"
+        }
+      },
+      "z-4": {
+        "offset": {
+          "$value": "32",
+          "$type": "number"
+        },
+        "shadow": {
+          "$value": "{shadow.floating}",
+          "$type": "shadow"
+        },
+        "tint": {
+          "$value": "{material.glass.opacity.xl}",
+          "$type": "opacity"
         }
       }
     },
@@ -146,6 +247,44 @@
         }
       }
     },
+    "material": {
+      "glass": {
+        "opacity": {
+          "sm": {
+            "$value": "0.6",
+            "$type": "opacity"
+          },
+          "md": {
+            "$value": "0.72",
+            "$type": "opacity"
+          },
+          "lg": {
+            "$value": "0.82",
+            "$type": "opacity"
+          },
+          "xl": {
+            "$value": "0.9",
+            "$type": "opacity"
+          },
+          "default": {
+            "$value": "{material.glass.opacity.lg}",
+            "$type": "opacity"
+          }
+        },
+        "tint": {
+          "$value": "{color.background}",
+          "$type": "color"
+        },
+        "highlight": {
+          "$value": "{material.highlight.top}",
+          "$type": "color"
+        },
+        "hairline": {
+          "$value": "{color.glass-border}",
+          "$type": "color"
+        }
+      }
+    },
     "opacity": {
       "grain": {
         "$value": "1",
@@ -233,6 +372,48 @@
             "blur": "40",
             "spread": "0",
             "color": "#0000002E",
+            "inset": false
+          }
+        ],
+        "$type": "shadow"
+      },
+      "glass": {
+        "$value": [
+          {
+            "offsetX": "0",
+            "offsetY": "1",
+            "blur": "2",
+            "spread": "0",
+            "color": "#0000000D",
+            "inset": false
+          },
+          {
+            "offsetX": "0",
+            "offsetY": "4",
+            "blur": "14",
+            "spread": "0",
+            "color": "#0000000F",
+            "inset": false
+          }
+        ],
+        "$type": "shadow"
+      },
+      "glass-floating": {
+        "$value": [
+          {
+            "offsetX": "0",
+            "offsetY": "1",
+            "blur": "2",
+            "spread": "0",
+            "color": "#00000014",
+            "inset": false
+          },
+          {
+            "offsetX": "0",
+            "offsetY": "10",
+            "blur": "28",
+            "spread": "0",
+            "color": "#0000001F",
             "inset": false
           }
         ],
@@ -428,6 +609,18 @@
         "$value": "#D4D4D4",
         "$type": "color"
       },
+      "glass-border": {
+        "$value": "#FFFFFF2E",
+        "$type": "color"
+      },
+      "glass-input": {
+        "$value": "#A3A3A3",
+        "$type": "color"
+      },
+      "glass-muted-foreground": {
+        "$value": "#D4D4D4",
+        "$type": "color"
+      },
       "badge-label": {
         "danger": {
           "$value": "{color.destructive}",
@@ -444,6 +637,40 @@
         "warning": {
           "$value": "{color.warning}",
           "$type": "color"
+        }
+      }
+    },
+    "material": {
+      "highlight": {
+        "top": {
+          "$value": "#FFFFFF2E",
+          "$type": "color"
+        }
+      },
+      "glass": {
+        "tint-top": {
+          "$value": "#1C1C1CB2",
+          "$type": "color"
+        },
+        "tint-bottom": {
+          "$value": "#1414149C",
+          "$type": "color"
+        },
+        "tint-dense-top": {
+          "$value": "#121212E0",
+          "$type": "color"
+        },
+        "tint-dense-bottom": {
+          "$value": "#121212D1",
+          "$type": "color"
+        },
+        "hairline-edge": {
+          "$value": "#FFFFFF1A",
+          "$type": "color"
+        },
+        "sheen-opacity": {
+          "$value": "0.17",
+          "$type": "opacity"
         }
       }
     },
@@ -515,6 +742,48 @@
             "spread": "0",
             "color": "#FFFFFF29",
             "inset": true
+          }
+        ],
+        "$type": "shadow"
+      },
+      "glass": {
+        "$value": [
+          {
+            "offsetX": "0",
+            "offsetY": "1",
+            "blur": "2",
+            "spread": "0",
+            "color": "#00000066",
+            "inset": false
+          },
+          {
+            "offsetX": "0",
+            "offsetY": "4",
+            "blur": "14",
+            "spread": "0",
+            "color": "#0000004D",
+            "inset": false
+          }
+        ],
+        "$type": "shadow"
+      },
+      "glass-floating": {
+        "$value": [
+          {
+            "offsetX": "0",
+            "offsetY": "1",
+            "blur": "2",
+            "spread": "0",
+            "color": "#00000080",
+            "inset": false
+          },
+          {
+            "offsetX": "0",
+            "offsetY": "10",
+            "blur": "28",
+            "spread": "0",
+            "color": "#00000080",
+            "inset": false
           }
         ],
         "$type": "shadow"
@@ -711,6 +980,18 @@
         "$value": "#0A0A0A",
         "$type": "color"
       },
+      "glass-border": {
+        "$value": "#00000024",
+        "$type": "color"
+      },
+      "glass-input": {
+        "$value": "#595959",
+        "$type": "color"
+      },
+      "glass-muted-foreground": {
+        "$value": "#404040",
+        "$type": "color"
+      },
       "badge-label": {
         "danger": {
           "$value": "{color.destructive}",
@@ -727,6 +1008,40 @@
         "warning": {
           "$value": "{color.warning}",
           "$type": "color"
+        }
+      }
+    },
+    "material": {
+      "highlight": {
+        "top": {
+          "$value": "#FFFFFFCC",
+          "$type": "color"
+        }
+      },
+      "glass": {
+        "tint-top": {
+          "$value": "#FFFFFFA3",
+          "$type": "color"
+        },
+        "tint-bottom": {
+          "$value": "#FFFFFF80",
+          "$type": "color"
+        },
+        "tint-dense-top": {
+          "$value": "#FFFFFFE6",
+          "$type": "color"
+        },
+        "tint-dense-bottom": {
+          "$value": "#FFFFFFD6",
+          "$type": "color"
+        },
+        "hairline-edge": {
+          "$value": "#00000014",
+          "$type": "color"
+        },
+        "sheen-opacity": {
+          "$value": "1",
+          "$type": "opacity"
         }
       }
     },
@@ -921,6 +1236,18 @@
         "$value": "#D4D4D4",
         "$type": "color"
       },
+      "glass-border": {
+        "$value": "#FFFFFF2E",
+        "$type": "color"
+      },
+      "glass-input": {
+        "$value": "#A3A3A3",
+        "$type": "color"
+      },
+      "glass-muted-foreground": {
+        "$value": "#D4D4D4",
+        "$type": "color"
+      },
       "badge-label": {
         "danger": {
           "$value": "{color.destructive}",
@@ -937,6 +1264,40 @@
         "warning": {
           "$value": "{color.warning}",
           "$type": "color"
+        }
+      }
+    },
+    "material": {
+      "highlight": {
+        "top": {
+          "$value": "#FFFFFF2E",
+          "$type": "color"
+        }
+      },
+      "glass": {
+        "tint-top": {
+          "$value": "#1C1C1CB2",
+          "$type": "color"
+        },
+        "tint-bottom": {
+          "$value": "#1414149C",
+          "$type": "color"
+        },
+        "tint-dense-top": {
+          "$value": "#121212E0",
+          "$type": "color"
+        },
+        "tint-dense-bottom": {
+          "$value": "#121212D1",
+          "$type": "color"
+        },
+        "hairline-edge": {
+          "$value": "#FFFFFF1A",
+          "$type": "color"
+        },
+        "sheen-opacity": {
+          "$value": "0.17",
+          "$type": "opacity"
         }
       }
     },
@@ -1008,6 +1369,48 @@
             "spread": "0",
             "color": "#FFFFFF29",
             "inset": true
+          }
+        ],
+        "$type": "shadow"
+      },
+      "glass": {
+        "$value": [
+          {
+            "offsetX": "0",
+            "offsetY": "1",
+            "blur": "2",
+            "spread": "0",
+            "color": "#00000066",
+            "inset": false
+          },
+          {
+            "offsetX": "0",
+            "offsetY": "4",
+            "blur": "14",
+            "spread": "0",
+            "color": "#0000004D",
+            "inset": false
+          }
+        ],
+        "$type": "shadow"
+      },
+      "glass-floating": {
+        "$value": [
+          {
+            "offsetX": "0",
+            "offsetY": "1",
+            "blur": "2",
+            "spread": "0",
+            "color": "#00000080",
+            "inset": false
+          },
+          {
+            "offsetX": "0",
+            "offsetY": "10",
+            "blur": "28",
+            "spread": "0",
+            "color": "#00000080",
+            "inset": false
           }
         ],
         "$type": "shadow"
@@ -1156,6 +1559,18 @@
         "$value": "#0A0A0A",
         "$type": "color"
       },
+      "glass-border": {
+        "$value": "#00000024",
+        "$type": "color"
+      },
+      "glass-input": {
+        "$value": "#595959",
+        "$type": "color"
+      },
+      "glass-muted-foreground": {
+        "$value": "#404040",
+        "$type": "color"
+      },
       "badge-label": {
         "danger": {
           "$value": "{color.destructive}",
@@ -1172,6 +1587,40 @@
         "warning": {
           "$value": "{color.warning}",
           "$type": "color"
+        }
+      }
+    },
+    "material": {
+      "highlight": {
+        "top": {
+          "$value": "#FFFFFFCC",
+          "$type": "color"
+        }
+      },
+      "glass": {
+        "tint-top": {
+          "$value": "#FFFFFFA3",
+          "$type": "color"
+        },
+        "tint-bottom": {
+          "$value": "#FFFFFF80",
+          "$type": "color"
+        },
+        "tint-dense-top": {
+          "$value": "#FFFFFFE6",
+          "$type": "color"
+        },
+        "tint-dense-bottom": {
+          "$value": "#FFFFFFD6",
+          "$type": "color"
+        },
+        "hairline-edge": {
+          "$value": "#00000014",
+          "$type": "color"
+        },
+        "sheen-opacity": {
+          "$value": "1",
+          "$type": "opacity"
         }
       }
     },
@@ -1208,6 +1657,96 @@
       }
     }
   },
+  "vllnt/material/solid": {
+    "material": {
+      "glass": {
+        "opacity": {
+          "sm": {
+            "$value": "1",
+            "$type": "opacity"
+          },
+          "md": {
+            "$value": "1",
+            "$type": "opacity"
+          },
+          "lg": {
+            "$value": "1",
+            "$type": "opacity"
+          },
+          "xl": {
+            "$value": "1",
+            "$type": "opacity"
+          }
+        },
+        "tint": {
+          "$value": "{color.card}",
+          "$type": "color"
+        },
+        "highlight": {
+          "$value": "{color.border}",
+          "$type": "color"
+        },
+        "hairline": {
+          "$value": "{color.border}",
+          "$type": "color"
+        },
+        "tint-top": {
+          "$value": "{color.card}",
+          "$type": "color"
+        },
+        "tint-bottom": {
+          "$value": "{color.card}",
+          "$type": "color"
+        },
+        "tint-dense-top": {
+          "$value": "{color.card}",
+          "$type": "color"
+        },
+        "tint-dense-bottom": {
+          "$value": "{color.card}",
+          "$type": "color"
+        },
+        "hairline-edge": {
+          "$value": "{color.border}",
+          "$type": "color"
+        },
+        "sheen-opacity": {
+          "$value": "0",
+          "$type": "opacity"
+        }
+      }
+    },
+    "shadow": {
+      "glass": {
+        "$value": "{shadow.raised}",
+        "$type": "shadow"
+      },
+      "glass-floating": {
+        "$value": "{shadow.floating}",
+        "$type": "shadow"
+      }
+    },
+    "blur": {
+      "glass": {
+        "sm": {
+          "$value": "0",
+          "$type": "number"
+        },
+        "md": {
+          "$value": "0",
+          "$type": "number"
+        },
+        "lg": {
+          "$value": "0",
+          "$type": "number"
+        },
+        "default": {
+          "$value": "0",
+          "$type": "number"
+        }
+      }
+    }
+  },
   "$themes": [
     {
       "group": "maia",
@@ -1217,7 +1756,8 @@
         "vllnt/maia/dark": "enabled",
         "vllnt/maia/light": "disabled",
         "vllnt/paas/dark": "disabled",
-        "vllnt/paas/light": "disabled"
+        "vllnt/paas/light": "disabled",
+        "vllnt/material/solid": "disabled"
       }
     },
     {
@@ -1228,7 +1768,8 @@
         "vllnt/maia/dark": "disabled",
         "vllnt/maia/light": "enabled",
         "vllnt/paas/dark": "disabled",
-        "vllnt/paas/light": "disabled"
+        "vllnt/paas/light": "disabled",
+        "vllnt/material/solid": "disabled"
       }
     },
     {
@@ -1239,7 +1780,8 @@
         "vllnt/maia/dark": "disabled",
         "vllnt/maia/light": "disabled",
         "vllnt/paas/dark": "enabled",
-        "vllnt/paas/light": "disabled"
+        "vllnt/paas/light": "disabled",
+        "vllnt/material/solid": "disabled"
       }
     },
     {
@@ -1250,7 +1792,44 @@
         "vllnt/maia/dark": "disabled",
         "vllnt/maia/light": "disabled",
         "vllnt/paas/dark": "disabled",
-        "vllnt/paas/light": "enabled"
+        "vllnt/paas/light": "enabled",
+        "vllnt/material/solid": "disabled"
+      }
+    },
+    {
+      "group": "material",
+      "name": "Solid",
+      "selectedTokenSets": {
+        "vllnt/core": "disabled",
+        "vllnt/maia/dark": "disabled",
+        "vllnt/maia/light": "disabled",
+        "vllnt/paas/dark": "disabled",
+        "vllnt/paas/light": "disabled",
+        "vllnt/material/solid": "enabled"
+      }
+    },
+    {
+      "group": "transparency",
+      "name": "Reduced",
+      "selectedTokenSets": {
+        "vllnt/core": "disabled",
+        "vllnt/maia/dark": "disabled",
+        "vllnt/maia/light": "disabled",
+        "vllnt/paas/dark": "disabled",
+        "vllnt/paas/light": "disabled",
+        "vllnt/material/solid": "enabled"
+      }
+    },
+    {
+      "group": "contrast",
+      "name": "Increased",
+      "selectedTokenSets": {
+        "vllnt/core": "disabled",
+        "vllnt/maia/dark": "disabled",
+        "vllnt/maia/light": "disabled",
+        "vllnt/paas/dark": "disabled",
+        "vllnt/paas/light": "disabled",
+        "vllnt/material/solid": "enabled"
       }
     }
   ],
@@ -1260,7 +1839,8 @@
       "vllnt/maia/dark",
       "vllnt/maia/light",
       "vllnt/paas/dark",
-      "vllnt/paas/light"
+      "vllnt/paas/light",
+      "vllnt/material/solid"
     ]
   }
 }

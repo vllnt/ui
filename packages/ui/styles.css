@@ -83,9 +83,48 @@
     --size-target-min: 2.75rem;
     --opacity-grain: 1;
     --opacity-contact: 1;
+    --blur-glass-sm: 8px;
+    --blur-glass-md: 12px;
+    --blur-glass-lg: 24px;
+    --blur-glass-default: 20px;
+    --material-glass-opacity-sm: 0.6;
+    --material-glass-opacity-md: 0.72;
+    --material-glass-opacity-lg: 0.82;
+    --material-glass-opacity-xl: 0.9;
+    --material-glass-opacity-default: var(--material-glass-opacity-lg);
+    --material-glass-tint: var(--background);
+    --material-glass-highlight: var(--material-highlight-top);
+    --material-glass-hairline: var(--color-glass-border);
+    --depth-z-0-offset: 0px;
+    --depth-z-0-shadow: none;
+    --depth-z-0-tint: var(--material-glass-opacity-default);
+    --depth-z-1-offset: 2px;
+    --depth-z-1-shadow: var(--shadow-raised);
+    --depth-z-1-tint: var(--material-glass-opacity-default);
+    --depth-z-2-offset: 8px;
+    --depth-z-2-shadow: var(--shadow-overlay);
+    --depth-z-2-tint: var(--material-glass-opacity-default);
+    --depth-z-3-offset: 16px;
+    --depth-z-3-shadow: var(--shadow-floating);
+    --depth-z-3-tint: var(--material-glass-opacity-xl);
+    --depth-z-4-offset: 32px;
+    --depth-z-4-shadow: var(--shadow-floating);
+    --depth-z-4-tint: var(--material-glass-opacity-xl);
+    --color-glass-border: #00000024;
+    --color-glass-input: 0.464 0 0;
+    --color-glass-muted-foreground: 0.3715 0 0;
+    --material-highlight-top: #FFFFFFCC;
+    --material-glass-tint-top: #FFFFFFA3;
+    --material-glass-tint-bottom: #FFFFFF80;
+    --material-glass-tint-dense-top: #FFFFFFE6;
+    --material-glass-tint-dense-bottom: #FFFFFFD6;
+    --material-glass-hairline-edge: #00000014;
+    --material-glass-sheen-opacity: 1;
     --shadow-raised: 0px 1px 3px 0px #0000001A, 0px 1px 2px 0px #0000000F;
     --shadow-overlay: 0px 8px 24px 0px #00000024;
     --shadow-floating: 0px 16px 40px 0px #0000002E;
+    --shadow-glass: 0px 1px 2px 0px #0000000D, 0px 4px 14px 0px #0000000F;
+    --shadow-glass-floating: 0px 1px 2px 0px #00000014, 0px 10px 28px 0px #0000001F;
   }
   .dark {
     --background: 0 0 0;
@@ -118,11 +157,135 @@
     --shadow-raised: 0px 1px 3px 0px #00000066, 0px 1px 2px 0px #0000003D, inset 0px 1px 0px 0px #FFFFFF14;
     --shadow-overlay: 0px 8px 24px 0px #00000080, inset 0px 1px 0px 0px #FFFFFF1F;
     --shadow-floating: 0px 16px 40px 0px #00000099, inset 0px 1px 0px 0px #FFFFFF29;
+    --shadow-glass: 0px 1px 2px 0px #00000066, 0px 4px 14px 0px #0000004D;
+    --shadow-glass-floating: 0px 1px 2px 0px #00000080, 0px 10px 28px 0px #00000080;
+    --color-glass-border: #FFFFFF2E;
+    --color-glass-input: 0.7155 0 0;
+    --color-glass-muted-foreground: 0.8699 0 0;
+    --material-highlight-top: #FFFFFF2E;
+    --material-glass-tint-top: #1C1C1CB2;
+    --material-glass-tint-bottom: #1414149C;
+    --material-glass-tint-dense-top: #121212E0;
+    --material-glass-tint-dense-bottom: #121212D1;
+    --material-glass-hairline-edge: #FFFFFF1A;
+    --material-glass-sheen-opacity: 0.17;
+    --material-glass-opacity-default: var(--material-glass-opacity-lg);
+    --material-glass-tint: var(--background);
+    --material-glass-highlight: var(--material-highlight-top);
+    --material-glass-hairline: var(--color-glass-border);
+    --depth-z-0-tint: var(--material-glass-opacity-default);
+    --depth-z-1-shadow: var(--shadow-raised);
+    --depth-z-1-tint: var(--material-glass-opacity-default);
+    --depth-z-2-shadow: var(--shadow-overlay);
+    --depth-z-2-tint: var(--material-glass-opacity-default);
+    --depth-z-3-shadow: var(--shadow-floating);
+    --depth-z-3-tint: var(--material-glass-opacity-xl);
+    --depth-z-4-shadow: var(--shadow-floating);
+    --depth-z-4-tint: var(--material-glass-opacity-xl);
   }
   @media (pointer: coarse) {
     :root {
       --size-control-xs: var(--size-target-min);
     }
+  }
+  /* Solid material: the vllnt/material/solid values replace the glass tokens. */
+  @media (prefers-reduced-transparency: reduce), (prefers-contrast: more), (forced-colors: active) {
+    :root,
+    .dark {
+      --material-glass-opacity-sm: 1;
+      --material-glass-opacity-md: 1;
+      --material-glass-opacity-lg: 1;
+      --material-glass-opacity-xl: 1;
+      --material-glass-tint: var(--card);
+      --material-glass-highlight: oklch(var(--border));
+      --material-glass-hairline: oklch(var(--border));
+      --material-glass-tint-top: oklch(var(--card));
+      --material-glass-tint-bottom: oklch(var(--card));
+      --material-glass-tint-dense-top: oklch(var(--card));
+      --material-glass-tint-dense-bottom: oklch(var(--card));
+      --material-glass-hairline-edge: oklch(var(--border));
+      --material-glass-sheen-opacity: 0;
+      --shadow-glass: var(--shadow-raised);
+      --shadow-glass-floating: var(--shadow-floating);
+      --blur-glass-sm: 0px;
+      --blur-glass-md: 0px;
+      --blur-glass-lg: 0px;
+      --blur-glass-default: 0px;
+      --material-glass-opacity-default: var(--material-glass-opacity-lg);
+      --depth-z-0-tint: var(--material-glass-opacity-default);
+      --depth-z-1-tint: var(--material-glass-opacity-default);
+      --depth-z-2-tint: var(--material-glass-opacity-default);
+      --depth-z-3-tint: var(--material-glass-opacity-xl);
+      --depth-z-4-tint: var(--material-glass-opacity-xl);
+      --color-glass-input: var(--input);
+      --color-glass-muted-foreground: var(--muted-foreground);
+      --vllnt-glass-backdrop: none;
+    }
+  }
+  @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+    :root,
+    .dark {
+      --material-glass-opacity-sm: 1;
+      --material-glass-opacity-md: 1;
+      --material-glass-opacity-lg: 1;
+      --material-glass-opacity-xl: 1;
+      --material-glass-tint: var(--card);
+      --material-glass-highlight: oklch(var(--border));
+      --material-glass-hairline: oklch(var(--border));
+      --material-glass-tint-top: oklch(var(--card));
+      --material-glass-tint-bottom: oklch(var(--card));
+      --material-glass-tint-dense-top: oklch(var(--card));
+      --material-glass-tint-dense-bottom: oklch(var(--card));
+      --material-glass-hairline-edge: oklch(var(--border));
+      --material-glass-sheen-opacity: 0;
+      --shadow-glass: var(--shadow-raised);
+      --shadow-glass-floating: var(--shadow-floating);
+      --blur-glass-sm: 0px;
+      --blur-glass-md: 0px;
+      --blur-glass-lg: 0px;
+      --blur-glass-default: 0px;
+      --material-glass-opacity-default: var(--material-glass-opacity-lg);
+      --depth-z-0-tint: var(--material-glass-opacity-default);
+      --depth-z-1-tint: var(--material-glass-opacity-default);
+      --depth-z-2-tint: var(--material-glass-opacity-default);
+      --depth-z-3-tint: var(--material-glass-opacity-xl);
+      --depth-z-4-tint: var(--material-glass-opacity-xl);
+      --color-glass-input: var(--input);
+      --color-glass-muted-foreground: var(--muted-foreground);
+      --vllnt-glass-backdrop: none;
+    }
+  }
+  :root[data-glass="off"],
+  :root[data-glass="off"] .dark,
+  [data-material="solid"] {
+    --material-glass-opacity-sm: 1;
+    --material-glass-opacity-md: 1;
+    --material-glass-opacity-lg: 1;
+    --material-glass-opacity-xl: 1;
+    --material-glass-tint: var(--card);
+    --material-glass-highlight: oklch(var(--border));
+    --material-glass-hairline: oklch(var(--border));
+    --material-glass-tint-top: oklch(var(--card));
+    --material-glass-tint-bottom: oklch(var(--card));
+    --material-glass-tint-dense-top: oklch(var(--card));
+    --material-glass-tint-dense-bottom: oklch(var(--card));
+    --material-glass-hairline-edge: oklch(var(--border));
+    --material-glass-sheen-opacity: 0;
+    --shadow-glass: var(--shadow-raised);
+    --shadow-glass-floating: var(--shadow-floating);
+    --blur-glass-sm: 0px;
+    --blur-glass-md: 0px;
+    --blur-glass-lg: 0px;
+    --blur-glass-default: 0px;
+    --material-glass-opacity-default: var(--material-glass-opacity-lg);
+    --depth-z-0-tint: var(--material-glass-opacity-default);
+    --depth-z-1-tint: var(--material-glass-opacity-default);
+    --depth-z-2-tint: var(--material-glass-opacity-default);
+    --depth-z-3-tint: var(--material-glass-opacity-xl);
+    --depth-z-4-tint: var(--material-glass-opacity-xl);
+    --color-glass-input: var(--input);
+    --color-glass-muted-foreground: var(--muted-foreground);
+    --vllnt-glass-backdrop: none;
   }
 }
 
@@ -132,6 +295,104 @@
   }
   body {
     @apply bg-background text-foreground font-mono;
+  }
+}
+
+/*
+ * Glass material (DESIGN.md "Glass material"). A glass part is a tint drawn
+ * top to bottom (--material-glass-tint-top to -tint-bottom, or the dense pair
+ * with .vllnt-glass-dense), a white sheen over it (a specular gradient and an
+ * inner highlight, both scaled by --material-glass-sheen-opacity), the
+ * backdrop blur, a 1 px outer edge and a two-layer shadow. Every value reads a
+ * token, so the solid scopes in the theme block above (reduced transparency,
+ * more contrast, forced colors, no backdrop-filter, html[data-glass="off"],
+ * [data-material="solid"]) turn it solid without any rule here. Border width
+ * stays on the component (`border`).
+ *
+ * Two tint classes. Default (`vllnt-glass`): islands, bars, buttons and chips
+ * with foreground text only. Dense (`vllnt-glass vllnt-glass-dense`): panels
+ * with body text, anything with muted or placeholder text, and any part whose
+ * border identifies a control. `vllnt-glass-floating` swaps the shadow for the
+ * stronger shadow.glass-floating; it paints a glass part by itself.
+ *
+ * The muted-foreground and input colours read --vllnt-glass-muted-foreground
+ * and --vllnt-glass-input (see the Tailwind preset), set only inside glass, so
+ * their AA-checked glass variants apply on glass and nowhere else.
+ */
+@layer components {
+  .vllnt-glass,
+  .vllnt-glass-floating,
+  .vllnt-glass-scrim {
+    --vllnt-glass-muted-foreground: var(--color-glass-muted-foreground);
+    --vllnt-glass-input: var(--color-glass-input);
+    -webkit-backdrop-filter: var(
+      --vllnt-glass-backdrop,
+      blur(var(--vllnt-glass-blur))
+    );
+    backdrop-filter: var(
+      --vllnt-glass-backdrop,
+      blur(var(--vllnt-glass-blur))
+    );
+  }
+
+  .vllnt-glass,
+  .vllnt-glass-floating {
+    --vllnt-glass-blur: var(--blur-glass-default);
+    --vllnt-glass-tint-top: var(--material-glass-tint-top);
+    --vllnt-glass-tint-bottom: var(--material-glass-tint-bottom);
+    --vllnt-glass-shadow: var(--shadow-glass);
+    border-color: var(--material-glass-hairline-edge);
+    background-image:
+      linear-gradient(
+        to bottom,
+        rgb(255 255 255 / calc(0.7 * var(--material-glass-sheen-opacity))) 0%,
+        rgb(255 255 255 / 0) 45%,
+        rgb(255 255 255 / calc(0.12 * var(--material-glass-sheen-opacity))) 100%
+      ),
+      linear-gradient(
+        to bottom,
+        var(--vllnt-glass-tint-top),
+        var(--vllnt-glass-tint-bottom)
+      );
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / calc(0.9 * var(--material-glass-sheen-opacity))),
+      inset 0 -1px 0 rgb(0 0 0 / calc(0.04 * var(--material-glass-sheen-opacity))),
+      var(--vllnt-glass-shadow);
+  }
+
+  .vllnt-glass-floating {
+    --vllnt-glass-shadow: var(--shadow-glass-floating);
+  }
+
+  .vllnt-glass-dense {
+    --vllnt-glass-tint-top: var(--material-glass-tint-dense-top);
+    --vllnt-glass-tint-bottom: var(--material-glass-tint-dense-bottom);
+  }
+
+  /*
+   * The default tint is tuned for the foreground of the default theme, which
+   * the product themes share. A theme preset has its own, weaker foreground
+   * (src/lib/glass-contrast.test.ts), so its default-tint parts take the dense
+   * tint and keep 4.5:1.
+   */
+  html[data-theme]:not(
+      [data-theme="default"],
+      [data-theme="maia"],
+      [data-theme="paas"]
+    )
+    :is(.vllnt-glass, .vllnt-glass-floating) {
+    --vllnt-glass-tint-top: var(--material-glass-tint-dense-top);
+    --vllnt-glass-tint-bottom: var(--material-glass-tint-dense-bottom);
+  }
+
+  /*
+   * Overlay scrim behind a dialog or sheet: it carries no text and no border.
+   * Its 0.8 dim is the scrim's own value, not a glass opacity step, so solid
+   * keeps the dim and drops only the blur.
+   */
+  .vllnt-glass-scrim {
+    --vllnt-glass-blur: var(--blur-glass-sm);
+    background-color: oklch(var(--material-glass-tint) / 0.8);
   }
 }
 
@@ -316,6 +577,16 @@
   .dark body {
     background-color: #000000;
     color: #fafafa;
+  }
+  .vllnt-glass,
+  .vllnt-glass-floating,
+  .vllnt-glass-scrim {
+    background-color: #ffffff;
+  }
+  .dark .vllnt-glass,
+  .dark .vllnt-glass-floating,
+  .dark .vllnt-glass-scrim {
+    background-color: #000000;
   }
   header[data-slot="navbar-saas"] {
     background-color: #ffffff;

@@ -70,9 +70,48 @@
   --size-target-min: 2.75rem;
   --opacity-grain: 1;
   --opacity-contact: 1;
+  --blur-glass-sm: 8px;
+  --blur-glass-md: 12px;
+  --blur-glass-lg: 24px;
+  --blur-glass-default: 20px;
+  --material-glass-opacity-sm: 0.6;
+  --material-glass-opacity-md: 0.72;
+  --material-glass-opacity-lg: 0.82;
+  --material-glass-opacity-xl: 0.9;
+  --material-glass-opacity-default: var(--material-glass-opacity-lg);
+  --material-glass-tint: var(--background);
+  --material-glass-highlight: var(--material-highlight-top);
+  --material-glass-hairline: var(--color-glass-border);
+  --depth-z-0-offset: 0px;
+  --depth-z-0-shadow: none;
+  --depth-z-0-tint: var(--material-glass-opacity-default);
+  --depth-z-1-offset: 2px;
+  --depth-z-1-shadow: var(--shadow-raised);
+  --depth-z-1-tint: var(--material-glass-opacity-default);
+  --depth-z-2-offset: 8px;
+  --depth-z-2-shadow: var(--shadow-overlay);
+  --depth-z-2-tint: var(--material-glass-opacity-default);
+  --depth-z-3-offset: 16px;
+  --depth-z-3-shadow: var(--shadow-floating);
+  --depth-z-3-tint: var(--material-glass-opacity-xl);
+  --depth-z-4-offset: 32px;
+  --depth-z-4-shadow: var(--shadow-floating);
+  --depth-z-4-tint: var(--material-glass-opacity-xl);
+  --color-glass-border: #00000024;
+  --color-glass-input: 0.464 0 0;
+  --color-glass-muted-foreground: 0.3715 0 0;
+  --material-highlight-top: #FFFFFFCC;
+  --material-glass-tint-top: #FFFFFFA3;
+  --material-glass-tint-bottom: #FFFFFF80;
+  --material-glass-tint-dense-top: #FFFFFFE6;
+  --material-glass-tint-dense-bottom: #FFFFFFD6;
+  --material-glass-hairline-edge: #00000014;
+  --material-glass-sheen-opacity: 1;
   --shadow-raised: 0px 1px 3px 0px #0000001A, 0px 1px 2px 0px #0000000F;
   --shadow-overlay: 0px 8px 24px 0px #00000024;
   --shadow-floating: 0px 16px 40px 0px #0000002E;
+  --shadow-glass: 0px 1px 2px 0px #0000000D, 0px 4px 14px 0px #0000000F;
+  --shadow-glass-floating: 0px 1px 2px 0px #00000014, 0px 10px 28px 0px #0000001F;
 }
 .dark {
   --background: 0 0 0;
@@ -105,9 +144,133 @@
   --shadow-raised: 0px 1px 3px 0px #00000066, 0px 1px 2px 0px #0000003D, inset 0px 1px 0px 0px #FFFFFF14;
   --shadow-overlay: 0px 8px 24px 0px #00000080, inset 0px 1px 0px 0px #FFFFFF1F;
   --shadow-floating: 0px 16px 40px 0px #00000099, inset 0px 1px 0px 0px #FFFFFF29;
+  --shadow-glass: 0px 1px 2px 0px #00000066, 0px 4px 14px 0px #0000004D;
+  --shadow-glass-floating: 0px 1px 2px 0px #00000080, 0px 10px 28px 0px #00000080;
+  --color-glass-border: #FFFFFF2E;
+  --color-glass-input: 0.7155 0 0;
+  --color-glass-muted-foreground: 0.8699 0 0;
+  --material-highlight-top: #FFFFFF2E;
+  --material-glass-tint-top: #1C1C1CB2;
+  --material-glass-tint-bottom: #1414149C;
+  --material-glass-tint-dense-top: #121212E0;
+  --material-glass-tint-dense-bottom: #121212D1;
+  --material-glass-hairline-edge: #FFFFFF1A;
+  --material-glass-sheen-opacity: 0.17;
+  --material-glass-opacity-default: var(--material-glass-opacity-lg);
+  --material-glass-tint: var(--background);
+  --material-glass-highlight: var(--material-highlight-top);
+  --material-glass-hairline: var(--color-glass-border);
+  --depth-z-0-tint: var(--material-glass-opacity-default);
+  --depth-z-1-shadow: var(--shadow-raised);
+  --depth-z-1-tint: var(--material-glass-opacity-default);
+  --depth-z-2-shadow: var(--shadow-overlay);
+  --depth-z-2-tint: var(--material-glass-opacity-default);
+  --depth-z-3-shadow: var(--shadow-floating);
+  --depth-z-3-tint: var(--material-glass-opacity-xl);
+  --depth-z-4-shadow: var(--shadow-floating);
+  --depth-z-4-tint: var(--material-glass-opacity-xl);
 }
 @media (pointer: coarse) {
   :root {
     --size-control-xs: var(--size-target-min);
   }
+}
+/* Solid material: the vllnt/material/solid values replace the glass tokens. */
+@media (prefers-reduced-transparency: reduce), (prefers-contrast: more), (forced-colors: active) {
+  :root,
+  .dark {
+    --material-glass-opacity-sm: 1;
+    --material-glass-opacity-md: 1;
+    --material-glass-opacity-lg: 1;
+    --material-glass-opacity-xl: 1;
+    --material-glass-tint: var(--card);
+    --material-glass-highlight: oklch(var(--border));
+    --material-glass-hairline: oklch(var(--border));
+    --material-glass-tint-top: oklch(var(--card));
+    --material-glass-tint-bottom: oklch(var(--card));
+    --material-glass-tint-dense-top: oklch(var(--card));
+    --material-glass-tint-dense-bottom: oklch(var(--card));
+    --material-glass-hairline-edge: oklch(var(--border));
+    --material-glass-sheen-opacity: 0;
+    --shadow-glass: var(--shadow-raised);
+    --shadow-glass-floating: var(--shadow-floating);
+    --blur-glass-sm: 0px;
+    --blur-glass-md: 0px;
+    --blur-glass-lg: 0px;
+    --blur-glass-default: 0px;
+    --material-glass-opacity-default: var(--material-glass-opacity-lg);
+    --depth-z-0-tint: var(--material-glass-opacity-default);
+    --depth-z-1-tint: var(--material-glass-opacity-default);
+    --depth-z-2-tint: var(--material-glass-opacity-default);
+    --depth-z-3-tint: var(--material-glass-opacity-xl);
+    --depth-z-4-tint: var(--material-glass-opacity-xl);
+    --color-glass-input: var(--input);
+    --color-glass-muted-foreground: var(--muted-foreground);
+    --vllnt-glass-backdrop: none;
+  }
+}
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  :root,
+  .dark {
+    --material-glass-opacity-sm: 1;
+    --material-glass-opacity-md: 1;
+    --material-glass-opacity-lg: 1;
+    --material-glass-opacity-xl: 1;
+    --material-glass-tint: var(--card);
+    --material-glass-highlight: oklch(var(--border));
+    --material-glass-hairline: oklch(var(--border));
+    --material-glass-tint-top: oklch(var(--card));
+    --material-glass-tint-bottom: oklch(var(--card));
+    --material-glass-tint-dense-top: oklch(var(--card));
+    --material-glass-tint-dense-bottom: oklch(var(--card));
+    --material-glass-hairline-edge: oklch(var(--border));
+    --material-glass-sheen-opacity: 0;
+    --shadow-glass: var(--shadow-raised);
+    --shadow-glass-floating: var(--shadow-floating);
+    --blur-glass-sm: 0px;
+    --blur-glass-md: 0px;
+    --blur-glass-lg: 0px;
+    --blur-glass-default: 0px;
+    --material-glass-opacity-default: var(--material-glass-opacity-lg);
+    --depth-z-0-tint: var(--material-glass-opacity-default);
+    --depth-z-1-tint: var(--material-glass-opacity-default);
+    --depth-z-2-tint: var(--material-glass-opacity-default);
+    --depth-z-3-tint: var(--material-glass-opacity-xl);
+    --depth-z-4-tint: var(--material-glass-opacity-xl);
+    --color-glass-input: var(--input);
+    --color-glass-muted-foreground: var(--muted-foreground);
+    --vllnt-glass-backdrop: none;
+  }
+}
+:root[data-glass="off"],
+:root[data-glass="off"] .dark,
+[data-material="solid"] {
+  --material-glass-opacity-sm: 1;
+  --material-glass-opacity-md: 1;
+  --material-glass-opacity-lg: 1;
+  --material-glass-opacity-xl: 1;
+  --material-glass-tint: var(--card);
+  --material-glass-highlight: oklch(var(--border));
+  --material-glass-hairline: oklch(var(--border));
+  --material-glass-tint-top: oklch(var(--card));
+  --material-glass-tint-bottom: oklch(var(--card));
+  --material-glass-tint-dense-top: oklch(var(--card));
+  --material-glass-tint-dense-bottom: oklch(var(--card));
+  --material-glass-hairline-edge: oklch(var(--border));
+  --material-glass-sheen-opacity: 0;
+  --shadow-glass: var(--shadow-raised);
+  --shadow-glass-floating: var(--shadow-floating);
+  --blur-glass-sm: 0px;
+  --blur-glass-md: 0px;
+  --blur-glass-lg: 0px;
+  --blur-glass-default: 0px;
+  --material-glass-opacity-default: var(--material-glass-opacity-lg);
+  --depth-z-0-tint: var(--material-glass-opacity-default);
+  --depth-z-1-tint: var(--material-glass-opacity-default);
+  --depth-z-2-tint: var(--material-glass-opacity-default);
+  --depth-z-3-tint: var(--material-glass-opacity-xl);
+  --depth-z-4-tint: var(--material-glass-opacity-xl);
+  --color-glass-input: var(--input);
+  --color-glass-muted-foreground: var(--muted-foreground);
+  --vllnt-glass-backdrop: none;
 }

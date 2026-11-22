@@ -11,6 +11,7 @@ import {
   useState,
 } from "react";
 
+import type { MaterialProps } from "../../../lib/material";
 import { cn } from "../../../lib/utils";
 
 const VIEWBOX_WIDTH = 1000;
@@ -332,10 +333,12 @@ ChoroplethTooltip.displayName = "ChoroplethTooltip";
 export type ChoroplethLegendProps = {
   /** Optional title rendered above the ramp. */
   title?: ReactNode;
-} & Omit<ComponentPropsWithoutRef<"div">, "children">;
+} & MaterialProps &
+  Omit<ComponentPropsWithoutRef<"div">, "children">;
 
 export const ChoroplethLegend = ({
   className,
+  material = "glass",
   ref,
   title,
   ...rest
@@ -346,10 +349,11 @@ export const ChoroplethLegend = ({
   return (
     <div
       className={cn(
-        "absolute bottom-3 right-3 z-10 flex flex-col gap-1 rounded-md border bg-background/95 px-2 py-1 text-[11px] text-foreground shadow-sm backdrop-blur",
+        "vllnt-glass vllnt-glass-dense absolute bottom-3 right-3 z-10 flex flex-col gap-1 rounded-md border px-2 py-1 text-[11px] text-foreground",
         className,
       )}
       data-legend
+      data-material={material}
       ref={ref}
       {...rest}
     >

@@ -13,6 +13,7 @@ import {
   useState,
 } from "react";
 
+import type { MaterialProps } from "../../../lib/material";
 import { cn } from "../../../lib/utils";
 
 const MIN_ZOOM = 1;
@@ -162,15 +163,18 @@ function useMapState(arguments_: {
 export const MapControls = ({
   children,
   className,
+  material = "glass",
   ref,
   ...rest
-}: ComponentPropsWithoutRef<"div"> & { ref?: React.Ref<HTMLDivElement> }) => (
+}: MaterialProps &
+  ComponentPropsWithoutRef<"div"> & { ref?: React.Ref<HTMLDivElement> }) => (
   <div
     aria-label="Map controls"
     className={cn(
-      "absolute right-3 top-3 z-20 flex flex-col gap-1 rounded-md border border-border bg-background/95 p-1 shadow-sm backdrop-blur",
+      "vllnt-glass absolute right-3 top-3 z-20 flex flex-col gap-1 rounded-md border p-1",
       className,
     )}
+    data-material={material}
     ref={ref}
     {...rest}
   >

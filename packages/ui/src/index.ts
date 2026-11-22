@@ -19,6 +19,7 @@ export {
   type SupportedLanguage,
   type SupportedLanguage as UISupportedLanguage,
 } from "./lib/types";
+export type { Material, MaterialProps } from "./lib/material";
 export {
   CUSTOM_THEME_NAME,
   DEFAULT_THEME_PRESET,

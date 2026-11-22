@@ -89,7 +89,7 @@ export async function Footer() {
   const t = await getTranslations("footer");
 
   return (
-    <footer className="border-t border-border bg-background">
+    <footer className="vllnt-glass vllnt-glass-dense border-t">
       <div className="mx-auto max-w-7xl px-4 py-12 lg:px-8">
         <div className="grid grid-cols-2 gap-8 sm:grid-cols-4">
           {COLUMNS.map((column) => (

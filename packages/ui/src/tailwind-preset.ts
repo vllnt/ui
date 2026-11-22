@@ -53,10 +53,11 @@ const preset: Partial<Config> = {
           DEFAULT: "oklch(var(--info) / <alpha-value>)",
           foreground: "oklch(var(--info-foreground) / <alpha-value>)",
         },
-        input: "oklch(var(--input) / <alpha-value>)",
+        input: "oklch(var(--vllnt-glass-input, var(--input)) / <alpha-value>)",
         muted: {
           DEFAULT: "oklch(var(--muted) / <alpha-value>)",
-          foreground: "oklch(var(--muted-foreground) / <alpha-value>)",
+          foreground:
+            "oklch(var(--vllnt-glass-muted-foreground, var(--muted-foreground)) / <alpha-value>)",
         },
         popover: {
           DEFAULT: "oklch(var(--popover) / <alpha-value>)",

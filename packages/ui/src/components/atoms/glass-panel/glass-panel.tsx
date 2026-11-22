@@ -1,18 +1,23 @@
+import type { MaterialProps } from "../../../lib/material";
 import { cn } from "../../../lib/utils";
 
-export type GlassPanelProps = React.ComponentPropsWithoutRef<"div">;
+/** Props for {@link GlassPanel}. `material="solid"` opts out of glass. */
+export type GlassPanelProps = MaterialProps &
+  React.ComponentPropsWithoutRef<"div">;
 
 const GlassPanel = ({
   children,
   className,
+  material = "glass",
   ref,
   ...props
 }: GlassPanelProps & { ref?: React.Ref<HTMLDivElement> }) => (
   <div
     className={cn(
-      "rounded-2xl border border-border/60 bg-background/70 shadow-[0_12px_40px_oklch(var(--foreground)/0.08)] backdrop-blur-xl",
+      "vllnt-glass vllnt-glass-dense rounded-2xl border",
       className,
     )}
+    data-material={material}
     ref={ref}
     {...props}
   >

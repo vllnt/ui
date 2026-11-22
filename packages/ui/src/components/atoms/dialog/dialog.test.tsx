@@ -114,4 +114,41 @@ describe("Dialog", () => {
       },
     );
   });
+
+  it("is glass by default: the scrim and the dense floating content", () => {
+    render(
+      <Dialog defaultOpen>
+        <DialogContent>
+          <DialogTitle>Title</DialogTitle>
+          <DialogDescription>Description</DialogDescription>
+        </DialogContent>
+      </Dialog>,
+    );
+    const content = screen.getByRole("dialog");
+    expect(content).toHaveAttribute("data-material", "glass");
+    expect(content).toHaveClass("vllnt-glass-floating", "vllnt-glass-dense");
+    expect(document.body.querySelector(".vllnt-glass-scrim")).toHaveAttribute(
+      "data-material",
+      "glass",
+    );
+  });
+
+  it("material=solid on the content makes the scrim solid too", () => {
+    render(
+      <Dialog defaultOpen>
+        <DialogContent material="solid">
+          <DialogTitle>Title</DialogTitle>
+          <DialogDescription>Description</DialogDescription>
+        </DialogContent>
+      </Dialog>,
+    );
+    expect(screen.getByRole("dialog")).toHaveAttribute(
+      "data-material",
+      "solid",
+    );
+    expect(document.body.querySelector(".vllnt-glass-scrim")).toHaveAttribute(
+      "data-material",
+      "solid",
+    );
+  });
 });

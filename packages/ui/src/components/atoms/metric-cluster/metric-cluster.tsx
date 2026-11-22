@@ -2,6 +2,7 @@
 
 import type { ComponentPropsWithoutRef, ReactNode } from "react";
 
+import type { MaterialProps } from "../../../lib/material";
 import { cn } from "../../../lib/utils";
 
 /**
@@ -92,7 +93,8 @@ export type MetricClusterProps = {
   x: number;
   /** Anchor Y in canvas pixels. */
   y: number;
-} & ComponentPropsWithoutRef<"div">;
+} & MaterialProps &
+  ComponentPropsWithoutRef<"div">;
 
 const Row = (props: { entry: MetricClusterEntry }): React.ReactElement => {
   const { entry } = props;
@@ -148,6 +150,7 @@ export const MetricCluster = ({
     anchor = "top-right",
     className,
     labels,
+    material = "glass",
     metrics,
     title,
     x,
@@ -159,9 +162,10 @@ export const MetricCluster = ({
     <div
       aria-label={resolvedLabels.region}
       className={cn(
-        "pointer-events-none absolute z-20 flex flex-col gap-1 rounded-md border border-border bg-background/90 p-2 shadow-sm backdrop-blur",
+        "vllnt-glass vllnt-glass-dense pointer-events-none absolute z-20 flex flex-col gap-1 rounded-md border p-2",
         className,
       )}
+      data-material={material}
       data-metric-cluster
       data-metric-cluster-anchor={anchor}
       ref={ref}

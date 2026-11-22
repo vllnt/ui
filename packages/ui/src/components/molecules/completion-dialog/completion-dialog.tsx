@@ -5,6 +5,7 @@ import { memo, useRef } from "react";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import type { KeyboardEvent, ReactNode } from "react";
 
+import type { MaterialProps } from "../../../lib/material";
 import type { HeadingTag } from "../../../lib/types";
 import { useReturnFocus } from "../../../lib/use-return-focus";
 import { cn } from "../../../lib/utils";
@@ -39,11 +40,11 @@ export type CompletionDialogProps = {
   onClose: () => void;
   onConfirm: () => void;
   title: string;
-};
+} & MaterialProps;
 
 type DialogBodyProps = Omit<
   CompletionDialogProps,
-  "isOpen" | "modal" | "onClose"
+  "isOpen" | "material" | "modal" | "onClose"
 >;
 
 type DialogCloseButtonProps = Pick<DialogBodyProps, "closeIcon">;
@@ -168,7 +169,7 @@ function DialogBody({
     <DialogPrimitive.Content
       {...(description ? {} : { "aria-describedby": undefined })}
       className={cn(
-        "relative z-10 w-full max-w-md mx-4 p-6 bg-background border border-border rounded-lg shadow-lg",
+        "vllnt-glass-floating vllnt-glass-dense relative z-10 w-full max-w-md mx-4 p-6 border rounded-lg",
         "animate-in fade-in-0 zoom-in-95 duration-200",
         className,
       )}
@@ -210,12 +211,13 @@ function DialogBody({
  * shortcuts act while focus sits inside the dialog and nowhere else.
  */
 const BACKDROP_CLASS = cn(
-  "absolute inset-0 bg-background/80 backdrop-blur-sm",
+  "vllnt-glass-scrim absolute inset-0",
   "animate-in fade-in-0 duration-200",
 );
 
 function CompletionDialogImpl({
   isOpen,
+  material = "glass",
   modal = true,
   onClose,
   ...props
@@ -229,7 +231,10 @@ function CompletionDialogImpl({
       open={isOpen}
     >
       {isOpen ? (
-        <div className="absolute inset-0 z-[100] flex items-center justify-center">
+        <div
+          className="absolute inset-0 z-[100] flex items-center justify-center"
+          data-material={material}
+        >
           {modal ? (
             <DialogPrimitive.Overlay className={BACKDROP_CLASS} />
           ) : (

@@ -2,6 +2,7 @@
 
 import type { ComponentPropsWithoutRef, ReactNode } from "react";
 
+import type { MaterialProps } from "../../../lib/material";
 import { cn } from "../../../lib/utils";
 
 /**
@@ -80,7 +81,8 @@ export type StickyMetricProps = {
   x: number;
   /** Anchor Y in canvas pixels. */
   y: number;
-} & ComponentPropsWithoutRef<"div">;
+} & MaterialProps &
+  ComponentPropsWithoutRef<"div">;
 
 /**
  * Pinned metric pill that sticks to a canvas object's corner. Use to
@@ -117,6 +119,7 @@ export const StickyMetric = ({
     detail,
     label,
     labels,
+    material = "glass",
     tone = "neutral",
     value,
     x,
@@ -128,9 +131,10 @@ export const StickyMetric = ({
     <div
       aria-label={resolvedLabels.region}
       className={cn(
-        "pointer-events-none absolute z-20 inline-flex items-center gap-1.5 rounded-full border border-border bg-background/90 px-2 py-1 text-[11px] shadow-sm backdrop-blur",
+        "vllnt-glass vllnt-glass-dense pointer-events-none absolute z-20 inline-flex items-center gap-1.5 rounded-full border px-2 py-1 text-[11px]",
         className,
       )}
+      data-material={material}
       data-sticky-anchor={anchor}
       data-sticky-metric
       data-sticky-tone={tone}

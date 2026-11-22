@@ -1,9 +1,11 @@
 import * as React from "react";
 
+import type { MaterialProps } from "../../../lib/material";
 import { cn } from "../../../lib/utils";
 
-/** Props for {@link LiquidGlass}. */
-export type LiquidGlassProps = React.ComponentPropsWithoutRef<"div">;
+/** Props for {@link LiquidGlass}. `material="solid"` opts out of glass. */
+export type LiquidGlassProps = MaterialProps &
+  React.ComponentPropsWithoutRef<"div">;
 
 /**
  * Glass surface with a looping liquid sheen drifting across the backdrop.
@@ -18,15 +20,17 @@ export type LiquidGlassProps = React.ComponentPropsWithoutRef<"div">;
 export const LiquidGlass = ({
   children,
   className,
+  material = "glass",
   ref,
   ...props
 }: LiquidGlassProps & { ref?: React.Ref<HTMLDivElement> }) => {
   return (
     <div
       className={cn(
-        "relative overflow-hidden rounded-xl border border-border/50 bg-card/50 backdrop-blur-md",
+        "vllnt-glass vllnt-glass-dense relative overflow-hidden rounded-xl border",
         className,
       )}
+      data-material={material}
       ref={ref}
       {...props}
     >

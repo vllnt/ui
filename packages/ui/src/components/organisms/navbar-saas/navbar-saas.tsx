@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { ReactNode } from "react";
 
+import type { MaterialProps } from "../../../lib/material";
 import { cn } from "../../../lib/utils";
 import { Button } from "../../atoms/button/button";
 import { useSidebar } from "../../atoms/sidebar-provider/sidebar-provider";
@@ -23,7 +24,7 @@ export type NavbarSaasProps = {
   rightSlot?: ReactNode;
   showMobileMenu?: boolean;
   sidebarId?: string;
-};
+} & MaterialProps;
 
 const EMPTY_NAV_ITEMS: NavItem[] = [];
 
@@ -40,6 +41,7 @@ function getHrefPathname(href: string): string {
 export function NavbarSaas({
   brand,
   closeSidebarLabel = "Close sidebar",
+  material = "glass",
   navItems = EMPTY_NAV_ITEMS,
   openSidebarLabel = "Open sidebar",
   rightSlot,
@@ -51,9 +53,9 @@ export function NavbarSaas({
 
   return (
     <header
-      className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 shrink-0"
+      className="vllnt-glass sticky top-0 z-50 w-full border-b shrink-0"
+      data-material={material}
       data-slot="navbar-saas"
-      style={{ WebkitBackdropFilter: "blur(8px)" }}
     >
       <div className="w-full">
         <div className="mx-auto flex h-16 items-center justify-between px-4">

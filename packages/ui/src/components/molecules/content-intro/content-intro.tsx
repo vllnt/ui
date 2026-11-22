@@ -4,6 +4,7 @@ import { memo, useEffect, useRef } from "react";
 
 import type { ReactNode } from "react";
 
+import type { Material } from "../../../lib/material";
 import type { HeadingTag } from "../../../lib/types";
 import { cn } from "../../../lib/utils";
 import { Button } from "../../atoms/button/button";
@@ -30,6 +31,8 @@ export type ContentIntroProps = {
   isLoading?: boolean;
   /** Labels for i18n */
   labels?: ContentIntroLabels;
+  /** Surface material of the sticky bar. Defaults to `"glass"`; `"solid"` opts out. */
+  material?: Material;
   /** Callback when navigating to section */
   onGoToSection: (index: number) => void;
   /** Callback when starting */
@@ -157,6 +160,7 @@ type ContentIntroStickyBarProps = {
   estimatedTime: string;
   hasProgress: boolean;
   labels: Required<ContentIntroLabels>;
+  material: Material;
   onStart: () => void;
   sectionCount: number;
 };
@@ -166,11 +170,15 @@ function ContentIntroStickyBar({
   estimatedTime,
   hasProgress,
   labels: mergedLabels,
+  material,
   onStart,
   sectionCount,
 }: ContentIntroStickyBarProps): ReactNode {
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-50 border-t border-border bg-background/80 backdrop-blur-sm safe-bottom">
+    <div
+      className="vllnt-glass vllnt-glass-dense fixed bottom-0 left-0 right-0 z-50 border-t safe-bottom"
+      data-material={material}
+    >
       <div className="mx-auto max-w-3xl p-4">
         <div className="flex items-center justify-between gap-4">
           <p className="text-sm text-muted-foreground hidden sm:block">
@@ -240,6 +248,7 @@ function ContentIntroImpl({
   estimatedTime,
   isLoading = false,
   labels = EMPTY_CONTENT_INTRO_LABELS,
+  material = "glass",
   onGoToSection,
   onStart,
   renderIntroContent,
@@ -285,6 +294,7 @@ function ContentIntroImpl({
         estimatedTime={estimatedTime}
         hasProgress={hasProgress}
         labels={mergedLabels}
+        material={material}
         onStart={onStart}
         sectionCount={sections.length}
       />
