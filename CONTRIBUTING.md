@@ -42,7 +42,8 @@ The **Privacy Guard** check keeps personal addresses and private hostnames out o
 - A squash merge copies each commit author's email into a `Co-authored-by` trailer, so every commit in a PR needs a noreply author.
 - Check a range locally with `PRIVACY_COMMIT_RANGE=origin/main..HEAD bash scripts/check-commit-emails.sh`. The `.githooks/pre-push` hook runs the same check on each push (bypass once with `git push --no-verify`).
 - Findings print the commit, field and category only, never the matched value.
-- A few old commits are skipped by SHA in [`.privacy-commit-allowlist`](.privacy-commit-allowlist): accepted exposure, history is not rewritten. Add entries only with owner approval.
+- Old accepted exposure is covered by the baseline in [`.privacy-baseline`](.privacy-baseline) (the standard vllnt baseline file): on `main` the check scans the commits after that SHA, and history is not rewritten. Move the baseline only with owner approval.
+- A weekly, non-required `Privacy Guard history audit` scans the full history of every ref. It stays red while the accepted exposure is still in history.
 
 ## Adding a component
 

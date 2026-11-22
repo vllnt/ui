@@ -17,23 +17,27 @@ chmod +x "$REPO/scripts/check-commit-emails.sh"
 git -C "$REPO" init -q
 git -C "$REPO" config user.email "123+tester@users.noreply.github.com"
 git -C "$REPO" config user.name tester
+git -C "$REPO" config commit.gpgsign false
 
 failures=0
 LAST_OUTPUT=""
 LAST_STATUS=0
 
-# Fragmented fixtures (adjacent quoted strings).
-ICLOUD_ADDR="someone@""icloud.com"
-OVH_HOST="vps-abc123fe"".vps.ovh.net"
+# Fixtures are assembled from fragments so this file never contains a
+# contiguous real provider suffix, personal mailbox domain, or private
+# address — including extra denylist patterns that may be loaded in CI.
+# Assembled values stay valid for the checks below.
+DISALLOWED_ADDR="someone@""example.invalid"
+OVH_HOST="v""ps-abc123fe.v""ps.ov""h.net"
 OVH_EMAIL="ubuntu@${OVH_HOST}"
-TS_HOST="box.example-net.ts"".net"
+TS_HOST="box.example-tailnet"".ts.net"
 PRIV_IP="192.168"."0.42"
 NOREPLY="123+tester@users.noreply.github.com"
 WEB_FLOW="noreply@github.com"
-SYNTH_HOST="vps-0000test"".vps.ovh.net"
+SYNTH_HOST="v""ps-0000test.v""ps.ov""h.net"
+SYNTH_HOST_BARE="v""ps-0000test"
 BOT_ADDR="support@""github.com"
 BOT_LOOKALIKE="support@""github.com.example"
-ALLOWLIST="$REPO/.privacy-commit-allowlist"
 
 commit() {
   # commit <message> [VAR=value ...]  — runs in $REPO
@@ -51,8 +55,11 @@ run() {
       --all)
         args+=("$1"); shift
         ;;
-      --range)
+      --range|--baseline-file)
         args+=("$1" "$2"); shift 2
+        ;;
+      --print-baseline)
+        args+=("$1"); shift
         ;;
       *=*)
         envvars+=("$1"); shift
@@ -94,31 +101,31 @@ commit "clean base"
 run "noreply history passes" 0 PRIVACY_COMMIT_RANGE=--all
 
 # 2. Personal author email fails; value withheld; sha and category reported.
-commit "personal author" GIT_AUTHOR_EMAIL="$ICLOUD_ADDR" GIT_AUTHOR_NAME=someone
+commit "personal author" GIT_AUTHOR_EMAIL="$DISALLOWED_ADDR" GIT_AUTHOR_NAME=someone
 personal_sha="$(git -C "$REPO" rev-parse --short HEAD)"
 run "personal author email fails" 1 PRIVACY_COMMIT_RANGE=--all
 expect "reports author field" "author"
 expect "reports disallowed-email" "disallowed-email"
 expect "reports short sha" "$personal_sha"
-refute "does not print personal address" "$ICLOUD_ADDR"
+refute "does not print personal address" "$DISALLOWED_ADDR"
 refute "does not print local-part" "someone@"
 
 # Reset to a clean line by going back? Keep going; later tests use ranges.
 
 # 3. Personal Co-authored-by trailer fails.
-commit "$(printf 'add collaborator\n\nCo-authored-by: Someone <%s>\n' "$ICLOUD_ADDR")"
+commit "$(printf 'add collaborator\n\nCo-authored-by: Someone <%s>\n' "$DISALLOWED_ADDR")"
 trailer_sha="$(git -C "$REPO" rev-parse --short HEAD)"
 run "personal Co-authored-by fails" 1 --range "$trailer_sha^..$trailer_sha"
 expect "reports Co-authored-by" "Co-authored-by"
 expect "reports disallowed-email for trailer" "disallowed-email"
-refute "trailer value withheld" "$ICLOUD_ADDR"
+refute "trailer value withheld" "$DISALLOWED_ADDR"
 
 # 4. Personal Signed-off-by trailer fails.
-commit "$(printf 'signoff\n\nSigned-off-by: Someone <%s>\n' "$ICLOUD_ADDR")"
+commit "$(printf 'signoff\n\nSigned-off-by: Someone <%s>\n' "$DISALLOWED_ADDR")"
 sign_sha="$(git -C "$REPO" rev-parse --short HEAD)"
 run "personal Signed-off-by fails" 1 --range "$sign_sha^..$sign_sha"
 expect "reports Signed-off-by" "Signed-off-by"
-refute "signoff value withheld" "$ICLOUD_ADDR"
+refute "signoff value withheld" "$DISALLOWED_ADDR"
 
 # 5. Provider VPS hostname as author email fails as private-hostname.
 commit "vps author" GIT_AUTHOR_EMAIL="$OVH_EMAIL" GIT_AUTHOR_NAME=ubuntu
@@ -174,22 +181,22 @@ run "invalid range exits 2" 2 --range "this-is-not-a-rev-xyz"
 run "full history with dirt fails" 1 --all
 expect "full history fail line" "FAIL commit metadata"
 
-# 13. A hostname-looking trailer fails; a full or bare host is withheld.
+# 12a. A hostname-looking trailer fails; a full or bare host is withheld.
 commit "$(printf 'add host\n\nCo-authored-by: ubuntu <ubuntu@%s>\n' "$SYNTH_HOST")"
 host_sha="$(git -C "$REPO" rev-parse --short HEAD)"
 run "hostname Co-authored-by fails" 1 --range "$host_sha^..$host_sha"
 expect "reports Co-authored-by for host" "Co-authored-by"
 expect "reports private-hostname for trailer" "private-hostname"
 refute "trailer hostname withheld" "$SYNTH_HOST"
-refute "trailer host name withheld" "vps-0000test"
+refute "trailer host name withheld" "$SYNTH_HOST_BARE"
 
-commit "$(printf 'add bare host\n\nCo-authored-by: ubuntu <ubuntu@vps-0000test>\n')"
+commit "$(printf 'add bare host\n\nCo-authored-by: ubuntu <ubuntu@%s>\n' "$SYNTH_HOST_BARE")"
 bare_sha="$(git -C "$REPO" rev-parse --short HEAD)"
 run "bare hostname Co-authored-by fails" 1 --range "$bare_sha^..$bare_sha"
 expect "reports disallowed-email for bare host" "disallowed-email"
-refute "bare host name withheld" "vps-0000test"
+refute "bare host name withheld" "$SYNTH_HOST_BARE"
 
-# 14. The public Dependabot sign-off address passes; a lookalike does not.
+# 12b. The public Dependabot sign-off address passes; a lookalike does not.
 commit "$(printf 'bump a dependency\n\nSigned-off-by: dependabot[bot] <%s>\n' "$BOT_ADDR")"
 bot_sha="$(git -C "$REPO" rev-parse --short HEAD)"
 run "Dependabot sign-off address passes" 0 --range "$bot_sha^..$bot_sha"
@@ -200,57 +207,130 @@ run "lookalike of the bot address fails" 1 --range "$look_sha^..$look_sha"
 expect "reports Signed-off-by for lookalike" "Signed-off-by"
 refute "lookalike withheld" "$BOT_LOOKALIKE"
 
-# 15. Commit allowlist: full SHAs only, checked before anything is read or printed.
-commit "accepted author" GIT_AUTHOR_EMAIL="$ICLOUD_ADDR" GIT_AUTHOR_NAME=someone
-acc1="$(git -C "$REPO" rev-parse HEAD)"
-acc1_short="$(git -C "$REPO" rev-parse --short HEAD)"
-commit "$(printf 'accepted trailers mention %s\n\nCo-authored-by: Someone <%s>\nCo-authored-by: ubuntu <ubuntu@%s>\n' "$TS_HOST" "$ICLOUD_ADDR" "$OVH_HOST")"
-acc2="$(git -C "$REPO" rev-parse HEAD)"
-acc2_short="$(git -C "$REPO" rev-parse --short HEAD)"
-commit "$(printf 'not accepted\n\nCo-authored-by: Someone <%s>\n' "$ICLOUD_ADDR")"
-bad="$(git -C "$REPO" rev-parse HEAD)"
-bad_short="$(git -C "$REPO" rev-parse --short HEAD)"
+# --- SHA baseline ---
 
-run "without an allowlist the range fails" 1 --range "$acc1^..$bad"
-expect "unlisted commit reported" "$bad_short"
+write_baseline() {
+  local dest="${4:-$REPO/.privacy-baseline}"
+  printf '%s\n' \
+    "# test fixture — not a production baseline" \
+    "" \
+    "sha: $1" \
+    "reason: $2" \
+    "decided: $3" \
+    > "$dest"
+}
 
-printf '%s\n' "$acc1" "$acc2" > "$ALLOWLIST"
-run "allowlisted commits are skipped, an unlisted one still fails" 1 --range "$acc1^..$bad"
-expect "reports the unlisted commit" "$bad_short"
-expect "reports one finding" "1 finding"
-refute "allowlisted author commit not printed" "$acc1_short"
-refute "allowlisted trailer commit not printed" "$acc2_short"
-refute "allowlisted personal address withheld" "$ICLOUD_ADDR"
-refute "allowlisted tailnet host withheld" "$TS_HOST"
-refute "allowlisted provider host withheld" "$OVH_HOST"
+# 13. No baseline file: --print-baseline is silent and succeeds.
+run "print-baseline without file is silent" 0 --print-baseline
+if [[ -n "$LAST_OUTPUT" ]]; then
+  printf 'FAIL print-baseline without file: expected empty output\n%s\n' "$LAST_OUTPUT" >&2
+  failures=$((failures + 1))
+fi
 
-printf '# accepted\n\n%s # author\n%s\n   %s   # trailers\n' "$acc1" "$acc2" "$bad" > "$ALLOWLIST"
-run "comments, blank lines and inline comments are accepted" 0 --range "$acc1^..$bad"
-expect "skipped count reported" "3 allowlisted skipped"
-refute "skipped run withholds the address" "$ICLOUD_ADDR"
+# 14–16. A valid baseline excludes earlier dirt and is printed as a full SHA.
+commit "dirt before baseline" GIT_AUTHOR_EMAIL="$DISALLOWED_ADDR" GIT_COMMITTER_EMAIL="$DISALLOWED_ADDR"
+dirty_full="$(git -C "$REPO" rev-parse HEAD)"
+dirty_short="$(git -C "$REPO" rev-parse --short HEAD)"
+commit "clean after baseline"
+write_baseline "$dirty_full" "accepted historical test fixture" "2026-11-22"
+run "print-baseline emits resolved sha" 0 --print-baseline
+if [[ "$LAST_OUTPUT" != "$dirty_full" ]]; then
+  printf 'FAIL print-baseline emits resolved sha: expected the baseline sha only\n' >&2
+  failures=$((failures + 1))
+fi
+run "baseline excludes earlier dirt" 0
+expect "baseline auto-range ok" "OK"
+# The baseline commit is itself dirty and many dirty commits sit before it.
+# Only the one noreply commit after it is scanned, and nothing is printed
+# about the excluded ones.
+expect "only the commit after the baseline is scanned" "1 commit\(s\) in range"
+refute "baseline commit is not reported" "$dirty_short"
+run "explicit --all overrides baseline" 1 --all
+expect "override still reports fail" "FAIL commit metadata"
+refute "override withholds disallowed" "$DISALLOWED_ADDR"
 
-run "a range of one allowlisted commit is empty" 0 --range "$acc1^..$acc1"
-expect "empty range reports the skip" "no commits in range, 1 allowlisted skipped"
+# 17. Dirt after the baseline is still detected.
+commit "dirt after baseline" GIT_AUTHOR_EMAIL="$DISALLOWED_ADDR" GIT_COMMITTER_EMAIL="$DISALLOWED_ADDR"
+run "dirt after baseline still fails" 1
+expect "post-baseline finding" "disallowed-email"
+refute "post-baseline withheld" "$DISALLOWED_ADDR"
 
-commit "accepted author again" GIT_AUTHOR_EMAIL="$ICLOUD_ADDR" GIT_AUTHOR_NAME=someone
-again_short="$(git -C "$REPO" rev-parse --short HEAD)"
-run "a later commit is not covered by earlier entries" 1 --range "$acc1^..HEAD"
-expect "reports the later commit" "$again_short"
+# 17a. A non-noreply Co-authored-by trailer after the baseline is detected
+# by the baseline range itself, and the value is withheld.
+commit "$(printf 'add collaborator\n\nCo-authored-by: Someone <%s>\n' "$DISALLOWED_ADDR")"
+post_trailer_sha="$(git -C "$REPO" rev-parse --short HEAD)"
+run "Co-authored-by after baseline fails" 1
+expect "baseline range reports the trailer commit" "$post_trailer_sha"
+expect "baseline range reports the trailer field" "Co-authored-by"
+refute "post-baseline trailer withheld" "$DISALLOWED_ADDR"
 
-git -C "$REPO" rev-list --all > "$ALLOWLIST"
-run "allowlisting every commit clears a full scan" 0 --all
-expect "full scan reports the skips" "allowlisted skipped"
+# 17b. A hostname-looking trailer after the baseline is detected, withheld.
+commit "$(printf 'add host\n\nCo-authored-by: ubuntu <ubuntu@%s>\n' "$SYNTH_HOST")"
+post_host_sha="$(git -C "$REPO" rev-parse --short HEAD)"
+run "hostname trailer after baseline fails" 1
+expect "baseline range reports the host commit" "$post_host_sha"
+expect "baseline range reports private-hostname" "private-hostname"
+refute "post-baseline host withheld" "$SYNTH_HOST"
+refute "post-baseline host name withheld" "$SYNTH_HOST_BARE"
 
-printf '%s\n' "${acc1:0:8}" > "$ALLOWLIST"
-run "a short SHA in the allowlist is rejected" 2 --range "$acc1^..$bad"
-expect "error names the line" "line 1"
+# 17c. A noreply commit after the baseline passes on its own range.
+commit "clean again"
+post_clean_sha="$(git -C "$REPO" rev-parse --short HEAD)"
+run "noreply commit after baseline passes" 0 --range "$post_clean_sha^..$post_clean_sha"
 
-printf '%s\n' "$ICLOUD_ADDR" > "$ALLOWLIST"
-run "a non-SHA line in the allowlist is rejected" 2 --range "$acc1^..$bad"
-refute "rejected line is not echoed" "$ICLOUD_ADDR"
+# 18. Explicit --range still wins, and a present valid file is accepted.
+root="$(git -C "$REPO" rev-list --max-parents=0 HEAD)"
+run "explicit clean range wins over baseline" 0 --range "$root"
+expect "explicit range ok" "OK"
 
-rm -f "$ALLOWLIST"
-run "removing the allowlist restores the failure" 1 --range "$acc1^..$bad"
+# 19. Invalid files fail even when a range flag is also given.
+write_baseline "$dirty_full" "" "2026-11-22"
+run "empty reason exits 2" 2 --print-baseline
+expect "empty reason message" "reason is empty"
+
+write_baseline "$dirty_full" "accepted historical test fixture" "22-11-2026"
+run "bad decided date exits 2" 2 --print-baseline
+expect "bad decided message" "YYYY-MM-DD"
+
+printf '%s\n' "reason: accepted historical test fixture" "decided: 2026-11-22" > "$REPO/.privacy-baseline"
+run "missing sha exits 2" 2 --print-baseline
+expect "missing sha message" "must set sha, reason, and decided"
+
+write_baseline "not-a-sha" "accepted historical test fixture" "2026-11-22"
+run "malformed sha exits 2" 2 --print-baseline
+expect "malformed sha message" "not a git SHA"
+
+write_baseline "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" "accepted historical test fixture" "2026-11-22"
+run "unresolved sha exits 2" 2 --print-baseline
+expect "unresolved sha message" "does not resolve to a commit"
+
+write_baseline "$dirty_full" "accepted historical test fixture" "2026-11-22"
+printf '%s\n' "sha: $dirty_full" >> "$REPO/.privacy-baseline"
+run "duplicate key exits 2" 2 --print-baseline
+expect "duplicate key message" "duplicate key"
+
+printf '%s\n' "sha: $dirty_full" "reason: accepted historical test fixture" "decided: 2026-11-22" "owner: nobody" > "$REPO/.privacy-baseline"
+run "unknown key exits 2" 2 --print-baseline
+expect "unknown key message" "unknown key"
+
+# A present but invalid baseline must fail even with --all, so CI cannot
+# skip validation by setting a range.
+printf '%s\n' "sha: not-a-sha" "reason: accepted historical test fixture" "decided: 2026-11-22" > "$REPO/.privacy-baseline"
+run "invalid baseline fails with --all" 2 --all
+expect "invalid with --all message" "not a git SHA"
+
+# 20. --baseline-file can point at an alternate path.
+rm -f "$REPO/.privacy-baseline"
+write_baseline "$dirty_full" "accepted historical test fixture" "2026-11-22" "$REPO/.other-baseline"
+run "alternate baseline file prints sha" 0 --print-baseline --baseline-file .other-baseline
+if [[ "$LAST_OUTPUT" != "$dirty_full" ]]; then
+  printf 'FAIL alternate baseline file prints sha: expected the baseline sha only\n' >&2
+  failures=$((failures + 1))
+fi
+# Without --baseline-file, the default path is absent again, so this is --all
+# over dirty history and must fail.
+run "missing default baseline falls back to all" 1
+expect "fallback fail line" "FAIL commit metadata"
 
 if [[ "$failures" -ne 0 ]]; then
   echo "FAILED $failures test(s)" >&2

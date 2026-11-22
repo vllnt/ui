@@ -11,17 +11,20 @@
 # Range (first match wins):
 #   $PRIVACY_COMMIT_RANGE   a git revision range, or the token --all
 #   --range <rev> | --all   command-line flags
+#   otherwise, if a baseline file is present, <baseline-sha>..HEAD
 #   otherwise               --all
+#
+# Optional committed baseline file (default .privacy-baseline, override
+# with $PRIVACY_BASELINE_FILE or --baseline-file). Allowed only for
+# historical exposure the maintainer has accepted, recorded in the
+# security-findings ledger. The file is validated whenever it is present.
+# --print-baseline prints the resolved SHA and exits, or prints nothing
+# and exits 0 when the file is absent.
 #
 # Allowed emails (override with $ALLOWED_EMAIL_PATTERN):
 #   *@users.noreply.github.com  and  noreply@github.com
 #   the public GitHub bot address Dependabot signs its commits with (a
 #   Signed-off-by trailer), so Dependabot pull requests are not blocked
-#
-# Accepted exposure (.privacy-commit-allowlist): full 40-character commit SHAs,
-# one per line, '#' starts a comment. Listed commits are dropped from the range
-# before any of their metadata is read, so nothing about them is printed. A
-# SHA names exactly one commit; a rewritten or descendant commit is checked.
 #
 # Exit codes: 0 clean, 1 finding, 2 misuse.
 
@@ -30,7 +33,6 @@ set -u
 cd "$(git rev-parse --show-toplevel)" || exit 2
 
 ALLOWED_EMAIL_PATTERN="${ALLOWED_EMAIL_PATTERN:-(@users\.noreply\.github\.com|^noreply@github\.com|^support@github\.com)$}"
-COMMIT_ALLOWLIST=.privacy-commit-allowlist
 
 # Hostname and address patterns, assembled from fragments so this file does
 # not itself match a tree denylist. Keep them generic: no personal names.
@@ -49,11 +51,84 @@ HOSTNAME_PATTERN="${TS_NET}|${OVH_VPS}|${OVH_VPS_CA}|${HETZNER_DED}|${HETZNER_CL
 IP_PATTERN="${CGNAT}|${RFC10}|${RFC192}|${RFC172}"
 
 usage() {
-  echo "usage: $0 [--all] [--range <rev>]" >&2
+  echo "usage: $0 [--all] [--range <rev>] [--print-baseline] [--baseline-file <path>]" >&2
   exit 2
 }
 
+# parse_baseline <path>
+#   Prints the resolved 40-character commit SHA on stdout.
+#   Exit 2 on a present but invalid file. Does not print reason text.
+parse_baseline() {
+  local file="$1"
+  local line key value sha="" reason="" decided=""
+  local -A seen=()
+  while IFS= read -r line || [[ -n "$line" ]]; do
+    line="${line%$'\r'}"
+    [[ -z "${line// /}" ]] && continue
+    [[ "$line" == \#* ]] && continue
+    if [[ "$line" != *:* ]]; then
+      echo "error: .privacy-baseline has a malformed line" >&2
+      return 2
+    fi
+    key="${line%%:*}"
+    value="${line#*:}"
+    key="${key#"${key%%[![:space:]]*}"}"
+    key="${key%"${key##*[![:space:]]}"}"
+    value="${value#"${value%%[![:space:]]*}"}"
+    value="${value%"${value##*[![:space:]]}"}"
+    key="${key,,}"
+    if [[ -z "$key" ]]; then
+      echo "error: .privacy-baseline has a malformed line" >&2
+      return 2
+    fi
+    if [[ -n "${seen[$key]:-}" ]]; then
+      echo "error: .privacy-baseline has a duplicate key" >&2
+      return 2
+    fi
+    seen[$key]=1
+    case "$key" in
+      sha)
+        if [[ ! "$value" =~ ^[0-9a-fA-F]{7,40}$ ]]; then
+          echo "error: .privacy-baseline sha is not a git SHA" >&2
+          return 2
+        fi
+        sha="$value"
+        ;;
+      reason)
+        if [[ -z "$value" ]]; then
+          echo "error: .privacy-baseline reason is empty" >&2
+          return 2
+        fi
+        reason="$value"
+        ;;
+      decided)
+        if [[ ! "$value" =~ ^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$ ]]; then
+          echo "error: .privacy-baseline decided must be YYYY-MM-DD" >&2
+          return 2
+        fi
+        decided="$value"
+        ;;
+      *)
+        echo "error: .privacy-baseline has an unknown key" >&2
+        return 2
+        ;;
+    esac
+  done < "$file"
+  if [[ -z "$sha" || -z "$reason" || -z "$decided" ]]; then
+    echo "error: .privacy-baseline must set sha, reason, and decided" >&2
+    return 2
+  fi
+  local resolved
+  if ! resolved="$(git rev-parse --verify "${sha}^{commit}" 2>/dev/null)"; then
+    echo "error: .privacy-baseline sha does not resolve to a commit" >&2
+    return 2
+  fi
+  printf '%s\n' "$resolved"
+}
+
 RANGE="${PRIVACY_COMMIT_RANGE:-}"
+BASELINE_FILE="${PRIVACY_BASELINE_FILE:-.privacy-baseline}"
+PRINT_BASELINE=0
 while [[ $# -gt 0 ]]; do
   case "$1" in
     --all) RANGE="--all"; shift ;;
@@ -62,11 +137,41 @@ while [[ $# -gt 0 ]]; do
       RANGE="$2"
       shift 2
       ;;
+    --print-baseline) PRINT_BASELINE=1; shift ;;
+    --baseline-file)
+      [[ $# -ge 2 ]] || usage
+      BASELINE_FILE="$2"
+      shift 2
+      ;;
     -h|--help) usage ;;
     *) usage ;;
   esac
 done
-[[ -n "$RANGE" ]] || RANGE="--all"
+
+BASELINE_SHA=""
+if [[ -f "$BASELINE_FILE" ]]; then
+  if ! BASELINE_SHA="$(parse_baseline "$BASELINE_FILE")"; then
+    exit 2
+  fi
+elif [[ -e "$BASELINE_FILE" ]]; then
+  echo "error: .privacy-baseline exists but is not a regular file" >&2
+  exit 2
+fi
+
+if [[ "$PRINT_BASELINE" -eq 1 ]]; then
+  if [[ -n "$BASELINE_SHA" ]]; then
+    printf '%s\n' "$BASELINE_SHA"
+  fi
+  exit 0
+fi
+
+if [[ -z "$RANGE" ]]; then
+  if [[ -n "$BASELINE_SHA" ]]; then
+    RANGE="${BASELINE_SHA}..HEAD"
+  else
+    RANGE="--all"
+  fi
+fi
 
 # Validate the allowed-email pattern without printing it.
 if ! printf 'a@users.noreply.github.com\n' | grep -qE "$ALLOWED_EMAIL_PATTERN"; then
@@ -81,25 +186,7 @@ fi
 # Resolve the commit list. An empty range (no new commits) is clean.
 commits="$(mktemp)"
 findings="$(mktemp)"
-allowed="$(mktemp)"
-kept="$(mktemp)"
-trap 'rm -f "$commits" "$findings" "$allowed" "$kept"' EXIT
-
-# Load the commit allowlist. Errors name the line only, never its content.
-if [[ -f "$COMMIT_ALLOWLIST" ]]; then
-  n=0
-  while IFS= read -r entry || [[ -n "$entry" ]]; do
-    n=$((n + 1))
-    entry="${entry%%#*}"
-    entry="${entry//[[:space:]]/}"
-    [[ -n "$entry" ]] || continue
-    if [[ ! "$entry" =~ ^[0-9a-f]{40}$ ]]; then
-      echo "error: $COMMIT_ALLOWLIST line $n is not a full 40-character commit SHA" >&2
-      exit 2
-    fi
-    printf '%s\n' "$entry" >> "$allowed"
-  done < "$COMMIT_ALLOWLIST"
-fi
+trap 'rm -f "$commits" "$findings"' EXIT
 
 if [[ "$RANGE" == "--all" ]]; then
   if ! git rev-list --all > "$commits" 2>/dev/null; then
@@ -113,18 +200,8 @@ else
   fi
 fi
 
-# Drop allowlisted commits before any message, author or trailer is read.
-skipped=0
-if [[ -s "$allowed" && -s "$commits" ]]; then
-  grep -vxFf "$allowed" "$commits" > "$kept" || true
-  skipped=$(( $(wc -l < "$commits") - $(wc -l < "$kept") ))
-  cp "$kept" "$commits"
-fi
-skipped_note=""
-[[ "$skipped" -gt 0 ]] && skipped_note=", $skipped allowlisted skipped"
-
 if [[ ! -s "$commits" ]]; then
-  echo "OK    commit metadata: no commits in range${skipped_note}"
+  echo "OK    commit metadata: no commits in range"
   exit 0
 fi
 
@@ -219,5 +296,5 @@ if [[ -s "$findings" ]]; then
 fi
 
 n="$(wc -l < "$commits" | tr -d ' ')"
-echo "OK    commit metadata: $n commit(s) in range, no findings${skipped_note}"
+echo "OK    commit metadata: $n commit(s) in range, no findings"
 exit 0
