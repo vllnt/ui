@@ -6,6 +6,11 @@
 
 set -u
 
+# The checker reads these from the environment. CI exports a real range for
+# the later steps, which is not a valid range in the throwaway repository, so
+# tests that need one pass it explicitly through run().
+unset PRIVACY_COMMIT_RANGE PRIVACY_BASELINE_FILE ALLOWED_EMAIL_PATTERN
+
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 REPO="$(mktemp -d)"
 trap 'rm -rf "$REPO"' EXIT
