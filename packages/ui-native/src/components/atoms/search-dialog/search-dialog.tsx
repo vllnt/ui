@@ -117,6 +117,10 @@ function searchableText(item: SearchItem): string {
     .toLocaleLowerCase();
 }
 
+function matchesQuery(item: SearchItem, normalizedQuery: string): boolean {
+  return !normalizedQuery || searchableText(item).includes(normalizedQuery);
+}
+
 function SearchScopeControl({
   labels,
   onChange,
@@ -334,6 +338,222 @@ function resultStatus({
   return scope === "docs" ? labels.docsEmpty : labels.empty;
 }
 
+type SearchView = {
+  readonly componentItems: readonly SearchItem[];
+  readonly documentationItems: readonly SearchItem[];
+  readonly loading: boolean;
+  readonly noResults: boolean;
+  readonly resultCount: number;
+  /** A query is present and docs search is not waiting for more characters. */
+  readonly searching: boolean;
+  readonly showComponents: boolean;
+  readonly showDocumentation: boolean;
+  readonly waitingForQuery: boolean;
+};
+
+function deriveSearchView({
+  documentation,
+  hasDocumentationSearch,
+  items,
+  minimum,
+  query,
+  scope,
+}: {
+  readonly documentation: ReturnType<typeof useDocumentationResults>;
+  readonly hasDocumentationSearch: boolean;
+  readonly items: readonly SearchItem[];
+  readonly minimum: number;
+  readonly query: string;
+  readonly scope: SearchScope;
+}): SearchView {
+  const trimmedQuery = query.trim();
+  const normalizedQuery = trimmedQuery.toLocaleLowerCase();
+  const componentItems = [...items]
+    .filter((item) => matchesQuery(item, normalizedQuery))
+    .sort((left, right) => left.title.localeCompare(right.title));
+  const showComponents = scope !== "docs";
+  const showDocumentation = hasDocumentationSearch && scope !== "components";
+  const waitingForQuery = showDocumentation && trimmedQuery.length < minimum;
+  const noResults =
+    (!showComponents || componentItems.length === 0) &&
+    (!showDocumentation || documentation.items.length === 0) &&
+    !documentation.loading;
+  return {
+    componentItems,
+    documentationItems: documentation.items,
+    loading: documentation.loading,
+    noResults,
+    resultCount:
+      (showComponents ? componentItems.length : 0) +
+      (showDocumentation ? documentation.items.length : 0),
+    searching: normalizedQuery.length > 0 && !waitingForQuery,
+    showComponents,
+    showDocumentation,
+    waitingForQuery,
+  };
+}
+
+function SearchDialogHeader({
+  hardwareKeyboardHint,
+  inputNativeId,
+  labels,
+  onClose,
+  onQueryChange,
+  onScopeChange,
+  query,
+  scope,
+  showScopes,
+}: {
+  readonly hardwareKeyboardHint: string | undefined;
+  readonly inputNativeId: string;
+  readonly labels: SearchDialogLabels;
+  readonly onClose: () => void;
+  readonly onQueryChange: (query: string) => void;
+  readonly onScopeChange: (scope: SearchScope) => void;
+  readonly query: string;
+  readonly scope: SearchScope;
+  readonly showScopes: boolean;
+}) {
+  const theme = useTheme();
+  const inputRef = useRef<TextInput>(null);
+  return (
+    <>
+      <Text
+        accessibilityRole="header"
+        style={typeStyle(theme, "bodyLarge", {
+          color: "foreground",
+          fontWeight: theme.typography.fontWeight.heading,
+        })}
+      >
+        {labels.title}
+      </Text>
+      <View style={[styles.row, { gap: theme.spacing[2] }]}>
+        <TextInput
+          accessibilityLabel={labels.searchPlaceholder}
+          inputMode="search"
+          nativeID={inputNativeId}
+          onChangeText={onQueryChange}
+          placeholder={labels.searchPlaceholder}
+          placeholderTextColor={theme.colors.mutedForeground}
+          ref={inputRef}
+          style={[
+            styles.input,
+            theme.typography.scale.body,
+            {
+              borderColor: theme.colors.input,
+              borderRadius: theme.radius.md,
+              color: theme.colors.foreground,
+              paddingHorizontal: theme.spacing[3],
+            },
+          ]}
+          value={query}
+        />
+        {query ? (
+          <InteractivePressable
+            accessibilityLabel={labels.clear}
+            accessibilityRole="button"
+            onPress={() => {
+              onQueryChange("");
+              focusAccessibility(inputRef);
+            }}
+            style={styles.action}
+          >
+            <Text style={{ color: theme.colors.mutedForeground, fontSize: 20 }}>
+              ×
+            </Text>
+          </InteractivePressable>
+        ) : null}
+        <InteractivePressable
+          accessibilityLabel={labels.close}
+          accessibilityRole="button"
+          onPress={onClose}
+          style={styles.action}
+        >
+          <Text style={{ color: theme.colors.mutedForeground, fontSize: 20 }}>
+            ×
+          </Text>
+        </InteractivePressable>
+      </View>
+      {hardwareKeyboardHint ? (
+        <Text style={typeStyle(theme, "caption", "mutedForeground")}>
+          {hardwareKeyboardHint}
+        </Text>
+      ) : null}
+      {showScopes ? (
+        <SearchScopeControl
+          labels={labels}
+          onChange={onScopeChange}
+          scope={scope}
+        />
+      ) : null}
+    </>
+  );
+}
+SearchDialogHeader.displayName = "SearchDialogHeader";
+
+function SearchDialogBody({
+  labels,
+  minimum,
+  onSelectComponent,
+  onSelectDocument,
+  scope,
+  view,
+}: {
+  readonly labels: SearchDialogLabels;
+  readonly minimum: number;
+  readonly onSelectComponent: (item: SearchItem) => void;
+  readonly onSelectDocument: (item: SearchItem) => void;
+  readonly scope: SearchScope;
+  readonly view: SearchView;
+}) {
+  const theme = useTheme();
+  return (
+    <ScrollView
+      contentContainerStyle={{ gap: theme.spacing[4] }}
+      keyboardShouldPersistTaps="handled"
+    >
+      {view.showComponents ? (
+        <SearchResults
+          heading={labels.componentsGroup}
+          items={view.componentItems}
+          labels={labels}
+          onSelect={onSelectComponent}
+        />
+      ) : null}
+      {view.showDocumentation ? (
+        <SearchResults
+          heading={labels.docsGroup}
+          items={view.documentationItems}
+          labels={labels}
+          onSelect={onSelectDocument}
+        />
+      ) : null}
+      {view.waitingForQuery ? (
+        <Text style={typeStyle(theme, "bodySmall", "mutedForeground")}>
+          {labels.minimumDocsQuery(minimum)}
+        </Text>
+      ) : null}
+      {view.loading ? (
+        <Text
+          accessibilityLiveRegion="polite"
+          style={typeStyle(theme, "bodySmall", "mutedForeground")}
+        >
+          {labels.searchingDocs}
+        </Text>
+      ) : null}
+      {view.noResults && !view.waitingForQuery ? (
+        <Text
+          accessibilityLiveRegion="polite"
+          style={typeStyle(theme, "bodySmall", "mutedForeground")}
+        >
+          {scope === "docs" ? labels.docsEmpty : labels.empty}
+        </Text>
+      ) : null}
+    </ScrollView>
+  );
+}
+SearchDialogBody.displayName = "SearchDialogBody";
+
 /**
  * Native modal search without browser-global shortcut claims. The dialog
  * title renders as its first header; result counts (via `labels.results`),
@@ -366,7 +586,6 @@ function SearchDialog({
   const theme = useTheme();
   const reduceMotion = useReducedMotion();
   const generatedId = useId();
-  const inputRef = useRef<TextInput>(null);
   const [visible, setVisible] = useControllableState(
     controllableOptions(open, defaultOpen, onOpenChange),
   );
@@ -384,36 +603,24 @@ function SearchDialog({
     query: searchQuery,
     scope: searchScope,
   });
-  const normalizedQuery = searchQuery.trim().toLocaleLowerCase();
-  const componentItems = [...items]
-    .filter(
-      (item) =>
-        !normalizedQuery || searchableText(item).includes(normalizedQuery),
-    )
-    .sort((left, right) => left.title.localeCompare(right.title));
-  const showComponents = searchScope !== "docs";
-  const showDocumentation = Boolean(docsSearch) && searchScope !== "components";
-  const waitingForQuery =
-    showDocumentation && searchQuery.trim().length < minimum;
-  const noResults =
-    (!showComponents || componentItems.length === 0) &&
-    (!showDocumentation || documentation.items.length === 0) &&
-    !documentation.loading;
-  const resultCount =
-    (showComponents ? componentItems.length : 0) +
-    (showDocumentation ? documentation.items.length : 0);
-  const announceStatus =
-    visible && normalizedQuery.length > 0 && !waitingForQuery;
+  const view = deriveSearchView({
+    documentation,
+    hasDocumentationSearch: Boolean(docsSearch),
+    items,
+    minimum,
+    query: searchQuery,
+    scope: searchScope,
+  });
   useAnnounceOnChange(
-    announceStatus
+    visible && view.searching
       ? resultStatus({
-          count: resultCount,
+          count: view.resultCount,
           labels,
-          loading: documentation.loading,
+          loading: view.loading,
           scope: searchScope,
         })
       : undefined,
-    { liveRegion: documentation.loading || noResults },
+    { liveRegion: view.loading || view.noResults },
   );
   const close = (reason: ModalLayerCloseReason) => {
     onRequestClose?.(reason);
@@ -478,122 +685,27 @@ function SearchDialog({
             surfaceProps?.style,
           ]}
         >
-          <Text
-            accessibilityRole="header"
-            style={typeStyle(theme, "bodyLarge", {
-              color: "foreground",
-              fontWeight: theme.typography.fontWeight.heading,
-            })}
-          >
-            {labels.title}
-          </Text>
-          <View style={[styles.row, { gap: theme.spacing[2] }]}>
-            <TextInput
-              accessibilityLabel={labels.searchPlaceholder}
-              inputMode="search"
-              nativeID={`${generatedId}-input`}
-              onChangeText={setSearchQuery}
-              placeholder={labels.searchPlaceholder}
-              placeholderTextColor={theme.colors.mutedForeground}
-              ref={inputRef}
-              style={[
-                styles.input,
-                theme.typography.scale.body,
-                {
-                  borderColor: theme.colors.input,
-                  borderRadius: theme.radius.md,
-                  color: theme.colors.foreground,
-                  paddingHorizontal: theme.spacing[3],
-                },
-              ]}
-              value={searchQuery}
-            />
-            {searchQuery ? (
-              <InteractivePressable
-                accessibilityLabel={labels.clear}
-                accessibilityRole="button"
-                onPress={() => {
-                  setSearchQuery("");
-                  focusAccessibility(inputRef);
-                }}
-                style={styles.action}
-              >
-                <Text
-                  style={{ color: theme.colors.mutedForeground, fontSize: 20 }}
-                >
-                  ×
-                </Text>
-              </InteractivePressable>
-            ) : null}
-            <InteractivePressable
-              accessibilityLabel={labels.close}
-              accessibilityRole="button"
-              onPress={() => {
-                close("requestClose");
-              }}
-              style={styles.action}
-            >
-              <Text
-                style={{ color: theme.colors.mutedForeground, fontSize: 20 }}
-              >
-                ×
-              </Text>
-            </InteractivePressable>
-          </View>
-          {hardwareKeyboardHint ? (
-            <Text style={typeStyle(theme, "caption", "mutedForeground")}>
-              {hardwareKeyboardHint}
-            </Text>
-          ) : null}
-          {docsSearch ? (
-            <SearchScopeControl
-              labels={labels}
-              onChange={setSearchScope}
-              scope={searchScope}
-            />
-          ) : null}
-          <ScrollView
-            contentContainerStyle={{ gap: theme.spacing[4] }}
-            keyboardShouldPersistTaps="handled"
-          >
-            {showComponents ? (
-              <SearchResults
-                heading={labels.componentsGroup}
-                items={componentItems}
-                labels={labels}
-                onSelect={selectComponent}
-              />
-            ) : null}
-            {showDocumentation ? (
-              <SearchResults
-                heading={labels.docsGroup}
-                items={documentation.items}
-                labels={labels}
-                onSelect={selectDocument}
-              />
-            ) : null}
-            {waitingForQuery ? (
-              <Text style={typeStyle(theme, "bodySmall", "mutedForeground")}>
-                {labels.minimumDocsQuery(minimum)}
-              </Text>
-            ) : null}
-            {documentation.loading ? (
-              <Text
-                accessibilityLiveRegion="polite"
-                style={typeStyle(theme, "bodySmall", "mutedForeground")}
-              >
-                {labels.searchingDocs}
-              </Text>
-            ) : null}
-            {noResults && !waitingForQuery ? (
-              <Text
-                accessibilityLiveRegion="polite"
-                style={typeStyle(theme, "bodySmall", "mutedForeground")}
-              >
-                {searchScope === "docs" ? labels.docsEmpty : labels.empty}
-              </Text>
-            ) : null}
-          </ScrollView>
+          <SearchDialogHeader
+            hardwareKeyboardHint={hardwareKeyboardHint}
+            inputNativeId={`${generatedId}-input`}
+            labels={labels}
+            onClose={() => {
+              close("requestClose");
+            }}
+            onQueryChange={setSearchQuery}
+            onScopeChange={setSearchScope}
+            query={searchQuery}
+            scope={searchScope}
+            showScopes={Boolean(docsSearch)}
+          />
+          <SearchDialogBody
+            labels={labels}
+            minimum={minimum}
+            onSelectComponent={selectComponent}
+            onSelectDocument={selectDocument}
+            scope={searchScope}
+            view={view}
+          />
         </View>
       </ModalLayer>
     </>

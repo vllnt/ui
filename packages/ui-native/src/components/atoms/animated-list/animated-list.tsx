@@ -41,11 +41,10 @@ function AnimatedListRow({
   readonly index: number;
   readonly reduceMotion: boolean;
 }) {
-  const [animateOnMount, setAnimateOnMount] = useState(animate);
+  const animateOnMount = useRef(animate);
   const [progress, setProgress] = useState(
     () => new Animated.Value(animate && !reduceMotion ? 0 : 1),
   );
-  void setAnimateOnMount;
   void setProgress;
   const animationConsumed = useRef(false);
 
@@ -56,7 +55,7 @@ function AnimatedListRow({
       progress.setValue(1);
       return;
     }
-    if (!animateOnMount || animationConsumed.current) return;
+    if (!animateOnMount.current || animationConsumed.current) return;
 
     animationConsumed.current = true;
     const animation = Animated.timing(progress, {
@@ -70,7 +69,7 @@ function AnimatedListRow({
       animation.stop();
       progress.setValue(1);
     };
-  }, [animateOnMount, delay, index, progress, reduceMotion]);
+  }, [delay, index, progress, reduceMotion]);
 
   return (
     <Animated.View

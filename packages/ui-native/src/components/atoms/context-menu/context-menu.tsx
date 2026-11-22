@@ -1,7 +1,14 @@
 "use client";
 
-import type { Ref } from "react";
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { type Ref, useCallback } from "react";
+
+import {
+  FlatList,
+  type ListRenderItemInfo,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 
 import { useFocusWhenShown } from "../../../primitives/accessibility";
 import { InteractivePressable } from "../../../primitives/interactive-pressable";
@@ -9,6 +16,7 @@ import {
   ModalLayer,
   type ModalLayerCloseReason,
 } from "../../../primitives/modal-layer";
+import { screenReaderListProps } from "../../../primitives/screen-reader-list";
 import type { SelectionKey } from "../../../primitives/selection";
 import { typeStyle } from "../../../primitives/type-style";
 import {
@@ -50,6 +58,51 @@ const styles = StyleSheet.create({
   surface: { borderTopWidth: 1, maxHeight: "80%", width: "100%" },
 });
 
+type ContextMenuRowProps = {
+  readonly destructiveLabel: string;
+  readonly item: ContextMenuItem;
+  readonly onSelect: (id: SelectionKey) => void;
+};
+
+function ContextMenuRow({
+  destructiveLabel,
+  item,
+  onSelect,
+}: ContextMenuRowProps) {
+  const theme = useTheme();
+  return (
+    <InteractivePressable
+      accessibilityHint={item.destructive ? destructiveLabel : undefined}
+      accessibilityLabel={item.label}
+      accessibilityRole="menuitem"
+      accessibilityState={{ disabled: item.disabled === true }}
+      disabled={item.disabled === true}
+      onPress={() => {
+        onSelect(item.id);
+      }}
+      style={[
+        styles.action,
+        {
+          backgroundColor: theme.colors.popover,
+          borderRadius: theme.radius.sm,
+          paddingHorizontal: theme.spacing[3],
+        },
+      ]}
+    >
+      <Text
+        style={typeStyle(
+          theme,
+          "bodySmall",
+          item.destructive ? "destructive" : "popoverForeground",
+        )}
+      >
+        {item.label}
+      </Text>
+    </InteractivePressable>
+  );
+}
+ContextMenuRow.displayName = "ContextMenuRow";
+
 /**
  * Context menu represented truthfully as a native modal action list. The
  * menu `label` renders as the sheet's header and screen readers hear it when
@@ -77,6 +130,23 @@ function ContextMenu({
     onRequestClose?.(reason);
     setVisible(false);
   };
+  const selectItem = useCallback(
+    (id: SelectionKey) => {
+      onSelect?.(id);
+      setVisible(false);
+    },
+    [onSelect, setVisible],
+  );
+  const renderItem = useCallback(
+    ({ item }: ListRenderItemInfo<ContextMenuItem>) => (
+      <ContextMenuRow
+        destructiveLabel={destructiveLabel}
+        item={item}
+        onSelect={selectItem}
+      />
+    ),
+    [destructiveLabel, selectItem],
+  );
 
   return (
     <ModalLayer
@@ -114,42 +184,12 @@ function ContextMenu({
         >
           {label}
         </Text>
-        <ScrollView>
-          {items.map((item) => (
-            <InteractivePressable
-              accessibilityHint={
-                item.destructive ? destructiveLabel : undefined
-              }
-              accessibilityLabel={item.label}
-              accessibilityRole="menuitem"
-              accessibilityState={{ disabled: item.disabled === true }}
-              disabled={item.disabled === true}
-              key={item.id}
-              onPress={() => {
-                onSelect?.(item.id);
-                setVisible(false);
-              }}
-              style={[
-                styles.action,
-                {
-                  backgroundColor: theme.colors.popover,
-                  borderRadius: theme.radius.sm,
-                  paddingHorizontal: theme.spacing[3],
-                },
-              ]}
-            >
-              <Text
-                style={typeStyle(
-                  theme,
-                  "bodySmall",
-                  item.destructive ? "destructive" : "popoverForeground",
-                )}
-              >
-                {item.label}
-              </Text>
-            </InteractivePressable>
-          ))}
-        </ScrollView>
+        <FlatList
+          {...screenReaderListProps(items.length)}
+          data={items}
+          keyExtractor={(item) => String(item.id)}
+          renderItem={renderItem}
+        />
         <InteractivePressable
           accessibilityLabel={cancelLabel}
           accessibilityRole="button"

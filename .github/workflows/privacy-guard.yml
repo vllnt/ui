@@ -1,0 +1,99 @@
+# Privacy Guard: keeps personal addresses, private hostnames and secrets out of
+# new commits. Required status check name: "Privacy Guard".
+#
+# Adapted from vllnt/skills at 8aa4c829fc9ba8af94da1395eca1eda5fdd253b5
+# (references/capabilities/release-readiness/templates/privacy-guard.yml).
+#
+# Checks:
+#   - gitleaks on the commits being checked
+#   - author, committer, Co-authored-by and Signed-off-by emails, and private
+#     hostnames or addresses in commit messages (scripts/check-commit-emails.sh)
+#   - the tracked tree against .privacy-denylist (scripts/privacy-denylist.sh)
+#
+# Only new commits are gated: a pull request's commits, or the pushed range on
+# main. Known exposure is allowlisted by commit SHA in .privacy-commit-allowlist.
+# Runs on every pull request (no path filter) so it can be a required check.
+# Logs never print matched values. This file holds no personal data.
+
+name: Privacy Guard
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: privacy-guard-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  privacy-guard:
+    name: Privacy Guard
+    runs-on: ubuntu-latest
+    env:
+      GITLEAKS_VERSION: "8.30.1"
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Resolve commit range
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          PR_BASE: ${{ github.event.pull_request.base.sha }}
+          PR_HEAD: ${{ github.event.pull_request.head.sha }}
+          BEFORE: ${{ github.event.before }}
+          SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          # Pull request: the commits it adds. Push to main: the pushed range.
+          # First push of a ref (no previous tip): the history of that commit.
+          if [[ "$EVENT_NAME" == "pull_request" ]]; then
+            range="${PR_BASE}..${PR_HEAD}"
+          elif [[ -n "${BEFORE:-}" && "$BEFORE" != 0000000000000000000000000000000000000000 ]]; then
+            range="${BEFORE}..${SHA}"
+          else
+            range="$SHA"
+          fi
+          echo "PRIVACY_COMMIT_RANGE=$range" >> "$GITHUB_ENV"
+      - name: Install gitleaks
+        run: |
+          set -euo pipefail
+          base="https://github.com/gitleaks/gitleaks/releases/download/v${GITLEAKS_VERSION}"
+          archive="gitleaks_${GITLEAKS_VERSION}_linux_x64.tar.gz"
+          curl -sSfL -o "$RUNNER_TEMP/$archive" "$base/$archive"
+          curl -sSfL -o "$RUNNER_TEMP/checksums.txt" "$base/gitleaks_${GITLEAKS_VERSION}_checksums.txt"
+          (cd "$RUNNER_TEMP" && grep " ${archive}\$" checksums.txt | sha256sum -c -)
+          tar -xzf "$RUNNER_TEMP/$archive" -C "$RUNNER_TEMP" gitleaks
+          echo "$RUNNER_TEMP" >> "$GITHUB_PATH"
+      - name: Scan new commits for secrets
+        run: gitleaks git --redact --no-banner --exit-code 1 --log-opts="$PRIVACY_COMMIT_RANGE" .
+      - name: Test denylist guard
+        run: bash scripts/test-privacy-denylist.sh
+      - name: Test commit-metadata email check
+        run: bash scripts/test-check-commit-emails.sh
+      - name: Check denylist
+        env:
+          PRIVACY_DENYLIST_EXTRA: ${{ secrets.PRIVACY_DENYLIST_EXTRA }}
+        run: |
+          set -euo pipefail
+          # Tracked denylist must always run. If the optional CI secret has invalid
+          # git-grep regexes, warn and continue without it so PRs are not blocked
+          # while the secret is repaired (same failure mode as an empty secret).
+          code=0
+          bash scripts/privacy-denylist.sh || code=$?
+          if [[ "$code" -eq 0 ]]; then
+            exit 0
+          fi
+          if [[ "$code" -eq 2 && -n "${PRIVACY_DENYLIST_EXTRA:-}" ]]; then
+            echo "::warning title=Privacy guard::PRIVACY_DENYLIST_EXTRA has invalid regex line(s) for git grep -E. Re-running with the tracked denylist only. Fix the Actions secret."
+            unset PRIVACY_DENYLIST_EXTRA
+            bash scripts/privacy-denylist.sh
+            exit $?
+          fi
+          exit "$code"
+      - name: Check commit emails and trailers
+        run: bash scripts/check-commit-emails.sh

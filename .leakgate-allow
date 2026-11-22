@@ -1,0 +1,7 @@
+# Regexes, one per line, for added lines the shared Leak Gate should not flag.
+# Matched against "<line number>:<path>: <added text>".
+#
+# The Privacy Guard tests build private-looking fixtures on purpose (synthetic
+# hosts and addresses, split in the source so the files do not match the tree
+# denylist). Nothing in them is real.
+^[0-9]+:scripts/test-(check-commit-emails|privacy-denylist)\.sh:

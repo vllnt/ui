@@ -109,6 +109,7 @@ function NavigationMenu({
         horizontal
         showsHorizontalScrollIndicator={false}
       >
+        {/* react-doctor-disable-next-line react-doctor/rn-no-scrollview-mapped-list -- horizontal bar of a handful of top-level destinations; every item must stay mounted for screen readers */}
         {items.map((item) => {
           const current = isSingleSelected(
             currentId,

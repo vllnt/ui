@@ -11,6 +11,7 @@ import {
   type ViewProps,
 } from "react-native";
 
+import { keyByOccurrence } from "../../../primitives/occurrence-keys";
 import { typeStyle } from "../../../primitives/type-style";
 import {
   type ReducedMotionService,
@@ -46,14 +47,15 @@ function RingCharacters({
   readonly radius: number;
 }) {
   const theme = useTheme();
-  return characters.map((character, index) => {
+  const keyedCharacters = keyByOccurrence(characters, (character) => character);
+  return keyedCharacters.map(({ item: character, key }, index) => {
     const angle = (360 / characters.length) * index;
     const radians = (angle * Math.PI) / 180;
     return (
       <NativeText
         accessibilityElementsHidden
         importantForAccessibility="no-hide-descendants"
-        key={`${character}-${index.toString()}`}
+        key={key}
         style={[
           styles.character,
           ...typeStyle(theme, "caption", {

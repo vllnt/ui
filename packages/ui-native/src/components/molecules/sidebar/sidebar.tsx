@@ -81,6 +81,7 @@ function Sidebar({
       ]}
     >
       <ScrollView contentContainerStyle={{ gap: theme.spacing[4] }}>
+        {/* react-doctor-disable-next-line react-doctor/rn-no-scrollview-mapped-list -- navigation links (tens, not data feeds) render inside the drawer or side panel's own layout; every link stays mounted so screen readers can reach it; switch to SectionList if a consumer needs hundreds */}
         {sections.map((section) => (
           <View key={section.id} style={{ gap: theme.spacing[1] }}>
             {!compact && section.label ? (

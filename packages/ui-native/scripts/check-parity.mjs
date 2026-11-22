@@ -38,10 +38,12 @@ export async function loadFacts(repoRoot) {
     }
   }
   const readJson = async (path) => JSON.parse(await readFile(path, "utf8"));
-  const registry = (await readJson(join(packageDirectory, "registry.json"))).components;
-  const schema = await readJson(join(packageDirectory, "parity.schema.json"));
-  const parity = await readJson(join(packageDirectory, "parity.json"));
-  return { parity, registry, schema, web };
+  const [registryFile, schema, parity] = await Promise.all(
+    ["registry.json", "parity.schema.json", "parity.json"].map((file) =>
+      readJson(join(packageDirectory, file)),
+    ),
+  );
+  return { parity, registry: registryFile.components, schema, web };
 }
 
 // ---------- schema shapes (the subset parity.schema.json uses) ----------
@@ -170,8 +172,9 @@ function checkComponent(entry, context, errors) {
     checkAffordance(entry, label, errors);
     if (exists && !hasOwn(entry, "propsGap")) errors.push(`${label}: foundation entries that exist need "propsGap"`);
     if (hasOwn(entry, "propsRenamed")) {
+      const propsGap = new Set(entry.propsGap);
       for (const key of Object.keys(entry.propsRenamed)) {
-        if (entry.propsGap?.includes(key)) errors.push(`${label}: "${key}" is in both propsGap and propsRenamed`);
+        if (propsGap.has(key)) errors.push(`${label}: "${key}" is in both propsGap and propsRenamed`);
       }
     }
   } else {
@@ -237,8 +240,12 @@ export function validate({ parity, registry, schema, web }) {
     checkNativeOnly(entry, context, errors);
   }
 
+  const componentsByName = new Map();
+  for (const candidate of parity.components) {
+    if (!componentsByName.has(candidate.name)) componentsByName.set(candidate.name, candidate);
+  }
   for (const name of registrySources.keys()) {
-    const entry = parity.components.find((candidate) => candidate.name === name);
+    const entry = componentsByName.get(name);
     const builtNativeOnly = parity.nativeOnly.some((candidate) => candidate.name === name && candidate.missing !== true);
     const marked = entry ? entry.status === "native-0.1.0" && entry.missing !== true : builtNativeOnly;
     if (!marked) errors.push(`native module "${name}" must be marked native-0.1.0 (or be a built nativeOnly entry) in parity.json`);

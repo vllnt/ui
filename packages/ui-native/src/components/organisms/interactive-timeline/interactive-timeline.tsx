@@ -310,9 +310,10 @@ function InteractiveTimeline({
   useAnnounceOnChange(
     labels.zoomLevel ? labels.zoomLevel(zoomLevel) : `Zoom ${zoomLevel}x`,
   );
+  const visibleIdSet = new Set(visible);
   const visibleEvents = events.filter(
     (event) =>
-      event.categoryId === undefined || visible.includes(event.categoryId),
+      event.categoryId === undefined || visibleIdSet.has(event.categoryId),
   );
 
   return (
@@ -373,8 +374,9 @@ function InteractiveTimeline({
           horizontal
           showsHorizontalScrollIndicator={false}
         >
+          {/* react-doctor-disable-next-line react-doctor/rn-no-scrollview-mapped-list -- horizontal filter chips for a handful of categories; every checkbox must stay mounted for screen readers */}
           {categories.map((category) => {
-            const checked = visible.includes(category.id);
+            const checked = visibleIdSet.has(category.id);
             return (
               <InteractivePressable
                 accessibilityLabel={category.label}

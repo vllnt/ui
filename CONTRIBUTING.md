@@ -34,6 +34,16 @@ with `git commit --no-verify`. See AGENTS.md → *React health* for details.
 - Commit messages follow [Conventional Commits](https://www.conventionalcommits.org/). The release workflow groups `feat:`/`fix:`/other into the generated notes.
 - PRs require passing CI (`.github/workflows/ci.yml`) before merge.
 
+## Privacy Guard
+
+The **Privacy Guard** check keeps personal addresses and private hostnames out of git history. On every PR it checks the commits the PR adds (on `main`, the pushed range): author, committer, `Co-authored-by` and `Signed-off-by` emails must be GitHub noreply addresses, and commit messages must not name private hostnames or internal IPs. It also runs gitleaks on those commits and scans the tracked tree against [`.privacy-denylist`](.privacy-denylist).
+
+- Commit as your GitHub noreply address (`<id>+<login>@users.noreply.github.com`) and do not leave `user.email` unset.
+- A squash merge copies each commit author's email into a `Co-authored-by` trailer, so every commit in a PR needs a noreply author.
+- Check a range locally with `PRIVACY_COMMIT_RANGE=origin/main..HEAD bash scripts/check-commit-emails.sh`. The `.githooks/pre-push` hook runs the same check on each push (bypass once with `git push --no-verify`).
+- Findings print the commit, field and category only, never the matched value.
+- A few old commits are skipped by SHA in [`.privacy-commit-allowlist`](.privacy-commit-allowlist): accepted exposure, history is not rewritten. Add entries only with owner approval.
+
 ## Adding a component
 
 1. Pick the component's [Atomic Design level](docs/agents/COMPONENTS.md#atomic-design-levels) (`atoms`, `molecules`, `organisms` or `templates`), create `packages/ui/src/components/{level}/{name}/` following the folder layout and patterns in [docs/agents/COMPONENTS.md](docs/agents/COMPONENTS.md#folder-layout) (ref-as-prop + `displayName`, `cn()`, Radix, CVA), and add the export to `packages/ui/src/components/index.ts` (import from `./{level}/{name}/{name}`; there are no per-folder `index.ts` files). `pnpm check:atomic` verifies the level against the component's imports.

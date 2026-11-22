@@ -25,16 +25,15 @@ async function sourceFiles(directory) {
   return nested.flat().filter((path) => [".ts", ".tsx"].includes(extname(path)));
 }
 
-const errors = [];
-for (const path of await sourceFiles(sourceRoot)) {
-  if (path.endsWith(".test.ts") || path.endsWith(".test.tsx")) continue;
-  const source = await readFile(path, "utf8");
-  for (const bannedImport of bannedImports) {
-    if (source.includes(bannedImport)) {
-      errors.push(`${relative(sourceRoot, path)} imports ${bannedImport}`);
-    }
-  }
-}
+const shippedFiles = (await sourceFiles(sourceRoot)).filter(
+  (path) => !path.endsWith(".test.ts") && !path.endsWith(".test.tsx"),
+);
+const sources = await Promise.all(shippedFiles.map((path) => readFile(path, "utf8")));
+const errors = shippedFiles.flatMap((path, index) =>
+  bannedImports
+    .filter((bannedImport) => sources[index].includes(bannedImport))
+    .map((bannedImport) => `${relative(sourceRoot, path)} imports ${bannedImport}`),
+);
 
 if (errors.length > 0) {
   console.error("Native renderer boundary check failed:");
