@@ -22,9 +22,7 @@ function relativeLuminance(hex: string): number {
   const channels = hexChannels(hex)
     .map((channel) => channel / 255)
     .map((channel) =>
-      channel <= 0.040_45
-        ? channel / 12.92
-        : ((channel + 0.055) / 1.055) ** 2.4,
+      channel <= 0.04045 ? channel / 12.92 : ((channel + 0.055) / 1.055) ** 2.4,
     );
   const red = channels[0] ?? 0;
   const green = channels[1] ?? 0;

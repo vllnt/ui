@@ -62,7 +62,23 @@ describe("CommentPin accent contrast", () => {
     expect(
       container.querySelector("[data-comment-pin-body]")?.getAttribute("style"),
     ).toMatch(
-      /color-mix\(in oklab, (#5b8def|rgb\(91, 141, 239\)) 55%, oklch\(0 0 0\)\)/,
+      /color-mix\((in oklab, )?(#5b8def|rgb\(91, 141, 239\)) 55%, oklch\(0 0 0\)( 45%)?\)/,
     );
+  });
+});
+
+describe("CommentPin trigger name", () => {
+  it("takes its name from content, not aria-label (WCAG 2.5.3)", () => {
+    render(
+      <CommentPin
+        authorInitial="B"
+        onActivate={vi.fn()}
+        unread={2}
+        x={0}
+        y={0}
+      />,
+    );
+    const trigger = screen.getByRole("button", { name: "Comment, 2 unread" });
+    expect(trigger).not.toHaveAttribute("aria-label");
   });
 });

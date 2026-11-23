@@ -161,14 +161,17 @@ const PhaseBar = (props: {
     top: `${top}%`,
     width: `${width}%`,
   };
-  const ariaLabel = `${STATE_LABEL[state]} ${phase.start} → ${phase.end}`;
+  const description = (
+    <>
+      <span className="sr-only">{`${STATE_LABEL[state]} ${phase.start} → ${phase.end}:`}</span>{" "}
+    </>
+  );
   if (phase.onActivate) {
     const handleActivatePhase = (): void => {
       phase.onActivate?.();
     };
     return (
       <button
-        aria-label={ariaLabel}
         className={cn(
           "absolute flex min-w-6 items-center justify-start overflow-hidden truncate rounded-sm border border-border/50 px-1 text-left text-[10px] text-foreground transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
           STATE_FILL[state],
@@ -179,22 +182,22 @@ const PhaseBar = (props: {
         style={sharedStyle}
         type="button"
       >
+        {description}
         {phase.label}
       </button>
     );
   }
   return (
     <span
-      aria-label={ariaLabel}
       className={cn(
         "absolute flex items-center justify-start overflow-hidden truncate rounded-sm border border-border/50 px-1 text-[10px] text-foreground",
         STATE_FILL[state],
       )}
       data-run-phase={phase.id}
       data-run-phase-state={state}
-      role="img"
       style={sharedStyle}
     >
+      {description}
       {phase.label}
     </span>
   );

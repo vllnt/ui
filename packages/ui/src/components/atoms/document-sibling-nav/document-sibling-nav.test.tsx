@@ -101,3 +101,20 @@ describe("DocumentSiblingNav", () => {
     expect(link).toHaveAttribute("target", "_blank");
   });
 });
+
+describe("DocumentSiblingNav accessible names", () => {
+  it("names each link from its visible text, with no aria-label (WCAG 2.5.3)", () => {
+    render(
+      <DocumentSiblingNav
+        next={{ href: "/b", meta: "May 2026", title: "Bar post" }}
+        previous={{ href: "/a", title: "Foo post" }}
+        variant="with-meta"
+      />,
+    );
+    const older = screen.getByRole("link", { name: "Older: Foo post" });
+    expect(older).not.toHaveAttribute("aria-label");
+    expect(
+      screen.getByRole("link", { name: "Newer: Bar post May 2026" }),
+    ).not.toHaveAttribute("aria-label");
+  });
+});

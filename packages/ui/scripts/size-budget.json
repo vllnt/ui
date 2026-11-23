@@ -4,17 +4,17 @@
     { "name": "Badge", "export": "Badge", "maxBytes": 23700 },
     { "name": "Card", "export": "Card", "maxBytes": 23200 },
     { "name": "Dialog", "export": "Dialog", "maxBytes": 67900 },
-    { "name": "DataTable", "export": "DataTable", "maxBytes": 184500 },
+    { "name": "DataTable", "export": "DataTable", "maxBytes": 187200 },
     {
       "name": "CodeBlock (up front)",
       "export": "CodeBlock",
-      "maxBytes": 34800
+      "maxBytes": 37200
     },
     {
       "name": "CodeBlock (with lazy highlighter)",
       "export": "CodeBlock",
       "withLazy": true,
-      "maxBytes": 117800
+      "maxBytes": 119000
     },
     {
       "name": "TutorialMDX (up front)",

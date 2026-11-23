@@ -74,11 +74,11 @@
     "typecheck": "tsc --noEmit --incremental --tsBuildInfoFile node_modules/.cache/tsc/typecheck.tsbuildinfo --project tsconfig.build.json"
   },
   "devDependencies": {
-    "@vllnt/eslint-config": "^2.0.0",
-    "@vllnt/typescript": "^2.0.0",
+    "@vllnt/eslint-config": "^2.1.0",
+    "@vllnt/typescript": "^3.0.0",
     "eslint": "^9.39.5",
     "tsup": "^9.0.0",
     "typescript": "~6.0.3",
-    "vitest": "^5.0.5"
+    "vitest": "^5.1.0"
   }
 }

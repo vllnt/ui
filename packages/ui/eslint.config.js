@@ -11,6 +11,12 @@ export default [
   },
   ...react,
   {
+    // `__tests__` holds shared test helpers; tsup and check:atomic key on that
+    // exact name, so the folder keeps it.
+    files: ['src/**/__tests__/**'],
+    rules: { 'unicorn/filename-case': 'off' },
+  },
+  {
     linterOptions: {
       reportUnusedDisableDirectives: 'error',
     },

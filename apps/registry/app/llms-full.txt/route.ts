@@ -1,15 +1,14 @@
-import {
-  generateLlmsFullText,
-  type LlmsFullPage,
-  type LlmsFullSection,
-} from "@vllnt/next-llms";
-
 import { routing } from "@/i18n/routing";
 import { getPublishedArticles } from "@/lib/articles";
 import { getLatestReleaseRecords } from "@/lib/changelog";
 import { getPageContent } from "@/lib/content";
 import { getDesignGuideMarkdown } from "@/lib/design-guide";
 import { buildArticlePages } from "@/lib/llms";
+import {
+  generateLlmsFullText,
+  type LlmsFullPage,
+  type LlmsFullSection,
+} from "@/lib/llms-full";
 import { registry, type RegistryComponent } from "@/lib/registry";
 
 import { DOCS_PAGES, getDocsPath } from "../../lib/docs-pages";

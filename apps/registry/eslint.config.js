@@ -30,6 +30,12 @@ export default [
   },
   ...nextjs,
   {
+    /* `/DESIGN.md` is a public URL (the DESIGN.md convention for agents), so
+       its route folder keeps the upper-case name. */
+    files: ['app/DESIGN.md/**'],
+    rules: { 'unicorn/filename-case': 'off' },
+  },
+  {
     linterOptions: {
       reportUnusedDisableDirectives: 'error',
     },

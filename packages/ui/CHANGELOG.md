@@ -50,6 +50,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
   (`md`), `diff`, `yaml` (`yml`), `python` (`py`), `markup` (`html`, `xml`) and
   `sql`. Any other language, and `text`, renders as plain text without an
   error.
+- **Runtime dependencies** - `lucide-react` 0.468 to 1.73 (icons now share a
+  small base, about 3 KB minified once per bundle), `sonner` 1.7 to 2.0 (the
+  `toast` export), `react-day-picker` 9 to 10 (`Calendar`, `RangeCalendar`,
+  `DateRangePicker`), `@hookform/resolvers` 6 to 7 (`Form` with `schema`),
+  `react-hook-form` 7.92 and `react-resizable-panels` 4.24. Apps that pass
+  `react-day-picker` props through `Calendar` should check the react-day-picker
+  10 upgrade notes.
+- **AspectRatio** - renders two plain `div`s with the same structure and no
+  longer needs `"use client"`, so it works in a Server Component.
+
+### Removed
+
+- **`@radix-ui/react-aspect-ratio`** - no longer a dependency; `AspectRatio`
+  does the same with an inline `padding-bottom` box.
 
 ### Fixed
 
@@ -60,6 +74,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - **List keys** - lists that key items by label (OrderSummary, StatusBoard,
   FilterBar, PieChart and others) no longer warn or drop rows when two items
   share a label.
+- **Accessible names** - a `Curriculum` lesson link and a `TutorialComplete`
+  related link put a space between their parts, so screen readers announce
+  "Available HTML Basics" and "Tutorial Next Tutorial" instead of running the
+  words together.
+- **Visible label in the accessible name (WCAG 2.5.3)** - `RunTimeline` phase
+  bars, the `CommentPin` trigger and `DocumentSiblingNav` links take their name
+  from their content instead of an `aria-label` that left out the visible text.
+  Names read as before ("Complete 0 → 600: load", "Comment, 3 unread",
+  "Older: Foo post"); a passive `RunTimeline` bar is plain text, not
+  `role="img"`. axe-core 4.14 checks this rule.
 
 ## [0.4.0] - 2026-11-20
 

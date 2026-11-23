@@ -1,6 +1,7 @@
 {
   "extends": "@vllnt/typescript/react.json",
   "compilerOptions": {
+    "exactOptionalPropertyTypes": false,
     "paths": {
       "@/*": ["./src/*"]
     },

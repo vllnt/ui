@@ -208,7 +208,7 @@ function RelatedContentList({
           >
             <span className="text-xs uppercase text-muted-foreground font-medium">
               {item.type}
-            </span>
+            </span>{" "}
             <span className="flex-1 truncate">{item.title}</span>
             <ChevronRight className="size-4 text-muted-foreground" />
           </LinkComponent>

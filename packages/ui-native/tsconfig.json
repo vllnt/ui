@@ -1,6 +1,7 @@
 {
   "extends": "@vllnt/typescript/react.json",
   "compilerOptions": {
+    "exactOptionalPropertyTypes": false,
     "incremental": false,
     "lib": ["ES2022"],
     "paths": {

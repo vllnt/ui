@@ -398,7 +398,7 @@ function CurriculumLesson({
       )}
     >
       {statusIcon(status)}
-      <span className="sr-only">{statusLabel(status)}</span>
+      <span className="sr-only">{statusLabel(status)}</span>{" "}
       <span
         className={cn(
           "min-w-0 flex-1 truncate",

@@ -35,8 +35,8 @@
   },
   "devDependencies": {
     "madge": "^8.0.0",
-    "react-doctor": "0.9.18",
-    "turbo": "^2.11.10",
-    "vite": "7.3.7"
+    "react-doctor": "0.9.23",
+    "turbo": "^2.11.11",
+    "vite": "8.3.8"
   }
 }
