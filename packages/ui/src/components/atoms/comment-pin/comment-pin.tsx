@@ -171,13 +171,13 @@ export const CommentPin = ({
     >
       {onActivate ? (
         <button
-          aria-label={ariaLabel}
           className="relative inline-flex rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           data-comment-pin-trigger
           onClick={handleActivateComment}
           type="button"
         >
           {body}
+          <span className="sr-only">{ariaLabel}</span>
         </button>
       ) : (
         <span className="relative inline-flex">{body}</span>

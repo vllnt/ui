@@ -98,52 +98,33 @@ const DEFAULT_LABELS = {
 } as const satisfies Required<LabelDictionary>;
 
 type ItemProps = {
-  ariaLabel: string;
   caption: string;
   link: DocumentSiblingNavLink;
   side: "next" | "previous";
   variant: DocumentSiblingNavVariant;
 };
 
-function SiblingItem({
-  ariaLabel,
-  caption,
-  link,
-  side,
-  variant,
-}: ItemProps): ReactNode {
+function SiblingItem({ caption, link, side, variant }: ItemProps): ReactNode {
   const { anchorProps, href, meta, title } = link;
   return (
-    <a
-      aria-label={ariaLabel}
-      className={cn(itemVariants({ side }))}
-      href={href}
-      {...anchorProps}
-    >
+    <a className={cn(itemVariants({ side }))} href={href} {...anchorProps}>
       <span className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
         {caption}
       </span>
+      {variant === "compact" ? null : <span className="sr-only">:</span>}{" "}
       {variant === "compact" ? null : (
         <span className="line-clamp-2 text-sm font-semibold text-foreground group-hover:underline">
           {title}
         </span>
       )}
       {variant === "with-meta" && meta ? (
-        <span className="text-xs text-muted-foreground">{meta}</span>
+        <>
+          {" "}
+          <span className="text-xs text-muted-foreground">{meta}</span>
+        </>
       ) : null}
     </a>
   );
-}
-
-function buildAriaLabel(
-  caption: string,
-  link: DocumentSiblingNavLink,
-  variant: DocumentSiblingNavVariant,
-): string {
-  if (variant === "compact" || typeof link.title !== "string") {
-    return caption;
-  }
-  return `${caption}: ${link.title}`;
 }
 
 /**
@@ -192,11 +173,6 @@ export const DocumentSiblingNav = ({
     >
       {previous ? (
         <SiblingItem
-          ariaLabel={buildAriaLabel(
-            resolvedLabels.previous,
-            previous,
-            resolvedVariant,
-          )}
           caption={resolvedLabels.previous}
           link={previous}
           side="previous"
@@ -207,7 +183,6 @@ export const DocumentSiblingNav = ({
       )}
       {next ? (
         <SiblingItem
-          ariaLabel={buildAriaLabel(resolvedLabels.next, next, resolvedVariant)}
           caption={resolvedLabels.next}
           link={next}
           side="next"

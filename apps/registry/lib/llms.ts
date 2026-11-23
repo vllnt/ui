@@ -1,6 +1,5 @@
 import {
   generateLlmsText,
-  type LlmsFullPage,
   type LlmsLink,
   type LlmsSection,
 } from "@vllnt/next-llms";
@@ -16,6 +15,7 @@ import {
 import { registry, type RegistryComponent } from "@/lib/registry";
 
 import { DOCS_PAGES, getDocsPath } from "./docs-pages";
+import type { LlmsFullPage } from "./llms-full";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://ui.vllnt.com";
 

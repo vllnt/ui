@@ -136,3 +136,31 @@ describe("RunTimeline target size and contrast", () => {
     );
   });
 });
+
+describe("RunTimeline phase names", () => {
+  it("keeps the visible label inside the accessible name (WCAG 2.5.3)", () => {
+    render(
+      <RunTimeline
+        end={100}
+        phases={[
+          {
+            end: 40,
+            id: "a",
+            label: "Ingest",
+            onActivate: vi.fn(),
+            start: 0,
+            state: "complete",
+          },
+          { end: 90, id: "b", label: "Train", start: 40, state: "queued" },
+        ]}
+        start={0}
+      />,
+    );
+    expect(
+      screen.getByRole("button", { name: "Complete 0 → 40: Ingest" }),
+    ).toBeInTheDocument();
+    const passive = document.querySelector("[data-run-phase='b']");
+    expect(passive).not.toHaveAttribute("aria-label");
+    expect(passive).toHaveTextContent("Queued 40 → 90: Train");
+  });
+});

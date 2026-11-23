@@ -48,7 +48,7 @@ export class FlowErrorBoundary extends Component<
     return { error, hasError: true };
   }
 
-  componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
+  override componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
     console.error("[FlowDiagram] Error caught by boundary:", error, errorInfo);
     this.props.onError?.(error, errorInfo);
   }
@@ -57,7 +57,7 @@ export class FlowErrorBoundary extends Component<
     this.setState({ error: null, hasError: false });
   };
 
-  render(): ReactNode {
+  override render(): ReactNode {
     const { children, className, fallback, height = 400 } = this.props;
     const { error, hasError } = this.state;
 

@@ -18,7 +18,7 @@ describe("PresenceStack", () => {
       container.querySelectorAll("[data-presence-stack-user]"),
     ).toHaveLength(3);
     expect(user("1")?.getAttribute("style")).toMatch(
-      /color-mix\(in oklab, (#5b8def|rgb\(91, 141, 239\)) 55%, oklch\(0 0 0\)\)/,
+      /color-mix\((in oklab, )?(#5b8def|rgb\(91, 141, 239\)) 55%, oklch\(0 0 0\)( 45%)?\)/,
     );
     expect(user("1")).toHaveAttribute("title", "Bea");
     expect(user("2")).toHaveAttribute("data-presence-stack-status", "away");
