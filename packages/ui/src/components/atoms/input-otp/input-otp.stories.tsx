@@ -29,6 +29,14 @@ const meta = {
     maxLength: 6,
   },
   component: InputOTP,
+  parameters: {
+    a11y: {
+      focus: {
+        reason:
+          "The native input is transparent; the active slot draws the focus ring (ring-2 ring-ring), which the runner's element/parent check cannot see.",
+      },
+    },
+  },
   title: "Form/InputOtp",
 } satisfies Meta<typeof InputOTP>;
 

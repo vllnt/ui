@@ -79,6 +79,7 @@
     "styles.css",
     "themes",
     "CHANGELOG.md",
+    "MIGRATION.md",
     "README.md"
   ],
   "sideEffects": [

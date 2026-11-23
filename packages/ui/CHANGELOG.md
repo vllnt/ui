@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+## [0.4.0] - 2026-11-23
+
+Upgrading from 0.3.0: see [MIGRATION.md](./MIGRATION.md).
+
 ### Added
 
 - **Glass tokens** - `blur.glass.default` (20 px), `material.glass.tint-top`,
@@ -27,73 +31,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - **`keyByOccurrence`** - keys items that have no id and may repeat: the key is
   the identity text plus the number of identical items before it, so an equal
   item keeps its key when others change around it.
-
-### Changed
-
-- **Glass is the default material** - bars, panels, menus, popovers, dialogs,
-  sheets, docks and map overlays draw a frosted surface (tint, sheen, 20 px
-  blur, edge, two-layer shadow) instead of an opaque one. Pass
-  `material="solid"` to keep the previous look. The classes `vllnt-glass-md` and
-  `vllnt-glass-sm` are replaced by `vllnt-glass`, `vllnt-glass-floating`,
-  `vllnt-glass-dense` (denser tint for body text, muted text and control
-  borders) and `vllnt-glass-scrim`. Apps that use these classes load
-  `@vllnt/ui/styles.css`.
-- **Dark default tint** - the dark default glass tint is `#1C1C1CB2` to
-  `#1414149C` (4.51:1 for the foreground), not the first recipe draft's
-  `#1C1C1CAF` to `#14141499` (4.34:1).
-- **Smaller code highlighter** - `CodeBlock` and `StaticCode` use the Prism
-  light build with a fixed language set, not the full build that bundles every
-  language. `StaticCode` drops from about 682 KB to 121 KB minified, the lazy
-  `CodeBlock` chunk from about 681 KB to 115 KB, and an import of every export
-  from about 2.67 MB to 2.11 MB. The set is `tsx`, `typescript` (`ts`), `jsx`,
-  `javascript` (`js`), `json`, `bash` (`sh`, `shell`, `zsh`), `css`, `markdown`
-  (`md`), `diff`, `yaml` (`yml`), `python` (`py`), `markup` (`html`, `xml`) and
-  `sql`. Any other language, and `text`, renders as plain text without an
-  error.
-- **Runtime dependencies** - `lucide-react` 0.468 to 1.73 (icons now share a
-  small base, about 3 KB minified once per bundle), `sonner` 1.7 to 2.0 (the
-  `toast` export), `react-day-picker` 9 to 10 (`Calendar`, `RangeCalendar`,
-  `DateRangePicker`), `@hookform/resolvers` 6 to 7 (`Form` with `schema`),
-  `react-hook-form` 7.92 and `react-resizable-panels` 4.24. Apps that pass
-  `react-day-picker` props through `Calendar` should check the react-day-picker
-  10 upgrade notes.
-- **AspectRatio** - renders two plain `div`s with the same structure and no
-  longer needs `"use client"`, so it works in a Server Component.
-
-### Removed
-
-- **`@radix-ui/react-aspect-ratio`** - no longer a dependency; `AspectRatio`
-  does the same with an inline `padding-bottom` box.
-
-### Fixed
-
-- **StepByStep** - `null`, `false` and text children no longer crash the list
-  or render an empty step; numbering and the completed count skip them.
-- **Reasoning** - `onOpenChange` fires once per toggle under React StrictMode.
-- **DocumentSiblingNav** - a label passed as `undefined` keeps its default.
-- **List keys** - lists that key items by label (OrderSummary, StatusBoard,
-  FilterBar, PieChart and others) no longer warn or drop rows when two items
-  share a label.
-- **Accessible names** - a `Curriculum` lesson link and a `TutorialComplete`
-  related link put a space between their parts, so screen readers announce
-  "Available HTML Basics" and "Tutorial Next Tutorial" instead of running the
-  words together.
-- **Visible label in the accessible name (WCAG 2.5.3)** - `RunTimeline` phase
-  bars, the `CommentPin` trigger and `DocumentSiblingNav` links take their name
-  from their content instead of an `aria-label` that left out the visible text.
-  Names read as before ("Complete 0 → 600: load", "Comment, 3 unread",
-  "Older: Foo post"); a passive `RunTimeline` bar is plain text, not
-  `role="img"`. `StepNavigation` buttons drop their fixed English
-  `aria-label` ("Previous step", "Next step") and take their name from
-  `previousLabel` / `nextLabel`, so a translated label is also the spoken name.
-  `Calendar` (and `RangeCalendar`, `DateRangePicker`) day names start with the
-  visible day number ("12, Thursday, November 12th, 2026"); a `labels` prop
-  still overrides them. axe-core 4.14 checks this rule.
-
-## [0.4.0] - 2026-11-20
-
-### Added
-
+- **Migration guide** - [MIGRATION.md](./MIGRATION.md) lists the steps from
+  0.3.0 (peers, stylesheet, glass or solid, colours, renames, accessibility
+  behaviour, runtime dependency majors). It ships in the package.
+- **Accessibility gate** - every Storybook story is checked with axe-core
+  (WCAG 2.0, 2.1 and 2.2 A and AA) in light and dark, on glass and on solid
+  surfaces, under `prefers-reduced-motion: reduce` (no endless decorative
+  animation unless marked `data-motion="essential"`) and for a visible focus
+  indicator on each of the first tab stops. CI runs it on every pull request.
 - **Dialog overlay** - `DialogContent` takes `overlay="scrim"` (default, the
   dimmed veil as before) or `overlay="none"` (no veil; the dialog stays modal).
   (#601)
@@ -188,6 +133,35 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Changed
 
+- **Glass is the default material** - bars, panels, menus, popovers, dialogs,
+  sheets, docks and map overlays draw a frosted surface (tint, sheen, 20 px
+  blur, edge, two-layer shadow) instead of an opaque one. Pass
+  `material="solid"` to keep the previous look. The classes `vllnt-glass-md` and
+  `vllnt-glass-sm` are replaced by `vllnt-glass`, `vllnt-glass-floating`,
+  `vllnt-glass-dense` (denser tint for body text, muted text and control
+  borders) and `vllnt-glass-scrim`. Apps that use these classes load
+  `@vllnt/ui/styles.css`.
+- **Dark default tint** - the dark default glass tint is `#1C1C1CB2` to
+  `#1414149C` (4.51:1 for the foreground), not the first recipe draft's
+  `#1C1C1CAF` to `#14141499` (4.34:1).
+- **Smaller code highlighter** - `CodeBlock` and `StaticCode` use the Prism
+  light build with a fixed language set, not the full build that bundles every
+  language. `StaticCode` drops from about 682 KB to 121 KB minified, the lazy
+  `CodeBlock` chunk from about 681 KB to 115 KB, and an import of every export
+  from about 2.67 MB to 2.11 MB. The set is `tsx`, `typescript` (`ts`), `jsx`,
+  `javascript` (`js`), `json`, `bash` (`sh`, `shell`, `zsh`), `css`, `markdown`
+  (`md`), `diff`, `yaml` (`yml`), `python` (`py`), `markup` (`html`, `xml`) and
+  `sql`. Any other language, and `text`, renders as plain text without an
+  error.
+- **Runtime dependencies** - `lucide-react` 0.468 to 1.73 (icons now share a
+  small base, about 3 KB minified once per bundle), `sonner` 1.7 to 2.0 (the
+  `toast` export), `react-day-picker` 9 to 10 (`Calendar`, `RangeCalendar`,
+  `DateRangePicker`), `@hookform/resolvers` 6 to 7 (`Form` with `schema`),
+  `react-hook-form` 7.92 and `react-resizable-panels` 4.24. Apps that pass
+  `react-day-picker` props through `Calendar` should check the react-day-picker
+  10 upgrade notes.
+- **AspectRatio** - renders two plain `div`s with the same structure and no
+  longer needs `"use client"`, so it works in a Server Component.
 - **Dark surfaces are pure black** - the default dark theme now renders
   `--background`, `--muted`, `--card` and `--popover` as `0 0 0` (#000000).
   Hairline borders separate the surfaces: `--border`, `--secondary` and
@@ -321,8 +295,38 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
   `data-jarvis-*` selectors to `data-command-*`, and install with
   `pnpm dlx shadcn@latest add https://ui.vllnt.com/r/command-dock.json`. (#682)
 
+### Removed
+
+- **`@radix-ui/react-aspect-ratio`** - no longer a dependency; `AspectRatio`
+  does the same with an inline `padding-bottom` box.
+
 ### Fixed
 
+- **StepByStep** - `null`, `false` and text children no longer crash the list
+  or render an empty step; numbering and the completed count skip them.
+- **Reasoning** - `onOpenChange` fires once per toggle under React StrictMode.
+- **DocumentSiblingNav** - a label passed as `undefined` keeps its default.
+- **List keys** - lists that key items by label (OrderSummary, StatusBoard,
+  FilterBar, PieChart and others) no longer warn or drop rows when two items
+  share a label.
+- **Accessible names** - a `Curriculum` lesson link and a `TutorialComplete`
+  related link put a space between their parts, so screen readers announce
+  "Available HTML Basics" and "Tutorial Next Tutorial" instead of running the
+  words together.
+- **Visible label in the accessible name (WCAG 2.5.3)** - `RunTimeline` phase
+  bars, the `CommentPin` trigger and `DocumentSiblingNav` links take their name
+  from their content instead of an `aria-label` that left out the visible text.
+  Names read as before ("Complete 0 → 600: load", "Comment, 3 unread",
+  "Older: Foo post"); a passive `RunTimeline` bar is plain text, not
+  `role="img"`. `StepNavigation` buttons drop their fixed English
+  `aria-label` ("Previous step", "Next step") and take their name from
+  `previousLabel` / `nextLabel`, so a translated label is also the spoken name.
+  `Calendar` (and `RangeCalendar`, `DateRangePicker`) day names start with the
+  visible day number ("12, Thursday, November 12th, 2026"); a `labels` prop
+  still overrides them. axe-core 4.14 checks this rule.
+- **Command input focus** - `CommandInput` draws its bottom border in the ring
+  colour while the field has focus, so keyboard users see where focus is
+  (WCAG 2.4.7). The input itself keeps no outline, as before.
 - **Tap targets** - the NavbarSaas links, the Breadcrumb crumbs, the
   TableOfContents buttons and the Sidebar family heading link are at least
   24 px tall (WCAG 2.5.8); they were 20 px.
