@@ -113,3 +113,17 @@ describe("CommandSeparator", () => {
     expect(container.querySelector("[data-testid=separator]")).toBeNull();
   });
 });
+
+describe("CommandInput focus", () => {
+  it("marks the input row when the input has focus (WCAG 2.4.7)", () => {
+    render(
+      <Command>
+        <CommandInput placeholder="Search" />
+      </Command>,
+    );
+    const wrapper = screen
+      .getByPlaceholderText("Search")
+      .closest("[cmdk-input-wrapper]");
+    expect(wrapper).toHaveClass("focus-within:border-ring");
+  });
+});

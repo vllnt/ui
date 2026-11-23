@@ -2,7 +2,7 @@
 
 React components built on Radix UI primitives, Tailwind CSS, and CVA. For humans and AI agents.
 
-See [CHANGELOG.md](./CHANGELOG.md) for release history.
+See [CHANGELOG.md](./CHANGELOG.md) for release history and [MIGRATION.md](./MIGRATION.md) to upgrade from 0.3.0.
 
 ## For AI agents
 
