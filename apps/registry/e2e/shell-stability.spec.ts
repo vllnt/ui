@@ -198,12 +198,16 @@ test.describe("the query still reaches shell links", () => {
     const components = page.locator("header a", { hasText: "Components" });
     await expect(components.first()).toHaveAttribute("href", "/components");
 
-    await page
-      .getByRole("navigation", { name: "Filter by implementation" })
-      .getByRole("link", { name: "Native" })
-      .click();
-
-    await expect(page).toHaveURL("/components?platform=native");
+    // A click that lands before the page hydrates is dropped; retry until it navigates.
+    await expect(async () => {
+      await page
+        .getByRole("navigation", { name: "Filter by implementation" })
+        .getByRole("link", { name: "Native" })
+        .click();
+      await expect(page).toHaveURL("/components?platform=native", {
+        timeout: 5000,
+      });
+    }).toPass({ timeout: 20_000 });
     await expect(components.first()).toHaveAttribute(
       "href",
       "/components?platform=native",
