@@ -33,7 +33,10 @@ const flowRuntime = vi.hoisted(() => {
     currentNodes,
     fetchImage: vi.fn((input: string) =>
       Promise.resolve(
-        new Response(new Blob([input], { type: "image/png" }), { status: 200 }),
+        new Response(input, {
+          headers: { "content-type": "image/png" },
+          status: 200,
+        }),
       ),
     ),
     fitView: vi.fn(() => Promise.resolve()),
