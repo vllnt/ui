@@ -1,12 +1,34 @@
 "use client";
 
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { DayPicker } from "react-day-picker";
+import {
+  type DateLib,
+  DayPicker,
+  labelDayButton,
+  labelGridcell,
+  type Labels,
+} from "react-day-picker";
 
 import { cn } from "../../../lib/utils";
 import { buttonVariants } from "../../atoms/button/button";
 
 export type CalendarProps = React.ComponentProps<typeof DayPicker>;
+
+/** The day number as the grid shows it, so the spoken name starts with it. */
+function visibleDay(date: Date, dateLibrary?: DateLib): string {
+  return dateLibrary ? dateLibrary.format(date, "d") : String(date.getDate());
+}
+
+/**
+ * Day labels that start with the visible day number ("12, Thursday, November
+ * 12th, 2026"), so the accessible name contains the visible text (WCAG 2.5.3).
+ */
+const DAY_LABELS: Partial<Labels> = {
+  labelDayButton: (...arguments_: Parameters<typeof labelDayButton>) =>
+    `${visibleDay(arguments_[0], arguments_[3])}, ${labelDayButton(...arguments_)}`,
+  labelGridcell: (...arguments_: Parameters<typeof labelGridcell>) =>
+    `${visibleDay(arguments_[0], arguments_[3])}, ${labelGridcell(...arguments_)}`,
+};
 
 function IconLeft() {
   return <ChevronLeft className="size-4" />;
@@ -27,6 +49,7 @@ function ChevronComponent({
 function Calendar({
   className,
   classNames,
+  labels,
   showOutsideDays = true,
   ...props
 }: CalendarProps) {
@@ -72,6 +95,7 @@ function Calendar({
       components={{
         Chevron: ChevronComponent,
       }}
+      labels={{ ...DAY_LABELS, ...labels }}
       showOutsideDays={showOutsideDays}
       {...props}
     />

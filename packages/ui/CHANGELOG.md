@@ -83,7 +83,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
   from their content instead of an `aria-label` that left out the visible text.
   Names read as before ("Complete 0 → 600: load", "Comment, 3 unread",
   "Older: Foo post"); a passive `RunTimeline` bar is plain text, not
-  `role="img"`. axe-core 4.14 checks this rule.
+  `role="img"`. `StepNavigation` buttons drop their fixed English
+  `aria-label` ("Previous step", "Next step") and take their name from
+  `previousLabel` / `nextLabel`, so a translated label is also the spoken name.
+  `Calendar` (and `RangeCalendar`, `DateRangePicker`) day names start with the
+  visible day number ("12, Thursday, November 12th, 2026"); a `labels` prop
+  still overrides them. axe-core 4.14 checks this rule.
 
 ## [0.4.0] - 2026-11-20
 

@@ -74,7 +74,6 @@ function StepNavigationImpl({
       <div className="mx-auto flex max-w-3xl items-center justify-between px-4 py-3">
         {/* Previous Button */}
         <button
-          aria-label="Previous step"
           className={buttonClassName}
           disabled={!canPrev}
           onClick={onPrev}
@@ -91,7 +90,6 @@ function StepNavigationImpl({
 
         {/* Next Button */}
         <button
-          aria-label="Next step"
           className={buttonClassName}
           disabled={!canNext}
           onClick={onNext}
