@@ -4,16 +4,15 @@ import * as React from "react";
 
 import { MenuTrigger as MenuTriggerPart } from "@ui-sdk/react/menu";
 
+import type { AsChildProps, NarrowPartProps } from "../../../lib/ui-sdk";
 import {
   asChildProps,
   openState,
   withDataAttributes,
 } from "../../../lib/ui-sdk";
 import {
-  type AsChild,
   createMenuParts,
   type MenuContentProps,
-  type Narrow,
 } from "../../../lib/ui-sdk-menu";
 
 const {
@@ -46,8 +45,8 @@ const {
     "flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none focus:bg-accent data-[highlighted]:bg-accent data-[state=open]:bg-accent",
 });
 
-type TriggerProps = AsChild &
-  Narrow<React.ComponentProps<typeof MenuTriggerPart>> & {
+type TriggerProps = AsChildProps &
+  NarrowPartProps<React.ComponentProps<typeof MenuTriggerPart>> & {
     ref?: React.Ref<HTMLButtonElement>;
   };
 

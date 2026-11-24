@@ -15,6 +15,7 @@ import {
 import { cva } from "class-variance-authority";
 import { ChevronDown } from "lucide-react";
 
+import type { AsChildProps, NarrowPartProps } from "../../../lib/ui-sdk";
 import {
   asChildProps,
   type DataAttributes,
@@ -28,15 +29,6 @@ import {
   runDismissHandlers,
 } from "../../../lib/ui-sdk-dismiss";
 import { cn } from "../../../lib/utils";
-
-/** A ui-sdk part's props with a plain string `className`, as Radix had. */
-type Narrow<Props> = Omit<Props, "children" | "className" | "render"> & {
-  children?: React.ReactNode;
-  className?: string;
-};
-
-/** Radix's `asChild`: render the single child as the part's element. */
-type AsChild = { asChild?: boolean };
 
 type RootState = {
   /** The root element, where the viewport lines up. */
@@ -52,7 +44,7 @@ type ContentEntry = { dismiss: DismissHandlers; element: HTMLElement | null };
 const RootContext = React.createContext<null | RootState>(null);
 
 type RootProps = Omit<
-  Narrow<React.ComponentProps<typeof NavigationMenuRoot>>,
+  NarrowPartProps<React.ComponentProps<typeof NavigationMenuRoot>>,
   "defaultValue" | "onValueChange" | "value"
 > & {
   defaultValue?: string;
@@ -161,8 +153,8 @@ const NavigationMenu = ({
 };
 NavigationMenu.displayName = "NavigationMenu";
 
-type ListProps = AsChild &
-  Narrow<React.ComponentProps<typeof NavigationMenuListPart>> & {
+type ListProps = AsChildProps &
+  NarrowPartProps<React.ComponentProps<typeof NavigationMenuListPart>> & {
     ref?: React.Ref<HTMLUListElement>;
   };
 
@@ -189,8 +181,8 @@ const NavigationMenuList = ({
 };
 NavigationMenuList.displayName = "NavigationMenuList";
 
-type ItemProps = AsChild &
-  Narrow<React.ComponentProps<typeof NavigationMenuItemPart>> & {
+type ItemProps = AsChildProps &
+  NarrowPartProps<React.ComponentProps<typeof NavigationMenuItemPart>> & {
     ref?: React.Ref<HTMLLIElement>;
   };
 
@@ -218,8 +210,8 @@ const navigationMenuTriggerStyle = cva(
   "group inline-flex h-10 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50 data-[state=open]:bg-accent/50",
 );
 
-type TriggerProps = AsChild &
-  Narrow<React.ComponentProps<typeof NavigationMenuTriggerPart>> & {
+type TriggerProps = AsChildProps &
+  NarrowPartProps<React.ComponentProps<typeof NavigationMenuTriggerPart>> & {
     ref?: React.Ref<HTMLButtonElement>;
   };
 
@@ -250,9 +242,9 @@ NavigationMenuTrigger.displayName = "NavigationMenuTrigger";
 const contentState = (state: { open: boolean }): DataAttributes =>
   openState(state);
 
-type ContentProps = AsChild &
+type ContentProps = AsChildProps &
   DismissHandlers &
-  Narrow<
+  NarrowPartProps<
     Omit<
       React.ComponentProps<typeof NavigationMenuContentPart>,
       "hiddenUntilFound" | "keepMounted"
@@ -316,9 +308,9 @@ const NavigationMenuContent = ({
 };
 NavigationMenuContent.displayName = "NavigationMenuContent";
 
-type LinkProps = AsChild &
+type LinkProps = AsChildProps &
   Omit<
-    Narrow<React.ComponentProps<typeof NavigationMenuLinkPart>>,
+    NarrowPartProps<React.ComponentProps<typeof NavigationMenuLinkPart>>,
     "current" | "onSelect"
   > & {
     /** Marks the link of the current page. */
@@ -365,8 +357,8 @@ const NavigationMenuLink = ({
 };
 NavigationMenuLink.displayName = "NavigationMenuLink";
 
-type ViewportProps = AsChild &
-  Narrow<React.ComponentProps<typeof NavigationMenuViewportPart>> & {
+type ViewportProps = AsChildProps &
+  NarrowPartProps<React.ComponentProps<typeof NavigationMenuViewportPart>> & {
     /** Radix-compatible: accepted, ui-sdk unmounts the viewport while closed. */
     forceMount?: true;
     ref?: React.Ref<HTMLDivElement>;
@@ -410,8 +402,8 @@ const indicatorState = (state: { open: boolean }): DataAttributes => ({
   "data-state": state.open ? "visible" : "hidden",
 });
 
-type IndicatorProps = AsChild &
-  Narrow<React.ComponentProps<typeof NavigationMenuIndicatorPart>> & {
+type IndicatorProps = AsChildProps &
+  NarrowPartProps<React.ComponentProps<typeof NavigationMenuIndicatorPart>> & {
     /** Radix-compatible: accepted, ui-sdk keeps the indicator mounted. */
     forceMount?: true;
     ref?: React.Ref<HTMLDivElement>;

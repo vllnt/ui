@@ -16,6 +16,7 @@ import { renderElement } from "@ui-sdk/react/primitive";
 import { Check, ChevronRight, Circle } from "lucide-react";
 
 import type { MaterialProps } from "./material";
+import type { AsChildProps, NarrowPartProps } from "./ui-sdk";
 import {
   asChildProps,
   checkedState,
@@ -41,19 +42,10 @@ import { cn } from "./utils";
  * atoms, where Tailwind sees them.
  */
 
-/** A ui-sdk part's props with a plain string `className`, as Radix had. */
-type Narrow<Props> = Omit<Props, "children" | "className" | "render"> & {
-  children?: React.ReactNode;
-  className?: string;
-};
-
-/** Radix's `asChild`: render the single child as the part's element. */
-type AsChild = { asChild?: boolean };
-
 type ContentOptions = { dismiss: DismissHandlers; loop?: boolean };
 
 /** How a menu's content hands what Radix put on the content to its root. */
-const ContentContext = React.createContext<
+const MenuContentContext = React.createContext<
   ((options: ContentOptions) => void) | null
 >(null);
 
@@ -61,7 +53,7 @@ const ContentContext = React.createContext<
  * Radix puts `loop` and the dismissal callbacks on the content, ui-sdk on the
  * root: the root keeps what its content reports, and applies it.
  */
-function useContentOptions(
+function useMenuContentOptions(
   onOpenChange?: (open: boolean, details: DismissDetails) => void,
 ) {
   const { handleOpenChange, ref } = useDismissRoot(onOpenChange);
@@ -107,19 +99,19 @@ type MenuRootProps = Omit<
 
 /** Holds the open state. Renders no element. */
 const Root = ({ dir, modal = true, onOpenChange, ...props }: MenuRootProps) => {
-  const options = useContentOptions((open) => {
+  const options = useMenuContentOptions((open) => {
     onOpenChange?.(open);
   });
 
   return (
-    <ContentContext value={options.register}>
+    <MenuContentContext value={options.register}>
       <MenuRoot
         loop={options.loop}
         modal={modal}
         onOpenChange={options.handleOpenChange}
         {...props}
       />
-    </ContentContext>
+    </MenuContentContext>
   );
 };
 
@@ -132,23 +124,23 @@ type MenuSubProps = Omit<
 
 /** Holds the open state of a submenu. Renders no element. */
 const Sub = ({ onOpenChange, ...props }: MenuSubProps) => {
-  const options = useContentOptions((open) => {
+  const options = useMenuContentOptions((open) => {
     onOpenChange?.(open);
   });
 
   return (
-    <ContentContext value={options.register}>
+    <MenuContentContext value={options.register}>
       <MenuSubRoot
         loop={options.loop}
         onOpenChange={options.handleOpenChange}
         {...props}
       />
-    </ContentContext>
+    </MenuContentContext>
   );
 };
 
-type MenuGroupProps = AsChild &
-  Narrow<React.ComponentProps<typeof MenuGroupPart>> & {
+type MenuGroupProps = AsChildProps &
+  NarrowPartProps<React.ComponentProps<typeof MenuGroupPart>> & {
     ref?: React.Ref<HTMLDivElement>;
   };
 
@@ -173,10 +165,12 @@ type MenuPortalProps = {
 /** Renders its children. Radix needed a portal, ui-sdk popups use the top layer. */
 const Portal = ({ children }: MenuPortalProps) => children;
 
-type MenuContentProps = AsChild &
+type MenuContentProps = AsChildProps &
   DismissHandlers &
   MaterialProps &
-  Narrow<Omit<React.ComponentProps<typeof MenuContentPart>, "keepMounted">> & {
+  NarrowPartProps<
+    Omit<React.ComponentProps<typeof MenuContentPart>, "keepMounted">
+  > & {
     /** Keeps the content in the page while the menu stays closed. */
     forceMount?: boolean;
     /** Whether arrow keys wrap from the last item to the first. */
@@ -218,7 +212,7 @@ const Popup = ({
   ...props
 }: WithLook<MenuContentProps>) => {
   const slot = asChildProps({ asChild, children });
-  const register = React.use(ContentContext);
+  const register = React.use(MenuContentContext);
   const renderContent = (
     renderProps: Record<string, unknown>,
     state: { open: boolean },
@@ -260,8 +254,8 @@ const Popup = ({
   );
 };
 
-type MenuSubTriggerProps = AsChild &
-  Narrow<React.ComponentProps<typeof MenuSubTriggerPart>> & {
+type MenuSubTriggerProps = AsChildProps &
+  NarrowPartProps<React.ComponentProps<typeof MenuSubTriggerPart>> & {
     inset?: boolean;
     ref?: React.Ref<HTMLDivElement>;
   };
@@ -288,8 +282,8 @@ const SubTrigger = ({
   );
 };
 
-type MenuItemProps = AsChild &
-  Narrow<React.ComponentProps<typeof MenuItemPart>> & {
+type MenuItemProps = AsChildProps &
+  NarrowPartProps<React.ComponentProps<typeof MenuItemPart>> & {
     inset?: boolean;
     ref?: React.Ref<HTMLDivElement>;
     /** The text typeahead matches, when the children aren't plain text. */
@@ -319,7 +313,7 @@ const Item = ({
   );
 };
 
-type MenuCheckboxItemProps = Narrow<
+type MenuCheckboxItemProps = NarrowPartProps<
   Omit<
     React.ComponentProps<typeof MenuCheckboxItemPart>,
     "checked" | "onSelect" | "value"
@@ -368,8 +362,8 @@ const CheckboxItem = ({
   );
 };
 
-type MenuRadioGroupProps = AsChild &
-  Narrow<React.ComponentProps<typeof MenuRadioGroupPart>> & {
+type MenuRadioGroupProps = AsChildProps &
+  NarrowPartProps<React.ComponentProps<typeof MenuRadioGroupPart>> & {
     ref?: React.Ref<HTMLDivElement>;
   };
 
@@ -383,7 +377,7 @@ const RadioGroup = ({ asChild, children, ...props }: MenuRadioGroupProps) => {
   );
 };
 
-type MenuRadioItemProps = Narrow<
+type MenuRadioItemProps = NarrowPartProps<
   Omit<React.ComponentProps<typeof MenuRadioItemPart>, "onSelect">
 > & {
   ref?: React.Ref<HTMLDivElement>;
@@ -541,10 +535,9 @@ function createMenuParts(
 }
 
 export {
-  type AsChild,
-  ContentContext,
   createMenuParts,
   type MenuCheckboxItemProps,
+  MenuContentContext,
   type MenuContentProps,
   type MenuGroupProps,
   type MenuItemProps,
@@ -557,7 +550,6 @@ export {
   type MenuSeparatorProps,
   type MenuSubProps,
   type MenuSubTriggerProps,
-  type Narrow,
-  useContentOptions,
+  useMenuContentOptions,
   type WithLook,
 };

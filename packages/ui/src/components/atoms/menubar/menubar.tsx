@@ -8,18 +8,17 @@ import {
 } from "@ui-sdk/react/menu";
 import { Menubar as MenubarRoot } from "@ui-sdk/react/menubar";
 
+import type { AsChildProps, NarrowPartProps } from "../../../lib/ui-sdk";
 import {
   asChildProps,
   openState,
   withDataAttributes,
 } from "../../../lib/ui-sdk";
 import {
-  type AsChild,
-  ContentContext,
   createMenuParts,
+  MenuContentContext,
   type MenuContentProps,
-  type Narrow,
-  useContentOptions,
+  useMenuContentOptions,
 } from "../../../lib/ui-sdk-menu";
 import { cn } from "../../../lib/utils";
 
@@ -52,7 +51,9 @@ type BarState = {
 
 const BarContext = React.createContext<BarState>({});
 
-type MenubarProps = Narrow<React.ComponentProps<typeof MenubarRoot>> & {
+type MenubarProps = NarrowPartProps<
+  React.ComponentProps<typeof MenubarRoot>
+> & {
   /** Value of the menu that starts open. */
   defaultValue?: string;
   /** Radix-compatible: accepted, ui-sdk follows the document direction. */
@@ -106,7 +107,7 @@ const MenubarMenu = ({ value, ...props }: MenubarMenuProps) => {
   const generated = React.useId();
   const id = value ?? generated;
   const bar = React.use(BarContext);
-  const options = useContentOptions((open, details) => {
+  const options = useMenuContentOptions((open, details) => {
     if (open) {
       bar.onValueChange?.(id);
     } else if (details.reason !== "submenu-switch") {
@@ -116,7 +117,7 @@ const MenubarMenu = ({ value, ...props }: MenubarMenuProps) => {
   });
 
   return (
-    <ContentContext value={options.register}>
+    <MenuContentContext value={options.register}>
       <MenuRoot
         defaultOpen={
           bar.defaultValue === undefined ? undefined : bar.defaultValue === id
@@ -126,13 +127,13 @@ const MenubarMenu = ({ value, ...props }: MenubarMenuProps) => {
         open={bar.value === undefined ? undefined : bar.value === id}
         {...props}
       />
-    </ContentContext>
+    </MenuContentContext>
   );
 };
 MenubarMenu.displayName = "MenubarMenu";
 
-type TriggerProps = AsChild &
-  Narrow<React.ComponentProps<typeof MenuTriggerPart>> & {
+type TriggerProps = AsChildProps &
+  NarrowPartProps<React.ComponentProps<typeof MenuTriggerPart>> & {
     ref?: React.Ref<HTMLButtonElement>;
   };
 
