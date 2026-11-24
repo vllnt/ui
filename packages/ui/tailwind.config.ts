@@ -68,6 +68,15 @@ const config = {
         md: 'calc(var(--radius) - 2px)',
         sm: 'calc(var(--radius) - 4px)',
       },
+      height: {
+        'control-xs': 'var(--size-control-xs)',
+      },
+      minHeight: {
+        target: 'var(--size-target-min)',
+      },
+      minWidth: {
+        target: 'var(--size-target-min)',
+      },
       keyframes: {
         'accordion-down': {
           from: { height: '0' },
