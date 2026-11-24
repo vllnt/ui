@@ -37,6 +37,10 @@ Known differences that remain:
   `avoidCollisions`, `sticky`, `dir`, `skipDelayDuration`, and vaul's drawer
   options.
 - A press outside a popup dismisses it on pointer up, not pointer down.
+- `Tooltip`: pressing the trigger closes the tooltip on click, not pointer
+  down, so a custom `TooltipTrigger asChild` child must pass `onClick` on to
+  its element. A closed tooltip stays in the page, hidden, so it can name its
+  trigger: test for a visible tooltip, not for none in the DOM.
 - `CompletionDialog` sets `aria-modal="true"` when modal, closes on a click
   outside (a press that starts inside and ends outside keeps it open), and in
   non-modal mode hands focus back to the opener only when nothing else took it.

@@ -87,19 +87,26 @@ const ButtonTrigger = ({
   copiedText,
   iconClassName,
   label = "Copy",
-  onClick: _onClick,
+  onClick,
   onClickHandler,
   ref,
   value: _value,
   variant = "icon",
   ...rest
 }: TriggerProps & { ref?: React.Ref<HTMLButtonElement> }) => {
+  // `onClick` here is the tooltip trigger's own handler: pressing the button
+  // closes the tooltip until the pointer leaves, so it must still run.
+  const handleClick = (event: ReactMouseEvent<HTMLButtonElement>) => {
+    onClickHandler(event);
+    onClick?.(event);
+  };
+
   if (variant === "button") {
     return (
       <Button
         aria-label={accessibleLabel}
         className={cn(className)}
-        onClick={onClickHandler}
+        onClick={handleClick}
         ref={ref}
         size="sm"
         type="button"
@@ -120,7 +127,7 @@ const ButtonTrigger = ({
           "size-6 align-middle text-muted-foreground hover:text-foreground",
           className,
         )}
-        onClick={onClickHandler}
+        onClick={handleClick}
         ref={ref}
         size="icon"
         type="button"
@@ -136,7 +143,7 @@ const ButtonTrigger = ({
     <Button
       aria-label={accessibleLabel}
       className={cn("size-8", className)}
-      onClick={onClickHandler}
+      onClick={handleClick}
       ref={ref}
       size="icon"
       type="button"
