@@ -60,3 +60,21 @@ if (!("getAnimations" in Element.prototype)) {
     value: () => [],
   });
 }
+
+// ui-sdk's sheet and drawer run their slide through the Web Animations API,
+// which jsdom lacks: a stand-in animation that finishes on the next microtask.
+if (!("animate" in Element.prototype)) {
+  Object.defineProperty(Element.prototype, "animate", {
+    configurable: true,
+    value: () => {
+      const animation = {
+        cancel: () => {},
+        finished: Promise.resolve(),
+        onfinish: null as (() => void) | null,
+      };
+      queueMicrotask(() => animation.onfinish?.());
+      return animation;
+    },
+    writable: true,
+  });
+}
