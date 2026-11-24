@@ -15,7 +15,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
   (`DismissContext`, `useDismissRoot`, `useRegisterDismissHandlers`,
   `runDismissHandlers`, `callPreventDefault`) and `createMenuParts`, with their
   types (`AsChildProps`, `NarrowPartProps`, `DataAttributes`, `DismissDetails`,
-  `DismissHandlers`, `MenuContentProps`, `MenuLook`).
+  `DismissHandlers`, `FocusOutsideEvent`, `PointerDownOutsideEvent`,
+  `MenuContentProps`, `MenuLook`).
+- **`commandScore` and `createCommandRanker`** - cmdk's scoring (MIT, ported from
+  cmdk 1.1.1) and the ranker `Command` uses to order its results, so search
+  results keep cmdk's ranking.
 - **`Separator` `variant`** - `variant="dashed"` draws a dashed 1 px border over a
   transparent fill, in both orientations. The default stays `solid`.
 - **`Link` `size`, `foreground` and `skip`** - `size="sm" | "default" | "lg"`

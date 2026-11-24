@@ -37,6 +37,13 @@ Known differences that remain:
   `avoidCollisions`, `sticky`, `dir`, `skipDelayDuration`, and vaul's drawer
   options.
 - A press outside a popup dismisses it on pointer up, not pointer down.
+- `Command` ranks results with cmdk's score, but groups keep their written
+  order, items outside a group stay where they are, and clearing the search
+  restores the written order (cmdk left the last sort in place).
+- `onEscapeKeyDown`, `onPointerDownOutside`, `onFocusOutside` and
+  `onInteractOutside` get the DOM event (with `detail.originalEvent` on the
+  outside ones, as in Radix), and `onFocusOutside` is now accepted on `Dialog`,
+  `Sheet` and `Drawer` content too.
 
 # Migrating from 0.3.0 to 0.4.0
 
