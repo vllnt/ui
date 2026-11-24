@@ -5,6 +5,13 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { SegmentedControl, SegmentedControlItem } from "./segmented-control";
 
 const meta = {
+  argTypes: {
+    fit: { control: "boolean" },
+    variant: {
+      control: "select",
+      options: ["filled", "hairline"],
+    },
+  },
   component: SegmentedControl,
   title: "Form/SegmentedControl",
 } satisfies Meta<typeof SegmentedControl>;
@@ -52,4 +59,36 @@ function ControlledSegmentedControlDemo() {
 
 export const Controlled: Story = {
   render: () => <ControlledSegmentedControlDemo />,
+};
+
+export const Fit: Story = {
+  render: () => (
+    <SegmentedControl aria-label="Layout" defaultValue="grid" fit>
+      <SegmentedControlItem value="grid">Grid</SegmentedControlItem>
+      <SegmentedControlItem value="list">List</SegmentedControlItem>
+    </SegmentedControl>
+  ),
+};
+
+export const Hairline: Story = {
+  render: () => (
+    <div className="w-full max-w-sm">
+      <SegmentedControl aria-label="Theme" defaultValue="light" variant="hairline">
+        <SegmentedControlItem value="light">Light</SegmentedControlItem>
+        <SegmentedControlItem value="dark">Dark</SegmentedControlItem>
+        <SegmentedControlItem value="system">System</SegmentedControlItem>
+      </SegmentedControl>
+    </div>
+  ),
+};
+
+export const FitHairlineOnGlass: Story = {
+  render: () => (
+    <div className="vllnt-glass vllnt-glass-dense inline-flex rounded-xl border p-3">
+      <SegmentedControl aria-label="Theme" defaultValue="light" fit variant="hairline">
+        <SegmentedControlItem value="light">Light</SegmentedControlItem>
+        <SegmentedControlItem value="dark">Dark</SegmentedControlItem>
+      </SegmentedControl>
+    </div>
+  ),
 };

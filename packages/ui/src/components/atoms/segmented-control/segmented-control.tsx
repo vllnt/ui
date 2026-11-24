@@ -8,16 +8,26 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "../../../lib/utils";
 
 const segmentedControlVariants = cva(
-  "inline-flex w-full items-center rounded-lg bg-secondary p-1 text-muted-foreground",
+  "inline-flex items-center rounded-lg p-1 text-muted-foreground",
   {
     defaultVariants: {
+      fit: false,
       size: "default",
+      variant: "filled",
     },
     variants: {
+      fit: {
+        false: "w-full",
+        true: "w-auto [&>*]:flex-none",
+      },
       size: {
         default: "min-h-10",
         lg: "min-h-11",
         sm: "min-h-9",
+      },
+      variant: {
+        filled: "bg-secondary",
+        hairline: "border border-input bg-transparent",
       },
     },
   },
@@ -54,16 +64,31 @@ export type SegmentedControlItemProps = React.ComponentPropsWithoutRef<
 > &
   VariantProps<typeof segmentedControlItemVariants>;
 
+/**
+ * Single-choice segmented selector.
+ *
+ * `fit` hugs the content (root `w-auto`, items `flex-none`) instead of filling
+ * the row. `variant="hairline"` swaps the filled track for a transparent one
+ * with a 1 px border; the border is the input colour, which inside glass is the
+ * AA-checked `glass-input`, so set it on the dense glass tint.
+ * @example
+ * <SegmentedControl aria-label="View" defaultValue="grid" fit variant="hairline">
+ *   <SegmentedControlItem value="grid">Grid</SegmentedControlItem>
+ *   <SegmentedControlItem value="list">List</SegmentedControlItem>
+ * </SegmentedControl>
+ */
 const SegmentedControl = ({
   className,
+  fit,
   ref,
   size,
+  variant,
   ...props
 }: SegmentedControlProps & {
   ref?: React.Ref<React.ComponentRef<typeof ToggleGroupPrimitive.Root>>;
 }) => (
   <ToggleGroupPrimitive.Root
-    className={cn(segmentedControlVariants({ size }), className)}
+    className={cn(segmentedControlVariants({ fit, size, variant }), className)}
     ref={ref}
     type="single"
     {...props}

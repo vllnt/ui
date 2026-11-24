@@ -8,7 +8,11 @@ import {
 import type * as React from "react";
 import { describe, expect, it, vi } from "vitest";
 
-import { SegmentedControl, SegmentedControlItem } from "./segmented-control";
+import {
+  SegmentedControl,
+  SegmentedControlItem,
+  segmentedControlVariants,
+} from "./segmented-control";
 
 function renderSegmentedControl(
   props: React.ComponentProps<typeof SegmentedControl> = {},
@@ -98,5 +102,55 @@ describe("SegmentedControl", () => {
     expect(details).toBeDisabled();
     expect(overview).toHaveAttribute("aria-checked", "true");
     expect(details).toHaveAttribute("aria-checked", "false");
+  });
+
+  it("fills the row with a filled track by default", () => {
+    renderSegmentedControl({ defaultValue: "overview" });
+
+    const group = screen.getByRole("radiogroup", { name: "View mode" });
+
+    expect(group).toHaveClass("w-full", "bg-secondary");
+    expect(group).not.toHaveClass("w-auto", "border", "bg-transparent");
+    expect(screen.getByRole("radio", { name: "Overview" })).toHaveClass(
+      "flex-1",
+    );
+  });
+
+  it("fit hugs the content: root w-auto, items flex-none", () => {
+    renderSegmentedControl({ defaultValue: "overview", fit: true });
+
+    const group = screen.getByRole("radiogroup", { name: "View mode" });
+
+    expect(group).toHaveClass("w-auto", "[&>*]:flex-none");
+    expect(group).not.toHaveClass("w-full");
+    expect(segmentedControlVariants({ fit: true })).not.toContain("w-full");
+  });
+
+  it("hairline draws a transparent track with a 1 px input-colour border", () => {
+    renderSegmentedControl({ defaultValue: "overview", variant: "hairline" });
+
+    const group = screen.getByRole("radiogroup", { name: "View mode" });
+
+    expect(group).toHaveClass("border", "border-input", "bg-transparent");
+    expect(group).not.toHaveClass("bg-secondary");
+  });
+
+  it("combines fit and hairline and keeps selection working", () => {
+    renderSegmentedControl({
+      defaultValue: "overview",
+      fit: true,
+      variant: "hairline",
+    });
+
+    fireEvent.click(screen.getByRole("radio", { name: "Details" }));
+
+    expect(screen.getByRole("radio", { name: "Details" })).toHaveAttribute(
+      "aria-checked",
+      "true",
+    );
+    expect(screen.getByRole("radiogroup", { name: "View mode" })).toHaveClass(
+      "w-auto",
+      "border-input",
+    );
   });
 });
