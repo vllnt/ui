@@ -22,12 +22,21 @@ import * as React from "react";
  * calls `runDismissHandlers` itself.
  */
 
+/**
+ * Radix's outside events: the DOM event that caused them sits in
+ * `detail.originalEvent`.
+ */
+type PointerDownOutsideEvent = CustomEvent<{ originalEvent: PointerEvent }>;
+type FocusOutsideEvent = CustomEvent<{ originalEvent: FocusEvent }>;
+
 /** The Radix callbacks a content takes; each may call `preventDefault()`. */
 type DismissHandlers = {
   onEscapeKeyDown?: (event: KeyboardEvent) => void;
-  onFocusOutside?: (event: Event) => void;
-  onInteractOutside?: (event: Event) => void;
-  onPointerDownOutside?: (event: Event) => void;
+  onFocusOutside?: (event: FocusOutsideEvent) => void;
+  onInteractOutside?: (
+    event: FocusOutsideEvent | PointerDownOutsideEvent,
+  ) => void;
+  onPointerDownOutside?: (event: PointerDownOutsideEvent) => void;
 };
 
 /** What ui-sdk hands `onOpenChange` besides the new state. */
@@ -41,15 +50,20 @@ type DismissDetails = {
 /**
  * Runs Radix-style `handlers` on `event` and tells whether one of them called
  * `preventDefault()`. ui-sdk calls it on the event itself first, so
- * `defaultPrevented` cannot tell.
+ * `defaultPrevented` cannot tell. `overrides` replace properties the handlers
+ * read, such as the `detail` of a Radix outside event.
  */
 function callPreventDefault<Handled extends Event>(
   event: Handled,
   handlers: (((event: Handled) => void) | undefined)[],
+  overrides: Record<string, unknown> = {},
 ): boolean {
   let prevented = false;
   const watched = new Proxy(event, {
     get(target, key) {
+      if (typeof key === "string" && Object.hasOwn(overrides, key)) {
+        return overrides[key];
+      }
       if (key === "preventDefault") {
         return () => {
           prevented = true;
@@ -71,6 +85,8 @@ function callPreventDefault<Handled extends Event>(
 /**
  * Runs the callbacks that match why the popup closes, with the DOM event
  * ui-sdk reports, and keeps the popup open when one calls `preventDefault()`.
+ * Outside callbacks also find that event in `detail.originalEvent`, as Radix
+ * passed it.
  */
 function runDismissHandlers(
   handlers: DismissHandlers,
@@ -93,7 +109,9 @@ function runDismissHandlers(
   }[reason as "escape-key" | "focus-out" | "outside-press"] as
     | ((event: Event) => void)[]
     | undefined;
-  if (matching && callPreventDefault(event, matching)) {
+  const overrides =
+    reason === "escape-key" ? {} : { detail: { originalEvent: event } };
+  if (matching && callPreventDefault(event, matching, overrides)) {
     cancel();
   }
 }
@@ -140,6 +158,8 @@ export {
   DismissContext,
   type DismissDetails,
   type DismissHandlers,
+  type FocusOutsideEvent,
+  type PointerDownOutsideEvent,
   runDismissHandlers,
   useDismissRoot,
   useRegisterDismissHandlers,

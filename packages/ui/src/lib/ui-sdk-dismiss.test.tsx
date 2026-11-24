@@ -54,6 +54,40 @@ const run = (handlers: DismissHandlers, reason: string, event?: Event) => {
 };
 
 describe("runDismissHandlers", () => {
+  it("gives outside callbacks the DOM event in detail.originalEvent, as Radix did", () => {
+    const pointer = cancelable("pointerdown");
+    const focus = cancelable("focusin");
+    const keydown = cancelable("keydown");
+    const seen: unknown[] = [];
+
+    run(
+      {
+        onFocusOutside: (event) => seen.push(event.detail.originalEvent),
+        onInteractOutside: (event) => seen.push(event.detail.originalEvent),
+        onPointerDownOutside: (event) => seen.push(event.detail.originalEvent),
+      },
+      "outside-press",
+      pointer,
+    );
+    run(
+      { onFocusOutside: (event) => seen.push(event.detail.originalEvent) },
+      "focus-out",
+      focus,
+    );
+    run(
+      { onEscapeKeyDown: (event) => seen.push(event.detail) },
+      "escape-key",
+      keydown,
+    );
+
+    expect(seen).toHaveLength(4);
+    expect(seen[0]).toBe(pointer);
+    expect(seen[1]).toBe(pointer);
+    expect(seen[2]).toBe(focus);
+    // Escape callbacks get the keyboard event itself, with no detail added.
+    expect(seen[3]).toBeUndefined();
+  });
+
   it("runs the callbacks for each reason and cancels on preventDefault", () => {
     const onEscapeKeyDown = vi.fn((event: Event) => {
       event.preventDefault();

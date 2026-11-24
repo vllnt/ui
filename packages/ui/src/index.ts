@@ -68,6 +68,8 @@ export {
   DismissContext,
   type DismissDetails,
   type DismissHandlers,
+  type FocusOutsideEvent,
+  type PointerDownOutsideEvent,
   runDismissHandlers,
   useDismissRoot,
   useRegisterDismissHandlers,
