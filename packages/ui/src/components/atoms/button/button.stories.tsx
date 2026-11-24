@@ -11,7 +11,7 @@ const meta = {
   argTypes: {
     size: {
       control: "select",
-      options: ["default", "icon", "lg", "sm"],
+      options: ["default", "icon", "icon-lg", "lg", "sm"],
     },
     variant: {
       control: "select",
@@ -35,6 +35,7 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {};
 
 export const SizeIcon: Story = { args: { size: "icon" } };
+export const SizeIconLg: Story = { args: { size: "icon-lg" } };
 export const SizeLg: Story = { args: { size: "lg" } };
 export const SizeSm: Story = { args: { size: "sm" } };
 export const VariantDestructive: Story = { args: { variant: "destructive" } };
