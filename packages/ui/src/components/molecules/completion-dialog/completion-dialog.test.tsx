@@ -1,20 +1,28 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 
 import { CompletionDialog } from "./completion-dialog";
 
-afterEach(() => {
-  vi.restoreAllMocks();
-});
-
-const pressOutside = () => {
-  fireEvent.pointerDown(document.body);
-  fireEvent.pointerUp(document.body);
-  fireEvent.click(document.body);
+const press = (element: Element) => {
+  fireEvent.pointerDown(element);
+  fireEvent.pointerUp(element);
+  fireEvent.click(element);
 };
 
+const getBackdrop = () => {
+  const backdrop = document.querySelector(".vllnt-glass-scrim");
+  if (!backdrop) throw new Error("no backdrop rendered");
+  return backdrop;
+};
+
+const makeHandlers = () => ({
+  onCancel: vi.fn(),
+  onClose: vi.fn(),
+  onConfirm: vi.fn(),
+});
+
 const renderOpen = () => {
-  const handlers = { onCancel: vi.fn(), onClose: vi.fn(), onConfirm: vi.fn() };
+  const handlers = makeHandlers();
   render(<CompletionDialog {...handlers} isOpen title="Done?" />);
   return handlers;
 };
@@ -74,23 +82,28 @@ describe("CompletionDialog", () => {
     const { onClose } = renderOpen();
     fireEvent.click(screen.getByLabelText("Close"));
     expect(onClose).toHaveBeenCalledTimes(1);
+    expect(onClose).toHaveBeenCalledWith();
   });
 });
 
 describe("CompletionDialog dialog semantics (WAI-ARIA APG modal dialog)", () => {
-  it("is a named modal dialog that focuses the confirm button and traps Tab", async () => {
-    vi.spyOn(Element.prototype, "getClientRects").mockReturnValue(
-      Object.assign([new DOMRect(0, 0, 1, 1)], { item: () => null }),
-    );
+  it("is a named modal dialog that focuses the confirm button and traps Tab", () => {
     renderOpen();
     const dialog = screen.getByRole("dialog", { name: "Done?" });
     const confirm = screen.getByRole("button", { name: /Done/ });
-    await waitFor(() => {
-      expect(confirm).toHaveFocus();
-    });
+    expect(dialog).toHaveAttribute("aria-modal", "true");
+    expect(confirm).toHaveFocus();
     fireEvent.keyDown(confirm, { key: "Tab" });
     expect(screen.getByRole("button", { name: "Close" })).toHaveFocus();
     expect(dialog.contains(document.activeElement)).toBe(true);
+  });
+
+  it("wraps Shift+Tab from the first control to the last", () => {
+    renderOpen();
+    const close = screen.getByRole("button", { name: "Close" });
+    close.focus();
+    fireEvent.keyDown(close, { key: "Tab", shiftKey: true });
+    expect(screen.getByRole("button", { name: /Done/ })).toHaveFocus();
   });
 
   it("lets Enter activate the focused button instead of always confirming", () => {
@@ -102,11 +115,7 @@ describe("CompletionDialog dialog semantics (WAI-ARIA APG modal dialog)", () => 
   });
 
   it("scopes single-key shortcuts to the dialog and lets hosts turn them off", () => {
-    const handlers = {
-      onCancel: vi.fn(),
-      onClose: vi.fn(),
-      onConfirm: vi.fn(),
-    };
+    const handlers = makeHandlers();
     const { rerender } = render(
       <>
         <input aria-label="Notes" />
@@ -135,12 +144,33 @@ describe("CompletionDialog dialog semantics (WAI-ARIA APG modal dialog)", () => 
     expect(handlers.onCancel).not.toHaveBeenCalled();
   });
 
+  it("lets a handler inside the dialog claim a shortcut key", () => {
+    const handlers = makeHandlers();
+    render(
+      <CompletionDialog
+        {...handlers}
+        description={
+          <input
+            aria-label="Name"
+            onKeyDown={(event) => {
+              event.preventDefault();
+            }}
+          />
+        }
+        isOpen
+        title="Done?"
+      />,
+    );
+    fireEvent.keyDown(screen.getByLabelText("Name"), { key: "d" });
+    expect(handlers.onConfirm).not.toHaveBeenCalled();
+    fireEvent.keyDown(screen.getByRole("button", { name: /Skip/ }), {
+      key: "d",
+    });
+    expect(handlers.onConfirm).toHaveBeenCalledTimes(1);
+  });
+
   it("returns focus to the element that was focused before it opened", async () => {
-    const handlers = {
-      onCancel: vi.fn(),
-      onClose: vi.fn(),
-      onConfirm: vi.fn(),
-    };
+    const handlers = makeHandlers();
     const view = (isOpen: boolean) => (
       <>
         <button type="button">Finish lesson</button>
@@ -151,67 +181,24 @@ describe("CompletionDialog dialog semantics (WAI-ARIA APG modal dialog)", () => 
     const opener = screen.getByRole("button", { name: "Finish lesson" });
     opener.focus();
     rerender(view(true));
-    await waitFor(() => {
-      expect(opener).not.toHaveFocus();
-    });
+    expect(opener).not.toHaveFocus();
     rerender(view(false));
     await waitFor(() => {
       expect(opener).toHaveFocus();
     });
   });
-});
 
-describe("CompletionDialog modal prop", () => {
-  it("locks the page by default and leaves it interactive when modal is false", async () => {
-    const handlers = {
-      onCancel: vi.fn(),
-      onClose: vi.fn(),
-      onConfirm: vi.fn(),
-    };
-    const view = (props: { isOpen: boolean; modal?: boolean }) => (
-      <>
-        <button type="button">Page control</button>
-        <CompletionDialog {...handlers} {...props} title="Done?" />
-      </>
-    );
-    const { container, rerender } = render(view({ isOpen: true }));
-    await waitFor(() => {
-      expect(container).toHaveProperty("inert", true);
-    });
-    rerender(view({ isOpen: false }));
-    await waitFor(() => {
-      expect(container).toHaveProperty("inert", false);
-    });
-    rerender(view({ isOpen: true, modal: false }));
-    expect(screen.getByRole("dialog", { name: "Done?" })).toBeInTheDocument();
-    expect(container).toHaveProperty("inert", false);
-  });
-});
-
-describe("CompletionDialog Radix-compatible DOM", () => {
-  it("emits data-state open on the dialog and the scrim", () => {
-    renderOpen();
-    const dialog = screen.getByRole("dialog", { name: "Done?" });
-    expect(dialog).toHaveAttribute("data-state", "open");
-    expect(document.querySelector('[role="dialog"][data-state="open"]')).toBe(
-      dialog,
-    );
-    expect(document.querySelector(".vllnt-glass-scrim")).toHaveAttribute(
-      "data-state",
-      "open",
-    );
-  });
-
-  it("describes the dialog only when a description is given", () => {
-    const handlers = {
-      onCancel: vi.fn(),
-      onClose: vi.fn(),
-      onConfirm: vi.fn(),
-    };
+  it("labels the dialog by its title and describes it only when a description is given", () => {
+    const handlers = makeHandlers();
     const { rerender } = render(
       <CompletionDialog {...handlers} isOpen title="Done?" />,
     );
-    expect(screen.getByRole("dialog")).not.toHaveAttribute("aria-describedby");
+    const dialog = screen.getByRole("dialog");
+    expect(dialog).toHaveAttribute(
+      "aria-labelledby",
+      screen.getByText("Done?").id,
+    );
+    expect(dialog).not.toHaveAttribute("aria-describedby");
     rerender(
       <CompletionDialog
         {...handlers}
@@ -223,6 +210,184 @@ describe("CompletionDialog Radix-compatible DOM", () => {
     expect(screen.getByRole("dialog")).toHaveAccessibleDescription(
       "Mark this lesson as complete.",
     );
+  });
+});
+
+describe("CompletionDialog modal prop", () => {
+  it("locks scroll by default and releases it on close", () => {
+    const handlers = makeHandlers();
+    const view = (isOpen: boolean) => (
+      <CompletionDialog {...handlers} isOpen={isOpen} title="Done?" />
+    );
+    const { rerender } = render(view(true));
+    expect(document.body.style.overflow).toBe("hidden");
+    rerender(view(false));
+    expect(document.body.style.overflow).toBe("");
+  });
+
+  it("makes the body the containing block while open, as Radix's scroll lock did", () => {
+    const handlers = makeHandlers();
+    const view = (isOpen: boolean) => (
+      <CompletionDialog {...handlers} isOpen={isOpen} title="Done?" />
+    );
+    const { rerender } = render(view(true));
+    expect(document.body.style.position).toBe("relative");
+    rerender(view(false));
+    expect(document.body.style.position).toBe("");
+  });
+
+  it("gives a host's own body position back on close", () => {
+    document.body.style.position = "sticky";
+    const handlers = makeHandlers();
+    const { unmount } = render(
+      <CompletionDialog {...handlers} isOpen title="Done?" />,
+    );
+    expect(document.body.style.position).toBe("relative");
+    unmount();
+    expect(document.body.style.position).toBe("sticky");
+    document.body.style.position = "";
+  });
+
+  it("leaves scroll and the page alone when modal is false", () => {
+    render(
+      <>
+        <button type="button">Page control</button>
+        <CompletionDialog
+          {...makeHandlers()}
+          isOpen
+          modal={false}
+          title="Done?"
+        />
+      </>,
+    );
+    const dialog = screen.getByRole("dialog", { name: "Done?" });
+    expect(dialog).not.toHaveAttribute("aria-modal");
+    expect(document.body.style.overflow).toBe("");
+    expect(document.body.style.position).toBe("");
+    expect(screen.getByText("Page control")).not.toHaveAttribute("inert");
+  });
+
+  it("does not trap Tab when modal is false", () => {
+    render(
+      <CompletionDialog
+        {...makeHandlers()}
+        isOpen
+        modal={false}
+        title="Done?"
+      />,
+    );
+    const confirm = screen.getByRole("button", { name: /Done/ });
+    expect(confirm).toHaveFocus();
+    expect(fireEvent.keyDown(confirm, { key: "Tab" })).toBe(true);
+    expect(confirm).toHaveFocus();
+  });
+
+  it("gives the scrim a data-state only when modal", () => {
+    const handlers = makeHandlers();
+    const { rerender } = render(
+      <CompletionDialog {...handlers} isOpen title="Done?" />,
+    );
+    expect(getBackdrop()).toHaveAttribute("data-state", "open");
+    expect(getBackdrop()).not.toHaveAttribute("aria-hidden");
+    rerender(
+      <CompletionDialog {...handlers} isOpen modal={false} title="Done?" />,
+    );
+    expect(getBackdrop()).toHaveAttribute("aria-hidden", "true");
+    expect(getBackdrop()).not.toHaveAttribute("data-state");
+  });
+});
+
+describe("CompletionDialog inert page", () => {
+  const view = (isOpen: boolean, modal = true) => (
+    <div data-testid="app">
+      <button type="button">Before</button>
+      <section data-testid="stage">
+        <p>Stage text</p>
+        <CompletionDialog
+          {...makeHandlers()}
+          isOpen={isOpen}
+          modal={modal}
+          title="Done?"
+        />
+      </section>
+      <div aria-live="polite" data-testid="live" />
+      <button inert type="button">
+        Already inert
+      </button>
+    </div>
+  );
+
+  it("makes every sibling of the dialog's ancestors inert, up to the body, and restores them", () => {
+    const outside = document.createElement("aside");
+    document.body.append(outside);
+    const { container, rerender } = render(view(true));
+    const dialog = screen.getByRole("dialog");
+
+    [
+      screen.getByText("Before"),
+      screen.getByText("Stage text"),
+      outside,
+    ].forEach((element) => {
+      expect(element).toHaveAttribute("inert");
+    });
+    expect(dialog.closest("[inert]")).toBeNull();
+    expect(getBackdrop().closest("[inert]")).toBeNull();
+    expect(container.closest("[inert]")).toBeNull();
+    expect(screen.getByTestId("app")).not.toHaveAttribute("inert");
+    expect(screen.getByTestId("stage")).not.toHaveAttribute("inert");
+
+    rerender(view(false));
+    [
+      screen.getByText("Before"),
+      screen.getByText("Stage text"),
+      outside,
+    ].forEach((element) => {
+      expect(element).not.toHaveAttribute("inert");
+    });
+    outside.remove();
+  });
+
+  it("keeps live regions reachable and leaves already-inert elements inert", () => {
+    const { rerender } = render(view(true));
+    expect(screen.getByTestId("live")).not.toHaveAttribute("inert");
+    rerender(view(false));
+    expect(screen.getByText("Already inert")).toHaveAttribute("inert");
+  });
+
+  it("does not make anything inert when modal is false", () => {
+    render(view(true, false));
+    expect(screen.getByText("Before")).not.toHaveAttribute("inert");
+    expect(screen.getByText("Stage text")).not.toHaveAttribute("inert");
+  });
+});
+
+describe("CompletionDialog in place", () => {
+  it("renders inside its container and covers it, not the viewport", () => {
+    const { container } = render(
+      <div className="relative" data-testid="host">
+        <CompletionDialog {...makeHandlers()} isOpen title="Done?" />
+      </div>,
+    );
+    const dialog = screen.getByRole("dialog");
+    const layer = dialog.closest("[data-material]");
+    expect(screen.getByTestId("host")).toContainElement(dialog);
+    expect(container).toContainElement(dialog);
+    expect(layer).toHaveClass("absolute", "inset-0", "z-[100]");
+    expect(layer).toHaveAttribute("data-material", "glass");
+    expect(dialog.closest("[popover]")).toBeNull();
+    expect(getBackdrop()).toHaveClass("absolute", "inset-0");
+  });
+});
+
+describe("CompletionDialog Radix-compatible DOM", () => {
+  it("emits data-state open on the dialog and the scrim", () => {
+    renderOpen();
+    const dialog = screen.getByRole("dialog", { name: "Done?" });
+    expect(dialog).toHaveAttribute("data-state", "open");
+    expect(document.querySelector('[role="dialog"][data-state="open"]')).toBe(
+      dialog,
+    );
+    expect(getBackdrop()).toHaveAttribute("data-state", "open");
   });
 
   it("renders the title with the chosen heading tag", () => {
@@ -267,22 +432,61 @@ describe("CompletionDialog dismissal", () => {
     expect(onClose).toHaveBeenCalledTimes(1);
   });
 
-  it("invokes onClose when the page behind is pressed", () => {
+  it("ignores Escape while closed", () => {
+    const handlers = makeHandlers();
+    render(<CompletionDialog {...handlers} isOpen={false} title="Done?" />);
+    fireEvent.keyDown(document, { key: "Escape" });
+    expect(handlers.onClose).not.toHaveBeenCalled();
+  });
+
+  it("invokes onClose when the backdrop is pressed", () => {
     const { onClose } = renderOpen();
-    pressOutside();
+    press(getBackdrop());
     expect(onClose).toHaveBeenCalledTimes(1);
   });
 
-  it("invokes onClose from a press outside when modal is false", () => {
-    const handlers = {
-      onCancel: vi.fn(),
-      onClose: vi.fn(),
-      onConfirm: vi.fn(),
-    };
+  it("keeps the dialog open for presses inside it", () => {
+    const { onClose } = renderOpen();
+    press(screen.getByRole("dialog"));
+    press(screen.getByText("Done?"));
+    expect(onClose).not.toHaveBeenCalled();
+  });
+
+  it("keeps the dialog open when a press starts inside and is released on the backdrop", () => {
+    const { onClose } = renderOpen();
+    fireEvent.pointerDown(screen.getByText("Done?"));
+    fireEvent.pointerUp(getBackdrop());
+    fireEvent.click(getBackdrop());
+    expect(onClose).not.toHaveBeenCalled();
+  });
+
+  it("invokes onClose from Escape and an outside press when modal is false", () => {
+    const handlers = makeHandlers();
     render(
-      <CompletionDialog {...handlers} isOpen modal={false} title="Done?" />,
+      <>
+        <button type="button">Page control</button>
+        <CompletionDialog {...handlers} isOpen modal={false} title="Done?" />
+      </>,
     );
-    pressOutside();
+    fireEvent.keyDown(document, { key: "Escape" });
+    expect(handlers.onClose).toHaveBeenCalledTimes(1);
+    press(getBackdrop());
+    expect(handlers.onClose).toHaveBeenCalledTimes(2);
+    press(screen.getByText("Page control"));
+    expect(handlers.onClose).toHaveBeenCalledTimes(3);
+  });
+
+  it("invokes onClose when focus leaves a non-modal dialog, as Radix did", () => {
+    const handlers = makeHandlers();
+    render(
+      <>
+        <button type="button">Page control</button>
+        <CompletionDialog {...handlers} isOpen modal={false} title="Done?" />
+      </>,
+    );
+    screen.getByRole("button", { name: "Close" }).focus();
+    expect(handlers.onClose).not.toHaveBeenCalled();
+    screen.getByText("Page control").focus();
     expect(handlers.onClose).toHaveBeenCalledTimes(1);
   });
 
@@ -292,5 +496,40 @@ describe("CompletionDialog dismissal", () => {
     expect(onConfirm).toHaveBeenCalledTimes(1);
     fireEvent.keyDown(screen.getByRole("dialog"), { key: "s" });
     expect(onCancel).toHaveBeenCalledTimes(1);
+  });
+});
+
+describe("CompletionDialog focus when modal is false", () => {
+  const view = (isOpen: boolean) => (
+    <>
+      <button type="button">Finish lesson</button>
+      <button type="button">Other control</button>
+      <CompletionDialog
+        {...makeHandlers()}
+        isOpen={isOpen}
+        modal={false}
+        title="Done?"
+      />
+    </>
+  );
+
+  it("moves focus to the confirm button and returns it to the opener", () => {
+    const { rerender } = render(view(false));
+    const opener = screen.getByRole("button", { name: "Finish lesson" });
+    opener.focus();
+    rerender(view(true));
+    expect(screen.getByRole("button", { name: /Done/ })).toHaveFocus();
+    rerender(view(false));
+    expect(opener).toHaveFocus();
+  });
+
+  it("leaves focus where the user moved it", () => {
+    const { rerender } = render(view(false));
+    screen.getByRole("button", { name: "Finish lesson" }).focus();
+    rerender(view(true));
+    const other = screen.getByRole("button", { name: "Other control" });
+    other.focus();
+    rerender(view(false));
+    expect(other).toHaveFocus();
   });
 });
