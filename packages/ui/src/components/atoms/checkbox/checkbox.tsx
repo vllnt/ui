@@ -1,34 +1,41 @@
 "use client";
 
-import * as React from "react";
+import type * as React from "react";
 
-import * as CheckboxPrimitive from "@radix-ui/react-checkbox";
+import {
+  Checkbox as CheckboxPrimitive,
+  CheckboxIndicator,
+} from "@ui-sdk/react/checkbox";
 import { Check } from "lucide-react";
 
+import { checkedState, withDataAttributes } from "../../../lib/ui-sdk";
 import { cn } from "../../../lib/utils";
 
 const Checkbox = ({
   className,
   ref: reference,
+  render,
   ...props
-}: React.ComponentPropsWithoutRef<typeof CheckboxPrimitive.Root> & {
-  ref?: React.Ref<React.ComponentRef<typeof CheckboxPrimitive.Root>>;
+}: Omit<React.ComponentProps<typeof CheckboxPrimitive>, "children"> & {
+  ref?: React.Ref<HTMLButtonElement>;
 }) => (
-  <CheckboxPrimitive.Root
+  <CheckboxPrimitive
     className={cn(
       "peer size-4 shrink-0 rounded border border-input bg-background ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground data-[state=checked]:border-primary",
       className,
     )}
     ref={reference}
+    render={withDataAttributes("button", checkedState, render)}
     {...props}
   >
-    <CheckboxPrimitive.Indicator
-      className={cn("flex items-center justify-center text-current")}
+    <CheckboxIndicator
+      className="flex items-center justify-center text-current"
+      render={withDataAttributes("span", checkedState)}
     >
       <Check className="size-4" />
-    </CheckboxPrimitive.Indicator>
-  </CheckboxPrimitive.Root>
+    </CheckboxIndicator>
+  </CheckboxPrimitive>
 );
-Checkbox.displayName = CheckboxPrimitive.Root.displayName;
+Checkbox.displayName = "Checkbox";
 
 export { Checkbox };

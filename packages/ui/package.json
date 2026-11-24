@@ -146,6 +146,8 @@
     "@radix-ui/react-toggle-group": "^1.2.1",
     "@radix-ui/react-tooltip": "^1.4.1",
     "@tanstack/react-table": "^8.21.3",
+    "@ui-sdk/core": "0.1.0-beta.7",
+    "@ui-sdk/react": "0.1.0-beta.7",
     "@xyflow/react": "^12.12.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
