@@ -68,7 +68,9 @@ if (!("animate" in Element.prototype)) {
     configurable: true,
     value: () => {
       const animation = {
-        cancel: () => {},
+        cancel: () => {
+          animation.onfinish = null;
+        },
         finished: Promise.resolve(),
         onfinish: null as (() => void) | null,
       };
