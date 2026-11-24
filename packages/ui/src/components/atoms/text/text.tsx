@@ -20,6 +20,10 @@ export const textVariants = cva("text-foreground", {
       mono: "font-[family-name:var(--font-mono)]",
       sans: "font-[family-name:var(--font-sans)]",
     },
+    measure: {
+      narrow: "max-w-[var(--size-measure-narrow)]",
+      prose: "max-w-[var(--size-measure-prose)]",
+    },
     size: {
       base: "text-[length:var(--font-size-body)] leading-[var(--line-height-body)]",
       caption:
@@ -41,7 +45,7 @@ export const textVariants = cva("text-foreground", {
 });
 
 /** HTML element the {@link Text} primitive renders as. */
-export type TextElement = "div" | "label" | "p" | "span";
+export type TextElement = "dd" | "div" | "dt" | "label" | "li" | "p" | "span";
 
 /** Props for {@link Text}. */
 export type TextProps = React.HTMLAttributes<HTMLElement> &
@@ -58,17 +62,30 @@ export type TextProps = React.HTMLAttributes<HTMLElement> &
  * `family="mono"` sets the same scale in the mono family (JetBrains Mono by
  * default): `size="base"` is 16/1.6 and `size="lead"` 18/1.7.
  *
+ * `measure` caps the line length with a token: `prose` is `--size-measure-prose`
+ * (720 px) for lead copy and descriptions, `narrow` is `--size-measure-narrow`
+ * (480 px). Unset, the text fills its container.
+ *
+ * `as` also takes `dt`, `dd` and `li`, for key/value lists and prose lists. They
+ * need a `dl` or `ul`/`ol` parent, which the caller renders.
+ *
  * Use `tone="muted"` on the default `background`; on `muted`/`card` surfaces the
  * muted foreground can fall below WCAG AA contrast for body text.
  *
  * @example
  * <Text size="lead" tone="muted">Intro copy</Text>
  * <Text family="mono" size="lead">Mono intro copy</Text>
+ * <Text measure="prose" size="lead">Lead copy capped at 720 px</Text>
+ * <dl>
+ *   <Text as="dt" size="small" tone="muted">Region</Text>
+ *   <Text as="dd" size="small" weight="medium">Paris</Text>
+ * </dl>
  */
 const Text = ({
   as = "p",
   className,
   family,
+  measure,
   ref,
   size,
   tone,
@@ -76,7 +93,10 @@ const Text = ({
   ...props
 }: TextProps) =>
   createElement(as, {
-    className: cn(textVariants({ family, size, tone, weight }), className),
+    className: cn(
+      textVariants({ family, measure, size, tone, weight }),
+      className,
+    ),
     ref,
     ...props,
   });
