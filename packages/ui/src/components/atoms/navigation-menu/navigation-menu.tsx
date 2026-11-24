@@ -22,6 +22,11 @@ import {
   useElementRef,
   withDataAttributes,
 } from "../../../lib/ui-sdk";
+import {
+  type DismissDetails,
+  type DismissHandlers,
+  runDismissHandlers,
+} from "../../../lib/ui-sdk-dismiss";
 import { cn } from "../../../lib/utils";
 
 /** A ui-sdk part's props with a plain string `className`, as Radix had. */
@@ -33,76 +38,6 @@ type Narrow<Props> = Omit<Props, "children" | "className" | "render"> & {
 /** Radix's `asChild`: render the single child as the part's element. */
 type AsChild = { asChild?: boolean };
 
-type Interactions = {
-  onEscapeKeyDown?: (event: KeyboardEvent) => void;
-  onFocusOutside?: (event: Event) => void;
-  onInteractOutside?: (event: Event) => void;
-  onPointerDownOutside?: (event: Event) => void;
-};
-
-type ChangeDetails = {
-  cancel: () => void;
-  canceled: boolean;
-  event?: Event;
-  reason: string;
-};
-
-/**
- * Runs Radix-style `handlers` on `event` and tells whether one of them called
- * `preventDefault()`. ui-sdk calls it on the event itself first, so
- * `defaultPrevented` cannot tell.
- */
-function callPreventDefault<Handled extends Event>(
-  event: Handled,
-  handlers: (((event: Handled) => void) | undefined)[],
-): boolean {
-  let prevented = false;
-  const watched = new Proxy(event, {
-    get(target, key) {
-      if (key === "preventDefault") {
-        return () => {
-          prevented = true;
-          target.preventDefault();
-        };
-      }
-      const value: unknown = Reflect.get(target, key);
-
-      return typeof value === "function"
-        ? (value as (...arguments_: unknown[]) => unknown).bind(target)
-        : value;
-    },
-  });
-  handlers.forEach((handler) => handler?.(watched));
-
-  return prevented;
-}
-
-/**
- * Radix's dismissal callbacks, run from the root's `onValueChange`: the handler
- * gets the DOM event, and `preventDefault()` keeps the panel open.
- */
-function runInteractions(
-  interactions: Interactions,
-  { cancel, event, reason }: ChangeDetails,
-): void {
-  if (!event) {
-    return;
-  }
-  const handlers = {
-    "escape-key": [interactions.onEscapeKeyDown],
-    "focus-out": [interactions.onFocusOutside, interactions.onInteractOutside],
-    "outside-press": [
-      interactions.onPointerDownOutside,
-      interactions.onInteractOutside,
-    ],
-  }[reason as "escape-key" | "focus-out" | "outside-press"] as
-    | ((event: Event) => void)[]
-    | undefined;
-  if (handlers && callPreventDefault(event, handlers)) {
-    cancel();
-  }
-}
-
 type RootState = {
   /** The root element, where the viewport lines up. */
   anchor: HTMLElement | null;
@@ -112,7 +47,7 @@ type RootState = {
   register: (entry: ContentEntry) => () => void;
 };
 
-type ContentEntry = { element: HTMLElement | null; interactions: Interactions };
+type ContentEntry = { dismiss: DismissHandlers; element: HTMLElement | null };
 
 const RootContext = React.createContext<null | RootState>(null);
 
@@ -164,7 +99,7 @@ function useRootState(
   );
   const handleValueChange = (
     next: null | string,
-    details: ChangeDetails,
+    details: DismissDetails,
   ): void => {
     if (next === null) {
       if (details.reason === "link-press") {
@@ -175,7 +110,7 @@ function useRootState(
         const open = [...entriesRef.current].find((entry) =>
           entry.element?.matches("[data-open]"),
         );
-        runInteractions(open?.interactions ?? {}, details);
+        runDismissHandlers(open?.dismiss ?? {}, details);
       }
     }
     linkPreventedRef.current = false;
@@ -316,7 +251,7 @@ const contentState = (state: { open: boolean }): DataAttributes =>
   openState(state);
 
 type ContentProps = AsChild &
-  Interactions &
+  DismissHandlers &
   Narrow<
     Omit<
       React.ComponentProps<typeof NavigationMenuContentPart>,
@@ -346,13 +281,13 @@ const NavigationMenuContent = ({
   React.useEffect(
     () =>
       root?.register({
-        element,
-        interactions: {
+        dismiss: {
           onEscapeKeyDown,
           onFocusOutside,
           onInteractOutside,
           onPointerDownOutside,
         },
+        element,
       }),
     [
       element,

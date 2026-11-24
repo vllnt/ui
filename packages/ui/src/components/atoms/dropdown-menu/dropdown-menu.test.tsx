@@ -528,3 +528,84 @@ describe("DropdownMenu submenus", () => {
     expect(menus[1]).toHaveAttribute("data-state", "open");
   });
 });
+
+describe("DropdownMenu accessibility attributes", () => {
+  it("exposes a mixed checkbox item as aria-checked=mixed, like Radix", () => {
+    render(
+      <DropdownMenu defaultOpen>
+        <DropdownMenuTrigger>Menu</DropdownMenuTrigger>
+        <DropdownMenuContent>
+          <DropdownMenuCheckboxItem checked="indeterminate">
+            Mixed
+          </DropdownMenuCheckboxItem>
+          <DropdownMenuCheckboxItem checked>On</DropdownMenuCheckboxItem>
+          <DropdownMenuCheckboxItem checked={false}>
+            Off
+          </DropdownMenuCheckboxItem>
+        </DropdownMenuContent>
+      </DropdownMenu>,
+    );
+    const mixed = screen.getByRole("menuitemcheckbox", { name: /Mixed/ });
+    expect(mixed).toHaveAttribute("aria-checked", "mixed");
+    expect(mixed).toHaveAttribute("data-state", "indeterminate");
+    expect(
+      screen.getByRole("menuitemcheckbox", { name: /On/ }),
+    ).toHaveAttribute("aria-checked", "true");
+    expect(
+      screen.getByRole("menuitemcheckbox", { name: /Off/ }),
+    ).toHaveAttribute("aria-checked", "false");
+  });
+
+  it("names the menu after its trigger, whether it opened by click or by prop", () => {
+    const { unmount } = render(
+      <DropdownMenu>
+        <DropdownMenuTrigger>Menu</DropdownMenuTrigger>
+        <DropdownMenuContent>
+          <DropdownMenuItem>Item</DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>,
+    );
+    const trigger = screen.getByRole("button", { name: "Menu" });
+    fireEvent.click(trigger);
+    expect(trigger.id).not.toBe("");
+    expect(screen.getByRole("menu")).toHaveAttribute(
+      "aria-labelledby",
+      trigger.id,
+    );
+    unmount();
+
+    render(
+      <DropdownMenu open>
+        <DropdownMenuTrigger>Menu</DropdownMenuTrigger>
+        <DropdownMenuContent>
+          <DropdownMenuItem>Item</DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>,
+    );
+    expect(screen.getByRole("menu")).toHaveAttribute(
+      "aria-labelledby",
+      screen.getByRole("button", { name: "Menu" }).id,
+    );
+  });
+
+  it("names a submenu after its sub trigger", () => {
+    render(
+      <DropdownMenu defaultOpen>
+        <DropdownMenuTrigger>Menu</DropdownMenuTrigger>
+        <DropdownMenuContent>
+          <DropdownMenuSub defaultOpen>
+            <DropdownMenuSubTrigger>More</DropdownMenuSubTrigger>
+            <DropdownMenuSubContent>
+              <DropdownMenuItem>Nested</DropdownMenuItem>
+            </DropdownMenuSubContent>
+          </DropdownMenuSub>
+        </DropdownMenuContent>
+      </DropdownMenu>,
+    );
+    const subTrigger = screen.getByRole("menuitem", { name: /More/ });
+    expect(screen.getAllByRole("menu")[1]).toHaveAttribute(
+      "aria-labelledby",
+      subTrigger.id,
+    );
+  });
+});

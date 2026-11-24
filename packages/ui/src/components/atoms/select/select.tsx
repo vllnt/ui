@@ -23,83 +23,19 @@ import {
   Slot,
   withDataAttributes,
 } from "../../../lib/ui-sdk";
+import {
+  DismissContext,
+  type DismissHandlers,
+  useDismissRoot,
+  useRegisterDismissHandlers,
+} from "../../../lib/ui-sdk-dismiss";
 import { cn } from "../../../lib/utils";
 
 /** A ui-sdk part's props with a plain string `className`, as Radix had. */
 type PlainClass<Props> = Omit<Props, "className"> & { className?: string };
 
-/** What `SelectContent` hands the root, which owns the open state. */
-type DismissHandlers = {
-  onEscapeKeyDown?: (event: KeyboardEvent) => void;
-  onInteractOutside?: (event: Event) => void;
-  onPointerDownOutside?: (event: Event) => void;
-};
-
-type DismissDetails = {
-  cancel: () => void;
-  event?: Event;
-  reason: string;
-};
-
-const DismissContext = React.createContext<React.RefObject<DismissHandlers>>({
-  current: {},
-});
-
-/**
- * Runs Radix-style `handlers` on `event` and tells whether one of them called
- * `preventDefault()`. ui-sdk calls it on the event itself first, so
- * `defaultPrevented` cannot tell.
- */
-function callPreventDefault<Handled extends Event>(
-  event: Handled,
-  handlers: (((event: Handled) => void) | undefined)[],
-): boolean {
-  let prevented = false;
-  const watched = new Proxy(event, {
-    get(target, key) {
-      if (key === "preventDefault") {
-        return () => {
-          prevented = true;
-          target.preventDefault();
-        };
-      }
-      const value: unknown = Reflect.get(target, key);
-
-      return typeof value === "function"
-        ? (value as (...arguments_: unknown[]) => unknown).bind(target)
-        : value;
-    },
-  });
-  handlers.forEach((handler) => handler?.(watched));
-
-  return prevented;
-}
-
-/**
- * Radix's dismissal callbacks, run from the root's `onOpenChange`: the handler
- * gets the DOM event, and `preventDefault()` keeps the list open.
- */
-function runDismissHandlers(
-  handlers: DismissHandlers,
-  { cancel, event, reason }: DismissDetails,
-): void {
-  if (!event) {
-    return;
-  }
-  const matching = {
-    "escape-key": [handlers.onEscapeKeyDown],
-    "focus-out": [handlers.onInteractOutside],
-    "outside-press": [
-      handlers.onPointerDownOutside,
-      handlers.onInteractOutside,
-    ],
-  }[reason as "escape-key" | "focus-out" | "outside-press"] as
-    | ((event: Event) => void)[]
-    | undefined;
-  if (matching && callPreventDefault(event, matching)) {
-    cancel();
-  }
-}
+/** What `SelectContent` takes from Radix; `onFocusOutside` was never part of it. */
+type SelectDismissHandlers = Omit<DismissHandlers, "onFocusOutside">;
 
 /** Radix reads an empty string as "nothing selected"; ui-sdk reads `null`. */
 const toSelection = (value: string | undefined) =>
@@ -132,20 +68,15 @@ const Select = ({
   value,
   ...props
 }: SelectProps) => {
-  const handlersRef = React.useRef<DismissHandlers>({});
+  const dismiss = useDismissRoot((open) => {
+    onOpenChange?.(open);
+  });
 
   return (
-    <DismissContext value={handlersRef}>
+    <DismissContext value={dismiss.ref}>
       <SelectRoot
         defaultValue={toSelection(defaultValue)}
-        onOpenChange={(open, details) => {
-          if (!open) {
-            runDismissHandlers(handlersRef.current, details);
-          }
-          if (!details.canceled) {
-            onOpenChange?.(open);
-          }
-        }}
+        onOpenChange={dismiss.handleOpenChange}
         onValueChange={(next) => {
           onValueChange?.(next ?? "");
         }}
@@ -353,7 +284,7 @@ type ContentProps = MaterialProps &
     PlainClass<React.ComponentProps<typeof SelectContentPart>>,
     "children" | "render"
   > &
-  DismissHandlers & {
+  SelectDismissHandlers & {
     asChild?: boolean;
     children?: React.ReactNode;
     /** Radix-compatible: accepted, ui-sdk always returns focus to the trigger. */
@@ -379,16 +310,13 @@ const SelectContent = ({
   ...props
 }: ContentProps) => {
   const slot = asChildProps({ asChild, children });
-  const handlersRef = React.use(DismissContext);
   const [viewport, setViewport] = React.useState<HTMLDivElement | null>(null);
   const popper = position === "popper";
 
-  React.useEffect(() => {
-    handlersRef.current = {
-      onEscapeKeyDown,
-      onInteractOutside,
-      onPointerDownOutside,
-    };
+  useRegisterDismissHandlers({
+    onEscapeKeyDown,
+    onInteractOutside,
+    onPointerDownOutside,
   });
 
   return (
