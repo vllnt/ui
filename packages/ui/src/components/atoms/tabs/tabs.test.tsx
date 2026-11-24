@@ -335,6 +335,44 @@ describe("Tabs roles and aria state", () => {
     expect(screen.queryByRole("tabpanel")).not.toBeInTheDocument();
   });
 
+  it("calls onValueChange for a new tab and not for the active one", () => {
+    const onValueChange = vi.fn();
+    renderTabs(onValueChange);
+    fireEvent.click(screen.getByText("A"));
+    expect(onValueChange).not.toHaveBeenCalled();
+    fireEvent.click(screen.getByText("B"));
+    fireEvent.click(screen.getByText("B"));
+    expect(onValueChange).toHaveBeenCalledTimes(1);
+    expect(onValueChange).toHaveBeenCalledWith("b");
+  });
+
+  it("keeps a controlled value until the parent changes it", () => {
+    const onValueChange = vi.fn();
+    render(
+      <Tabs onValueChange={onValueChange} value="a">
+        <TabsList aria-label="Letters">
+          <TabsTrigger value="a">A</TabsTrigger>
+          <TabsTrigger value="b">B</TabsTrigger>
+        </TabsList>
+        <TabsContent value="a">Panel A</TabsContent>
+        <TabsContent value="b">Panel B</TabsContent>
+      </Tabs>,
+    );
+    fireEvent.click(screen.getByRole("tab", { name: "B" }));
+    expect(onValueChange).toHaveBeenCalledWith("b");
+    expect(screen.getByRole("tabpanel")).toHaveTextContent("Panel A");
+  });
+
+  it("throws when a panel is used outside Tabs", () => {
+    const error = vi.spyOn(console, "error").mockImplementation(() => {
+      /* React logs the thrown error; keep the test output clean */
+    });
+    expect(() => render(<TabsContent value="a">A</TabsContent>)).toThrow(
+      "Tab components must be used within a Tabs component",
+    );
+    error.mockRestore();
+  });
+
   it("throws when a trigger is used outside Tabs", () => {
     const error = vi.spyOn(console, "error").mockImplementation(() => {
       /* React logs the thrown error; keep the test output clean */

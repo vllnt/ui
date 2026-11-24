@@ -1,7 +1,8 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useState } from "react";
 
+import { Rating as RatingPrimitive, RatingItem } from "@ui-sdk/react/rating";
 import { Star } from "lucide-react";
 import type { KeyboardEvent, ReactNode } from "react";
 
@@ -27,90 +28,23 @@ export type RatingProps = {
   value?: number;
 };
 
-function handleRadioKeyDown(event: KeyboardEvent<HTMLDivElement>): void {
+// ui-sdk moves between stars with the arrow keys; Home and End jump to the ends.
+function handleEndKeys(event: KeyboardEvent<HTMLDivElement>): void {
+  if (event.key !== "Home" && event.key !== "End") return;
   moveRovingFocus(event, '[role="radio"]', {
     activate: true,
     orientation: "both",
   });
 }
 
-type RatingStarsProps = {
-  activeValue: number;
-  hoveredValue: number;
-  label: string;
-  max: number;
-  onHoverChange: (value: number) => void;
-  onSelect: (value: number) => void;
-  readOnly: boolean;
-  size: keyof typeof sizeClasses;
-};
-
-function RatingStars({
-  activeValue,
-  hoveredValue,
-  label,
-  max,
-  onHoverChange,
-  onSelect,
-  readOnly,
-  size,
-}: RatingStarsProps): ReactNode {
-  const stars = useMemo(
-    () => Array.from({ length: max }, (_, index) => index + 1),
-    [max],
-  );
-  const displayValue = hoveredValue || activeValue;
-  const tabStopValue = activeValue >= 1 && activeValue <= max ? activeValue : 1;
-
-  return (
-    <div
-      aria-label={label}
-      className="inline-flex items-center gap-1"
-      onKeyDown={handleRadioKeyDown}
-      role="radiogroup"
-      tabIndex={-1}
-    >
-      {stars.map((starValue) => {
-        const isFilled = starValue <= displayValue;
-
-        return (
-          <button
-            aria-checked={activeValue === starValue}
-            aria-label={`${starValue} ${starValue === 1 ? "star" : "stars"}`}
-            className={cn(
-              "rounded-sm text-muted-foreground transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
-              !readOnly && "hover:text-amber-600 dark:hover:text-amber-500",
-              isFilled && "text-amber-600 dark:text-amber-500",
-            )}
-            disabled={readOnly}
-            key={starValue}
-            onBlur={() => {
-              onHoverChange(0);
-            }}
-            onClick={() => {
-              onSelect(starValue);
-            }}
-            onMouseEnter={() => {
-              if (!readOnly) {
-                onHoverChange(starValue);
-              }
-            }}
-            onMouseLeave={() => {
-              onHoverChange(0);
-            }}
-            role="radio"
-            tabIndex={starValue === tabStopValue ? 0 : -1}
-            type="button"
-          >
-            <Star
-              className={cn(sizeClasses[size], isFilled && "fill-current")}
-              strokeWidth={1.75}
-            />
-          </button>
-        );
-      })}
-    </div>
-  );
+/** Classes of one star: muted, amber once the shown score covers it. */
+function getItemClassName(readOnly: boolean) {
+  return ({ fill }: { fill: number }) =>
+    cn(
+      "inline-flex rounded-sm text-muted-foreground transition-colors has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-ring [&>[role=radio]]:outline-none",
+      !readOnly && "hover:text-amber-600 dark:hover:text-amber-500",
+      fill === 1 && "text-amber-600 dark:text-amber-500",
+    );
 }
 
 export function Rating({
@@ -127,33 +61,40 @@ export function Rating({
 }: RatingProps): ReactNode {
   const isControlled = value !== undefined;
   const [internalValue, setInternalValue] = useState(defaultValue);
-  const [hoveredValue, setHoveredValue] = useState(0);
-  const activeValue = isControlled ? (value ?? 0) : internalValue;
-
-  const handleSelect = (nextValue: number): void => {
-    const resolvedValue =
-      allowClear && activeValue === nextValue ? 0 : nextValue;
-
-    if (!isControlled) {
-      setInternalValue(resolvedValue);
-    }
-
-    onValueChange?.(resolvedValue);
-  };
+  const activeValue = isControlled ? value : internalValue;
 
   return (
     <div className={cn("inline-flex flex-col gap-2", className)}>
       <div className="inline-flex items-center gap-3">
-        <RatingStars
-          activeValue={activeValue}
-          hoveredValue={hoveredValue}
-          label={label}
+        <RatingPrimitive
+          aria-label={label}
+          className="inline-flex items-center gap-1"
+          deselectable={allowClear}
+          // ui-sdk swaps the radios of a locked score for one image. Disabling
+          // them instead keeps their roles and labels.
+          disabled={readOnly}
+          loop
           max={max}
-          onHoverChange={setHoveredValue}
-          onSelect={handleSelect}
-          readOnly={readOnly}
-          size={size}
-        />
+          onKeyDown={handleEndKeys}
+          onValueChange={(next) => {
+            if (!isControlled) {
+              setInternalValue(next ?? 0);
+            }
+
+            onValueChange?.(next ?? 0);
+          }}
+          tabIndex={-1}
+          value={activeValue || null}
+        >
+          <RatingItem className={getItemClassName(readOnly)}>
+            {({ fill }) => (
+              <Star
+                className={cn(sizeClasses[size], fill === 1 && "fill-current")}
+                strokeWidth={1.75}
+              />
+            )}
+          </RatingItem>
+        </RatingPrimitive>
         {showValue ? (
           <span className="text-sm text-muted-foreground">
             {activeValue}/{max}
