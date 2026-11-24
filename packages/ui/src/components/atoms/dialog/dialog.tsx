@@ -2,49 +2,210 @@
 
 import * as React from "react";
 
-import * as DialogPrimitive from "@radix-ui/react-dialog";
+import {
+  Dialog as DialogRoot,
+  DialogBackdrop,
+  DialogClose as DialogClosePart,
+  DialogContent as DialogContentPart,
+  DialogDescription as DialogDescriptionPart,
+  type DialogOpenChangeDetails,
+  DialogTitle as DialogTitlePart,
+  DialogTrigger as DialogTriggerPart,
+} from "@ui-sdk/react/dialog";
 import { X } from "lucide-react";
 
 import type { MaterialProps } from "../../../lib/material";
+import {
+  asChildProps,
+  closeAutoFocus,
+  type DataAttributes,
+  openAutoFocus,
+  openState,
+  useElementRef,
+  withDataAttributes,
+} from "../../../lib/ui-sdk";
 import { cn } from "../../../lib/utils";
 
-const Dialog = DialogPrimitive.Root;
+type PointerDownOutsideEvent = CustomEvent<{ originalEvent: MouseEvent }>;
 
-const DialogTrigger = DialogPrimitive.Trigger;
+type DismissHandlers = {
+  /** Radix-compatible: call `preventDefault()` to keep the dialog open. */
+  onEscapeKeyDown?: (event: KeyboardEvent) => void;
+  /** Radix-compatible: call `preventDefault()` to keep the dialog open. */
+  onInteractOutside?: (event: PointerDownOutsideEvent) => void;
+  /** Radix-compatible: call `preventDefault()` to keep the dialog open. */
+  onPointerDownOutside?: (event: PointerDownOutsideEvent) => void;
+};
 
-const DialogPortal = DialogPrimitive.Portal;
+const contentAttributes =
+  (named: boolean) =>
+  (state: { open: boolean }): DataAttributes => ({
+    ...openState(state),
+    ...(named ? { "aria-labelledby": undefined } : {}),
+  });
 
-const DialogClose = DialogPrimitive.Close;
+const DismissContext =
+  React.createContext<null | React.RefObject<DismissHandlers>>(null);
 
+function dismissPrevented(
+  handlers: DismissHandlers,
+  details: DialogOpenChangeDetails,
+): boolean {
+  if (details.reason === "escape-key") {
+    const event = new KeyboardEvent("keydown", {
+      cancelable: true,
+      code: "Escape",
+      key: "Escape",
+    });
+    handlers.onEscapeKeyDown?.(event);
+    return event.defaultPrevented;
+  }
+  if (details.reason === "outside-press") {
+    const event = new CustomEvent("dismissable-layer.pointerDownOutside", {
+      cancelable: true,
+      detail: { originalEvent: details.event ?? new MouseEvent("pointerdown") },
+    });
+    handlers.onPointerDownOutside?.(event);
+    handlers.onInteractOutside?.(event);
+    return event.defaultPrevented;
+  }
+  return false;
+}
+
+function useRegisterDismissHandlers(handlers: DismissHandlers) {
+  const dismissRef = React.use(DismissContext);
+  React.useEffect(() => {
+    if (dismissRef) {
+      dismissRef.current = handlers;
+    }
+  });
+}
+
+type RadixPartProps<Props> = Omit<
+  Props,
+  "children" | "className" | "render"
+> & {
+  asChild?: boolean;
+  children?: React.ReactNode;
+  className?: string;
+};
+
+type DialogRootProps = React.ComponentProps<typeof DialogRoot>;
+
+type DialogProps = Omit<DialogRootProps, "onOpenChange"> & {
+  onOpenChange?: (open: boolean) => void;
+};
+
+/** Holds the open state. Renders no element. */
+const Dialog = ({ onOpenChange, ...props }: DialogProps) => {
+  const dismiss = React.useRef<DismissHandlers>({});
+  const handleOpenChange: DialogRootProps["onOpenChange"] = (open, details) => {
+    if (!open && dismissPrevented(dismiss.current, details)) {
+      details.cancel();
+      return;
+    }
+    onOpenChange?.(open);
+  };
+
+  return (
+    <DismissContext value={dismiss}>
+      <DialogRoot onOpenChange={handleOpenChange} {...props} />
+    </DismissContext>
+  );
+};
+Dialog.displayName = "Dialog";
+
+const DialogTrigger = ({
+  asChild,
+  children,
+  ...props
+}: RadixPartProps<React.ComponentProps<typeof DialogTriggerPart>>) => {
+  const slot = asChildProps({ asChild, children });
+
+  return (
+    <DialogTriggerPart
+      render={withDataAttributes("button", openState, slot.render)}
+      {...props}
+    >
+      {slot.children}
+    </DialogTriggerPart>
+  );
+};
+DialogTrigger.displayName = "DialogTrigger";
+
+/**
+ * Kept for compatibility. ui-sdk renders a dialog in place, in the browser top
+ * layer, so there is nothing to portal and this renders its children as is.
+ * `container` and `forceMount` have no effect here.
+ */
+const DialogPortal = ({
+  children,
+}: {
+  children?: React.ReactNode;
+  container?: HTMLElement | null;
+  forceMount?: true;
+}): React.ReactNode => children;
+DialogPortal.displayName = "DialogPortal";
+
+const DialogClose = ({
+  asChild,
+  children,
+  ...props
+}: RadixPartProps<React.ComponentProps<typeof DialogClosePart>>) => {
+  const slot = asChildProps({ asChild, children });
+
+  return (
+    <DialogClosePart render={slot.render} {...props}>
+      {slot.children}
+    </DialogClosePart>
+  );
+};
+DialogClose.displayName = "DialogClose";
+
+/**
+ * Veil behind the panel. `forceMount` has no effect: ui-sdk keeps the
+ * backdrop mounted until its exit animation ends.
+ */
 const DialogOverlay = ({
+  asChild,
+  children,
   className,
+  forceMount: _forceMount,
   material = "glass",
-  ref: reference,
   ...props
 }: MaterialProps &
-  React.ComponentPropsWithoutRef<typeof DialogPrimitive.Overlay> & {
-    ref?: React.Ref<React.ComponentRef<typeof DialogPrimitive.Overlay>>;
-  }) => (
-  <DialogPrimitive.Overlay
-    className={cn(
-      "vllnt-glass-scrim fixed inset-0 z-50 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
-      className,
-    )}
-    data-material={material}
-    ref={reference}
-    {...props}
-  />
+  RadixPartProps<React.ComponentProps<typeof DialogBackdrop>> & {
+    forceMount?: true;
+  }) => {
+  const slot = asChildProps({ asChild, children });
+
+  return (
+    <DialogBackdrop
+      className={cn(
+        "vllnt-glass-scrim fixed inset-0 z-50 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
+        className,
+      )}
+      data-material={material}
+      render={withDataAttributes("div", openState, slot.render)}
+      {...props}
+    >
+      {slot.children}
+    </DialogBackdrop>
+  );
+};
+DialogOverlay.displayName = "DialogOverlay";
+
+const DialogCornerClose = () => (
+  <DialogClosePart className="absolute right-3 top-3 inline-flex min-h-6 min-w-6 items-center justify-center rounded-sm p-1 opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground">
+    <X className="size-4" />
+    <span className="sr-only">Close</span>
+  </DialogClosePart>
 );
-DialogOverlay.displayName = DialogPrimitive.Overlay.displayName;
 
 /**
- * Locks page scroll for a dialog that draws no veil. Radix locks scroll from
- * inside its overlay, so this renders that overlay without displaying it.
- */
-const DialogScrollLock = () => <DialogPrimitive.Overlay className="hidden" />;
-
-/**
- * Modal panel of a {@link Dialog}, rendered in a portal above the page.
+ * Modal panel of a {@link Dialog}, rendered in the browser top layer above the
+ * page. With `asChild`, the single child element renders as the panel and the
+ * built-in close button drops out.
  *
  * @example
  * ```tsx
@@ -55,14 +216,30 @@ const DialogScrollLock = () => <DialogPrimitive.Overlay className="hidden" />;
  * ```
  */
 const DialogContent = ({
+  asChild,
   children,
   className,
+  finalFocus,
+  forceMount,
+  initialFocus,
   material = "glass",
+  onCloseAutoFocus,
+  onEscapeKeyDown,
+  onInteractOutside,
+  onOpenAutoFocus,
+  onPointerDownOutside,
   overlay = "scrim",
-  ref: reference,
+  ref,
   ...props
-}: MaterialProps &
-  React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content> & {
+}: DismissHandlers &
+  MaterialProps &
+  RadixPartProps<React.ComponentProps<typeof DialogContentPart>> & {
+    /** Keeps the panel in the page while closed, like Radix's `forceMount`. */
+    forceMount?: boolean;
+    /** Radix-compatible: call `preventDefault()` to leave focus where your handler put it. */
+    onCloseAutoFocus?: (event: Event) => void;
+    /** Radix-compatible: call `preventDefault()` to leave focus where your handler put it. */
+    onOpenAutoFocus?: (event: Event) => void;
     /**
      * Veil drawn behind the panel. `"scrim"` (default) dims and blurs the page;
      * `"none"` draws nothing, so the page stays fully visible behind the dialog.
@@ -70,32 +247,46 @@ const DialogContent = ({
      * hides the page from assistive technology.
      */
     overlay?: "none" | "scrim";
-    ref?: React.Ref<React.ComponentRef<typeof DialogPrimitive.Content>>;
-  }) => (
-  <DialogPortal>
-    {overlay === "scrim" ? (
-      <DialogOverlay material={material} />
-    ) : (
-      <DialogScrollLock />
-    )}
-    <DialogPrimitive.Content
-      className={cn(
-        "fixed left-[50%] top-[50%] z-50 vllnt-glass-floating vllnt-glass-dense grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border p-6 duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] sm:rounded-lg",
-        className,
-      )}
-      data-material={material}
-      ref={reference}
-      {...props}
-    >
-      {children}
-      <DialogPrimitive.Close className="absolute right-3 top-3 inline-flex min-h-6 min-w-6 items-center justify-center rounded-sm p-1 opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground">
-        <X className="size-4" />
-        <span className="sr-only">Close</span>
-      </DialogPrimitive.Close>
-    </DialogPrimitive.Content>
-  </DialogPortal>
-);
-DialogContent.displayName = DialogPrimitive.Content.displayName;
+  }) => {
+  const [content, contentReference] = useElementRef(ref);
+  const slot = asChildProps({ asChild, children });
+  const named =
+    props["aria-label"] !== undefined && props["aria-labelledby"] === undefined;
+  useRegisterDismissHandlers({
+    onEscapeKeyDown,
+    onInteractOutside,
+    onPointerDownOutside,
+  });
+
+  return (
+    <>
+      {overlay === "scrim" ? <DialogOverlay material={material} /> : null}
+      <DialogContentPart
+        className={cn(
+          "fixed left-[50%] top-[50%] z-50 vllnt-glass-floating vllnt-glass-dense grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border p-6 duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] sm:rounded-lg",
+          className,
+        )}
+        data-material={material}
+        finalFocus={finalFocus ?? closeAutoFocus(onCloseAutoFocus)}
+        initialFocus={
+          initialFocus ?? openAutoFocus(() => content, onOpenAutoFocus)
+        }
+        keepMounted={forceMount}
+        ref={contentReference}
+        render={withDataAttributes(
+          "div",
+          contentAttributes(named),
+          slot.render,
+        )}
+        {...props}
+      >
+        {slot.children}
+        {slot.render ? null : <DialogCornerClose />}
+      </DialogContentPart>
+    </>
+  );
+};
+DialogContent.displayName = "DialogContent";
 
 const DialogHeader = ({
   className,
@@ -126,37 +317,47 @@ const DialogFooter = ({
 DialogFooter.displayName = "DialogFooter";
 
 const DialogTitle = ({
+  asChild,
+  children,
   className,
-  ref: reference,
   ...props
-}: React.ComponentPropsWithoutRef<typeof DialogPrimitive.Title> & {
-  ref?: React.Ref<React.ComponentRef<typeof DialogPrimitive.Title>>;
-}) => (
-  <DialogPrimitive.Title
-    className={cn(
-      "text-lg font-semibold leading-none tracking-tight",
-      className,
-    )}
-    ref={reference}
-    {...props}
-  />
-);
-DialogTitle.displayName = DialogPrimitive.Title.displayName;
+}: RadixPartProps<React.ComponentProps<typeof DialogTitlePart>>) => {
+  const slot = asChildProps({ asChild, children });
+
+  return (
+    <DialogTitlePart
+      className={cn(
+        "text-lg font-semibold leading-none tracking-tight",
+        className,
+      )}
+      render={slot.render}
+      {...props}
+    >
+      {slot.children}
+    </DialogTitlePart>
+  );
+};
+DialogTitle.displayName = "DialogTitle";
 
 const DialogDescription = ({
+  asChild,
+  children,
   className,
-  ref: reference,
   ...props
-}: React.ComponentPropsWithoutRef<typeof DialogPrimitive.Description> & {
-  ref?: React.Ref<React.ComponentRef<typeof DialogPrimitive.Description>>;
-}) => (
-  <DialogPrimitive.Description
-    className={cn("text-sm text-muted-foreground", className)}
-    ref={reference}
-    {...props}
-  />
-);
-DialogDescription.displayName = DialogPrimitive.Description.displayName;
+}: RadixPartProps<React.ComponentProps<typeof DialogDescriptionPart>>) => {
+  const slot = asChildProps({ asChild, children });
+
+  return (
+    <DialogDescriptionPart
+      className={cn("text-sm text-muted-foreground", className)}
+      render={slot.render}
+      {...props}
+    >
+      {slot.children}
+    </DialogDescriptionPart>
+  );
+};
+DialogDescription.displayName = "DialogDescription";
 
 export {
   Dialog,
