@@ -154,3 +154,50 @@ describe("SegmentedControl", () => {
     );
   });
 });
+
+describe("SegmentedControl Radix-compatible behavior", () => {
+  it("mirrors the checked state in data-state as on and off", () => {
+    renderSegmentedControl({ defaultValue: "overview" });
+    const overview = screen.getByRole("radio", { name: "Overview" });
+    const details = screen.getByRole("radio", { name: "Details" });
+    expect(overview).toHaveAttribute("data-state", "on");
+    expect(details).toHaveAttribute("data-state", "off");
+    fireEvent.click(details);
+    expect(overview).toHaveAttribute("data-state", "off");
+    expect(details).toHaveAttribute("data-state", "on");
+  });
+
+  it("disables an item natively through its own disabled prop", () => {
+    renderSegmentedControl({ defaultValue: "overview" });
+    expect(screen.getByRole("radio", { name: "Settings" })).toBeDisabled();
+    expect(screen.getByRole("radio", { name: "Details" })).toBeEnabled();
+  });
+
+  it("selects the focused item on Enter", () => {
+    const handleChange = vi.fn();
+    renderSegmentedControl({
+      defaultValue: "overview",
+      onValueChange: handleChange,
+    });
+    const details = screen.getByRole("radio", { name: "Details" });
+    details.focus();
+    fireEvent.keyDown(details, { key: "Enter" });
+    expect(handleChange).toHaveBeenCalledWith("details");
+  });
+
+  it("selects the last enabled item on End and the first on Home", () => {
+    const handleChange = vi.fn();
+    renderSegmentedControl({
+      defaultValue: "overview",
+      onValueChange: handleChange,
+    });
+    const overview = screen.getByRole("radio", { name: "Overview" });
+    overview.focus();
+    fireEvent.keyDown(overview, { key: "End" });
+    expect(handleChange).toHaveBeenLastCalledWith("details");
+    fireEvent.keyDown(screen.getByRole("radio", { name: "Details" }), {
+      key: "Home",
+    });
+    expect(handleChange).toHaveBeenLastCalledWith("overview");
+  });
+});

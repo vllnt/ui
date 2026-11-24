@@ -2,8 +2,16 @@
 
 import * as React from "react";
 
-import * as ScrollAreaPrimitive from "@radix-ui/react-scroll-area";
+import {
+  ScrollArea as ScrollAreaPrimitive,
+  ScrollAreaContent,
+  ScrollAreaCorner,
+  ScrollAreaScrollbar,
+  ScrollAreaThumb,
+  ScrollAreaViewport,
+} from "@ui-sdk/react/scroll-area";
 
+import { type DataAttributes, withDataAttributes } from "../../../lib/ui-sdk";
 import { cn } from "../../../lib/utils";
 
 /** Tracks whether the viewport's content overflows it, on resize too. */
@@ -34,6 +42,10 @@ function useOverflows(
   return overflows;
 }
 
+const visibleState = (state: { visible: boolean }): DataAttributes => ({
+  "data-state": state.visible ? "visible" : "hidden",
+});
+
 /**
  * Scrollable area with custom scrollbars. The viewport becomes a keyboard tab
  * stop while its content overflows (axe scrollable-region-focusable), and
@@ -46,50 +58,53 @@ const ScrollArea = ({
   className,
   ref,
   ...props
-}: React.ComponentPropsWithoutRef<typeof ScrollAreaPrimitive.Root> & {
-  ref?: React.Ref<React.ComponentRef<typeof ScrollAreaPrimitive.Root>>;
+}: React.ComponentProps<typeof ScrollAreaPrimitive> & {
+  ref?: React.Ref<HTMLDivElement>;
 }) => {
   const viewportRef = React.useRef<HTMLDivElement>(null);
   const overflows = useOverflows(viewportRef);
   const named = Boolean(ariaLabel ?? ariaLabelledBy);
   return (
-    <ScrollAreaPrimitive.Root
+    <ScrollAreaPrimitive
       className={cn("relative overflow-hidden", className)}
       ref={ref}
       {...props}
     >
-      <ScrollAreaPrimitive.Viewport
+      <ScrollAreaViewport
         aria-label={ariaLabel}
         aria-labelledby={ariaLabelledBy}
         className="h-full w-full rounded-[inherit] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        data-radix-scroll-area-viewport=""
         ref={viewportRef}
         role={named ? "region" : undefined}
         tabIndex={overflows ? 0 : undefined}
       >
-        {children}
-      </ScrollAreaPrimitive.Viewport>
+        <ScrollAreaContent style={{ display: "table", minWidth: "100%" }}>
+          {children}
+        </ScrollAreaContent>
+      </ScrollAreaViewport>
       <ScrollBar />
-      <ScrollAreaPrimitive.Corner />
-    </ScrollAreaPrimitive.Root>
+      <ScrollAreaCorner />
+    </ScrollAreaPrimitive>
   );
 };
-ScrollArea.displayName = ScrollAreaPrimitive.Root.displayName;
+ScrollArea.displayName = "ScrollArea";
 
 const ScrollBar = ({
   className,
+  forceMount: _forceMount,
   orientation = "vertical",
   ref,
+  render,
   ...props
-}: React.ComponentPropsWithoutRef<
-  typeof ScrollAreaPrimitive.ScrollAreaScrollbar
-> & {
-  ref?: React.Ref<
-    React.ComponentRef<typeof ScrollAreaPrimitive.ScrollAreaScrollbar>
-  >;
+}: React.ComponentProps<typeof ScrollAreaScrollbar> & {
+  /** Accepted for compatibility: the scrollbar always stays mounted. */
+  forceMount?: true;
+  ref?: React.Ref<HTMLDivElement>;
 }) => (
-  <ScrollAreaPrimitive.ScrollAreaScrollbar
+  <ScrollAreaScrollbar
     className={cn(
-      "flex touch-none select-none transition-colors",
+      "invisible flex touch-none select-none transition-colors data-[visible]:visible",
       orientation === "vertical" &&
         "h-full w-2.5 border-l border-l-transparent p-[1px]",
       orientation === "horizontal" &&
@@ -98,11 +113,12 @@ const ScrollBar = ({
     )}
     orientation={orientation}
     ref={ref}
+    render={withDataAttributes("div", visibleState, render)}
     {...props}
   >
-    <ScrollAreaPrimitive.ScrollAreaThumb className="relative flex-1 rounded-full bg-border" />
-  </ScrollAreaPrimitive.ScrollAreaScrollbar>
+    <ScrollAreaThumb className="relative flex-1 rounded-full bg-border" />
+  </ScrollAreaScrollbar>
 );
-ScrollBar.displayName = ScrollAreaPrimitive.ScrollAreaScrollbar.displayName;
+ScrollBar.displayName = "ScrollBar";
 
 export { ScrollArea, ScrollBar };

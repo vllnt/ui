@@ -3,7 +3,6 @@
 import * as React from "react";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Slot } from "@radix-ui/react-slot";
 import {
   Controller,
   type ControllerProps,
@@ -18,6 +17,7 @@ import {
   type UseFormReturn,
 } from "react-hook-form";
 
+import { Slot } from "../../../lib/ui-sdk";
 import { cn } from "../../../lib/utils";
 import { Label } from "../../atoms/label/label";
 

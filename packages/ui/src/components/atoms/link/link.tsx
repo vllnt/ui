@@ -1,7 +1,7 @@
-import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
 import { ExternalLink } from "lucide-react";
 
+import { Slot } from "../../../lib/ui-sdk";
 import { cn } from "../../../lib/utils";
 
 const linkVariants = cva(

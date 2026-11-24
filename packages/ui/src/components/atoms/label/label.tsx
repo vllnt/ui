@@ -1,9 +1,8 @@
 "use client";
 
-import * as React from "react";
-
-import * as LabelPrimitive from "@radix-ui/react-label";
+import { Label as LabelPrimitive } from "@ui-sdk/react/label";
 import { cva, type VariantProps } from "class-variance-authority";
+import type * as React from "react";
 
 import { cn } from "../../../lib/utils";
 
@@ -13,18 +12,30 @@ const labelVariants = cva(
 
 const Label = ({
   className,
+  onMouseDown,
   ref,
   ...props
-}: React.ComponentPropsWithoutRef<typeof LabelPrimitive.Root> &
+}: React.ComponentProps<typeof LabelPrimitive> &
   VariantProps<typeof labelVariants> & {
-    ref?: React.Ref<React.ComponentRef<typeof LabelPrimitive.Root>>;
+    ref?: React.Ref<HTMLLabelElement>;
   }) => (
-  <LabelPrimitive.Root
+  <LabelPrimitive
     className={cn(labelVariants(), className)}
+    onMouseDown={(event: React.MouseEvent<HTMLLabelElement>) => {
+      onMouseDown?.(event);
+      // A double click on the text must not select it, unless it hit a control inside.
+      if (
+        !event.defaultPrevented &&
+        event.detail > 1 &&
+        !(event.target as Element).closest("button, input, select, textarea")
+      ) {
+        event.preventDefault();
+      }
+    }}
     ref={ref}
     {...props}
   />
 );
-Label.displayName = LabelPrimitive.Root.displayName;
+Label.displayName = "Label";
 
 export { Label };

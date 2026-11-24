@@ -1,5 +1,5 @@
-import { render } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { fireEvent, render, screen } from "@testing-library/react";
+import { describe, expect, it, vi } from "vitest";
 
 import { Toggle } from "./toggle";
 
@@ -29,5 +29,35 @@ describe("Toggle", () => {
   it("is visible when rendered", () => {
     const { container } = render(<Toggle />);
     expect(container.firstChild).toBeVisible();
+  });
+});
+
+describe("Toggle Radix-compatible state", () => {
+  it("mirrors the pressed state in data-state as on and off", () => {
+    render(<Toggle aria-label="Bold" />);
+    const toggle = screen.getByRole("button", { name: "Bold" });
+    expect(toggle).toHaveAttribute("data-state", "off");
+    expect(toggle).toHaveAttribute("aria-pressed", "false");
+    fireEvent.click(toggle);
+    expect(toggle).toHaveAttribute("data-state", "on");
+    expect(toggle).toHaveAttribute("aria-pressed", "true");
+  });
+
+  it("reports the new state through onPressedChange", () => {
+    const handlePressed = vi.fn();
+    render(<Toggle aria-label="Bold" onPressedChange={handlePressed} />);
+    fireEvent.click(screen.getByRole("button", { name: "Bold" }));
+    expect(handlePressed).toHaveBeenCalledWith(true, expect.anything());
+  });
+
+  it("renders the child element when asChild is set", () => {
+    render(
+      <Toggle asChild>
+        <a href="/bold">Bold</a>
+      </Toggle>,
+    );
+    const link = screen.getByRole("link", { name: "Bold" });
+    expect(link).toHaveAttribute("data-state", "off");
+    expect(screen.queryByRole("button")).toBeNull();
   });
 });
