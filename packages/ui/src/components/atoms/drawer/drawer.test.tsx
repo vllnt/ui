@@ -1,13 +1,5 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
-import {
-  afterAll,
-  afterEach,
-  beforeAll,
-  describe,
-  expect,
-  it,
-  vi,
-} from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 
 import {
   Drawer,
@@ -20,28 +12,6 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "./drawer";
-
-type StubAnimation = {
-  cancel: () => void;
-  onfinish?: () => void;
-  startTime?: number;
-};
-
-beforeAll(() => {
-  Object.defineProperty(Element.prototype, "animate", {
-    configurable: true,
-    value: () => {
-      const animation: StubAnimation = { cancel: vi.fn() };
-      queueMicrotask(() => animation.onfinish?.());
-      return animation;
-    },
-    writable: true,
-  });
-});
-
-afterAll(() => {
-  Reflect.deleteProperty(Element.prototype, "animate");
-});
 
 afterEach(() => {
   vi.restoreAllMocks();
