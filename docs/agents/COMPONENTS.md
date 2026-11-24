@@ -157,7 +157,7 @@ When a component's name implies an HTML element, the root must render that eleme
 | `alert` | Time-sensitive announcements | Persistent UI |
 | `presentation` / `none` | Element is purely visual scaffolding | Anywhere semantics matter |
 
-When introducing a non-obvious role, **cite the WAI-ARIA Authoring Practices section or the Radix pattern** in the PR body.
+When introducing a non-obvious role, **cite the WAI-ARIA Authoring Practices section or the ui-sdk component docs** in the PR body.
 
 > **Counters:** PR #139 — `role="button"` on canvas workspace; PR #140 — `role="status"` on a static port marker.
 

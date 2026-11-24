@@ -10,7 +10,7 @@ og:
 
 # React Native components in 0.4.0
 
-`@vllnt/ui-native` is a separate renderer built on the same authored design tokens and portable option contracts as `@vllnt/ui`. The stable web package is unchanged: web uses the DOM, Radix UI, Tailwind CSS, and CVA; native uses React Native core primitives, `StyleSheet`, native accessibility APIs, and injected platform services.
+`@vllnt/ui-native` is a separate renderer built on the same authored design tokens and portable option contracts as `@vllnt/ui`. The stable web package is unchanged: web uses the DOM, ui-sdk, Tailwind CSS, and CVA; native uses React Native core primitives, `StyleSheet`, native accessibility APIs, and injected platform services.
 
 ## Current availability
 
@@ -98,4 +98,4 @@ Machine clients can use:
 
 Repository checks include lint, strict typecheck, Jest interaction tests, renderer boundary checks, generated export/manifest drift, packed-package resolution, Expo Doctor, and Android/iOS Metro exports. Stable native release remains blocked until physical-device, VoiceOver, TalkBack, migration, observability, and rollback evidence exists.
 
-The package has no DOM, Radix UI, Tailwind CSS, NativeWind, or browser-global dependency. `@vllnt/ui` remains the stable web renderer with its existing API and release path.
+The package has no DOM, ui-sdk, Tailwind CSS, NativeWind, or browser-global dependency. `@vllnt/ui` remains the stable web renderer with its existing API and release path.

@@ -81,7 +81,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       "ui library",
       "component library",
       "tailwind",
-      "radix-ui",
+      "ui-sdk",
       "shadcn",
       "registry",
       "design system",

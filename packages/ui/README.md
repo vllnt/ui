@@ -1,6 +1,6 @@
 # @vllnt/ui
 
-React components built on Radix UI primitives, Tailwind CSS, and CVA. For humans and AI agents.
+React components built on [ui-sdk](https://ui-sdk.dev) behaviors, Tailwind CSS, and CVA. For humans and AI agents.
 
 See [CHANGELOG.md](./CHANGELOG.md) for release history and [MIGRATION.md](./MIGRATION.md) to upgrade from 0.3.0.
 
@@ -263,8 +263,8 @@ All components follow these conventions:
 - **`React.ComponentPropsWithoutRef`** — extends native HTML element props
 - **`cn()` utility** — merges Tailwind classes via `clsx` + `tailwind-merge`
 - **CVA variants** — variant props defined with `class-variance-authority`
-- **Radix primitives** — accessible behavior (focus, keyboard, ARIA) via Radix UI
-- **Slot support** — `asChild` prop via `@radix-ui/react-slot` for render delegation
+- **ui-sdk behaviors** — accessible behavior (focus, keyboard, ARIA) via `@ui-sdk/react` + `@ui-sdk/core`
+- **Slot support** — `asChild` prop for render delegation (a ui-sdk `render` element)
 
 ### Variant Pattern
 
@@ -310,15 +310,15 @@ import {
 | `Button` | `{ Button, buttonVariants }` | Variants: default, destructive, outline, secondary, ghost, link. Sizes: default, sm, lg, icon |
 | `Input` | `{ Input }` | Standard text input |
 | `Textarea` | `{ Textarea }` | Multi-line text input |
-| `Checkbox` | `{ Checkbox }` | Radix checkbox |
-| `RadioGroup` | `{ RadioGroup, RadioGroupItem }` | Radix radio group |
-| `Select` | `{ Select, SelectTrigger, SelectValue, SelectContent, SelectItem, ... }` | Radix select |
-| `Slider` | `{ Slider }` | Radix slider |
-| `Switch` | `{ Switch }` | Radix switch |
-| `Toggle` | `{ Toggle, toggleVariants }` | Radix toggle |
-| `ToggleGroup` | `{ ToggleGroup, ToggleGroupItem }` | Radix toggle group |
+| `Checkbox` | `{ Checkbox }` | ui-sdk checkbox |
+| `RadioGroup` | `{ RadioGroup, RadioGroupItem }` | ui-sdk radio group |
+| `Select` | `{ Select, SelectTrigger, SelectValue, SelectContent, SelectItem, ... }` | ui-sdk select |
+| `Slider` | `{ Slider }` | ui-sdk slider |
+| `Switch` | `{ Switch }` | ui-sdk switch |
+| `Toggle` | `{ Toggle, toggleVariants }` | ui-sdk toggle |
+| `ToggleGroup` | `{ ToggleGroup, ToggleGroupItem }` | ui-sdk toggle group |
 | `InputOTP` | `{ InputOTP, InputOTPGroup, InputOTPSlot, InputOTPSeparator }` | OTP input via `input-otp` |
-| `Label` | `{ Label }` | Radix label |
+| `Label` | `{ Label }` | ui-sdk label |
 | `Calendar` | `{ Calendar }` | Date picker via `react-day-picker` |
 
 ### Layout
@@ -326,11 +326,11 @@ import {
 | Component | Import | Notes |
 |-----------|--------|-------|
 | `Card` | `{ Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter }` | Content container |
-| `AspectRatio` | `{ AspectRatio }` | Radix aspect ratio |
-| `ScrollArea` | `{ ScrollArea, ScrollBar }` | Radix scroll area |
+| `AspectRatio` | `{ AspectRatio }` | CSS `aspect-ratio` box |
+| `ScrollArea` | `{ ScrollArea, ScrollBar }` | ui-sdk scroll area |
 | `Separator` | `{ Separator }` | Radix separator |
 | `ResizablePanel` | `{ ResizablePanel, ResizablePanelGroup, ResizableHandle }` | Via `react-resizable-panels` |
-| `Collapsible` | `{ Collapsible, CollapsibleTrigger, CollapsibleContent }` | Radix collapsible |
+| `Collapsible` | `{ Collapsible, CollapsibleTrigger, CollapsibleContent }` | ui-sdk collapsible |
 | `Carousel` | `{ Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext }` | Via `embla-carousel-react` |
 | `Tabs` | `{ Tabs, TabsList, TabsTrigger, TabsContent }` | Tabbed content |
 | `Accordion` | `{ Accordion, AccordionItem, AccordionTrigger, AccordionContent }` | Collapsible sections |
@@ -339,13 +339,13 @@ import {
 
 | Component | Import | Notes |
 |-----------|--------|-------|
-| `Dialog` | `{ Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogClose }` | Radix modal dialog |
+| `Dialog` | `{ Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogClose }` | ui-sdk modal dialog |
 | `AlertDialog` | `{ AlertDialog, AlertDialogTrigger, AlertDialogContent, AlertDialogHeader, AlertDialogTitle, AlertDialogDescription, AlertDialogFooter, AlertDialogAction, AlertDialogCancel }` | Confirmation dialog |
 | `Sheet` | `{ Sheet, SheetTrigger, SheetContent, SheetHeader, SheetTitle, SheetDescription, SheetFooter, SheetClose }` | Slide-out panel |
-| `Drawer` | `{ Drawer, DrawerTrigger, DrawerContent, DrawerHeader, DrawerTitle, DrawerDescription, DrawerFooter, DrawerClose }` | Bottom drawer via `vaul` |
-| `Popover` | `{ Popover, PopoverTrigger, PopoverContent }` | Radix popover |
-| `Tooltip` | `{ Tooltip, TooltipTrigger, TooltipContent, TooltipProvider }` | Radix tooltip (wrap app in `TooltipProvider`) |
-| `HoverCard` | `{ HoverCard, HoverCardTrigger, HoverCardContent }` | Radix hover card |
+| `Drawer` | `{ Drawer, DrawerTrigger, DrawerContent, DrawerHeader, DrawerTitle, DrawerDescription, DrawerFooter, DrawerClose }` | Bottom drawer via ui-sdk drawer |
+| `Popover` | `{ Popover, PopoverTrigger, PopoverContent }` | ui-sdk popover |
+| `Tooltip` | `{ Tooltip, TooltipTrigger, TooltipContent, TooltipProvider }` | ui-sdk tooltip (wrap app in `TooltipProvider`) |
+| `HoverCard` | `{ HoverCard, HoverCardTrigger, HoverCardContent }` | ui-sdk hover card |
 | `Toast` | `{ toast, Toaster }` | Toast notifications via `sonner`. Add `<Toaster />` to layout, trigger with `toast()` |
 | `Alert` | `{ Alert, AlertTitle, AlertDescription, alertVariants }` | Static alert banner |
 | `Badge` | `{ Badge, badgeVariants }` | Inline status label. Variants: default, secondary, destructive, outline |
@@ -356,11 +356,11 @@ import {
 
 | Component | Import | Notes |
 |-----------|--------|-------|
-| `Command` | `{ Command, CommandInput, CommandList, CommandEmpty, CommandGroup, CommandItem, CommandSeparator }` | Command palette via `cmdk` |
-| `DropdownMenu` | `{ DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, ... }` | Radix dropdown |
-| `ContextMenu` | `{ ContextMenu, ContextMenuTrigger, ContextMenuContent, ContextMenuItem, ... }` | Radix right-click menu |
-| `Menubar` | `{ Menubar, MenubarMenu, MenubarTrigger, MenubarContent, MenubarItem, ... }` | Radix menu bar |
-| `NavigationMenu` | `{ NavigationMenu, NavigationMenuList, NavigationMenuItem, NavigationMenuTrigger, NavigationMenuContent, NavigationMenuLink }` | Radix nav menu |
+| `Command` | `{ Command, CommandInput, CommandList, CommandEmpty, CommandGroup, CommandItem, CommandSeparator }` | Command palette via ui-sdk command |
+| `DropdownMenu` | `{ DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, ... }` | ui-sdk dropdown |
+| `ContextMenu` | `{ ContextMenu, ContextMenuTrigger, ContextMenuContent, ContextMenuItem, ... }` | ui-sdk right-click menu |
+| `Menubar` | `{ Menubar, MenubarMenu, MenubarTrigger, MenubarContent, MenubarItem, ... }` | ui-sdk menu bar |
+| `NavigationMenu` | `{ NavigationMenu, NavigationMenuList, NavigationMenuItem, NavigationMenuTrigger, NavigationMenuContent, NavigationMenuLink }` | ui-sdk nav menu |
 | `Breadcrumb` | `{ Breadcrumb }` | Breadcrumb navigation |
 | `Pagination` | `{ Pagination }` | Page navigation |
 
@@ -369,7 +369,7 @@ import {
 | Component | Import | Notes |
 |-----------|--------|-------|
 | `Table` | `{ Table, TableHeader, TableBody, TableRow, TableHead, TableCell, TableCaption, TableFooter }` | Data table (use with `@tanstack/react-table` for sorting/filtering) |
-| `Avatar` | `{ Avatar, AvatarImage, AvatarFallback }` | Radix avatar |
+| `Avatar` | `{ Avatar, AvatarImage, AvatarFallback }` | ui-sdk avatar |
 | `AreaChart` | `{ AreaChart }` | Chart component |
 | `BarChart` | `{ BarChart }` | Chart component |
 | `LineChart` | `{ LineChart }` | Chart component |

@@ -2,7 +2,7 @@
 
 # @vllnt/ui
 
-**321 accessible React components** built on [Radix UI](https://radix-ui.com) primitives, styled with [Tailwind CSS](https://tailwindcss.com), powered by [CVA](https://cva.style).
+**321 accessible React components** built on Vercel's [ui-sdk](https://ui-sdk.dev) behaviors, styled with [Tailwind CSS](https://tailwindcss.com), powered by [CVA](https://cva.style).
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![TypeScript](https://img.shields.io/badge/TypeScript-strict-blue)](https://www.typescriptlang.org)
@@ -17,7 +17,7 @@
 ## Features
 
 - **321 components** — primitives (Button, Input), composites (Command, DataTable, Carousel), and domain families (AI, Financial, Ops, Educational, Billing, Animation, Maps, Canvas, Timelines)
-- **Accessible by default** — Radix UI handles focus, keyboard nav, and ARIA
+- **Accessible by default** — ui-sdk handles focus, keyboard nav, and ARIA
 - **Tailwind CSS + CVA** — variant-driven styling with full theme override via CSS variables
 - **shadcn-compatible registry** — install individual components with `shadcn add`
 - **TypeScript strict** — fully typed with exported prop interfaces
@@ -48,7 +48,7 @@ pnpm dlx shadcn@latest add @vllnt-ui/button
 
 ## React Native source preview
 
-The experimental native renderer is separate so React DOM and Radix dependencies never enter Metro. It currently exists in repository source only; `@vllnt/ui-native` has no supported npm release (only a manually bootstrapped name-reservation pre-release without provenance). The planned command becomes actionable only after the native manifest reports package availability:
+The experimental native renderer is separate so React DOM and ui-sdk dependencies never enter Metro. It currently exists in repository source only; `@vllnt/ui-native` has no supported npm release (only a manually bootstrapped name-reservation pre-release without provenance). The planned command becomes actionable only after the native manifest reports package availability:
 
 ```bash
 pnpm add @vllnt/ui-native@canary
@@ -143,7 +143,7 @@ Override CSS variables after importing styles:
 
 | Category | Components |
 |----------|------------|
-| **Primitives (Radix)** | Accordion, Alert Dialog, Aspect Ratio, Avatar, Checkbox, Collapsible, Context Menu, Dialog, Dropdown Menu, Hover Card, Label, Menubar, Navigation Menu, Popover, Radio Group, Scroll Area, Select, Separator, Slider, Switch, Tabs, Toggle, Toggle Group, Tooltip |
+| **Primitives (ui-sdk)** | Accordion, Alert Dialog, Aspect Ratio, Avatar, Checkbox, Collapsible, Context Menu, Dialog, Dropdown Menu, Hover Card, Label, Menubar, Navigation Menu, Popover, Radio Group, Scroll Area, Select, Separator, Slider, Switch, Tabs, Toggle, Toggle Group, Tooltip |
 | **Layout** | Card, Carousel, Resizable, Sheet, Drawer, Horizontal Scroll Row, View Switcher |
 | **Forms** | Button, Input, Input OTP, Inline Input, Number Input, Password Input, Textarea, Date Picker, File Upload, Combobox, Command, Rating |
 | **Feedback** | Alert, Badge, Callout, Skeleton, Spinner, Toast, Tour |

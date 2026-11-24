@@ -100,6 +100,6 @@ One line each; the linked [`COMPONENTS.md`](./COMPONENTS.md) section holds the f
 - **R12 — Don't hijack events from descendants.** Containers check `event.target` before `preventDefault()` on wheel / key / pointer; defer first, hijack last. [Pattern](./COMPONENTS.md#event-handling--dont-hijack-what-isnt-yours). *Why:* PR #139 (`canvas-view` stole wheel and arrow/zoom keys).
 - **R13 — Legacy prop = legacy behavior.** Keep a prop's documented behavior, or rename + major bump + migration note. [Pattern](./COMPONENTS.md#legacy-props--legacy-behavior). *Why:* PR #141 (`CanvasShell` slots lost their layout contract).
 - **R14 — Prop name = trigger.** Handler names match the real trigger (`onSuggestionClick`, not `onSend`). [Pattern](./COMPONENTS.md#prop-naming--trigger). *Why:* PR #150 (`onSend` fired only on suggestion clicks).
-- **R15 — ARIA by spec, not vibe.** Pick roles from Radix / WAI-ARIA Authoring Practices and cite the source in the PR body for non-obvious roles. [Pattern](./COMPONENTS.md#aria--by-spec-not-vibe). *Why:* PR #139 (`role="button"` on a workspace host), PR #140 (`role="status"` on a static marker).
+- **R15 — ARIA by spec, not vibe.** Pick roles from the WAI-ARIA Authoring Practices / ui-sdk component docs and cite the source in the PR body for non-obvious roles. [Pattern](./COMPONENTS.md#aria--by-spec-not-vibe). *Why:* PR #139 (`role="button"` on a workspace host), PR #140 (`role="status"` on a static marker).
 
 Out-of-scope actions for agents are listed in [`AGENTS.md`](../../AGENTS.md#out-of-scope-for-agents).

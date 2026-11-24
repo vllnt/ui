@@ -21,7 +21,7 @@ allowed-tools:
 # VLLNT UI — usage + design system
 
 `@vllnt/ui` (brand name **VLLNT UI**, always two words) is a React component
-library: 200+ accessible components built on **Radix UI** primitives,
+library: 200+ accessible components built on **ui-sdk** (Vercel) behaviors,
 **Tailwind CSS**, and **CVA** (class-variance-authority). Shipped on public npm
 and as a shadcn-compatible registry at `https://ui.vllnt.com/r`.
 
@@ -191,7 +191,7 @@ Ops/Status, Billing & Plans, Animation, Content, Tutorial/Educational, App Shell
 ### Variant API pattern
 
 Components expose variants via CVA props plus an escape-hatch `className`.
-`asChild` (Radix `Slot`) renders the child element instead of the default tag.
+`asChild` renders the child element instead of the default tag (a ui-sdk `render` element under the hood).
 
 ```tsx
 // Button: variant ∈ default|destructive|outline|secondary|ghost|link

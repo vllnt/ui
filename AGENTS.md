@@ -61,7 +61,7 @@ When a change would break one of these rules, say so in the PR body and link the
 
 ## Repository at a glance
 
-- **Project:** `@vllnt/ui` — accessible React component library (Radix primitives + Tailwind + CVA).
+- **Project:** `@vllnt/ui` — accessible React component library (ui-sdk behaviors + Tailwind + CVA).
 - **Language:** TypeScript (strict mode via `@vllnt/typescript`).
 - **Package manager:** pnpm. Lockfile: `pnpm-lock.yaml`. Never use `npm` / `yarn` / `bun`.
 - **Monorepo tool:** Turborepo (`turbo.json`).

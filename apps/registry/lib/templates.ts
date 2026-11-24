@@ -39,7 +39,7 @@ export const TEMPLATES: readonly Template[] = [
     pages: ["Home", "Dashboard", "Account", "Settings", "Billing"],
     screenshot: "/template-screenshots/next-starter.svg",
     slug: "next-starter",
-    stack: ["Next.js", "React", "Tailwind CSS", "Radix UI"],
+    stack: ["Next.js", "React", "Tailwind CSS", "ui-sdk"],
     title: "Next Starter",
   },
   {

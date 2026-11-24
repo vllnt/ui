@@ -17,7 +17,7 @@
     "requestComponent": "Request a component"
   },
   "footer": {
-    "builtWith": "VLLNT UI · MIT licensed · Built with Radix UI, Tailwind CSS, and CVA",
+    "builtWith": "VLLNT UI · MIT licensed · Built with ui-sdk, Tailwind CSS, and CVA",
     "changelog": "Changelog",
     "codeOfConduct": "Code of Conduct",
     "community": "Community",
@@ -333,7 +333,7 @@
       "title": "Component families"
     },
     "home": {
-      "description": "Install any of {count} accessible React components with the shadcn CLI. Built on Radix UI, Tailwind CSS, and CVA. Every component is a machine-readable JSON descriptor agents can consume directly. v{version}, MIT licensed.",
+      "description": "Install any of {count} accessible React components with the shadcn CLI. Built on ui-sdk, Tailwind CSS, and CVA. Every component is a machine-readable JSON descriptor agents can consume directly. v{version}, MIT licensed.",
       "title": "VLLNT UI - {count} agent-first React components"
     },
     "notFound": {
@@ -463,7 +463,7 @@
         "taglines": {
           "headlessUi": "Tailwind Labs primitives — different ecosystem.",
           "nextui": "Component library with its own design language.",
-          "radix": "Accessible primitives — VLLNT UI is built on top of these.",
+          "radix": "Accessible primitives. VLLNT UI used them through 0.4; it is now built on ui-sdk.",
           "shadcn": "Closest sibling. Same registry format. Different component count and agent surface."
         },
         "title": "VLLNT UI vs the rest"
@@ -477,7 +477,7 @@
           "a11yPrimitives": {
             "attribute": "Accessibility primitives",
             "shadcn": "Radix UI",
-            "vllnt": "Radix UI"
+            "vllnt": "ui-sdk (Vercel)"
           },
           "a11ySchema": {
             "attribute": "Per-component a11y schema in JSON",

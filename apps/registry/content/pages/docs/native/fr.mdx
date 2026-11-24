@@ -10,7 +10,7 @@ og:
 
 # Composants React Native dans 0.4.0
 
-`@vllnt/ui-native` est un renderer separe, construit avec les memes jetons de design et contrats d'options portables que `@vllnt/ui`. Le paquet web stable reste inchange : le web utilise le DOM, Radix UI, Tailwind CSS et CVA ; le natif utilise les primitives React Native, `StyleSheet`, les API d'accessibilite natives et des services de plateforme injectes.
+`@vllnt/ui-native` est un renderer separe, construit avec les memes jetons de design et contrats d'options portables que `@vllnt/ui`. Le paquet web stable reste inchange : le web utilise le DOM, ui-sdk, Tailwind CSS et CVA ; le natif utilise les primitives React Native, `StyleSheet`, les API d'accessibilite natives et des services de plateforme injectes.
 
 ## Disponibilite actuelle
 
@@ -98,4 +98,4 @@ Les clients machine peuvent utiliser :
 
 Les controles du depot incluent le lint, le typecheck strict, les tests Jest d'interaction, les limites du renderer, la derive entre exports et manifeste, la resolution du paquet archive, Expo Doctor et les exports Metro Android/iOS. La version native stable reste bloquee tant que les preuves sur appareil physique, VoiceOver, TalkBack, migration, observabilite et retour arriere n'existent pas.
 
-Le paquet ne depend ni du DOM, ni de Radix UI, ni de Tailwind CSS, ni de NativeWind, ni des globales navigateur. `@vllnt/ui` reste le renderer web stable avec son API et son chemin de publication existants.
+Le paquet ne depend ni du DOM, ni de ui-sdk, ni de Tailwind CSS, ni de NativeWind, ni des globales navigateur. `@vllnt/ui` reste le renderer web stable avec son API et son chemin de publication existants.
