@@ -328,12 +328,12 @@ import {
 | `Card` | `{ Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter }` | Content container |
 | `AspectRatio` | `{ AspectRatio }` | CSS `aspect-ratio` box |
 | `ScrollArea` | `{ ScrollArea, ScrollBar }` | ui-sdk scroll area |
-| `Separator` | `{ Separator }` | Radix separator |
+| `Separator` | `{ Separator }` | `div` line; `role="separator"` when not decorative |
 | `ResizablePanel` | `{ ResizablePanel, ResizablePanelGroup, ResizableHandle }` | Via `react-resizable-panels` |
 | `Collapsible` | `{ Collapsible, CollapsibleTrigger, CollapsibleContent }` | ui-sdk collapsible |
 | `Carousel` | `{ Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext }` | Via `embla-carousel-react` |
-| `Tabs` | `{ Tabs, TabsList, TabsTrigger, TabsContent }` | Tabbed content |
-| `Accordion` | `{ Accordion, AccordionItem, AccordionTrigger, AccordionContent }` | Collapsible sections |
+| `Tabs` | `{ Tabs, TabsList, TabsTrigger, TabsContent }` | ui-sdk tabs |
+| `Accordion` | `{ Accordion, AccordionItem, AccordionTrigger, AccordionContent }` | ui-sdk accordion |
 
 ### Feedback & Overlays
 
@@ -481,7 +481,7 @@ import {
 | `PasswordInput` | `{ PasswordInput }` | Input w/ show-password toggle |
 | `InlineInput` | `{ InlineInput }` | Click-to-edit inline input |
 | `Combobox` | `{ Combobox }` | Typeahead select |
-| `Rating` | `{ Rating }` | Star rating input |
+| `Rating` | `{ Rating }` | Star rating input (ui-sdk rating) |
 
 ### Data & Metrics
 
