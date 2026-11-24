@@ -108,6 +108,8 @@ The earlier co-located `.native.tsx` proposal is superseded by the package bound
 
 Builds on 0.4.0: glass default with solid fallbacks (#705, from #684) and the a11y gate on glass, solid, reduced motion and focus (#714).
 
+**(C) dependency:** the generative and streaming pillar relies on the AI SDK UI layer — `ai` and `@ai-sdk/react` (`useChat`, streamed UI message parts and tool parts; latest beta allowed). It is planned as an optional peer dependency (`peerDependenciesMeta`) or a separate optional entry point, so the core kit stays light and installs without it.
+
 - [ ] v050-glass-spatial-genui.1 (A) Liquid Glass default theme: rebrand the default vllnt theme on material tokens — clear and tinted glass, blur, depth, sheen — #684, #705
 - [ ] v050-glass-spatial-genui.2 (A) Automatic solid fallback for every glass surface + a `backdrop-filter` budget (max stacked layers, blur radius, per-viewport cost) checked in CI — #684
 - [ ] v050-glass-spatial-genui.3 (B) Spatial-ready foundations from the RFC: depth and material tokens, one affordance contract, input-agnostic targets (pointer, touch, gaze) — #631, #632
@@ -116,8 +118,9 @@ Builds on 0.4.0: glass default with solid fallbacks (#705, from #684) and the a1
 - [ ] v050-glass-spatial-genui.6 (C) Agent-to-UI event contract: a renderer-agnostic, typed event stream (text deltas, tool calls and results, state diffs, interrupts) in `@vllnt/ui-core` — #672, #675
 - [ ] v050-glass-spatial-genui.7 (C) Streamed and partial states: a partial-props contract so components render from incomplete, streamed data — #672
 - [ ] v050-glass-spatial-genui.8 (C) Generative UI primitives: AI message parts, tool-result cards, agent layouts, human-in-the-loop states (approve, edit, retry) — #672, #675
+- [ ] v050-glass-spatial-genui.11 (C) AI SDK UI layer integration: `ai` + `@ai-sdk/react` (`useChat`, UI message parts, tool parts) as an optional peer dependency or a separate optional entry point; the core kit installs and builds without it — #672
 - [ ] v050-glass-spatial-genui.9 (cross-cutting) Accessibility under glass: WCAG 2.2 AA contrast fallbacks; `prefers-reduced-transparency`, `prefers-reduced-motion`, `prefers-contrast` and `forced-colors` fall back to solid — #681, #714
-- [ ] v050-glass-spatial-genui.10 Validate v050-glass-spatial-genui.1–9: CT + axe per media preference, a recorded event-stream replay E2E, web + native target-size checks (E2E)
+- [ ] v050-glass-spatial-genui.10 Validate v050-glass-spatial-genui.1–9 and .11: CT + axe per media preference, a recorded event-stream replay E2E, web + native target-size checks, core install without `ai` (E2E)
 
 ## ai-elements-parity [PLANNED]
 
