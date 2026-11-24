@@ -52,6 +52,27 @@ describe("DropdownMenu", () => {
     expect(screen.getByText("Item")).toBeInTheDocument();
   });
 
+  it('marks the content glass by default and solid with material="solid"', () => {
+    const { rerender } = render(
+      <DropdownMenu defaultOpen>
+        <DropdownMenuTrigger>Menu</DropdownMenuTrigger>
+        <DropdownMenuContent>
+          <DropdownMenuItem>Item</DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>,
+    );
+    expect(screen.getByRole("menu")).toHaveAttribute("data-material", "glass");
+    rerender(
+      <DropdownMenu defaultOpen>
+        <DropdownMenuTrigger>Menu</DropdownMenuTrigger>
+        <DropdownMenuContent material="solid">
+          <DropdownMenuItem>Item</DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>,
+    );
+    expect(screen.getByRole("menu")).toHaveAttribute("data-material", "solid");
+  });
+
   it("DropdownMenuShortcut renders the shortcut text", () => {
     render(<DropdownMenuShortcut>Cmd+K</DropdownMenuShortcut>);
     expect(screen.getByText("Cmd+K")).toBeInTheDocument();
