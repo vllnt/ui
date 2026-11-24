@@ -140,7 +140,7 @@ const PopoverContent = ({
         className,
       )}
       data-material={material}
-      finalFocus={finalFocus ?? closeAutoFocus(onCloseAutoFocus)}
+      finalFocus={finalFocus ?? closeAutoFocus(onCloseAutoFocus, () => content)}
       initialFocus={
         initialFocus ?? openAutoFocus(() => content, onOpenAutoFocus)
       }

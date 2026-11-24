@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 
 import { DateRangePicker } from "./date-range-picker";
@@ -26,7 +26,7 @@ describe("DateRangePicker", () => {
     expect(screen.getByRole("button")).toHaveTextContent("Jun 1, 2026");
   });
 
-  it("opens a named dialog with focus on the range start", () => {
+  it("opens a named dialog with focus on the range start", async () => {
     render(
       <DateRangePicker
         defaultValue={{
@@ -39,7 +39,10 @@ describe("DateRangePicker", () => {
     expect(
       screen.getByRole("dialog", { name: "Choose date range" }),
     ).toBeInTheDocument();
+    // ui-sdk moves focus a frame after a press opens the popover.
+    await waitFor(() => {
+      expect(document.activeElement?.closest("[role=grid]")).not.toBeNull();
+    });
     expect(document.activeElement).toHaveTextContent("10");
-    expect(document.activeElement?.closest("[role=grid]")).not.toBeNull();
   });
 });

@@ -66,9 +66,25 @@ function withDataAttributes<State>(
     renderElement(tag, { ...props, ...attributes(state) }, render, state);
 }
 
-function autoFocusEvent(handler: ((event: Event) => void) | undefined) {
-  const event = new Event("autofocus", { cancelable: true });
-  handler?.(event);
+/**
+ * Runs a Radix-style auto-focus handler with a cancelable event dispatched on
+ * the content, as Radix's focus scope did, so `event.currentTarget` is the
+ * content element. Returns whether the handler called `preventDefault()`.
+ */
+function autoFocusEvent(
+  handler: ((event: Event) => void) | undefined,
+  content: HTMLElement | null,
+) {
+  const event = new Event("vllnt.autoFocus", { cancelable: true });
+  if (!handler) {
+    return false;
+  }
+  if (!content) {
+    handler(event);
+    return event.defaultPrevented;
+  }
+  content.addEventListener(event.type, handler, { once: true });
+  content.dispatchEvent(event);
   return event.defaultPrevented;
 }
 
@@ -92,10 +108,10 @@ function openAutoFocus(
   onOpenAutoFocus?: (event: Event) => void,
 ): () => HTMLElement | undefined {
   return () => {
-    if (autoFocusEvent(onOpenAutoFocus)) {
+    const content = getContent();
+    if (autoFocusEvent(onOpenAutoFocus, content)) {
       return activeHTMLElement();
     }
-    const content = getContent();
     const active = activeHTMLElement();
     if (!content || (active && content.contains(active))) {
       return active;
@@ -123,13 +139,16 @@ function openAutoFocus(
  */
 function closeAutoFocus(
   onCloseAutoFocus: ((event: Event) => void) | undefined,
+  getContent?: () => HTMLElement | null,
 ): (() => HTMLElement | undefined) | undefined {
   if (!onCloseAutoFocus) {
     return undefined;
   }
 
   return () =>
-    autoFocusEvent(onCloseAutoFocus) ? activeHTMLElement() : undefined;
+    autoFocusEvent(onCloseAutoFocus, getContent?.() ?? null)
+      ? activeHTMLElement()
+      : undefined;
 }
 
 function assignRef<T>(ref: React.Ref<T> | undefined, element: null | T) {
