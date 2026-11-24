@@ -148,6 +148,15 @@ None of these ship yet. They are the next steps toward the vision.
 - **Spatial foundations** (proposed for 0.5.0): depth tokens, one affordance contract for pointer, touch and gaze, target sizes that adapt to the input (24 px pointer, 44 pt touch, 60 pt spatial), and motion tokens. The proposal is an open RFC: [vllnt/ui#631](https://github.com/vllnt/ui/issues/631).
 - **Spatial renderers** such as visionOS or WebXR, built on the same core.
 
+### Planned for 0.5.0
+
+The next minor after 0.4.0 stable has three headline pillars of equal weight. Full plan: the `v050-glass-spatial-genui` phase in the [Roadmap](https://github.com/vllnt/ui/blob/main/ROADMAP.md).
+
+- **Liquid Glass default theme:** the default vllnt theme is rebranded on material tokens (clear and tinted glass, blur, depth, sheen), with an automatic solid fallback and a `backdrop-filter` budget ([vllnt/ui#684](https://github.com/vllnt/ui/issues/684)).
+- **Spatial/AR-ready foundations:** depth and material tokens, one affordance contract and input-agnostic targets for pointer, touch, gaze, gesture and voice ([vllnt/ui#631](https://github.com/vllnt/ui/issues/631), [vllnt/ui#680](https://github.com/vllnt/ui/issues/680)).
+- **Generative and streaming UI primitives:** streamed and partial states, AI message parts, tool-result cards, agent layouts and human-in-the-loop states (approve, edit, retry), on a renderer-agnostic, typed agent-to-UI event contract ([vllnt/ui#672](https://github.com/vllnt/ui/issues/672), [vllnt/ui#675](https://github.com/vllnt/ui/issues/675)).
+- **Accessibility under glass:** WCAG 2.2 AA is kept; reduced transparency, reduced motion, higher contrast and forced colors all fall back to solid ([vllnt/ui#681](https://github.com/vllnt/ui/issues/681)).
+
 ### 3D, AR and holographic interfaces
 
 Each of these is open work, tracked in its own issue. Nothing here ships yet.
