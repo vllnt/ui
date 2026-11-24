@@ -46,6 +46,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
   the command key on Mac and `Ctrl` elsewhere, as the shortcut handler accepts
   either.
 
+### Fixed
+
+- **`Kbd` `shortcut`** - each key cap has an explicit React key, so a
+  multi-key shortcut no longer logs the "unique key prop" warning in
+  development.
+
 ## [0.4.0] - 2026-11-23
 
 Upgrading from 0.3.0: see [MIGRATION.md](./MIGRATION.md).

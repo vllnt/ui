@@ -1,7 +1,7 @@
 import { createRef } from "react";
 
 import { render, screen } from "@testing-library/react";
-import { afterEach, describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { Kbd, kbdVariants } from "./kbd";
 
@@ -82,6 +82,21 @@ describe("Kbd", () => {
     expect(screen.getByText("Ctrl")).toBeInTheDocument();
     expect(screen.getByText("Shift")).toBeInTheDocument();
     expect(screen.getByText("P")).toBeInTheDocument();
+  });
+
+  describe("keys", () => {
+    it("renders a multi-key shortcut without a React key warning", () => {
+      const spy = vi.spyOn(console, "error");
+      try {
+        render(<Kbd platform="win" shortcut="ctrl+shift+p" />);
+        const keyWarnings = spy.mock.calls.filter((call) =>
+          String(call[0]).includes('unique "key" prop'),
+        );
+        expect(keyWarnings).toEqual([]);
+      } finally {
+        spy.mockRestore();
+      }
+    });
   });
 
   describe("platform", () => {

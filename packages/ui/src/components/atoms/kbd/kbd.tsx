@@ -1,7 +1,6 @@
 "use client";
 
 import {
-  Children,
   type ComponentPropsWithoutRef,
   type ReactNode,
   useSyncExternalStore,
@@ -221,17 +220,17 @@ export const Kbd = ({
         className="inline-flex items-center gap-1"
         role="img"
       >
-        {Children.toArray(
-          keys.map(({ label }, index) => (
-            <kbd
-              className={keyClassName}
-              ref={index === 0 ? ref : undefined}
-              {...(index === 0 ? rest : {})}
-            >
-              {withBrackets(renderLabel(label), variant)}
-            </kbd>
-          )),
-        )}
+        {keys.map(({ label }, index) => (
+          <kbd
+            className={keyClassName}
+            // Keys are positional: a shortcut can repeat a label.
+            key={`${String(index)}-${label}`}
+            ref={index === 0 ? ref : undefined}
+            {...(index === 0 ? rest : {})}
+          >
+            {withBrackets(renderLabel(label), variant)}
+          </kbd>
+        ))}
       </span>
     );
   }
