@@ -8,7 +8,6 @@ import {
   DialogClose as DialogClosePart,
   DialogContent as DialogContentPart,
   DialogDescription as DialogDescriptionPart,
-  type DialogOpenChangeDetails,
   DialogTitle as DialogTitlePart,
   DialogTrigger as DialogTriggerPart,
 } from "@ui-sdk/react/dialog";
@@ -16,26 +15,23 @@ import { X } from "lucide-react";
 
 import type { MaterialProps } from "../../../lib/material";
 import {
+  type AsChildProps,
   asChildProps,
   closeAutoFocus,
   type DataAttributes,
+  type NarrowPartProps,
   openAutoFocus,
   openState,
   useElementRef,
   withDataAttributes,
 } from "../../../lib/ui-sdk";
+import {
+  DismissContext,
+  type DismissHandlers,
+  useDismissRoot,
+  useRegisterDismissHandlers,
+} from "../../../lib/ui-sdk-dismiss";
 import { cn } from "../../../lib/utils";
-
-type PointerDownOutsideEvent = CustomEvent<{ originalEvent: MouseEvent }>;
-
-type DismissHandlers = {
-  /** Radix-compatible: call `preventDefault()` to keep the dialog open. */
-  onEscapeKeyDown?: (event: KeyboardEvent) => void;
-  /** Radix-compatible: call `preventDefault()` to keep the dialog open. */
-  onInteractOutside?: (event: PointerDownOutsideEvent) => void;
-  /** Radix-compatible: call `preventDefault()` to keep the dialog open. */
-  onPointerDownOutside?: (event: PointerDownOutsideEvent) => void;
-};
 
 const contentAttributes =
   (named: boolean) =>
@@ -43,52 +39,6 @@ const contentAttributes =
     ...openState(state),
     ...(named ? { "aria-labelledby": undefined } : {}),
   });
-
-const DismissContext =
-  React.createContext<null | React.RefObject<DismissHandlers>>(null);
-
-function dismissPrevented(
-  handlers: DismissHandlers,
-  details: DialogOpenChangeDetails,
-): boolean {
-  if (details.reason === "escape-key") {
-    const event = new KeyboardEvent("keydown", {
-      cancelable: true,
-      code: "Escape",
-      key: "Escape",
-    });
-    handlers.onEscapeKeyDown?.(event);
-    return event.defaultPrevented;
-  }
-  if (details.reason === "outside-press") {
-    const event = new CustomEvent("dismissable-layer.pointerDownOutside", {
-      cancelable: true,
-      detail: { originalEvent: details.event ?? new MouseEvent("pointerdown") },
-    });
-    handlers.onPointerDownOutside?.(event);
-    handlers.onInteractOutside?.(event);
-    return event.defaultPrevented;
-  }
-  return false;
-}
-
-function useRegisterDismissHandlers(handlers: DismissHandlers) {
-  const dismissRef = React.use(DismissContext);
-  React.useEffect(() => {
-    if (dismissRef) {
-      dismissRef.current = handlers;
-    }
-  });
-}
-
-type RadixPartProps<Props> = Omit<
-  Props,
-  "children" | "className" | "render"
-> & {
-  asChild?: boolean;
-  children?: React.ReactNode;
-  className?: string;
-};
 
 type DialogRootProps = React.ComponentProps<typeof DialogRoot>;
 
@@ -98,18 +48,13 @@ type DialogProps = Omit<DialogRootProps, "onOpenChange"> & {
 
 /** Holds the open state. Renders no element. */
 const Dialog = ({ onOpenChange, ...props }: DialogProps) => {
-  const dismiss = React.useRef<DismissHandlers>({});
-  const handleOpenChange: DialogRootProps["onOpenChange"] = (open, details) => {
-    if (!open && dismissPrevented(dismiss.current, details)) {
-      details.cancel();
-      return;
-    }
+  const dismiss = useDismissRoot((open) => {
     onOpenChange?.(open);
-  };
+  });
 
   return (
-    <DismissContext value={dismiss}>
-      <DialogRoot onOpenChange={handleOpenChange} {...props} />
+    <DismissContext value={dismiss.ref}>
+      <DialogRoot onOpenChange={dismiss.handleOpenChange} {...props} />
     </DismissContext>
   );
 };
@@ -119,7 +64,8 @@ const DialogTrigger = ({
   asChild,
   children,
   ...props
-}: RadixPartProps<React.ComponentProps<typeof DialogTriggerPart>>) => {
+}: AsChildProps &
+  NarrowPartProps<React.ComponentProps<typeof DialogTriggerPart>>) => {
   const slot = asChildProps({ asChild, children });
 
   return (
@@ -151,7 +97,8 @@ const DialogClose = ({
   asChild,
   children,
   ...props
-}: RadixPartProps<React.ComponentProps<typeof DialogClosePart>>) => {
+}: AsChildProps &
+  NarrowPartProps<React.ComponentProps<typeof DialogClosePart>>) => {
   const slot = asChildProps({ asChild, children });
 
   return (
@@ -174,7 +121,8 @@ const DialogOverlay = ({
   material = "glass",
   ...props
 }: MaterialProps &
-  RadixPartProps<React.ComponentProps<typeof DialogBackdrop>> & {
+  AsChildProps &
+  NarrowPartProps<React.ComponentProps<typeof DialogBackdrop>> & {
     forceMount?: true;
   }) => {
   const slot = asChildProps({ asChild, children });
@@ -225,6 +173,7 @@ const DialogContent = ({
   material = "glass",
   onCloseAutoFocus,
   onEscapeKeyDown,
+  onFocusOutside,
   onInteractOutside,
   onOpenAutoFocus,
   onPointerDownOutside,
@@ -233,7 +182,8 @@ const DialogContent = ({
   ...props
 }: DismissHandlers &
   MaterialProps &
-  RadixPartProps<React.ComponentProps<typeof DialogContentPart>> & {
+  AsChildProps &
+  NarrowPartProps<React.ComponentProps<typeof DialogContentPart>> & {
     /** Keeps the panel in the page while closed, like Radix's `forceMount`. */
     forceMount?: boolean;
     /** Radix-compatible: call `preventDefault()` to leave focus where your handler put it. */
@@ -254,6 +204,7 @@ const DialogContent = ({
     props["aria-label"] !== undefined && props["aria-labelledby"] === undefined;
   useRegisterDismissHandlers({
     onEscapeKeyDown,
+    onFocusOutside,
     onInteractOutside,
     onPointerDownOutside,
   });
@@ -321,7 +272,8 @@ const DialogTitle = ({
   children,
   className,
   ...props
-}: RadixPartProps<React.ComponentProps<typeof DialogTitlePart>>) => {
+}: AsChildProps &
+  NarrowPartProps<React.ComponentProps<typeof DialogTitlePart>>) => {
   const slot = asChildProps({ asChild, children });
 
   return (
@@ -344,7 +296,8 @@ const DialogDescription = ({
   children,
   className,
   ...props
-}: RadixPartProps<React.ComponentProps<typeof DialogDescriptionPart>>) => {
+}: AsChildProps &
+  NarrowPartProps<React.ComponentProps<typeof DialogDescriptionPart>>) => {
   const slot = asChildProps({ asChild, children });
 
   return (

@@ -13,9 +13,13 @@ import {
 } from "@ui-sdk/react/command";
 import { Search } from "lucide-react";
 
+import { createCommandRanker } from "../../../lib/command-rank";
+import { commandScore } from "../../../lib/command-score";
 import {
+  type AsChildProps,
   asChildProps,
   type DataAttributes,
+  type NarrowPartProps,
   useElementRef,
   withDataAttributes,
 } from "../../../lib/ui-sdk";
@@ -24,23 +28,17 @@ import { Dialog, DialogContent, DialogTitle } from "../../atoms/dialog/dialog";
 
 type SearchHandler = (search: string) => void;
 
+type ItemScore = (value: string, search: string, keywords?: string[]) => number;
+
 type SearchBinding = {
   label?: string;
   query: string;
+  score?: ItemScore;
   setQuery: (query: string) => void;
   setSearchHandler: (handler?: SearchHandler) => void;
 };
 
 const SearchContext = React.createContext<null | SearchBinding>(null);
-
-type RadixPartProps<Props> = Omit<
-  Props,
-  "children" | "className" | "render"
-> & {
-  asChild?: boolean;
-  children?: React.ReactNode;
-  className?: string;
-};
 
 type CommandProps = Omit<
   React.ComponentProps<"div">,
@@ -50,10 +48,10 @@ type CommandProps = Omit<
   /** Highlighted item when uncontrolled. */
   defaultValue?: string;
   /**
-   * Replaces the built-in fuzzy match. Return a score: `0` hides the item and
+   * Replaces the built-in cmdk match. Return a score: `0` hides the item and
    * a higher score ranks first.
    */
-  filter?: (value: string, search: string, keywords?: string[]) => number;
+  filter?: ItemScore;
   /** Accessible name of the search field and the list. */
   label?: string;
   /** Wraps the highlight from the last item to the first. */
@@ -93,16 +91,17 @@ const Command = ({
   const setSearchHandler = React.useCallback((handler?: SearchHandler) => {
     onSearchChangeRef.current = handler;
   }, []);
+  const score = shouldFilter ? (filter ?? commandScore) : undefined;
   const binding = React.useMemo(
-    () => ({ label, query, setQuery, setSearchHandler }),
-    [label, query, setSearchHandler],
+    () => ({ label, query, score, setQuery, setSearchHandler }),
+    [label, query, score, setSearchHandler],
   );
   const handleQueryChange = (next: string) => {
     setQuery(next);
     onSearchChangeRef.current?.(next);
   };
-  const rank: React.ComponentProps<typeof CommandRoot>["filter"] = shouldFilter
-    ? filter && ((item, search) => filter(item.label, search, item.keywords))
+  const rank: React.ComponentProps<typeof CommandRoot>["filter"] = score
+    ? (item, search) => score(item.label, search, item.keywords)
     : false;
 
   return (
@@ -209,8 +208,46 @@ type CommandListProps = Omit<
   label?: string;
 };
 
+const keywordSeparator = "\n";
+
+const itemScore = (
+  item: HTMLElement,
+  query: string,
+  score?: ItemScore,
+): number => {
+  if (!score || query.trim() === "") {
+    return 0;
+  }
+  const value =
+    item.dataset.value ?? (item.textContent ?? "").replaceAll(/\s+/g, " ");
+  return score(
+    value.trim(),
+    query,
+    item.dataset.keywords?.split(keywordSeparator),
+  );
+};
+
 const CommandList = ({ className, label, ref, ...props }: CommandListProps) => {
   const search = React.use(SearchContext);
+  const [list, listReference] = useElementRef(ref);
+  const [ranker] = React.useState(createCommandRanker);
+  const query = search?.query ?? "";
+  const score = search?.score;
+
+  React.useLayoutEffect(() => {
+    if (!list) {
+      return;
+    }
+    const arrange = () => {
+      ranker.arrange(list, (item) => itemScore(item, query, score));
+    };
+    arrange();
+    const observer = new MutationObserver(arrange);
+    observer.observe(list, { childList: true, subtree: true });
+    return () => {
+      observer.disconnect();
+    };
+  }, [list, query, ranker, score]);
 
   return (
     <CommandListPart
@@ -220,7 +257,7 @@ const CommandList = ({ className, label, ref, ...props }: CommandListProps) => {
         className,
       )}
       cmdk-list=""
-      ref={ref}
+      ref={listReference}
       {...props}
     />
   );
@@ -310,7 +347,7 @@ const itemAttributes = (state: {
 });
 
 type CommandItemProps = Omit<
-  RadixPartProps<React.ComponentProps<typeof CommandItemPart>>,
+  AsChildProps & NarrowPartProps<React.ComponentProps<typeof CommandItemPart>>,
   "label" | "onSelect" | "value"
 > & {
   /** Extra words the search matches. */
@@ -329,6 +366,7 @@ const CommandItem = ({
   children,
   className,
   disabled,
+  keywords,
   onSelect,
   ref,
   value,
@@ -346,7 +384,10 @@ const CommandItem = ({
         className,
       )}
       cmdk-item=""
+      data-keywords={keywords?.join(keywordSeparator)}
+      data-value={trimmed}
       disabled={disabled}
+      keywords={keywords}
       label={trimmed}
       onSelect={() => {
         onSelect?.(trimmed ?? item?.textContent?.trim() ?? "");

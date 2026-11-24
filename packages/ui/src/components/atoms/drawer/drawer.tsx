@@ -16,79 +16,25 @@ import {
 
 import type { MaterialProps } from "../../../lib/material";
 import {
+  type AsChildProps,
   asChildProps,
   closeAutoFocus,
   type DataAttributes,
+  type NarrowPartProps,
   openAutoFocus,
   openState,
   useElementRef,
   withDataAttributes,
 } from "../../../lib/ui-sdk";
+import {
+  DismissContext,
+  type DismissHandlers,
+  useDismissRoot,
+  useRegisterDismissHandlers,
+} from "../../../lib/ui-sdk-dismiss";
 import { cn } from "../../../lib/utils";
 
-type PointerDownOutsideEvent = CustomEvent<{ originalEvent: MouseEvent }>;
-
-type DismissHandlers = {
-  /** Radix-compatible: call `preventDefault()` to keep the drawer open. */
-  onEscapeKeyDown?: (event: KeyboardEvent) => void;
-  /** Radix-compatible: call `preventDefault()` to keep the drawer open. */
-  onInteractOutside?: (event: PointerDownOutsideEvent) => void;
-  /** Radix-compatible: call `preventDefault()` to keep the drawer open. */
-  onPointerDownOutside?: (event: PointerDownOutsideEvent) => void;
-};
-
-const DismissContext =
-  React.createContext<null | React.RefObject<DismissHandlers>>(null);
-
 const AutoFocusContext = React.createContext(true);
-
-function dismissPrevented(
-  handlers: DismissHandlers,
-  details: { event?: Event; reason: string },
-): boolean {
-  if (details.reason === "escape-key") {
-    const event = new KeyboardEvent("keydown", {
-      cancelable: true,
-      code: "Escape",
-      key: "Escape",
-    });
-    handlers.onEscapeKeyDown?.(event);
-    return event.defaultPrevented;
-  }
-  if (details.reason === "outside-press") {
-    const event = new CustomEvent("dismissable-layer.pointerDownOutside", {
-      cancelable: true,
-      detail: {
-        originalEvent:
-          details.event instanceof MouseEvent
-            ? details.event
-            : new MouseEvent("pointerdown"),
-      },
-    });
-    handlers.onPointerDownOutside?.(event);
-    handlers.onInteractOutside?.(event);
-    return event.defaultPrevented;
-  }
-  return false;
-}
-
-function useRegisterDismissHandlers(handlers: DismissHandlers) {
-  const dismissRef = React.use(DismissContext);
-  React.useEffect(() => {
-    if (dismissRef) {
-      dismissRef.current = handlers;
-    }
-  });
-}
-
-type RadixPartProps<Props> = Omit<
-  Props,
-  "children" | "className" | "render"
-> & {
-  asChild?: boolean;
-  children?: React.ReactNode;
-  className?: string;
-};
 
 /** Tuning props of the previous drawer library. Each one has no effect. */
 type VaulOnlyProps = {
@@ -178,24 +124,19 @@ const Drawer = ({
   snapPoint,
   ...props
 }: DrawerProps) => {
-  const dismiss = React.useRef<DismissHandlers>({});
-  const handleOpenChange: DrawerRootProps["onOpenChange"] = (open, details) => {
-    if (!open && dismissPrevented(dismiss.current, details)) {
-      details.cancel();
-      return;
-    }
+  const dismiss = useDismissRoot((open) => {
     onOpenChange?.(open);
     if (!open) {
       onClose?.();
     }
-  };
+  });
 
   return (
-    <DismissContext value={dismiss}>
+    <DismissContext value={dismiss.ref}>
       <AutoFocusContext value={autoFocus}>
         <DrawerRoot
           {...withoutVaulOnly(props)}
-          onOpenChange={handleOpenChange}
+          onOpenChange={dismiss.handleOpenChange}
           onOpenChangeComplete={onOpenChangeComplete ?? onAnimationEnd}
           onSnapPointChange={
             onSnapPointChange ??
@@ -217,7 +158,8 @@ const DrawerTrigger = ({
   asChild,
   children,
   ...props
-}: RadixPartProps<React.ComponentProps<typeof DrawerTriggerPart>>) => {
+}: AsChildProps &
+  NarrowPartProps<React.ComponentProps<typeof DrawerTriggerPart>>) => {
   const slot = asChildProps({ asChild, children });
 
   return (
@@ -249,7 +191,8 @@ const DrawerClose = ({
   asChild,
   children,
   ...props
-}: RadixPartProps<React.ComponentProps<typeof DrawerClosePart>>) => {
+}: AsChildProps &
+  NarrowPartProps<React.ComponentProps<typeof DrawerClosePart>>) => {
   const slot = asChildProps({ asChild, children });
 
   return (
@@ -275,9 +218,10 @@ const DrawerOverlay = ({
   className,
   forceMount: _forceMount,
   ...props
-}: RadixPartProps<React.ComponentProps<typeof DrawerBackdrop>> & {
-  forceMount?: true;
-}) => {
+}: AsChildProps &
+  NarrowPartProps<React.ComponentProps<typeof DrawerBackdrop>> & {
+    forceMount?: true;
+  }) => {
   const slot = asChildProps({ asChild, children });
 
   return (
@@ -317,6 +261,7 @@ const DrawerContent = ({
   material = "glass",
   onCloseAutoFocus,
   onEscapeKeyDown,
+  onFocusOutside,
   onInteractOutside,
   onOpenAutoFocus,
   onPointerDownOutside,
@@ -324,7 +269,8 @@ const DrawerContent = ({
   ...props
 }: DismissHandlers &
   MaterialProps &
-  RadixPartProps<React.ComponentProps<typeof DrawerContentPart>> & {
+  AsChildProps &
+  NarrowPartProps<React.ComponentProps<typeof DrawerContentPart>> & {
     /** Keeps the panel in the page while closed, like Radix's `forceMount`. */
     forceMount?: boolean;
     /** Radix-compatible: call `preventDefault()` to leave focus where your handler put it. */
@@ -339,6 +285,7 @@ const DrawerContent = ({
     props["aria-label"] !== undefined && props["aria-labelledby"] === undefined;
   useRegisterDismissHandlers({
     onEscapeKeyDown,
+    onFocusOutside,
     onInteractOutside,
     onPointerDownOutside,
   });
@@ -401,7 +348,8 @@ const DrawerTitle = ({
   children,
   className,
   ...props
-}: RadixPartProps<React.ComponentProps<typeof DrawerTitlePart>>) => {
+}: AsChildProps &
+  NarrowPartProps<React.ComponentProps<typeof DrawerTitlePart>>) => {
   const slot = asChildProps({ asChild, children });
 
   return (
@@ -424,7 +372,8 @@ const DrawerDescription = ({
   children,
   className,
   ...props
-}: RadixPartProps<React.ComponentProps<typeof DrawerDescriptionPart>>) => {
+}: AsChildProps &
+  NarrowPartProps<React.ComponentProps<typeof DrawerDescriptionPart>>) => {
   const slot = asChildProps({ asChild, children });
 
   return (
