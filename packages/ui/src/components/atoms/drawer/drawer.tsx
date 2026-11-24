@@ -296,6 +296,14 @@ const DrawerContent = ({
       <DrawerContentPart
         className={cn(
           "vllnt-glass-floating vllnt-glass-dense mt-24 flex h-auto flex-col rounded-t-[10px] border",
+          // vaul's backfill: the panel's background runs on past the edge it
+          // comes from, so a drag past the edge shows no gap, and it covers
+          // the border on that edge.
+          "after:absolute after:content-[''] after:[background:inherit]",
+          "data-[vaul-drawer-direction=bottom]:after:inset-x-0 data-[vaul-drawer-direction=bottom]:after:top-full data-[vaul-drawer-direction=bottom]:after:h-[200%]",
+          "data-[vaul-drawer-direction=top]:after:inset-x-0 data-[vaul-drawer-direction=top]:after:bottom-full data-[vaul-drawer-direction=top]:after:h-[200%]",
+          "data-[vaul-drawer-direction=left]:after:inset-y-0 data-[vaul-drawer-direction=left]:after:right-full data-[vaul-drawer-direction=left]:after:w-[200%]",
+          "data-[vaul-drawer-direction=right]:after:inset-y-0 data-[vaul-drawer-direction=right]:after:left-full data-[vaul-drawer-direction=right]:after:w-[200%]",
           className,
         )}
         data-material={material}
