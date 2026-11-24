@@ -1,30 +1,64 @@
-"use client";
-
-import * as SeparatorPrimitive from "@radix-ui/react-separator";
-
 import { cn } from "../../../lib/utils";
 
+/** Props for the {@link Separator} component. */
+export type SeparatorProps = {
+  /**
+   * Purely visual line. Hides it from assistive tech (`aria-hidden`); set
+   * `false` to expose `role="separator"` with `aria-orientation`.
+   * @default true
+   */
+  decorative?: boolean;
+  /**
+   * Direction of the line.
+   * @default "horizontal"
+   */
+  orientation?: "horizontal" | "vertical";
+  ref?: React.Ref<HTMLDivElement>;
+  /**
+   * `solid` draws a filled 1 px line. `dashed` draws a 1 px dashed border over
+   * a transparent fill, in both orientations.
+   * @default "solid"
+   */
+  variant?: "dashed" | "solid";
+} & React.HTMLAttributes<HTMLDivElement>;
+
+const LINE_CLASSES = {
+  dashed: {
+    horizontal: "h-0 w-full border-t border-dashed border-border",
+    vertical: "h-full w-0 border-l border-dashed border-border",
+  },
+  solid: {
+    horizontal: "h-[1px] w-full bg-border",
+    vertical: "h-full w-[1px] bg-border",
+  },
+} as const;
+
+/**
+ * Divider line between content sections. It holds no state, so it renders on
+ * the server (no `"use client"`).
+ * @example
+ * <Separator />
+ * <Separator variant="dashed" />
+ * <Separator decorative={false} orientation="vertical" />
+ */
 const Separator = ({
   className,
   decorative = true,
   orientation = "horizontal",
   ref,
+  variant = "solid",
   ...props
-}: React.ComponentPropsWithoutRef<typeof SeparatorPrimitive.Root> & {
-  ref?: React.Ref<React.ComponentRef<typeof SeparatorPrimitive.Root>>;
-}) => (
-  <SeparatorPrimitive.Root
-    className={cn(
-      "shrink-0 bg-border",
-      orientation === "horizontal" ? "h-[1px] w-full" : "h-full w-[1px]",
-      className,
-    )}
-    decorative={decorative}
-    orientation={orientation}
+}: SeparatorProps) => (
+  <div
+    className={cn("shrink-0", LINE_CLASSES[variant][orientation], className)}
+    data-orientation={orientation}
     ref={ref}
+    {...(decorative
+      ? { "aria-hidden": true }
+      : { "aria-orientation": orientation, role: "separator" })}
     {...props}
   />
 );
-Separator.displayName = SeparatorPrimitive.Root.displayName;
+Separator.displayName = "Separator";
 
 export { Separator };
