@@ -49,3 +49,18 @@ describe("ScrollArea keyboard access", () => {
     ).not.toHaveAttribute("tabindex");
   });
 });
+
+describe("ScrollArea Radix-compatible markers", () => {
+  it("marks the viewport with data-radix-scroll-area-viewport", () => {
+    const { container } = render(
+      <ScrollArea>
+        <p>Content</p>
+      </ScrollArea>,
+    );
+    const viewport = container.querySelector(
+      "[data-radix-scroll-area-viewport]",
+    );
+    expect(viewport).toBeInTheDocument();
+    expect(viewport).toContainElement(screen.getByText("Content"));
+  });
+});

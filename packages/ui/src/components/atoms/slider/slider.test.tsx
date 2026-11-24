@@ -1,5 +1,5 @@
-import { render, screen } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { fireEvent, render, screen } from "@testing-library/react";
+import { describe, expect, it, vi } from "vitest";
 
 import { Slider } from "./slider";
 
@@ -15,10 +15,46 @@ describe("Slider", () => {
     const { container } = render(
       <Slider defaultValue={[40]} max={100} step={1} />,
     );
-    expect(container.querySelector("[role='slider']")).toHaveAttribute(
-      "aria-valuenow",
-      "40",
+    // The thumb is a native range input: its value is the value now, and
+    // ui-sdk adds the text form instead of aria-valuenow.
+    const thumb = container.querySelector("[role='slider']");
+    expect(thumb).toHaveValue("40");
+    expect(thumb).toHaveAttribute("aria-valuetext", "40");
+  });
+
+  it("gives every value its own named thumb", () => {
+    render(
+      <Slider
+        aria-label="Price range"
+        defaultValue={[20, 80]}
+        max={100}
+        step={1}
+      />,
     );
+    const thumbs = screen.getAllByRole("slider", { name: "Price range" });
+    expect(thumbs.map((thumb) => (thumb as HTMLInputElement).value)).toEqual([
+      "20",
+      "80",
+    ]);
+  });
+
+  it("reports changes and commits as lists", () => {
+    const handleChange = vi.fn();
+    const handleCommit = vi.fn();
+    render(
+      <Slider
+        aria-label="Volume"
+        defaultValue={[40]}
+        max={100}
+        onValueChange={handleChange}
+        onValueCommit={handleCommit}
+        step={1}
+      />,
+    );
+    const thumb = screen.getByRole("slider", { name: "Volume" });
+    fireEvent.change(thumb, { target: { value: "55" } });
+    expect(handleChange).toHaveBeenCalledWith([55]);
+    expect(thumb).toHaveValue("55");
   });
 
   it("disables the slider when the disabled prop is set", () => {

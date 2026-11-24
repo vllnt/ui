@@ -1,12 +1,18 @@
 "use client";
 
-import * as TogglePrimitive from "@radix-ui/react-toggle";
+import { Toggle as TogglePrimitive } from "@ui-sdk/react/toggle";
 import { cva, type VariantProps } from "class-variance-authority";
+import type * as React from "react";
 
+import {
+  asChildProps,
+  type DataAttributes,
+  withDataAttributes,
+} from "../../../lib/ui-sdk";
 import { cn } from "../../../lib/utils";
 
 const toggleVariants = cva(
-  "inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors hover:bg-secondary hover:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=on]:bg-accent data-[state=on]:text-accent-foreground [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
+  "inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors hover:bg-secondary hover:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[disabled]:pointer-events-none data-[disabled]:opacity-50 data-[state=on]:bg-accent data-[state=on]:text-accent-foreground [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
   {
     defaultVariants: {
       size: "default",
@@ -27,23 +33,42 @@ const toggleVariants = cva(
   },
 );
 
+const pressedState = (state: { pressed: boolean }): DataAttributes => ({
+  "data-state": state.pressed ? "on" : "off",
+});
+
+type ToggleProps = Omit<
+  React.ComponentProps<typeof TogglePrimitive>,
+  "render" | "value"
+> &
+  VariantProps<typeof toggleVariants> & {
+    asChild?: boolean;
+    ref?: React.Ref<HTMLButtonElement>;
+  };
+
 const Toggle = ({
+  asChild,
+  children,
   className,
   ref,
   size,
   variant,
   ...props
-}: React.ComponentPropsWithoutRef<typeof TogglePrimitive.Root> &
-  VariantProps<typeof toggleVariants> & {
-    ref?: React.Ref<React.ComponentRef<typeof TogglePrimitive.Root>>;
-  }) => (
-  <TogglePrimitive.Root
-    className={cn(toggleVariants({ className, size, variant }))}
-    ref={ref}
-    {...props}
-  />
-);
+}: ToggleProps) => {
+  const slot = asChildProps({ asChild, children });
 
-Toggle.displayName = TogglePrimitive.Root.displayName;
+  return (
+    <TogglePrimitive
+      className={cn(toggleVariants({ className, size, variant }))}
+      ref={ref}
+      render={withDataAttributes("button", pressedState, slot.render)}
+      {...props}
+    >
+      {slot.children}
+    </TogglePrimitive>
+  );
+};
+
+Toggle.displayName = "Toggle";
 
 export { Toggle, toggleVariants };

@@ -1,5 +1,5 @@
-import { render, screen } from "@testing-library/react";
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { act, fireEvent, render, screen } from "@testing-library/react";
+import { afterEach, describe, expect, it, vi } from "vitest";
 
 import {
   Avatar,
@@ -8,12 +8,20 @@ import {
   type AvatarPresence,
 } from "./avatar";
 
-class LoadedImage extends EventTarget {
-  complete = true;
-  crossOrigin: null | string = null;
-  naturalWidth = 1;
-  referrerPolicy = "";
-  src = "";
+/** The image never loads in jsdom, so report the load the way a browser does. */
+function loadImage(container: HTMLElement): HTMLImageElement {
+  const image = container.querySelector("img");
+  if (!image) {
+    throw new Error("no <img> rendered");
+  }
+  Object.defineProperty(image, "naturalWidth", {
+    configurable: true,
+    value: 1,
+  });
+  act(() => {
+    fireEvent.load(image);
+  });
+  return image;
 }
 
 const presences: AvatarPresence[] = ["online", "away", "busy"];
@@ -123,42 +131,37 @@ describe("Avatar shape", () => {
 });
 
 describe("AvatarImage", () => {
-  beforeEach(() => {
-    vi.stubGlobal("Image", LoadedImage);
-  });
-
-  afterEach(() => {
-    vi.unstubAllGlobals();
-  });
-
-  it("replaces the fallback once the image has loaded", async () => {
-    render(
+  it("replaces the fallback once the image has loaded", () => {
+    const { container } = render(
       <Avatar>
         <AvatarImage alt="Ada Lovelace" src="/ada.png" />
         <AvatarFallback>AL</AvatarFallback>
       </Avatar>,
     );
-    const image = await screen.findByRole("img", { name: "Ada Lovelace" });
+    expect(screen.getByText("AL")).toBeVisible();
+    loadImage(container);
+    const image = screen.getByRole("img", { name: "Ada Lovelace" });
     expect(image).toHaveAttribute("src", "/ada.png");
     expect(image).toHaveClass("aspect-square", "h-full", "w-full");
     expect(image).toHaveClass("rounded-full");
     expect(screen.queryByText("AL")).toBeNull();
   });
 
-  it("follows the square shape", async () => {
-    render(
+  it("follows the square shape", () => {
+    const { container } = render(
       <Avatar shape="square">
         <AvatarImage alt="Acme" src="/acme.png" />
       </Avatar>,
     );
-    const image = await screen.findByRole("img", { name: "Acme" });
+    loadImage(container);
+    const image = screen.getByRole("img", { name: "Acme" });
     expect(image).toHaveClass("rounded-md");
     expect(image).not.toHaveClass("rounded-full");
   });
 
-  it("merges className and forwards ref", async () => {
+  it("merges className and forwards ref", () => {
     const ref = { current: null };
-    render(
+    const { container } = render(
       <Avatar>
         <AvatarImage
           alt="Ada"
@@ -168,10 +171,77 @@ describe("AvatarImage", () => {
         />
       </Avatar>,
     );
-    expect(await screen.findByRole("img", { name: "Ada" })).toHaveClass(
+    loadImage(container);
+    expect(screen.getByRole("img", { name: "Ada" })).toHaveClass(
       "custom-image",
     );
     expect(ref.current).toBeInstanceOf(HTMLImageElement);
+  });
+
+  it("reports loading and loaded through onLoadingStatusChange", () => {
+    const handleStatus = vi.fn();
+    const { container } = render(
+      <Avatar>
+        <AvatarImage
+          alt="Ada"
+          onLoadingStatusChange={handleStatus}
+          src="/a.png"
+        />
+      </Avatar>,
+    );
+    loadImage(container);
+    expect(handleStatus).toHaveBeenLastCalledWith("loaded");
+  });
+
+  it("reports an error when the image fails", () => {
+    const handleStatus = vi.fn();
+    const { container } = render(
+      <Avatar>
+        <AvatarImage
+          alt="Ada"
+          onLoadingStatusChange={handleStatus}
+          src="/missing.png"
+        />
+        <AvatarFallback>AL</AvatarFallback>
+      </Avatar>,
+    );
+    const image = container.querySelector("img");
+    act(() => {
+      if (image) {
+        fireEvent.error(image);
+      }
+    });
+    expect(handleStatus).toHaveBeenLastCalledWith("error");
+    expect(screen.getByText("AL")).toBeVisible();
+  });
+});
+
+describe("AvatarFallback delayMs", () => {
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
+  it("holds the fallback back until the delay has passed", async () => {
+    vi.useFakeTimers();
+    render(
+      <Avatar>
+        <AvatarImage alt="Ada" src="/a.png" />
+        <AvatarFallback delayMs={600}>AL</AvatarFallback>
+      </Avatar>,
+    );
+    expect(screen.queryByText("AL")).toBeNull();
+    // ui-sdk starts the delay a microtask after mount.
+    await act(async () => {
+      await Promise.resolve();
+    });
+    act(() => {
+      vi.advanceTimersByTime(599);
+    });
+    expect(screen.queryByText("AL")).toBeNull();
+    act(() => {
+      vi.advanceTimersByTime(1);
+    });
+    expect(screen.getByText("AL")).toBeVisible();
   });
 });
 
