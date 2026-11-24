@@ -10,10 +10,8 @@ import {
   openState,
   withDataAttributes,
 } from "../../../lib/ui-sdk";
-import {
-  createMenuParts,
-  type MenuContentProps,
-} from "../../../lib/ui-sdk-menu";
+import type { MenuContentProps } from "../../../lib/ui-sdk-menu";
+import { createMenuParts } from "../../../lib/ui-sdk-menu";
 
 const {
   CheckboxItem: DropdownMenuCheckboxItem,
