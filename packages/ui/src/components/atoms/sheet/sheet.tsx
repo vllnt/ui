@@ -8,7 +8,6 @@ import {
   DialogClose as SheetClosePart,
   DialogContent as SheetContentPart,
   DialogDescription as SheetDescriptionPart,
-  type DialogOpenChangeDetails,
   DialogTitle as SheetTitlePart,
   DialogTrigger as SheetTriggerPart,
 } from "@ui-sdk/react/dialog";
@@ -17,26 +16,23 @@ import { X } from "lucide-react";
 
 import type { MaterialProps } from "../../../lib/material";
 import {
+  type AsChildProps,
   asChildProps,
   closeAutoFocus,
   type DataAttributes,
+  type NarrowPartProps,
   openAutoFocus,
   openState,
   useElementRef,
   withDataAttributes,
 } from "../../../lib/ui-sdk";
+import {
+  DismissContext,
+  type DismissHandlers,
+  useDismissRoot,
+  useRegisterDismissHandlers,
+} from "../../../lib/ui-sdk-dismiss";
 import { cn } from "../../../lib/utils";
-
-type PointerDownOutsideEvent = CustomEvent<{ originalEvent: MouseEvent }>;
-
-type DismissHandlers = {
-  /** Radix-compatible: call `preventDefault()` to keep the sheet open. */
-  onEscapeKeyDown?: (event: KeyboardEvent) => void;
-  /** Radix-compatible: call `preventDefault()` to keep the sheet open. */
-  onInteractOutside?: (event: PointerDownOutsideEvent) => void;
-  /** Radix-compatible: call `preventDefault()` to keep the sheet open. */
-  onPointerDownOutside?: (event: PointerDownOutsideEvent) => void;
-};
 
 const contentAttributes =
   (named: boolean) =>
@@ -44,52 +40,6 @@ const contentAttributes =
     ...openState(state),
     ...(named ? { "aria-labelledby": undefined } : {}),
   });
-
-const DismissContext =
-  React.createContext<null | React.RefObject<DismissHandlers>>(null);
-
-function dismissPrevented(
-  handlers: DismissHandlers,
-  details: DialogOpenChangeDetails,
-): boolean {
-  if (details.reason === "escape-key") {
-    const event = new KeyboardEvent("keydown", {
-      cancelable: true,
-      code: "Escape",
-      key: "Escape",
-    });
-    handlers.onEscapeKeyDown?.(event);
-    return event.defaultPrevented;
-  }
-  if (details.reason === "outside-press") {
-    const event = new CustomEvent("dismissable-layer.pointerDownOutside", {
-      cancelable: true,
-      detail: { originalEvent: details.event ?? new MouseEvent("pointerdown") },
-    });
-    handlers.onPointerDownOutside?.(event);
-    handlers.onInteractOutside?.(event);
-    return event.defaultPrevented;
-  }
-  return false;
-}
-
-function useRegisterDismissHandlers(handlers: DismissHandlers) {
-  const dismissRef = React.use(DismissContext);
-  React.useEffect(() => {
-    if (dismissRef) {
-      dismissRef.current = handlers;
-    }
-  });
-}
-
-type RadixPartProps<Props> = Omit<
-  Props,
-  "children" | "className" | "render"
-> & {
-  asChild?: boolean;
-  children?: React.ReactNode;
-  className?: string;
-};
 
 type SheetRootProps = React.ComponentProps<typeof SheetRoot>;
 
@@ -99,18 +49,13 @@ type SheetProps = Omit<SheetRootProps, "onOpenChange"> & {
 
 /** Holds the open state. Renders no element. */
 const Sheet = ({ onOpenChange, ...props }: SheetProps) => {
-  const dismiss = React.useRef<DismissHandlers>({});
-  const handleOpenChange: SheetRootProps["onOpenChange"] = (open, details) => {
-    if (!open && dismissPrevented(dismiss.current, details)) {
-      details.cancel();
-      return;
-    }
+  const dismiss = useDismissRoot((open) => {
     onOpenChange?.(open);
-  };
+  });
 
   return (
-    <DismissContext value={dismiss}>
-      <SheetRoot onOpenChange={handleOpenChange} {...props} />
+    <DismissContext value={dismiss.ref}>
+      <SheetRoot onOpenChange={dismiss.handleOpenChange} {...props} />
     </DismissContext>
   );
 };
@@ -120,7 +65,8 @@ const SheetTrigger = ({
   asChild,
   children,
   ...props
-}: RadixPartProps<React.ComponentProps<typeof SheetTriggerPart>>) => {
+}: AsChildProps &
+  NarrowPartProps<React.ComponentProps<typeof SheetTriggerPart>>) => {
   const slot = asChildProps({ asChild, children });
 
   return (
@@ -138,7 +84,8 @@ const SheetClose = ({
   asChild,
   children,
   ...props
-}: RadixPartProps<React.ComponentProps<typeof SheetClosePart>>) => {
+}: AsChildProps &
+  NarrowPartProps<React.ComponentProps<typeof SheetClosePart>>) => {
   const slot = asChildProps({ asChild, children });
 
   return (
@@ -173,9 +120,10 @@ const SheetOverlay = ({
   className,
   forceMount: _forceMount,
   ...props
-}: RadixPartProps<React.ComponentProps<typeof DialogBackdrop>> & {
-  forceMount?: true;
-}) => {
+}: AsChildProps &
+  NarrowPartProps<React.ComponentProps<typeof DialogBackdrop>> & {
+    forceMount?: true;
+  }) => {
   const slot = asChildProps({ asChild, children });
 
   return (
@@ -233,7 +181,8 @@ export type SheetContentProps = {
   onOpenAutoFocus?: (event: Event) => void;
 } & DismissHandlers &
   MaterialProps &
-  RadixPartProps<React.ComponentProps<typeof SheetContentPart>> &
+  AsChildProps &
+  NarrowPartProps<React.ComponentProps<typeof SheetContentPart>> &
   VariantProps<typeof sheetVariants>;
 
 /**
@@ -251,6 +200,7 @@ const SheetContent = ({
   material = "glass",
   onCloseAutoFocus,
   onEscapeKeyDown,
+  onFocusOutside,
   onInteractOutside,
   onOpenAutoFocus,
   onPointerDownOutside,
@@ -264,6 +214,7 @@ const SheetContent = ({
     props["aria-label"] !== undefined && props["aria-labelledby"] === undefined;
   useRegisterDismissHandlers({
     onEscapeKeyDown,
+    onFocusOutside,
     onInteractOutside,
     onPointerDownOutside,
   });
@@ -331,7 +282,8 @@ const SheetTitle = ({
   children,
   className,
   ...props
-}: RadixPartProps<React.ComponentProps<typeof SheetTitlePart>>) => {
+}: AsChildProps &
+  NarrowPartProps<React.ComponentProps<typeof SheetTitlePart>>) => {
   const slot = asChildProps({ asChild, children });
 
   return (
@@ -351,7 +303,8 @@ const SheetDescription = ({
   children,
   className,
   ...props
-}: RadixPartProps<React.ComponentProps<typeof SheetDescriptionPart>>) => {
+}: AsChildProps &
+  NarrowPartProps<React.ComponentProps<typeof SheetDescriptionPart>>) => {
   const slot = asChildProps({ asChild, children });
 
   return (

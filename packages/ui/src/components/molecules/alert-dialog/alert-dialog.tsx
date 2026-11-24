@@ -13,21 +13,24 @@ import {
 } from "@ui-sdk/react/alert-dialog";
 
 import {
+  type AsChildProps,
   asChildProps,
   closeAutoFocus,
   type DataAttributes,
+  type NarrowPartProps,
   openAutoFocus,
   openState,
   useElementRef,
   withDataAttributes,
 } from "../../../lib/ui-sdk";
+import {
+  DismissContext,
+  type DismissHandlers,
+  useDismissRoot,
+  useRegisterDismissHandlers,
+} from "../../../lib/ui-sdk-dismiss";
 import { cn } from "../../../lib/utils";
 import { buttonVariants } from "../../atoms/button/button";
-
-type EscapeHandler = ((event: KeyboardEvent) => void) | undefined;
-
-const EscapeContext =
-  React.createContext<null | React.RefObject<EscapeHandler>>(null);
 
 const CancelContext = React.createContext<
   ((element: HTMLElement | null) => void) | null
@@ -40,15 +43,6 @@ const contentAttributes =
     ...(named ? { "aria-labelledby": undefined } : {}),
   });
 
-type RadixPartProps<Props> = Omit<
-  Props,
-  "children" | "className" | "render"
-> & {
-  asChild?: boolean;
-  children?: React.ReactNode;
-  className?: string;
-};
-
 type AlertDialogRootProps = React.ComponentProps<typeof AlertDialogRoot>;
 
 type AlertDialogProps = Omit<AlertDialogRootProps, "onOpenChange"> & {
@@ -57,30 +51,14 @@ type AlertDialogProps = Omit<AlertDialogRootProps, "onOpenChange"> & {
 
 /** Holds the open state. Renders no element. */
 const AlertDialog = ({ onOpenChange, ...props }: AlertDialogProps) => {
-  const escapeRef = React.useRef<EscapeHandler>(undefined);
-  const handleOpenChange: AlertDialogRootProps["onOpenChange"] = (
-    open,
-    details,
-  ) => {
-    if (!open && details.reason === "escape-key") {
-      const event = new KeyboardEvent("keydown", {
-        cancelable: true,
-        code: "Escape",
-        key: "Escape",
-      });
-      escapeRef.current?.(event);
-      if (event.defaultPrevented) {
-        details.cancel();
-        return;
-      }
-    }
+  const dismiss = useDismissRoot((open) => {
     onOpenChange?.(open);
-  };
+  });
 
   return (
-    <EscapeContext value={escapeRef}>
-      <AlertDialogRoot onOpenChange={handleOpenChange} {...props} />
-    </EscapeContext>
+    <DismissContext value={dismiss.ref}>
+      <AlertDialogRoot onOpenChange={dismiss.handleOpenChange} {...props} />
+    </DismissContext>
   );
 };
 AlertDialog.displayName = "AlertDialog";
@@ -89,7 +67,8 @@ const AlertDialogTrigger = ({
   asChild,
   children,
   ...props
-}: RadixPartProps<React.ComponentProps<typeof AlertDialogTriggerPart>>) => {
+}: AsChildProps &
+  NarrowPartProps<React.ComponentProps<typeof AlertDialogTriggerPart>>) => {
   const slot = asChildProps({ asChild, children });
 
   return (
@@ -127,9 +106,10 @@ const AlertDialogOverlay = ({
   className,
   forceMount: _forceMount,
   ...props
-}: RadixPartProps<React.ComponentProps<typeof AlertDialogBackdrop>> & {
-  forceMount?: true;
-}) => {
+}: AsChildProps &
+  NarrowPartProps<React.ComponentProps<typeof AlertDialogBackdrop>> & {
+    forceMount?: true;
+  }) => {
   const slot = asChildProps({ asChild, children });
 
   return (
@@ -163,28 +143,23 @@ const AlertDialogContent = ({
   onOpenAutoFocus,
   ref,
   ...props
-}: RadixPartProps<React.ComponentProps<typeof AlertDialogContentPart>> & {
-  /** Keeps the panel in the page while closed, like Radix's `forceMount`. */
-  forceMount?: boolean;
-  /** Radix-compatible: call `preventDefault()` to leave focus where your handler put it. */
-  onCloseAutoFocus?: (event: Event) => void;
-  /** Radix-compatible: call `preventDefault()` to keep the dialog open. */
-  onEscapeKeyDown?: (event: KeyboardEvent) => void;
-  /** Radix-compatible: call `preventDefault()` to leave focus where your handler put it. */
-  onOpenAutoFocus?: (event: Event) => void;
-}) => {
-  const escapeRef = React.use(EscapeContext);
+}: AsChildProps &
+  NarrowPartProps<React.ComponentProps<typeof AlertDialogContentPart>> &
+  Pick<DismissHandlers, "onEscapeKeyDown"> & {
+    /** Keeps the panel in the page while closed, like Radix's `forceMount`. */
+    forceMount?: boolean;
+    /** Radix-compatible: call `preventDefault()` to leave focus where your handler put it. */
+    onCloseAutoFocus?: (event: Event) => void;
+    /** Radix-compatible: call `preventDefault()` to leave focus where your handler put it. */
+    onOpenAutoFocus?: (event: Event) => void;
+  }) => {
   const [cancel, setCancel] = React.useState<HTMLElement | null>(null);
   const [content, contentReference] = useElementRef(ref);
   const slot = asChildProps({ asChild, children });
   const named =
     props["aria-label"] !== undefined && props["aria-labelledby"] === undefined;
 
-  React.useEffect(() => {
-    if (escapeRef) {
-      escapeRef.current = onEscapeKeyDown;
-    }
-  });
+  useRegisterDismissHandlers({ onEscapeKeyDown });
 
   return (
     <CancelContext value={setCancel}>
@@ -248,7 +223,8 @@ const AlertDialogTitle = ({
   children,
   className,
   ...props
-}: RadixPartProps<React.ComponentProps<typeof AlertDialogTitlePart>>) => {
+}: AsChildProps &
+  NarrowPartProps<React.ComponentProps<typeof AlertDialogTitlePart>>) => {
   const slot = asChildProps({ asChild, children });
 
   return (
@@ -268,7 +244,8 @@ const AlertDialogDescription = ({
   children,
   className,
   ...props
-}: RadixPartProps<React.ComponentProps<typeof AlertDialogDescriptionPart>>) => {
+}: AsChildProps &
+  NarrowPartProps<React.ComponentProps<typeof AlertDialogDescriptionPart>>) => {
   const slot = asChildProps({ asChild, children });
 
   return (
@@ -289,7 +266,8 @@ const AlertDialogAction = ({
   children,
   className,
   ...props
-}: RadixPartProps<React.ComponentProps<typeof AlertDialogClose>>) => {
+}: AsChildProps &
+  NarrowPartProps<React.ComponentProps<typeof AlertDialogClose>>) => {
   const slot = asChildProps({ asChild, children });
 
   return (
@@ -311,7 +289,8 @@ const AlertDialogCancel = ({
   className,
   ref,
   ...props
-}: RadixPartProps<React.ComponentProps<typeof AlertDialogClose>>) => {
+}: AsChildProps &
+  NarrowPartProps<React.ComponentProps<typeof AlertDialogClose>>) => {
   const register = React.use(CancelContext);
   const [cancel, cancelReference] = useElementRef(ref);
   const slot = asChildProps({ asChild, children });
