@@ -455,8 +455,8 @@ describe("CommandSeparator alwaysRender", () => {
 });
 
 describe("CommandEmpty layout", () => {
-  it("is an empty live region that takes no padding while items match", () => {
-    const { container } = render(
+  it("takes no padding while items match, and stays out of the listbox's roles", () => {
+    render(
       <Command>
         <CommandInput placeholder="Search" />
         <CommandList>
@@ -465,10 +465,28 @@ describe("CommandEmpty layout", () => {
         </CommandList>
       </Command>,
     );
-    const status = within(container).getByRole("status");
+    const listbox = screen.getByRole("listbox");
+    const empty = listbox.querySelector("[cmdk-empty]");
 
-    expect(status).toBeEmptyDOMElement();
-    expect(status).toHaveClass("py-6", "empty:py-0");
+    expect(within(listbox).queryByRole("status")).toBeNull();
+    expect(empty).toHaveAttribute("role", "presentation");
+    expect(empty).not.toHaveAttribute("aria-live");
+    expect(empty).toBeEmptyDOMElement();
+    expect(empty).toHaveClass("py-6", "empty:py-0");
+  });
+
+  it("announces the message as a live region outside the list", () => {
+    render(
+      <Command>
+        <CommandInput placeholder="Search" />
+        <CommandEmpty>No results</CommandEmpty>
+        <CommandList>
+          <CommandItem>First</CommandItem>
+        </CommandList>
+      </Command>,
+    );
+
+    expect(screen.getByRole("status")).toHaveAttribute("aria-live");
   });
 });
 

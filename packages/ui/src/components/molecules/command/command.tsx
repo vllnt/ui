@@ -11,6 +11,7 @@ import {
   CommandItem as CommandItemPart,
   CommandList as CommandListPart,
 } from "@ui-sdk/react/command";
+import { renderElement, type RenderProp } from "@ui-sdk/react/primitive";
 import { Search } from "lucide-react";
 
 import { createCommandRanker } from "../../../lib/command-rank";
@@ -227,6 +228,9 @@ const itemScore = (
   );
 };
 
+/** True inside `CommandList`: its listbox holds options and groups, nothing else. */
+const InListContext = React.createContext(false);
+
 const CommandList = ({ className, label, ref, ...props }: CommandListProps) => {
   const search = React.use(SearchContext);
   const [list, listReference] = useElementRef(ref);
@@ -250,16 +254,18 @@ const CommandList = ({ className, label, ref, ...props }: CommandListProps) => {
   }, [list, query, ranker, score]);
 
   return (
-    <CommandListPart
-      aria-label={label ?? search?.label ?? "Suggestions"}
-      className={cn(
-        "max-h-[300px] overflow-y-auto overflow-x-hidden",
-        className,
-      )}
-      cmdk-list=""
-      ref={listReference}
-      {...props}
-    />
+    <InListContext value>
+      <CommandListPart
+        aria-label={label ?? search?.label ?? "Suggestions"}
+        className={cn(
+          "max-h-[300px] overflow-y-auto overflow-x-hidden",
+          className,
+        )}
+        cmdk-list=""
+        ref={listReference}
+        {...props}
+      />
+    </InListContext>
   );
 };
 CommandList.displayName = "CommandList";
@@ -269,14 +275,41 @@ type CommandEmptyProps = Omit<
   "className" | "render"
 >;
 
-const CommandEmpty = ({ ref, ...props }: CommandEmptyProps) => (
-  <CommandEmptyPart
-    className="py-6 text-center text-sm empty:py-0"
-    cmdk-empty=""
-    ref={ref}
-    {...props}
-  />
-);
+/**
+ * cmdk's empty state inside the list. A listbox may not hold a live region,
+ * so cmdk rendered it as presentational, and so does this.
+ */
+const presentational: RenderProp<unknown> = (props, state) =>
+  renderElement(
+    "div",
+    {
+      ...props,
+      "aria-atomic": undefined,
+      "aria-live": undefined,
+      role: "presentation",
+    },
+    undefined,
+    state,
+  );
+
+/**
+ * Shown when no command matches. Outside `CommandList`, a live region
+ * announces the message; inside the list, as with cmdk, the element is
+ * presentational.
+ */
+const CommandEmpty = ({ ref, ...props }: CommandEmptyProps) => {
+  const inList = React.use(InListContext);
+
+  return (
+    <CommandEmptyPart
+      className="py-6 text-center text-sm empty:py-0"
+      cmdk-empty=""
+      ref={ref}
+      render={inList ? presentational : undefined}
+      {...props}
+    />
+  );
+};
 CommandEmpty.displayName = "CommandEmpty";
 
 type CommandGroupProps = Omit<
