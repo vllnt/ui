@@ -40,13 +40,116 @@ describe("ListBox", () => {
 
   it("selects with the keyboard", () => {
     const onValueChange = vi.fn();
-    const { getByText } = render(
+    const { getByRole } = render(
       <ListBox onValueChange={onValueChange}>
         <ListBoxItem value="apple">Apple</ListBoxItem>
       </ListBox>,
     );
-    fireEvent.keyDown(getByText("Apple"), { key: "Enter" });
+    // Enter acts on the focused option, as it does for a keyboard user.
+    const apple = getByRole("option", { name: "Apple" });
+    apple.focus();
+    fireEvent.keyDown(apple, { key: "Enter" });
     expect(onValueChange).toHaveBeenCalledWith(["apple"]);
+  });
+
+  it("selects with the Space key", () => {
+    const onValueChange = vi.fn();
+    const { getByRole } = render(
+      <ListBox onValueChange={onValueChange}>
+        <ListBoxItem value="apple">Apple</ListBoxItem>
+      </ListBox>,
+    );
+    const apple = getByRole("option", { name: "Apple" });
+    apple.focus();
+    fireEvent.keyDown(apple, { key: " " });
+    expect(onValueChange).toHaveBeenCalledWith(["apple"]);
+  });
+});
+
+describe("ListBox value", () => {
+  it("follows a controlled list in single and multiple mode", () => {
+    const { getByRole, rerender } = render(
+      <ListBox label="Fruit" value={["banana"]}>
+        <ListBoxItem value="apple">Apple</ListBoxItem>
+        <ListBoxItem value="banana">Banana</ListBoxItem>
+      </ListBox>,
+    );
+    expect(getByRole("option", { name: "Banana" })).toHaveAttribute(
+      "aria-selected",
+      "true",
+    );
+    rerender(
+      <ListBox
+        label="Fruit"
+        selectionMode="multiple"
+        value={["apple", "banana"]}
+      >
+        <ListBoxItem value="apple">Apple</ListBoxItem>
+        <ListBoxItem value="banana">Banana</ListBoxItem>
+      </ListBox>,
+    );
+    expect(getByRole("listbox")).toHaveAttribute(
+      "aria-multiselectable",
+      "true",
+    );
+    expect(getByRole("option", { name: "Apple" })).toHaveAttribute(
+      "aria-selected",
+      "true",
+    );
+    expect(getByRole("option", { name: "Banana" })).toHaveAttribute(
+      "aria-selected",
+      "true",
+    );
+  });
+
+  it("reports an empty list when a multiple selection is cleared", () => {
+    const onValueChange = vi.fn();
+    const { getByText } = render(
+      <ListBox
+        defaultValue={["apple"]}
+        onValueChange={onValueChange}
+        selectionMode="multiple"
+      >
+        <ListBoxItem value="apple">Apple</ListBoxItem>
+      </ListBox>,
+    );
+    fireEvent.click(getByText("Apple"));
+    expect(onValueChange).toHaveBeenCalledWith([]);
+  });
+
+  it("replaces the selection in single mode", () => {
+    const onValueChange = vi.fn();
+    const { getByRole, getByText } = render(
+      <ListBox defaultValue={["apple"]} onValueChange={onValueChange}>
+        <ListBoxItem value="apple">Apple</ListBoxItem>
+        <ListBoxItem value="banana">Banana</ListBoxItem>
+      </ListBox>,
+    );
+    fireEvent.click(getByText("Banana"));
+    expect(onValueChange).toHaveBeenLastCalledWith(["banana"]);
+    expect(getByRole("option", { name: "Apple" })).toHaveAttribute(
+      "aria-selected",
+      "false",
+    );
+  });
+
+  it("ignores clicks on a disabled option and on a disabled list", () => {
+    const onValueChange = vi.fn();
+    const { getByText, rerender } = render(
+      <ListBox onValueChange={onValueChange}>
+        <ListBoxItem disabled value="apple">
+          Apple
+        </ListBoxItem>
+      </ListBox>,
+    );
+    fireEvent.click(getByText("Apple"));
+    rerender(
+      <ListBox disabled onValueChange={onValueChange}>
+        <ListBoxItem value="apple">Apple</ListBoxItem>
+      </ListBox>,
+    );
+    fireEvent.click(getByText("Apple"));
+    expect(onValueChange).not.toHaveBeenCalled();
   });
 });
 

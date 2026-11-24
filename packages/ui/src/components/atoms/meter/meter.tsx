@@ -1,5 +1,9 @@
+"use client";
+
+import { Meter as MeterPrimitive, MeterIndicator } from "@ui-sdk/react/meter";
 import { cva, type VariantProps } from "class-variance-authority";
 
+import { withDataAttributes } from "../../../lib/ui-sdk";
 import { cn } from "../../../lib/utils";
 
 const meterFillVariants = cva("h-full transition-all", {
@@ -56,27 +60,28 @@ const Meter = ({
   ...props
 }: MeterProps & { ref?: React.Ref<HTMLDivElement> }) => {
   const safeMax = max > min ? max : min + 1;
-  const current = clamp(value, min, safeMax);
-  const ratio = (current - min) / (safeMax - min);
-  const percentage = ratio * 100;
   const segmentCount = segments !== undefined && segments > 0 ? segments : 0;
+  const ratio = (clamp(value, min, safeMax) - min) / (safeMax - min);
   const filledSegments = Math.round(ratio * segmentCount);
 
   return (
-    <div
+    <MeterPrimitive
       aria-label={label}
-      aria-valuemax={safeMax}
-      aria-valuemin={min}
-      aria-valuenow={current}
-      aria-valuetext={valueText}
       className={cn(
         "h-2 w-full overflow-hidden rounded-full bg-secondary",
         segmentCount > 0 && "flex gap-0.5 bg-transparent",
         className,
       )}
+      max={safeMax}
+      min={min}
       ref={ref}
-      // react-doctor-disable-next-line react-doctor/prefer-tag-over-role -- a native <meter> cannot render the segment blocks (its children are fallback content); the div props and ref are public API
-      role="meter"
+      // Drops the default link to a label part and the percent value text:
+      // `label` names the meter and `valueText` describes its value.
+      render={withDataAttributes("div", () => ({
+        "aria-labelledby": undefined,
+        "aria-valuetext": valueText,
+      }))}
+      value={value}
       {...props}
     >
       {segmentCount > 0 ? (
@@ -92,12 +97,9 @@ const Meter = ({
           />
         ))
       ) : (
-        <div
-          className={meterFillVariants({ variant })}
-          style={{ width: `${percentage}%` }}
-        />
+        <MeterIndicator className={meterFillVariants({ variant })} />
       )}
-    </div>
+    </MeterPrimitive>
   );
 };
 Meter.displayName = "Meter";

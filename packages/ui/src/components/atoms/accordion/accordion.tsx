@@ -1,27 +1,21 @@
 "use client";
 
-import {
-  createContext,
-  use,
-  useCallback,
-  useId,
-  useMemo,
-  useState,
-} from "react";
+import { createContext, use, useId } from "react";
 
+import {
+  Accordion as AccordionPrimitive,
+  AccordionItem as AccordionItemPrimitive,
+  AccordionPanel,
+  AccordionTrigger as AccordionTriggerPrimitive,
+} from "@ui-sdk/react/accordion";
+import { renderElement } from "@ui-sdk/react/primitive";
 import type { ReactNode } from "react";
 
+import { withDataAttributes } from "../../../lib/ui-sdk";
 import { cn } from "../../../lib/utils";
 
-// Context for accordion state
-type AccordionContextValue = {
-  baseId: string;
-  openItems: Set<string>;
-  toggleItem: (value: string) => void;
-  type: "multiple" | "single";
-};
-
-const AccordionContext = createContext<AccordionContextValue | null>(null);
+// Holds the id prefix that ties each trigger to its panel.
+const AccordionIdContext = createContext<null | string>(null);
 
 /**
  * Builds the DOM id of an item's trigger or panel. The id replaces each
@@ -40,12 +34,37 @@ function getPartId(
   return `${baseId}-${part}-${key}`;
 }
 
-function useAccordionContext(): AccordionContextValue {
-  const context = use(AccordionContext);
-  if (!context) {
+/** Classes of a trigger, which change with the open state. */
+function getTriggerClassName(className: string | undefined) {
+  return ({ open }: { open: boolean }) =>
+    cn(
+      "w-full flex items-center justify-between p-4 text-left font-medium transition-colors",
+      "hover:bg-secondary/50",
+      open && "bg-secondary/30",
+      className,
+    );
+}
+
+/**
+ * Renders the panel as the old markup did: a closed panel stays laid out at
+ * zero height and is `inert`, which takes it out of the tab order and the
+ * accessibility tree while keeping its name and role.
+ */
+function renderPanel(props: Record<string, unknown>, state: { open: boolean }) {
+  return renderElement(
+    "div",
+    { ...props, hidden: undefined, inert: !state.open },
+    undefined,
+    state,
+  );
+}
+
+function useAccordionId(): string {
+  const baseId = use(AccordionIdContext);
+  if (!baseId) {
     throw new Error("AccordionItem must be used within an Accordion");
   }
-  return context;
+  return baseId;
 }
 
 export type AccordionProps = {
@@ -62,46 +81,22 @@ function Accordion({
   type = "single",
 }: AccordionProps): React.ReactNode {
   const baseId = useId();
-  const [openItems, setOpenItems] = useState<Set<string>>(() => {
-    if (!defaultValue) return new Set();
-    if (Array.isArray(defaultValue)) return new Set(defaultValue);
-    return new Set([defaultValue]);
-  });
-
-  const toggleItem = useCallback(
-    (value: string) => {
-      setOpenItems((previous) => {
-        const newSet = new Set(previous);
-        if (newSet.has(value)) {
-          newSet.delete(value);
-        } else {
-          if (type === "single") {
-            newSet.clear();
-          }
-          newSet.add(value);
-        }
-        return newSet;
-      });
-    },
-    [type],
-  );
-
-  const contextValue = useMemo(
-    () => ({ baseId, openItems, toggleItem, type }),
-    [baseId, openItems, toggleItem, type],
-  );
 
   return (
-    <AccordionContext.Provider value={contextValue}>
-      <div
+    <AccordionIdContext.Provider value={baseId}>
+      <AccordionPrimitive
         className={cn(
           "my-6 divide-y divide-border rounded-lg border",
           className,
         )}
+        defaultValue={
+          typeof defaultValue === "string" ? [defaultValue] : defaultValue
+        }
+        multiple={type === "multiple"}
       >
         {children}
-      </div>
-    </AccordionContext.Provider>
+      </AccordionPrimitive>
+    </AccordionIdContext.Provider>
   );
 }
 
@@ -117,15 +112,16 @@ function AccordionItem({
   value,
 }: AccordionItemProps): React.ReactNode {
   return (
-    <div
+    <AccordionItemPrimitive
       className={cn(
         "first:rounded-t-lg last:rounded-b-lg overflow-hidden",
         className,
       )}
       data-value={value}
+      value={value}
     >
       {children}
-    </div>
+    </AccordionItemPrimitive>
   );
 }
 
@@ -133,6 +129,7 @@ export type AccordionTriggerProps = {
   children: ReactNode;
   className?: string;
   icon?: ReactNode;
+  /** The enclosing `AccordionItem` sets which panel the trigger opens. */
   value: string;
 };
 
@@ -142,61 +139,58 @@ function AccordionTrigger({
   icon,
   value,
 }: AccordionTriggerProps): React.ReactNode {
-  const { baseId, openItems, toggleItem } = useAccordionContext();
-  const isOpen = openItems.has(value);
+  const baseId = useAccordionId();
 
   return (
-    <button
-      aria-controls={getPartId(baseId, "content", value)}
-      aria-expanded={isOpen}
-      className={cn(
-        "w-full flex items-center justify-between p-4 text-left font-medium transition-colors",
-        "hover:bg-secondary/50",
-        isOpen && "bg-secondary/30",
-        className,
-      )}
+    <AccordionTriggerPrimitive
+      className={getTriggerClassName(className)}
       id={getPartId(baseId, "trigger", value)}
-      onClick={() => {
-        toggleItem(value);
-      }}
-      type="button"
+      // ui-sdk leaves out `aria-controls`; the panel id comes from the value.
+      render={withDataAttributes("button", () => ({
+        "aria-controls": getPartId(baseId, "content", value),
+      }))}
     >
-      <span className="text-sm">{children}</span>
-      {icon ? (
-        <span
-          className={cn(
-            "size-4 flex-shrink-0 transition-transform duration-200",
-            isOpen && "rotate-180",
+      {({ open }) => (
+        <>
+          <span className="text-sm">{children}</span>
+          {icon ? (
+            <span
+              className={cn(
+                "size-4 flex-shrink-0 transition-transform duration-200",
+                open && "rotate-180",
+              )}
+            >
+              {icon}
+            </span>
+          ) : (
+            <svg
+              aria-hidden="true"
+              className={cn(
+                "size-4 flex-shrink-0 transition-transform duration-200",
+                open && "rotate-180",
+              )}
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                d="m6 9 6 6 6-6"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+              />
+            </svg>
           )}
-        >
-          {icon}
-        </span>
-      ) : (
-        <svg
-          aria-hidden="true"
-          className={cn(
-            "size-4 flex-shrink-0 transition-transform duration-200",
-            isOpen && "rotate-180",
-          )}
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            d="m6 9 6 6 6-6"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-          />
-        </svg>
+        </>
       )}
-    </button>
+    </AccordionTriggerPrimitive>
   );
 }
 
 export type AccordionContentProps = {
   children: ReactNode;
   className?: string;
+  /** The enclosing `AccordionItem` sets which trigger opens the panel. */
   value: string;
 };
 
@@ -205,19 +199,14 @@ function AccordionContent({
   className,
   value,
 }: AccordionContentProps): React.ReactNode {
-  const { baseId, openItems } = useAccordionContext();
-  const isOpen = openItems.has(value);
+  const baseId = useAccordionId();
 
   return (
-    <div
-      aria-labelledby={getPartId(baseId, "trigger", value)}
-      className={cn(
-        "overflow-hidden transition-all duration-200",
-        isOpen ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0",
-      )}
+    <AccordionPanel
+      className="h-[var(--accordion-panel-height)] overflow-hidden transition-[height,opacity] duration-200 [--radix-accordion-content-height:var(--accordion-panel-height)] [--radix-accordion-content-width:var(--accordion-panel-width)] data-[ending-style]:h-0 data-[starting-style]:h-0 data-[ending-style]:opacity-0 data-[starting-style]:opacity-0"
       id={getPartId(baseId, "content", value)}
-      inert={!isOpen}
-      role="region"
+      keepMounted
+      render={renderPanel}
     >
       <div
         className={cn(
@@ -227,7 +216,7 @@ function AccordionContent({
       >
         {children}
       </div>
-    </div>
+    </AccordionPanel>
   );
 }
 

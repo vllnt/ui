@@ -2,8 +2,14 @@
 
 import * as React from "react";
 
+import { renderElement } from "@ui-sdk/react/primitive";
+import {
+  Progress as ProgressPrimitive,
+  ProgressIndicator,
+} from "@ui-sdk/react/progress";
 import { cva, type VariantProps } from "class-variance-authority";
 
+import { withDataAttributes } from "../../../lib/ui-sdk";
 import { cn } from "../../../lib/utils";
 
 const progressBarTrackVariants = cva(
@@ -199,6 +205,22 @@ type ProgressBarTrackProps = Pick<
   tone: ProgressBarTone;
 };
 
+type FillProps = { style?: React.CSSProperties } & Record<string, unknown>;
+
+/**
+ * Renders the fill with the rounded percentage the header reads, where ui-sdk
+ * writes the exact one.
+ */
+function renderFill(percent: number) {
+  return (props: FillProps, state: object) =>
+    renderElement(
+      "div",
+      { ...props, style: { ...props.style, width: `${percent}%` } },
+      undefined,
+      state,
+    );
+}
+
 function ProgressBarTrack({
   ariaLabel,
   blocks,
@@ -216,17 +238,21 @@ function ProgressBarTrack({
   const filledBlocks = isValueKnown ? countFilledBlocks(value, max) : 0;
 
   return (
-    <div
+    <ProgressPrimitive
       aria-label={labelledBy ? undefined : (ariaLabel ?? "Progress")}
-      aria-labelledby={labelledBy}
-      aria-valuemax={max}
-      aria-valuemin={0}
-      aria-valuenow={isValueKnown ? value : undefined}
       className={cn(
         progressBarTrackVariants({ size }),
         showBlocks && "flex gap-0.5 bg-transparent",
       )}
-      role="progressbar"
+      max={max}
+      min={0}
+      // Names the bar from the header label (or `aria-label`) and reports the
+      // plain value, where ui-sdk would link a label part and read a percent.
+      render={withDataAttributes("div", () => ({
+        "aria-labelledby": labelledBy,
+        "aria-valuetext": undefined,
+      }))}
+      value={isValueKnown ? value : null}
     >
       {showBlocks ? (
         BLOCKS.map((block) => (
@@ -241,7 +267,7 @@ function ProgressBarTrack({
           />
         ))
       ) : (
-        <div
+        <ProgressIndicator
           className={cn(
             progressBarFillVariants({ tone }),
             isIndeterminate
@@ -249,10 +275,10 @@ function ProgressBarTrack({
               : "transition-all duration-300 motion-reduce:transition-none",
             isLoading && "w-0",
           )}
-          style={isValueKnown ? { width: `${percent}%` } : undefined}
+          render={isValueKnown ? renderFill(percent) : undefined}
         />
       )}
-    </div>
+    </ProgressPrimitive>
   );
 }
 
