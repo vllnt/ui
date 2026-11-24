@@ -2,128 +2,279 @@
 
 import * as React from "react";
 
-import type * as DialogPrimitive from "@radix-ui/react-dialog";
-import { Command as CommandPrimitive, useCommandState } from "cmdk";
+import {
+  Command as CommandRoot,
+  CommandEmpty as CommandEmptyPart,
+  CommandGroup as CommandGroupPart,
+  CommandGroupLabel,
+  CommandInput as CommandInputPart,
+  CommandItem as CommandItemPart,
+  CommandList as CommandListPart,
+} from "@ui-sdk/react/command";
 import { Search } from "lucide-react";
 
-import { useReturnFocus } from "../../../lib/use-return-focus";
+import {
+  asChildProps,
+  type DataAttributes,
+  useElementRef,
+  withDataAttributes,
+} from "../../../lib/ui-sdk";
 import { cn } from "../../../lib/utils";
 import { Dialog, DialogContent, DialogTitle } from "../../atoms/dialog/dialog";
 
+type SearchHandler = (search: string) => void;
+
+type SearchBinding = {
+  label?: string;
+  query: string;
+  setQuery: (query: string) => void;
+  setSearchHandler: (handler?: SearchHandler) => void;
+};
+
+const SearchContext = React.createContext<null | SearchBinding>(null);
+
+type RadixPartProps<Props> = Omit<
+  Props,
+  "children" | "className" | "render"
+> & {
+  asChild?: boolean;
+  children?: React.ReactNode;
+  className?: string;
+};
+
+type CommandProps = Omit<
+  React.ComponentProps<"div">,
+  "defaultValue" | "onChange" | "onSelect"
+> & {
+  asChild?: boolean;
+  /** Highlighted item when uncontrolled. */
+  defaultValue?: string;
+  /**
+   * Replaces the built-in fuzzy match. Return a score: `0` hides the item and
+   * a higher score ranks first.
+   */
+  filter?: (value: string, search: string, keywords?: string[]) => number;
+  /** Accessible name of the search field and the list. */
+  label?: string;
+  /** Wraps the highlight from the last item to the first. */
+  loop?: boolean;
+  /** Runs when the highlight moves, with the highlighted item's value. */
+  onValueChange?: (value: string) => void;
+  /** Set `false` to keep every item, for results that are already filtered. */
+  shouldFilter?: boolean;
+  /** Highlighted item's value. Pass it to control the highlight. */
+  value?: string;
+};
+
+/**
+ * Search field over a list of commands. The cmdk-style API (`shouldFilter`,
+ * `onValueChange`, `value` on items) sits on top of the ui-sdk command, and
+ * parts keep the `cmdk-*` attributes that styles and tests select on.
+ */
 const Command = ({
+  asChild,
+  children,
   className,
-  ref: reference,
+  defaultValue,
+  filter,
+  label,
+  loop = false,
+  onValueChange,
+  ref,
+  shouldFilter = true,
+  value,
   ...props
-}: React.ComponentPropsWithoutRef<typeof CommandPrimitive> & {
-  ref?: React.Ref<React.ComponentRef<typeof CommandPrimitive>>;
-}) => (
-  <CommandPrimitive
-    className={cn(
-      "flex h-full w-full flex-col overflow-hidden rounded-md bg-popover text-popover-foreground",
-      className,
-    )}
-    ref={reference}
-    {...props}
-  />
-);
-Command.displayName = CommandPrimitive.displayName;
-
-export type CommandDialogProps = {} & React.ComponentPropsWithoutRef<
-  typeof DialogPrimitive.Root
->;
-
-const CommandDialog = ({ children, ...props }: CommandDialogProps) => {
-  const {
-    onCloseAutoFocus: handleCloseAutoFocus,
-    onOpenAutoFocus: handleOpenAutoFocus,
-  } = useReturnFocus();
+}: CommandProps) => {
+  const [query, setQuery] = React.useState("");
+  const onSearchChangeRef = React.useRef<
+    ((search: string) => void) | undefined
+  >(undefined);
+  const slot = asChildProps({ asChild, children });
+  const setSearchHandler = React.useCallback((handler?: SearchHandler) => {
+    onSearchChangeRef.current = handler;
+  }, []);
+  const binding = React.useMemo(
+    () => ({ label, query, setQuery, setSearchHandler }),
+    [label, query, setSearchHandler],
+  );
+  const handleQueryChange = (next: string) => {
+    setQuery(next);
+    onSearchChangeRef.current?.(next);
+  };
+  const rank: React.ComponentProps<typeof CommandRoot>["filter"] = shouldFilter
+    ? filter && ((item, search) => filter(item.label, search, item.keywords))
+    : false;
 
   return (
-    <Dialog {...props}>
-      <DialogContent
-        className="overflow-hidden p-0 shadow-lg"
-        onCloseAutoFocus={handleCloseAutoFocus}
-        onOpenAutoFocus={handleOpenAutoFocus}
+    <SearchContext value={binding}>
+      <CommandRoot
+        autoHighlight
+        className={cn(
+          "flex h-full w-full flex-col overflow-hidden rounded-md bg-popover text-popover-foreground",
+          className,
+        )}
+        cmdk-root=""
+        defaultValue={defaultValue}
+        filter={rank}
+        loop={loop}
+        onQueryChange={handleQueryChange}
+        onValueChange={(next) => {
+          onValueChange?.(next ?? "");
+        }}
+        query={query}
+        ref={ref}
+        render={slot.render}
+        value={value}
+        {...props}
       >
-        <DialogTitle className="sr-only">Command Menu</DialogTitle>
-        <Command className="[&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:font-medium [&_[cmdk-group-heading]]:text-muted-foreground [&_[cmdk-group]:not([hidden])_~[cmdk-group]]:pt-0 [&_[cmdk-group]]:px-2 [&_[cmdk-input-wrapper]_svg]:h-5 [&_[cmdk-input-wrapper]_svg]:w-5 [&_[cmdk-input]]:h-12 [&_[cmdk-item]]:px-2 [&_[cmdk-item]]:py-3 [&_[cmdk-item]_svg]:h-5 [&_[cmdk-item]_svg]:w-5">
-          {children}
-        </Command>
-      </DialogContent>
-    </Dialog>
+        {slot.children}
+      </CommandRoot>
+    </SearchContext>
   );
+};
+Command.displayName = "Command";
+
+export type CommandDialogProps = React.ComponentProps<typeof Dialog>;
+
+const CommandDialog = ({ children, ...props }: CommandDialogProps) => (
+  <Dialog {...props}>
+    <DialogContent className="overflow-hidden p-0 shadow-lg">
+      <DialogTitle className="sr-only">Command Menu</DialogTitle>
+      <Command className="[&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:font-medium [&_[cmdk-group-heading]]:text-muted-foreground [&_[cmdk-group]:not([hidden])_~[cmdk-group]]:pt-0 [&_[cmdk-group]]:px-2 [&_[cmdk-input-wrapper]_svg]:h-5 [&_[cmdk-input-wrapper]_svg]:w-5 [&_[cmdk-input]]:h-12 [&_[cmdk-item]]:px-2 [&_[cmdk-item]]:py-3 [&_[cmdk-item]_svg]:h-5 [&_[cmdk-item]_svg]:w-5">
+        {children}
+      </Command>
+    </DialogContent>
+  </Dialog>
+);
+CommandDialog.displayName = "CommandDialog";
+
+type CommandInputProps = Omit<
+  React.ComponentProps<"input">,
+  "className" | "defaultValue" | "onChange" | "value"
+> & {
+  className?: string;
+  /** Runs with the search text as the user types. */
+  onValueChange?: (search: string) => void;
+  /** Search text. Pass it, with `onValueChange`, to control the field. */
+  value?: string;
 };
 
 const CommandInput = ({
   className,
-  ref: reference,
+  onValueChange,
+  ref,
+  value,
   ...props
-}: React.ComponentPropsWithoutRef<typeof CommandPrimitive.Input> & {
-  ref?: React.Ref<React.ComponentRef<typeof CommandPrimitive.Input>>;
-}) => (
-  <div
-    className="flex items-center border-b px-3 focus-within:border-ring"
-    cmdk-input-wrapper=""
-  >
-    <Search className="mr-2 size-4 shrink-0 opacity-50" />
-    <CommandPrimitive.Input
+}: CommandInputProps) => {
+  const search = React.use(SearchContext);
+  const setQuery = search?.setQuery;
+  const setSearchHandler = search?.setSearchHandler;
+
+  React.useEffect(() => {
+    setSearchHandler?.(onValueChange);
+  });
+  React.useEffect(() => {
+    if (value !== undefined) {
+      setQuery?.(value);
+    }
+  }, [setQuery, value]);
+
+  return (
+    <div
+      className="flex items-center border-b px-3 focus-within:border-ring"
+      cmdk-input-wrapper=""
+    >
+      <Search className="mr-2 size-4 shrink-0 opacity-50" />
+      <CommandInputPart
+        aria-label={search?.label}
+        className={cn(
+          "flex h-11 w-full rounded-md bg-transparent py-3 text-sm outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50",
+          className,
+        )}
+        cmdk-input=""
+        ref={ref}
+        {...props}
+      />
+    </div>
+  );
+};
+CommandInput.displayName = "CommandInput";
+
+type CommandListProps = Omit<
+  React.ComponentProps<typeof CommandListPart>,
+  "className" | "render"
+> & {
+  className?: string;
+  /** Accessible name of the list. Defaults to `"Suggestions"`. */
+  label?: string;
+};
+
+const CommandList = ({ className, label, ref, ...props }: CommandListProps) => {
+  const search = React.use(SearchContext);
+
+  return (
+    <CommandListPart
+      aria-label={label ?? search?.label ?? "Suggestions"}
       className={cn(
-        "flex h-11 w-full rounded-md bg-transparent py-3 text-sm outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50",
+        "max-h-[300px] overflow-y-auto overflow-x-hidden",
         className,
       )}
-      ref={reference}
+      cmdk-list=""
+      ref={ref}
       {...props}
     />
-  </div>
-);
-CommandInput.displayName = CommandPrimitive.Input.displayName;
+  );
+};
+CommandList.displayName = "CommandList";
 
-const CommandList = ({
-  className,
-  ref: reference,
-  ...props
-}: React.ComponentPropsWithoutRef<typeof CommandPrimitive.List> & {
-  ref?: React.Ref<React.ComponentRef<typeof CommandPrimitive.List>>;
-}) => (
-  <CommandPrimitive.List
-    className={cn("max-h-[300px] overflow-y-auto overflow-x-hidden", className)}
-    ref={reference}
+type CommandEmptyProps = Omit<
+  React.ComponentProps<typeof CommandEmptyPart>,
+  "className" | "render"
+>;
+
+const CommandEmpty = ({ ref, ...props }: CommandEmptyProps) => (
+  <CommandEmptyPart
+    className="py-6 text-center text-sm empty:py-0"
+    cmdk-empty=""
+    ref={ref}
     {...props}
   />
 );
-CommandList.displayName = CommandPrimitive.List.displayName;
+CommandEmpty.displayName = "CommandEmpty";
 
-const CommandEmpty = ({
-  ref: reference,
-  ...props
-}: React.ComponentPropsWithoutRef<typeof CommandPrimitive.Empty> & {
-  ref?: React.Ref<React.ComponentRef<typeof CommandPrimitive.Empty>>;
-}) => (
-  <CommandPrimitive.Empty
-    className="py-6 text-center text-sm"
-    ref={reference}
-    {...props}
-  />
-);
-CommandEmpty.displayName = CommandPrimitive.Empty.displayName;
+type CommandGroupProps = Omit<
+  React.ComponentProps<typeof CommandGroupPart>,
+  "children" | "className" | "render"
+> & {
+  children?: React.ReactNode;
+  className?: string;
+  /** Title shown above the group. */
+  heading?: React.ReactNode;
+};
 
 const CommandGroup = ({
+  children,
   className,
-  ref: reference,
+  heading,
+  ref,
   ...props
-}: React.ComponentPropsWithoutRef<typeof CommandPrimitive.Group> & {
-  ref?: React.Ref<React.ComponentRef<typeof CommandPrimitive.Group>>;
-}) => (
-  <CommandPrimitive.Group
+}: CommandGroupProps) => (
+  <CommandGroupPart
     className={cn(
       "overflow-hidden p-1 [&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:py-1.5 [&_[cmdk-group-heading]]:text-xs [&_[cmdk-group-heading]]:font-medium [&_[cmdk-group-heading]]:text-muted-foreground",
       className,
     )}
-    ref={reference}
+    cmdk-group=""
+    ref={ref}
     {...props}
-  />
+  >
+    {heading ? (
+      <CommandGroupLabel cmdk-group-heading="">{heading}</CommandGroupLabel>
+    ) : null}
+    {children}
+  </CommandGroupPart>
 );
-CommandGroup.displayName = CommandPrimitive.Group.displayName;
+CommandGroup.displayName = "CommandGroup";
 
 /**
  * Visual divider between groups. It renders as a hidden decoration rather
@@ -134,44 +285,82 @@ CommandGroup.displayName = CommandPrimitive.Group.displayName;
 const CommandSeparator = ({
   alwaysRender = false,
   className,
-  ref: reference,
+  ref,
   ...props
-}: React.ComponentPropsWithoutRef<typeof CommandPrimitive.Separator> & {
-  ref?: React.Ref<React.ComponentRef<typeof CommandPrimitive.Separator>>;
-}) => {
-  const searching = useCommandState((state) => state.search !== "");
+}: React.ComponentProps<"div"> & { alwaysRender?: boolean }) => {
+  const searching = React.use(SearchContext)?.query !== "";
   if (searching && !alwaysRender) return null;
   return (
     <div
       aria-hidden="true"
       className={cn("-mx-1 h-px bg-border", className)}
-      ref={reference}
+      ref={ref}
       {...props}
     />
   );
 };
-CommandSeparator.displayName = CommandPrimitive.Separator.displayName;
+CommandSeparator.displayName = "CommandSeparator";
+
+const itemAttributes = (state: {
+  disabled: boolean;
+  highlighted: boolean;
+}): DataAttributes => ({
+  "data-disabled": state.disabled ? "true" : "false",
+  "data-selected": state.highlighted ? "true" : "false",
+});
+
+type CommandItemProps = Omit<
+  RadixPartProps<React.ComponentProps<typeof CommandItemPart>>,
+  "label" | "onSelect" | "value"
+> & {
+  /** Extra words the search matches. */
+  keywords?: string[];
+  /** Runs on choice, with the item's value. */
+  onSelect?: (value: string) => void;
+  /**
+   * Identifies the item and is the text the search matches. Without it, the
+   * item's text content takes its place.
+   */
+  value?: string;
+};
 
 const CommandItem = ({
+  asChild,
+  children,
   className,
   disabled,
-  ref: reference,
+  onSelect,
+  ref,
+  value,
   ...props
-}: React.ComponentPropsWithoutRef<typeof CommandPrimitive.Item> & {
-  ref?: React.Ref<React.ComponentRef<typeof CommandPrimitive.Item>>;
-}) => (
-  <CommandPrimitive.Item
-    className={cn(
-      "relative flex cursor-pointer select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none aria-selected:bg-accent aria-selected:text-accent-foreground data-[disabled=true]:opacity-50",
-      disabled && "pointer-events-none",
-      className,
-    )}
-    disabled={disabled}
-    ref={reference}
-    {...props}
-  />
-);
-CommandItem.displayName = CommandPrimitive.Item.displayName;
+}: CommandItemProps) => {
+  const [item, itemReference] = useElementRef(ref);
+  const slot = asChildProps({ asChild, children });
+  const trimmed = value?.trim();
+
+  return (
+    <CommandItemPart
+      className={cn(
+        "relative flex cursor-pointer select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none aria-selected:bg-accent aria-selected:text-accent-foreground data-[disabled=true]:opacity-50",
+        disabled && "pointer-events-none",
+        className,
+      )}
+      cmdk-item=""
+      disabled={disabled}
+      label={trimmed}
+      onSelect={() => {
+        onSelect?.(trimmed ?? item?.textContent?.trim() ?? "");
+      }}
+      ref={itemReference}
+      render={withDataAttributes("div", itemAttributes, slot.render)}
+      value={trimmed}
+      {...props}
+    >
+      {slot.children}
+    </CommandItemPart>
+  );
+};
+CommandItem.displayName = "CommandItem";
 
 const CommandShortcut = ({
   className,

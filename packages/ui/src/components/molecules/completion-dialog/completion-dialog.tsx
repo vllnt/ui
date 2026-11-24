@@ -2,12 +2,19 @@
 
 import { memo, useRef } from "react";
 
-import * as DialogPrimitive from "@radix-ui/react-dialog";
+import {
+  Dialog as DialogRoot,
+  DialogBackdrop,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogTitle,
+} from "@ui-sdk/react/dialog";
 import type { KeyboardEvent, ReactNode } from "react";
 
 import type { MaterialProps } from "../../../lib/material";
 import type { HeadingTag } from "../../../lib/types";
-import { useReturnFocus } from "../../../lib/use-return-focus";
+import { openState, withDataAttributes } from "../../../lib/ui-sdk";
 import { cn } from "../../../lib/utils";
 import { Button } from "../../atoms/button/button";
 
@@ -33,7 +40,7 @@ export type CompletionDialogProps = {
   /**
    * Page-modal dialog (focus trap, scroll lock, the rest of the page inert).
    * Defaults to `true`. Pass `false` to keep the page interactive; the
-   * dialog then overlays its container without trapping focus.
+   * dialog then dims the viewport without trapping focus.
    */
   modal?: boolean;
   onCancel: () => void;
@@ -44,7 +51,7 @@ export type CompletionDialogProps = {
 
 type DialogBodyProps = Omit<
   CompletionDialogProps,
-  "isOpen" | "material" | "modal" | "onClose"
+  "isOpen" | "modal" | "onClose"
 >;
 
 type DialogCloseButtonProps = Pick<DialogBodyProps, "closeIcon">;
@@ -53,7 +60,7 @@ function DialogCloseButton({
   closeIcon,
 }: DialogCloseButtonProps): React.ReactNode {
   return (
-    <DialogPrimitive.Close
+    <DialogClose
       aria-label="Close"
       className="absolute right-3 top-3 inline-flex min-h-6 min-w-6 items-center justify-center rounded-sm p-1 opacity-70 hover:opacity-100 transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
     >
@@ -73,7 +80,7 @@ function DialogCloseButton({
           />
         </svg>
       )}
-    </DialogPrimitive.Close>
+    </DialogClose>
   );
 }
 
@@ -132,8 +139,33 @@ function DialogActions({
   );
 }
 
-function DialogBody({
+type DialogHeadingProps = Pick<DialogBodyProps, "as" | "description" | "title">;
+
+function DialogHeading({
   as: Heading = "h2",
+  description,
+  title,
+}: DialogHeadingProps): React.ReactNode {
+  return (
+    <div className="mb-4">
+      <DialogTitle
+        render={<Heading className="text-lg font-semibold">{title}</Heading>}
+      />
+      {description ? (
+        <DialogDescription
+          render={
+            <div className="text-sm text-muted-foreground mt-1.5">
+              {description}
+            </div>
+          }
+        />
+      ) : null}
+    </div>
+  );
+}
+
+function DialogBody({
+  as,
   cancelLabel = "Skip",
   cancelShortcut = "S",
   className,
@@ -141,18 +173,12 @@ function DialogBody({
   confirmLabel = "Done",
   confirmShortcut = "D",
   description,
+  material,
   onCancel,
   onConfirm,
   title,
 }: DialogBodyProps): React.ReactNode {
   const confirmButtonRef = useRef<HTMLButtonElement>(null);
-  const {
-    onCloseAutoFocus: handleCloseAutoFocus,
-    onOpenAutoFocus: handleOpenAutoFocus,
-  } = useReturnFocus((event) => {
-    event.preventDefault();
-    confirmButtonRef.current?.focus();
-  });
 
   const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>): void => {
     if (event.defaultPrevented) return;
@@ -166,30 +192,19 @@ function DialogBody({
   };
 
   return (
-    <DialogPrimitive.Content
-      {...(description ? {} : { "aria-describedby": undefined })}
+    <DialogContent
       className={cn(
-        "vllnt-glass-floating vllnt-glass-dense relative z-10 w-full max-w-md mx-4 p-6 border rounded-lg",
+        "vllnt-glass-floating vllnt-glass-dense fixed inset-0 m-auto h-fit w-[calc(100%-2rem)] max-w-md p-6 border rounded-lg",
         "animate-in fade-in-0 zoom-in-95 duration-200",
         className,
       )}
-      onCloseAutoFocus={handleCloseAutoFocus}
+      data-material={material}
+      initialFocus={() => confirmButtonRef.current ?? undefined}
       onKeyDown={handleKeyDown}
-      onOpenAutoFocus={handleOpenAutoFocus}
+      render={withDataAttributes("div", openState)}
     >
       <DialogCloseButton closeIcon={closeIcon} />
-      <div className="mb-4">
-        <DialogPrimitive.Title asChild>
-          <Heading className="text-lg font-semibold">{title}</Heading>
-        </DialogPrimitive.Title>
-        {description ? (
-          <DialogPrimitive.Description asChild>
-            <div className="text-sm text-muted-foreground mt-1.5">
-              {description}
-            </div>
-          </DialogPrimitive.Description>
-        ) : null}
-      </div>
+      <DialogHeading as={as} description={description} title={title} />
       <DialogActions
         cancelLabel={cancelLabel}
         cancelShortcut={cancelShortcut}
@@ -199,19 +214,20 @@ function DialogBody({
         onCancel={onCancel}
         onConfirm={onConfirm}
       />
-    </DialogPrimitive.Content>
+    </DialogContent>
   );
 }
 
 /**
- * Modal confirmation overlay that covers its positioned container. Built on
- * the Radix dialog primitive (WAI-ARIA APG modal dialog): focus moves to the
- * confirm button, Tab cycles inside the dialog, Escape and the backdrop close
- * it, and focus returns to the element that opened it. The single-key
- * shortcuts act while focus sits inside the dialog and nowhere else.
+ * Modal confirmation overlay. Built on the ui-sdk dialog (WAI-ARIA APG modal
+ * dialog): focus moves to the confirm button, Tab cycles inside the dialog,
+ * Escape and the backdrop close it, and focus returns to the element that
+ * opened it. The single-key shortcuts act while focus sits inside the dialog
+ * and nowhere else. The panel and its backdrop render in the browser top
+ * layer, so they cover the viewport rather than a positioned container.
  */
 const BACKDROP_CLASS = cn(
-  "vllnt-glass-scrim absolute inset-0",
+  "vllnt-glass-scrim fixed inset-0 m-0 size-full",
   "animate-in fade-in-0 duration-200",
 );
 
@@ -223,27 +239,30 @@ function CompletionDialogImpl({
   ...props
 }: CompletionDialogProps): React.ReactNode {
   return (
-    <DialogPrimitive.Root
+    <DialogRoot
+      closeOnOutsidePress
       modal={modal}
       onOpenChange={(open) => {
         if (!open) onClose();
       }}
       open={isOpen}
     >
-      {isOpen ? (
-        <div
-          className="absolute inset-0 z-[100] flex items-center justify-center"
+      {isOpen && modal ? (
+        <DialogBackdrop
+          className={BACKDROP_CLASS}
           data-material={material}
-        >
-          {modal ? (
-            <DialogPrimitive.Overlay className={BACKDROP_CLASS} />
-          ) : (
-            <div aria-hidden="true" className={BACKDROP_CLASS} />
-          )}
-          <DialogBody {...props} />
-        </div>
+          render={withDataAttributes("div", openState)}
+        />
       ) : null}
-    </DialogPrimitive.Root>
+      {isOpen && !modal ? (
+        <div
+          aria-hidden="true"
+          className={cn(BACKDROP_CLASS, "z-[100]")}
+          data-material={material}
+        />
+      ) : null}
+      <DialogBody {...props} material={material} />
+    </DialogRoot>
   );
 }
 
