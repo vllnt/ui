@@ -42,6 +42,11 @@ function useOverflows(
   return overflows;
 }
 
+/** Lets a horizontal `ScrollBar` tell its `ScrollArea` the x axis scrolls. */
+const HorizontalContext = React.createContext<
+  ((present: boolean) => void) | null
+>(null);
+
 const visibleState = (state: { visible: boolean }): DataAttributes => ({
   "data-state": state.visible ? "visible" : "hidden",
 });
@@ -63,6 +68,8 @@ const ScrollArea = ({
 }) => {
   const viewportRef = React.useRef<HTMLDivElement>(null);
   const overflows = useOverflows(viewportRef);
+  // Like Radix, clip the x axis unless a horizontal scrollbar renders.
+  const [horizontal, setHorizontal] = React.useState(false);
   const named = Boolean(ariaLabel ?? ariaLabelledBy);
   return (
     <ScrollAreaPrimitive
@@ -70,21 +77,27 @@ const ScrollArea = ({
       ref={ref}
       {...props}
     >
-      <ScrollAreaViewport
-        aria-label={ariaLabel}
-        aria-labelledby={ariaLabelledBy}
-        className="h-full w-full rounded-[inherit] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-        data-radix-scroll-area-viewport=""
-        ref={viewportRef}
-        role={named ? "region" : undefined}
-        tabIndex={overflows ? 0 : undefined}
-      >
-        <ScrollAreaContent style={{ display: "table", minWidth: "100%" }}>
-          {children}
-        </ScrollAreaContent>
-      </ScrollAreaViewport>
-      <ScrollBar />
-      <ScrollAreaCorner />
+      <HorizontalContext value={setHorizontal}>
+        <ScrollAreaViewport
+          aria-label={ariaLabel}
+          aria-labelledby={ariaLabelledBy}
+          className={cn(
+            "h-full w-full rounded-[inherit] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+            // ui-sdk sets `overflow: auto` inline, so clipping x needs `!important`.
+            !horizontal && "!overflow-x-hidden",
+          )}
+          data-radix-scroll-area-viewport=""
+          ref={viewportRef}
+          role={named ? "region" : undefined}
+          tabIndex={overflows ? 0 : undefined}
+        >
+          <ScrollAreaContent style={{ display: "table", minWidth: "100%" }}>
+            {children}
+          </ScrollAreaContent>
+        </ScrollAreaViewport>
+        <ScrollBar />
+        <ScrollAreaCorner />
+      </HorizontalContext>
     </ScrollAreaPrimitive>
   );
 };
@@ -101,24 +114,36 @@ const ScrollBar = ({
   /** Accepted for compatibility: the scrollbar always stays mounted. */
   forceMount?: true;
   ref?: React.Ref<HTMLDivElement>;
-}) => (
-  <ScrollAreaScrollbar
-    className={cn(
-      "invisible flex touch-none select-none transition-colors data-[visible]:visible",
-      orientation === "vertical" &&
-        "h-full w-2.5 border-l border-l-transparent p-[1px]",
-      orientation === "horizontal" &&
-        "h-2.5 flex-col border-t border-t-transparent p-[1px]",
-      className,
-    )}
-    orientation={orientation}
-    ref={ref}
-    render={withDataAttributes("div", visibleState, render)}
-    {...props}
-  >
-    <ScrollAreaThumb className="relative flex-1 rounded-full bg-border" />
-  </ScrollAreaScrollbar>
-);
+}) => {
+  const setHorizontal = React.use(HorizontalContext);
+  const isHorizontal = orientation === "horizontal";
+  React.useEffect(() => {
+    if (!isHorizontal || !setHorizontal) return;
+    setHorizontal(true);
+    return () => {
+      setHorizontal(false);
+    };
+  }, [isHorizontal, setHorizontal]);
+
+  return (
+    <ScrollAreaScrollbar
+      className={cn(
+        "invisible flex touch-none select-none transition-colors data-[visible]:visible",
+        orientation === "vertical" &&
+          "h-full w-2.5 border-l border-l-transparent p-[1px]",
+        orientation === "horizontal" &&
+          "h-2.5 flex-col border-t border-t-transparent p-[1px]",
+        className,
+      )}
+      orientation={orientation}
+      ref={ref}
+      render={withDataAttributes("div", visibleState, render)}
+      {...props}
+    >
+      <ScrollAreaThumb className="relative flex-1 rounded-full bg-border" />
+    </ScrollAreaScrollbar>
+  );
+};
 ScrollBar.displayName = "ScrollBar";
 
 export { ScrollArea, ScrollBar };
