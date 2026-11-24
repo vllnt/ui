@@ -52,12 +52,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - **Built on ui-sdk** - the interactive components now sit on Vercel's ui-sdk
   (`@ui-sdk/react` and `@ui-sdk/core`, pinned to `0.1.0-beta.7`) instead of Radix,
   cmdk and vaul: Accordion, AlertDialog, Avatar, Checkbox, Collapsible, Command,
-  CompletionDialog, ContextMenu, Dialog, Drawer, DropdownMenu, Field, HoverCard,
+  ContextMenu, Dialog, Drawer, DropdownMenu, Field, HoverCard,
   Label, ListBox, Menubar, Meter, NavigationMenu, Popover, ProgressBar,
   RadioGroup, Rating, ScrollArea, SegmentedControl, Select, Sheet, Slider, Switch,
   Tabs, Toggle, ToggleGroup, Tooltip, and everything built from them. `asChild`
   on Button, Link, Banner, Form and the other non-primitive parts uses the kit's
-  own `Slot`. Exports, props and class names are unchanged,
+  own `Slot`. `CompletionDialog` stays in place inside its container, built on
+  the kit's own focus, Escape and scroll-lock hooks, since a ui-sdk dialog
+  always covers the viewport. Exports, props and class names are unchanged,
   and the Radix-facing DOM is kept for apps that style it: `data-state` with the
   Radix values, the `--radix-*` CSS variables (aliased to ui-sdk's), and
   `data-radix-scroll-area-viewport`. `asChild`, `onOpenAutoFocus`,
