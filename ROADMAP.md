@@ -2,10 +2,10 @@
 
 > **Goal:** the design-system foundation for building UI fast — the @vllnt/ui component registry (web + native), the `@vllnt/ui-cli` DX gate, and `@vllnt/front-studio` + `@vllnt/ui-toolbar` (verify · review · author, API-first) — for humans and agents alike.
 > **Now:** ship `@vllnt/ui@0.4.0` stable (release-ready on main; see `RELEASING.md`), then `component-sidebar` `.5`/`.6`.
-> **Next:** `native-parity` pilot validation · `agent-ui-cli` (MVP) · `ai-elements-parity`.
+> **Next:** `0.5.0` after 0.4.0 stable (`v050-glass-spatial-genui`: Liquid Glass default theme · spatial/AR · generative and streaming UI) · `native-parity` pilot validation · `agent-ui-cli` (MVP) · `ai-elements-parity`.
 > **Horizon (gated):** the front-studio line (`studio` → `studio-hub` — after the CLI ships + a real need).
 > **Visibility track:** SEO/GEO phases — `search-consolidation` → `ai-toolchain-registration` → `visibility-measurement` → `seo-content-engine` → `backlink-authority`. Diagnosis: infra is DONE (`agent-surface`) but GSC shows indexed-yet-buried (141 pages, 2 clicks/90d, 0 AI-query visibility) + a dead `.com` twin outranking the live `.ai`. Full plan: [strategy dossier](https://claude.ai/code/artifact/6e2359db-a626-4226-aa54-a9e53ecfd766).
-> **Last updated:** 2026-10-31
+> **Last updated:** 2026-11-24
 > **Channels:** `@latest` = `0.3.0` · `@canary` = `0.4.0-canary.<sha>` (auto-publishes on every merge to main). Tracking: [milestone 0.3.0](https://github.com/vllnt/ui/milestone/1)
 
 Convention: phases are kebab-case outcome slugs, ordered DONE → ACTIVE → PLANNED. Tasks carry stable `<slug>.<n>` IDs; functional tasks pair with a `Validate`/`E2E` task. History is never deleted. Shipped 0.3.0 detail lives in `CHANGELOG.md` and the 197 closed issues; phases below summarize it.
@@ -99,6 +99,28 @@ The earlier co-located `.native.tsx` proposal is superseded by the package bound
 - [x] typography-primitives.5 Registry entries + barrel exports (`HeadingProps`) + count/prose surfaces (313) — #465
 - [x] typography-primitives.6 Validate: unit + Playwright CT (token override, reduced-motion, axe + AA contrast) (E2E) — #465
 - [x] typography-primitives.7 Code review (PR #468): ref-forwarding on `Text`/`Display`, `HeadingProps` disambiguation, robust axe resolution + oklch-safe contrast test — #465
+
+## v050-glass-spatial-genui [PLANNED — 0.5.0, after 0.4.0 stable]
+
+**Goal:** `@vllnt/ui@0.5.0` rebrands the default vllnt theme and is competitive for agent-driven, streaming and generative UI. Three headline pillars of equal weight: **A) Liquid Glass default theme** · **B) spatial/AR-ready foundations** · **C) generative and streaming UI primitives**, with accessibility under glass as a cross-cutting gate. Tracking: [milestone v0.5.0](https://github.com/vllnt/ui/milestone/3).
+**Exit criteria:** (A) the default theme is Liquid Glass, driven only by material tokens (clear and tinted glass, blur, depth, sheen), with an automatic solid fallback and a documented `backdrop-filter` budget; (B) depth and material tokens, one affordance contract and input-agnostic targets (pointer, touch, gaze, gesture, voice) ship in `@vllnt/ui-core` and are read by web and native; (C) streamed and partial states, AI message parts, tool-result cards, agent layouts and human-in-the-loop states (approve, edit, retry) ship on a renderer-agnostic, typed agent-to-UI event contract (text deltas, tool calls and results, state diffs, interrupts); (cross-cutting) WCAG 2.2 AA holds on glass, and `prefers-reduced-transparency`, `prefers-reduced-motion`, `prefers-contrast` and `forced-colors` all fall back to solid.
+**Verify:** a demo page with the default theme renders glass surfaces that switch to solid under each of the four media preferences with axe AA clean; the same demo replays a recorded agent event stream (text deltas → tool call → tool result → state diff → interrupt → approve) and every partial frame renders without layout errors; a component's targets meet the pointer, touch and spatial sizes from one contract on web and native.
+
+Builds on 0.4.0: glass default with solid fallbacks (#705, from #684) and the a11y gate on glass, solid, reduced motion and focus (#714).
+
+**(C) dependency:** the generative and streaming pillar relies on the AI SDK UI layer — `ai` and `@ai-sdk/react` (`useChat`, streamed UI message parts and tool parts; latest beta allowed). It is planned as an optional peer dependency (`peerDependenciesMeta`) or a separate optional entry point, so the core kit stays light and installs without it.
+
+- [ ] v050-glass-spatial-genui.1 (A) Liquid Glass default theme: rebrand the default vllnt theme on material tokens — clear and tinted glass, blur, depth, sheen — #684, #705
+- [ ] v050-glass-spatial-genui.2 (A) Automatic solid fallback for every glass surface + a `backdrop-filter` budget (max stacked layers, blur radius, per-viewport cost) checked in CI — #684
+- [ ] v050-glass-spatial-genui.3 (B) Spatial-ready foundations from the RFC: depth and material tokens, one affordance contract, input-agnostic targets (pointer, touch, gaze) — #631, #632
+- [ ] v050-glass-spatial-genui.4 (B) Spatial input: gesture and voice on top of the affordance contract, every action still keyboard-reachable — #680
+- [ ] v050-glass-spatial-genui.5 (B) Optional 3D scene layer adapters (peer dependencies, never in the core) + holographic components on the glass and HUD set — #678, #679
+- [ ] v050-glass-spatial-genui.6 (C) Agent-to-UI event contract: a renderer-agnostic, typed event stream (text deltas, tool calls and results, state diffs, interrupts) in `@vllnt/ui-core` — #672, #675
+- [ ] v050-glass-spatial-genui.7 (C) Streamed and partial states: a partial-props contract so components render from incomplete, streamed data — #672
+- [ ] v050-glass-spatial-genui.8 (C) Generative UI primitives: AI message parts, tool-result cards, agent layouts, human-in-the-loop states (approve, edit, retry) — #672, #675
+- [ ] v050-glass-spatial-genui.11 (C) AI SDK UI layer integration: `ai` + `@ai-sdk/react` (`useChat`, UI message parts, tool parts) as an optional peer dependency or a separate optional entry point; the core kit installs and builds without it — #672
+- [ ] v050-glass-spatial-genui.9 (cross-cutting) Accessibility under glass: WCAG 2.2 AA contrast fallbacks; `prefers-reduced-transparency`, `prefers-reduced-motion`, `prefers-contrast` and `forced-colors` fall back to solid — #681, #714
+- [ ] v050-glass-spatial-genui.10 Validate v050-glass-spatial-genui.1–9 and .11: CT + axe per media preference, a recorded event-stream replay E2E, web + native target-size checks, core install without `ai` (E2E)
 
 ## ai-elements-parity [PLANNED]
 

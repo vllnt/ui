@@ -148,6 +148,16 @@ Rien de ceci n'est encore disponible. Ce sont les prochaines étapes vers la vis
 - **Fondations spatiales** (proposées pour la 0.5.0) : tokens de profondeur, un seul contrat d'affordance pour le pointeur, le tactile et le regard, des tailles de cible qui s'adaptent à l'entrée (24 px au pointeur, 44 pt au tactile, 60 pt en spatial), et des tokens de mouvement. La proposition est une RFC ouverte : [vllnt/ui#631](https://github.com/vllnt/ui/issues/631).
 - **Moteurs de rendu spatiaux** comme visionOS ou WebXR, construits sur le même socle.
 
+### Prévu pour la 0.5.0
+
+La prochaine version mineure après la 0.4.0 stable repose sur trois piliers de même poids. Plan complet : la phase `v050-glass-spatial-genui` de la [feuille de route](https://github.com/vllnt/ui/blob/main/ROADMAP.md).
+
+- **Thème Liquid Glass par défaut :** le thème vllnt par défaut est refondu sur des tokens de matière (verre clair et teinté, flou, profondeur, reflet), avec un repli opaque automatique et un budget `backdrop-filter` ([vllnt/ui#684](https://github.com/vllnt/ui/issues/684)).
+- **Fondations prêtes pour le spatial et l'AR :** tokens de profondeur et de matière, un seul contrat d'affordance et des cibles indépendantes de l'entrée pour le pointeur, le tactile, le regard, le geste et la voix ([vllnt/ui#631](https://github.com/vllnt/ui/issues/631), [vllnt/ui#680](https://github.com/vllnt/ui/issues/680)).
+- **Primitives d'UI générative et en flux :** états partiels et en flux, parties de message IA, cartes de résultat d'outil, mises en page d'agent et états avec validation humaine (approuver, modifier, réessayer), sur un contrat d'événements agent-vers-UI typé et indépendant du moteur de rendu ([vllnt/ui#672](https://github.com/vllnt/ui/issues/672), [vllnt/ui#675](https://github.com/vllnt/ui/issues/675)).
+  - Construit sur la couche UI de l'AI SDK (`ai` et `@ai-sdk/react` : `useChat`, parties de message et d'outil en flux), en dépendance pair optionnelle ou en point d'entrée optionnel séparé, pour que le kit de base s'installe sans elle.
+- **Accessibilité sous le verre :** le niveau WCAG 2.2 AA est maintenu ; transparence réduite, mouvement réduit, contraste renforcé et couleurs forcées repassent tous en opaque ([vllnt/ui#681](https://github.com/vllnt/ui/issues/681)).
+
 ### Interfaces 3D, AR et holographiques
 
 Chacun de ces chantiers est ouvert et suivi dans son propre ticket. Rien de ceci n'est encore disponible.
