@@ -276,3 +276,51 @@ describe("ContextMenu items", () => {
     expect(screen.getByText("Nested")).toBeInTheDocument();
   });
 });
+
+describe("ContextMenu accessibility attributes", () => {
+  it("exposes a mixed checkbox item as aria-checked=mixed, like Radix", () => {
+    render(
+      <ContextMenu defaultOpen>
+        <ContextMenuTrigger>Target</ContextMenuTrigger>
+        <ContextMenuContent>
+          <ContextMenuCheckboxItem checked="indeterminate">
+            Mixed
+          </ContextMenuCheckboxItem>
+          <ContextMenuCheckboxItem checked>On</ContextMenuCheckboxItem>
+          <ContextMenuCheckboxItem checked={false}>Off</ContextMenuCheckboxItem>
+        </ContextMenuContent>
+      </ContextMenu>,
+    );
+    const mixed = screen.getByRole("menuitemcheckbox", { name: /Mixed/ });
+    expect(mixed).toHaveAttribute("aria-checked", "mixed");
+    expect(mixed).toHaveAttribute("data-state", "indeterminate");
+    expect(
+      screen.getByRole("menuitemcheckbox", { name: /On/ }),
+    ).toHaveAttribute("aria-checked", "true");
+    expect(
+      screen.getByRole("menuitemcheckbox", { name: /Off/ }),
+    ).toHaveAttribute("aria-checked", "false");
+  });
+
+  it("leaves the menu without a trigger label, like Radix, and labels a submenu by its sub trigger", () => {
+    render(
+      <ContextMenu defaultOpen>
+        <ContextMenuTrigger>Target</ContextMenuTrigger>
+        <ContextMenuContent>
+          <ContextMenuSub defaultOpen>
+            <ContextMenuSubTrigger>More</ContextMenuSubTrigger>
+            <ContextMenuSubContent>
+              <ContextMenuItem>Nested</ContextMenuItem>
+            </ContextMenuSubContent>
+          </ContextMenuSub>
+        </ContextMenuContent>
+      </ContextMenu>,
+    );
+    const [menu, subMenu] = screen.getAllByRole("menu");
+    expect(menu).not.toHaveAttribute("aria-labelledby");
+    expect(subMenu).toHaveAttribute(
+      "aria-labelledby",
+      screen.getByRole("menuitem", { name: /More/ }).id,
+    );
+  });
+});
