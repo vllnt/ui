@@ -8,10 +8,10 @@
   },
   {
     "name": "size",
-    "type": "\"default\" | \"sm\" | \"lg\" | \"icon\"",
+    "type": "\"default\" | \"sm\" | \"lg\" | \"icon\" | \"icon-lg\"",
     "required": false,
     "defaultValue": "\"default\"",
-    "description": "Size token. Use \"icon\" for icon-only buttons."
+    "description": "Size token. Use \"icon\" for icon-only buttons; \"icon-lg\" is the 44 px square for touch targets."
   },
   {
     "name": "asChild",

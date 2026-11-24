@@ -37,3 +37,10 @@ import { StatusIndicator } from '@vllnt/ui'
 
 - Pair with \`StatusBoard\` for the full health grid and \`LiveFeed\` for the rolling event stream.
 - Distinct from \`SeverityBadge\` (one-shot incident severity): \`StatusIndicator\` reads as a live dot.
+
+## Icon
+
+Pass `icon` to show a mark in place of the dot. The tone colours the icon alone: the pill and the label take the neutral variant, so the label stays foreground (lint rule A12). The icon is decorative (`aria-hidden`), so give an indicator that has no label an `aria-label`. When `icon` is set, `showDot` has no effect.
+
+<Canvas of={Stories.WithIcon} sourceState="shown" />
+

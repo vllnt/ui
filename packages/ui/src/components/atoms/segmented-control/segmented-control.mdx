@@ -45,6 +45,16 @@ Set `disabled` on the root to disable the full control, or on an individual item
 
 <Canvas of={Stories.Disabled} sourceState="shown" />
 
+## Fit and hairline
+
+`fit` hugs the content: the root takes `w-auto` and the items `flex-none`, instead of filling the row. `variant="hairline"` replaces the filled track with a transparent one and a 1 px border. The border is the input colour, which inside glass is the AA-checked `glass-input`, so place a hairline control on the dense glass tint (`vllnt-glass vllnt-glass-dense`). The default stays `variant="filled"`, full width.
+
+<Canvas of={Stories.Fit} sourceState="shown" />
+
+<Canvas of={Stories.Hairline} sourceState="shown" />
+
+<Canvas of={Stories.FitHairlineOnGlass} sourceState="shown" />
+
 ## Accessibility
 
 - The control is one tab stop and lands on the selected segment.

@@ -20,7 +20,7 @@ const meta = {
     },
     variant: {
       control: "select",
-      options: ["default", "bracket"],
+      options: ["default", "bracket", "glass"],
     },
   },
   component: Kbd,
@@ -49,6 +49,15 @@ export const PlatformWin: Story = {
 };
 
 export const VariantBracket: Story = { args: { variant: "bracket" } };
+export const VariantGlass: Story = {
+  args: { children: undefined, shortcut: "mod+k", variant: "glass" },
+  render: (args) => (
+    <div className="vllnt-glass vllnt-glass-dense inline-flex items-center gap-3 rounded-full border px-4 py-2 text-sm">
+      Search...
+      <Kbd {...args} />
+    </div>
+  ),
+};
 export const BracketShortcutMac: Story = {
   args: {
     children: undefined,

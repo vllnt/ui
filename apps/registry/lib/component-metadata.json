@@ -1019,6 +1019,10 @@
         "name": "Size Icon"
       },
       {
+        "id": "core-button--size-icon-lg",
+        "name": "Size Icon Lg"
+      },
+      {
         "id": "core-button--size-lg",
         "name": "Size Lg"
       },
@@ -3156,6 +3160,10 @@
         "name": "Variant Bracket"
       },
       {
+        "id": "core-kbd--variant-glass",
+        "name": "Variant Glass"
+      },
+      {
         "id": "core-kbd--bracket-shortcut-mac",
         "name": "Bracket Shortcut Mac"
       },
@@ -3330,12 +3338,28 @@
         "name": "Default"
       },
       {
+        "id": "core-link--foreground",
+        "name": "Foreground"
+      },
+      {
         "id": "core-link--muted",
         "name": "Muted"
       },
       {
         "id": "core-link--underline",
         "name": "Underline"
+      },
+      {
+        "id": "core-link--size-sm",
+        "name": "Size Sm"
+      },
+      {
+        "id": "core-link--size-lg",
+        "name": "Size Lg"
+      },
+      {
+        "id": "core-link--skip",
+        "name": "Skip"
       },
       {
         "id": "core-link--external",
@@ -5295,6 +5319,18 @@
       {
         "id": "form-segmentedcontrol--controlled",
         "name": "Controlled"
+      },
+      {
+        "id": "form-segmentedcontrol--fit",
+        "name": "Fit"
+      },
+      {
+        "id": "form-segmentedcontrol--hairline",
+        "name": "Hairline"
+      },
+      {
+        "id": "form-segmentedcontrol--fit-hairline-on-glass",
+        "name": "Fit Hairline On Glass"
       }
     ],
     "title": "Segmented Control"
@@ -5385,6 +5421,22 @@
       {
         "id": "core-separator--default",
         "name": "Default"
+      },
+      {
+        "id": "core-separator--dashed",
+        "name": "Dashed"
+      },
+      {
+        "id": "core-separator--vertical",
+        "name": "Vertical"
+      },
+      {
+        "id": "core-separator--dashed-vertical",
+        "name": "Dashed Vertical"
+      },
+      {
+        "id": "core-separator--semantic",
+        "name": "Semantic"
       }
     ],
     "title": "Separator"
@@ -5949,6 +6001,14 @@
       {
         "id": "data-statusindicator--variants",
         "name": "Variants"
+      },
+      {
+        "id": "data-statusindicator--with-icon",
+        "name": "With Icon"
+      },
+      {
+        "id": "data-statusindicator--icon-on-glass",
+        "name": "Icon On Glass"
       }
     ],
     "title": "Status Indicator"
@@ -6267,6 +6327,18 @@
       {
         "id": "core-text--mono-family",
         "name": "Mono Family"
+      },
+      {
+        "id": "core-text--measure",
+        "name": "Measure"
+      },
+      {
+        "id": "core-text--definition-list",
+        "name": "Definition List"
+      },
+      {
+        "id": "core-text--list-items",
+        "name": "List Items"
       }
     ],
     "title": "Text"

@@ -1149,10 +1149,10 @@
         },
         {
           "name": "size",
-          "type": "\"default\" | \"sm\" | \"lg\" | \"icon\"",
+          "type": "\"default\" | \"sm\" | \"lg\" | \"icon\" | \"icon-lg\"",
           "required": false,
           "defaultValue": "\"default\"",
-          "description": "Size token. Use \"icon\" for icon-only buttons."
+          "description": "Size token. Use \"icon\" for icon-only buttons; \"icon-lg\" is the 44 px square for touch targets."
         },
         {
           "name": "asChild",
@@ -7628,7 +7628,7 @@
       "version": "0.3.0",
       "stability": "stable",
       "a11y": {
-        "notes": "Renders a semantic element (p, span, div, or label) chosen by `as`, forwards `ref`, and inherits the design-system foreground contrast tokens. Use `tone=\"muted\"` on the default `background` — on `muted`/`card` surfaces the muted foreground can fall below WCAG AA. For a real form label use the Label component, which wires the htmlFor association."
+        "notes": "Renders a semantic element (p, span, div, label, dt, dd, or li) chosen by `as`; `dt` and `dd` need a `dl` parent and `li` a `ul` or `ol` parent, forwards `ref`, and inherits the design-system foreground contrast tokens. Use `tone=\"muted\"` on the default `background`, because on `muted` or `card` surfaces the muted foreground can fall below WCAG AA. For a real form label use the Label component, which wires the htmlFor association."
       },
       "platforms": [
         "web",

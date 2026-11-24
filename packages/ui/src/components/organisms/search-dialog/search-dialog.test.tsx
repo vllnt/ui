@@ -152,6 +152,20 @@ describe("SearchDialog", () => {
     expect(screen.getByRole("dialog")).toBeInTheDocument();
   });
 
+  it("shows the shortcut on the trigger with the Kbd atom", () => {
+    renderSearchDialog();
+
+    const trigger = screen.getByRole("button", { name: /search/i });
+    const hint = trigger.querySelector('[role="img"]');
+
+    expect(hint).toHaveAttribute(
+      "aria-label",
+      expect.stringMatching(/^(Command|Ctrl) \+ K$/),
+    );
+    expect(hint?.querySelectorAll("kbd")).toHaveLength(2);
+    expect(trigger.querySelector(":scope > kbd")).toBeNull();
+  });
+
   it("ignores keyboard shortcuts from text inputs and when disabled", () => {
     const input = document.createElement("input");
     document.body.append(input);

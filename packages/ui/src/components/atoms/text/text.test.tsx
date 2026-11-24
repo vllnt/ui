@@ -72,4 +72,56 @@ describe("Text", () => {
     render(<Text className="custom-class">Merged</Text>);
     expect(screen.getByText("Merged")).toHaveClass("custom-class");
   });
+
+  it.each(["dd", "dt", "li"] as const)("renders a <%s> element", (tag) => {
+    const { container } = render(
+      tag === "li" ? (
+        <ul>
+          <Text as={tag}>Item</Text>
+        </ul>
+      ) : (
+        <dl>
+          <Text as={tag}>Item</Text>
+        </dl>
+      ),
+    );
+    expect(container.querySelector(tag)).toHaveTextContent("Item");
+    expect(container.querySelector(tag)).toHaveClass(
+      "text-[length:var(--font-size-body)]",
+    );
+  });
+
+  it("builds a definition list the browser exposes as terms and definitions", () => {
+    render(
+      <dl>
+        <Text as="dt" size="small" tone="muted">
+          Region
+        </Text>
+        <Text as="dd" size="small" weight="medium">
+          Paris
+        </Text>
+      </dl>,
+    );
+    expect(screen.getByRole("term")).toHaveTextContent("Region");
+    expect(screen.getByRole("definition")).toHaveTextContent("Paris");
+  });
+
+  it("applies no measure by default", () => {
+    render(<Text>Fill</Text>);
+    expect(screen.getByText("Fill").className).not.toContain("max-w-");
+  });
+
+  it("caps the line length with the measure tokens", () => {
+    const { rerender } = render(<Text measure="prose">Measured</Text>);
+    expect(screen.getByText("Measured")).toHaveClass(
+      "max-w-[var(--size-measure-prose)]",
+    );
+    rerender(<Text measure="narrow">Measured</Text>);
+    expect(screen.getByText("Measured")).toHaveClass(
+      "max-w-[var(--size-measure-narrow)]",
+    );
+    expect(screen.getByText("Measured")).not.toHaveClass(
+      "max-w-[var(--size-measure-prose)]",
+    );
+  });
 });

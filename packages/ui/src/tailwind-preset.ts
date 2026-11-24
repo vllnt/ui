@@ -84,6 +84,9 @@ const preset: Partial<Config> = {
       fontFamily: {
         mono: ["var(--font-mono)", "ui-monospace", "monospace"],
       },
+      height: {
+        "control-xs": "var(--size-control-xs)",
+      },
       keyframes: {
         "accordion-down": {
           from: { height: "0" },
@@ -97,6 +100,12 @@ const preset: Partial<Config> = {
           "0%": { transform: "translateX(-100%)" },
           "100%": { transform: "translateX(100%)" },
         },
+      },
+      minHeight: {
+        target: "var(--size-target-min)",
+      },
+      minWidth: {
+        target: "var(--size-target-min)",
       },
     },
   },

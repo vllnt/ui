@@ -34,6 +34,7 @@ const badgeVariants = {
 const buttonSizes = {
   default: true,
   icon: true,
+  "icon-lg": true,
   lg: true,
   sm: true,
 } satisfies Record<ButtonSize, true> &

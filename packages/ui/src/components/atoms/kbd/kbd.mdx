@@ -57,12 +57,17 @@ Press <Kbd>Ctrl</Kbd> + <Kbd>K</Kbd>
 | ----- | ------- | ---- |
 | `default` | Yes | Boxed key cap with a hairline border and shadow |
 | `bracket` | - | No key cap; the key sits between decorative `[` `]` brackets |
+| `glass` | - | Chip for a glass surface: 9 % ink wash, 75 % ink text, no border |
 
 The `variant` prop is the Penpot `Style` axis (`style` is already the HTML inline-style attribute). Brackets are hidden from assistive tech, so a shortcut keeps the same accessible name in both variants.
 
 <Canvas of={Stories.VariantBracket} sourceState="shown" />
 
 <Canvas of={Stories.BracketShortcutMac} sourceState="shown" />
+
+The `glass` chip adds no border, so it does not draw a second edge inside a glass part. Place it on the dense glass tint (`vllnt-glass vllnt-glass-dense`): its 75 % ink text is under 4.5:1 on the default tint, and `glass-contrast.test.ts` checks the dense tint. On a plain background the wash is faint.
+
+<Canvas of={Stories.VariantGlass} sourceState="shown" />
 
 ## Platform
 
