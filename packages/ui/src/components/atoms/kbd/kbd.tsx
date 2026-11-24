@@ -13,7 +13,7 @@ import { Command } from "lucide-react";
 import { cn } from "../../../lib/utils";
 
 const kbdVariants = cva(
-  "inline-flex select-none items-center justify-center font-mono font-medium text-foreground [&>svg]:h-3 [&>svg]:w-3",
+  "inline-flex select-none items-center justify-center font-mono font-medium [&>svg]:h-3 [&>svg]:w-3",
   {
     defaultVariants: {
       size: "md",
@@ -26,9 +26,10 @@ const kbdVariants = cva(
         sm: "h-4 min-w-[1rem] px-1 text-[10px]",
       },
       variant: {
-        bracket: "gap-0.5",
+        bracket: "gap-0.5 text-foreground",
         default:
-          "rounded border border-border bg-muted shadow-[0_1px_0_0_oklch(var(--border))]",
+          "rounded border border-border bg-muted text-foreground shadow-[0_1px_0_0_oklch(var(--border))]",
+        glass: "rounded bg-foreground/[0.09] text-foreground/75",
       },
     },
   },
@@ -162,7 +163,9 @@ export type KbdProps = {
  * Keyboard key indicator. Renders a single key when used with `children`,
  * or expands a shortcut string with platform-aware modifiers when given a
  * `shortcut` prop. The `bracket` variant drops the key cap and wraps each key
- * in decorative brackets.
+ * in decorative brackets. The `glass` variant is a chip for a glass surface: a
+ * 9 % ink wash with 75 % ink text and no border. Place it on the dense tint
+ * of a glass surface; 75 % ink text is under 4.5:1 on the default tint.
  *
  * @example
  * ```tsx
@@ -173,6 +176,9 @@ export type KbdProps = {
  *
  * {/* Force one platform, bracket style *\/}
  * <Kbd platform="win" shortcut="mod+k" variant="bracket" />
+ *
+ * {/* Chip on a glass surface *\/}
+ * <Kbd shortcut="mod+k" variant="glass" />
  * ```
  *
  * @public

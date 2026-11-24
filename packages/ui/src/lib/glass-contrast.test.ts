@@ -147,6 +147,24 @@ function worst(stacks: readonly Stack[], foreground: Rgb): number {
   );
 }
 
+/** The Kbd glass chip: a 9 % ink wash over the glass, with 75 % ink text on it. */
+const CHIP_WASH = 0.09;
+const CHIP_TEXT = 0.75;
+
+/** Lowest contrast of the Kbd glass chip text over every stack, backdrop and step. */
+function worstChip(stacks: readonly Stack[], ink: Rgb): number {
+  return Math.min(
+    ...stacks.flatMap((stack) =>
+      BACKDROPS.flatMap((backdrop) =>
+        STEPS.map((step) => {
+          const wash = blend(stack(backdrop, step), ink, CHIP_WASH);
+          return contrast(blend(wash, ink, CHIP_TEXT), wash);
+        }),
+      ),
+    ),
+  );
+}
+
 type Surface = { readonly default: Tint; readonly dense: Tint; sheen: number };
 
 function surface(colors: Palette): Surface {
@@ -310,6 +328,37 @@ describe.each(
       worst(both(dense), role(colors, "color-glass-input")),
     ).toBeGreaterThanOrEqual(BOUNDARY_MINIMUM);
   });
+});
+
+describe.each(
+  [DEFAULT_THEME, ...PRODUCT_THEMES].flatMap((name) =>
+    MODES.map((mode): [string, Mode] => [name, mode]),
+  ),
+)("%s theme (%s): the Kbd glass chip", (theme, mode) => {
+  const colors = palette(theme, mode);
+  const { dense, sheen } = surface(colors);
+
+  it("keeps its 75 % ink text over the 9 % ink wash at 4.5:1 on the dense tint", () => {
+    expect(
+      worstChip(
+        [...recipeStacks(mode, dense), ...shippedStacks(dense, sheen)],
+        role(colors, "foreground"),
+      ),
+    ).toBeGreaterThanOrEqual(TEXT_MINIMUM);
+  });
+});
+
+describe("why the Kbd glass chip sits on the dense tint", () => {
+  it.each(MODES)(
+    "fails the chip text on the default tint in %s mode",
+    (mode) => {
+      const colors = palette("default", mode);
+      const { default: standard, sheen } = surface(colors);
+      expect(
+        worstChip(shippedStacks(standard, sheen), role(colors, "foreground")),
+      ).toBeLessThan(TEXT_MINIMUM);
+    },
+  );
 });
 
 describe("why glass has a dense tint and its own muted and input colours", () => {

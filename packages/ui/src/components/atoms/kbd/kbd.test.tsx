@@ -245,7 +245,7 @@ describe("Kbd", () => {
     });
 
     it.each(
-      (["default", "bracket"] as const).flatMap((variant) =>
+      (["default", "bracket", "glass"] as const).flatMap((variant) =>
         (["sm", "md", "lg"] as const).map((size) => ({ size, variant })),
       ),
     )(
@@ -255,5 +255,37 @@ describe("Kbd", () => {
         expect(kbdVariants({ size, variant })).not.toMatch(raw);
       },
     );
+  });
+
+  describe("glass variant", () => {
+    it("is a 9 % ink wash with 75 % ink text and no border or shadow", () => {
+      stubUserAgent(WIN_UA);
+      render(<Kbd variant="glass">K</Kbd>);
+      const key = screen.getByText("K");
+      expect(key).toHaveClass("bg-foreground/[0.09]", "text-foreground/75");
+      expect(key.className).not.toMatch(/\bborder\b|shadow/);
+      expect(key).not.toHaveClass("bg-muted", "text-foreground");
+    });
+
+    it("keeps the default and bracket variants on full ink text", () => {
+      expect(kbdVariants({ variant: "default" })).toContain("text-foreground");
+      expect(kbdVariants({ variant: "bracket" })).toContain("text-foreground");
+      expect(kbdVariants({ variant: "default" })).not.toContain(
+        "text-foreground/75",
+      );
+    });
+
+    it("styles every key of an expanded shortcut", () => {
+      stubUserAgent(WIN_UA);
+      const { container } = render(
+        <Kbd platform="win" shortcut="mod+k" variant="glass" />,
+      );
+      const keys = [...container.querySelectorAll("kbd")];
+      expect(keys).toHaveLength(2);
+      expect(
+        keys.map((key) => key.classList.contains("bg-foreground/[0.09]")),
+      ).toEqual([true, true]);
+      expect(screen.getByLabelText("Ctrl + K")).toBeInTheDocument();
+    });
   });
 });
