@@ -1,3 +1,43 @@
+# Unreleased: from Radix to ui-sdk
+
+The next release builds the interactive components on Vercel's ui-sdk instead
+of Radix, cmdk and vaul. Exports, props and class names stay the same, and the
+Radix-facing DOM is kept (`data-state` values, `--radix-*` CSS variables,
+`data-radix-scroll-area-viewport`), so most apps change nothing. Check these:
+
+1. **Selectors on portals.** Popups render in place, in the browser top layer,
+   not at the end of `<body>`. CSS or tests that look for popup content as a
+   direct child of `body`, or for `[data-radix-popper-content-wrapper]`, find it
+   next to its trigger instead. `*Portal` exports still exist and render their
+   children.
+2. **Scroll lock and the rest of the page.** A modal sets `overflow: hidden` on
+   `<html>` and marks everything outside it `inert`. Selectors on
+   `body[data-scroll-locked]` or on `aria-hidden` siblings no longer match.
+3. **Focus timing in tests.** Focus enters a popup one animation frame after
+   the press that opens it. Wrap focus assertions in `waitFor`.
+4. **Your own Radix imports.** `@vllnt/ui` no longer installs any
+   `@radix-ui/*` package, `cmdk` or `vaul`. If your app imports them directly,
+   add them to your own `package.json`.
+5. **Building your own parts.** Use the exported helpers (`Slot`,
+   `asChildProps`, `withDataAttributes`, `openState`, `createMenuParts`, …) the
+   same way the kit's components do; see `src/lib/ui-sdk.tsx`.
+
+Known differences that remain:
+
+- `ToggleGroup`: a disabled item stays focusable with the arrow keys, and the
+  root has no `tabindex`.
+- `Slider`: the thumb is a native range input, so it exposes its value through
+  the input instead of `aria-valuenow`.
+- `NavigationMenu`: the open viewport is drawn by a fixed-position layer, so
+  text in it can antialias differently (greyscale instead of subpixel).
+- `Rating` with `readOnly`: its radios carry `aria-disabled` and are left out of
+  the tab order, instead of the `disabled` attribute.
+- `Meter` is a client component.
+- Radix-only props that ui-sdk has no counterpart for are accepted and ignored:
+  `avoidCollisions`, `sticky`, `dir`, `skipDelayDuration`, and vaul's drawer
+  options.
+- A press outside a popup dismisses it on pointer up, not pointer down.
+
 # Migrating from 0.3.0 to 0.4.0
 
 `@vllnt/ui` 0.4.0 keeps the 0.3.0 API: every one of the 1,343 exports of 0.3.0

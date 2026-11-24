@@ -8,6 +8,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Added
 
+- **ui-sdk compat helpers** - the helpers the components are written with are
+  public, for apps and agents that build their own parts the same way: `Slot`,
+  `asChildProps`, `withDataAttributes`, `openState`, `checkedState`,
+  `openAutoFocus`, `closeAutoFocus`, `useElementRef`, the dismissal helpers
+  (`DismissContext`, `useDismissRoot`, `useRegisterDismissHandlers`,
+  `runDismissHandlers`, `callPreventDefault`) and `createMenuParts`, with their
+  types (`AsChildProps`, `NarrowPartProps`, `DataAttributes`, `DismissDetails`,
+  `DismissHandlers`, `MenuContentProps`, `MenuLook`).
 - **`Separator` `variant`** - `variant="dashed"` draws a dashed 1 px border over a
   transparent fill, in both orientations. The default stays `solid`.
 - **`Link` `size`, `foreground` and `skip`** - `size="sm" | "default" | "lg"`
@@ -37,6 +45,31 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Changed
 
+- **Built on ui-sdk** - the interactive components now sit on Vercel's ui-sdk
+  (`@ui-sdk/react` and `@ui-sdk/core`, pinned to `0.1.0-beta.7`) instead of Radix,
+  cmdk and vaul: Accordion, AlertDialog, Avatar, Checkbox, Collapsible, Command,
+  CompletionDialog, ContextMenu, Dialog, Drawer, DropdownMenu, Field, HoverCard,
+  Label, ListBox, Menubar, Meter, NavigationMenu, Popover, ProgressBar,
+  RadioGroup, Rating, ScrollArea, SegmentedControl, Select, Sheet, Slider, Switch,
+  Tabs, Toggle, ToggleGroup, Tooltip, and everything built from them. `asChild`
+  on Button, Link, Banner, Form and the other non-primitive parts uses the kit's
+  own `Slot`. Exports, props and class names are unchanged,
+  and the Radix-facing DOM is kept for apps that style it: `data-state` with the
+  Radix values, the `--radix-*` CSS variables (aliased to ui-sdk's), and
+  `data-radix-scroll-area-viewport`. `asChild`, `onOpenAutoFocus`,
+  `onCloseAutoFocus`, `onEscapeKeyDown`, `onPointerDownOutside`,
+  `onInteractOutside`, `forceMount` and `delayDuration` keep working.
+- **Popups render in the browser top layer** - popovers, menus, selects, tooltips,
+  dialogs, sheets and drawers render in place in the top layer rather than in a
+  portal at the end of `<body>`. The `*Portal` exports stay and render their
+  children. A modal makes the rest of the page `inert` and locks scrolling with
+  `overflow: hidden` on `<html>`; there is no `data-scroll-locked` attribute.
+- **Focus on open moves one frame later** - a popup opened by a press moves focus
+  into itself on the next animation frame, so tests that check focus right after
+  a click wait for it (`waitFor`).
+- **Parts carry ui-sdk attributes too** - `data-slot`, `data-open` /
+  `data-closed`, `data-checked`, `data-selected`, `data-side`,
+  `data-starting-style` and `data-ending-style` appear next to the Radix ones.
 - **`Separator` renders on the server** - it is a plain element with no
   `"use client"` and no Radix dependency. A decorative separator (the default) is
   `aria-hidden`; `decorative={false}` gives `role="separator"` with
@@ -45,6 +78,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - **`SearchDialog` trigger** - the shortcut hint is the `Kbd` atom, so it shows
   the command key on Mac and `Ctrl` elsewhere, as the shortcut handler accepts
   either.
+
+### Removed
+
+- **Radix, cmdk and vaul** - `@radix-ui/react-alert-dialog`, `-avatar`,
+  `-checkbox`, `-collapsible`, `-context-menu`, `-dialog`, `-dropdown-menu`,
+  `-hover-card`, `-label`, `-menubar`, `-navigation-menu`, `-popover`,
+  `-radio-group`, `-scroll-area`, `-select`, `-slider`, `-slot`, `-switch`,
+  `-toggle`, `-toggle-group` and `-tooltip`, `cmdk` and `vaul` are no longer
+  dependencies (62 packages fewer in the lockfile).
 
 ### Fixed
 
