@@ -330,3 +330,57 @@ describe("Menubar items", () => {
     expect(screen.getByText("Email link")).toBeInTheDocument();
   });
 });
+
+describe("Menubar accessibility attributes", () => {
+  it("exposes a mixed checkbox item as aria-checked=mixed, like Radix", () => {
+    render(
+      <Menubar defaultValue="view">
+        <MenubarMenu value="view">
+          <MenubarTrigger>View</MenubarTrigger>
+          <MenubarContent>
+            <MenubarCheckboxItem checked="indeterminate">
+              Mixed
+            </MenubarCheckboxItem>
+            <MenubarCheckboxItem checked>On</MenubarCheckboxItem>
+            <MenubarCheckboxItem checked={false}>Off</MenubarCheckboxItem>
+          </MenubarContent>
+        </MenubarMenu>
+      </Menubar>,
+    );
+    const mixed = screen.getByRole("menuitemcheckbox", { name: /Mixed/ });
+    expect(mixed).toHaveAttribute("aria-checked", "mixed");
+    expect(mixed).toHaveAttribute("data-state", "indeterminate");
+    expect(
+      screen.getByRole("menuitemcheckbox", { name: /On/ }),
+    ).toHaveAttribute("aria-checked", "true");
+    expect(
+      screen.getByRole("menuitemcheckbox", { name: /Off/ }),
+    ).toHaveAttribute("aria-checked", "false");
+  });
+
+  it("names each menu after its trigger, and a submenu after its sub trigger", () => {
+    render(
+      <Menubar defaultValue="file">
+        <MenubarMenu value="file">
+          <MenubarTrigger>File</MenubarTrigger>
+          <MenubarContent>
+            <MenubarSub defaultOpen>
+              <MenubarSubTrigger>Share</MenubarSubTrigger>
+              <MenubarSubContent>
+                <MenubarItem>Email link</MenubarItem>
+              </MenubarSubContent>
+            </MenubarSub>
+          </MenubarContent>
+        </MenubarMenu>
+      </Menubar>,
+    );
+    const trigger = screen.getByRole("menuitem", { name: "File" });
+    const [menu, subMenu] = screen.getAllByRole("menu");
+    expect(trigger.id).not.toBe("");
+    expect(menu).toHaveAttribute("aria-labelledby", trigger.id);
+    expect(subMenu).toHaveAttribute(
+      "aria-labelledby",
+      screen.getByRole("menuitem", { name: /Share/ }).id,
+    );
+  });
+});

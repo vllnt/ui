@@ -46,6 +46,37 @@ export {
   type RovingFocusOptions,
   type RovingOrientation,
 } from "./lib/roving-focus";
+// ui-sdk compat helpers: the Radix-shaped API (asChild, data-state, focus and
+// dismissal callbacks) that the kit's components build on ui-sdk parts with.
+export {
+  type AsChildProps,
+  asChildProps,
+  checkedState,
+  closeAutoFocus,
+  type DataAttributes,
+  type NarrowPartProps,
+  openAutoFocus,
+  openState,
+  Slot,
+  useElementRef,
+  withDataAttributes,
+} from "./lib/ui-sdk";
+export {
+  callPreventDefault,
+  DismissContext,
+  type DismissDetails,
+  type DismissHandlers,
+  runDismissHandlers,
+  useDismissRoot,
+  useRegisterDismissHandlers,
+} from "./lib/ui-sdk-dismiss";
+export {
+  createMenuParts,
+  MenuContentContext,
+  type MenuContentProps,
+  type MenuLook,
+  useMenuContentOptions,
+} from "./lib/ui-sdk-menu";
 export { useBodyScrollLock } from "./lib/use-body-scroll-lock";
 export { useDebounce } from "./lib/use-debounce";
 export { useEscapeKey } from "./lib/use-escape-key";

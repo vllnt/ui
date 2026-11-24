@@ -131,7 +131,15 @@ describe("glass backdrop-filter budget", () => {
         file.startsWith("packages/ui/src/") &&
         file.endsWith(".tsx") &&
         GLASS_CLASS.test(read(file)),
-    ).filter((file) => !read(file).includes("data-material"));
+    ).filter(
+      (file) =>
+        !read(file).includes("data-material") &&
+        // Menus get their content, and its `data-material`, from the shared parts.
+        !read(file).includes("createMenuParts("),
+    );
     expect(missing).toEqual([]);
+    expect(read("packages/ui/src/lib/ui-sdk-menu.tsx")).toContain(
+      "data-material={material}",
+    );
   });
 });

@@ -6,6 +6,18 @@ import {
   type RenderProp,
 } from "@ui-sdk/react/primitive";
 
+/** Radix's `asChild`: render the single child as the part's element. */
+type AsChildProps = { asChild?: boolean };
+
+/** A ui-sdk part's props with a plain string `className`, as Radix had. */
+type NarrowPartProps<Props> = Omit<
+  Props,
+  "children" | "className" | "render"
+> & {
+  children?: React.ReactNode;
+  className?: string;
+};
+
 type DataAttributes = Record<
   `aria-${string}` | `data-${string}`,
   string | undefined
@@ -193,10 +205,12 @@ const checkedState = (state: {
 });
 
 export {
+  type AsChildProps,
   asChildProps,
   checkedState,
   closeAutoFocus,
   type DataAttributes,
+  type NarrowPartProps,
   openAutoFocus,
   openState,
   Slot,

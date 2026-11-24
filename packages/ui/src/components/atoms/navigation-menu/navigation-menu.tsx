@@ -15,6 +15,7 @@ import {
 import { cva } from "class-variance-authority";
 import { ChevronDown } from "lucide-react";
 
+import type { AsChildProps, NarrowPartProps } from "../../../lib/ui-sdk";
 import {
   asChildProps,
   type DataAttributes,
@@ -22,86 +23,12 @@ import {
   useElementRef,
   withDataAttributes,
 } from "../../../lib/ui-sdk";
+import {
+  type DismissDetails,
+  type DismissHandlers,
+  runDismissHandlers,
+} from "../../../lib/ui-sdk-dismiss";
 import { cn } from "../../../lib/utils";
-
-/** A ui-sdk part's props with a plain string `className`, as Radix had. */
-type Narrow<Props> = Omit<Props, "children" | "className" | "render"> & {
-  children?: React.ReactNode;
-  className?: string;
-};
-
-/** Radix's `asChild`: render the single child as the part's element. */
-type AsChild = { asChild?: boolean };
-
-type Interactions = {
-  onEscapeKeyDown?: (event: KeyboardEvent) => void;
-  onFocusOutside?: (event: Event) => void;
-  onInteractOutside?: (event: Event) => void;
-  onPointerDownOutside?: (event: Event) => void;
-};
-
-type ChangeDetails = {
-  cancel: () => void;
-  canceled: boolean;
-  event?: Event;
-  reason: string;
-};
-
-/**
- * Runs Radix-style `handlers` on `event` and tells whether one of them called
- * `preventDefault()`. ui-sdk calls it on the event itself first, so
- * `defaultPrevented` cannot tell.
- */
-function callPreventDefault<Handled extends Event>(
-  event: Handled,
-  handlers: (((event: Handled) => void) | undefined)[],
-): boolean {
-  let prevented = false;
-  const watched = new Proxy(event, {
-    get(target, key) {
-      if (key === "preventDefault") {
-        return () => {
-          prevented = true;
-          target.preventDefault();
-        };
-      }
-      const value: unknown = Reflect.get(target, key);
-
-      return typeof value === "function"
-        ? (value as (...arguments_: unknown[]) => unknown).bind(target)
-        : value;
-    },
-  });
-  handlers.forEach((handler) => handler?.(watched));
-
-  return prevented;
-}
-
-/**
- * Radix's dismissal callbacks, run from the root's `onValueChange`: the handler
- * gets the DOM event, and `preventDefault()` keeps the panel open.
- */
-function runInteractions(
-  interactions: Interactions,
-  { cancel, event, reason }: ChangeDetails,
-): void {
-  if (!event) {
-    return;
-  }
-  const handlers = {
-    "escape-key": [interactions.onEscapeKeyDown],
-    "focus-out": [interactions.onFocusOutside, interactions.onInteractOutside],
-    "outside-press": [
-      interactions.onPointerDownOutside,
-      interactions.onInteractOutside,
-    ],
-  }[reason as "escape-key" | "focus-out" | "outside-press"] as
-    | ((event: Event) => void)[]
-    | undefined;
-  if (handlers && callPreventDefault(event, handlers)) {
-    cancel();
-  }
-}
 
 type RootState = {
   /** The root element, where the viewport lines up. */
@@ -112,12 +39,12 @@ type RootState = {
   register: (entry: ContentEntry) => () => void;
 };
 
-type ContentEntry = { element: HTMLElement | null; interactions: Interactions };
+type ContentEntry = { dismiss: DismissHandlers; element: HTMLElement | null };
 
 const RootContext = React.createContext<null | RootState>(null);
 
 type RootProps = Omit<
-  Narrow<React.ComponentProps<typeof NavigationMenuRoot>>,
+  NarrowPartProps<React.ComponentProps<typeof NavigationMenuRoot>>,
   "defaultValue" | "onValueChange" | "value"
 > & {
   defaultValue?: string;
@@ -164,7 +91,7 @@ function useRootState(
   );
   const handleValueChange = (
     next: null | string,
-    details: ChangeDetails,
+    details: DismissDetails,
   ): void => {
     if (next === null) {
       if (details.reason === "link-press") {
@@ -175,7 +102,7 @@ function useRootState(
         const open = [...entriesRef.current].find((entry) =>
           entry.element?.matches("[data-open]"),
         );
-        runInteractions(open?.interactions ?? {}, details);
+        runDismissHandlers(open?.dismiss ?? {}, details);
       }
     }
     linkPreventedRef.current = false;
@@ -226,8 +153,8 @@ const NavigationMenu = ({
 };
 NavigationMenu.displayName = "NavigationMenu";
 
-type ListProps = AsChild &
-  Narrow<React.ComponentProps<typeof NavigationMenuListPart>> & {
+type ListProps = AsChildProps &
+  NarrowPartProps<React.ComponentProps<typeof NavigationMenuListPart>> & {
     ref?: React.Ref<HTMLUListElement>;
   };
 
@@ -254,8 +181,8 @@ const NavigationMenuList = ({
 };
 NavigationMenuList.displayName = "NavigationMenuList";
 
-type ItemProps = AsChild &
-  Narrow<React.ComponentProps<typeof NavigationMenuItemPart>> & {
+type ItemProps = AsChildProps &
+  NarrowPartProps<React.ComponentProps<typeof NavigationMenuItemPart>> & {
     ref?: React.Ref<HTMLLIElement>;
   };
 
@@ -283,8 +210,8 @@ const navigationMenuTriggerStyle = cva(
   "group inline-flex h-10 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50 data-[state=open]:bg-accent/50",
 );
 
-type TriggerProps = AsChild &
-  Narrow<React.ComponentProps<typeof NavigationMenuTriggerPart>> & {
+type TriggerProps = AsChildProps &
+  NarrowPartProps<React.ComponentProps<typeof NavigationMenuTriggerPart>> & {
     ref?: React.Ref<HTMLButtonElement>;
   };
 
@@ -315,9 +242,9 @@ NavigationMenuTrigger.displayName = "NavigationMenuTrigger";
 const contentState = (state: { open: boolean }): DataAttributes =>
   openState(state);
 
-type ContentProps = AsChild &
-  Interactions &
-  Narrow<
+type ContentProps = AsChildProps &
+  DismissHandlers &
+  NarrowPartProps<
     Omit<
       React.ComponentProps<typeof NavigationMenuContentPart>,
       "hiddenUntilFound" | "keepMounted"
@@ -346,13 +273,13 @@ const NavigationMenuContent = ({
   React.useEffect(
     () =>
       root?.register({
-        element,
-        interactions: {
+        dismiss: {
           onEscapeKeyDown,
           onFocusOutside,
           onInteractOutside,
           onPointerDownOutside,
         },
+        element,
       }),
     [
       element,
@@ -381,9 +308,9 @@ const NavigationMenuContent = ({
 };
 NavigationMenuContent.displayName = "NavigationMenuContent";
 
-type LinkProps = AsChild &
+type LinkProps = AsChildProps &
   Omit<
-    Narrow<React.ComponentProps<typeof NavigationMenuLinkPart>>,
+    NarrowPartProps<React.ComponentProps<typeof NavigationMenuLinkPart>>,
     "current" | "onSelect"
   > & {
     /** Marks the link of the current page. */
@@ -430,8 +357,8 @@ const NavigationMenuLink = ({
 };
 NavigationMenuLink.displayName = "NavigationMenuLink";
 
-type ViewportProps = AsChild &
-  Narrow<React.ComponentProps<typeof NavigationMenuViewportPart>> & {
+type ViewportProps = AsChildProps &
+  NarrowPartProps<React.ComponentProps<typeof NavigationMenuViewportPart>> & {
     /** Radix-compatible: accepted, ui-sdk unmounts the viewport while closed. */
     forceMount?: true;
     ref?: React.Ref<HTMLDivElement>;
@@ -475,8 +402,8 @@ const indicatorState = (state: { open: boolean }): DataAttributes => ({
   "data-state": state.open ? "visible" : "hidden",
 });
 
-type IndicatorProps = AsChild &
-  Narrow<React.ComponentProps<typeof NavigationMenuIndicatorPart>> & {
+type IndicatorProps = AsChildProps &
+  NarrowPartProps<React.ComponentProps<typeof NavigationMenuIndicatorPart>> & {
     /** Radix-compatible: accepted, ui-sdk keeps the indicator mounted. */
     forceMount?: true;
     ref?: React.Ref<HTMLDivElement>;

@@ -4,145 +4,43 @@ import * as React from "react";
 
 import {
   Menu as MenuRoot,
-  MenuCheckboxItem as MenuCheckboxItemPart,
-  MenuContent as MenuContentPart,
-  MenuGroup as MenuGroupPart,
-  MenuItem as MenuItemPart,
-  MenuItemIndicator,
-  MenuRadioGroup as MenuRadioGroupPart,
-  MenuRadioItem as MenuRadioItemPart,
-  MenuSub as MenuSubRoot,
-  MenuSubTrigger as MenuSubTriggerPart,
   MenuTrigger as MenuTriggerPart,
 } from "@ui-sdk/react/menu";
 import { Menubar as MenubarRoot } from "@ui-sdk/react/menubar";
-import { Check, ChevronRight, Circle } from "lucide-react";
 
-import type { MaterialProps } from "../../../lib/material";
+import type { AsChildProps, NarrowPartProps } from "../../../lib/ui-sdk";
 import {
   asChildProps,
-  checkedState,
-  closeAutoFocus,
-  type DataAttributes,
   openState,
-  Slot,
   withDataAttributes,
 } from "../../../lib/ui-sdk";
+import {
+  createMenuParts,
+  MenuContentContext,
+  type MenuContentProps,
+  useMenuContentOptions,
+} from "../../../lib/ui-sdk-menu";
 import { cn } from "../../../lib/utils";
 
-/** A ui-sdk part's props with a plain string `className`, as Radix had. */
-type Narrow<Props> = Omit<Props, "children" | "className" | "render"> & {
-  children?: React.ReactNode;
-  className?: string;
-};
-
-/** Radix's `asChild`: render the single child as the part's element. */
-type AsChild = { asChild?: boolean };
-
-type Interactions = {
-  onEscapeKeyDown?: (event: KeyboardEvent) => void;
-  onFocusOutside?: (event: Event) => void;
-  onInteractOutside?: (event: Event) => void;
-  onPointerDownOutside?: (event: Event) => void;
-};
-
-type ContentOptions = { interactions: Interactions; loop?: boolean };
-
-type OpenChangeDetails = {
-  cancel: () => void;
-  canceled: boolean;
-  event?: Event;
-  reason: string;
-};
-
-/** How a menu's content hands what Radix put on the content to its root. */
-const ContentContext = React.createContext<
-  ((options: ContentOptions) => void) | null
->(null);
-
-/**
- * Runs Radix-style `handlers` on `event` and tells whether one of them called
- * `preventDefault()`. ui-sdk calls it on the event itself first, so
- * `defaultPrevented` cannot tell.
- */
-function callPreventDefault<Handled extends Event>(
-  event: Handled,
-  handlers: (((event: Handled) => void) | undefined)[],
-): boolean {
-  let prevented = false;
-  const watched = new Proxy(event, {
-    get(target, key) {
-      if (key === "preventDefault") {
-        return () => {
-          prevented = true;
-          target.preventDefault();
-        };
-      }
-      const value: unknown = Reflect.get(target, key);
-
-      return typeof value === "function"
-        ? (value as (...arguments_: unknown[]) => unknown).bind(target)
-        : value;
-    },
-  });
-  handlers.forEach((handler) => handler?.(watched));
-
-  return prevented;
-}
-
-/**
- * Radix's dismissal callbacks, run from the root's `onOpenChange`: the handler
- * gets the DOM event, and `preventDefault()` keeps the menu open.
- */
-function runInteractions(
-  interactions: Interactions,
-  { cancel, event, reason }: OpenChangeDetails,
-): void {
-  if (!event) {
-    return;
-  }
-  const handlers = {
-    "escape-key": [interactions.onEscapeKeyDown],
-    "focus-out": [interactions.onFocusOutside, interactions.onInteractOutside],
-    "outside-press": [
-      interactions.onPointerDownOutside,
-      interactions.onInteractOutside,
-    ],
-  }[reason as "escape-key" | "focus-out" | "outside-press"] as
-    | ((event: Event) => void)[]
-    | undefined;
-  if (handlers && callPreventDefault(event, handlers)) {
-    cancel();
-  }
-}
-
-/**
- * Radix puts `loop` and the dismissal callbacks on the content, ui-sdk on the
- * root: the root keeps what its content reports, and applies it.
- */
-function useContentOptions(
-  onOpenChange?: (open: boolean, details: OpenChangeDetails) => void,
-) {
-  const interactionsRef = React.useRef<Interactions>({});
-  const [loop, setLoop] = React.useState<boolean>();
-  const register = React.useCallback((options: ContentOptions) => {
-    interactionsRef.current = options.interactions;
-    setLoop(options.loop);
-  }, []);
-
-  return {
-    handleOpenChange: (open: boolean, details: OpenChangeDetails) => {
-      if (!open) {
-        runInteractions(interactionsRef.current, details);
-      }
-      if (!details.canceled) {
-        onOpenChange?.(open, details);
-      }
-    },
-    loop,
-    register,
-  };
-}
+const {
+  CheckboxItem: MenubarCheckboxItem,
+  Group: MenubarGroup,
+  Item: MenubarItem,
+  Label: MenubarLabel,
+  Popup,
+  Portal: MenubarPortal,
+  RadioGroup: MenubarRadioGroup,
+  RadioItem: MenubarRadioItem,
+  Separator: MenubarSeparator,
+  Shortcut: MenubarShortcut,
+  Sub: MenubarSub,
+  SubTrigger: MenubarSubTrigger,
+} = createMenuParts("Menubar", {
+  label: "px-2 py-1.5 text-sm font-semibold",
+  labelledByTrigger: true,
+  popup:
+    "vllnt-glass-floating vllnt-glass-dense z-50 bg-transparent overflow-hidden rounded-md border p-1 text-popover-foreground [--radix-menubar-content-available-height:var(--available-height)] [--radix-menubar-content-available-width:var(--available-width)] [--radix-menubar-content-transform-origin:var(--transform-origin)] [--radix-menubar-trigger-height:var(--anchor-height)] [--radix-menubar-trigger-width:var(--anchor-width)] data-[state=open]:animate-in data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
+});
 
 /** What the bar tells its menus: which one is open, and who hears changes. */
 type BarState = {
@@ -153,7 +51,9 @@ type BarState = {
 
 const BarContext = React.createContext<BarState>({});
 
-type MenubarProps = Narrow<React.ComponentProps<typeof MenubarRoot>> & {
+type MenubarProps = NarrowPartProps<
+  React.ComponentProps<typeof MenubarRoot>
+> & {
   /** Value of the menu that starts open. */
   defaultValue?: string;
   /** Radix-compatible: accepted, ui-sdk follows the document direction. */
@@ -207,7 +107,7 @@ const MenubarMenu = ({ value, ...props }: MenubarMenuProps) => {
   const generated = React.useId();
   const id = value ?? generated;
   const bar = React.use(BarContext);
-  const options = useContentOptions((open, details) => {
+  const options = useMenuContentOptions((open, details) => {
     if (open) {
       bar.onValueChange?.(id);
     } else if (details.reason !== "submenu-switch") {
@@ -217,7 +117,7 @@ const MenubarMenu = ({ value, ...props }: MenubarMenuProps) => {
   });
 
   return (
-    <ContentContext value={options.register}>
+    <MenuContentContext value={options.register}>
       <MenuRoot
         defaultOpen={
           bar.defaultValue === undefined ? undefined : bar.defaultValue === id
@@ -227,13 +127,13 @@ const MenubarMenu = ({ value, ...props }: MenubarMenuProps) => {
         open={bar.value === undefined ? undefined : bar.value === id}
         {...props}
       />
-    </ContentContext>
+    </MenuContentContext>
   );
 };
 MenubarMenu.displayName = "MenubarMenu";
 
-type TriggerProps = AsChild &
-  Narrow<React.ComponentProps<typeof MenuTriggerPart>> & {
+type TriggerProps = AsChildProps &
+  NarrowPartProps<React.ComponentProps<typeof MenuTriggerPart>> & {
     ref?: React.Ref<HTMLButtonElement>;
   };
 
@@ -260,131 +160,14 @@ const MenubarTrigger = ({
 };
 MenubarTrigger.displayName = "MenubarTrigger";
 
-type GroupProps = AsChild &
-  Narrow<React.ComponentProps<typeof MenuGroupPart>> & {
-    ref?: React.Ref<HTMLDivElement>;
-  };
-
-const MenubarGroup = ({ asChild, children, ...props }: GroupProps) => {
-  const slot = asChildProps({ asChild, children });
-
-  return (
-    <MenuGroupPart render={slot.render} {...props}>
-      {slot.children}
-    </MenuGroupPart>
-  );
-};
-MenubarGroup.displayName = "MenubarGroup";
-
-type PortalProps = {
-  children?: React.ReactNode;
-  /** Radix-compatible: accepted, ui-sdk renders the popup in the top layer. */
-  container?: unknown;
-  /** Radix-compatible: accepted, use `forceMount` on the content. */
-  forceMount?: true;
-};
-
-/** Renders its children. Radix needed a portal, ui-sdk popups use the top layer. */
-const MenubarPortal = ({ children }: PortalProps) => children;
-MenubarPortal.displayName = "MenubarPortal";
-
-type SubProps = Omit<
-  React.ComponentProps<typeof MenuSubRoot>,
-  "onOpenChange"
-> & {
-  onOpenChange?: (open: boolean) => void;
-};
-
-/** Holds the open state of a submenu. Renders no element. */
-const MenubarSub = ({ onOpenChange, ...props }: SubProps) => {
-  const options = useContentOptions(onOpenChange);
-
-  return (
-    <ContentContext value={options.register}>
-      <MenuSubRoot
-        loop={options.loop}
-        onOpenChange={options.handleOpenChange}
-        {...props}
-      />
-    </ContentContext>
-  );
-};
-MenubarSub.displayName = "MenubarSub";
-
-const contentState = (state: { open: boolean }): DataAttributes => ({
-  "data-orientation": "vertical",
-  ...openState(state),
-});
-
-type ContentProps = AsChild &
-  Interactions &
-  MaterialProps &
-  Narrow<Omit<React.ComponentProps<typeof MenuContentPart>, "keepMounted">> & {
-    /** Keeps the content in the page while the menu stays closed. */
-    forceMount?: boolean;
-    /** Whether arrow keys wrap from the last item to the first. */
-    loop?: boolean;
-    onCloseAutoFocus?: (event: Event) => void;
-    ref?: React.Ref<HTMLDivElement>;
-  };
-
-const POPUP_CLASS =
-  "vllnt-glass-floating vllnt-glass-dense z-50 bg-transparent overflow-hidden rounded-md border p-1 text-popover-foreground [--radix-menubar-content-available-height:var(--available-height)] [--radix-menubar-content-available-width:var(--available-width)] [--radix-menubar-content-transform-origin:var(--transform-origin)] [--radix-menubar-trigger-height:var(--anchor-height)] [--radix-menubar-trigger-width:var(--anchor-width)] data-[state=open]:animate-in data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2";
-
-/** The popup of a menu or submenu, with what Radix put on the content. */
-const MenuPopup = ({
-  asChild,
-  children,
-  className,
-  collisionPadding = 0,
-  finalFocus,
-  forceMount,
-  loop = false,
-  material = "glass",
-  onCloseAutoFocus,
-  onEscapeKeyDown,
-  onFocusOutside,
-  onInteractOutside,
-  onPointerDownOutside,
-  ...props
-}: ContentProps) => {
-  const slot = asChildProps({ asChild, children });
-  const register = React.use(ContentContext);
-  React.useEffect(() => {
-    register?.({
-      interactions: {
-        onEscapeKeyDown,
-        onFocusOutside,
-        onInteractOutside,
-        onPointerDownOutside,
-      },
-      loop,
-    });
-  });
-
-  return (
-    <MenuContentPart
-      className={cn(POPUP_CLASS, className)}
-      collisionPadding={collisionPadding}
-      data-material={material}
-      finalFocus={finalFocus ?? closeAutoFocus(onCloseAutoFocus)}
-      keepMounted={forceMount}
-      render={withDataAttributes("div", contentState, slot.render)}
-      {...props}
-    >
-      {slot.children}
-    </MenuContentPart>
-  );
-};
-
 const MenubarContent = ({
   align = "start",
   alignOffset = -4,
   className,
   sideOffset = 8,
   ...props
-}: ContentProps) => (
-  <MenuPopup
+}: MenuContentProps) => (
+  <Popup
     align={align}
     alignOffset={alignOffset}
     className={cn("min-w-[12rem]", className)}
@@ -398,254 +181,14 @@ const MenubarSubContent = ({
   className,
   sideOffset = 0,
   ...props
-}: ContentProps) => (
-  <MenuPopup
+}: MenuContentProps) => (
+  <Popup
     className={cn("min-w-[8rem] data-[state=closed]:animate-out", className)}
     sideOffset={sideOffset}
     {...props}
   />
 );
 MenubarSubContent.displayName = "MenubarSubContent";
-
-type SubTriggerProps = AsChild &
-  Narrow<React.ComponentProps<typeof MenuSubTriggerPart>> & {
-    inset?: boolean;
-    ref?: React.Ref<HTMLDivElement>;
-  };
-
-const MenubarSubTrigger = ({
-  asChild,
-  children,
-  className,
-  inset,
-  ...props
-}: SubTriggerProps) => {
-  const slot = asChildProps({ asChild, children });
-
-  return (
-    <MenuSubTriggerPart
-      className={cn(
-        "flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none focus:bg-accent focus:text-accent-foreground data-[highlighted]:bg-accent data-[highlighted]:text-accent-foreground data-[state=open]:bg-accent data-[state=open]:text-accent-foreground",
-        inset && "pl-8",
-        className,
-      )}
-      render={withDataAttributes("div", openState, slot.render)}
-      {...props}
-    >
-      {slot.children}
-      <ChevronRight className="ml-auto size-4" />
-    </MenuSubTriggerPart>
-  );
-};
-MenubarSubTrigger.displayName = "MenubarSubTrigger";
-
-type ItemProps = AsChild &
-  Narrow<React.ComponentProps<typeof MenuItemPart>> & {
-    inset?: boolean;
-    ref?: React.Ref<HTMLDivElement>;
-    /** The text typeahead matches, when the children aren't plain text. */
-    textValue?: string;
-  };
-
-const MenubarItem = ({
-  asChild,
-  children,
-  className,
-  inset,
-  textValue,
-  ...props
-}: ItemProps) => {
-  const slot = asChildProps({ asChild, children });
-
-  return (
-    <MenuItemPart
-      className={cn(
-        "relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none focus:bg-accent focus:text-accent-foreground data-[highlighted]:bg-accent data-[highlighted]:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
-        inset && "pl-8",
-        className,
-      )}
-      label={textValue}
-      render={slot.render}
-      {...props}
-    >
-      {slot.children}
-    </MenuItemPart>
-  );
-};
-MenubarItem.displayName = "MenubarItem";
-
-const CHECKABLE_ITEM_CLASS =
-  "relative flex cursor-default select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-sm outline-none focus:bg-accent focus:text-accent-foreground data-[highlighted]:bg-accent data-[highlighted]:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50";
-
-type CheckboxItemProps = Narrow<
-  Omit<
-    React.ComponentProps<typeof MenuCheckboxItemPart>,
-    "checked" | "onSelect" | "value"
-  >
-> & {
-  checked?: "indeterminate" | boolean;
-  ref?: React.Ref<HTMLDivElement>;
-  /** The text typeahead matches, when the children aren't plain text. */
-  textValue?: string;
-};
-
-const MenubarCheckboxItem = ({
-  checked,
-  children,
-  className,
-  closeOnSelect = true,
-  textValue,
-  ...props
-}: CheckboxItemProps) => {
-  const value = React.useId();
-  const indeterminate = checked === "indeterminate";
-
-  return (
-    <MenuCheckboxItemPart
-      checked={indeterminate ? false : checked}
-      className={cn(CHECKABLE_ITEM_CLASS, className)}
-      closeOnSelect={closeOnSelect}
-      label={textValue}
-      render={withDataAttributes("div", (state: { checked: boolean }) =>
-        checkedState({ ...state, indeterminate }),
-      )}
-      value={value}
-      {...props}
-    >
-      <span className="absolute left-2 flex size-3.5 items-center justify-center">
-        <MenuItemIndicator keepMounted={indeterminate}>
-          <Check className="size-4" />
-        </MenuItemIndicator>
-      </span>
-      {children}
-    </MenuCheckboxItemPart>
-  );
-};
-MenubarCheckboxItem.displayName = "MenubarCheckboxItem";
-
-type RadioGroupProps = AsChild &
-  Narrow<React.ComponentProps<typeof MenuRadioGroupPart>> & {
-    ref?: React.Ref<HTMLDivElement>;
-  };
-
-const MenubarRadioGroup = ({
-  asChild,
-  children,
-  ...props
-}: RadioGroupProps) => {
-  const slot = asChildProps({ asChild, children });
-
-  return (
-    <MenuRadioGroupPart render={slot.render} {...props}>
-      {slot.children}
-    </MenuRadioGroupPart>
-  );
-};
-MenubarRadioGroup.displayName = "MenubarRadioGroup";
-
-type RadioItemProps = Narrow<
-  Omit<React.ComponentProps<typeof MenuRadioItemPart>, "onSelect">
-> & {
-  ref?: React.Ref<HTMLDivElement>;
-  /** The text typeahead matches, when the children aren't plain text. */
-  textValue?: string;
-};
-
-const MenubarRadioItem = ({
-  children,
-  className,
-  closeOnSelect = true,
-  textValue,
-  ...props
-}: RadioItemProps) => (
-  <MenuRadioItemPart
-    className={cn(CHECKABLE_ITEM_CLASS, className)}
-    closeOnSelect={closeOnSelect}
-    label={textValue}
-    render={withDataAttributes("div", checkedState)}
-    {...props}
-  >
-    <span className="absolute left-2 flex size-3.5 items-center justify-center">
-      <MenuItemIndicator>
-        <Circle className="size-2 fill-current" />
-      </MenuItemIndicator>
-    </span>
-    {children}
-  </MenuRadioItemPart>
-);
-MenubarRadioItem.displayName = "MenubarRadioItem";
-
-type LabelProps = React.ComponentPropsWithoutRef<"div"> & {
-  asChild?: boolean;
-  inset?: boolean;
-  ref?: React.Ref<HTMLDivElement>;
-};
-
-/** A heading inside the menu. Like Radix's, a plain element. */
-const MenubarLabel = ({
-  asChild,
-  className,
-  inset,
-  ref,
-  ...props
-}: LabelProps) => {
-  const Component = asChild ? Slot : "div";
-
-  return (
-    <Component
-      className={cn(
-        "px-2 py-1.5 text-sm font-semibold",
-        inset && "pl-8",
-        className,
-      )}
-      ref={ref}
-      {...props}
-    />
-  );
-};
-MenubarLabel.displayName = "MenubarLabel";
-
-type SeparatorProps = React.ComponentPropsWithoutRef<"div"> & {
-  asChild?: boolean;
-  ref?: React.Ref<HTMLDivElement>;
-};
-
-/** A rule between items. Like Radix's, a plain element. */
-const MenubarSeparator = ({
-  asChild,
-  className,
-  ref,
-  ...props
-}: SeparatorProps) => {
-  const Component = asChild ? Slot : "div";
-
-  return (
-    <Component
-      aria-orientation="horizontal"
-      className={cn("-m-1 h-px bg-border", className)}
-      ref={ref}
-      role="separator"
-      {...props}
-    />
-  );
-};
-MenubarSeparator.displayName = "MenubarSeparator";
-
-const MenubarShortcut = ({
-  className,
-  ...props
-}: React.HTMLAttributes<HTMLSpanElement>) => {
-  return (
-    <span
-      className={cn(
-        "ml-auto text-xs tracking-widest text-muted-foreground",
-        className,
-      )}
-      {...props}
-    />
-  );
-};
-MenubarShortcut.displayName = "MenubarShortcut";
 
 export {
   Menubar,
