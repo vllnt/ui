@@ -1,6 +1,12 @@
 import { useState } from "react";
 
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import {
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+  within,
+} from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 import {
@@ -450,7 +456,7 @@ describe("CommandSeparator alwaysRender", () => {
 
 describe("CommandEmpty layout", () => {
   it("is an empty live region that takes no padding while items match", () => {
-    render(
+    const { container } = render(
       <Command>
         <CommandInput placeholder="Search" />
         <CommandList>
@@ -459,9 +465,233 @@ describe("CommandEmpty layout", () => {
         </CommandList>
       </Command>,
     );
-    const status = screen.getByRole("status");
+    const status = within(container).getByRole("status");
 
     expect(status).toBeEmptyDOMElement();
     expect(status).toHaveClass("py-6", "empty:py-0");
+  });
+});
+
+const shortestFirst = (value: string, search: string) =>
+  value.toLowerCase().includes(search.toLowerCase()) ? 1 / value.length : 0;
+
+const apps = [
+  "Calendar",
+  "Search emoji",
+  "Calculator (offline)",
+  "Profile",
+  "Settings",
+  "Keyboard shortcuts",
+  "Toggle theme",
+];
+
+const keywordsOf: Record<string, string[]> = {
+  Profile: ["account"],
+  Settings: ["preferences", "config"],
+  "Toggle theme": ["dark", "light"],
+};
+
+const appItems = (list: string[]) =>
+  list.map((name) => (
+    <CommandItem key={name} keywords={keywordsOf[name]} value={name}>
+      {name}
+    </CommandItem>
+  ));
+
+const type = (value: string) => {
+  fireEvent.change(screen.getByPlaceholderText("Search"), {
+    target: { value },
+  });
+};
+
+const highlighted = () =>
+  screen
+    .queryAllByRole("option")
+    .find((option) => option.getAttribute("aria-selected") === "true")
+    ?.textContent;
+
+function Palette({ children }: { children: React.ReactNode }) {
+  return (
+    <Command>
+      <CommandInput placeholder="Search" />
+      <CommandList>{children}</CommandList>
+    </Command>
+  );
+}
+
+function AppRow({ name }: { name: string }) {
+  return (
+    <CommandItem keywords={keywordsOf[name]} value={name}>
+      {name}
+    </CommandItem>
+  );
+}
+
+describe("Command ranking", () => {
+  it("orders items by the cmdk score, best first, and keeps ties in written order", () => {
+    render(<Palette>{appItems(apps)}</Palette>);
+
+    type("c");
+    expect(names()).toEqual([
+      "Calendar",
+      "Calculator (offline)",
+      "Settings",
+      "Search emoji",
+      "Profile",
+      "Keyboard shortcuts",
+    ]);
+    type("tt");
+    expect(names()).toEqual([
+      "Toggle theme",
+      "Settings",
+      "Profile",
+      "Calculator (offline)",
+      "Keyboard shortcuts",
+    ]);
+    type("e");
+    expect(names()).toEqual([
+      "Search emoji",
+      "Calendar",
+      "Calculator (offline)",
+      "Profile",
+      "Settings",
+      "Keyboard shortcuts",
+      "Toggle theme",
+    ]);
+  });
+
+  it("matches keywords as extra words after the value", () => {
+    render(<Palette>{appItems(apps)}</Palette>);
+
+    type("acc");
+    expect(names()[0]).toBe("Profile");
+  });
+
+  it("ranks the items of each group and leaves the groups where they are", () => {
+    render(
+      <Palette>
+        <CommandGroup heading="Apps">{appItems(apps.slice(0, 3))}</CommandGroup>
+        <CommandGroup heading="System">{appItems(apps.slice(3))}</CommandGroup>
+      </Palette>,
+    );
+
+    type("tt");
+    expect(names()).toEqual([
+      "Calculator (offline)",
+      "Toggle theme",
+      "Settings",
+      "Profile",
+      "Keyboard shortcuts",
+    ]);
+    const headings = [...document.querySelectorAll("[cmdk-group-heading]")];
+    expect(headings.map((heading) => heading.textContent)).toEqual([
+      "Apps",
+      "System",
+    ]);
+  });
+
+  it("ranks items that a component renders, and items in a wrapper element", () => {
+    render(
+      <Palette>
+        {apps.slice(0, 3).map((name) => (
+          <AppRow key={name} name={name} />
+        ))}
+        {apps.slice(3).map((name) => (
+          <div key={name}>
+            <AppRow name={name} />
+          </div>
+        ))}
+      </Palette>,
+    );
+
+    type("tt");
+    expect(names()).toEqual([
+      "Toggle theme",
+      "Settings",
+      "Profile",
+      "Calculator (offline)",
+      "Keyboard shortcuts",
+    ]);
+  });
+
+  it("puts the items back in written order when the search clears", () => {
+    render(<Palette>{appItems(apps)}</Palette>);
+
+    type("tt");
+    type("");
+    expect(names()).toEqual(apps);
+  });
+
+  it("highlights the best match, and the arrow keys follow the ranked order", async () => {
+    render(<Palette>{appItems(apps)}</Palette>);
+    const input = screen.getByPlaceholderText("Search");
+
+    type("tt");
+    await waitFor(() => {
+      expect(highlighted()).toBe("Toggle theme");
+    });
+    fireEvent.keyDown(input, { key: "ArrowDown" });
+    expect(highlighted()).toBe("Settings");
+    fireEvent.keyDown(input, { key: "ArrowDown" });
+    expect(highlighted()).toBe("Profile");
+  });
+
+  it("ranks an item that mounts while a search is active", async () => {
+    function Late() {
+      const [shown, setShown] = useState(false);
+      return (
+        <Palette>
+          {appItems(apps.slice(0, 3))}
+          {shown ? <AppRow name="Toggle theme" /> : null}
+          <button
+            onClick={() => {
+              setShown(true);
+            }}
+            type="button"
+          >
+            Show
+          </button>
+        </Palette>
+      );
+    }
+    render(<Late />);
+
+    type("tt");
+    fireEvent.click(screen.getByRole("button", { name: "Show" }));
+    await waitFor(() => {
+      expect(names()).toEqual(["Toggle theme", "Calculator (offline)"]);
+    });
+  });
+
+  it("keeps written order and every item when shouldFilter is false", () => {
+    render(
+      <Command shouldFilter={false}>
+        <CommandInput placeholder="Search" />
+        <CommandList>{appItems(apps)}</CommandList>
+      </Command>,
+    );
+
+    type("tt");
+    expect(names()).toEqual(apps);
+  });
+
+  it("ranks by the score a custom filter returns", () => {
+    render(
+      <Command filter={shortestFirst}>
+        <CommandInput placeholder="Search" />
+        <CommandList>{appItems(apps)}</CommandList>
+      </Command>,
+    );
+
+    type("e");
+    expect(names()).toEqual([
+      "Profile",
+      "Calendar",
+      "Settings",
+      "Search emoji",
+      "Toggle theme",
+      "Keyboard shortcuts",
+      "Calculator (offline)",
+    ]);
   });
 });

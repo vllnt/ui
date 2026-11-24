@@ -31,6 +31,8 @@ export {
   type ThemePreset,
   type ThemePresetName,
 } from "./lib/theme-presets";
+export { createCommandRanker } from "./lib/command-rank";
+export { commandScore } from "./lib/command-score";
 export { copyText } from "./lib/copy-text";
 export { formatChange, normalizeDate } from "./lib/format";
 export {
