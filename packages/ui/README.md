@@ -172,7 +172,7 @@ export function Example() {
 
 Import everything from `@vllnt/ui`; you pay only for what you use. The package ships one ESM file per module and marks only its CSS files as having side effects, so any bundler that honours `sideEffects` (webpack, Turbopack, Rollup, Vite, esbuild) drops the components you do not import. Heavy dependencies, such as the `CodeBlock` syntax highlighter and the `FlowDiagram` image export, load through `import()` only when used.
 
-Every component pays a shared base of about 20 KB minified for `cn` (`clsx` and `tailwind-merge`). Most single components then add a few KB on top: `Button` is about 25 KB in total and `Dialog` about 65 KB. CI fails if a named import grows past its budget, or if any module grows past 256 KB up front (`pnpm -F @vllnt/ui size`).
+Every component pays a shared base of about 20 KB minified for `cn` (`clsx` and `tailwind-merge`). Most single components then add a few KB on top: `Button` is about 25 KB in total and `Dialog` about 65 KB. CI fails if a named import grows past its budget, or if any module grows past 320 KB up front (`pnpm -F @vllnt/ui size`).
 
 ## Theming
 

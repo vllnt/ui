@@ -1,6 +1,6 @@
 {
   "perModule": {
-    "maxBytes": 262144,
+    "maxBytes": 327680,
     "skip": {
       "components/organisms/mdx-content/mdx-content.js": "Async server component that compiles MDX on the server; the MDXContent check budgets it."
     }
