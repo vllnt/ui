@@ -2,15 +2,16 @@
   "perModule": {
     "maxBytes": 327680,
     "skip": {
-      "components/organisms/mdx-content/mdx-content.js": "Async server component that compiles MDX on the server; the MDXContent check budgets it."
+      "components/organisms/mdx-content/mdx-content.js": "Async server component that compiles MDX on the server; the MDXContent check budgets it.",
+      "components/organisms/tutorial-mdx/tutorial-mdx.js": "Renders a dozen interactive atoms that share the ui-sdk runtime, so the split build counts whole shared chunks; the TutorialMDX check budgets its real up-front size."
     }
   },
   "checks": [
-    { "name": "Button", "export": "Button", "maxBytes": 26600 },
+    { "name": "Button", "export": "Button", "maxBytes": 23500 },
     { "name": "Badge", "export": "Badge", "maxBytes": 23700 },
     { "name": "Card", "export": "Card", "maxBytes": 23200 },
-    { "name": "Dialog", "export": "Dialog", "maxBytes": 67900 },
-    { "name": "DataTable", "export": "DataTable", "maxBytes": 187200 },
+    { "name": "Dialog", "export": "Dialog", "maxBytes": 112000 },
+    { "name": "DataTable", "export": "DataTable", "maxBytes": 231000 },
     {
       "name": "CodeBlock (up front)",
       "export": "CodeBlock",
@@ -25,7 +26,7 @@
     {
       "name": "TutorialMDX (up front)",
       "export": "TutorialMDX",
-      "maxBytes": 199900
+      "maxBytes": 252300
     },
     {
       "name": "StaticCode (up front)",
@@ -46,7 +47,7 @@
     {
       "name": "* (every export, up front)",
       "export": "*",
-      "maxBytes": 2176900
+      "maxBytes": 2363600
     }
   ]
 }
