@@ -26,10 +26,10 @@ const roles: ShareDialogPeopleRole[] = [
 ];
 
 function chooseOption(trigger: HTMLElement, optionName: string): void {
+  // Opens with the keyboard, then picks the option the way a pointer does:
+  // ui-sdk handles Enter on the listbox, not on a synthetic option event.
   fireEvent.keyDown(trigger, { key: "ArrowDown" });
-  fireEvent.keyDown(screen.getByRole("option", { name: optionName }), {
-    key: "Enter",
-  });
+  fireEvent.click(screen.getByRole("option", { name: optionName }));
 }
 
 describe("ShareDialogPeople list kind", () => {
