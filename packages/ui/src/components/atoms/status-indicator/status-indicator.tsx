@@ -141,16 +141,52 @@ const dotVariants = cva("rounded-full", {
   },
 });
 
+const iconVariants = cva("inline-flex shrink-0 [&>svg]:size-full", {
+  defaultVariants: {
+    size: "md",
+    tone: "neutral",
+  },
+  variants: {
+    size: {
+      lg: "size-4",
+      md: "size-3.5",
+      sm: "size-3",
+    },
+    tone: {
+      danger: "text-red-500",
+      info: "text-sky-500",
+      neutral: "text-muted-foreground",
+      success: "text-emerald-500",
+      warning: "text-amber-500",
+    },
+  },
+});
+
+/** Props for the {@link StatusIndicator} component. */
 export type StatusIndicatorProps = React.HTMLAttributes<HTMLSpanElement> &
   VariantProps<typeof statusIndicatorVariants> & {
+    /**
+     * Mark shown before the label in place of the dot. The tone colours the
+     * icon alone: the pill and the label take the neutral variant, so the label
+     * stays foreground. Decorative (`aria-hidden`): give an indicator with no
+     * label an `aria-label`.
+     */
+    icon?: React.ReactNode;
     label?: string;
     pulse?: boolean;
     showDot?: boolean;
   };
 
+/**
+ * Status pill: a dot or an `icon`, then a label.
+ * @example
+ * <StatusIndicator tone="success">Operational</StatusIndicator>
+ * <StatusIndicator icon={<CircleAlert />} tone="warning">Degraded</StatusIndicator>
+ */
 const StatusIndicator = ({
   children,
   className,
+  icon,
   label,
   pulse = false,
   ref: reference,
@@ -161,23 +197,34 @@ const StatusIndicator = ({
   ...props
 }: StatusIndicatorProps & { ref?: React.Ref<HTMLSpanElement> }) => {
   const content = children ?? label;
+  const pulseClass = pulse
+    ? "animate-pulse motion-reduce:animate-none"
+    : undefined;
 
   return (
     <span
       className={cn(
-        statusIndicatorVariants({ size, tone, variant }),
+        statusIndicatorVariants({
+          size,
+          tone: icon ? "neutral" : tone,
+          variant,
+        }),
         className,
       )}
       ref={reference}
       {...props}
     >
-      {showDot ? (
+      {icon ? (
         <span
           aria-hidden="true"
-          className={cn(
-            dotVariants({ size, tone }),
-            pulse ? "animate-pulse motion-reduce:animate-none" : undefined,
-          )}
+          className={cn(iconVariants({ size, tone }), pulseClass)}
+        >
+          {icon}
+        </span>
+      ) : showDot ? (
+        <span
+          aria-hidden="true"
+          className={cn(dotVariants({ size, tone }), pulseClass)}
         />
       ) : null}
       {content}
