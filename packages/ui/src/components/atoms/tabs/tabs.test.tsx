@@ -335,15 +335,14 @@ describe("Tabs roles and aria state", () => {
     expect(screen.queryByRole("tabpanel")).not.toBeInTheDocument();
   });
 
-  it("calls onValueChange for a new tab and not for the active one", () => {
+  it("calls onValueChange once per press, on the active tab too", () => {
     const onValueChange = vi.fn();
     renderTabs(onValueChange);
     fireEvent.click(screen.getByText("A"));
-    expect(onValueChange).not.toHaveBeenCalled();
+    expect(onValueChange).toHaveBeenLastCalledWith("a");
     fireEvent.click(screen.getByText("B"));
     fireEvent.click(screen.getByText("B"));
-    expect(onValueChange).toHaveBeenCalledTimes(1);
-    expect(onValueChange).toHaveBeenCalledWith("b");
+    expect(onValueChange.mock.calls).toEqual([["a"], ["b"], ["b"]]);
   });
 
   it("keeps a controlled value until the parent changes it", () => {

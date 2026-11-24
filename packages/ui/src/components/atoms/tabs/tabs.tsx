@@ -58,6 +58,8 @@ type TabsContextValue = {
   /** Whether the active value matches a rendered trigger. */
   hasActiveTab: boolean;
   registerTab: (value: string) => () => void;
+  /** Reports a press on the selected tab, which ui-sdk ignores. */
+  reselect: (value: string) => void;
   variant: TabsVariant;
 };
 
@@ -93,14 +95,15 @@ type RenderProps = Record<string, unknown>;
 /**
  * Renders a trigger with the attributes Radix emitted (`data-state`) and the
  * caller's overrides of what ui-sdk manages. An override left `undefined`
- * keeps the ui-sdk value.
+ * keeps the ui-sdk value. A press on the selected tab calls `onReselect`.
  */
-function renderTab(overrides: RenderProps) {
+function renderTab(overrides: RenderProps, onReselect: () => void) {
   return (props: RenderProps, state: { selected: boolean }) =>
     renderElement(
       "button",
       mergeProps(props, overrides, {
         "data-state": state.selected ? "active" : "inactive",
+        onClick: state.selected ? onReselect : undefined,
       }),
       undefined,
       state,
@@ -142,9 +145,17 @@ function Tabs({
   const hasActiveTab = tabValues.includes(activeTab);
   const firstTab = tabValues[0];
 
+  // A press on the selected tab still reports its value, as before ui-sdk.
+  const reselect = useCallback(
+    (next: string) => {
+      onValueChange?.(next);
+    },
+    [onValueChange],
+  );
+
   const contextValue = useMemo(
-    () => ({ firstTab, hasActiveTab, registerTab, variant }),
-    [firstTab, hasActiveTab, registerTab, variant],
+    () => ({ firstTab, hasActiveTab, registerTab, reselect, variant }),
+    [firstTab, hasActiveTab, registerTab, reselect, variant],
   );
 
   return (
@@ -239,7 +250,8 @@ function TabsTrigger({
   tabIndex,
   value,
 }: TabsTriggerProps): React.ReactNode {
-  const { firstTab, hasActiveTab, registerTab, variant } = useTabsContext();
+  const { firstTab, hasActiveTab, registerTab, reselect, variant } =
+    useTabsContext();
   // With no active tab, the first trigger stays reachable with the Tab key.
   const isFallbackStop = !hasActiveTab && firstTab === value;
 
@@ -250,10 +262,15 @@ function TabsTrigger({
       aria-hidden={ariaHidden}
       className={cn(tabsTriggerVariants({ variant }), className)}
       id={id}
-      render={renderTab({
-        "aria-controls": ariaControls,
-        tabIndex: tabIndex ?? (isFallbackStop ? 0 : undefined),
-      })}
+      render={renderTab(
+        {
+          "aria-controls": ariaControls,
+          tabIndex: tabIndex ?? (isFallbackStop ? 0 : undefined),
+        },
+        () => {
+          reselect(value);
+        },
+      )}
       value={value}
     >
       {children}

@@ -133,6 +133,28 @@ describe("ListBox value", () => {
     );
   });
 
+  it("reports a press on the selected option in single mode, once per press", () => {
+    const onValueChange = vi.fn();
+    const { getByText } = render(
+      <ListBox defaultValue={["apple"]} onValueChange={onValueChange}>
+        <ListBoxItem value="apple">Apple</ListBoxItem>
+        <ListBoxItem value="pear">Pear</ListBoxItem>
+      </ListBox>,
+    );
+    const apple = getByText("Apple").closest('[role="option"]');
+    if (!(apple instanceof HTMLElement)) throw new Error("no option");
+    fireEvent.click(apple);
+    fireEvent.keyDown(apple, { key: "Enter" });
+    fireEvent.keyDown(apple, { key: " " });
+    fireEvent.click(getByText("Pear"));
+    expect(onValueChange.mock.calls).toEqual([
+      [["apple"]],
+      [["apple"]],
+      [["apple"]],
+      [["pear"]],
+    ]);
+  });
+
   it("ignores clicks on a disabled option and on a disabled list", () => {
     const onValueChange = vi.fn();
     const { getByText, rerender } = render(
