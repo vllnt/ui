@@ -6,6 +6,46 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+### Added
+
+- **`Separator` `variant`** - `variant="dashed"` draws a dashed 1 px border over a
+  transparent fill, in both orientations. The default stays `solid`.
+- **`Link` `size`, `foreground` and `skip`** - `size="sm" | "default" | "lg"`
+  (`lg` is the bar link: 14 px label, 4 px side padding, height from
+  `--size-control-xs`); `variant="foreground"` takes the ink colour with no
+  primary; `variant="skip"` is a skip-to-content link, hidden until focused,
+  then shown at the top left, 44 px high, above other content.
+- **`Button` size `icon-lg`** - a 44 px square icon button (`size-11`).
+- **`SegmentedControl` `fit` and `variant`** - `fit` hugs the content (root
+  `w-auto`, items `flex-none`); `variant="hairline"` swaps the filled track for a
+  transparent one with a 1 px input-colour border (`glass-input` inside glass).
+  The defaults stay `filled` and full width.
+- **`Text` `dt`, `dd`, `li` and `measure`** - `as` takes `dt`, `dd` and `li`;
+  `measure="prose" | "narrow"` caps the width with `size.measure-prose` (720 px,
+  new) or `size.measure-narrow` (480 px).
+- **`Kbd` `variant="glass"`** - a chip for a glass surface: 9 % ink wash, 75 % ink
+  text, no border. Place it on the dense glass tint.
+- **`StatusIndicator` `icon`** - a mark shown in place of the dot. The tone
+  colours the icon alone; the pill and label take the neutral variant, so the
+  label stays foreground.
+- **Touch-target utilities** - the Tailwind preset adds `min-h-target`,
+  `min-w-target` (`--size-target-min`, 44 px) and `h-control-xs`
+  (`--size-control-xs`, 32 px, 44 px under `@media (pointer: coarse)`). They
+  switch by pointer, not by screen width.
+- **`size.measure-prose` token** - 720 px (`--size-measure-prose`), for lead
+  copy and descriptions.
+
+### Changed
+
+- **`Separator` renders on the server** - it is a plain element with no
+  `"use client"` and no Radix dependency. A decorative separator (the default) is
+  `aria-hidden`; `decorative={false}` gives `role="separator"` with
+  `aria-orientation`. `@radix-ui/react-separator` is removed from the
+  dependencies.
+- **`SearchDialog` trigger** - the shortcut hint is the `Kbd` atom, so it shows
+  the command key on Mac and `Ctrl` elsewhere, as the shortcut handler accepts
+  either.
+
 ## [0.4.0] - 2026-11-23
 
 Upgrading from 0.3.0: see [MIGRATION.md](./MIGRATION.md).

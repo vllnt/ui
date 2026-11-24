@@ -281,7 +281,7 @@ Product themes override these steps. Maia sets Display 28/600, H5 20/600, H6 15/
 | `spacing.page-gutter-desktop` | `--spacing-page-gutter-desktop` | 96px (`space-24`) | Page padding from 1200 px |
 | `size.page-max` | `--size-page-max` | 1440px (90rem) | Maximum width of the page column |
 
-**Narrow measure.** `size.measure-narrow` (`--size-measure-narrow`, 480px) is the width of a narrow text column, for rich text in a tight container.
+**Text measure.** Two tokens cap the width of a text column. `size.measure-narrow` (`--size-measure-narrow`, 480px) is for rich text in a tight container. `size.measure-prose` (`--size-measure-prose`, 720px) is for lead copy and descriptions. `Text` reads them through its `measure` prop (`narrow`, `prose`); unset, the text fills its container.
 
 ---
 
@@ -494,6 +494,16 @@ The dark default foreground is the tightest figure (white backdrop, top of the p
 | `--size-control-xs` | 32px; 44px under `@media (pointer: coarse)` | Extra-small control height |
 
 `themes/default.css` and `styles.css` declare both. Under `@media (pointer: coarse)` they set `--size-control-xs: var(--size-target-min)` and change nothing else. A component reaches 44px by sizing from these variables; `Button` `lg` is already 44. Each component adopts them in its own change.
+
+The Tailwind preset maps them to three utilities, so a class reads the same token a component does:
+
+| Utility | CSS | Use |
+|---------|-----|-----|
+| `min-h-target` | `min-height: var(--size-target-min)` | Give a control a 44px minimum height |
+| `min-w-target` | `min-width: var(--size-target-min)` | Give a control a 44px minimum width |
+| `h-control-xs` | `height: var(--size-control-xs)` | A 32px control that is 44px under a coarse pointer |
+
+The switch is by pointer, never by screen width: a phone gets 44px because its primary pointer is coarse, and a narrow desktop window keeps 32px. Do not key a target size on a breakpoint. `Link` `size="lg"` reads `h-control-xs`; `Button` `icon-lg` is a fixed 44px square.
 
 The Penpot libraries keep one `size.target.min` and `size.control-xs` per density (compact 24, regular 32, touch 44). Code has one value per name: `size.target.min` is the touch value (44) and `size.control-xs` the regular one (32).
 
