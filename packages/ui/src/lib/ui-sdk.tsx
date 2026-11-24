@@ -6,7 +6,10 @@ import {
   type RenderProp,
 } from "@ui-sdk/react/primitive";
 
-type DataAttributes = Record<`data-${string}`, string | undefined>;
+type DataAttributes = Record<
+  `aria-${string}` | `data-${string}`,
+  string | undefined
+>;
 
 type SlotProps = React.HTMLAttributes<HTMLElement> & {
   children?: React.ReactNode;
@@ -14,7 +17,7 @@ type SlotProps = React.HTMLAttributes<HTMLElement> & {
 };
 
 /**
- * Renders its only child element with the slot's props merged in: the
+ * Renders its single child element with the slot's props merged in: the
  * `asChild` pattern. The child's props win; class names, styles and refs
  * combine, and the child's event handler runs before the slot's.
  */
@@ -31,7 +34,7 @@ function Slot({ children, ref, ...props }: SlotProps) {
 Slot.displayName = "Slot";
 
 /**
- * Maps the `asChild` prop onto a ui-sdk part: with `asChild`, the only child
+ * Maps the `asChild` prop onto a ui-sdk part: with `asChild`, the single child
  * element becomes the part's `render` element and takes the part's props.
  */
 function asChildProps<Children>({
@@ -79,7 +82,7 @@ const TABBABLE =
 
 /**
  * The `initialFocus` of a dialog-like popup, matching Radix's focus scope:
- * focus stays put when it is already inside the content, otherwise the first
+ * focus stays put when already inside the content, otherwise the first
  * tabbable element that isn't a link takes it, and an input's text is
  * selected. `onOpenAutoFocus` gets a cancelable event first; calling
  * `preventDefault()` keeps focus where the handler put it.
@@ -129,27 +132,30 @@ function closeAutoFocus(
     autoFocusEvent(onCloseAutoFocus) ? activeHTMLElement() : undefined;
 }
 
+function assignRef<T>(ref: React.Ref<T> | undefined, element: null | T) {
+  if (typeof ref === "function") {
+    ref(element);
+  } else if (ref) {
+    ref.current = element;
+  }
+}
+
 /**
- * A callback ref that keeps `ref` up to date and also returns the element
- * through the second ref object, for parts that need their own handle.
+ * Tracks the element a part renders, for wrappers that need it (focus,
+ * anchoring), and still passes it to the caller's `ref`.
  */
-function useComposedRef<T>(
+function useElementRef<T>(
   ref: React.Ref<T> | undefined,
-  own: React.RefObject<T | null>,
-): React.RefCallback<T> {
-  return React.useCallback(
-    (element: T | null) => {
-      own.current = element;
-      if (typeof ref === "function") {
-        return ref(element);
-      }
-      if (ref) {
-        ref.current = element;
-      }
-      return undefined;
+): readonly [null | T, React.RefCallback<T>] {
+  const [element, setElement] = React.useState<null | T>(null);
+  const callback = React.useCallback(
+    (node: null | T) => {
+      setElement(node);
+      assignRef(ref, node);
     },
-    [own, ref],
+    [ref],
   );
+  return [element, callback] as const;
 }
 
 const openState = (state: { open: boolean }): DataAttributes => ({
@@ -169,12 +175,12 @@ const checkedState = (state: {
 
 export {
   asChildProps,
-  closeAutoFocus,
   checkedState,
+  closeAutoFocus,
   type DataAttributes,
   openAutoFocus,
   openState,
   Slot,
-  useComposedRef,
+  useElementRef,
   withDataAttributes,
 };

@@ -1,12 +1,11 @@
 "use client";
 
-import type * as React from "react";
-
 import {
   Checkbox as CheckboxPrimitive,
   CheckboxIndicator,
 } from "@ui-sdk/react/checkbox";
 import { Check } from "lucide-react";
+import type * as React from "react";
 
 import { checkedState, withDataAttributes } from "../../../lib/ui-sdk";
 import { cn } from "../../../lib/utils";

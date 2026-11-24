@@ -3,8 +3,8 @@
 import * as React from "react";
 
 import {
-  PopoverContent as PopoverContentPart,
   Popover as PopoverRoot,
+  PopoverContent as PopoverContentPart,
   PopoverTrigger as PopoverTriggerPart,
 } from "@ui-sdk/react/popover";
 
@@ -14,7 +14,8 @@ import {
   closeAutoFocus,
   openAutoFocus,
   openState,
-  useComposedRef,
+  Slot,
+  useElementRef,
   withDataAttributes,
 } from "../../../lib/ui-sdk";
 import { cn } from "../../../lib/utils";
@@ -73,21 +74,17 @@ const PopoverAnchor = ({
   ref?: React.Ref<HTMLDivElement>;
 }) => {
   const setAnchor = React.use(AnchorContext)?.setAnchor;
-  const own = React.useRef<HTMLDivElement | null>(null);
-  const composed = useComposedRef(ref, own);
-  const anchorReference = React.useCallback(
-    (element: HTMLDivElement | null) => {
-      setAnchor?.(element);
-      return composed(element);
-    },
-    [composed, setAnchor],
-  );
+  const [element, anchorReference] = useElementRef(ref);
+  React.useEffect(() => {
+    setAnchor?.(element);
+    return () => setAnchor?.(null);
+  }, [element, setAnchor]);
 
-  if (asChild && React.isValidElement<Record<string, unknown>>(children)) {
-    return React.cloneElement(children, { ...props, ref: anchorReference });
-  }
-
-  return (
+  return asChild ? (
+    <Slot ref={anchorReference} {...props}>
+      {children}
+    </Slot>
+  ) : (
     <div ref={anchorReference} {...props}>
       {children}
     </div>
@@ -98,9 +95,9 @@ PopoverAnchor.displayName = "PopoverAnchor";
 type ContentProps = MaterialProps &
   Omit<React.ComponentProps<typeof PopoverContentPart>, "render"> & {
     asChild?: boolean;
-    /** Radix-compatible: call `preventDefault()` to keep focus where it is. */
+    /** Radix-compatible: `preventDefault()` keeps focus where the handler put it. */
     onCloseAutoFocus?: (event: Event) => void;
-    /** Radix-compatible: call `preventDefault()` to keep focus where it is. */
+    /** Radix-compatible: `preventDefault()` keeps focus where the handler put it. */
     onOpenAutoFocus?: (event: Event) => void;
   };
 
@@ -123,9 +120,16 @@ const PopoverContent = ({
   ...props
 }: ContentProps) => {
   const anchor = React.use(AnchorContext)?.anchor ?? undefined;
-  const content = React.useRef<HTMLDivElement | null>(null);
-  const contentReference = useComposedRef(ref, content);
+  const [content, contentReference] = useElementRef(ref);
   const slot = asChildProps({ asChild, children });
+  // Radix gave the content no name of its own, so an `aria-label` named it.
+  // ui-sdk labels it by the trigger; drop that when the caller names it.
+  const named =
+    props["aria-label"] !== undefined && props["aria-labelledby"] === undefined;
+  const attributes = (state: { open: boolean }) => ({
+    ...openState(state),
+    ...(named ? { "aria-labelledby": undefined } : {}),
+  });
 
   return (
     <PopoverContentPart
@@ -138,10 +142,10 @@ const PopoverContent = ({
       data-material={material}
       finalFocus={finalFocus ?? closeAutoFocus(onCloseAutoFocus)}
       initialFocus={
-        initialFocus ?? openAutoFocus(() => content.current, onOpenAutoFocus)
+        initialFocus ?? openAutoFocus(() => content, onOpenAutoFocus)
       }
       ref={contentReference}
-      render={withDataAttributes("div", openState, slot.render)}
+      render={withDataAttributes("div", attributes, slot.render)}
       sideOffset={sideOffset}
       {...props}
     >

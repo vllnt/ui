@@ -2,6 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 
+/*
+ * ui-sdk keeps some closed parts in the page with the `hidden` attribute (a
+ * tooltip's content, for one) and only adds its own CSS once it hydrates.
+ * Tailwind 3's preflight rule for `[hidden]` loses to a display utility such
+ * as `flex`, so server-rendered HTML would show those parts until then.
+ */
+[data-slot][hidden]:not([hidden="until-found"]) {
+  display: none !important;
+}
+
 @property --vllnt-border-beam-angle {
   syntax: "<angle>";
   inherits: false;
