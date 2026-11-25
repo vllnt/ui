@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, use, useId } from "react";
+import { createContext, use, useCallback, useId } from "react";
 
 import {
   Accordion as AccordionPrimitive,
@@ -9,7 +9,7 @@ import {
   AccordionTrigger as AccordionTriggerPrimitive,
 } from "@ui-sdk/react/accordion";
 import { renderElement } from "@ui-sdk/react/primitive";
-import type { ReactNode } from "react";
+import type { ReactNode, RefCallback } from "react";
 
 import { withDataAttributes } from "../../../lib/ui-sdk";
 import { cn } from "../../../lib/utils";
@@ -48,7 +48,8 @@ function getTriggerClassName(className: string | undefined) {
 /**
  * Renders the panel as the old markup did: a closed panel stays laid out at
  * zero height and is `inert`, which takes it out of the tab order and the
- * accessibility tree while keeping its name and role.
+ * accessibility tree while keeping its name and role. See
+ * `useInertWhileClosed` for why the attribute alone is not enough.
  */
 function renderPanel(props: Record<string, unknown>, state: { open: boolean }) {
   return renderElement(
@@ -57,6 +58,33 @@ function renderPanel(props: Record<string, unknown>, state: { open: boolean }) {
     undefined,
     state,
   );
+}
+
+/**
+ * ui-sdk's close animation sets `inert` on the panel and clears it when the
+ * transition ends. React already rendered `inert` for the closed panel and
+ * does not write it again, so the closed panel would turn reachable by Tab.
+ * This puts `inert` back whenever it goes missing from a closed panel.
+ */
+function useInertWhileClosed(): RefCallback<HTMLDivElement> {
+  return useCallback((panel: HTMLDivElement | null) => {
+    if (!panel) {
+      return;
+    }
+    const restore = () => {
+      if (panel.hasAttribute("data-closed") && !panel.inert) {
+        panel.inert = true;
+      }
+    };
+    const observer = new MutationObserver(restore);
+    observer.observe(panel, {
+      attributeFilter: ["data-closed", "inert"],
+      attributes: true,
+    });
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
 }
 
 function useAccordionId(): string {
@@ -200,12 +228,14 @@ function AccordionContent({
   value,
 }: AccordionContentProps): React.ReactNode {
   const baseId = useAccordionId();
+  const inertWhileClosed = useInertWhileClosed();
 
   return (
     <AccordionPanel
       className="h-[var(--accordion-panel-height)] overflow-hidden transition-[height,opacity] duration-200 [--radix-accordion-content-height:var(--accordion-panel-height)] [--radix-accordion-content-width:var(--accordion-panel-width)] data-[ending-style]:h-0 data-[starting-style]:h-0 data-[ending-style]:opacity-0 data-[starting-style]:opacity-0"
       id={getPartId(baseId, "content", value)}
       keepMounted
+      ref={inertWhileClosed}
       render={renderPanel}
     >
       <div

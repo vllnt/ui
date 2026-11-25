@@ -129,5 +129,40 @@ function defineKeyboardTests(label: string, viewport: Viewport): void {
   });
 }
 
+test("a closed panel stays inert after its close transition ends", async ({
+  mount,
+  page,
+}) => {
+  await mount(
+    <Accordion defaultValue="shipping" type="single">
+      <AccordionItem value="shipping">
+        <AccordionTrigger value="shipping">Shipping</AccordionTrigger>
+        <AccordionContent value="shipping">
+          <a href="#shipping-policy">Shipping policy</a>
+        </AccordionContent>
+      </AccordionItem>
+      <AccordionItem value="returns">
+        <AccordionTrigger value="returns">Returns</AccordionTrigger>
+        <AccordionContent value="returns">
+          <a href="#returns-policy">Returns policy</a>
+        </AccordionContent>
+      </AccordionItem>
+    </Accordion>,
+  );
+  const panel = page.locator('[data-slot="accordion-panel"]').first();
+
+  await page.getByRole("button", { name: "Shipping" }).click();
+  await expect(panel).toHaveAttribute("data-closed", "");
+  // ui-sdk clears `inert` with `data-ending-style` when the transition ends.
+  await expect(panel).not.toHaveAttribute("data-ending-style");
+
+  expect(await panel.evaluate((element: HTMLElement) => element.inert)).toBe(
+    true,
+  );
+  await page.getByRole("button", { name: "Shipping" }).focus();
+  await page.keyboard.press("Tab");
+  await expect(page.getByRole("button", { name: "Returns" })).toBeFocused();
+});
+
 defineKeyboardTests("desktop 1440", { height: 900, width: 1440 });
 defineKeyboardTests("mobile 390", { height: 844, width: 390 });
