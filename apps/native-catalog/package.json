@@ -33,7 +33,7 @@
   },
   "dependencies": {
     "@vllnt/ui-native": "workspace:*",
-    "expo": "~57.0.33",
+    "expo": "~57.0.34",
     "expo-status-bar": "~57.0.1",
     "lucide-react-native": "1.73.0",
     "react": "19.2.3",
