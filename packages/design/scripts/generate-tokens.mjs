@@ -855,10 +855,10 @@ function referencedShadowLayers(reference, mode) {
  * - `shadowRadius` is the blur radius / 2. CSS blur is a gaussian of
  *   sigma = blur / 2, which is what iOS `shadowRadius` is.
  * - Android `elevation` (dp) is round((offsetY + blur / 2) / 2): the mean of
- *   the key-light offset and the half blur. Material elevation is about its
- *   key-light offset and half its penumbra blur, and this reproduces the
- *   Material 4, 8, 16 and 24 dp shadows within 2 dp. Android draws the
- *   elevation shadow itself, so it ignores `shadowOpacity` and `shadowRadius`.
+ *   how far the shadow falls (the offset) and how far it spreads (the half
+ *   blur). It is a heuristic, not a measurement: Android draws its own shadow
+ *   from the elevation, so no exact mapping exists. Android also ignores
+ *   `shadowOpacity` and `shadowRadius`.
  */
 function nativeShadow(name, layers) {
   const outer = layers.filter((layer) => !layer.inset);
