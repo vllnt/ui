@@ -1131,7 +1131,7 @@ function VideoEmbedPreview() {
 function BlogCardPreview() {
   return (
     <ContentCard
-      href="/blog/getting-started"
+      href="/articles"
       lang="en"
       post={{
         date: "2024-01-15",
@@ -1146,12 +1146,15 @@ function BlogCardPreview() {
 
 function CategoryFilterPreview() {
   return (
-    <CategoryFilter categories={["nextjs", "react", "typescript"]} lang="en" />
+    <CategoryFilter
+      categories={["components", "templates", "themes"]}
+      lang="en"
+    />
   );
 }
 
 function PaginationPreview() {
-  return <Pagination baseUrl="/blog" currentPage={3} totalPages={10} />;
+  return <Pagination baseUrl="/articles" currentPage={3} totalPages={10} />;
 }
 
 function UsageBreakdownPreview() {
