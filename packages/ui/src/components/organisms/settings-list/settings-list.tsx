@@ -2,10 +2,10 @@
 
 import * as React from "react";
 
-import { cva, type VariantProps } from "class-variance-authority";
 import { ChevronRight } from "lucide-react";
 
 import { cn } from "../../../lib/utils";
+import { cva, type VariantProps } from "../../../lib/variants";
 import { itemVariants } from "../../atoms/item/item";
 
 const settingsListVariants = cva("w-full", {

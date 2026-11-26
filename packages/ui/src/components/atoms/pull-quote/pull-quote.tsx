@@ -1,6 +1,5 @@
-import { cva } from "class-variance-authority";
-
 import { cn } from "../../../lib/utils";
+import { cva } from "../../../lib/variants";
 
 const pullQuoteVariants = cva(
   "flex flex-col font-[family-name:var(--font-sans)] text-foreground",

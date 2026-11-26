@@ -12,7 +12,6 @@ import {
   NavigationMenuTrigger as NavigationMenuTriggerPart,
   NavigationMenuViewport as NavigationMenuViewportPart,
 } from "@ui-sdk/react/navigation-menu";
-import { cva } from "class-variance-authority";
 import { ChevronDown } from "lucide-react";
 
 import type { AsChildProps, NarrowPartProps } from "../../../lib/ui-sdk";
@@ -29,6 +28,7 @@ import {
   runDismissHandlers,
 } from "../../../lib/ui-sdk-dismiss";
 import { cn } from "../../../lib/utils";
+import { cva } from "../../../lib/variants";
 
 type RootState = {
   /** The root element, where the viewport lines up. */

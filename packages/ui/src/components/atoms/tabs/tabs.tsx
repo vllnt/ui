@@ -17,12 +17,12 @@ import {
   TabsPanel,
   TabsTab,
 } from "@ui-sdk/react/tabs";
-import { cva } from "class-variance-authority";
 import type { ReactNode, Ref } from "react";
 
 import { reselectProps } from "../../../lib/reselect";
 import { useControllableState } from "../../../lib/use-controllable-state";
 import { cn } from "../../../lib/utils";
+import { cva } from "../../../lib/variants";
 
 /**
  * Look of the tab triggers (Penpot `Style` axis): `underline` is the default,

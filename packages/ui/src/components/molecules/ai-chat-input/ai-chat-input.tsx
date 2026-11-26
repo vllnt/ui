@@ -1,9 +1,9 @@
 "use client";
 
-import { cva } from "class-variance-authority";
 import { LoaderCircle, SendHorizontal } from "lucide-react";
 
 import { cn } from "../../../lib/utils";
+import { cva } from "../../../lib/variants";
 import { Button } from "../../atoms/button/button";
 import { Textarea } from "../../atoms/textarea/textarea";
 

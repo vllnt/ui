@@ -1,9 +1,9 @@
 import * as React from "react";
 
-import { cva, type VariantProps } from "class-variance-authority";
 import { ArrowDownRight, ArrowRight, ArrowUpRight } from "lucide-react";
 
 import { cn } from "../../../lib/utils";
+import { cva, type VariantProps } from "../../../lib/variants";
 import {
   Card,
   CardContent,

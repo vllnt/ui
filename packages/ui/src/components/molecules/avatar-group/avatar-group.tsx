@@ -1,9 +1,8 @@
 import * as React from "react";
 
-import { cva, type VariantProps } from "class-variance-authority";
-
 import { keyByOccurrence } from "../../../lib/occurrence-keys";
 import { cn } from "../../../lib/utils";
+import { cva, type VariantProps } from "../../../lib/variants";
 import { Avatar, AvatarFallback, AvatarImage } from "../../atoms/avatar/avatar";
 
 const avatarGroupVariants = cva("flex items-center", {

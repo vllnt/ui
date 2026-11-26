@@ -7,10 +7,10 @@ import {
   Progress as ProgressPrimitive,
   ProgressIndicator,
 } from "@ui-sdk/react/progress";
-import { cva, type VariantProps } from "class-variance-authority";
 
 import { withDataAttributes } from "../../../lib/ui-sdk";
 import { cn } from "../../../lib/utils";
+import { cva, type VariantProps } from "../../../lib/variants";
 
 const progressBarTrackVariants = cva(
   "overflow-hidden rounded-full bg-secondary",

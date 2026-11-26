@@ -1,7 +1,7 @@
-import { cva } from "class-variance-authority";
 import { AlertCircle, CheckCircle2, Clock3, Wrench } from "lucide-react";
 
 import { cn } from "../../../lib/utils";
+import { cva } from "../../../lib/variants";
 import { Badge } from "../../atoms/badge/badge";
 
 const statusVariants = cva(

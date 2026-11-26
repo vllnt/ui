@@ -2,10 +2,10 @@
 
 import * as React from "react";
 
-import { cva } from "class-variance-authority";
 import { X } from "lucide-react";
 
 import { cn } from "../../../lib/utils";
+import { cva } from "../../../lib/variants";
 import { Avatar, AvatarFallback, AvatarImage } from "../../atoms/avatar/avatar";
 import { Button } from "../../atoms/button/button";
 import { Input } from "../../atoms/input/input";

@@ -172,7 +172,7 @@ export function Example() {
 
 Import everything from `@vllnt/ui`; you pay only for what you use. The package ships one ESM file per module and marks only its CSS files as having side effects, so any bundler that honours `sideEffects` (webpack, Turbopack, Rollup, Vite, esbuild) drops the components you do not import. Heavy dependencies, such as the `CodeBlock` syntax highlighter and the `FlowDiagram` image export, load through `import()` only when used.
 
-Every component pays a shared base of about 20 KB minified for `cn` (`clsx` and `tailwind-merge`). Most single components then add a few KB on top: `Button` is about 25 KB in total and `Dialog` about 65 KB. CI fails if a named import grows past its budget, or if any module grows past 320 KB up front (`pnpm -F @vllnt/ui size`).
+Every component pays a shared base of about 20 KB minified for `cn` (`tailwind-merge` plus a small class joiner). Most single components then add a few KB on top: `Button` is about 25 KB in total and `Dialog` about 65 KB. CI fails if a named import grows past its budget, or if any module grows past 320 KB up front (`pnpm -F @vllnt/ui size`).
 
 ## Theming
 
@@ -261,8 +261,8 @@ All components follow these conventions:
 
 - **`React.forwardRef`** — every component forwards refs
 - **`React.ComponentPropsWithoutRef`** — extends native HTML element props
-- **`cn()` utility** — merges Tailwind classes via `clsx` + `tailwind-merge`
-- **CVA variants** — variant props defined with `class-variance-authority`
+- **`cn()` utility** — joins class values and merges Tailwind classes via `tailwind-merge`
+- **CVA variants** — variant props defined with `cva` from `lib/variants`, which has the API of `class-variance-authority` without the dependency
 - **ui-sdk behaviors** — accessible behavior (focus, keyboard, ARIA) via `@ui-sdk/react` + `@ui-sdk/core`
 - **Slot support** — `asChild` prop for render delegation (a ui-sdk `render` element)
 
@@ -517,7 +517,7 @@ import {
 ```tsx
 import { cn } from "@vllnt/ui";
 
-// Merge Tailwind classes (clsx + tailwind-merge)
+// Merge Tailwind classes
 <div className={cn("p-4 bg-primary", isActive && "bg-accent", className)} />
 ```
 

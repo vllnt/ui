@@ -1,9 +1,9 @@
 import { Children } from "react";
 
-import { cva, type VariantProps } from "class-variance-authority";
 import { Check, LoaderCircle, X } from "lucide-react";
 
 import { cn } from "../../../lib/utils";
+import { cva, type VariantProps } from "../../../lib/variants";
 
 const markerVariants = cva(
   "flex size-6 shrink-0 items-center justify-center rounded-full border text-xs font-medium",

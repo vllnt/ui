@@ -1,4 +1,4 @@
-import { cva } from "class-variance-authority";
+import { cva } from "./variants";
 
 /**
  * Tones that colour a status dot. The chip around the dot stays neutral and

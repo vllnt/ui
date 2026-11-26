@@ -6,10 +6,10 @@ import {
   useSyncExternalStore,
 } from "react";
 
-import { cva, type VariantProps } from "class-variance-authority";
 import { Command } from "lucide-react";
 
 import { cn } from "../../../lib/utils";
+import { cva, type VariantProps } from "../../../lib/variants";
 
 const kbdVariants = cva(
   "inline-flex select-none items-center justify-center font-mono font-medium [&>svg]:h-3 [&>svg]:w-3",

@@ -8,11 +8,11 @@ import {
   ToggleGroup as ToggleGroupPrimitive,
   type ToggleGroupState,
 } from "@ui-sdk/react/toggle";
-import type { VariantProps } from "class-variance-authority";
 import type * as React from "react";
 
 import { asChildProps } from "../../../lib/ui-sdk";
 import { cn } from "../../../lib/utils";
+import type { VariantProps } from "../../../lib/variants";
 import { toggleVariants } from "../../atoms/toggle/toggle";
 
 type ToggleGroupContextValue = VariantProps<typeof toggleVariants> & {

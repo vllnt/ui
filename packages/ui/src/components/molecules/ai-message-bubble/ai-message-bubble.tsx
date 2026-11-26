@@ -1,6 +1,5 @@
-import { cva, type VariantProps } from "class-variance-authority";
-
 import { cn } from "../../../lib/utils";
+import { cva, type VariantProps } from "../../../lib/variants";
 import { Avatar, AvatarFallback } from "../../atoms/avatar/avatar";
 import { Badge } from "../../atoms/badge/badge";
 

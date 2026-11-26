@@ -9,11 +9,11 @@ import {
   useSyncExternalStore,
 } from "react";
 
-import { cva, type VariantProps } from "class-variance-authority";
 import { X } from "lucide-react";
 
 import { Slot } from "../../../lib/ui-sdk";
 import { cn } from "../../../lib/utils";
+import { cva, type VariantProps } from "../../../lib/variants";
 
 const bannerVariants = cva(
   "flex w-full items-start gap-3 border-b px-4 py-3 text-sm transition-all motion-safe:animate-in motion-safe:slide-in-from-top-1",

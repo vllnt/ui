@@ -64,6 +64,34 @@ export default [
     },
   },
   {
+    // cva, cx and VariantProps come from lib/variants, so the package ships
+    // without class-variance-authority and clsx. They stay devDependencies as
+    // the oracle of the variants tests, which are the only files to import them.
+    files: ['src/**/*.{ts,tsx}'],
+    ignores: [
+      'src/lib/__tests__/variant-props.ts',
+      'src/lib/variants-definitions.test.ts',
+      'src/lib/variants.test.ts',
+    ],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          paths: [
+            {
+              name: 'class-variance-authority',
+              message: 'Import cva and VariantProps from lib/variants.',
+            },
+            {
+              name: 'clsx',
+              message: 'Use cn from lib/utils, or cx from lib/variants.',
+            },
+          ],
+        },
+      ],
+    },
+  },
+  {
     // A12 (signature v1.3): status colour goes on a glyph, a dot or a border,
     // never on words. See eslint-rules/a12-status-text-colour.js.
     files: ['src/components/**/*.tsx'],

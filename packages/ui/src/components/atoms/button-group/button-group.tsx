@@ -1,8 +1,7 @@
 import * as React from "react";
 
-import { cva, type VariantProps } from "class-variance-authority";
-
 import { cn } from "../../../lib/utils";
+import { cva, type VariantProps } from "../../../lib/variants";
 
 const buttonGroupVariants = cva(
   "isolate inline-flex w-fit [&>*:focus-visible]:z-10 [&>*:focus-within]:z-10",

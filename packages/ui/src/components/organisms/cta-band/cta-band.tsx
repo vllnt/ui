@@ -1,8 +1,7 @@
 import * as React from "react";
 
-import { cva } from "class-variance-authority";
-
 import { cn } from "../../../lib/utils";
+import { cva } from "../../../lib/variants";
 import { Heading, type HeadingLevel } from "../../atoms/heading/heading";
 import { Separator } from "../../atoms/separator/separator";
 import { Text } from "../../atoms/text/text";

@@ -1,8 +1,7 @@
 import { createElement } from "react";
 
-import { cva, type VariantProps } from "class-variance-authority";
-
 import { cn } from "../../../lib/utils";
+import { cva, type VariantProps } from "../../../lib/variants";
 
 /**
  * Body-text scale for the {@link Text} primitive. Exposed so consumers can

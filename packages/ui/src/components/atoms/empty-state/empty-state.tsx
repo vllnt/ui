@@ -1,7 +1,7 @@
-import { cva, type VariantProps } from "class-variance-authority";
 import type { ComponentPropsWithoutRef, ReactNode } from "react";
 
 import { cn } from "../../../lib/utils";
+import { cva, type VariantProps } from "../../../lib/variants";
 
 const emptyStateVariants = cva(
   "flex flex-col items-center justify-center gap-3 text-center text-foreground",

@@ -1,4 +1,3 @@
-import { cva, type VariantProps } from "class-variance-authority";
 import type {
   AnchorHTMLAttributes,
   ComponentPropsWithoutRef,
@@ -6,6 +5,7 @@ import type {
 } from "react";
 
 import { cn } from "../../../lib/utils";
+import { cva, type VariantProps } from "../../../lib/variants";
 
 const navVariants = cva("grid w-full gap-3 text-sm sm:grid-cols-2", {
   defaultVariants: {

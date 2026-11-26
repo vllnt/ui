@@ -8,10 +8,10 @@ import {
   AvatarImage as AvatarImagePrimitive,
   type AvatarLoadingStatus,
 } from "@ui-sdk/react/avatar";
-import { cva, type VariantProps } from "class-variance-authority";
 import type * as React from "react";
 
 import { cn } from "../../../lib/utils";
+import { cva, type VariantProps } from "../../../lib/variants";
 
 const avatarSizeVariants = cva("relative flex shrink-0", {
   defaultVariants: {

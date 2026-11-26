@@ -2,9 +2,8 @@
 
 import * as React from "react";
 
-import { cva, type VariantProps } from "class-variance-authority";
-
 import { cn } from "../../../lib/utils";
+import { cva, type VariantProps } from "../../../lib/variants";
 
 const dataListVariants = cva(
   "grid rounded-xl border bg-card text-card-foreground",

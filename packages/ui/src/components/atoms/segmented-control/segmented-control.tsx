@@ -6,11 +6,11 @@ import {
   SegmentedControlItem as SegmentedControlItemPrimitive,
   type SegmentedControlItemState,
 } from "@ui-sdk/react/segmented-control";
-import { cva, type VariantProps } from "class-variance-authority";
 import type * as React from "react";
 
 import { asChildProps } from "../../../lib/ui-sdk";
 import { cn } from "../../../lib/utils";
+import { cva, type VariantProps } from "../../../lib/variants";
 
 const segmentedControlVariants = cva(
   "inline-flex items-center rounded-lg p-1 text-muted-foreground",

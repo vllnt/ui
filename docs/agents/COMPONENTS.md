@@ -231,6 +231,7 @@ Don't leave a prop that "still exists" but means something different.
 - No inline `//` comments in shipped code — use TSDoc on exports, or refactor.
 - Additive architecture: new feature → new file. Don't reflexively edit hub files (`index.ts`, `routes.ts`, global configs).
 - Follow existing codebase patterns. If a pattern exists in 3+ files, use it.
+- **Class helpers come from this package.** Import `cva` and `VariantProps` from `lib/variants`, and `cn` from `lib/utils`. Never import `class-variance-authority` or `clsx` in `src/`: the package ships without them, and lint (`no-restricted-imports`) fails the import. They stay devDependencies as the oracle of `lib/variants.test.ts`.
 - **No status colour on words (lint rule A12).** `text-destructive`, `text-success`, `text-warning`, `text-info` and palette status colours such as `text-red-600` or `text-emerald-700` are lint errors in `packages/ui/src/components`. Keep words in `text-foreground` or `text-muted-foreground`, and put the status colour on an `aria-hidden` icon, a dot or the border. `Text` has no status tones. Files that predate the rule sit in `packages/ui/eslint-rules/a12-allowlist.js` (burn-down: #604); the list only shrinks, so never add to it.
 
 ---

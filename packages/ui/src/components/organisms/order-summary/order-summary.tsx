@@ -2,10 +2,9 @@
 
 import * as React from "react";
 
-import { cva } from "class-variance-authority";
-
 import { keyByOccurrence } from "../../../lib/occurrence-keys";
 import { cn } from "../../../lib/utils";
+import { cva } from "../../../lib/variants";
 import { Button } from "../../atoms/button/button";
 import { Card } from "../../atoms/card/card";
 import { Input } from "../../atoms/input/input";

@@ -11,7 +11,6 @@ import {
   DialogTitle as SheetTitlePart,
   DialogTrigger as SheetTriggerPart,
 } from "@ui-sdk/react/dialog";
-import { cva, type VariantProps } from "class-variance-authority";
 import { X } from "lucide-react";
 
 import type { MaterialProps } from "../../../lib/material";
@@ -23,6 +22,7 @@ import {
 } from "../../../lib/ui-sdk-dialog";
 import type { DismissHandlers } from "../../../lib/ui-sdk-dismiss";
 import { cn } from "../../../lib/utils";
+import { cva, type VariantProps } from "../../../lib/variants";
 
 const parts = createDialogParts(
   "Sheet",

@@ -2,10 +2,10 @@
 
 import * as React from "react";
 
-import { cva } from "class-variance-authority";
 import { Check, CornerDownRight, type LucideIcon, X } from "lucide-react";
 
 import { cn } from "../../../lib/utils";
+import { cva } from "../../../lib/variants";
 import { Button } from "../../atoms/button/button";
 import {
   Table,

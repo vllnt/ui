@@ -1,10 +1,10 @@
 "use client";
 
 import { Meter as MeterPrimitive, MeterIndicator } from "@ui-sdk/react/meter";
-import { cva, type VariantProps } from "class-variance-authority";
 
 import { withDataAttributes } from "../../../lib/ui-sdk";
 import { cn } from "../../../lib/utils";
+import { cva, type VariantProps } from "../../../lib/variants";
 
 const meterFillVariants = cva("h-full transition-all", {
   defaultVariants: {

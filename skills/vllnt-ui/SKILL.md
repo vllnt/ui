@@ -22,7 +22,7 @@ allowed-tools:
 
 `@vllnt/ui` (brand name **VLLNT UI**, always two words) is a React component
 library: 200+ accessible components built on **ui-sdk** (Vercel) behaviors,
-**Tailwind CSS**, and **CVA** (class-variance-authority). Shipped on public npm
+**Tailwind CSS**, and **CVA** (`cva` variants). Shipped on public npm
 and as a shadcn-compatible registry at `https://ui.vllnt.com/r`.
 
 - Docs: https://ui.vllnt.com · Storybook: https://storybook.vllnt.com
@@ -134,7 +134,7 @@ export function Example() {
 | `@vllnt/ui/themes/presets.css` | Built-in color presets, applied via `data-theme` |
 | `@vllnt/ui/themes/products.css` | Product themes `maia` and `paas` (generated), applied via `data-theme` |
 
-`cn()` merges Tailwind classes via `clsx` + `tailwind-merge` — use it to combine
+`cn()` joins class values and merges Tailwind classes via `tailwind-merge` — use it to combine
 a component's `className` with conditional classes (last class wins on conflict).
 
 ### Theming / dark mode
@@ -273,7 +273,7 @@ Only when editing inside this repo (not for app consumers).
   `.stories.tsx`), where `{level}` is the Atomic Design level — `atoms`,
   `molecules`, `organisms` or `templates`; a component imports only lower
   levels (organisms may import organisms). Validate with `pnpm check:atomic`.
-  Define variants with `cva`, expose `VariantProps`, merge with `cn`, forward
+  Define variants with `cva` from `lib/variants`, expose `VariantProps`, merge with `cn`, forward
   refs, support `asChild` where a wrapper element makes sense.
 - **Tokens, not literals** — the design rules above are enforced in review.
 - **Don't hand-edit generated files** (`apps/registry/lib/component-metadata.json`,

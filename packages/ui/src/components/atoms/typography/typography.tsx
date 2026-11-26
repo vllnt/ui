@@ -1,6 +1,5 @@
-import { cva, type VariantProps } from "class-variance-authority";
-
 import { cn } from "../../../lib/utils";
+import { cva, type VariantProps } from "../../../lib/variants";
 
 /**
  * Shared typographic scale for the semantic text primitives. Exposed so

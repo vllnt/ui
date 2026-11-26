@@ -9,10 +9,10 @@ import {
   FieldError as FieldErrorPrimitive,
   FieldLabel as FieldLabelPrimitive,
 } from "@ui-sdk/react/field";
-import { cva, type VariantProps } from "class-variance-authority";
 
 import { Slot } from "../../../lib/ui-sdk";
 import { cn } from "../../../lib/utils";
+import { cva, type VariantProps } from "../../../lib/variants";
 import { Label } from "../../atoms/label/label";
 
 type FieldContextValue = {
