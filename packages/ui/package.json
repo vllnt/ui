@@ -141,8 +141,7 @@
     "react-syntax-highlighter": "^16.1.2",
     "remark-gfm": "^4.0.1",
     "sonner": "^2.0.8",
-    "tailwind-merge": "^2.6.1",
-    "zod": "^4.6.7"
+    "tailwind-merge": "^2.6.1"
   },
   "devDependencies": {
     "@chromatic-com/storybook": "^5.6.0",
@@ -178,6 +177,7 @@
     "tsup": "^9.0.0",
     "tsx": "^4.23.15",
     "typescript": "~6.0.3",
-    "vitest": "^5.1.0"
+    "vitest": "^5.1.0",
+    "zod": "^4.6.7"
   }
 }
