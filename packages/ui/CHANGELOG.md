@@ -8,11 +8,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Added
 
-- **`Slider` part classes and `thumbProps`** - `controlClassName`,
-  `trackClassName`, `rangeClassName` and `thumbClassName` are merged into each
-  part's default classes, and `thumbProps` (an object, or a function of the
-  thumb's index) passes extra props to every thumb, winning over the name the
-  root passes on. Without them, the slider renders as before.
 - **ui-sdk compat helpers** - the helpers the components are written with are
   public, for apps and agents that build their own parts the same way: `Slot`,
   `asChildProps`, `withDataAttributes`, `openState`, `checkedState`,
@@ -45,6 +40,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - **`StatusIndicator` `icon`** - a mark shown in place of the dot. The tone
   colours the icon alone; the pill and label take the neutral variant, so the
   label stays foreground.
+- **`Slider` part classes and `thumbProps`** - `controlClassName`,
+  `trackClassName`, `rangeClassName` and `thumbClassName` are merged into each
+  part's default classes, and `thumbProps` (an object, or a function of the
+  thumb's index) passes extra props to every thumb, winning over the name the
+  root passes on. Without them, the slider renders as before.
 - **Touch-target utilities** - the Tailwind preset adds `min-h-target`,
   `min-w-target` (`--size-target-min`, 44 px) and `h-control-xs`
   (`--size-control-xs`, 32 px, 44 px under `@media (pointer: coarse)`). They
