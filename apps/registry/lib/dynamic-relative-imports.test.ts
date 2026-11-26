@@ -80,20 +80,26 @@ describe("assertNoDynamicRelativeImports", () => {
   });
 
   it("accepts a specifier on the allow list and rejects the others", () => {
-    const allowed = new Set(["../flow-diagram"]);
+    const allowed = new Set(["./flow-diagram-content"]);
     expect(
-      checking('import("../flow-diagram"); import("../other");', allowed),
+      checking('import("./flow-diagram-content"); import("../other");', allowed),
     ).toThrow("(found: ../other)");
-    expect(checking('import("../flow-diagram");', allowed)).not.toThrow();
+    expect(
+      checking('import("./flow-diagram-content");', allowed),
+    ).not.toThrow();
   });
 
   it("accepts the current CodeBlock source", () => {
     expect(checking(readComponent("code-block"))).not.toThrow();
   });
 
-  it("still sees the one relative import TutorialMDX allows", () => {
-    expect(findDynamicRelativeImports(readComponent("tutorial-mdx"))).toEqual([
-      "../flow-diagram",
+  it("still sees the one relative import FlowDiagram allows", () => {
+    expect(findDynamicRelativeImports(readComponent("flow-diagram"))).toEqual([
+      "./flow-diagram-content",
     ]);
+  });
+
+  it("accepts the current TutorialMDX source", () => {
+    expect(checking(readComponent("tutorial-mdx"))).not.toThrow();
   });
 });

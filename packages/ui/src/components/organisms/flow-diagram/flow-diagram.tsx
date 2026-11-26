@@ -1,146 +1,44 @@
 "use client";
 
-import "@xyflow/react/dist/style.css";
-
-import { memo, useCallback, useEffect } from "react";
-
-import {
-  type Node,
-  type NodeMouseHandler,
-  ReactFlowProvider,
-} from "@xyflow/react";
+import { lazy, memo, Suspense } from "react";
 
 import { cn } from "../../../lib/utils";
 
-import { FlowCanvas } from "./flow-canvas";
 import { FlowErrorBoundary } from "./flow-error-boundary";
-import { FlowFullscreen } from "./flow-fullscreen";
-import type {
-  FlowDiagramEdge,
-  FlowDiagramNode,
-  FlowDiagramProps,
-} from "./types";
-import { useFlowDiagram } from "./use-flow-diagram";
+import type { FlowDiagramProps } from "./types";
 
-/**
- * Validates nodes and edges, logging warnings for common issues.
- */
-function validateFlowData(
-  nodes: FlowDiagramNode[],
-  edges: FlowDiagramEdge[],
-): void {
-  if (nodes.length === 0 && edges.length > 0) {
-    console.warn(
-      "[FlowDiagram] Edges provided without nodes - edges will not render",
-    );
-  }
+// @xyflow/react is ~185 KB: it loads when a diagram first renders.
+const FlowDiagramContent = lazy(() =>
+  import("./flow-diagram-content").then((module_) => ({
+    default: module_.FlowDiagramContent,
+  })),
+);
 
-  const nodeIds = new Set(nodes.map((n) => n.id));
-  const invalidEdges = edges.filter(
-    (e) => !nodeIds.has(e.source) || !nodeIds.has(e.target),
-  );
-
-  if (invalidEdges.length > 0) {
-    console.warn(
-      `[FlowDiagram] ${invalidEdges.length} edge(s) reference non-existent nodes:`,
-      invalidEdges.map((e) => `${e.id}: ${e.source} -> ${e.target}`),
-    );
-  }
-
-  const nodesWithoutPosition = nodes.filter((n) => n.position === undefined);
-  if (nodesWithoutPosition.length > 0) {
-    console.warn(
-      `[FlowDiagram] ${nodesWithoutPosition.length} node(s) missing position:`,
-      nodesWithoutPosition.map((n) => n.id),
-    );
-  }
-}
-
-const FlowDiagramInner = memo(function FlowDiagramInner({
-  allowCopy = false,
-  allowFullscreen = true,
+/** Holds the diagram's place, with the title and height the canvas will have. */
+function FlowDiagramFallback({
   className,
-  edges,
-  fitView = true,
-  fitViewOptions,
   height = 400,
-  nodes,
-  onNodeClick,
-  showControls = true,
   title,
 }: FlowDiagramProps) {
-  // Check input on mount and when data changes
-  useEffect(() => {
-    validateFlowData(nodes, edges);
-  }, [nodes, edges]);
-
-  const {
-    closeFullscreen,
-    copyStatus,
-    copyToClipboard,
-    fitView: handleFitView,
-    isFullscreen,
-    toggleFullscreen,
-    zoomIn,
-    zoomOut,
-  } = useFlowDiagram({ allowCopy, allowFullscreen });
-
-  // Memoize node click handler to prevent unnecessary re-renders
-  const handleNodeClick: NodeMouseHandler | undefined = useCallback(
-    (_event: React.MouseEvent, node: Node) => {
-      onNodeClick?.(node as FlowDiagramNode);
-    },
-    [onNodeClick],
+  return (
+    <div className={cn("relative w-full", className)} role="status">
+      {title ? (
+        <div className="mb-2 text-sm font-medium text-foreground">{title}</div>
+      ) : null}
+      <div
+        className="relative w-full rounded-lg border border-border bg-background overflow-hidden"
+        style={{ height }}
+      >
+        <span className="sr-only">Loading diagram...</span>
+      </div>
+    </div>
   );
-
-  const handleCopy = useCallback(() => {
-    void copyToClipboard();
-  }, [copyToClipboard]);
-
-  const canvasProps = {
-    allowCopy,
-    allowFullscreen,
-    className,
-    copyStatus,
-    edges,
-    fitView,
-    fitViewOptions,
-    height,
-    isFullscreen,
-    nodes,
-    onCopy: allowCopy ? handleCopy : undefined,
-    onFitView: handleFitView,
-    onFullscreen: allowFullscreen ? toggleFullscreen : undefined,
-    onNodeClick: onNodeClick ? handleNodeClick : undefined,
-    onZoomIn: zoomIn,
-    onZoomOut: zoomOut,
-    showControls,
-    title,
-  };
-
-  if (isFullscreen) {
-    return (
-      <>
-        <div
-          className={cn(
-            "rounded-lg border border-border bg-muted/50",
-            className,
-          )}
-          style={{ height }}
-        />
-        <FlowFullscreen isOpen={isFullscreen} onClose={closeFullscreen}>
-          <FlowCanvas {...canvasProps} />
-        </FlowFullscreen>
-      </>
-    );
-  }
-
-  return <FlowCanvas {...canvasProps} />;
-});
+}
 
 /**
  * FlowDiagram component for rendering interactive flow diagrams.
- * Uses @xyflow/react under the hood with error boundary protection.
+ * Uses @xyflow/react under the hood with error boundary protection. The
+ * library loads on demand; a placeholder of the same size shows meanwhile.
  *
  * @example
  * ```tsx
@@ -158,9 +56,9 @@ const FlowDiagramInner = memo(function FlowDiagramInner({
 export const FlowDiagram = memo(function FlowDiagram(props: FlowDiagramProps) {
   return (
     <FlowErrorBoundary height={props.height}>
-      <ReactFlowProvider>
-        <FlowDiagramInner {...props} />
-      </ReactFlowProvider>
+      <Suspense fallback={<FlowDiagramFallback {...props} />}>
+        <FlowDiagramContent {...props} />
+      </Suspense>
     </FlowErrorBoundary>
   );
 });

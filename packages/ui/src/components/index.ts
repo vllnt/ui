@@ -1435,6 +1435,7 @@ export {
   FlowControls,
   type FlowControlsProps,
   FlowDiagram,
+  FlowDiagramContent,
   type FlowDiagramEdge,
   type FlowDiagramNode,
   type FlowDiagramProps,

@@ -18,9 +18,9 @@
  *   - `from "../<sibling>/<sibling>"`             → `from "@vllnt/ui"`
  *   - `from "../../<level>/<sibling>/<sibling>"`  → `from "@vllnt/ui"`
  *   - `from "../<sibling>"`                       → `from "@vllnt/ui"`
- *   - `import("../<sibling>")` (same sibling paths) → `import("@vllnt/ui")`, only
- *     for the components in ALLOWED_DYNAMIC_RELATIVE_IMPORTS; any other relative
- *     `import()` throws (a lazy chunk must import a package specifier)
+ *   - `import("../<sibling>")` and `import("./<helper>")` → `import("@vllnt/ui")`,
+ *     only for the components in ALLOWED_DYNAMIC_RELATIVE_IMPORTS; any other
+ *     relative `import()` throws (a lazy chunk must import a package specifier)
  *   - `import { A } from "./<helper>"`            → `from "@vllnt/ui"` when every
  *     binding is a public export
  *
@@ -70,10 +70,10 @@ const shimsRoot = join(repoRoot, "apps/registry/registry/default");
 const PACKAGE_NAME = "@vllnt/ui";
 
 // Dynamic relative imports the rewrite resolves correctly, by component: the
-// target is a sibling whose public export is read by name (FlowDiagram). Any
-// other relative `import()` fails the build, see lib/dynamic-relative-imports.
+// target is a module whose public export is read by name (FlowDiagramContent).
+// Any other relative `import()` fails the build, see lib/dynamic-relative-imports.
 const ALLOWED_DYNAMIC_RELATIVE_IMPORTS = new Map<string, ReadonlySet<string>>([
-  ["tutorial-mdx", new Set(["../flow-diagram"])],
+  ["flow-diagram", new Set(["./flow-diagram-content"])],
 ]);
 
 const RESERVED_REGISTRY_NAMES = new Set([
@@ -173,6 +173,8 @@ const DYNAMIC_SIBLING_IMPORT_PATTERN = new RegExp(
   `import\\(\\s*["']${SIBLING_PATH}["']\\s*\\)`,
   "g",
 );
+const DYNAMIC_SAME_FOLDER_IMPORT_PATTERN =
+  /import\(\s*["']\.\/[a-z][a-z0-9-]*["']\s*\)/g;
 
 const packageEntry = join(repoRoot, "packages/ui/src/index.ts");
 
@@ -215,8 +217,12 @@ const rewriteImports = (source: string): string => {
   // → `@vllnt/ui`
   code = code.replace(SIBLING_IMPORT_PATTERN, `from "${PACKAGE_NAME}"`);
 
-  // Dynamic `import("<sibling path>")` → `import("@vllnt/ui")`
+  // Dynamic `import("<sibling path>")` and `import("./<helper>")` → `import("@vllnt/ui")`
   code = code.replace(DYNAMIC_SIBLING_IMPORT_PATTERN, `import("${PACKAGE_NAME}")`);
+  code = code.replace(
+    DYNAMIC_SAME_FOLDER_IMPORT_PATTERN,
+    `import("${PACKAGE_NAME}")`,
+  );
 
   return rewriteSameFolderImports(code);
 };
