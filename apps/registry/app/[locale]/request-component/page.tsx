@@ -23,7 +23,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     locale,
     og: { description: t("metaDescription"), title: t("title"), type: "page" },
     pathname: "/request-component",
-    robots: { follow: true, index: false },
     title: `${t("title")} · VLLNT UI`,
   });
 }

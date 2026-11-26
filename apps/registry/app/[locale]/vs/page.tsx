@@ -105,7 +105,7 @@ export default async function VsIndexPage({ params }: Props) {
               </li>
             ) : (
               <li
-                className="rounded-lg border border-dashed border-border p-5 opacity-60"
+                className="rounded-lg border border-dashed border-border p-5"
                 key={entry.slug}
               >
                 <p className="text-lg font-semibold">

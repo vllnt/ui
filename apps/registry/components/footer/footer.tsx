@@ -94,7 +94,7 @@ export async function Footer() {
         <div className="grid grid-cols-2 gap-8 sm:grid-cols-4">
           {COLUMNS.map((column) => (
             <div key={column.titleKey}>
-              <h3 className="text-sm font-semibold">{t(column.titleKey)}</h3>
+              <h2 className="text-sm font-semibold">{t(column.titleKey)}</h2>
               <ul className="mt-4 space-y-2">
                 {column.links.map((link) => (
                   <li key={link.href}>
