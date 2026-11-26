@@ -106,3 +106,36 @@ describe("Combobox", () => {
     expect(screen.getByRole("combobox")).toHaveTextContent("Next.js");
   });
 });
+
+describe("Combobox state props", () => {
+  it("starts on defaultValue and follows the user's choice", () => {
+    render(<Combobox defaultValue="react" options={options} />);
+    expect(screen.getByRole("combobox")).toHaveTextContent("React");
+    fireEvent.click(screen.getByRole("combobox"));
+    fireEvent.click(screen.getByText("SvelteKit"));
+    expect(screen.getByRole("combobox")).toHaveTextContent("SvelteKit");
+  });
+
+  it("starts open with defaultOpen", () => {
+    render(<Combobox defaultOpen options={options} />);
+    expect(screen.getByRole("dialog")).toBeInTheDocument();
+  });
+
+  it("reports open changes and follows `open` when controlled", () => {
+    const onOpenChange = vi.fn();
+    const { rerender } = render(
+      <Combobox onOpenChange={onOpenChange} open={false} options={options} />,
+    );
+    fireEvent.click(screen.getByRole("combobox"));
+    expect(onOpenChange).toHaveBeenCalledWith(true);
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+
+    rerender(<Combobox onOpenChange={onOpenChange} open options={options} />);
+    expect(screen.getByRole("dialog")).toBeInTheDocument();
+  });
+
+  it("disables the trigger", () => {
+    render(<Combobox disabled options={options} />);
+    expect(screen.getByRole("combobox")).toBeDisabled();
+  });
+});

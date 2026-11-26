@@ -77,3 +77,29 @@ describe("ScopeSelector", () => {
     ).not.toBeInTheDocument();
   });
 });
+
+describe("ScopeSelector open state", () => {
+  it("starts open with defaultOpen", () => {
+    render(<ScopeSelector defaultOpen nodes={nodes} />);
+    expect(
+      screen.getByRole("button", { name: /environments/i }),
+    ).toBeInTheDocument();
+  });
+
+  it("reports open changes and follows `open` when controlled", () => {
+    const onOpenChange = vi.fn();
+    const { rerender } = render(
+      <ScopeSelector nodes={nodes} onOpenChange={onOpenChange} open={false} />,
+    );
+    fireEvent.click(screen.getByRole("button", { name: /select scope/i }));
+    expect(onOpenChange).toHaveBeenCalledWith(true);
+    expect(
+      screen.queryByRole("button", { name: /environments/i }),
+    ).not.toBeInTheDocument();
+
+    rerender(<ScopeSelector nodes={nodes} onOpenChange={onOpenChange} open />);
+    expect(
+      screen.getByRole("button", { name: /environments/i }),
+    ).toBeInTheDocument();
+  });
+});

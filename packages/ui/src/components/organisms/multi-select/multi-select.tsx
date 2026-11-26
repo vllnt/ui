@@ -4,6 +4,7 @@ import * as React from "react";
 
 import { Check, ChevronDown } from "lucide-react";
 
+import { useControllableState } from "../../../lib/use-controllable-state";
 import { cn } from "../../../lib/utils";
 import { Badge } from "../../atoms/badge/badge";
 import { Button } from "../../atoms/button/button";
@@ -31,10 +32,14 @@ export type MultiSelectProps = Omit<
   React.ButtonHTMLAttributes<HTMLButtonElement>,
   "defaultValue" | "onChange" | "value"
 > & {
+  /** Whether the list is open at first. Ignored once `open` has a value. */
+  defaultOpen?: boolean;
   defaultValue?: string[];
   emptyText?: string;
   onOpenChange?: (open: boolean) => void;
   onValueChange?: (value: string[]) => void;
+  /** Controls whether the list is open. */
+  open?: boolean;
   options: MultiSelectOption[];
   placeholder?: string;
   /**
@@ -63,18 +68,22 @@ type OptionListProps = {
 };
 
 type MultiSelectStateOptions = {
+  defaultOpen: boolean;
   defaultValue: string[];
   onOpenChange?: (open: boolean) => void;
   onValueChange?: (value: string[]) => void;
+  open?: boolean;
   value?: string[];
 };
 
 type MultiSelectTriggerProps = Omit<
   MultiSelectProps,
+  | "defaultOpen"
   | "defaultValue"
   | "emptyText"
   | "onOpenChange"
   | "onValueChange"
+  | "open"
   | "options"
   | "popoverLabel"
   | "searchable"
@@ -207,47 +216,41 @@ function MultiSelectContent({
 }
 
 function useMultiSelectState({
+  defaultOpen,
   defaultValue,
   onOpenChange,
   onValueChange,
+  open: openProperty,
   value,
 }: MultiSelectStateOptions) {
-  const [open, setOpen] = React.useState(false);
-  const [uncontrolledValue, setUncontrolledValue] = React.useState(() =>
-    getUniqueValues(defaultValue),
-  );
-  const isControlled = value !== undefined;
-  const selectedValues = React.useMemo(
-    () => getUniqueValues(value ?? uncontrolledValue),
-    [uncontrolledValue, value],
-  );
+  const [open, handleOpenChange] = useControllableState({
+    defaultValue: defaultOpen,
+    onChange: onOpenChange,
+    value: openProperty,
+  });
+  const [values, setValues] = useControllableState({
+    defaultValue,
+    onChange: onValueChange,
+    value,
+  });
+  const selectedValues = React.useMemo(() => getUniqueValues(values), [values]);
 
-  const setSelectedValues = React.useCallback(
-    (nextValue: string[]) => {
-      const uniqueValues = getUniqueValues(nextValue);
+  const handleSelect = React.useCallback(
+    (nextValue: string) => {
+      const nextSelectedValues = selectedValues.includes(nextValue)
+        ? selectedValues.filter((valueItem) => valueItem !== nextValue)
+        : [...selectedValues, nextValue];
 
-      if (!isControlled) {
-        setUncontrolledValue(uniqueValues);
-      }
-
-      onValueChange?.(uniqueValues);
+      setValues(getUniqueValues(nextSelectedValues));
     },
-    [isControlled, onValueChange],
-  );
-
-  const handleOpenChange = React.useCallback(
-    (nextOpen: boolean) => {
-      setOpen(nextOpen);
-      onOpenChange?.(nextOpen);
-    },
-    [onOpenChange],
+    [selectedValues, setValues],
   );
 
   return {
     handleOpenChange,
+    handleSelect,
     open,
     selectedValues,
-    setSelectedValues,
   };
 }
 
@@ -303,11 +306,13 @@ function resolvePopoverLabel(
 }
 
 const MultiSelect = ({
+  defaultOpen = false,
   defaultValue = [],
   emptyText = "No options found.",
   onKeyDown,
   onOpenChange,
   onValueChange,
+  open: openProperty,
   options,
   popoverLabel,
   ref,
@@ -317,24 +322,20 @@ const MultiSelect = ({
   ...props
 }: MultiSelectProps & { ref?: React.Ref<HTMLButtonElement> }) => {
   const contentId = React.useId();
-  const { handleOpenChange, open, selectedValues, setSelectedValues } =
-    useMultiSelectState({ defaultValue, onOpenChange, onValueChange, value });
+  const { handleOpenChange, handleSelect, open, selectedValues } =
+    useMultiSelectState({
+      defaultOpen,
+      defaultValue,
+      onOpenChange,
+      onValueChange,
+      open: openProperty,
+      value,
+    });
   const selectedOptions = React.useMemo(() => {
     const selectedSet = new Set(selectedValues);
 
     return options.filter((option) => selectedSet.has(option.value));
   }, [options, selectedValues]);
-
-  const handleSelect = React.useCallback(
-    (nextValue: string) => {
-      const nextSelectedValues = selectedValues.includes(nextValue)
-        ? selectedValues.filter((valueItem) => valueItem !== nextValue)
-        : [...selectedValues, nextValue];
-
-      setSelectedValues(nextSelectedValues);
-    },
-    [selectedValues, setSelectedValues],
-  );
 
   const handleTriggerKeyDown = React.useCallback(
     (event: React.KeyboardEvent<HTMLButtonElement>) => {

@@ -4,6 +4,7 @@ import * as React from "react";
 
 import { CalendarIcon } from "lucide-react";
 
+import { useControllableState } from "../../../lib/use-controllable-state";
 import { cn } from "../../../lib/utils";
 import { Button } from "../../atoms/button/button";
 import {
@@ -24,6 +25,8 @@ export type DatePickerProps = {
   buttonClassName?: string;
   calendarProps?: Omit<CalendarProps, "mode" | "onSelect" | "selected">;
   className?: string;
+  /** The date shown at first. Ignored once `value` has a value. */
+  defaultValue?: Date;
   onValueChange?: (date?: Date) => void;
   placeholder?: string;
   /** Accessible name of the calendar popover dialog. Defaults to "Choose date". */
@@ -35,6 +38,7 @@ const DatePicker = ({
   buttonClassName,
   calendarProps,
   className,
+  defaultValue,
   onValueChange,
   placeholder = "Pick a date",
   popoverLabel = "Choose date",
@@ -42,17 +46,12 @@ const DatePicker = ({
   value,
 }: DatePickerProps & { ref?: React.Ref<HTMLButtonElement> }) => {
   const [open, setOpen] = React.useState(false);
-  const [internalValue, setInternalValue] = React.useState<Date | undefined>(
-    () => value,
-  );
-  const selectedDate = value ?? internalValue;
+  const [selectedDate, setSelectedDate] = useControllableState<
+    Date | undefined
+  >({ defaultValue, onChange: onValueChange, value });
 
   const handleSelect = (nextDate: Date | undefined) => {
-    if (value === undefined) {
-      setInternalValue(nextDate);
-    }
-
-    onValueChange?.(nextDate);
+    setSelectedDate(nextDate);
 
     if (nextDate) {
       setOpen(false);
