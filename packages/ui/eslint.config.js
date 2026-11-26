@@ -129,7 +129,11 @@ export default [
   {
     // Tailwind theme keys (`DEFAULT`, `2xl`, `accordion-down`, `0%`) and the
     // Vite `@` path alias are dictated by the tools, not by our naming style.
-    files: ['src/tailwind-preset.ts', 'vitest.config.ts'],
+    files: [
+      'src/tailwind-animate.ts',
+      'src/tailwind-preset.ts',
+      'vitest.config.ts',
+    ],
     rules: {
       '@typescript-eslint/naming-convention': 'off',
     },

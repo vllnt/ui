@@ -2,14 +2,15 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 import type { Config } from "tailwindcss";
-import animate from "tailwindcss-animate";
+
+import { animatePlugin } from "./tailwind-animate";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
 const preset: Partial<Config> = {
   content: [join(__dirname, "**/*.js")],
   darkMode: ["class"],
-  plugins: [animate],
+  plugins: [animatePlugin],
   theme: {
     container: {
       center: true,
