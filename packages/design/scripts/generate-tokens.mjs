@@ -777,6 +777,165 @@ function oklchToHex(channels) {
   return `#${encoded.map((value) => value.toString(16).padStart(2, "0")).join("")}`;
 }
 
+// Native glass. Every value is read from the glass tokens above, so a change in
+// tokens.json reaches native on the next generation. Names follow the token
+// names, camelCased like the native colour roles: `glass-muted-foreground` is
+// `mutedForeground`, `tint-dense-top` is `tint.denseTop`, `glass-floating` is
+// `glassFloating`.
+
+const camelCase = (name) => name.replaceAll(/-([a-z])/g, (_, letter) => letter.toUpperCase());
+
+/** The `semantic` key (`mutedForeground`) of each colour role named by its CSS variable (`muted-foreground`). */
+const semanticKeyByRole = Object.fromEntries(
+  Object.entries(designTokens.color.semantic).map(([key, color]) => [
+    color.cssVariable.slice(2),
+    key,
+  ]),
+);
+
+/** The shadow tokens a glass surface draws. */
+const glassShadowNames = ["glass", "glass-floating"];
+
+/** The glass tint steps, `tint-top` to `tint-dense-bottom`: the mode tokens whose name starts with `tint-`. */
+const glassTintSteps = Object.entries(designTokens.material.glass)
+  .filter(([name, node]) => name.startsWith("tint-") && typeof node.light === "string")
+  .map(([name]) => name);
+
+/** A glass colour for React Native: `#rrggbbaa` as written, OKLCH channels as `#rrggbb`. */
+function nativeModeColor(value) {
+  if (isHexAlpha(value)) return value.toLowerCase();
+  assert(/^[0-9.]+ [0-9.]+ [0-9.]+$/.test(value), `${value} is not #RRGGBBAA or OKLCH channels.`);
+  return oklchToHex(value);
+}
+
+/**
+ * A glass colour value: a mode value, or a `{color.<role>}` reference. A
+ * semantic role takes the native palette, so the solid fallback is the colour
+ * a native Card draws, not the web one.
+ */
+function nativeGlassColor(value, mode, palette) {
+  if (!isReference(value)) return nativeModeColor(value);
+  const path = referencePath(value);
+  assert(
+    path?.length === 2 && path[0] === "color",
+    `${value} must be a {color.<role>} reference to resolve for native glass.`,
+  );
+  const key = semanticKeyByRole[path[1]];
+  if (key !== undefined) return palette[key];
+  assert(designTokens.color[path[1]]?.[mode] !== undefined, `${value} is not a colour token.`);
+  return nativeModeColor(designTokens.color[path[1]][mode]);
+}
+
+/** A glass blur radius in points; a literal `px` length. */
+function nativeBlur(name, value) {
+  assert(/^[0-9]+(?:\.[0-9]+)?px$/.test(value), `blur.glass.${name} must be a px length for native glass.`);
+  return lengthToPoints(value);
+}
+
+/** The layers of a `{shadow.<name>}` reference, for one mode. */
+function referencedShadowLayers(reference, mode) {
+  const path = referencePath(reference);
+  assert(
+    path?.length === 2 && path[0] === "shadow" && path[1] in designTokens.shadow,
+    `${reference} must be a {shadow.<name>} reference to resolve for native glass.`,
+  );
+  return designTokens.shadow[path[1]][mode];
+}
+
+/**
+ * A shadow token as a React Native shadow. A CSS shadow has many layers and a
+ * spread; React Native has one outer shadow, so:
+ *
+ * - Inset layers and `spread` are dropped. Native has neither.
+ * - The layer drawn is the one with the largest blur, the visible ambient
+ *   shadow; a tie goes to the higher alpha, then to the first layer. The small
+ *   contact layer that comes with it is lost.
+ * - `shadowColor` is that layer's RGB and `shadowOpacity` its alpha, so the
+ *   alpha is not applied twice. `shadowOffset` is its offset in points.
+ * - `shadowRadius` is the blur radius / 2. CSS blur is a gaussian of
+ *   sigma = blur / 2, which is what iOS `shadowRadius` is.
+ * - Android `elevation` (dp) is round((offsetY + blur / 2) / 2): the mean of
+ *   the key-light offset and the half blur. Material elevation is about its
+ *   key-light offset and half its penumbra blur, and this reproduces the
+ *   Material 4, 8, 16 and 24 dp shadows within 2 dp. Android draws the
+ *   elevation shadow itself, so it ignores `shadowOpacity` and `shadowRadius`.
+ */
+function nativeShadow(name, layers) {
+  const outer = layers.filter((layer) => !layer.inset);
+  assert(outer.length > 0, `${name} needs a layer that is not inset for native.`);
+  for (const layer of outer) {
+    assert(isHexAlpha(layer.color), `${name} layer color ${layer.color} must be #RRGGBBAA.`);
+  }
+  const alpha = (layer) => Number.parseInt(layer.color.slice(7), 16);
+  const layer = outer.reduce((best, next) => {
+    const larger = Number(next.blur) - Number(best.blur) || alpha(next) - alpha(best);
+    return larger > 0 ? next : best;
+  });
+  const blur = Number(layer.blur);
+  const offsetY = Number(layer.offsetY);
+  return {
+    elevation: Math.max(0, Math.round((offsetY + blur / 2) / 2)),
+    shadowColor: layer.color.slice(0, 7).toLowerCase(),
+    shadowOffset: { height: offsetY, width: Number(layer.offsetX) },
+    shadowOpacity: Number((alpha(layer) / 255).toFixed(3)),
+    shadowRadius: blur / 2,
+  };
+}
+
+/** Where the glass values of one mode come from: the glass tokens. */
+const glassSource = (mode) => ({
+  blur: (name) => designTokens.blur.glass[name].value,
+  hairline: designTokens.material.glass.hairline.value,
+  input: designTokens.color["glass-input"][mode],
+  mutedForeground: designTokens.color["glass-muted-foreground"][mode],
+  shadow: (name) => designTokens.shadow[name][mode],
+  tint: (step) => designTokens.material.glass[step][mode],
+});
+
+/**
+ * Where the solid fallback comes from: the `material.solid` set that overrides
+ * the glass tokens. As on the web (`solidLines`), the glass text roles fall
+ * back to the base roles, which the set leaves to the renderer.
+ */
+const solidSource = (mode) => {
+  const solid = designTokens.material.solid;
+  return {
+    blur: (name) => solid[`blur.glass.${name}`],
+    hairline: solid["material.glass.hairline"],
+    input: "{color.input}",
+    mutedForeground: "{color.muted-foreground}",
+    shadow: (name) => referencedShadowLayers(solid[`shadow.${name}`], mode),
+    tint: (step) => solid[`material.glass.${step}`],
+  };
+};
+
+/** One glass surface of one mode, in native units, from `source`. */
+function nativeGlassSurface(mode, palette, source) {
+  const color = (value) => nativeGlassColor(value, mode, palette);
+  return {
+    blur: mapValues(designTokens.blur.glass, (_, name) => nativeBlur(name, source.blur(name))),
+    foreground: palette.foreground,
+    hairline: color(source.hairline),
+    input: color(source.input),
+    mutedForeground: color(source.mutedForeground),
+    shadow: Object.fromEntries(
+      glassShadowNames.map((name) => [
+        camelCase(name),
+        nativeShadow(`shadow.${name}`, source.shadow(name)),
+      ]),
+    ),
+    tint: Object.fromEntries(
+      glassTintSteps.map((step) => [camelCase(step.slice("tint-".length)), color(source.tint(step))]),
+    ),
+  };
+}
+
+/** The glass group of one mode: the surface, and `solid`, the same surface with glass off. */
+const nativeGlass = (mode, palette) => ({
+  ...nativeGlassSurface(mode, palette, glassSource(mode)),
+  solid: nativeGlassSurface(mode, palette, solidSource(mode)),
+});
+
 function nativeTokens() {
   const colors = { dark: {}, light: {} };
   for (const [name, color] of Object.entries(designTokens.color.semantic)) {
@@ -804,6 +963,7 @@ function nativeTokens() {
 
   return {
     color: colors,
+    glass: Object.fromEntries(modes.map((mode) => [mode, nativeGlass(mode, colors[mode])])),
     motion: { duration: mapValues(designTokens.motion.duration, milliseconds) },
     radius: mapValues(designTokens.radius, lengthToPoints),
     spacing: mapValues(designTokens.spacing.scale, remToPoints),
