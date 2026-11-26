@@ -52,7 +52,8 @@ type ButtonVariantOptions = {
  * the caller's `className` (or `class`), merged with `cn`, and `size` has no
  * effect.
  */
-const buttonVariants = (options?: ButtonVariantOptions | null): string => {
+const buttonVariants = (options: ButtonVariantOptions = {}): string => {
+  // cva accepted `null` at runtime, outside its type; keep accepting it.
   const { class: classValue, className, size, variant } = options ?? {};
   return variant === "unstyled"
     ? cn(classValue, className)

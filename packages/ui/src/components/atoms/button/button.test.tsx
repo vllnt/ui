@@ -53,7 +53,10 @@ describe("Button", () => {
       "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 h-9 rounded-md px-3 hover:bg-accent hover:text-accent-foreground x",
     );
     expect(buttonVariants({ class: "y", variant: "outline" })).toMatch(/ y$/);
-    expect(buttonVariants(null)).toBe(buttonVariants());
+    // Untyped callers may pass null, which cva accepted.
+    expect(Reflect.apply(buttonVariants, undefined, [null])).toBe(
+      buttonVariants(),
+    );
   });
 
   describe('variant="unstyled"', () => {
