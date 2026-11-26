@@ -2,8 +2,8 @@ import { forwardRef } from "react";
 
 import { type GlassPeerExports, resolveGlassRenderer } from "./glass-renderer";
 
-const glassView = () => undefined;
-const blurView = () => undefined;
+const glassView = jest.fn();
+const blurView = jest.fn();
 const yes = () => true;
 const no = () => false;
 const throwing = () => {
@@ -89,7 +89,7 @@ describe("resolveGlassRenderer", () => {
   });
 
   it("accepts a forwardRef BlurView, the web export of expo-blur", () => {
-    const forwardedBlurView = forwardRef(() => undefined);
+    const forwardedBlurView = forwardRef(jest.fn());
     forwardedBlurView.displayName = "ForwardedBlurView";
 
     expect(
