@@ -1,6 +1,5 @@
 import { Slot } from "@radix-ui/react-slot";
-import { cva, cx, type VariantProps } from "class-variance-authority";
-import type { ClassValue } from "clsx";
+import { cva, type VariantProps } from "class-variance-authority";
 
 import { cn } from "../../../lib/utils";
 
@@ -34,6 +33,8 @@ const styledButtonVariants = cva(
   },
 );
 
+type ClassValue = Parameters<typeof cn>[number];
+
 type StyledButtonOptions = NonNullable<
   Parameters<typeof styledButtonVariants>[0]
 >;
@@ -57,9 +58,10 @@ const buttonVariants = ({
   variant,
 }: ButtonVariantOptions = {}): string =>
   variant === "unstyled"
-    ? cx(classValue, className)
+    ? cn(classValue, className)
     : styledButtonVariants({
-        className: cx(classValue, className),
+        // cva flattens the array, so the string matches passing each value.
+        className: [classValue, className],
         size,
         variant,
       });
