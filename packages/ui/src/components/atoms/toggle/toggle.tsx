@@ -1,8 +1,7 @@
 "use client";
 
 import { Toggle as TogglePrimitive } from "@ui-sdk/react/toggle";
-import { cva, cx, type VariantProps } from "class-variance-authority";
-import type { ClassValue } from "clsx";
+import { cva, type VariantProps } from "class-variance-authority";
 import type * as React from "react";
 
 import {
@@ -34,6 +33,8 @@ const styledToggleVariants = cva(
   },
 );
 
+type ClassValue = Parameters<typeof cn>[number];
+
 type StyledToggleOptions = NonNullable<
   Parameters<typeof styledToggleVariants>[0]
 >;
@@ -48,21 +49,21 @@ type ToggleVariantOptions = {
 
 /**
  * Toggle classes. `variant: "unstyled"` adds none of its own: the result is
- * the caller's `className` (or `class`), and `size` has no effect.
+ * the caller's `className` (or `class`), merged with `cn`, and `size` has no
+ * effect.
  */
-const toggleVariants = ({
-  class: classValue,
-  className,
-  size,
-  variant,
-}: ToggleVariantOptions = {}): string =>
-  variant === "unstyled"
-    ? cx(classValue, className)
+const toggleVariants = (options: ToggleVariantOptions = {}): string => {
+  // cva accepted `null` at runtime, outside its type; keep accepting it.
+  const { class: classValue, className, size, variant } = options ?? {};
+  return variant === "unstyled"
+    ? cn(classValue, className)
     : styledToggleVariants({
-        className: cx(classValue, className),
+        // cva flattens the array, so the string matches passing each value.
+        className: [classValue, className],
         size,
         variant,
       });
+};
 
 const pressedState = (state: { pressed: boolean }): DataAttributes => ({
   "data-state": state.pressed ? "on" : "off",

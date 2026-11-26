@@ -96,4 +96,10 @@ describe("Toggle Radix-compatible state", () => {
       expect(toggleVariants()).toContain("data-[state=on]:bg-accent");
     });
   });
+
+  it("keeps accepting null in toggleVariants, as cva did", () => {
+    expect(Reflect.apply(toggleVariants, undefined, [null])).toBe(
+      toggleVariants(),
+    );
+  });
 });
