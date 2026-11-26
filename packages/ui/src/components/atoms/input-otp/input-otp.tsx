@@ -1,78 +1,173 @@
 "use client";
 
-import { use } from "react";
+import * as React from "react";
 
-import { OTPInput, OTPInputContext } from "input-otp";
+import {
+  OTPInput,
+  OTPInputGroup,
+  OTPInputSeparator,
+  OTPInputSlot,
+  type OTPInputSlotState,
+} from "@ui-sdk/react/otp-input";
 import { Dot } from "lucide-react";
 
+import type { NarrowPartProps } from "../../../lib/ui-sdk";
 import { cn } from "../../../lib/utils";
+
+type SdkProps = React.ComponentProps<typeof OTPInput>;
+type SdkPattern = NonNullable<SdkProps["pattern"]>;
+type TextAlign = "center" | "end" | "left" | "right" | "start";
+
+const PATTERN_KEYWORDS = new Set(["alphanumeric", "digits", "letters"]);
+const ANY_CHARACTER = /[\S\s]/;
+// ui-sdk's own default length; slots past `maxLength` render nothing.
+const DEFAULT_MAX_LENGTH = 6;
+const MaxLengthContext = React.createContext(DEFAULT_MAX_LENGTH);
+
+type InputOTPProps = Omit<
+  NarrowPartProps<SdkProps>,
+  "onValueChange" | "onValueCommit" | "pattern" | "textAlign"
+> & {
+  /** Class names for the wrapper element (the root). Merged with `className`. */
+  containerClassName?: string;
+  /** Runs with the whole code on every change. */
+  onChange?: (value: string) => void;
+  /** Runs with the whole code once every slot has a character. */
+  onComplete?: (value: string) => void;
+  /**
+   * Which characters a code accepts: `"digits"`, `"letters"`, `"alphanumeric"`,
+   * a `RegExp` that each character must match, or a regular expression string
+   * such as `"^\d+$"`, which also has to match each single character.
+   * Without a pattern, any character works.
+   */
+  pattern?: SdkPattern | (string & {});
+  ref?: React.Ref<HTMLInputElement>;
+  /** `"left"` and `"right"` mean the same as `"start"` and `"end"`. */
+  textAlign?: TextAlign;
+};
+
+const SDK_TEXT_ALIGN: Record<TextAlign, "center" | "end" | "start"> = {
+  center: "center",
+  end: "end",
+  left: "start",
+  right: "end",
+  start: "start",
+};
+
+// ui-sdk callbacks get a details argument too; input-otp's got the code alone.
+const codeOnly = (callback: ((value: string) => void) | undefined) =>
+  callback
+    ? (value: string) => {
+        callback(value);
+      }
+    : undefined;
 
 const InputOTP = ({
   className,
   containerClassName,
-  ref,
+  inputMode,
+  maxLength = DEFAULT_MAX_LENGTH,
+  onChange,
+  onComplete,
+  pattern,
+  ref: reference,
+  textAlign,
   ...props
-}: React.ComponentPropsWithoutRef<typeof OTPInput> & {
-  ref?: React.Ref<React.ComponentRef<typeof OTPInput>>;
-}) => (
-  <OTPInput
-    className={cn("disabled:cursor-not-allowed", className)}
-    containerClassName={cn(
-      "flex items-center gap-2 has-[:disabled]:opacity-50",
-      containerClassName,
-    )}
-    ref={ref}
-    {...props}
-  />
-);
+}: InputOTPProps) => {
+  const sdkPattern = React.useMemo<SdkPattern>(
+    () =>
+      pattern === undefined
+        ? ANY_CHARACTER
+        : typeof pattern === "string" && !PATTERN_KEYWORDS.has(pattern)
+          ? new RegExp(pattern)
+          : (pattern as SdkPattern),
+    [pattern],
+  );
+
+  // The ref targets the real <input>, as before; the sdk's root is a <div>.
+  const rootReference = React.useCallback(
+    (root: HTMLDivElement | null) => {
+      const input = root?.querySelector("input") ?? null;
+      if (typeof reference === "function") {
+        reference(input);
+      } else if (reference) {
+        reference.current = input;
+      }
+    },
+    [reference],
+  );
+
+  return (
+    <MaxLengthContext value={maxLength}>
+      <OTPInput
+        className={cn(
+          "flex items-center gap-2 has-[:disabled]:opacity-50 [&>input:disabled]:cursor-not-allowed",
+          containerClassName,
+          className,
+        )}
+        inputMode={
+          inputMode ?? (sdkPattern === pattern ? undefined : "numeric")
+        }
+        maxLength={maxLength}
+        onValueChange={codeOnly(onChange)}
+        onValueCommit={codeOnly(onComplete)}
+        pattern={sdkPattern}
+        ref={rootReference}
+        textAlign={textAlign ? SDK_TEXT_ALIGN[textAlign] : undefined}
+        {...props}
+      />
+    </MaxLengthContext>
+  );
+};
 InputOTP.displayName = "InputOTP";
 
 const InputOTPGroup = ({
   className,
   ref,
   ...props
-}: React.ComponentPropsWithoutRef<"div"> & {
-  ref?: React.Ref<React.ComponentRef<"div">>;
-}) => (
-  <div className={cn("flex items-center", className)} ref={ref} {...props} />
+}: NarrowPartProps<React.ComponentProps<typeof OTPInputGroup>>) => (
+  <OTPInputGroup
+    className={cn("flex items-center", className)}
+    ref={ref}
+    {...props}
+  />
 );
 InputOTPGroup.displayName = "InputOTPGroup";
+
+const slotContent = ({ char, hasFakeCaret }: OTPInputSlotState) => (
+  <>
+    {char}
+    {hasFakeCaret ? (
+      <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+        <div className="h-4 w-px animate-caret-blink bg-foreground duration-1000 motion-reduce:animate-none" />
+      </div>
+    ) : null}
+  </>
+);
 
 const InputOTPSlot = ({
   className,
   index,
   ref,
   ...props
-}: React.ComponentPropsWithoutRef<"div"> & {
-  index: number;
-  ref?: React.Ref<React.ComponentRef<"div">>;
-}) => {
-  const inputOTPContext = use(OTPInputContext);
-  const slot = inputOTPContext.slots[index];
+}: NarrowPartProps<React.ComponentProps<typeof OTPInputSlot>>) => {
+  const maxLength = React.use(MaxLengthContext);
 
-  if (!slot) {
+  if (index >= maxLength) {
     return null;
   }
 
-  const { char, hasFakeCaret, isActive } = slot;
+  const slotClassName = ({ active }: OTPInputSlotState) =>
+    cn(
+      "relative flex size-10 items-center justify-center border-y border-r border-input text-sm transition-all first:rounded-l-md first:border-l last:rounded-r-md",
+      active && "z-10 ring-2 ring-ring ring-offset-background",
+      className,
+    );
 
   return (
-    <div
-      className={cn(
-        "relative flex size-10 items-center justify-center border-y border-r border-input text-sm transition-all first:rounded-l-md first:border-l last:rounded-r-md",
-        isActive && "z-10 ring-2 ring-ring ring-offset-background",
-        className,
-      )}
-      ref={ref}
-      {...props}
-    >
-      {char}
-      {hasFakeCaret ? (
-        <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-          <div className="h-4 w-px animate-caret-blink bg-foreground duration-1000 motion-reduce:animate-none" />
-        </div>
-      ) : null}
-    </div>
+    <OTPInputSlot className={slotClassName} index={index} ref={ref} {...props}>
+      {slotContent}
+    </OTPInputSlot>
   );
 };
 InputOTPSlot.displayName = "InputOTPSlot";
@@ -80,12 +175,10 @@ InputOTPSlot.displayName = "InputOTPSlot";
 const InputOTPSeparator = ({
   ref,
   ...props
-}: React.ComponentPropsWithoutRef<"div"> & {
-  ref?: React.Ref<React.ComponentRef<"div">>;
-}) => (
-  <div ref={ref} role="separator" {...props}>
+}: NarrowPartProps<React.ComponentProps<typeof OTPInputSeparator>>) => (
+  <OTPInputSeparator ref={ref} role="separator" {...props}>
     <Dot />
-  </div>
+  </OTPInputSeparator>
 );
 InputOTPSeparator.displayName = "InputOTPSeparator";
 

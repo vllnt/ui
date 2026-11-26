@@ -2112,7 +2112,7 @@ function CollapsiblePreview() {
 
 function CarouselPreview() {
   return (
-    <Carousel className="w-full max-w-xs">
+    <Carousel aria-label="Numbered slides" className="w-full max-w-xs">
       <CarouselContent>
         {Array.from({ length: 3 }).map((_, index) => (
           <CarouselItem key={index}>

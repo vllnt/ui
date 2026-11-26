@@ -129,15 +129,12 @@
     "@xyflow/react": "^12.12.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
-    "embla-carousel-react": "^8.6.0",
     "html-to-image": "^1.11.13",
-    "input-otp": "^1.5.0",
     "lucide-react": "^1.73.0",
     "react-hook-form": "^7.92.0",
     "react-markdown": "^10.1.0",
     "react-syntax-highlighter": "^16.1.2",
     "remark-gfm": "^4.0.1",
-    "sonner": "^2.0.8",
     "tailwind-merge": "^2.6.1"
   },
   "devDependencies": {

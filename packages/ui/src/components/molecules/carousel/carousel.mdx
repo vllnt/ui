@@ -30,7 +30,14 @@ import {
 ## Usage
 
 ```tsx
-<Carousel>Carousel content</Carousel>
+<Carousel aria-label="Release stages" className="mx-12 w-64">
+  <CarouselContent>
+    <CarouselItem>Design</CarouselItem>
+    <CarouselItem>Build</CarouselItem>
+  </CarouselContent>
+  <CarouselPrevious />
+  <CarouselNext />
+</Carousel>
 ```
 
 <Canvas of={Stories.Default} sourceState="shown" />
@@ -41,28 +48,48 @@ import {
 
 | Prop | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| `opts` | `CarouselOptions` | No | - |
+| `opts` | `CarouselOptions` | No | `align`, `dragFree`, `loop`, `skipSnaps`, `slidesToScroll`, `startIndex`, `watchDrag` |
 | `orientation` | `"horizontal" \| "vertical"` | No | `horizontal`, `vertical` |
-| `plugins` | `CarouselPlugin` | No | - |
-| `setApi` | `(api: CarouselApi) =&gt; void` | No | Callback: `(api: CarouselApi) => void` |
+| `setApi` | `(api: CarouselApi) => void` | No | Called once the slides are measured |
+
+## Behavior
+
+- The carousel is a labelled region: pass `aria-label`. Each slide is a group with the role description "slide" and the name "n of N" unless you set `aria-label`. Slides out of view are `inert`.
+- The viewport scrolls natively with scroll snapping. It takes focus, and the arrow keys (up and down when vertical) page it while it has focus.
+- The previous and next buttons are `aria-disabled` at either end and stay focusable.
+- Space slides with end padding on `CarouselItem` and a matching negative end margin on `CarouselContent` (`pe-4` and `-me-4` by default; `pb-4` and `-mb-4` when vertical). Override both together.
+- Give a vertical carousel a height, for example `className="h-[200px]"` on `CarouselContent`.
 
 ## Type Definitions
 
-### UseCarouselLogicOptions
+### CarouselOptions
 
 ```tsx
-type UseCarouselLogicOptions = {
-  options: CarouselOptions
-  orientation: "horizontal" | "vertical"
-  plugins: CarouselPlugin
-  setApi?: (api: CarouselApi) => void
+type CarouselOptions = {
+  align?: "center" | "end" | "start"
+  dragFree?: boolean
+  loop?: boolean
+  skipSnaps?: boolean
+  slidesToScroll?: "auto" | number
+  startIndex?: number
+  watchDrag?: boolean
 }
 ```
 
-| Field | Type | Required | Description |
-| ----- | ---- | -------- | ----------- |
-| `options` | `CarouselOptions` | Yes | - |
-| `orientation` | `"horizontal" \| "vertical"` | Yes | `horizontal`, `vertical` |
-| `plugins` | `CarouselPlugin` | Yes | - |
-| `setApi` | `(api: CarouselApi) =&gt; void` | No | Callback: `(api: CarouselApi) => void` |
+### CarouselApi
 
+```tsx
+type CarouselApi = {
+  canScrollNext: () => boolean
+  canScrollPrev: () => boolean
+  off: (event: "reInit" | "select", listener: (api: CarouselApi) => void) => CarouselApi
+  on: (event: "reInit" | "select", listener: (api: CarouselApi) => void) => CarouselApi
+  scrollNext: () => void
+  scrollPrev: () => void
+  scrollSnapList: () => number[]
+  scrollTo: (index: number) => void
+  selectedScrollSnap: () => number
+}
+```
+
+`scrollSnapList()` has one entry per page, spaced evenly from 0 to 1.
