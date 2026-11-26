@@ -4,6 +4,7 @@ import * as React from "react";
 
 import {
   Tooltip as TooltipRoot,
+  TooltipArrow as TooltipArrowPart,
   TooltipContent as TooltipContentPart,
   TooltipTrigger as TooltipTriggerPart,
 } from "@ui-sdk/react/tooltip";
@@ -44,8 +45,21 @@ const TooltipProvider = ({
 TooltipProvider.displayName = "TooltipProvider";
 
 type TooltipProps = React.ComponentProps<typeof TooltipRoot> & {
+  /**
+   * Milliseconds the tooltip stays open once the pointer leaves the trigger
+   * and the tooltip. Defaults to 0.
+   */
+  closeDelay?: number;
   /** Milliseconds the pointer rests on the trigger before the tooltip opens. */
   delayDuration?: number;
+  /**
+   * A press on the trigger (finger, mouse or keyboard) opens and closes the
+   * tooltip, so it opens on touch screens too; an outside press or Escape
+   * closes it. With a mouse, hovering opens it first, so the first press keeps
+   * it open and the next closes it. Meant for an info button that exists to
+   * show the tip. Defaults to off.
+   */
+  toggleable?: boolean;
 };
 
 const Tooltip = ({ delayDuration, ...props }: TooltipProps) => {
@@ -121,7 +135,7 @@ const TooltipContent = ({
   return (
     <TooltipContentPart
       className={cn(
-        "vllnt-glass vllnt-glass-dense z-50 bg-transparent overflow-hidden rounded-md border px-3 py-1.5 text-sm text-popover-foreground animate-in fade-in-0 zoom-in-95 [--radix-tooltip-content-available-height:var(--available-height)] [--radix-tooltip-content-available-width:var(--available-width)] [--radix-tooltip-content-transform-origin:var(--transform-origin)] [--radix-tooltip-trigger-height:var(--anchor-height)] [--radix-tooltip-trigger-width:var(--anchor-width)] data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
+        "vllnt-glass vllnt-glass-dense z-50 bg-transparent overflow-hidden has-[>[data-slot=tooltip-arrow]]:overflow-visible rounded-md border px-3 py-1.5 text-sm text-popover-foreground animate-in fade-in-0 zoom-in-95 [--radix-tooltip-content-available-height:var(--available-height)] [--radix-tooltip-content-available-width:var(--available-width)] [--radix-tooltip-content-transform-origin:var(--transform-origin)] [--radix-tooltip-trigger-height:var(--anchor-height)] [--radix-tooltip-trigger-width:var(--anchor-width)] data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
         className,
       )}
       collisionPadding={collisionPadding}
@@ -137,4 +151,36 @@ const TooltipContent = ({
 };
 TooltipContent.displayName = "TooltipContent";
 
-export { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger };
+type ArrowProps = Omit<
+  PlainClass<React.ComponentProps<typeof TooltipArrowPart>>,
+  "render"
+> & {
+  ref?: React.Ref<HTMLDivElement>;
+};
+
+/**
+ * Points at the trigger from the side the tooltip lands on, including after a
+ * flip. Place it inside `TooltipContent`, which then stops clipping its
+ * children. Hidden from assistive technology.
+ */
+const TooltipArrow = ({ className, ref, ...props }: ArrowProps) => (
+  <TooltipArrowPart
+    className={cn(
+      // An 8 px square offset by half its size: the diamond's centre sits on
+      // the content's edge, so it stays inside the 6 px padding.
+      "size-2 rotate-45 bg-popover data-[side=bottom]:-top-1 data-[side=left]:-right-1 data-[side=right]:-left-1 data-[side=top]:-bottom-1",
+      className,
+    )}
+    ref={ref}
+    {...props}
+  />
+);
+TooltipArrow.displayName = "TooltipArrow";
+
+export {
+  Tooltip,
+  TooltipArrow,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+};
