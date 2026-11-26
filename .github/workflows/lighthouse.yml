@@ -1,0 +1,78 @@
+name: Lighthouse
+
+# Lighthouse scores for public pages, run by hand: before and after a change to
+# the site's message, metadata or structured data (#742). Runs on GitHub's
+# runners, one page at a time with a pause between pages, because the edge bans
+# bursts. Reports are uploaded as an artifact and the scores go to the job summary.
+
+on:
+  workflow_dispatch:
+    inputs:
+      urls:
+        description: "Space-separated URLs to audit"
+        required: true
+        default: "https://ui.vllnt.com/ https://ui.vllnt.com/components https://ui.vllnt.com/docs https://ui.vllnt.com/ai"
+      label:
+        description: "Short name for this run, for example baseline or after-742"
+        required: true
+        default: "baseline"
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    name: Lighthouse (${{ inputs.label }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          sparse-checkout: .node-version
+          sparse-checkout-cone-mode: false
+
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .node-version
+
+      - name: Audit each page on mobile and desktop
+        env:
+          URLS: ${{ inputs.urls }}
+        run: |
+          set -euo pipefail
+          mkdir -p reports
+          index=0
+          for url in $URLS; do
+            for preset in mobile desktop; do
+              index=$((index + 1))
+              flags="--only-categories=seo,accessibility,best-practices,performance --output=json --quiet --chrome-flags=--headless=new"
+              if [ "$preset" = desktop ]; then flags="$flags --preset=desktop"; fi
+              # shellcheck disable=SC2086
+              npx --yes lighthouse@13.6.0 "$url" $flags --output-path="reports/$index-$preset.json"
+              sleep 20
+            done
+          done
+
+      - name: Write scores to the job summary
+        run: |
+          node --input-type=module <<'SCRIPT'
+          import { readdirSync, readFileSync, appendFileSync } from "node:fs";
+          const rows = readdirSync("reports").sort((a, b) => parseInt(a) - parseInt(b)).map((file) => {
+            const report = JSON.parse(readFileSync(`reports/${file}`, "utf8"));
+            const score = (id) => { const value = report.categories[id]?.score; return typeof value === "number" ? Math.round(value * 100) : "n/a"; };
+            const preset = file.includes("desktop") ? "desktop" : "mobile";
+            return `| ${report.finalDisplayedUrl} | ${preset} | ${score("seo")} | ${score("accessibility")} | ${score("best-practices")} | ${score("performance")} |`;
+          });
+          const table = ["| Page | Form factor | SEO | Accessibility | Best practices | Performance |", "| --- | --- | --- | --- | --- | --- |", ...rows].join("\n");
+          appendFileSync(process.env.GITHUB_STEP_SUMMARY, `## Lighthouse: ${process.env.LABEL}\n\n${table}\n`);
+          console.log(table);
+          SCRIPT
+        env:
+          LABEL: ${{ inputs.label }}
+
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: lighthouse-${{ inputs.label }}
+          path: reports/
+          retention-days: 90
