@@ -238,11 +238,14 @@ const SheetContent = ({
         )}
         {...props}
       >
+        {slot.children}
+        {/* Last in the DOM, so the first tabbable element of the content, not
+            Close, takes the initial focus. Its position stays `absolute`, so
+            Close still sits in the corner. */}
         <SheetClosePart className="absolute right-3 top-3 inline-flex size-6 items-center justify-center rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-secondary">
           <X className="size-4" />
           <span className="sr-only">{labels?.close ?? "Close"}</span>
         </SheetClosePart>
-        {slot.children}
       </SheetContentPart>
     </>
   );

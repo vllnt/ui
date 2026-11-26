@@ -223,11 +223,11 @@ describe("Sheet Radix-compatible DOM", () => {
     );
   });
 
-  it("puts the close button before the content, like the Radix version", () => {
+  it("puts the close button after the content, so the content takes the initial focus", () => {
     renderOpenSheet();
     const dialog = screen.getByRole("dialog");
 
-    expect(dialog.firstElementChild).toBe(
+    expect(dialog.lastElementChild).toBe(
       screen.getByRole("button", { name: "Close" }),
     );
   });
@@ -451,6 +451,25 @@ describe("Sheet focus handlers", () => {
     await waitFor(() => {
       expect(trigger).toHaveFocus();
     });
+  });
+
+  it("focuses the first control of the content, not Close, when it opens", async () => {
+    vi.spyOn(Element.prototype, "getClientRects").mockReturnValue(
+      Object.assign([new DOMRect(0, 0, 1, 1)], { item: () => null }),
+    );
+    render(
+      <Sheet defaultOpen>
+        <SheetContent>
+          <SheetTitle>Title</SheetTitle>
+          <input aria-label="Name" />
+        </SheetContent>
+      </Sheet>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByLabelText("Name")).toHaveFocus();
+    });
+    expect(screen.getByRole("button", { name: "Close" })).not.toHaveFocus();
   });
 
   it("leaves focus where onCloseAutoFocus put it after preventDefault", async () => {
