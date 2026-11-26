@@ -118,4 +118,50 @@ describe("ToggleGroup Radix-compatible modes", () => {
     expect(bold).toHaveAttribute("data-state", "on");
     expect(bold).toHaveAttribute("aria-pressed", "true");
   });
+
+  describe('variant="unstyled"', () => {
+    it("drops the group and item classes and keeps the behaviour", () => {
+      const onValueChange = vi.fn();
+      render(
+        <ToggleGroup
+          aria-label="Difficulty"
+          className="chips"
+          onValueChange={onValueChange}
+          size="lg"
+          type="single"
+          variant="unstyled"
+        >
+          <ToggleGroupItem className="chip" value="easy">
+            Easy
+          </ToggleGroupItem>
+          <ToggleGroupItem value="hard">Hard</ToggleGroupItem>
+        </ToggleGroup>,
+      );
+      expect(screen.getByRole("radiogroup").className).toBe("chips");
+      const easy = screen.getByRole("radio", { name: "Easy" });
+      const hard = screen.getByRole("radio", { name: "Hard" });
+      expect(easy.className).toBe("chip");
+      expect(hard).not.toHaveAttribute("class");
+      fireEvent.click(hard);
+      expect(onValueChange).toHaveBeenCalledWith("hard");
+      expect(hard).toHaveAttribute("aria-checked", "true");
+      expect(hard).toHaveAttribute("data-state", "on");
+    });
+
+    it("unstyles one item inside a styled group", () => {
+      render(
+        <ToggleGroup aria-label="Format" type="multiple">
+          <ToggleGroupItem className="plain" value="b" variant="unstyled">
+            B
+          </ToggleGroupItem>
+          <ToggleGroupItem value="i">I</ToggleGroupItem>
+        </ToggleGroup>,
+      );
+      expect(screen.getByRole("toolbar")).toHaveClass("flex", "gap-1");
+      expect(screen.getByRole("button", { name: "B" }).className).toBe("plain");
+      expect(screen.getByRole("button", { name: "I" })).toHaveClass(
+        "rounded-md",
+      );
+    });
+  });
 });

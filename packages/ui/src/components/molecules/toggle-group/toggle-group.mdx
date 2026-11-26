@@ -37,3 +37,8 @@ import { ToggleGroup, ToggleGroupItem } from '@vllnt/ui'
 
 ### ToggleGroup.displayName
 
+## Unstyled
+
+`variant="unstyled"` on the group drops its layout classes and every item's classes; each part draws only its `className`. The group keeps its roles, values and arrow-key focus. Set it on one `ToggleGroupItem` to unstyle that item alone, in a group that sets no `variant` (the group's `variant` wins over the item's).
+
+<Canvas of={Stories.Unstyled} sourceState="shown" />

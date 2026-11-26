@@ -37,6 +37,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
   new) or `size.measure-narrow` (480 px).
 - **`Kbd` `variant="glass"`** - a chip for a glass surface: 9 % ink wash, 75 % ink
   text, no border. Place it on the dense glass tint.
+- **`Toggle`, `ToggleGroup` and `ToggleGroupItem` `variant="unstyled"`** - keeps
+  the pressed state, roles, `aria-pressed` / `aria-checked`, `data-state`,
+  keyboard and `asChild`, and adds no classes of its own: each part's class list
+  is only its `className`, and `size` has no effect. On `ToggleGroup` it also
+  drops the group's layout classes and applies to every item.
+  `toggleVariants({ variant: "unstyled" })` returns only the caller's classes;
+  the other variants render the same class strings as before.
 - **`StatusIndicator` `icon`** - a mark shown in place of the dot. The tone
   colours the icon alone; the pill and label take the neutral variant, so the
   label stays foreground.

@@ -6795,6 +6795,10 @@
       {
         "id": "core-toggle--variant-outline",
         "name": "Variant Outline"
+      },
+      {
+        "id": "core-toggle--variant-unstyled",
+        "name": "Variant Unstyled"
       }
     ],
     "title": "Toggle"
@@ -6812,6 +6816,10 @@
       {
         "id": "core-togglegroup--default",
         "name": "Default"
+      },
+      {
+        "id": "core-togglegroup--unstyled",
+        "name": "Unstyled"
       }
     ],
     "title": "Toggle Group"
