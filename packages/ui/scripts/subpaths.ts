@@ -9,8 +9,8 @@
  * The subpaths are derived from the barrel, so they cannot drift from it:
  * one subpath per component directory named in `src/components/index.ts`,
  * re-exporting exactly the names the root exports from that directory, plus
- * `utils` for `cn`. `tsup.config.ts` calls `writeSubpaths` after the build;
- * `package.json` maps `./*` to `dist/subpaths/*.js` and `*.d.ts`.
+ * `utils` for `cn`. `scripts/write-subpaths.ts` calls `writeSubpaths` after
+ * tsup; `package.json` maps `./*` to `dist/subpaths/*.js` and `*.d.ts`.
  *
  * Each `.js` file re-exports from the component's own module and carries no
  * client directive of its own, so a server-safe component stays server-safe.
