@@ -39,6 +39,7 @@ export {
   type QrErrorLevel,
   type QrMatrix,
 } from "./lib/qr-encoder";
+export { createSchemaResolver } from "./lib/schema-resolver";
 export { formatChange, normalizeDate } from "./lib/format";
 export {
   isStatusTone,

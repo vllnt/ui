@@ -122,7 +122,6 @@
     }
   },
   "dependencies": {
-    "@hookform/resolvers": "^7.0.6",
     "@mdx-js/mdx": "^3.1.1",
     "@tanstack/react-table": "^8.21.3",
     "@ui-sdk/core": "0.1.0-beta.7",
