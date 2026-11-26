@@ -58,6 +58,22 @@ describe("pageMetadata", () => {
   });
 });
 
+describe("pageMetadata canonicalized to another page", () => {
+  it("lists no language alternates, so the canonical is not another hreflang URL", () => {
+    const metadata = pageMetadata({
+      canonicalPath: "/components/button",
+      locale: "en",
+      og: { title: "Button", type: "component" },
+      pathname: "/components/button/playground",
+    });
+
+    expect(metadata.alternates?.canonical).toBe(
+      "https://ui.vllnt.com/components/button",
+    );
+    expect(metadata.alternates?.languages).toBeUndefined();
+  });
+});
+
 describe("pageMetadata image", () => {
   it("replaces the generated card with a hosted image on Open Graph and Twitter", () => {
     const metadata = pageMetadata({

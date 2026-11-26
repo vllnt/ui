@@ -43,7 +43,7 @@ export function ThemePreview({ colors, radius }: ThemePreviewProps) {
       style={toCssVariables(colors, radius)}
     >
       <div className="space-y-1">
-        <h3 className="text-lg font-semibold">The quick brown fox</h3>
+        <p className="text-lg font-semibold">The quick brown fox</p>
         <p className="text-sm text-muted-foreground">
           Jumps over the lazy dog. This preview uses your live theme tokens.
         </p>
