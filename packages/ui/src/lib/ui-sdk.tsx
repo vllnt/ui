@@ -172,8 +172,30 @@ function assignRef<T>(ref: React.Ref<T> | undefined, element: null | T) {
 }
 
 /**
+ * Keeps the element a part renders in a ref, for callbacks that read it when
+ * they run (an `initialFocus` function), and still passes it to the caller's
+ * `ref`. It never re-renders, so prefer it to `useElementRef` unless an effect
+ * or the render itself must react to the element.
+ */
+function useLazyElementRef<T>(
+  ref?: React.Ref<T>,
+): readonly [React.RefObject<null | T>, React.RefCallback<T>] {
+  const element = React.useRef<null | T>(null);
+  const callback = React.useCallback(
+    (node: null | T) => {
+      element.current = node;
+      assignRef(ref, node);
+    },
+    [ref],
+  );
+  return [element, callback] as const;
+}
+
+/**
  * Tracks the element a part renders, for wrappers that need it (focus,
- * anchoring), and still passes it to the caller's `ref`.
+ * anchoring), and still passes it to the caller's `ref`. It re-renders once
+ * the element mounts, so an effect can react to it; for a callback that reads
+ * the element later, use `useLazyElementRef`.
  */
 function useElementRef<T>(
   ref: React.Ref<T> | undefined,
@@ -207,6 +229,7 @@ const checkedState = (state: {
 export {
   type AsChildProps,
   asChildProps,
+  assignRef,
   checkedState,
   closeAutoFocus,
   type DataAttributes,
@@ -215,5 +238,6 @@ export {
   openState,
   Slot,
   useElementRef,
+  useLazyElementRef,
   withDataAttributes,
 };

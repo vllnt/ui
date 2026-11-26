@@ -135,13 +135,13 @@ function useRegisterDismissHandlers(handlers: DismissHandlers): void {
  * the ui-sdk root. It runs the registered callbacks when the popup closes and
  * calls `onOpenChange` unless one of them kept the popup open.
  */
-function useDismissRoot(
-  onOpenChange?: (open: boolean, details: DismissDetails) => void,
+function useDismissRoot<Details extends DismissDetails = DismissDetails>(
+  onOpenChange?: (open: boolean, details: Details) => void,
 ) {
   const ref = React.useRef<DismissHandlers>({});
 
   return {
-    handleOpenChange: (open: boolean, details: DismissDetails) => {
+    handleOpenChange: (open: boolean, details: Details) => {
       if (!open) {
         runDismissHandlers(ref.current, details);
       }
