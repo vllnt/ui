@@ -1,4 +1,6 @@
-import { fireEvent, render } from "@testing-library/react";
+import { createRef } from "react";
+
+import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 
 import { ListBox, ListBoxItem } from "./list-box";
@@ -248,5 +250,22 @@ describe("ListBox keyboard (WAI-ARIA APG listbox pattern)", () => {
     expect(react).toHaveFocus();
     fireEvent.keyDown(react, { key: "ArrowUp" });
     expect(react).toHaveFocus();
+  });
+});
+
+describe("ListBox extension props", () => {
+  it("forwards ref and rest props to the list and its options", () => {
+    const listRef = createRef<HTMLDivElement>();
+    const itemRef = createRef<HTMLDivElement>();
+    render(
+      <ListBox data-testid="list" label="Fruit" ref={listRef}>
+        <ListBoxItem data-testid="item" ref={itemRef} value="apple">
+          Apple
+        </ListBoxItem>
+      </ListBox>,
+    );
+    expect(listRef.current).toBe(screen.getByTestId("list"));
+    expect(itemRef.current).toBe(screen.getByTestId("item"));
+    expect(screen.getByTestId("item")).toHaveAttribute("role", "option");
   });
 });

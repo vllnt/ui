@@ -1,3 +1,5 @@
+import { createRef } from "react";
+
 import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 
@@ -142,5 +144,21 @@ describe("Rating", () => {
     fireEvent.keyDown(five, { key: "ArrowRight" });
     expect(screen.getByLabelText("1 star")).toHaveFocus();
     expect(screen.getByText("1/5")).toBeInTheDocument();
+  });
+});
+
+describe("Rating extension props", () => {
+  it("forwards ref and rest props to the root element", () => {
+    const ref = createRef<HTMLDivElement>();
+    render(<Rating data-testid="rating" label="Quality" ref={ref} />);
+    expect(ref.current).toBe(screen.getByTestId("rating"));
+    expect(Rating.displayName).toBe("Rating");
+  });
+
+  it("reports a change once and not a repeated value", () => {
+    const onValueChange = vi.fn();
+    render(<Rating defaultValue={2} onValueChange={onValueChange} />);
+    fireEvent.click(screen.getByLabelText("4 stars"));
+    expect(onValueChange).toHaveBeenCalledExactlyOnceWith(4);
   });
 });

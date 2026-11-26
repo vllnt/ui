@@ -1,13 +1,12 @@
 "use client";
 
-import { useState } from "react";
-
 import { Rating as RatingPrimitive, RatingItem } from "@ui-sdk/react/rating";
 import { Star } from "lucide-react";
-import type { KeyboardEvent, ReactNode } from "react";
+import type { ComponentPropsWithoutRef, KeyboardEvent, Ref } from "react";
 
 import { HIT_AREA_24_RADIO_CHILD } from "../../../lib/hit-area";
 import { moveRovingFocus } from "../../../lib/roving-focus";
+import { useControllableState } from "../../../lib/use-controllable-state";
 import { cn } from "../../../lib/utils";
 
 const sizeClasses = {
@@ -16,7 +15,10 @@ const sizeClasses = {
   sm: "size-4",
 };
 
-export type RatingProps = {
+export type RatingProps = Omit<
+  ComponentPropsWithoutRef<"div">,
+  "defaultValue" | "onChange"
+> & {
   allowClear?: boolean;
   className?: string;
   defaultValue?: number;
@@ -49,7 +51,7 @@ function getItemClassName(readOnly: boolean) {
     );
 }
 
-export function Rating({
+const Rating = ({
   allowClear = false,
   className,
   defaultValue = 0,
@@ -57,16 +59,24 @@ export function Rating({
   max = 5,
   onValueChange,
   readOnly = false,
+  ref,
   showValue = false,
   size = "md",
   value,
-}: RatingProps): ReactNode {
-  const isControlled = value !== undefined;
-  const [internalValue, setInternalValue] = useState(defaultValue);
-  const activeValue = isControlled ? value : internalValue;
+  ...props
+}: RatingProps & { ref?: Ref<HTMLDivElement> }) => {
+  const [activeValue, setActiveValue] = useControllableState({
+    defaultValue,
+    onChange: onValueChange,
+    value,
+  });
 
   return (
-    <div className={cn("inline-flex flex-col gap-2", className)}>
+    <div
+      {...props}
+      className={cn("inline-flex flex-col gap-2", className)}
+      ref={ref}
+    >
       <div className="inline-flex items-center gap-3">
         <RatingPrimitive
           aria-label={label}
@@ -79,11 +89,7 @@ export function Rating({
           max={max}
           onKeyDown={handleEndKeys}
           onValueChange={(next) => {
-            if (!isControlled) {
-              setInternalValue(next ?? 0);
-            }
-
-            onValueChange?.(next ?? 0);
+            setActiveValue(next ?? 0);
           }}
           tabIndex={-1}
           value={activeValue || null}
@@ -105,4 +111,7 @@ export function Rating({
       </div>
     </div>
   );
-}
+};
+Rating.displayName = "Rating";
+
+export { Rating };

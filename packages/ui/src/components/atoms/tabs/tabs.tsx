@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  type ComponentPropsWithoutRef,
   createContext,
   use,
   useCallback,
@@ -17,8 +18,10 @@ import {
   TabsTab,
 } from "@ui-sdk/react/tabs";
 import { cva } from "class-variance-authority";
-import type { ReactNode } from "react";
+import type { ReactNode, Ref } from "react";
 
+import { reselectProps } from "../../../lib/reselect";
+import { useControllableState } from "../../../lib/use-controllable-state";
 import { cn } from "../../../lib/utils";
 
 /**
@@ -28,15 +31,19 @@ import { cn } from "../../../lib/utils";
  */
 export type TabsVariant = "link" | "pill" | "underline";
 
-const tabsListVariants = cva("flex overflow-x-auto", {
-  variants: {
-    variant: {
-      link: "",
-      pill: "gap-1",
-      underline: "border-b border-border",
+const tabsListVariants = cva(
+  "flex overflow-x-auto data-[orientation=vertical]:flex-col data-[orientation=vertical]:overflow-x-visible",
+  {
+    variants: {
+      variant: {
+        link: "",
+        pill: "gap-1",
+        underline:
+          "border-b border-border data-[orientation=vertical]:border-b-0 data-[orientation=vertical]:border-r",
+      },
     },
   },
-});
+);
 
 const tabsTriggerVariants = cva(
   "px-4 py-2 text-sm font-medium whitespace-nowrap transition-colors motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring",
@@ -46,7 +53,7 @@ const tabsTriggerVariants = cva(
         link: "underline-offset-4 data-[state=active]:text-foreground data-[state=active]:underline data-[state=inactive]:text-muted-foreground data-[state=inactive]:hover:text-foreground data-[state=inactive]:hover:underline",
         pill: "rounded-full data-[state=active]:bg-secondary data-[state=active]:text-foreground data-[state=inactive]:text-muted-foreground data-[state=inactive]:hover:bg-secondary/50 data-[state=inactive]:hover:text-foreground",
         underline:
-          "-mb-px border-b-2 data-[state=active]:border-primary data-[state=active]:text-primary data-[state=inactive]:border-transparent data-[state=inactive]:text-muted-foreground data-[state=inactive]:hover:border-muted-foreground/50 data-[state=inactive]:hover:text-foreground",
+          "-mb-px border-b-2 data-[orientation=vertical]:mb-0 data-[orientation=vertical]:-mr-px data-[orientation=vertical]:border-b-0 data-[orientation=vertical]:border-r-2 data-[state=active]:border-primary data-[state=active]:text-primary data-[state=inactive]:border-transparent data-[state=inactive]:text-muted-foreground data-[state=inactive]:hover:border-muted-foreground/50 data-[state=inactive]:hover:text-foreground",
       },
     },
   },
@@ -101,10 +108,12 @@ function renderTab(overrides: RenderProps, onReselect: () => void) {
   return (props: RenderProps, state: { selected: boolean }) =>
     renderElement(
       "button",
-      mergeProps(props, overrides, {
-        "data-state": state.selected ? "active" : "inactive",
-        onClick: state.selected ? onReselect : undefined,
-      }),
+      mergeProps(
+        props,
+        overrides,
+        { "data-state": state.selected ? "active" : "inactive" },
+        reselectProps(state.selected ? onReselect : undefined),
+      ),
       undefined,
       state,
     );
@@ -116,11 +125,16 @@ function renderPanel(overrides: RenderProps) {
     renderElement("div", mergeProps(props, overrides), undefined, state);
 }
 
-export type TabsProps = {
+export type TabsProps = Omit<
+  ComponentPropsWithoutRef<"div">,
+  "defaultValue" | "dir" | "onChange"
+> & {
   children: ReactNode;
   className?: string;
   defaultValue?: string;
   onValueChange?: (value: string) => void;
+  /** Which arrow keys move between tabs. Defaults to `horizontal`. */
+  orientation?: "horizontal" | "vertical";
   value?: string;
   /** Look of the triggers, shared with `Tabs.List` and `Tabs.Trigger`. Defaults to `underline`. */
   variant?: TabsVariant;
@@ -136,11 +150,17 @@ function Tabs({
   className,
   defaultValue = "",
   onValueChange,
+  orientation,
+  ref,
   value,
   variant = "underline",
-}: TabsProps): React.ReactNode {
-  const [internalTab, setInternalTab] = useState(defaultValue);
-  const activeTab = value ?? internalTab;
+  ...props
+}: TabsProps & { ref?: Ref<HTMLDivElement> }): React.ReactNode {
+  const [activeTab, setActiveTab] = useControllableState({
+    defaultValue,
+    onChange: onValueChange,
+    value,
+  });
   const [tabValues, registerTab] = useTabValues();
   const hasActiveTab = tabValues.includes(activeTab);
   const firstTab = tabValues[0];
@@ -161,14 +181,14 @@ function Tabs({
   return (
     <TabsContext.Provider value={contextValue}>
       <TabsPrimitive
+        {...props}
         className={cn("my-6", className)}
         onValueChange={(next) => {
           if (typeof next !== "string") return;
-          if (value === undefined) {
-            setInternalTab(next);
-          }
-          onValueChange?.(next);
+          setActiveTab(next);
         }}
+        orientation={orientation}
+        ref={ref}
         value={activeTab}
       >
         {children}
@@ -177,7 +197,7 @@ function Tabs({
   );
 }
 
-export type TabsListProps = {
+export type TabsListProps = ComponentPropsWithoutRef<"div"> & {
   "aria-label"?: string;
   children: ReactNode;
   className?: string;
@@ -196,16 +216,20 @@ function TabsList({
   children,
   className,
   onKeyDown,
-}: TabsListProps): React.ReactNode {
+  ref,
+  ...props
+}: TabsListProps & { ref?: Ref<HTMLDivElement> }): React.ReactNode {
   const context = use(TabsContext);
 
   if (!context) {
     // The ui-sdk list needs its root, and no trigger can render without one.
     return (
       <div
+        {...props}
         aria-label={ariaLabel}
         className={cn(tabsListVariants({ variant: "underline" }), className)}
         onKeyDown={onKeyDown}
+        ref={ref}
         role="tablist"
         tabIndex={-1}
       >
@@ -216,9 +240,11 @@ function TabsList({
 
   return (
     <TabsListPrimitive
+      {...props}
       aria-label={ariaLabel}
       className={cn(tabsListVariants({ variant: context.variant }), className)}
       onKeyDown={onKeyDown}
+      ref={ref}
       tabIndex={-1}
     >
       {children}
@@ -226,11 +252,16 @@ function TabsList({
   );
 }
 
-export type TabsTriggerProps = {
+export type TabsTriggerProps = Omit<
+  ComponentPropsWithoutRef<"button">,
+  "value"
+> & {
   "aria-controls"?: string;
   "aria-hidden"?: "false" | "true" | boolean;
   children: ReactNode;
   className?: string;
+  /** Keeps the tab focusable but stops it from taking selection. */
+  disabled?: boolean;
   id?: string;
   tabIndex?: number;
   value: string;
@@ -247,9 +278,11 @@ function TabsTrigger({
   children,
   className,
   id,
+  ref,
   tabIndex,
   value,
-}: TabsTriggerProps): React.ReactNode {
+  ...props
+}: TabsTriggerProps & { ref?: Ref<HTMLButtonElement> }): React.ReactNode {
   const { firstTab, hasActiveTab, registerTab, reselect, variant } =
     useTabsContext();
   // With no active tab, the first trigger stays reachable with the Tab key.
@@ -259,9 +292,11 @@ function TabsTrigger({
 
   return (
     <TabsTab
+      {...props}
       aria-hidden={ariaHidden}
       className={cn(tabsTriggerVariants({ variant }), className)}
       id={id}
+      ref={ref}
       render={renderTab(
         {
           "aria-controls": ariaControls,
@@ -278,7 +313,10 @@ function TabsTrigger({
   );
 }
 
-export type TabsContentProps = {
+export type TabsContentProps = Omit<
+  ComponentPropsWithoutRef<"div">,
+  "value"
+> & {
   "aria-hidden"?: "false" | "true" | boolean;
   "aria-labelledby"?: string;
   children: ReactNode;
@@ -298,16 +336,20 @@ function TabsContent({
   children,
   className,
   id,
+  ref,
   tabIndex,
   value,
-}: TabsContentProps): React.ReactNode {
+  ...props
+}: TabsContentProps & { ref?: Ref<HTMLDivElement> }): React.ReactNode {
   useTabsContext();
 
   return (
     <TabsPanel
+      {...props}
       aria-hidden={ariaHidden}
       className={cn("pt-4", className)}
       id={id}
+      ref={ref}
       render={renderPanel({ "aria-labelledby": ariaLabelledBy })}
       tabIndex={tabIndex}
       value={value}
@@ -316,6 +358,11 @@ function TabsContent({
     </TabsPanel>
   );
 }
+
+Tabs.displayName = "Tabs";
+TabsList.displayName = "TabsList";
+TabsTrigger.displayName = "TabsTrigger";
+TabsContent.displayName = "TabsContent";
 
 // Attach sub-components
 Tabs.List = TabsList;
