@@ -1,142 +1,52 @@
-import type { ComponentType } from "react";
-import type { ColorValue, ViewProps } from "react-native";
-
-/** Props this package passes to `GlassView` from `expo-glass-effect`. */
-export type GlassViewProps = ViewProps & {
-  readonly colorScheme?: "auto" | "dark" | "light";
-  readonly glassEffectStyle?: "clear" | "none" | "regular";
-  readonly tintColor?: ColorValue;
-};
-
-/** Props this package passes to `BlurView` from `expo-blur`. */
-export type BlurViewProps = ViewProps & {
-  readonly intensity?: number;
-  readonly tint?: "dark" | "light";
-};
-
-/** What draws a glass surface, decided from the installed optional peers. */
-export type GlassRenderer =
-  | {
-      readonly blurView: ComponentType<BlurViewProps>;
-      readonly kind: "blur";
-    }
-  | {
-      readonly glassView: ComponentType<GlassViewProps>;
-      readonly kind: "glass-effect";
-    }
-  | { readonly kind: "none" };
-
-type GlassEffectPeer = {
-  readonly glassView: ComponentType<GlassViewProps>;
-  readonly isAvailable: () => boolean;
-};
-
-type BlurPeer = { readonly blurView: ComponentType<BlurViewProps> };
-
-const emptyRecord: Readonly<Record<string, unknown>> = {};
-
-function isRecord(value: unknown): value is Readonly<Record<string, unknown>> {
-  return typeof value === "object" && value !== null;
-}
-
-function asRecord(value: unknown): Readonly<Record<string, unknown>> {
-  return isRecord(value) ? value : emptyRecord;
-}
-
-function isComponentLike(value: unknown): boolean {
-  return typeof value === "function" || "$$typeof" in asRecord(value);
-}
-
-function isGlassViewComponent(
-  value: unknown,
-): value is ComponentType<GlassViewProps> {
-  return isComponentLike(value);
-}
-
-function isBlurViewComponent(
-  value: unknown,
-): value is ComponentType<BlurViewProps> {
-  return isComponentLike(value);
-}
-
-function isCheck(value: unknown): value is () => unknown {
-  return typeof value === "function";
-}
-
-/** A missing native module makes the check throw, which counts as no. */
-function passes(check: () => unknown): boolean {
-  try {
-    return check() === true;
-  } catch {
-    return false;
-  }
-}
-
-function toGlassEffectPeer(loaded: unknown): GlassEffectPeer | undefined {
-  const {
-    GlassView: glassView,
-    isGlassEffectAPIAvailable: apiAvailable,
-    isLiquidGlassAvailable: liquidGlassAvailable,
-  } = asRecord(loaded);
-  return isGlassViewComponent(glassView) &&
-    isCheck(apiAvailable) &&
-    isCheck(liquidGlassAvailable)
-    ? {
-        glassView,
-        isAvailable: () => passes(liquidGlassAvailable) && passes(apiAvailable),
-      }
-    : undefined;
-}
-
-function toBlurPeer(loaded: unknown): BlurPeer | undefined {
-  const { BlurView: blurView } = asRecord(loaded);
-  return isBlurViewComponent(blurView) ? { blurView } : undefined;
-}
+import {
+  type GlassPeerExports,
+  type GlassRenderer,
+  resolveGlassRenderer,
+} from "./glass-renderer";
 
 /**
- * Loads each peer with a literal `require` in a `try` block at module scope.
- * Metro flags such a call as an optional dependency (Expo enables
+ * Each optional peer loads with a literal `require` in a `try` block at module
+ * scope. Metro flags such a call as an optional dependency (Expo enables
  * `allowOptionalDependencies`), so an app without the peer still bundles, and
- * the `catch` absorbs the failed `require`. Keep it a plain `require`: esbuild
- * rewrites it for ESM output and the build restores it
- * (`scripts/optional-peers.mjs`).
+ * the `catch` absorbs the failed `require`. Keep every one a plain `require`
+ * with a string literal: esbuild rewrites it for ESM output and the build
+ * restores it (`scripts/optional-peers.mjs`). This file loads and does nothing
+ * else; the choice of renderer lives in `resolveGlassRenderer`.
  */
-function loadGlassEffectPeer(): GlassEffectPeer | undefined {
-  let peer: GlassEffectPeer | undefined;
+function loadGlassEffectExports(): unknown {
+  let loaded: unknown;
   try {
-    peer = toGlassEffectPeer(require("expo-glass-effect"));
+    loaded = require("expo-glass-effect");
   } catch {
-    peer = undefined;
+    loaded = undefined;
   }
-  return peer;
+  return loaded;
 }
 
-function loadBlurPeer(): BlurPeer | undefined {
-  let peer: BlurPeer | undefined;
+function loadBlurExports(): unknown {
+  let loaded: unknown;
   try {
-    peer = toBlurPeer(require("expo-blur"));
+    loaded = require("expo-blur");
   } catch {
-    peer = undefined;
+    loaded = undefined;
   }
-  return peer;
+  return loaded;
 }
 
-const glassEffectPeer = loadGlassEffectPeer();
-const blurPeer = loadBlurPeer();
+const peerExports: GlassPeerExports = {
+  blur: loadBlurExports(),
+  glassEffect: loadGlassEffectExports(),
+};
 
 /**
- * Picks the renderer for a glass surface. It returns Apple Liquid Glass when
- * `expo-glass-effect` is present and the device supports it (iOS 26+), else
- * `expo-blur` when present, else `none`, which callers draw as the solid
- * fallback.
+ * The renderer for a glass surface, from the optional peers this app
+ * installed: Liquid Glass, a blur view, or `none`, which callers draw as the
+ * solid fallback. Tests replace this module instead of the peers.
+ *
+ * @returns The renderer to draw with.
  */
 function glassRenderer(): GlassRenderer {
-  if (glassEffectPeer?.isAvailable() === true) {
-    return { glassView: glassEffectPeer.glassView, kind: "glass-effect" };
-  }
-  return blurPeer === undefined
-    ? { kind: "none" }
-    : { blurView: blurPeer.blurView, kind: "blur" };
+  return resolveGlassRenderer(peerExports);
 }
 
 export { glassRenderer };

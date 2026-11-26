@@ -1,177 +1,42 @@
-import type * as TestingLibrary from "@testing-library/react-native/pure";
-import type * as ReactModule from "react";
-import type * as ReactNativeModule from "react-native";
+import { createElement, type ReactNode } from "react";
 
-import type * as GlassSurfaceModule from "../primitives/glass-surface";
-import type * as AvailabilityModule from "../primitives/use-glass-availability";
-import type * as ThemeProviderModule from "../theme/theme-provider";
+import { act } from "@testing-library/react-native";
 
-/** How the `expo-glass-effect` peer behaves in a sandbox. */
-export type GlassEffectMode =
-  | "absent"
-  | "api-throws"
-  | "available"
-  | "liquid-glass-throws"
-  | "malformed"
-  | "missing-checks"
-  | "no-api"
-  | "no-liquid-glass";
-
-/** How the `expo-blur` peer behaves in a sandbox. */
-export type BlurMode = "absent" | "forward-ref" | "malformed" | "present";
-
-/** Which optional peers a sandbox installs, and how they answer. */
-export type PeerModes = {
-  readonly blur: BlurMode;
-  readonly glassEffect: GlassEffectMode;
-};
-
-/** Modules a test loads fresh, wired to one set of fake peers. */
-export type GlassSandbox = {
-  readonly availability: typeof AvailabilityModule;
-  readonly reactNative: typeof ReactNativeModule;
-  readonly surface: typeof GlassSurfaceModule;
-  readonly testing: typeof TestingLibrary;
-  readonly theme: typeof ThemeProviderModule;
-};
-
-const yes = () => true;
-const no = () => false;
-const throwing = () => {
-  throw new Error("The native module is missing");
-};
-
-function glassEffectFactory(mode: GlassEffectMode): () => unknown {
-  return () => {
-    if (mode === "absent") {
-      throw new Error("Cannot find module 'expo-glass-effect'");
-    }
-    const { createElement } = jest.requireActual<typeof ReactModule>("react");
-    const GlassView = (props: object) => createElement("GlassView", props);
-    const exportsByMode: Record<Exclude<GlassEffectMode, "absent">, unknown> = {
-      "api-throws": {
-        GlassView,
-        isGlassEffectAPIAvailable: throwing,
-        isLiquidGlassAvailable: yes,
-      },
-      available: {
-        GlassView,
-        isGlassEffectAPIAvailable: yes,
-        isLiquidGlassAvailable: yes,
-      },
-      "liquid-glass-throws": {
-        GlassView,
-        isGlassEffectAPIAvailable: yes,
-        isLiquidGlassAvailable: throwing,
-      },
-      malformed: {},
-      "missing-checks": { GlassView },
-      "no-api": {
-        GlassView,
-        isGlassEffectAPIAvailable: no,
-        isLiquidGlassAvailable: yes,
-      },
-      "no-liquid-glass": {
-        GlassView,
-        isGlassEffectAPIAvailable: yes,
-        isLiquidGlassAvailable: no,
-      },
-    };
-    return exportsByMode[mode];
-  };
-}
-
-function blurFactory(mode: BlurMode): () => unknown {
-  return () => {
-    if (mode === "absent") {
-      throw new Error("Cannot find module 'expo-blur'");
-    }
-    const { createElement, forwardRef } =
-      jest.requireActual<typeof ReactModule>("react");
-    const exportsByMode: Record<Exclude<BlurMode, "absent">, unknown> = {
-      "forward-ref": {
-        BlurView: forwardRef((props: object, ref: unknown) =>
-          createElement("BlurView", { ...props, ref }),
-        ),
-      },
-      malformed: { BlurView: 42 },
-      present: {
-        BlurView: (props: object) => createElement("BlurView", props),
-      },
-    };
-    return exportsByMode[mode];
-  };
-}
+import type { GlassRenderer } from "../primitives/glass-renderer";
+import {
+  type GlassAccessibilityService,
+  GlassAvailabilityProvider,
+  type GlassPreference,
+} from "../theme/glass-availability";
+import { ThemeProvider } from "../theme/theme-provider";
 
 /**
- * Registers the fake peers for the next `require` of `expo-glass-effect` and
- * `expo-blur`. They are virtual, so the tests run with or without the real
- * packages installed. An `absent` peer throws on `require`, like a missing one.
- * The fake views render host elements named `GlassView` and `BlurView` that
- * keep every prop they receive.
+ * Fake `GlassView`: a host element named `GlassView` that keeps every prop it
+ * receives. Tests give it to a mocked `glass-peers`, never to the real peer.
  */
-export function mockGlassPeers(modes: PeerModes): void {
-  jest.doMock("expo-glass-effect", glassEffectFactory(modes.glassEffect), {
-    virtual: true,
-  });
-  jest.doMock("expo-blur", blurFactory(modes.blur), { virtual: true });
+function FakeGlassView(props: object) {
+  return createElement("GlassView", props);
 }
 
-/** Drops the fake peers so nothing outside a sandbox sees them. */
-export function unmockGlassPeers(): void {
-  jest.dontMock("expo-glass-effect");
-  jest.dontMock("expo-blur");
+/** Fake `BlurView`: a host element named `BlurView` that keeps its props. */
+function FakeBlurView(props: object) {
+  return createElement("BlurView", props);
 }
 
-/**
- * Runs `run` with the glass modules loaded fresh against `modes`. The peers are
- * read once when `glass-peers` loads, so each combination needs its own module
- * registry. The sandbox's `react` and `react-native` are not the test file's,
- * so render with `sandbox.testing` and build children from
- * `sandbox.reactNative`.
- */
-export async function withGlassSandbox(
-  modes: PeerModes,
-  run: (sandbox: GlassSandbox) => Promise<void> | void,
-): Promise<void> {
-  await jest.isolateModulesAsync(async () => {
-    mockGlassPeers(modes);
-    const testing = jest.requireActual<typeof TestingLibrary>(
-      "@testing-library/react-native/pure",
-    );
-    try {
-      await run({
-        availability: jest.requireActual<typeof AvailabilityModule>(
-          "../primitives/use-glass-availability",
-        ),
-        reactNative:
-          jest.requireActual<typeof ReactNativeModule>("react-native"),
-        surface: jest.requireActual<typeof GlassSurfaceModule>(
-          "../primitives/glass-surface",
-        ),
-        testing,
-        theme: jest.requireActual<typeof ThemeProviderModule>(
-          "../theme/theme-provider",
-        ),
-      });
-    } finally {
-      testing.cleanup();
-      unmockGlassPeers();
-    }
-  });
-}
-
-/** The peers a device with Liquid Glass and a blur view has. */
-export const LIQUID_GLASS: PeerModes = {
-  blur: "present",
-  glassEffect: "available",
+/** The renderer a device with Liquid Glass gets. */
+export const GLASS_RENDERER: GlassRenderer = {
+  glassView: FakeGlassView,
+  kind: "glass",
 };
 
-/** The peers of an app that installs `expo-blur` and nothing else. */
-export const BLUR_ONLY: PeerModes = { blur: "present", glassEffect: "absent" };
+/** The renderer an app that installs `expo-blur` alone gets. */
+export const BLUR_RENDERER: GlassRenderer = {
+  blurView: FakeBlurView,
+  kind: "blur",
+};
 
-/** The peers an app has with neither optional package installed. */
-export const NO_PEERS: PeerModes = { blur: "absent", glassEffect: "absent" };
+/** The renderer an app with neither optional peer gets. */
+export const NO_RENDERER: GlassRenderer = { kind: "none" };
 
 type Listener = (enabled: boolean) => void;
 
@@ -184,9 +49,11 @@ export type FakePreference = {
   readonly emit: (enabled: boolean) => void;
   /** Number of listeners subscribed right now. */
   readonly listenerCount: () => number;
-  readonly preference: AvailabilityModule.GlassPreference;
+  readonly preference: GlassPreference;
   /** Answers a `pending` query. It does nothing for any other answer. */
   readonly settle: (enabled: boolean) => void;
+  /** Number of listeners ever subscribed, including removed ones. */
+  readonly subscribeCount: () => number;
 };
 
 const ignoreAnswer = () => void 0;
@@ -194,6 +61,7 @@ const ignoreAnswer = () => void 0;
 /** Preference that answers `answer` to a query and keeps its listeners. */
 export function fakePreference(answer: PreferenceAnswer): FakePreference {
   const listeners = new Set<Listener>();
+  let subscribed = 0;
   let settle: (enabled: boolean) => void = ignoreAnswer;
   const pending = new Promise<boolean>((resolve) => {
     settle = resolve;
@@ -213,6 +81,7 @@ export function fakePreference(answer: PreferenceAnswer): FakePreference {
     preference: {
       addListener(listener) {
         listeners.add(listener);
+        subscribed += 1;
         return {
           remove() {
             listeners.delete(listener);
@@ -224,6 +93,7 @@ export function fakePreference(answer: PreferenceAnswer): FakePreference {
     settle: (enabled) => {
       settle(enabled);
     },
+    subscribeCount: () => subscribed,
   };
 }
 
@@ -239,7 +109,7 @@ export type FakeService = {
   readonly darkerSystemColors: FakePreference;
   readonly highTextContrast: FakePreference;
   readonly reduceTransparency: FakePreference;
-  readonly service: AvailabilityModule.GlassAccessibilityService;
+  readonly service: GlassAccessibilityService;
 };
 
 /** Service whose three preferences are off unless `state` says otherwise. */
@@ -259,20 +129,49 @@ export function fakeService(state: FakeServiceState = {}): FakeService {
   };
 }
 
-/** Lets the three preference queries settle, inside the sandbox's `act`. */
-export async function settlePreferences(
-  testing: typeof TestingLibrary,
-): Promise<void> {
-  await testing.act(async () => {
+type GlassHarnessProps = {
+  readonly children: ReactNode;
+  readonly colorScheme?: "dark" | "light";
+  readonly fake: FakeService;
+  readonly glass?: boolean;
+};
+
+/**
+ * The app boundary of a glass test: the fake platform preferences, outside a
+ * `ThemeProvider`. That provider reuses the outer subscription, as a nested
+ * one does in an app.
+ */
+export function GlassHarness({
+  children,
+  colorScheme = "light",
+  fake,
+  glass,
+}: GlassHarnessProps) {
+  return (
+    <GlassAvailabilityProvider service={fake.service}>
+      <ThemeProvider colorScheme={colorScheme} glass={glass}>
+        {children}
+      </ThemeProvider>
+    </GlassAvailabilityProvider>
+  );
+}
+
+/** Lets the three preference queries settle, inside `act`. */
+export async function settlePreferences(): Promise<void> {
+  await act(async () => {
     await Promise.resolve();
     await Promise.resolve();
     await Promise.resolve();
   });
 }
 
+/** The children of a rendered host, in order. */
+export type RenderedChildren = readonly (RenderedHost | string)[];
+
 /** A rendered host element, as `toJSON` reports it. */
 export type RenderedHost = {
-  readonly children: readonly (RenderedHost | string)[];
+  /** The test renderer reports `null` for a host without children. */
+  readonly children: null | RenderedChildren;
   readonly props: Readonly<Record<string, unknown>>;
   readonly type: string;
 };
@@ -285,14 +184,21 @@ function isRenderedHost(value: unknown): value is RenderedHost {
     typeof value.type === "string" &&
     "props" in value &&
     "children" in value &&
-    Array.isArray(value.children)
+    (value.children === null || Array.isArray(value.children))
   );
+}
+
+/** The children of a rendered host, empty for a leaf. */
+export function childrenOf(host: RenderedHost): RenderedChildren {
+  return host.children ?? [];
 }
 
 /** Every host in the rendered tree, parents before children. */
 export function hostsOf(node: unknown): readonly RenderedHost[] {
   if (Array.isArray(node)) return node.flatMap(hostsOf);
-  return isRenderedHost(node) ? [node, ...node.children.flatMap(hostsOf)] : [];
+  return isRenderedHost(node)
+    ? [node, ...childrenOf(node).flatMap(hostsOf)]
+    : [];
 }
 
 /** The hosts of one `type` in the rendered tree, parents before children. */

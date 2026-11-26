@@ -1,17 +1,20 @@
+import { renderHook, screen } from "@testing-library/react-native";
 import { darkTheme, lightTheme } from "@vllnt/ui-core";
 import type { ReactNode } from "react";
 
 import {
   fakeService,
+  GlassHarness,
   hostsOf,
-  NO_PEERS,
+  NO_RENDERER,
   settlePreferences,
-  withGlassSandbox,
 } from "../tests/glass-fixtures";
 import { styleOf } from "../tests/test-utils";
 
-// Each test loads React Native and the test renderer into a fresh registry.
-jest.setTimeout(30_000);
+import { glassRenderer } from "./glass-peers";
+import { GlassSurface, useGlassTextColor } from "./glass-surface";
+
+jest.mock("./glass-peers", () => ({ glassRenderer: jest.fn() }));
 
 const THEMES = { dark: darkTheme, light: lightTheme } as const;
 const SCHEMES = ["light", "dark"] as const;
@@ -56,47 +59,40 @@ describe("GlassSurface solid fallback contrast", () => {
     it.each(VARIANTS)(
       "keeps text and the control boundary legible on the %s surface",
       async (variant) => {
-        await withGlassSandbox(NO_PEERS, async (sandbox) => {
-          const fake = fakeService();
-          const { GlassSurface, useGlassTextColor } = sandbox.surface;
-          const { ThemeProvider } = sandbox.theme;
-          function wrapper({ children }: { readonly children: ReactNode }) {
-            return (
-              <ThemeProvider colorScheme={scheme}>
-                <GlassSurface
-                  accessibilityService={fake.service}
-                  testID="surface"
-                  variant={variant}
-                >
-                  {children}
-                </GlassSurface>
-              </ThemeProvider>
-            );
-          }
-          const { result } = sandbox.testing.renderHook(
-            () => ({
-              muted: useGlassTextColor("muted"),
-              text: useGlassTextColor("default"),
-            }),
-            { wrapper },
+        const fake = fakeService();
+        jest.mocked(glassRenderer).mockReturnValue(NO_RENDERER);
+        function wrapper({ children }: { readonly children: ReactNode }) {
+          return (
+            <GlassHarness colorScheme={scheme} fake={fake}>
+              <GlassSurface testID="surface" variant={variant}>
+                {children}
+              </GlassSurface>
+            </GlassHarness>
           );
-          await settlePreferences(sandbox.testing);
+        }
+        const { result } = renderHook(
+          () => ({
+            muted: useGlassTextColor("muted"),
+            text: useGlassTextColor("default"),
+          }),
+          { wrapper },
+        );
+        await settlePreferences();
 
-          const [surface] = hostsOf(sandbox.testing.screen.toJSON());
-          const ground = colorOf(styleOf(surface).backgroundColor);
-          const text = colorOf(result.current.text);
-          const muted = colorOf(result.current.muted);
-          expect(ground).toBe(
-            variant === "dense"
-              ? THEMES[scheme].glass.solid.tint.denseTop
-              : THEMES[scheme].glass.solid.tint.top,
-          );
-          expect(contrast(text, ground)).toBeGreaterThanOrEqual(TEXT_RATIO);
-          expect(contrast(muted, ground)).toBeGreaterThanOrEqual(TEXT_RATIO);
-          expect(
-            contrast(THEMES[scheme].glass.solid.input, ground),
-          ).toBeGreaterThanOrEqual(BOUNDARY_RATIO);
-        });
+        const [surface] = hostsOf(screen.toJSON());
+        const ground = colorOf(styleOf(surface).backgroundColor);
+        const text = colorOf(result.current.text);
+        const muted = colorOf(result.current.muted);
+        expect(ground).toBe(
+          variant === "dense"
+            ? THEMES[scheme].glass.solid.tint.denseTop
+            : THEMES[scheme].glass.solid.tint.top,
+        );
+        expect(contrast(text, ground)).toBeGreaterThanOrEqual(TEXT_RATIO);
+        expect(contrast(muted, ground)).toBeGreaterThanOrEqual(TEXT_RATIO);
+        expect(
+          contrast(THEMES[scheme].glass.solid.input, ground),
+        ).toBeGreaterThanOrEqual(BOUNDARY_RATIO);
       },
     );
   });

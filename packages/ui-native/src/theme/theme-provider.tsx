@@ -11,6 +11,8 @@ import {
 } from "@vllnt/ui-core";
 import { useColorScheme } from "react-native";
 
+import { GlassAvailabilityProvider } from "./glass-availability";
+
 const ThemeContext = createContext<NativeTheme>(lightTheme);
 const GlassEnabledContext = createContext(true);
 
@@ -31,7 +33,11 @@ export type ThemeProviderProps = {
   readonly override?: NativeThemeOverride;
 };
 
-/** Supplies generated semantic tokens to every native component below it. */
+/**
+ * Supplies generated semantic tokens to every native component below it. It
+ * also holds the app's one subscription to the platform preferences that turn
+ * glass off; a nested provider reuses it.
+ */
 function ThemeProvider({
   children,
   colorScheme = "system",
@@ -52,9 +58,11 @@ function ThemeProvider({
   );
 
   return (
-    <GlassEnabledContext value={glass ?? inheritedGlass}>
-      <ThemeContext value={theme}>{children}</ThemeContext>
-    </GlassEnabledContext>
+    <GlassAvailabilityProvider>
+      <GlassEnabledContext value={glass ?? inheritedGlass}>
+        <ThemeContext value={theme}>{children}</ThemeContext>
+      </GlassEnabledContext>
+    </GlassAvailabilityProvider>
   );
 }
 ThemeProvider.displayName = "ThemeProvider";

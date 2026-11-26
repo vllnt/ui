@@ -19,26 +19,18 @@ import {
 
 import { useTheme } from "../theme/theme-provider";
 
-import {
-  type BlurViewProps,
-  type GlassRenderer,
-  glassRenderer,
-  type GlassViewProps,
-} from "./glass-peers";
+import { glassRenderer } from "./glass-peers";
+import type {
+  BlurViewProps,
+  GlassRenderer,
+  GlassViewProps,
+} from "./glass-renderer";
 import type { Material, MaterialProps } from "./material";
-import {
-  type GlassAccessibilityService,
-  useGlassAvailability,
-} from "./use-glass-availability";
+import { useGlassAvailability } from "./use-glass-availability";
 
 /** Props for {@link GlassSurface}. */
 export type GlassSurfaceProps = MaterialProps &
   ViewProps & {
-    /**
-     * Source of the Reduce Transparency and contrast preferences. Tests inject
-     * a fake; the default reads `AccessibilityInfo`.
-     */
-    readonly accessibilityService?: GlassAccessibilityService;
     /** Draws the stronger `glassFloating` shadow, for docks, menus and sheets. */
     readonly elevated?: boolean;
     readonly ref?: Ref<View>;
@@ -155,7 +147,7 @@ function GlassBackdrop({
         pointerEvents="none"
         style={[StyleSheet.absoluteFill, { borderRadius, overflow: "hidden" }]}
       >
-        {renderer.kind === "glass-effect" ? (
+        {renderer.kind === "glass" ? (
           <GlassEffectLayer
             colorScheme={colorScheme}
             glassView={renderer.glassView}
@@ -190,7 +182,9 @@ GlassBackdrop.displayName = "GlassBackdrop";
  * under the token tint, plus a hairline border and a shadow. It falls back to
  * the opaque solid tokens when `material="solid"`, inside a solid surface,
  * under Reduce Transparency or a high-contrast setting, when `ThemeProvider`
- * sets `glass={false}`, and when neither peer is present.
+ * sets `glass={false}`, and when neither peer is present. The platform
+ * preferences come from the one subscription `ThemeProvider` holds, so a
+ * surface outside a `ThemeProvider` stays solid.
  *
  * It never responds to press or hover and adds no accessibility role. Set the
  * corner radius with `style.borderRadius`; per-corner radii are not supported
@@ -198,7 +192,6 @@ GlassBackdrop.displayName = "GlassBackdrop";
  * the iOS shadow.
  */
 function GlassSurface({
-  accessibilityService,
   children,
   elevated = false,
   material = "glass",
@@ -209,7 +202,7 @@ function GlassSurface({
 }: GlassSurfaceProps) {
   const theme = useTheme();
   const parent = use(GlassSurfaceContext);
-  const available = useGlassAvailability(accessibilityService);
+  const available = useGlassAvailability();
   const renderer =
     material === "glass" && parent?.material !== "solid" && available
       ? glassRenderer()

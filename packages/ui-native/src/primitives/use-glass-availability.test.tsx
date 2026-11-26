@@ -1,22 +1,30 @@
+import { act, renderHook } from "@testing-library/react-native";
 import type { ReactNode } from "react";
+import { AccessibilityInfo } from "react-native";
 
 import {
-  BLUR_ONLY,
+  BLUR_RENDERER,
   fakeService,
   type FakeServiceState,
-  type GlassSandbox,
-  LIQUID_GLASS,
-  NO_PEERS,
-  type PeerModes,
+  GLASS_RENDERER,
+  GlassHarness,
+  NO_RENDERER,
   type PreferenceAnswer,
   settlePreferences,
-  withGlassSandbox,
 } from "../tests/glass-fixtures";
+import {
+  defaultGlassAccessibilityService,
+  GlassAvailabilityProvider,
+} from "../theme/glass-availability";
+import { ThemeProvider } from "../theme/theme-provider";
 
-import type { GlassAccessibilityService } from "./use-glass-availability";
+import { glassRenderer } from "./glass-peers";
+import type { GlassRenderer } from "./glass-renderer";
+import { useGlassAvailability } from "./use-glass-availability";
 
-// Each test loads React Native and the test renderer into a fresh registry.
-jest.setTimeout(30_000);
+jest.mock("./glass-peers", () => ({ glassRenderer: jest.fn() }));
+
+const mockedRenderer = jest.mocked(glassRenderer);
 
 type Preference =
   | "darkerSystemColors"
@@ -45,89 +53,106 @@ type HookOptions = {
   readonly glass?: boolean;
   /** Skip the wait for the first answers. */
   readonly immediate?: boolean;
+  /** What the peers draw with. Defaults to Liquid Glass. */
+  readonly renderer?: GlassRenderer;
   readonly state?: FakeServiceState;
-  /** Pass no service, so the hook reads `AccessibilityInfo`. */
-  readonly useDefaultService?: boolean;
 };
 
-type HookProps = { readonly service?: GlassAccessibilityService };
+type ChildrenProps = { readonly children: ReactNode };
 
-/** Renders the hook under a `ThemeProvider` and, by default, waits for answers. */
-async function renderAvailability(
-  { availability, testing, theme }: GlassSandbox,
-  options: HookOptions = {},
-) {
+/** An app boundary that leaves the platform preferences to `ThemeProvider`. */
+function ThemeOnly({ children }: ChildrenProps) {
+  return <ThemeProvider colorScheme="light">{children}</ThemeProvider>;
+}
+
+/** Renders the hook under the fake platform and, by default, waits for answers. */
+async function renderAvailability(options: HookOptions = {}) {
   const fake = fakeService(options.state);
-  function wrapper({ children }: { readonly children: ReactNode }) {
+  mockedRenderer.mockReturnValue(options.renderer ?? GLASS_RENDERER);
+  function wrapper({ children }: ChildrenProps) {
     return (
-      <theme.ThemeProvider colorScheme="light" glass={options.glass}>
+      <GlassHarness fake={fake} glass={options.glass}>
         {children}
-      </theme.ThemeProvider>
+      </GlassHarness>
     );
   }
-  const rendered = testing.renderHook(
-    ({ service }: HookProps) => availability.useGlassAvailability(service),
-    {
-      initialProps: {
-        service: options.useDefaultService === true ? undefined : fake.service,
-      },
-      wrapper,
-    },
-  );
-  if (options.immediate !== true) await settlePreferences(testing);
+  const rendered = renderHook(() => useGlassAvailability(), { wrapper });
+  if (options.immediate !== true) await settlePreferences();
   return { fake, ...rendered };
 }
 
-function availableWith(modes: PeerModes, options?: HookOptions) {
-  return withGlassSandbox(modes, async (sandbox) => {
-    const { result } = await renderAvailability(sandbox, options);
-    expect(result.current).toBe(true);
-  });
+async function expectAvailability(
+  expected: boolean,
+  options?: HookOptions,
+): Promise<void> {
+  const { result } = await renderAvailability(options);
+  expect(result.current).toBe(expected);
 }
 
-function unavailableWith(modes: PeerModes, options?: HookOptions) {
-  return withGlassSandbox(modes, async (sandbox) => {
-    const { result } = await renderAvailability(sandbox, options);
-    expect(result.current).toBe(false);
-  });
-}
-
-/** Runs `change` inside the sandbox's `act`, then lets promises settle. */
-async function change(sandbox: GlassSandbox, run: () => void): Promise<void> {
-  await sandbox.testing.act(async () => {
+/** Runs `run` inside `act`, then lets promises settle. */
+async function change(run: () => void): Promise<void> {
+  await act(async () => {
     run();
     await Promise.resolve();
   });
 }
 
+const neverAnswers = () => new Promise<boolean>(() => void 0);
+
+/** Makes the platform answer each preference query, as a device would. */
+function answerPlatform(answers: {
+  readonly darker: boolean;
+  readonly highText: boolean;
+  readonly reduce: boolean;
+}): void {
+  jest
+    .spyOn(AccessibilityInfo, "isDarkerSystemColorsEnabled")
+    .mockResolvedValue(answers.darker);
+  jest
+    .spyOn(AccessibilityInfo, "isHighTextContrastEnabled")
+    .mockResolvedValue(answers.highText);
+  jest
+    .spyOn(AccessibilityInfo, "isReduceTransparencyEnabled")
+    .mockResolvedValue(answers.reduce);
+}
+
+/** Puts the platform queries back to the pending state `jest.setup.cjs` sets. */
+function leavePlatformPending(): void {
+  jest
+    .spyOn(AccessibilityInfo, "isDarkerSystemColorsEnabled")
+    .mockImplementation(neverAnswers);
+  jest
+    .spyOn(AccessibilityInfo, "isHighTextContrastEnabled")
+    .mockImplementation(neverAnswers);
+  jest
+    .spyOn(AccessibilityInfo, "isReduceTransparencyEnabled")
+    .mockImplementation(neverAnswers);
+}
+
 describe("useGlassAvailability", () => {
   describe("what turns glass on or off", () => {
     it("is on when a peer draws and every preference is off", async () => {
-      await availableWith(LIQUID_GLASS);
+      await expectAvailability(true);
     });
 
     it("is on with only the blur peer", async () => {
-      await availableWith(BLUR_ONLY);
-    });
-
-    it("is on with only the glass effect peer", async () => {
-      await availableWith({ blur: "absent", glassEffect: "available" });
+      await expectAvailability(true, { renderer: BLUR_RENDERER });
     });
 
     it("is off when neither peer is installed", async () => {
-      await unavailableWith(NO_PEERS);
+      await expectAvailability(false, { renderer: NO_RENDERER });
     });
 
     it("is off when the global switch on ThemeProvider is off", async () => {
-      await unavailableWith(LIQUID_GLASS, { glass: false });
+      await expectAvailability(false, { glass: false });
     });
 
     it.each(PREFERENCES)("is off while %s is on", async (preference) => {
-      await unavailableWith(LIQUID_GLASS, { state: only(preference, true) });
+      await expectAvailability(false, { state: only(preference, true) });
     });
 
     it("is off while every preference is on", async () => {
-      await unavailableWith(LIQUID_GLASS, {
+      await expectAvailability(false, {
         state: {
           darkerSystemColors: true,
           highTextContrast: true,
@@ -135,73 +160,69 @@ describe("useGlassAvailability", () => {
         },
       });
     });
+
+    it("is off outside a provider, where nothing observes the platform", async () => {
+      mockedRenderer.mockReturnValue(GLASS_RENDERER);
+      const { result } = renderHook(() => useGlassAvailability());
+      await settlePreferences();
+
+      expect(result.current).toBe(false);
+    });
   });
 
   describe("before the platform answers", () => {
     it("is off on the first render", async () => {
-      await withGlassSandbox(LIQUID_GLASS, async (sandbox) => {
-        const { result } = await renderAvailability(sandbox, {
-          immediate: true,
-        });
-        expect(result.current).toBe(false);
+      const { result } = await renderAvailability({ immediate: true });
+      expect(result.current).toBe(false);
 
-        await settlePreferences(sandbox.testing);
-        expect(result.current).toBe(true);
-      });
+      await settlePreferences();
+      expect(result.current).toBe(true);
     });
 
     it.each(PREFERENCES)(
       "stays off while %s is pending",
       async (preference) => {
-        await unavailableWith(LIQUID_GLASS, {
-          state: only(preference, "pending"),
-        });
+        await expectAvailability(false, { state: only(preference, "pending") });
       },
     );
 
     it("stays off when a query rejects, and a later change still wins", async () => {
-      await withGlassSandbox(LIQUID_GLASS, async (sandbox) => {
-        const { fake, result } = await renderAvailability(sandbox, {
-          state: only("reduceTransparency", "rejects"),
-        });
-        expect(result.current).toBe(false);
-
-        await change(sandbox, () => {
-          fake.reduceTransparency.emit(false);
-        });
-        expect(result.current).toBe(true);
+      const { fake, result } = await renderAvailability({
+        state: only("reduceTransparency", "rejects"),
       });
+      expect(result.current).toBe(false);
+
+      await change(() => {
+        fake.reduceTransparency.emit(false);
+      });
+      expect(result.current).toBe(true);
     });
 
     it("ignores a late answer that an event has already replaced", async () => {
-      await withGlassSandbox(LIQUID_GLASS, async (sandbox) => {
-        const { fake, result } = await renderAvailability(sandbox, {
-          state: only("reduceTransparency", "pending"),
-        });
-
-        await change(sandbox, () => {
-          fake.reduceTransparency.emit(true);
-        });
-        await change(sandbox, () => {
-          fake.reduceTransparency.settle(false);
-        });
-
-        expect(result.current).toBe(false);
+      const { fake, result } = await renderAvailability({
+        state: only("reduceTransparency", "pending"),
       });
+
+      await change(() => {
+        fake.reduceTransparency.emit(true);
+      });
+      await change(() => {
+        fake.reduceTransparency.settle(false);
+      });
+
+      expect(result.current).toBe(false);
     });
 
     it("takes a pending answer when no event came first", async () => {
-      await withGlassSandbox(LIQUID_GLASS, async (sandbox) => {
-        const { fake, result } = await renderAvailability(sandbox, {
-          state: only("reduceTransparency", "pending"),
-        });
-        expect(result.current).toBe(false);
-
-        await change(sandbox, () => {
-          fake.reduceTransparency.settle(false);
-        });
-        expect(result.current).toBe(true);
+      const { fake, result } = await renderAvailability({
+        state: only("reduceTransparency", "pending"),
       });
+      expect(result.current).toBe(false);
+
+      await change(() => {
+        fake.reduceTransparency.settle(false);
+      });
+      expect(result.current).toBe(true);
     });
   });
 
@@ -209,127 +230,152 @@ describe("useGlassAvailability", () => {
     it.each(PREFERENCES)(
       "flips off and back on as %s changes",
       async (preference) => {
-        await withGlassSandbox(LIQUID_GLASS, async (sandbox) => {
-          const { fake, result } = await renderAvailability(sandbox);
-          expect(result.current).toBe(true);
+        const { fake, result } = await renderAvailability();
+        expect(result.current).toBe(true);
 
-          await change(sandbox, () => {
-            fake[preference].emit(true);
-          });
-          expect(result.current).toBe(false);
-
-          await change(sandbox, () => {
-            fake[preference].emit(false);
-          });
-          expect(result.current).toBe(true);
+        await change(() => {
+          fake[preference].emit(true);
         });
+        expect(result.current).toBe(false);
+
+        await change(() => {
+          fake[preference].emit(false);
+        });
+        expect(result.current).toBe(true);
       },
     );
 
     it("stays off until every preference is off again", async () => {
-      await withGlassSandbox(LIQUID_GLASS, async (sandbox) => {
-        const { fake, result } = await renderAvailability(sandbox, {
-          state: { highTextContrast: true, reduceTransparency: true },
-        });
-
-        await change(sandbox, () => {
-          fake.reduceTransparency.emit(false);
-        });
-        expect(result.current).toBe(false);
-
-        await change(sandbox, () => {
-          fake.highTextContrast.emit(false);
-        });
-        expect(result.current).toBe(true);
+      const { fake, result } = await renderAvailability({
+        state: { highTextContrast: true, reduceTransparency: true },
       });
+
+      await change(() => {
+        fake.reduceTransparency.emit(false);
+      });
+      expect(result.current).toBe(false);
+
+      await change(() => {
+        fake.highTextContrast.emit(false);
+      });
+      expect(result.current).toBe(true);
     });
   });
 
   describe("subscriptions", () => {
     it("subscribes once per preference and removes each on unmount", async () => {
-      await withGlassSandbox(LIQUID_GLASS, async (sandbox) => {
-        const { fake, unmount } = await renderAvailability(sandbox);
-        for (const preference of PREFERENCES) {
-          expect(fake[preference].listenerCount()).toBe(1);
-        }
+      const { fake, unmount } = await renderAvailability();
+      for (const preference of PREFERENCES) {
+        expect(fake[preference].listenerCount()).toBe(1);
+      }
 
-        unmount();
+      unmount();
 
-        for (const preference of PREFERENCES) {
-          expect(fake[preference].listenerCount()).toBe(0);
-        }
-      });
+      for (const preference of PREFERENCES) {
+        expect(fake[preference].listenerCount()).toBe(0);
+      }
+    });
+
+    it("keeps one set of listeners under a nested ThemeProvider", async () => {
+      const fake = fakeService();
+      mockedRenderer.mockReturnValue(GLASS_RENDERER);
+      function wrapper({ children }: ChildrenProps) {
+        return (
+          <GlassHarness fake={fake}>
+            <ThemeProvider colorScheme="dark">{children}</ThemeProvider>
+          </GlassHarness>
+        );
+      }
+      const { result } = renderHook(() => useGlassAvailability(), { wrapper });
+      await settlePreferences();
+
+      expect(result.current).toBe(true);
+      for (const preference of PREFERENCES) {
+        expect(fake[preference].subscribeCount()).toBe(1);
+      }
     });
 
     it("moves its subscriptions to a new service", async () => {
-      await withGlassSandbox(LIQUID_GLASS, async (sandbox) => {
-        const { fake, rerender, result } = await renderAvailability(sandbox);
-        const next = fakeService({ reduceTransparency: true });
-
-        rerender({ service: next.service });
-        await settlePreferences(sandbox.testing);
-
-        expect(fake.reduceTransparency.listenerCount()).toBe(0);
-        expect(next.reduceTransparency.listenerCount()).toBe(1);
-        expect(result.current).toBe(false);
+      mockedRenderer.mockReturnValue(GLASS_RENDERER);
+      const first = fakeService();
+      const next = fakeService({ reduceTransparency: true });
+      let service = first.service;
+      function wrapper({ children }: ChildrenProps) {
+        return (
+          <GlassAvailabilityProvider service={service}>
+            <ThemeProvider colorScheme="light">{children}</ThemeProvider>
+          </GlassAvailabilityProvider>
+        );
+      }
+      const { rerender, result } = renderHook(() => useGlassAvailability(), {
+        wrapper,
       });
+      await settlePreferences();
+      expect(result.current).toBe(true);
+
+      service = next.service;
+      rerender({});
+      await settlePreferences();
+
+      expect(first.reduceTransparency.listenerCount()).toBe(0);
+      expect(next.reduceTransparency.listenerCount()).toBe(1);
+      expect(result.current).toBe(false);
     });
   });
 
   describe("the default service", () => {
+    afterEach(leavePlatformPending);
+
     it("forwards each preference to AccessibilityInfo", async () => {
-      await withGlassSandbox(
-        LIQUID_GLASS,
-        async ({ availability, reactNative }) => {
-          const remove = jest.fn();
-          const addEventListener = jest.fn(() => ({ remove }));
-          Object.assign(reactNative.AccessibilityInfo, {
-            addEventListener,
-            isDarkerSystemColorsEnabled: jest.fn(async () => false),
-            isHighTextContrastEnabled: jest.fn(async () => true),
-            isReduceTransparencyEnabled: jest.fn(async () => false),
-          });
-          const service = availability.defaultGlassAccessibilityService;
-          const listener = jest.fn();
-
-          const subscriptions = PREFERENCES.map((preference) =>
-            service[preference].addListener(listener),
-          );
-
-          expect(addEventListener.mock.calls).toEqual([
-            ["darkerSystemColorsChanged", listener],
-            ["highTextContrastChanged", listener],
-            ["reduceTransparencyChanged", listener],
-          ]);
-          for (const subscription of subscriptions) subscription.remove();
-          expect(remove).toHaveBeenCalledTimes(3);
-          await expect(service.darkerSystemColors.isEnabled()).resolves.toBe(
-            false,
-          );
-          await expect(service.highTextContrast.isEnabled()).resolves.toBe(
-            true,
-          );
-          await expect(service.reduceTransparency.isEnabled()).resolves.toBe(
-            false,
-          );
-        },
+      const addEventListener = jest.spyOn(
+        AccessibilityInfo,
+        "addEventListener",
       );
+      addEventListener.mockClear();
+      answerPlatform({ darker: false, highText: true, reduce: false });
+      const listener = jest.fn();
+
+      const subscriptions = PREFERENCES.map((preference) =>
+        defaultGlassAccessibilityService[preference].addListener(listener),
+      );
+
+      expect(addEventListener.mock.calls).toEqual([
+        ["darkerSystemColorsChanged", listener],
+        ["highTextContrastChanged", listener],
+        ["reduceTransparencyChanged", listener],
+      ]);
+      for (const subscription of subscriptions) {
+        subscription.remove();
+        expect(subscription.remove).toHaveBeenCalledTimes(1);
+      }
+      await expect(
+        defaultGlassAccessibilityService.darkerSystemColors.isEnabled(),
+      ).resolves.toBe(false);
+      await expect(
+        defaultGlassAccessibilityService.highTextContrast.isEnabled(),
+      ).resolves.toBe(true);
+      await expect(
+        defaultGlassAccessibilityService.reduceTransparency.isEnabled(),
+      ).resolves.toBe(false);
     });
 
-    it("drives the hook when no service is passed", async () => {
-      await withGlassSandbox(LIQUID_GLASS, async (sandbox) => {
-        Object.assign(sandbox.reactNative.AccessibilityInfo, {
-          addEventListener: jest.fn(() => ({ remove: jest.fn() })),
-          isDarkerSystemColorsEnabled: jest.fn(async () => false),
-          isHighTextContrastEnabled: jest.fn(async () => false),
-          isReduceTransparencyEnabled: jest.fn(async () => false),
+    it.each([
+      ["on", { darker: false, highText: false, reduce: false }, true],
+      ["off", { darker: false, highText: false, reduce: true }, false],
+    ] as const)(
+      "drives the hook through ThemeProvider alone: glass %s",
+      async (_name, answers, expected) => {
+        mockedRenderer.mockReturnValue(GLASS_RENDERER);
+        answerPlatform(answers);
+        const { result } = renderHook(() => useGlassAvailability(), {
+          wrapper: ThemeOnly,
         });
-        const { result } = await renderAvailability(sandbox, {
-          useDefaultService: true,
-        });
+        expect(result.current).toBe(false);
 
-        expect(result.current).toBe(true);
-      });
-    });
+        await settlePreferences();
+
+        expect(result.current).toBe(expected);
+      },
+    );
   });
 });
