@@ -11,6 +11,7 @@ import {
 } from "@ui-sdk/react/slider";
 import type * as React from "react";
 
+import { HIT_AREA_24 } from "../../../lib/hit-area";
 import { cn } from "../../../lib/utils";
 
 type SliderProps = Omit<
@@ -97,6 +98,7 @@ function Thumb({
       aria-describedby={ariaDescribedBy}
       {...getThumbName({ ariaLabel, ariaLabelledBy, label, suffix, suffixId })}
       className={cn(
+        HIT_AREA_24,
         "block size-5 rounded-full border-2 border-primary bg-background ring-offset-background transition-colors has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-ring has-[:focus-visible]:ring-offset-2 data-[orientation=horizontal]:[transform:translateX(calc(50%_-_var(--slider-thumb-position)))] data-[orientation=vertical]:[transform:translateY(calc(var(--slider-thumb-position)_-_50%))] forced-colors:border-[color:ButtonText] forced-colors:bg-[color:ButtonFace]",
       )}
       index={index}
