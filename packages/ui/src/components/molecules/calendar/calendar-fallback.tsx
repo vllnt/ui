@@ -15,6 +15,13 @@ export type CalendarFallbackProps = {
 
 const DAYS_IN_WEEK = [0, 1, 2, 3, 4, 5, 6];
 
+/** The page language, or US English where there is no document to ask. */
+function pageLocale() {
+  return typeof document === "undefined"
+    ? "en-US"
+    : document.documentElement.lang || "en-US";
+}
+
 /** The number of week rows a month takes, like the calendar's grid for it. */
 function weekCount(month: Date, weekStartsOn: number) {
   const year = month.getFullYear();
@@ -31,7 +38,7 @@ function weekCount(month: Date, weekStartsOn: number) {
  */
 function CalendarFallback({
   fixedWeeks,
-  locale = document.documentElement.lang || "en-US",
+  locale = pageLocale(),
   month = new Date(),
   numberOfMonths = 1,
   weekStartsOn = firstDayOfWeek(locale),

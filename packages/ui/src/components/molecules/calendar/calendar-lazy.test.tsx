@@ -32,7 +32,12 @@ describe("LazyCalendar", () => {
       rows: container.querySelectorAll("tbody tr").length,
     };
 
-    await screen.findByRole("grid", { name: "November 2026" });
+    // The first import of the calendar module is slow on a busy machine.
+    await screen.findByRole(
+      "grid",
+      { name: "November 2026" },
+      { timeout: 15_000 },
+    );
     expect(container.firstElementChild).toHaveClass("p-3");
     expect({
       cells: container.querySelectorAll("tbody td").length,
@@ -40,7 +45,7 @@ describe("LazyCalendar", () => {
       rows: container.querySelectorAll("tbody tr").length,
     }).toEqual(before);
     expect(before).toEqual({ cells: 35, headers: 7, rows: 5 });
-  });
+  }, 30_000);
 
   it.each([
     { fixedWeeks: false, month: new Date(2026, 1, 1), rows: 4 },

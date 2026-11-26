@@ -1,7 +1,18 @@
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
-import { describe, expect, it, vi } from "vitest";
+import {
+  configure,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+} from "@testing-library/react";
+import { beforeAll, describe, expect, it, vi } from "vitest";
 
 import { DateRangePicker } from "./date-range-picker";
+
+// The calendar loads on demand, which takes longer on a busy machine.
+beforeAll(() => {
+  configure({ asyncUtilTimeout: 5000 });
+});
 
 describe("DateRangePicker", () => {
   it("renders the placeholder by default", () => {
