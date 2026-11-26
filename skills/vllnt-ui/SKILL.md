@@ -134,7 +134,7 @@ directory name and exports the same names as the root.
 |-------------|------|
 | `@vllnt/ui` | All components, hooks, types, and the `cn()` utility |
 | `@vllnt/ui/<component>` | One component directory (for example `@vllnt/ui/button`), the same names the root exports from it |
-| `@vllnt/ui/utils` | `cn()` |
+| `@vllnt/ui/utils` | `cn()`, `cx()` |
 | `@vllnt/ui/tailwind-preset` | Tailwind preset config |
 | `@vllnt/ui/styles.css` | Tailwind base + theme variables + utilities |
 | `@vllnt/ui/themes/default.css` | Theme CSS variables only |
@@ -143,6 +143,8 @@ directory name and exports the same names as the root.
 
 `cn()` merges Tailwind classes via `clsx` + `tailwind-merge` — use it to combine
 a component's `className` with conditional classes (last class wins on conflict).
+`cx()` joins classes with `clsx` alone and keeps every class. `UnstyledButton` and
+`PlainSeparator` use it, so a route that renders them loads no `tailwind-merge`.
 
 ### Theming / dark mode
 

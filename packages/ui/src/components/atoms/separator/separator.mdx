@@ -37,3 +37,12 @@ import { Separator } from '@vllnt/ui'
 
 ### Separator.displayName
 
+## PlainSeparator: without tailwind-merge
+
+`PlainSeparator` (also from `@vllnt/ui/separator`) draws the same line as `Separator`, with the same `orientation`, `variant` and `decorative`. It joins classes with `cx`, so its module never imports `tailwind-merge` and adds none to a client bundle. The trade-off: a `className` that conflicts with a default (a `bg-*`, `h-*`, `w-*` or `border-*`) does not replace it. Use it with classes that do not conflict, such as margins, and use `Separator` to override the line itself.
+
+```tsx
+import { PlainSeparator } from "@vllnt/ui/separator";
+
+<PlainSeparator className="my-4" />
+```

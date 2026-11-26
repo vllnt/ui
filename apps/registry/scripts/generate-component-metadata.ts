@@ -198,7 +198,11 @@ function findStoryFile(componentName: string): string | undefined {
   );
   if (candidates.length === 0) return;
 
-  return join(componentDirectory, candidates[0]!);
+  // A directory can hold several components (spinner, button): take the one
+  // named after the directory, else the first by name, never by disk order.
+  const own = `${componentName}.stories.tsx`;
+  const chosen = candidates.includes(own) ? own : candidates.toSorted()[0]!;
+  return join(componentDirectory, chosen);
 }
 
 function parseStoriesFromFile(

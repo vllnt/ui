@@ -285,6 +285,58 @@ async function assertNodeResolution(manifest, packedDirectory) {
 }
 
 /**
+ * Bundles a consumer of the plain exports from the packed subpaths and checks
+ * that no `tailwind-merge` code reaches the bundle. A `Separator` consumer is
+ * the control: it must bring `tailwind-merge`, so the check can fail. Runs
+ * after `assertNodeResolution`, which links the dependencies.
+ */
+async function assertTailwindMergeFree() {
+  const { build } = await import("esbuild");
+  const bundledInputs = async (contents) => {
+    const result = await build({
+      absWorkingDir: temporaryDirectory,
+      bundle: true,
+      external: ["react", "react-dom", "react/jsx-runtime"],
+      format: "esm",
+      logLevel: "silent",
+      metafile: true,
+      platform: "browser",
+      stdin: { contents, resolveDir: temporaryDirectory },
+      write: false,
+    });
+    return Object.values(result.metafile.outputs).flatMap((output) =>
+      Object.entries(output.inputs)
+        .filter(([, input]) => input.bytesInOutput > 0)
+        .map(([path]) => path),
+    );
+  };
+  const plain = await bundledInputs(
+    [
+      'export { PlainSeparator } from "@vllnt/ui/separator";',
+      'export { UnstyledButton } from "@vllnt/ui/button";',
+      'export { cx } from "@vllnt/ui/utils";',
+    ].join("\n"),
+  );
+  const leaked = plain.filter((path) => path.includes("tailwind-merge"));
+  if (leaked.length > 0) {
+    throw new Error(
+      `PlainSeparator, UnstyledButton and cx bundle tailwind-merge: ${leaked.join(", ")}`,
+    );
+  }
+  if (!plain.some((path) => path.endsWith("plain-separator.js"))) {
+    throw new Error(
+      `The plain bundle is missing PlainSeparator: ${plain.join(", ")}`,
+    );
+  }
+  const control = await bundledInputs(
+    'export { Separator } from "@vllnt/ui/separator";',
+  );
+  if (!control.some((path) => path.includes("tailwind-merge"))) {
+    throw new Error("The Separator control bundle has no tailwind-merge.");
+  }
+}
+
+/**
  * Type-checks an ES module consumer that imports, by name, every value and
  * type the barrel defines for every subpath, under the two module resolutions
  * consumers use.
@@ -397,10 +449,11 @@ try {
 
   await assertResolvableRelativeSpecifiers(packedDirectory);
   await assertNodeResolution(manifest, packedDirectory);
+  await assertTailwindMergeFree();
   await assertSubpathTypes(packedDirectory);
 
   console.log(
-    `Packed web package resolves every export, internal ESM specifier, root entry, tailwind preset and subpath (runtime and types) from published files (${manifest.version}).`,
+    `Packed web package resolves every export, internal ESM specifier, root entry, tailwind preset and subpath (runtime and types) from published files, and the plain exports bundle without tailwind-merge (${manifest.version}).`,
   );
 } finally {
   await rm(temporaryDirectory, { force: true, recursive: true });

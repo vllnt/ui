@@ -42,7 +42,10 @@ type Entry = ExportName & { isTypeOnly: boolean; specifier: string };
 const COMPONENT_SPECIFIER = /^\.\/[a-z]+\/[a-z0-9-]+(?:\/[a-z0-9-]+)?$/;
 
 /** Root-index modules outside the barrel that get a subpath of their own. */
-const LIBRARY_SUBPATHS: Record<string, string> = { "./lib/utils": "utils" };
+const LIBRARY_SUBPATHS: Record<string, string> = {
+  "./lib/cx": "utils",
+  "./lib/utils": "utils",
+};
 
 /** The `export { … } from "…"` statements of a file. */
 function exportStatements(
