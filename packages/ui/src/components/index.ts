@@ -361,6 +361,7 @@ export {
 // New shadcn primitives - Overlay
 export {
   Tooltip,
+  TooltipArrow,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,

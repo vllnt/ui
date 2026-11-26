@@ -20,6 +20,7 @@ pnpm dlx shadcn@latest add https://ui.vllnt.com/r/tooltip.json
 ```tsx
 import {
   Tooltip,
+  TooltipArrow,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
@@ -37,4 +38,22 @@ import {
 ## API Reference
 
 <Controls />
+
+## Arrow
+
+Put a `TooltipArrow` inside `TooltipContent` to point at the trigger. It follows the side the tooltip lands on, including after a flip, and is hidden from assistive technology. The content stops clipping its children once it holds an arrow. Style it with `className`, for example a background that matches your content.
+
+<Canvas of={Stories.WithArrow} sourceState="shown" />
+
+## Close delay
+
+`closeDelay` on `Tooltip` is how many milliseconds the tooltip stays open after the pointer leaves the trigger and the tooltip. It defaults to 0.
+
+<Canvas of={Stories.CloseDelay} sourceState="shown" />
+
+## Touch
+
+Touch screens have no hover, so a plain tooltip never opens there. `toggleable` on `Tooltip` makes a press on the trigger (finger, mouse or keyboard) open and close it; an outside press or Escape closes it too. Use it on an info button that exists to show the tip.
+
+<Canvas of={Stories.Toggleable} sourceState="shown" />
 

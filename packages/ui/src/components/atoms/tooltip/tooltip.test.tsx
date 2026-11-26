@@ -3,6 +3,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 
 import {
   Tooltip,
+  TooltipArrow,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
@@ -190,5 +191,111 @@ describe("Tooltip delay", () => {
       "data-state",
       "instant-open",
     );
+  });
+});
+
+describe("TooltipArrow", () => {
+  it("renders a hidden arrow inside the content and merges className", () => {
+    const ref = { current: null as HTMLDivElement | null };
+    render(
+      <Tooltip defaultOpen>
+        <TooltipTrigger>Trigger</TooltipTrigger>
+        <TooltipContent>
+          <TooltipArrow className="fill-tip" ref={ref} />
+          Body
+        </TooltipContent>
+      </Tooltip>,
+    );
+    const content = screen.getByText("Body");
+    const arrow = content.querySelector('[data-slot="tooltip-arrow"]');
+    expect(arrow).toBe(ref.current);
+    expect(arrow).toHaveAttribute("aria-hidden", "true");
+    expect(arrow).toHaveClass("rotate-45", "fill-tip");
+  });
+
+  it("lets the content stop clipping once it holds an arrow", () => {
+    render(
+      <Tooltip defaultOpen>
+        <TooltipTrigger>Trigger</TooltipTrigger>
+        <TooltipContent>Body</TooltipContent>
+      </Tooltip>,
+    );
+    expect(screen.getByText("Body")).toHaveClass(
+      "overflow-hidden",
+      "has-[>[data-slot=tooltip-arrow]]:overflow-visible",
+    );
+  });
+});
+
+describe("Tooltip closeDelay", () => {
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
+  const openThenLeave = async (closeDelay?: number) => {
+    vi.useFakeTimers();
+    render(
+      <Tooltip closeDelay={closeDelay} delayDuration={0}>
+        <TooltipTrigger>Hover me</TooltipTrigger>
+        <TooltipContent>Tip</TooltipContent>
+      </Tooltip>,
+    );
+    const trigger = screen.getByText("Hover me");
+    hover(trigger);
+    await advance(1);
+    expect(screen.getByText("Tip")).not.toHaveAttribute("data-state", "closed");
+    // Far from the trigger and the tooltip, so it leaves the hover bridge.
+    fireEvent.pointerLeave(trigger, {
+      clientX: 500,
+      clientY: 500,
+      pointerType: "mouse",
+    });
+  };
+
+  it("stays open for closeDelay after the pointer leaves", async () => {
+    await openThenLeave(200);
+    await advance(150);
+    expect(screen.getByText("Tip")).not.toHaveAttribute("data-state", "closed");
+    await advance(100);
+    expect(screen.getByText("Tip")).toHaveAttribute("data-state", "closed");
+  });
+
+  it("closes at once by default", async () => {
+    await openThenLeave();
+    await advance(1);
+    expect(screen.getByText("Tip")).toHaveAttribute("data-state", "closed");
+  });
+});
+
+describe("Tooltip toggleable", () => {
+  it("opens and closes on a press of the trigger", () => {
+    render(
+      <Tooltip toggleable>
+        <TooltipTrigger aria-label="About storage">i</TooltipTrigger>
+        <TooltipContent>Storage tip</TooltipContent>
+      </Tooltip>,
+    );
+    const trigger = screen.getByRole("button", { name: "About storage" });
+    fireEvent.click(trigger);
+    expect(screen.getByText("Storage tip")).not.toHaveAttribute(
+      "data-state",
+      "closed",
+    );
+    fireEvent.click(trigger);
+    expect(screen.getByText("Storage tip")).toHaveAttribute(
+      "data-state",
+      "closed",
+    );
+  });
+
+  it("stays closed on a press by default", () => {
+    render(
+      <Tooltip>
+        <TooltipTrigger>Trigger</TooltipTrigger>
+        <TooltipContent>Tip</TooltipContent>
+      </Tooltip>,
+    );
+    fireEvent.click(screen.getByText("Trigger"));
+    expect(screen.getByText("Tip")).toHaveAttribute("data-state", "closed");
   });
 });

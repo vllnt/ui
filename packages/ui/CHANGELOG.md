@@ -8,6 +8,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Added
 
+- **`TooltipArrow`, and `Tooltip` `closeDelay` and `toggleable`** -
+  `TooltipArrow` points at the trigger from the side the tooltip lands on, and
+  `TooltipContent` stops clipping its children once it holds one. `closeDelay`
+  keeps the tooltip open for that many milliseconds after the pointer leaves
+  (default 0). `toggleable` makes a press on the trigger open and close the
+  tooltip, so it opens on touch screens (default off). Without them, tooltips
+  behave as before.
 - **ui-sdk compat helpers** - the helpers the components are written with are
   public, for apps and agents that build their own parts the same way: `Slot`,
   `asChildProps`, `withDataAttributes`, `openState`, `checkedState`,
