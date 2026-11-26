@@ -197,6 +197,7 @@ Repository-wide docs (audience = contributors, not just agents):
 | [`CONTRIBUTING.md`](./CONTRIBUTING.md) | Contributor onramp |
 | [`docs/ARCHITECTURE.md`](./docs/ARCHITECTURE.md) | Monorepo layout, build graph, theming |
 | [`docs/RELEASING.md`](./docs/RELEASING.md) | Release + canary flow |
+| [`docs/agent-first-architecture.html`](./docs/agent-first-architecture.html) | Proposed agent-first architecture (status: proposal). Parse its `#architecture-data` JSON first; only Live items exist, never call anything in `proposedApisThatDoNotExist` |
 | [`SECURITY.md`](./SECURITY.md) | Security policy (don't modify without authorization) |
 
 ---

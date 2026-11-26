@@ -8,6 +8,7 @@ This folder contains in-repo documentation for `@vllnt/ui` contributors and down
 |-----|------|
 | [ARCHITECTURE.md](./ARCHITECTURE.md) | Monorepo layout, package boundaries, build graph |
 | [RELEASING.md](./RELEASING.md) | How releases are cut and published |
+| [agent-first-architecture.html](./agent-first-architecture.html) | Proposed agent-first architecture: layers, rules R1 to R12, renderers, build order. Status: proposal; only items marked Live exist today |
 
 ## External destinations
 
