@@ -1,0 +1,640 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>VLLNT UI: agent-first architecture</title>
+<meta name="description" content="Proposed architecture that makes VLLNT UI a component kit AI agents can create with, extend, test and monitor, on web, native, desktop and spatial.">
+<style>
+:root{
+  color-scheme:light dark;
+  --a-fg:var(--foreground,CanvasText);
+  --a-mut:var(--muted-foreground,color-mix(in srgb,CanvasText 62%,Canvas));
+  --a-bd:var(--border,color-mix(in srgb,CanvasText 16%,Canvas));
+  --a-cd:var(--card,color-mix(in srgb,CanvasText 3%,Canvas));
+  --a-code:var(--code-background,color-mix(in srgb,CanvasText 6%,Canvas));
+  --a-tint:var(--accent-surface,color-mix(in srgb,CanvasText 5%,Canvas));
+  --a-ok:var(--success,light-dark(#15803d,#4ade80));
+  --a-info:var(--info,light-dark(#1d4ed8,#60a5fa));
+  --a-warn:var(--warning,light-dark(#b45309,#fbbf24));
+  --a-bad:var(--destructive,light-dark(#b91c1c,#f87171));
+  --a-r:var(--radius,10px);
+  --a-sans:var(--font-sans,system-ui,-apple-system,"Segoe UI",sans-serif);
+  --a-mono:var(--font-mono,ui-monospace,SFMono-Regular,Menlo,monospace);
+}
+.doc{max-width:860px;margin:0 auto;font-family:var(--a-sans);color:var(--a-fg);font-size:14px;line-height:1.55}
+.doc *{box-sizing:border-box}
+.doc h1{font-size:26px;line-height:1.2;margin:0 0 6px;text-wrap:balance}
+.doc h2{font-size:19px;margin:36px 0 8px;padding-top:14px;border-top:1px solid var(--a-bd);scroll-margin-top:12px}
+.doc h3{font-size:15px;margin:20px 0 6px}
+.doc p{margin:6px 0 10px}
+.doc ul,.doc ol{margin:6px 0 10px;padding-left:22px}
+.doc li{margin:3px 0}
+.doc a{color:var(--a-info)}
+.lede{color:var(--a-mut);font-size:15px;margin:0 0 10px}
+.meta{display:flex;flex-wrap:wrap;gap:6px 16px;color:var(--a-mut);font-size:12.5px;margin-bottom:14px}
+code,pre{font-family:var(--a-mono);font-size:12.5px}
+code{background:var(--a-code);padding:1px 5px;border-radius:5px}
+pre{background:var(--a-code);border:1px solid var(--a-bd);border-radius:var(--a-r);padding:12px 14px;overflow-x:auto;line-height:1.5;margin:8px 0 12px}
+pre code{background:none;padding:0}
+.box{background:var(--a-cd);border:1px solid var(--a-bd);border-radius:var(--a-r);padding:14px 16px;margin:10px 0}
+.box.note{background:var(--a-tint)}
+.box>:first-child{margin-top:0}.box>:last-child{margin-bottom:0}
+.tw{overflow-x:auto;margin:8px 0 12px;border:1px solid var(--a-bd);border-radius:var(--a-r)}
+table{border-collapse:collapse;width:100%;font-size:13px;min-width:560px}
+th,td{text-align:left;vertical-align:top;padding:7px 10px;border-bottom:1px solid var(--a-bd)}
+th{font-size:11.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--a-mut);background:var(--a-cd);white-space:nowrap}
+tr:last-child td{border-bottom:0}
+td:first-child{font-weight:600}
+.chip{display:inline-block;font-size:10.5px;font-weight:650;padding:0 7px;border-radius:999px;border:1px solid currentColor;white-space:nowrap;line-height:1.65}
+.s-live{color:var(--a-ok)}.s-pr{color:var(--a-info)}.s-plan{color:var(--a-warn)}.s-gap{color:var(--a-bad)}
+.s-prop{color:var(--a-mut);border-style:dashed}
+.toc{columns:2;column-gap:24px;padding-left:20px;margin:6px 0}
+.stack{display:flex;flex-direction:column;gap:6px;margin:10px 0}
+.lay{display:grid;grid-template-columns:56px 1fr;gap:0 12px;background:var(--a-cd);border:1px solid var(--a-bd);border-radius:var(--a-r);padding:10px 14px}
+.lay .id{font-family:var(--a-mono);font-size:12px;color:var(--a-mut);padding-top:2px}
+.lay b{font-size:14.5px}
+.lay .ag{color:var(--a-mut);font-size:12.5px}
+.flow{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px;margin:10px 0}
+.flow div{background:var(--a-cd);border:1px solid var(--a-bd);border-radius:var(--a-r);padding:9px 10px;font-size:12.5px}
+.flow b{display:block;font-size:13.5px}
+.fan{display:grid;grid-template-columns:minmax(0,1fr) 28px minmax(0,1.5fr);align-items:center;gap:8px;margin:10px 0}
+.fan .src,.fan .out{background:var(--a-cd);border:1px solid var(--a-bd);border-radius:var(--a-r);padding:10px 14px}
+.fan .arr{text-align:center;color:var(--a-mut);font-size:18px}
+.fan ul{margin:0;padding-left:18px}
+@media(max-width:600px){
+  .toc{columns:1}
+  .flow{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .fan{grid-template-columns:1fr}
+  .fan .arr{transform:rotate(90deg)}
+  .lay{grid-template-columns:36px 1fr}
+}
+</style>
+</head>
+<body>
+<main class="doc" id="top">
+
+<h1>VLLNT UI: agent-first architecture</h1>
+<p class="lede">One component kit that an AI agent can create with, extend, test and monitor, for web, native, desktop and spatial apps, in every major framework.</p>
+<div class="meta">
+  <span>Status: <b>proposal, not adopted</b></span>
+  <span>Date: 2026-11-26</span>
+  <span>Audience: AI agents working in or with this repository</span>
+</div>
+
+<script type="application/json" id="architecture-data">
+{
+  "document": "vllnt-ui-agent-first-architecture",
+  "status": "proposal",
+  "date": "2026-11-26",
+  "statusVocabulary": {
+    "live": "exists on the main branch today",
+    "in-pr": "built in an open pull request or published only as a canary",
+    "planned": "has an issue or a roadmap entry, not built",
+    "proposed": "exists only in this document; do not call it",
+    "gap": "nothing exists and nothing is filed"
+  },
+  "layers": [
+    {"id": "L1", "name": "Design source", "package": "@vllnt/design-source", "status": "live"},
+    {"id": "L2", "name": "Contracts", "package": "@vllnt/ui-core", "status": "live for tokens, theme and platform list; planned for component contracts", "issues": [727]},
+    {"id": "L3", "name": "Behaviors", "package": "ui-sdk on web, own primitives on native", "status": "in-pr on web, canary on native", "issues": [719]},
+    {"id": "L4", "name": "Renderers", "package": "@vllnt/ui, @vllnt/ui-native", "status": "live for React on web, canary for React Native, other frameworks proposed, desktop planned, spatial planned", "issues": [729, 631]},
+    {"id": "L5", "name": "Patterns", "package": "registry blocks", "status": "planned", "issues": [730]},
+    {"id": "L6", "name": "Apps", "package": "consumer code", "status": "out of this repository"}
+  ],
+  "renderers": [
+    {"framework": "Next.js", "package": "@vllnt/ui", "status": "live", "tier": 1},
+    {"framework": "React with Vite, TanStack Start, React Router", "package": "@vllnt/ui", "status": "workaround: alias three Next.js modules to stubs", "tier": 1},
+    {"framework": "Expo, React Native", "package": "@vllnt/ui-native", "status": "in-pr", "tier": 1},
+    {"framework": "Web Components (Angular, Astro, plain HTML, any other)", "package": "not named yet", "status": "proposed", "tier": 2},
+    {"framework": "Vue, Nuxt", "package": "not named yet", "status": "proposed", "tier": 2},
+    {"framework": "Svelte, SvelteKit", "package": "not named yet", "status": "proposed", "tier": 2},
+    {"framework": "Solid, SolidStart", "package": "not named yet", "status": "proposed", "tier": 2}
+  ],
+  "whoWritesWhat": {
+    "agentOrPerson": ["the definition file", "cases", "a layout file per renderer, only for a part marked as custom layout"],
+    "generatorAutomatic": ["component code for every renderer", "stories", "tests", "visual matrix", "docs page", "registry entry"],
+    "rule": "The generator is a normal program, not an AI model. Never edit generated files."
+  },
+  "rules": [
+    {"id": "R1", "rule": "Dependencies point down only", "status": "live"},
+    {"id": "R2", "rule": "One contract, many renderers", "status": "planned", "issues": [727]},
+    {"id": "R3", "rule": "Every layer ships a file an agent can read and a check an agent can run", "status": "live in part"},
+    {"id": "R4", "rule": "Define once, generate the rest", "status": "proposed"},
+    {"id": "R5", "rule": "Tokens only, no raw values", "status": "live in part"},
+    {"id": "R6", "rule": "Every declared fact has a test", "status": "proposed"},
+    {"id": "R7", "rule": "A visual change fails until it is accepted", "status": "gap"},
+    {"id": "R8", "rule": "Agent actions use the same callbacks as people", "status": "planned", "issues": [731, 732]},
+    {"id": "R9", "rule": "Extend by adding an entry, never by forking", "status": "proposed"},
+    {"id": "R10", "rule": "Docs match the installed version", "status": "planned", "issues": [722, 723]},
+    {"id": "R11", "rule": "Components ask an adapter for links, images and navigation and never import a framework's router", "status": "proposed"},
+    {"id": "R12", "rule": "A framework counts as supported only when the parity suite passes for it", "status": "proposed"}
+  ],
+  "lifecycle": ["create", "extend", "test", "ship", "monitor"],
+  "proposedApisThatDoNotExist": [
+    "defineComponent",
+    "vllnt-ui generate",
+    "@vllnt/ui/agent",
+    "@vllnt/ui/testing",
+    "the cases field",
+    "the .def.ts file convention",
+    "layout()",
+    "UIProvider with an adapter",
+    "@vllnt/ui/adapters/*",
+    "renderer packages for Vue, Svelte, Solid and Web Components"
+  ],
+  "issues": {
+    "docs": [722, 723, 724, 725, 726],
+    "contract": [727, 728],
+    "platformsAndPatterns": [729, 730, 631, 680],
+    "runtime": [731, 732, 733],
+    "proofAndUpkeep": [734, 735],
+    "foundation": [719]
+  }
+}
+</script>
+
+<section id="read-me-first">
+<h2>0. Read me first</h2>
+<div class="box note">
+<p><b>If you are an AI agent, follow these four steps before you use anything in this document.</b></p>
+<ol>
+  <li>Parse the JSON block with id <code>architecture-data</code> at the top of this file. It holds the layers, rules, statuses and issue numbers.</li>
+  <li>Read the status of each item. Only <span class="chip s-live">Live</span> items can be used today.</li>
+  <li>Never call an API marked <span class="chip s-prop">Proposed</span>. The names listed in <code>proposedApisThatDoNotExist</code> are sketches. Check a package's <code>exports</code> before you import from it.</li>
+  <li>For repository conventions, <code>AGENTS.md</code> is the source of truth. This document proposes a direction and does not override it.</li>
+</ol>
+</div>
+<div class="tw"><table>
+<tr><th>Status</th><th>Meaning</th></tr>
+<tr><td><span class="chip s-live">Live</span></td><td>Exists on the main branch today.</td></tr>
+<tr><td><span class="chip s-pr">In PR / canary</span></td><td>Built in an open pull request, or published only as a canary.</td></tr>
+<tr><td><span class="chip s-plan">Planned</span></td><td>Has an issue or a roadmap entry. Not built.</td></tr>
+<tr><td><span class="chip s-prop">Proposed</span></td><td>Exists only in this document.</td></tr>
+<tr><td><span class="chip s-gap">Gap</span></td><td>Nothing exists and nothing is filed.</td></tr>
+</table></div>
+<ol class="toc">
+  <li><a href="#goal">Goal</a></li>
+  <li><a href="#rules">Rules</a></li>
+  <li><a href="#layers">Layers</a></li>
+  <li><a href="#frameworks">Frameworks and renderers</a></li>
+  <li><a href="#definition">The component definition</a></li>
+  <li><a href="#lifecycle">Agent lifecycle and playbooks</a></li>
+  <li><a href="#extend">Extension points</a></li>
+  <li><a href="#tests">Test architecture</a></li>
+  <li><a href="#visual-regression">Visual regression</a></li>
+  <li><a href="#monitor">Monitoring</a></li>
+  <li><a href="#agent-surface">Agent surface</a></li>
+  <li><a href="#build-order">Build order</a></li>
+  <li><a href="#done">Definition of done</a></li>
+  <li><a href="#open-decisions">Open decisions</a></li>
+  <li><a href="#glossary">Glossary</a></li>
+</ol>
+</section>
+
+<section id="goal">
+<h2>1. Goal</h2>
+<p>Build any app from one kit, with an AI agent doing most of the work and proving that the work is correct.</p>
+<div class="tw"><table>
+<tr><th>Property</th><th>What it means here</th><th>How we know</th></tr>
+<tr><td>Agent-first</td><td>An agent can find, use and build components from files and commands, without a person explaining.</td><td>Agent task evals (#734).</td></tr>
+<tr><td>Extensible</td><td>A new component, variant, token, platform, framework or screen is added as an entry. Nothing is forked.</td><td>Adding one needs no change to existing components.</td></tr>
+<tr><td>Tested</td><td>Every fact declared about a component has a test that runs on every platform it supports.</td><td>Coverage is counted from the definition, not from test files.</td></tr>
+<tr><td>Visual regression built in</td><td>A new variant gets its screenshots without extra work. A visual change fails until someone accepts it.</td><td>A deliberate one-pixel change fails CI.</td></tr>
+<tr><td>Observable</td><td>An agent can read what a running interface contains, act on it by label, and see drift over time.</td><td>The same script drives web and native.</td></tr>
+</table></div>
+<p><b>Not goals:</b> a new framework, a visual page builder, or replacing the ui-sdk behaviors.</p>
+</section>
+
+<section id="rules">
+<h2>2. Rules</h2>
+<p>Each rule comes with a check. A rule without a check is only advice, and agents do not reliably follow advice.</p>
+<div class="tw"><table>
+<tr><th>Id</th><th>Rule</th><th>Check that enforces it</th><th>Status</th></tr>
+<tr><td>R1</td><td>Dependencies point down only. A renderer may use contracts. Contracts never import a renderer.</td><td><code>check:circular</code>, <code>check:atomic</code>, package boundary checks</td><td><span class="chip s-live">Live</span></td></tr>
+<tr><td>R2</td><td>One contract, many renderers. A new platform adds a renderer. It does not add component names or props.</td><td>Fail when a renderer's props differ from the contract (#727)</td><td><span class="chip s-plan">Planned</span></td></tr>
+<tr><td>R3</td><td>Every layer ships a file an agent can read and a check an agent can run.</td><td>See the last two columns of the <a href="#layers">layer table</a></td><td><span class="chip s-live">Live in part</span></td></tr>
+<tr><td>R4</td><td>Define once, generate the rest. A person or agent writes the definition. Tools write the stories, tests, docs and registry entry.</td><td>Fail when a generated file is out of date</td><td><span class="chip s-prop">Proposed</span></td></tr>
+<tr><td>R5</td><td>Tokens only. No raw colour, size or spacing in a component.</td><td><code>tokens:check</code> today; a compile error on an unknown token later</td><td><span class="chip s-live">Live in part</span></td></tr>
+<tr><td>R6</td><td>Every declared fact has a test: each prop, variant, state, key and action.</td><td>Count facts in the definition against generated tests</td><td><span class="chip s-prop">Proposed</span></td></tr>
+<tr><td>R7</td><td>A visual change fails until a person or agent accepts it.</td><td>Compare the pull request against the base branch</td><td><span class="chip s-gap">Gap</span></td></tr>
+<tr><td>R8</td><td>Agent actions use the same callbacks as people, are marked as agent-made, and can be cancelled.</td><td>e2e test that an agent change reaches the callback (#731, #732)</td><td><span class="chip s-plan">Planned</span></td></tr>
+<tr><td>R9</td><td>Extend by adding an entry, never by forking a component.</td><td>See <a href="#extend">extension points</a></td><td><span class="chip s-prop">Proposed</span></td></tr>
+<tr><td>R10</td><td>Docs match the installed version. They ship inside the package.</td><td>Fail when an export has no docs page (#722, #723)</td><td><span class="chip s-plan">Planned</span></td></tr>
+<tr><td>R11</td><td>Components ask an adapter for links, images and navigation. They never import a framework's router.</td><td>Lint that bans framework imports in components. Today 10 source files import Next.js modules.</td><td><span class="chip s-prop">Proposed</span></td></tr>
+<tr><td>R12</td><td>A framework counts as supported only when the parity suite passes for it.</td><td>One CI column per renderer</td><td><span class="chip s-prop">Proposed</span></td></tr>
+</table></div>
+</section>
+
+<section id="layers">
+<h2>3. Layers</h2>
+<p>Each layer uses only the layers below it.</p>
+<div class="stack">
+  <div class="lay"><span class="id">L6</span><div><b>Apps</b> <span class="chip s-live">Consumer code</span><br>Web, mobile, desktop and spatial apps built with the kit.<br><span class="ag">Agent gets: one kit to learn, with the same component names on every platform.</span></div></div>
+  <div class="lay"><span class="id">L5</span><div><b>Patterns</b> <span class="chip s-plan">Planned #730</span><br>Whole screens as registry blocks: app shell, sign-in, settings, dashboard, empty and error states.<br><span class="ag">Agent gets: screens to install, not only parts.</span></div></div>
+  <div class="lay"><span class="id">L4</span><div><b>Renderers</b> <span class="chip s-live">React live</span> <span class="chip s-pr">React Native canary</span> <span class="chip s-prop">Vue, Svelte, Solid, Web Components</span> <span class="chip s-plan">Desktop #729</span> <span class="chip s-plan">Spatial #631</span><br>The styled components people see. One package per framework: <code>@vllnt/ui</code>, <code>@vllnt/ui-native</code>, and the others in <a href="#frameworks">section 4</a>.<br><span class="ag">Agent gets: the registry says which platforms each component supports.</span></div></div>
+  <div class="lay"><span class="id">L3</span><div><b>Behaviors</b> <span class="chip s-pr">Web in PR #720</span> <span class="chip s-pr">Native canary</span><br>Focus, keyboard, popups, selection. No styling. ui-sdk on web (Radix on main today), own primitives on native.<br><span class="ag">Agent gets: stable roles, names and states, so it can operate the running app.</span></div></div>
+  <div class="lay"><span class="id">L2</span><div><b>Contracts</b> <span class="chip s-live">Tokens, theme, platform list</span> <span class="chip s-plan">Component contracts #727</span><br><code>@vllnt/ui-core</code>. What each component is, whatever draws it. No platform code.<br><span class="ag">Agent gets: one machine-readable description per component.</span></div></div>
+  <div class="lay"><span class="id">L1</span><div><b>Design source</b> <span class="chip s-live">Live</span><br><code>@vllnt/design-source</code>. Colour, spacing, type, radius, motion. One source of values.<br><span class="ag">Agent gets: a token file to read and <code>tokens:check</code> to run.</span></div></div>
+</div>
+<div class="tw"><table>
+<tr><th>Layer</th><th>File an agent reads</th><th>Check an agent runs</th></tr>
+<tr><td>L1 Design source</td><td>Token source files</td><td><code>tokens:check</code> <span class="chip s-live">Live</span></td></tr>
+<tr><td>L2 Contracts</td><td>Today: <code>meta.json</code>, <code>props.json</code>, <code>examples.json</code> beside each web component. Later: one contract per component.</td><td>Contract parity check <span class="chip s-plan">#727</span></td></tr>
+<tr><td>L3 Behaviors</td><td>ui-sdk docs shipped in <code>node_modules</code> (after #720)</td><td>Component unit tests <span class="chip s-live">Live</span></td></tr>
+<tr><td>L4 Renderers</td><td><code>/r/&lt;name&gt;.json</code>, <code>/llms.txt</code>, component pages</td><td><code>check:use-client</code>, <code>check:dist-imports</code>, <code>size</code>, <code>pack:check</code>, story accessibility checks <span class="chip s-live">Live</span></td></tr>
+<tr><td>L5 Patterns</td><td>Registry block descriptors</td><td>Block-level e2e <span class="chip s-plan">#730</span></td></tr>
+</table></div>
+</section>
+
+<section id="frameworks">
+<h2>4. Frameworks and renderers</h2>
+<p>The aim is the widest framework support for a bounded cost. A definition names platforms, never frameworks. A framework is supported by adding a renderer, so no component definition changes when one is added.</p>
+
+<h3 id="frameworks-support">4.1 Support today and target</h3>
+<div class="tw"><table>
+<tr><th>Framework</th><th>Renderer</th><th>Today</th><th>Target</th></tr>
+<tr><td>Next.js</td><td><code>@vllnt/ui</code></td><td><span class="chip s-live">Live</span></td><td>Tier 1</td></tr>
+<tr><td>React with Vite, TanStack Start, React Router</td><td><code>@vllnt/ui</code> plus an adapter</td><td><span class="chip s-gap">Workaround</span> the app must alias three Next.js modules to stubs</td><td>Tier 1</td></tr>
+<tr><td>Expo, React Native</td><td><code>@vllnt/ui-native</code></td><td><span class="chip s-pr">Canary</span></td><td>Tier 1</td></tr>
+<tr><td>Web Components: Angular, Astro, plain HTML, any other</td><td>New package</td><td><span class="chip s-prop">Proposed</span></td><td>Tier 2</td></tr>
+<tr><td>Vue, Nuxt</td><td>New package</td><td><span class="chip s-prop">Proposed</span></td><td>Tier 2</td></tr>
+<tr><td>Svelte, SvelteKit</td><td>New package</td><td><span class="chip s-prop">Proposed</span></td><td>Tier 2</td></tr>
+<tr><td>Solid, SolidStart</td><td>New package</td><td><span class="chip s-prop">Proposed</span></td><td>Tier 2</td></tr>
+<tr><td>Desktop shells</td><td>A web renderer inside the shell</td><td><span class="chip s-plan">#729</span></td><td>Follows the web renderer used</td></tr>
+</table></div>
+<ul>
+  <li><b>Tier 1</b>: every component, with hand-written layout files where needed.</li>
+  <li><b>Tier 2</b>: generated renderers. Every component whose definition has no custom layout, plus any component given a layout file for that renderer.</li>
+  <li>The registry lists, per component, which renderers have it. An agent reads that before choosing a component.</li>
+</ul>
+
+<h3 id="frameworks-pieces">4.2 The four pieces of a renderer</h3>
+<div class="tw"><table>
+<tr><th>Piece</th><th>What it is</th><th>Shared or per framework</th><th>Status</th></tr>
+<tr><td>Behaviors</td><td>ui-sdk publishes adapters for React, Vue, Svelte, Solid and Web Components. Native uses its own primitives.</td><td>Per framework, supplied by L3</td><td><span class="chip s-pr">React in PR #720</span></td></tr>
+<tr><td>Style recipes</td><td>The map from a variant to class names, plus the token stylesheet. The same for every web framework.</td><td>Shared by all web renderers</td><td><span class="chip s-prop">Proposed</span> today the recipes sit inside the React components</td></tr>
+<tr><td>Templates</td><td>The markup of each part, in the framework's own syntax.</td><td>Per framework, generated from the definition</td><td><span class="chip s-prop">Proposed</span></td></tr>
+<tr><td>Framework adapter</td><td>Link, image and navigation, supplied by the app's router.</td><td>Per router</td><td><span class="chip s-prop">Proposed</span></td></tr>
+</table></div>
+
+<h3 id="frameworks-adapter">4.3 Framework adapter</h3>
+<p>Components must not import a router. The app passes one in. This removes the stub workaround for React apps that do not use Next.js.</p>
+<pre><code>// PROPOSED. UIProvider and the adapters do not exist yet.
+import { UIProvider } from "@vllnt/ui";
+import { tanstackRouter } from "@vllnt/ui/adapters/tanstack-router";
+
+&lt;UIProvider adapter={tanstackRouter}&gt;{app}&lt;/UIProvider&gt;</code></pre>
+<p>Adapters to ship: Next.js, TanStack Router, React Router, Expo Router, and plain links as the default.</p>
+
+<h3 id="frameworks-order">4.4 Order of work</h3>
+<ol>
+  <li><b>Framework adapter.</b> Fixes a gap that exists today and needs nothing else.</li>
+  <li><b>Style recipes moved out of the React components.</b> Every later web renderer reuses them.</li>
+  <li><b>Web Components renderer.</b> One build reaches every framework that has no renderer of its own.</li>
+  <li><b>Vue, then Svelte, then Solid.</b> Each is a generator target plus one CI column.</li>
+</ol>
+
+<h3 id="frameworks-cost">4.5 Cost and limits</h3>
+<ul>
+  <li>Each renderer adds a generator target, a CI column, a docs tab and a published package to maintain.</li>
+  <li>A component with custom layout needs one layout file per renderer. Keep custom layout rare.</li>
+  <li>Renderers for Vue, Svelte, Solid and Web Components depend on ui-sdk adapters that are in beta.</li>
+  <li>Affordable only after components are generated from definitions (<a href="#definition">section 5</a>). Writing 300 or more components by hand per framework is out of scope.</li>
+</ul>
+</section>
+
+<section id="definition">
+<h2>5. The component definition</h2>
+<p><span class="chip s-prop">Proposed</span> The whole architecture turns on one idea: a component is described once, as data, and everything else is derived from that description.</p>
+<p>Today a web component is several hand-written files (for example Combobox: source, story, unit test, visual test, docs page, <code>meta.json</code>, <code>props.json</code>, <code>examples.json</code>), and the native version is written separately. The definition replaces the parts of those files that only repeat facts.</p>
+
+<h3 id="definition-example">5.1 Example</h3>
+<pre><code>// environment-picker.def.ts
+// PROPOSED. defineComponent does not exist yet.
+import { defineComponent } from "@vllnt/ui-core";
+
+export const environmentPicker = defineComponent({
+  name: "environment-picker",
+  purpose: "Pick one deployment environment from a searchable list.",
+
+  // L3: which behaviors it is made of
+  behaviors: ["popup", "selection", "typeahead"],
+
+  // L2: the public contract
+  props: {
+    value:   { type: "string", controlled: true },
+    options: {
+      type: "list",
+      of: { value: "string", label: "string", status: ["live", "failed"] },
+    },
+    disabled: { type: "boolean", default: false },
+  },
+  states: ["closed", "open", "disabled", "empty"],
+
+  // L4: which kit parts draw it
+  parts: {
+    trigger: { uses: "Button", variant: "outline", placeholder: "Select environment" },
+    search:  { uses: "CommandInput", placeholder: "Search" },
+    item:    { uses: "CommandItem", shows: ["statusDot", "label", "check"] },
+    empty:   { text: "No environment found" },
+  },
+
+  // L1: token names only. An unknown name is a compile error.
+  tokens: {
+    statusDot: { live: "status.success", failed: "status.danger" },
+  },
+
+  // Runtime: how another agent finds and operates it
+  agent: { label: "Environment", actions: ["setValue", "open"] },
+
+  // Platforms, not frameworks. Each framework is a renderer (section 4).
+  platforms: ["web", "native"],
+
+  // Regression tests, as data
+  cases: [
+    {
+      name: "keeps focus on the trigger after picking",
+      steps: [{ open: true }, { type: "prod" }, { press: "Enter" }],
+      expect: { value: "production", focus: "trigger", open: false },
+    },
+  ],
+});</code></pre>
+
+<h3 id="definition-fields">5.2 Fields</h3>
+<div class="tw"><table>
+<tr><th>Field</th><th>Says</th><th>Layer</th><th>Used to generate</th></tr>
+<tr><td><code>name</code>, <code>purpose</code></td><td>What it is, in one sentence</td><td>L2</td><td>Docs, registry entry, MCP answers</td></tr>
+<tr><td><code>behaviors</code></td><td>Which interaction pieces it is built from</td><td>L3</td><td>Keyboard and focus tests, accessibility notes</td></tr>
+<tr><td><code>props</code></td><td>Public inputs, with type, default and whether a parent can control them</td><td>L2</td><td>Types, props table, controlled and uncontrolled tests</td></tr>
+<tr><td><code>states</code></td><td>Every state it can be in</td><td>L2</td><td>One story and one screenshot per state</td></tr>
+<tr><td><code>parts</code></td><td>Which kit components draw each piece</td><td>L4</td><td>Web and native component code</td></tr>
+<tr><td><code>tokens</code></td><td>Which token colours or sizes each piece uses</td><td>L1</td><td>Styles, token lint, colour assertions</td></tr>
+<tr><td><code>agent</code></td><td>Label and actions another agent may call</td><td>Runtime</td><td>Bridge registration, e2e by label</td></tr>
+<tr><td><code>platforms</code></td><td>Where it must work. Platforms, not frameworks.</td><td>L4</td><td>Renderer outputs, parity tests</td></tr>
+<tr><td><code>cases</code></td><td>Scripted scenarios with an expected result</td><td>Tests</td><td>Regression tests on every platform</td></tr>
+</table></div>
+
+<h3 id="definition-outputs">5.3 What is written and what is generated</h3>
+<div class="fan">
+  <div class="src"><b>Written by a person or agent</b>
+    <ul>
+      <li><code>&lt;name&gt;.def.ts</code></li>
+      <li>A layout file per renderer, optional, for custom layout only</li>
+    </ul>
+  </div>
+  <div class="arr">→</div>
+  <div class="out"><b>Generated</b>
+    <ul>
+      <li>One component per renderer: React and React Native first, then the others in section 4</li>
+      <li>Stories: one per variant and state</li>
+      <li>Unit, keyboard, accessibility and parity tests</li>
+      <li>Visual test matrix</li>
+      <li>Docs page, with web and native together (#728)</li>
+      <li>Registry entry and MCP answers (#728)</li>
+      <li>Agent bridge registration (#732)</li>
+    </ul>
+  </div>
+</div>
+<p><b>Limit.</b> Layout that the parts cannot express still needs an optional layout file for each renderer. That file gets hand-written tests. A renderer with no layout file for such a component does not ship it, and the registry says so.</p>
+<p><b>Limit.</b> Code and tests come from the same definition, so a wrong definition gives wrong tests that pass. Keyboard and accessibility expectations therefore come from the behavior (a popup closes on Escape), never from the definition.</p>
+
+<h3 id="who-writes-what">5.4 Who writes what</h3>
+<p>The agent writes the definition. A generator writes the component for every renderer, automatically. The agent does not write the web and native versions.</p>
+<div class="tw"><table>
+<tr><th>File</th><th>Written by</th><th>When</th></tr>
+<tr><td>Definition</td><td>Agent or person</td><td>Always</td></tr>
+<tr><td>Cases inside the definition</td><td>Agent or person</td><td>For each bug fixed and each behaviour worth keeping</td></tr>
+<tr><td>Layout file for one renderer</td><td>Agent or person</td><td>Only for a part marked as custom layout</td></tr>
+<tr><td>Component code for React, React Native and every other renderer</td><td>Generator, automatic</td><td>Every build</td></tr>
+<tr><td>Stories, tests, visual matrix, docs page, registry entry</td><td>Generator, automatic</td><td>Every build</td></tr>
+</table></div>
+<ul>
+  <li><b>The generator is a normal program, not an AI model.</b> The same definition always gives the same output, so it can be reviewed once and trusted after.</li>
+  <li><b>Never edit a generated file.</b> Each one starts with a header that says so, and CI regenerates everything and fails on any difference.</li>
+  <li><b>When the generator cannot express something,</b> write a layout file, or extend the generator so every component gains the feature.</li>
+  <li><b>One fix reaches every component.</b> A bug in how a popup is rendered is fixed once in the generator, not in each component.</li>
+  <li><b>Until the generator exists,</b> each renderer is written by hand, as today.</li>
+</ul>
+</section>
+
+<section id="lifecycle">
+<h2>6. Agent lifecycle and playbooks</h2>
+<div class="flow">
+  <div><b>1. Create</b>Write one definition.</div>
+  <div><b>2. Extend</b>Add an entry to it.</div>
+  <div><b>3. Test</b>Run one gate.</div>
+  <div><b>4. Ship</b>Open a pull request with the visual diff.</div>
+  <div><b>5. Monitor</b>Read the running UI and the drift reports.</div>
+</div>
+<p>Commands marked <span class="chip s-plan">Planned</span> are on the roadmap as <code>agent-ui-cli</code>. Commands marked <span class="chip s-prop">Proposed</span> exist only here.</p>
+
+<h3 id="playbook-create">6.1 Create a component</h3>
+<ol>
+  <li>Search first. Ask the MCP server (<code>search_components</code>) or read <code>/r/registry.json</code>. Do not build what exists. <span class="chip s-live">Live</span></li>
+  <li>Load the rules, tokens and component index: <code>vllnt-ui context --json</code>. <span class="chip s-plan">Planned</span></li>
+  <li>Write <code>&lt;name&gt;.def.ts</code>. Use only token names and kit parts. <span class="chip s-prop">Proposed</span></li>
+  <li>Generate the outputs: <code>vllnt-ui generate &lt;name&gt;</code>. <span class="chip s-prop">Proposed</span></li>
+  <li>Run the gate: <code>vllnt-ui gate</code>. It returns one pass or fail, the same locally and in CI. <span class="chip s-plan">Planned</span></li>
+  <li>Look at the new screenshots and accept them.</li>
+  <li>Open a pull request. Report what passed and what you could not verify.</li>
+</ol>
+
+<h3 id="playbook-extend">6.2 Extend a component</h3>
+<ol>
+  <li>Add the variant, state, prop or platform to the definition. Do not copy the component.</li>
+  <li>Generate and run the gate.</li>
+  <li>Expect the visual diff to show only new screenshots and zero changed ones. A changed screenshot means the extension altered existing behaviour.</li>
+</ol>
+
+<h3 id="playbook-bug">6.3 Fix a bug</h3>
+<ol>
+  <li>Add a <code>cases</code> entry that describes the bug. Run it and see it fail.</li>
+  <li>Fix the cause.</li>
+  <li>See the case pass on every platform in <code>platforms</code>. The case stays for good.</li>
+</ol>
+
+<h3 id="playbook-platform">6.4 Add a platform or a framework</h3>
+<ol>
+  <li>For a platform, add its name to the platform list in <code>@vllnt/ui-core</code>. For a framework, skip this step.</li>
+  <li>Create a renderer package: the behaviors adapter, the shared style recipes, a template generator, and a framework adapter. Import only from L1 to L3.</li>
+  <li>Add a CI column that runs the parity suite on it.</li>
+  <li>Change no component definition. Components with custom layout join the renderer when someone adds their layout file.</li>
+  <li>List the renderer in the registry only after the parity suite passes (R12).</li>
+</ol>
+
+<h3 id="playbook-monitor">6.5 Monitor an interface</h3>
+<ol>
+  <li>Read what is on the page through the agent bridge snapshot. <span class="chip s-plan">#731, #732</span></li>
+  <li>Act by label, then read back the values that took effect.</li>
+  <li>Read the readiness report: <code>vllnt-ui status --json</code>. <span class="chip s-plan">Planned</span></li>
+  <li>Read the scheduled visual drift report for the deployed app. <span class="chip s-prop">Proposed</span></li>
+</ol>
+</section>
+
+<section id="extend">
+<h2>7. Extension points</h2>
+<p>Each kind of extension has one place to add it and one check that guards it. Nothing else needs to change.</p>
+<div class="tw"><table>
+<tr><th>To add</th><th>Add an entry in</th><th>Guarded by</th><th>Status</th></tr>
+<tr><td>Token or theme</td><td>L1 token source</td><td><code>tokens:check</code>, contrast check per theme</td><td><span class="chip s-live">Live in part</span></td></tr>
+<tr><td>Variant or state</td><td>The component definition</td><td>Generated story, screenshot and test</td><td><span class="chip s-prop">Proposed</span></td></tr>
+<tr><td>Component</td><td>A new definition file</td><td>The gate</td><td><span class="chip s-prop">Proposed</span></td></tr>
+<tr><td>Behavior</td><td>L3: a ui-sdk behavior on web, a primitive on native</td><td>Behavior tests, shared by every component that uses it</td><td><span class="chip s-pr">In PR #720</span></td></tr>
+<tr><td>Platform</td><td>Platform list plus a renderer package</td><td>Parity suite</td><td><span class="chip s-plan">#729</span></td></tr>
+<tr><td>Framework</td><td>A renderer package plus a framework adapter</td><td>Parity suite for that renderer (R12)</td><td><span class="chip s-prop">Proposed</span></td></tr>
+<tr><td>Screen pattern</td><td>A registry block</td><td>Block e2e, accessibility, no raw values</td><td><span class="chip s-plan">#730</span></td></tr>
+<tr><td>Generated output</td><td>A generator that reads the definition</td><td>Out-of-date check in CI</td><td><span class="chip s-prop">Proposed</span></td></tr>
+<tr><td>Custom component in a consumer app</td><td>A definition file in the app, using the same tools</td><td>The same gate, run in the app</td><td><span class="chip s-prop">Proposed</span></td></tr>
+</table></div>
+</section>
+
+<section id="tests">
+<h2>8. Test architecture</h2>
+<p>Tests are derived from the definition where a fact is declared, and hand-written only for custom layout.</p>
+<div class="tw"><table>
+<tr><th>Level</th><th>Proves</th><th>Derived from</th><th>Today</th></tr>
+<tr><td>Static</td><td>Types, lint, token use, import boundaries</td><td><code>props</code>, <code>tokens</code></td><td><span class="chip s-live">Live</span> type check, lint, <code>tokens:check</code></td></tr>
+<tr><td>Unit</td><td>Props, controlled and uncontrolled value, callbacks</td><td><code>props</code>, <code>states</code></td><td><span class="chip s-live">Live</span>, hand-written: 330 web test files, 53 native</td></tr>
+<tr><td>Keyboard and focus</td><td>Enter, Escape, arrows, typing, focus return</td><td><code>behaviors</code></td><td><span class="chip s-live">Live in part</span>, hand-written; keys are listed in <code>meta.json</code></td></tr>
+<tr><td>Accessibility</td><td>Roles, names, contrast</td><td><code>behaviors</code>, <code>agent.label</code></td><td><span class="chip s-live">Live</span> on web stories</td></tr>
+<tr><td>Visual</td><td>Nothing changed that was not meant to</td><td><code>states</code>, variants, themes, widths</td><td><span class="chip s-gap">Gap</span>, see <a href="#visual-regression">section 9</a></td></tr>
+<tr><td>Parity</td><td>Every renderer behaves the same</td><td><code>platforms</code>, <code>cases</code></td><td><span class="chip s-gap">Gap</span></td></tr>
+<tr><td>End to end, by label</td><td>An agent can operate it</td><td><code>agent</code></td><td><span class="chip s-plan">#731, #732, #733</span></td></tr>
+<tr><td>Regression</td><td>A fixed bug stays fixed everywhere</td><td><code>cases</code></td><td><span class="chip s-live">Live in part</span>, hand-written per platform</td></tr>
+<tr><td>Agent evals</td><td>An agent with only the docs completes real tasks</td><td>Shipped docs</td><td><span class="chip s-plan">#734</span></td></tr>
+</table></div>
+<p><b>Coverage is counted from the definition.</b> If a definition declares 3 variants, 4 states and 2 themes, the expected number of screenshots is 24 per width. A missing one fails the gate.</p>
+<p><b>Test helpers for consumers.</b> <span class="chip s-prop">Proposed</span> A <code>@vllnt/ui/testing</code> entry lets an agent building a custom component in an app run the same generated tests.</p>
+</section>
+
+<section id="visual-regression">
+<h2>9. Visual regression</h2>
+<h3>9.1 Today</h3>
+<ul>
+  <li>243 visual test files exist for the web kit, and 34 baseline images are stored in the repository.</li>
+  <li>The CI job runs them with <code>--update-snapshots</code>. That rewrites the baseline on each run, so the job cannot fail on a visual change.</li>
+  <li>The native kit has no visual tests.</li>
+</ul>
+<h3>9.2 Design</h3>
+<ol>
+  <li><b>Compare base against head.</b> CI builds the stories for the base branch and for the pull request, takes the same screenshots of both, and diffs them. No baseline images are stored in the repository.</li>
+  <li><b>Make rendering repeatable.</b> Fix the clock, the random seed, animations, fonts and the viewport. Wait for images. A story that cannot be made repeatable is tagged and excluded by name, never silently skipped.</li>
+  <li><b>Take the matrix from the definition.</b> Each variant, state, theme and width is one screenshot. Open, hover and focus states are included for interactive parts.</li>
+  <li><b>Report three lists.</b> New, changed and removed. New screenshots do not fail. Changed and removed ones fail.</li>
+  <li><b>Accept on purpose.</b> A changed screenshot passes only after a person or agent accepts it with a recorded reason. Nothing updates itself.</li>
+  <li><b>Same flow on native.</b> Screenshot the catalog app per component and state.</li>
+</ol>
+<h3>9.3 Adding visual regression for a component</h3>
+<p>There is no step. Adding a variant or state to the definition adds its screenshots to the matrix.</p>
+<h3>9.4 Done when</h3>
+<ul>
+  <li>A deliberate one-pixel change to one component fails CI and names that component.</li>
+  <li>Running the same commit twice gives zero differences.</li>
+  <li>The report shows new, changed and removed lists on the pull request.</li>
+</ul>
+</section>
+
+<section id="monitor">
+<h2>10. Monitoring</h2>
+<div class="tw"><table>
+<tr><th>Signal</th><th>Question it answers</th><th>Source</th><th>Status</th></tr>
+<tr><td>Page snapshot</td><td>What components are on screen, with which labels, values and actions?</td><td>ui-sdk agent bridge (<code>createAgent</code>, <code>snapshot</code>, <code>act</code>, <code>query</code>)</td><td><span class="chip s-plan">#731, #732</span></td></tr>
+<tr><td>Agent-made changes</td><td>Which changes came from an agent, and were any cancelled?</td><td>The component callback, marked with the agent as source</td><td><span class="chip s-plan">#732</span></td></tr>
+<tr><td>Readiness</td><td>Is this app set up correctly: tokens, gates, CI, agent files?</td><td><code>vllnt-ui status --json</code></td><td><span class="chip s-plan">Roadmap</span></td></tr>
+<tr><td>Visual drift</td><td>Did the deployed app change appearance without a release?</td><td>Scheduled screenshot diff of a deployed build</td><td><span class="chip s-prop">Proposed</span></td></tr>
+<tr><td>Docs drift</td><td>Do the docs an agent reads match the installed version?</td><td>Docs shipped in the package</td><td><span class="chip s-plan">#722</span></td></tr>
+<tr><td>Agent success</td><td>How often does an agent finish a task correctly?</td><td>Eval score per release</td><td><span class="chip s-plan">#734</span></td></tr>
+<tr><td>Size</td><td>Did a change make bundles heavier?</td><td><code>size</code> budgets</td><td><span class="chip s-live">Live</span></td></tr>
+</table></div>
+<p>The bridge names above come from the ui-sdk documentation. They are not yet tested against this kit's components (#731).</p>
+</section>
+
+<section id="agent-surface">
+<h2>11. Agent surface</h2>
+<div class="tw"><table>
+<tr><th>Need</th><th>Use</th><th>Status</th></tr>
+<tr><td>Read</td><td><code>https://ui.vllnt.com/llms.txt</code>, <code>/llms-full.txt</code>, markdown versions of pages</td><td><span class="chip s-live">Live</span> (#619 extends it)</td></tr>
+<tr><td>Read, version-matched</td><td><code>node_modules/@vllnt/ui/docs/</code></td><td><span class="chip s-plan">#722</span></td></tr>
+<tr><td>Install</td><td><code>/r/registry.json</code>, <code>/r/&lt;name&gt;.json</code></td><td><span class="chip s-live">Live</span></td></tr>
+<tr><td>Query</td><td>MCP server at <code>/mcp</code></td><td><span class="chip s-live">Live</span></td></tr>
+<tr><td>Learn</td><td>The <code>vllnt-ui</code> skill in <code>skills/</code>; inside the package later</td><td><span class="chip s-live">Live</span>, <span class="chip s-plan">#723</span></td></tr>
+<tr><td>Set up</td><td>A setup prompt that adds a note to the app's <code>AGENTS.md</code></td><td><span class="chip s-plan">#724</span></td></tr>
+<tr><td>Hand off</td><td>Copy-prompt box on docs pages</td><td><span class="chip s-plan">#725</span></td></tr>
+<tr><td>Check</td><td>One <code>gate</code> command</td><td><span class="chip s-plan">Roadmap</span></td></tr>
+<tr><td>Create</td><td>Definition file plus generator</td><td><span class="chip s-prop">Proposed</span></td></tr>
+<tr><td>Operate</td><td>Runtime agent entry</td><td><span class="chip s-plan">#732, #733</span></td></tr>
+</table></div>
+</section>
+
+<section id="build-order">
+<h2>12. Build order</h2>
+<div class="tw"><table>
+<tr><th>Phase</th><th>Outcome</th><th>Work</th></tr>
+<tr><td>0. Foundation</td><td>Web behaviors on ui-sdk. Visual regression that can fail. React apps without Next.js need no stubs.</td><td>#719 (PR #720). Visual regression rework and framework adapter: no issue yet.</td></tr>
+<tr><td>1. Docs an agent can trust</td><td>Version-matched docs, skill, setup prompt, copy prompts.</td><td>#722, #723, #724, #725, #726</td></tr>
+<tr><td>2. One contract</td><td>A machine-readable contract per component. Docs, registry and MCP generated from it.</td><td>#727, #728</td></tr>
+<tr><td>3. Define once</td><td>Definition file, generators, generated tests, cases. Style recipes shared by every web renderer.</td><td>No issue yet. Pilot on one component.</td></tr>
+<tr><td>4. Runtime</td><td>Agents operate web and native interfaces by label.</td><td>#731, #732, #733</td></tr>
+<tr><td>5. Frameworks</td><td>Generated renderers: Web Components first, then Vue, Svelte and Solid.</td><td>No issue yet.</td></tr>
+<tr><td>6. Reach</td><td>Desktop target, spatial foundations, screen patterns.</td><td>#729, #631, #680, #730</td></tr>
+<tr><td>Always</td><td>Proof and upkeep.</td><td>#734, #735</td></tr>
+</table></div>
+<p>Phases 0 and 1 need no new architecture. Phase 3 depends on phase 2. Phase 5 depends on phase 3.</p>
+</section>
+
+<section id="done">
+<h2>13. Definition of done</h2>
+<p>The architecture is in place when each line below is a check that passes.</p>
+<ul>
+  <li>A new component is one definition file, plus an optional layout file per platform.</li>
+  <li>Every declared variant, state and theme has a screenshot, and a missing one fails the gate.</li>
+  <li>A deliberate one-pixel change fails CI.</li>
+  <li>The same <code>cases</code> pass on web and native for every component that lists both.</li>
+  <li>An unknown token name does not compile.</li>
+  <li>An agent with only the shipped docs passes the agreed share of eval tasks.</li>
+  <li>An agent fills a form by label on web and on native without a screenshot.</li>
+  <li>Adding a platform or a framework changes no existing component definition.</li>
+  <li>A React app without Next.js installs and builds with no stub files.</li>
+  <li>Every listed framework passes the parity suite in CI.</li>
+  <li>CI regenerates all generated files and finds no difference.</li>
+</ul>
+</section>
+
+<section id="open-decisions">
+<h2>14. Open decisions</h2>
+<div class="tw"><table>
+<tr><th>Decision</th><th>Options</th><th>Suggested default</th></tr>
+<tr><td>Definition format</td><td>TypeScript file, or JSON with a schema</td><td>TypeScript that emits JSON: typed for authors, plain data for tools</td></tr>
+<tr><td>Desktop</td><td>Web renderer in a desktop shell, or its own renderer</td><td>Shell first (#729)</td></tr>
+<tr><td>Visual baselines</td><td>Compare against the base branch, or store images</td><td>Base branch: nothing to store, nothing to go stale</td></tr>
+<tr><td>How much to generate</td><td>Everything, or tests and docs only at first</td><td>Tests and docs first, component code after a pilot</td></tr>
+<tr><td>Framework order</td><td>Web Components first, or Vue first</td><td>Web Components: one build reaches every framework without its own renderer</td></tr>
+<tr><td>Generated code</td><td>Committed to the repository, or built at install time</td><td>Committed: the registry copies source into apps, so it must be readable code</td></tr>
+<tr><td>Dependence on a beta</td><td>Stay close to ui-sdk releases, or pin for long periods</td><td>Bump on a schedule with the parity suite (#735)</td></tr>
+</table></div>
+</section>
+
+<section id="glossary">
+<h2>15. Glossary</h2>
+<div class="tw"><table>
+<tr><th>Word</th><th>Meaning</th></tr>
+<tr><td>Token</td><td>A named design value, such as a colour or a spacing step.</td></tr>
+<tr><td>Contract</td><td>The platform-neutral description of a component: its props, states and accessibility role.</td></tr>
+<tr><td>Behavior</td><td>An interaction with no styling, such as a popup, a selection or type-to-search.</td></tr>
+<tr><td>Renderer</td><td>The package that draws components for one framework.</td></tr>
+<tr><td>Adapter</td><td>A small object that gives components the app's link, image and navigation.</td></tr>
+<tr><td>Recipe</td><td>The map from a variant to its class names, shared by every web renderer.</td></tr>
+<tr><td>Generator</td><td>A program that writes component code, tests and docs from a definition. Not an AI model.</td></tr>
+<tr><td>Part</td><td>A named piece of a component, such as the trigger or an item.</td></tr>
+<tr><td>Definition</td><td>The one file that describes a component as data.</td></tr>
+<tr><td>Case</td><td>A scripted scenario with an expected result, used as a regression test.</td></tr>
+<tr><td>Parity</td><td>The same component behaving the same on every platform it supports.</td></tr>
+<tr><td>Bridge</td><td>The runtime link that lets an agent read a page's components and call their actions.</td></tr>
+<tr><td>Gate</td><td>One command that returns a single pass or fail for all checks.</td></tr>
+</table></div>
+</section>
+
+</main>
+</body>
+</html>
