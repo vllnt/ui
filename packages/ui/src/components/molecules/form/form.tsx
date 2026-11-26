@@ -2,7 +2,6 @@
 
 import * as React from "react";
 
-import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Controller,
   type ControllerProps,
@@ -17,6 +16,7 @@ import {
   type UseFormReturn,
 } from "react-hook-form";
 
+import { createSchemaResolver } from "../../../lib/schema-resolver";
 import { Slot } from "../../../lib/ui-sdk";
 import { cn } from "../../../lib/utils";
 import { Label } from "../../atoms/label/label";
@@ -56,11 +56,14 @@ type BaseFormProps<TFieldValues extends FieldValues> = Omit<
   required?: boolean;
 };
 
+/** A Zod 4 schema; other Standard Schema libraries also work at runtime. */
+type FormSchema = { _zod: { input: FieldValues; output: unknown } };
+
 type ManagedFormProps<TFieldValues extends FieldValues> = {
   defaultValues?: DefaultValues<TFieldValues>;
   form?: undefined;
   resolver?: Resolver<TFieldValues>;
-  schema?: Parameters<typeof zodResolver>[0];
+  schema?: FormSchema;
   values?: TFieldValues;
 };
 
@@ -377,7 +380,7 @@ function FormInner<TFieldValues extends FieldValues = FieldValues>({
     resolver:
       schema === undefined
         ? resolver
-        : (zodResolver(schema) as Resolver<TFieldValues>),
+        : createSchemaResolver<TFieldValues>(schema),
     values,
   });
   const form: FormInstance<TFieldValues> = providedForm ?? internalForm;

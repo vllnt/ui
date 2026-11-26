@@ -2,14 +2,21 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 import type { Config } from "tailwindcss";
-import animate from "tailwindcss-animate";
+
+import { animatePlugin } from "./tailwind-animate";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
 const preset: Partial<Config> = {
-  content: [join(__dirname, "**/*.js")],
+  content: [
+    join(__dirname, "**/*.js"),
+    // These two files list class names as data. Scanning them would add
+    // utilities to the consumer's CSS that no component uses.
+    `!${join(__dirname, "tailwind-animate.js")}`,
+    `!${join(__dirname, "lib/tailwind-merge-config.js")}`,
+  ],
   darkMode: ["class"],
-  plugins: [animate],
+  plugins: [animatePlugin],
   theme: {
     container: {
       center: true,

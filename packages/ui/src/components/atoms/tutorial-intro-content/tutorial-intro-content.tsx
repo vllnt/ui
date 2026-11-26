@@ -1,6 +1,10 @@
-import ReactMarkdown from "react-markdown";
+import { lazy, Suspense } from "react";
 
 import { cn } from "../../../lib/utils";
+
+// The markdown parser loads on demand, so importing this component does not
+// ship it up front.
+const ReactMarkdown = lazy(() => import("react-markdown"));
 
 export type TutorialIntroContentProps = {
   className?: string;
@@ -186,9 +190,21 @@ export function TutorialIntroContent({
     <section className={cn("py-6", className)}>
       <h2 className="text-2xl md:text-3xl font-semibold mb-6">{title}</h2>
       <div className="max-w-none [&_h2:first-of-type]:hidden">
-        <ReactMarkdown components={serverMarkdownComponents}>
-          {markdownContent}
-        </ReactMarkdown>
+        <Suspense
+          fallback={
+            // The source text at the final text size keeps the swap from moving the page.
+            <div
+              aria-hidden="true"
+              className="whitespace-pre-wrap text-sm leading-relaxed text-muted-foreground"
+            >
+              {markdownContent}
+            </div>
+          }
+        >
+          <ReactMarkdown components={serverMarkdownComponents}>
+            {markdownContent}
+          </ReactMarkdown>
+        </Suspense>
       </div>
     </section>
   );

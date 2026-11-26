@@ -1,4 +1,4 @@
-import { evaluate } from "@mdx-js/mdx";
+import type * as MdxCompiler from "@mdx-js/mdx";
 import type React from "react";
 import * as runtime from "react/jsx-runtime";
 import ReactMarkdown, { type Components } from "react-markdown";
@@ -123,7 +123,7 @@ const MDXComponents: Components = {
   ),
 };
 
-type MDXModule = Awaited<ReturnType<typeof evaluate>>;
+type MDXModule = Awaited<ReturnType<typeof MdxCompiler.evaluate>>;
 
 const proseClasses = [
   "prose prose-lg dark:prose-invert max-w-none",
@@ -199,6 +199,8 @@ export async function MDXContent({
     let Component: MDXModule["default"] | undefined;
 
     try {
+      // The MDX compiler is ~350 KB. Plain markdown never loads it.
+      const { evaluate } = await import("@mdx-js/mdx");
       const result = await evaluate(processedContent, {
         ...runtime,
         baseUrl: import.meta.url,

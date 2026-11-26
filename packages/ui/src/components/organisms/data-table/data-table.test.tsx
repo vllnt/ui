@@ -72,6 +72,39 @@ describe("DataTable", () => {
       screen.getByRole("combobox", { name: "Filter by Status" }),
     ).toBeInTheDocument();
   });
+
+  it("narrows the rows with a column filter and resets with the All option", () => {
+    render(
+      <DataTable
+        columns={columns}
+        data={data}
+        filterableColumns={[
+          {
+            columnId: "status",
+            label: "Status",
+            options: [
+              { label: "Active", value: "active" },
+              { label: "Trial", value: "trial" },
+            ],
+          },
+        ]}
+      />,
+    );
+    const filter = screen.getByRole("combobox", { name: "Filter by Status" });
+    expect(filter).toHaveValue("all");
+    expect(
+      screen.getByRole("option", { name: "All Status" }),
+    ).toBeInTheDocument();
+
+    fireEvent.change(filter, { target: { value: "trial" } });
+    expect(filter).toHaveValue("trial");
+    expect(screen.getByText("Beacon")).toBeVisible();
+    expect(screen.queryByText("Acme")).toBeNull();
+
+    fireEvent.change(filter, { target: { value: "all" } });
+    expect(screen.getByText("Acme")).toBeVisible();
+    expect(screen.getByText("Delta")).toBeVisible();
+  });
 });
 
 describe("DataTable filter names", () => {

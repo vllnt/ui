@@ -1,4 +1,5 @@
 export { FlowDiagram } from "./flow-diagram";
+export { FlowDiagramContent } from "./flow-diagram-content";
 export { FlowCanvas } from "./flow-canvas";
 export { FlowControls } from "./flow-controls";
 export { FlowErrorBoundary } from "./flow-error-boundary";
