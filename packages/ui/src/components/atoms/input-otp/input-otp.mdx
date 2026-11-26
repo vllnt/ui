@@ -29,10 +29,29 @@ import {
 ## Usage
 
 ```tsx
-<InputOtp>InputOtp content</InputOtp>
+<InputOTP aria-label="One-time code" maxLength={6} onComplete={verify}>
+  <InputOTPGroup>
+    <InputOTPSlot index={0} />
+    <InputOTPSlot index={1} />
+    <InputOTPSlot index={2} />
+  </InputOTPGroup>
+  <InputOTPSeparator />
+  <InputOTPGroup>
+    <InputOTPSlot index={3} />
+    <InputOTPSlot index={4} />
+    <InputOTPSlot index={5} />
+  </InputOTPGroup>
+</InputOTP>
 ```
 
 <Canvas of={Stories.Default} sourceState="shown" />
+
+## Behavior
+
+- One real text field holds the code, so it takes one accessible name: pass `aria-label`, `aria-labelledby` or wrap it in a labelled field. The slots, groups and separators only draw the code and are hidden from assistive technology.
+- `onChange(code)` runs on every change and `onComplete(code)` once every slot has a character. Both receive the code only.
+- `pattern` takes `"digits"`, `"letters"`, `"alphanumeric"`, a `RegExp` that each character must match, or a regular expression string such as `"^\d+$"` that must match each single character. Without a pattern any character is accepted and phones show the numeric keyboard.
+- `className` and `containerClassName` both style the wrapper element. `ref` points at the input.
 
 ## API Reference
 
