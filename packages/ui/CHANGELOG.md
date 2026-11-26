@@ -16,6 +16,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
   primary; `variant="skip"` is a skip-to-content link, hidden until focused,
   then shown at the top left, 44 px high, above other content.
 - **`Button` size `icon-lg`** - a 44 px square icon button (`size-11`).
+- **`Button` `variant="unstyled"`** - keeps the button's behaviour (`asChild`,
+  `disabled`, ref, every native attribute) and adds no classes of its own: the
+  element's class list is only the caller's `className`, and `size` has no
+  effect. `buttonVariants({ variant: "unstyled" })` returns only the caller's
+  classes, merged with `cn`. The caller styles focus and disabled states. Every other variant and size renders the same class string as
+  before.
 - **`SegmentedControl` `fit` and `variant`** - `fit` hugs the content (root
   `w-auto`, items `flex-none`); `variant="hairline"` swaps the filled track for a
   transparent one with a 1 px input-colour border (`glass-input` inside glass).

@@ -58,4 +58,13 @@ test.describe("Button Visual", () => {
     await page.keyboard.press("Tab");
     await expect(component).toHaveScreenshot("button-focus-visible.png");
   });
+
+  test("variant-unstyled", async ({ mount }) => {
+    const component = await mount(
+      <Button className="border border-dashed px-3 py-1" variant="unstyled">
+        Test
+      </Button>,
+    );
+    await expect(component).toHaveScreenshot("button-variant-unstyled.png");
+  });
 });

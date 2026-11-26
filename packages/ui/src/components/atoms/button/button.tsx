@@ -3,7 +3,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 
 import { cn } from "../../../lib/utils";
 
-const buttonVariants = cva(
+const styledButtonVariants = cva(
   "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
   {
     defaultVariants: {
@@ -33,6 +33,38 @@ const buttonVariants = cva(
   },
 );
 
+type ClassValue = Parameters<typeof cn>[number];
+
+type StyledButtonOptions = NonNullable<
+  Parameters<typeof styledButtonVariants>[0]
+>;
+
+/** {@link buttonVariants} options: the styled variants plus `"unstyled"`. */
+type ButtonVariantOptions = {
+  class?: ClassValue;
+  className?: ClassValue;
+  size?: StyledButtonOptions["size"];
+  variant?: "unstyled" | StyledButtonOptions["variant"];
+};
+
+/**
+ * Button classes. `variant: "unstyled"` adds none of its own: the result is
+ * the caller's `className` (or `class`), merged with `cn`, and `size` has no
+ * effect.
+ */
+const buttonVariants = (options: ButtonVariantOptions = {}): string => {
+  // cva accepted `null` at runtime, outside its type; keep accepting it.
+  const { class: classValue, className, size, variant } = options ?? {};
+  return variant === "unstyled"
+    ? cn(classValue, className)
+    : styledButtonVariants({
+        // cva flattens the array, so the string matches passing each value.
+        className: [classValue, className],
+        size,
+        variant,
+      });
+};
+
 export type ButtonProps = {
   asChild?: boolean;
 } & React.ButtonHTMLAttributes<HTMLButtonElement> &
@@ -49,7 +81,8 @@ const Button = ({
   const Comp = asChild ? Slot : "button";
   return (
     <Comp
-      className={cn(buttonVariants({ className, size, variant }))}
+      // An unstyled button with no className renders no class attribute.
+      className={cn(buttonVariants({ className, size, variant })) || undefined}
       ref={reference}
       {...props}
     />

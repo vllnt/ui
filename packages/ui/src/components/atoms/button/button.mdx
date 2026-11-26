@@ -67,6 +67,7 @@ import { Button } from '@vllnt/ui'
 | `link` | - |
 | `outline` | - |
 | `secondary` | - |
+| `unstyled` | - |
 
 <Canvas of={Stories.VariantDestructive} sourceState="shown" />
 
@@ -77,4 +78,8 @@ import { Button } from '@vllnt/ui'
 <Canvas of={Stories.VariantOutline} sourceState="shown" />
 
 <Canvas of={Stories.VariantSecondary} sourceState="shown" />
+
+`unstyled` adds no classes: the button keeps its behaviour (`asChild`, `disabled`, ref, every native attribute) and draws only what `className` gives it. `size` has no effect with it. It also drops the focus ring and the disabled look, so give `className` its own `focus-visible:` and `disabled:` styles.
+
+<Canvas of={Stories.VariantUnstyled} sourceState="shown" />
 
