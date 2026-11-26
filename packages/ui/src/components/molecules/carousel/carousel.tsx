@@ -141,7 +141,8 @@ Carousel.displayName = "Carousel";
 
 // Slides carry their gap as end padding, and the content takes it back with a
 // negative end margin: ui-sdk pages by slide boxes, so padding at the start
-// would offset every page after the first.
+// would offset every page after the first. The content stays on its own
+// layer, as embla's inline transform kept it, so text renders as it did.
 const CarouselContent = ({
   className,
   ref,
@@ -155,7 +156,7 @@ const CarouselContent = ({
     <CarouselViewport className="ring-offset-background [scrollbar-width:none] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 [&::-webkit-scrollbar]:hidden">
       <CarouselContentPrimitive
         className={cn(
-          "flex",
+          "flex transform-gpu",
           orientation === "horizontal" ? "-me-4" : "-mb-4 flex-col",
           className,
         )}
