@@ -66,6 +66,7 @@ const DataList = ({
           dataListVariants({ density: resolvedDensity }),
           className,
         )}
+        data-slot="data-list"
         ref={reference}
         {...props}
       />
@@ -92,6 +93,7 @@ const DataListItem = ({
         dataListItemVariants({ density: density ?? context.density }),
         className,
       )}
+      data-slot="data-list-item"
       ref={reference}
       {...props}
     />
@@ -107,6 +109,7 @@ const DataListLabel = ({
 }: React.HTMLAttributes<HTMLElement> & { ref?: React.Ref<HTMLElement> }) => (
   <dt
     className={cn("text-sm font-medium text-muted-foreground", className)}
+    data-slot="data-list-label"
     ref={reference}
     {...props}
   />
@@ -121,6 +124,7 @@ const DataListValue = ({
 }: React.HTMLAttributes<HTMLElement> & { ref?: React.Ref<HTMLElement> }) => (
   <dd
     className={cn("m-0 text-sm leading-6 text-foreground", className)}
+    data-slot="data-list-value"
     ref={reference}
     {...props}
   />

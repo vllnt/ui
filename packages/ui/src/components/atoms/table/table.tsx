@@ -10,6 +10,7 @@ const Table = ({
   <div className="relative w-full overflow-auto">
     <table
       className={cn("w-full caption-bottom text-sm", className)}
+      data-slot="table"
       ref={ref}
       {...props}
     />
@@ -24,7 +25,12 @@ const TableHeader = ({
 }: React.HTMLAttributes<HTMLTableSectionElement> & {
   ref?: React.Ref<HTMLTableSectionElement>;
 }) => (
-  <thead className={cn("[&_tr]:border-b", className)} ref={ref} {...props} />
+  <thead
+    className={cn("[&_tr]:border-b", className)}
+    data-slot="table-header"
+    ref={ref}
+    {...props}
+  />
 );
 TableHeader.displayName = "TableHeader";
 
@@ -37,6 +43,7 @@ const TableBody = ({
 }) => (
   <tbody
     className={cn("[&_tr:last-child]:border-0", className)}
+    data-slot="table-body"
     ref={ref}
     {...props}
   />
@@ -55,6 +62,7 @@ const TableFooter = ({
       "border-t bg-muted/50 font-medium [&>tr]:last:border-b-0",
       className,
     )}
+    data-slot="table-footer"
     ref={ref}
     {...props}
   />
@@ -73,6 +81,7 @@ const TableRow = ({
       "border-b transition-colors hover:bg-secondary/50 data-[state=selected]:bg-secondary",
       className,
     )}
+    data-slot="table-row"
     ref={ref}
     {...props}
   />
@@ -91,6 +100,7 @@ const TableHead = ({
       "h-12 px-4 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0",
       className,
     )}
+    data-slot="table-head"
     ref={ref}
     {...props}
   />
@@ -106,6 +116,7 @@ const TableCell = ({
 }) => (
   <td
     className={cn("p-4 align-middle [&:has([role=checkbox])]:pr-0", className)}
+    data-slot="table-cell"
     ref={ref}
     {...props}
   />
@@ -121,6 +132,7 @@ const TableCaption = ({
 }) => (
   <caption
     className={cn("mt-4 text-sm text-muted-foreground", className)}
+    data-slot="table-caption"
     ref={ref}
     {...props}
   />

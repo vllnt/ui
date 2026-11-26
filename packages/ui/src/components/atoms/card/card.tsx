@@ -14,6 +14,7 @@ const Card = ({
       "rounded-lg border bg-card text-card-foreground shadow-sm",
       className,
     )}
+    data-slot="card"
     ref={reference}
     {...props}
   />
@@ -29,6 +30,7 @@ const CardHeader = ({
 }) => (
   <div
     className={cn("flex flex-col space-y-1.5 p-6", className)}
+    data-slot="card-header"
     ref={reference}
     {...props}
   />
@@ -47,6 +49,7 @@ const CardTitle = ({
       "text-2xl font-semibold leading-none tracking-tight",
       className,
     )}
+    data-slot="card-title"
     ref={reference}
     {...props}
   />
@@ -62,6 +65,7 @@ const CardDescription = ({
 }) => (
   <div
     className={cn("text-sm text-muted-foreground", className)}
+    data-slot="card-description"
     ref={reference}
     {...props}
   />
@@ -74,7 +78,14 @@ const CardContent = ({
   ...props
 }: React.HTMLAttributes<HTMLDivElement> & {
   ref?: React.Ref<HTMLDivElement>;
-}) => <div className={cn("p-6 pt-0", className)} ref={reference} {...props} />;
+}) => (
+  <div
+    className={cn("p-6 pt-0", className)}
+    data-slot="card-content"
+    ref={reference}
+    {...props}
+  />
+);
 CardContent.displayName = "CardContent";
 
 const CardFooter = ({
@@ -86,6 +97,7 @@ const CardFooter = ({
 }) => (
   <div
     className={cn("flex items-center p-6 pt-0", className)}
+    data-slot="card-footer"
     ref={reference}
     {...props}
   />

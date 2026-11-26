@@ -3,6 +3,12 @@ import { describe, expect, it } from "vitest";
 
 import { Alert, AlertDescription, AlertTitle } from "./alert";
 
+function slotsOf(container: HTMLElement): (string | undefined)[] {
+  return [...container.querySelectorAll<HTMLElement>("[data-slot]")].map(
+    (element) => element.dataset.slot,
+  );
+}
+
 describe("Alert", () => {
   it("keeps the destructive title and body in the foreground, with status colour only on the glyph and border", () => {
     const { container, getByText } = render(
@@ -38,4 +44,18 @@ describe("Alert", () => {
       expect(container.firstChild).toBeInTheDocument();
     },
   );
+
+  it("names every part with data-slot, so a consumer can target it", () => {
+    const { container } = render(
+      <Alert>
+        <AlertTitle>Heads up</AlertTitle>
+        <AlertDescription>Details.</AlertDescription>
+      </Alert>,
+    );
+    expect(slotsOf(container)).toEqual([
+      "alert",
+      "alert-title",
+      "alert-description",
+    ]);
+  });
 });

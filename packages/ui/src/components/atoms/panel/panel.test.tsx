@@ -10,6 +10,12 @@ import {
   PanelTitle,
 } from "./panel";
 
+function slotsOf(container: HTMLElement): (string | undefined)[] {
+  return [...container.querySelectorAll<HTMLElement>("[data-slot]")].map(
+    (element) => element.dataset.slot,
+  );
+}
+
 describe("Panel", () => {
   it("renders all slots in a container that merges className and forwards ref", () => {
     let node: HTMLDivElement | null = null;
@@ -36,5 +42,26 @@ describe("Panel", () => {
     expect(screen.getByText("Footer")).toBeInTheDocument();
     expect(container.firstChild).toHaveClass("custom-class");
     expect(node).toBeInstanceOf(HTMLDivElement);
+  });
+
+  it("names every part with data-slot, so a consumer can target it", () => {
+    const { container } = render(
+      <Panel>
+        <PanelHeader>
+          <PanelTitle>Title</PanelTitle>
+          <PanelDescription>About</PanelDescription>
+        </PanelHeader>
+        <PanelBody>Body</PanelBody>
+        <PanelFooter>Foot</PanelFooter>
+      </Panel>,
+    );
+    expect(slotsOf(container)).toEqual([
+      "panel",
+      "panel-header",
+      "panel-title",
+      "panel-description",
+      "panel-body",
+      "panel-footer",
+    ]);
   });
 });

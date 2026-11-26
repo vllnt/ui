@@ -32,6 +32,7 @@ const Panel = ({
       "rounded-lg border border-border bg-card text-card-foreground shadow-sm",
       className,
     )}
+    data-slot="panel"
     ref={ref}
     {...props}
   />
@@ -49,6 +50,7 @@ const PanelHeader = ({
       "flex flex-col gap-1.5 border-b border-border px-4 py-3",
       className,
     )}
+    data-slot="panel-header"
     ref={ref}
     {...props}
   />
@@ -67,6 +69,7 @@ const PanelTitle = ({
       "text-sm font-semibold leading-none tracking-tight",
       className,
     )}
+    data-slot="panel-title"
     ref={ref}
     {...props}
   >
@@ -83,6 +86,7 @@ const PanelDescription = ({
 }: PanelDescriptionProps & { ref?: React.Ref<HTMLParagraphElement> }) => (
   <p
     className={cn("text-sm text-muted-foreground", className)}
+    data-slot="panel-description"
     ref={ref}
     {...props}
   />
@@ -95,7 +99,12 @@ const PanelBody = ({
   ref,
   ...props
 }: PanelProps & { ref?: React.Ref<HTMLDivElement> }) => (
-  <div className={cn("px-4 py-3", className)} ref={ref} {...props} />
+  <div
+    className={cn("px-4 py-3", className)}
+    data-slot="panel-body"
+    ref={ref}
+    {...props}
+  />
 );
 PanelBody.displayName = "PanelBody";
 
@@ -110,6 +119,7 @@ const PanelFooter = ({
       "flex items-center border-t border-border px-4 py-3",
       className,
     )}
+    data-slot="panel-footer"
     ref={ref}
     {...props}
   />
