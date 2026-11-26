@@ -144,7 +144,19 @@ describe("subpath exports", () => {
       collectSubpaths('export { Foo } from "./foo";', rootIndex),
     ).toThrow("unsupported export");
     expect(() => collectSubpaths(componentsIndex, "")).toThrow(
-      "no longer exports ./lib/",
+      "no longer exports ./lib/cx.",
     );
+    expect(() =>
+      collectSubpaths(
+        componentsIndex,
+        rootIndex.replace('export { cx } from "./lib/cx";', ""),
+      ),
+    ).toThrow("no longer exports ./lib/cx.");
+    expect(() =>
+      collectSubpaths(
+        componentsIndex,
+        rootIndex.replace(/^export .* from "\.\/lib\/utils";$/m, ""),
+      ),
+    ).toThrow("no longer exports ./lib/utils.");
   });
 });

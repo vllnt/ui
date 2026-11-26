@@ -9,14 +9,31 @@ import { cn } from "./utils";
 
 const source = resolve(__dirname, "..");
 
+/** Specifiers of every `import("…")` call inside a node. */
+function dynamicImports(node: ts.Node): string[] {
+  const own =
+    ts.isCallExpression(node) &&
+    node.expression.kind === ts.SyntaxKind.ImportKeyword &&
+    node.arguments[0] &&
+    ts.isStringLiteral(node.arguments[0])
+      ? [node.arguments[0].text]
+      : [];
+  return [
+    ...own,
+    ...node.getChildren().flatMap((child) => dynamicImports(child)),
+  ];
+}
+
 /** Runtime import specifiers of one source file (type imports skipped). */
 function importSpecifiers(file: string): string[] {
   const parsed = ts.createSourceFile(
     file,
     readFileSync(file, "utf8"),
     ts.ScriptTarget.Latest,
+    true,
   );
-  return parsed.statements.flatMap((statement) => {
+  const dynamic = dynamicImports(parsed);
+  const statics = parsed.statements.flatMap((statement) => {
     if (ts.isImportDeclaration(statement)) {
       const typeOnly =
         statement.importClause?.phaseModifier === ts.SyntaxKind.TypeKeyword;
@@ -34,6 +51,7 @@ function importSpecifiers(file: string): string[] {
     }
     return [];
   });
+  return [...statics, ...dynamic];
 }
 
 function resolveSource(from: string, specifier: string): string {
@@ -74,9 +92,10 @@ describe("cx", () => {
     "components/atoms/separator/plain-separator.tsx",
   ])("%s never imports tailwind-merge", (file) => {
     const imports = runtimeImports(join(source, file));
-    expect([...imports].filter((name) => !name.startsWith("/"))).not.toContain(
-      "tailwind-merge",
-    );
+    const packages = [...imports].filter((name) => !name.startsWith("/"));
+    expect(
+      packages.filter((name) => name.startsWith("tailwind-merge")),
+    ).toEqual([]);
     expect(imports).not.toContain(join(source, "lib/utils.ts"));
   });
 
