@@ -139,7 +139,7 @@ export {
   type SegmentedControlProps,
   segmentedControlVariants,
 } from "./atoms/segmented-control/segmented-control";
-export { toast } from "./atoms/toast/sonner-toast";
+export { toast } from "./atoms/toast/toast-api";
 export {
   Toast,
   ToastAction,

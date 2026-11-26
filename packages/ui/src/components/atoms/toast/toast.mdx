@@ -1,5 +1,6 @@
 import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
 import * as Stories from './toast.stories'
+import * as ToasterStories from './toaster.stories'
 
 <Meta of={Stories} />
 
@@ -62,3 +63,95 @@ import {
 
 <Canvas of={Stories.WithAction} sourceState="shown" />
 
+
+## Toaster and toast()
+
+`Toaster` shows the notifications that `toast()` creates. Mount it once, in your layout, and call `toast()` from anywhere on the client.
+
+```tsx
+import { Toaster, toast } from '@vllnt/ui'
+
+export function Layout({ children }: { children: React.ReactNode }) {
+  return (
+    <>
+      {children}
+      <Toaster />
+    </>
+  )
+}
+
+toast('Event created')
+toast.success('Changes saved', { description: 'Your profile is up to date.' })
+toast.error('Payment failed', {
+  action: { label: 'Retry', onClick: () => retry() },
+})
+toast.promise(save(), {
+  loading: 'Saving',
+  success: 'Saved',
+  error: 'Could not save',
+})
+```
+
+<Canvas of={ToasterStories.Types} sourceState="shown" />
+
+### toast()
+
+| Call | Description |
+| ---- | ----------- |
+| `toast(title, options?)`, `toast.message` | A plain toast. Returns its id. |
+| `toast.success`, `.error`, `.info`, `.warning` | A toast with a type icon. |
+| `toast.loading` | A toast that stays until it is updated or dismissed. |
+| `toast.promise(promise, { loading, success, error, finally })` | Loading, then success or error. Returns `{ id, unwrap() }`. |
+| `toast.custom((id) => node, options?)` | Your own content, without the toast's chrome. |
+| `toast.dismiss(id?)` | Closes one toast, or all of them. |
+
+| Option | Type | Description |
+| ------ | ---- | ----------- |
+| `id` | `string \| number` | Showing a toast with the id of a visible one updates it. |
+| `description` | `ReactNode \| () => ReactNode` | Text under the title. |
+| `duration` | `number` | Milliseconds on screen, 4000 by default. `Infinity` keeps it. Loading toasts stay regardless. |
+| `action`, `cancel` | `{ label, onClick(event) }` | Buttons. `event.preventDefault()` in `action.onClick` keeps the toast open. |
+| `dismissible` | `boolean` | `false` turns off swipe, Escape and the close button. |
+| `closeButton`, `icon`, `className`, `classNames`, `descriptionClassName`, `style` | | How this toast looks. |
+| `onDismiss`, `onAutoClose` | `(toast: { id }) => void` | When the user or `toast.dismiss()` closes it, and when its time runs out. |
+| `priority` | `"polite" \| "assertive"` | How screen readers announce it. Polite for every type, errors included. |
+
+### Toaster
+
+| Prop | Type | Default | Description |
+| ---- | ---- | ------- | ----------- |
+| `position` | `"top-left" \| "top-center" \| "top-right" \| "bottom-left" \| "bottom-center" \| "bottom-right"` | `"bottom-right"` | Where the stack sits. |
+| `richColors` | `boolean` | `false` | Colors toasts by type. |
+| `expand` | `boolean` | `false` | Keeps the stack open instead of collapsed. |
+| `visibleToasts` | `number` | `3` | Toasts shown at once; the rest wait. |
+| `closeButton` | `boolean` | `false` | A close button on every toast. |
+| `theme` | `"light" \| "dark" \| "system"` | from `next-themes` | Palette of the rich colors and the muted text. |
+| `duration` | `number` | `4000` | Default time on screen. |
+| `offset` | `number \| string` | `24` | Distance from the screen edge on wider screens. |
+| `icons` | `{ success, error, info, warning, loading }` | | Replaces a type's icon. |
+| `toastOptions` | `{ className, classNames, style, descriptionClassName, closeButton, duration }` | | What every toast gets. |
+| `containerAriaLabel` | `string` | `"Notifications"` | Label of the notifications landmark. |
+
+### Behavior
+
+- The toast code loads once a `Toaster` mounts: `toast()` itself is a few KB. A toast shown before then waits and appears when the `Toaster` does.
+- The stack is a labelled `region`. Pressing Alt+T moves focus to it, and Escape on a focused toast closes it.
+- Toasts are announced through a polite live region. Pass `priority: "assertive"` to interrupt.
+- The stack opens while the pointer or keyboard focus is in it, so a focused toast is always visible.
+- Timers pause while the pointer or focus is on the stack, and while the tab is hidden.
+
+### Differences from sonner
+
+`toast()` and `Toaster` used `sonner`, and keep its call shape. These are the differences:
+
+| Sonner | Now |
+| ------ | --- |
+| `toast.promise(...)` returned the id with an `unwrap` method | Returns `{ id, unwrap() }`. A `description` function runs on success only; `success` and `error` take content or a function, not an options object. |
+| `action.onClick` and `cancel.onClick` got a React mouse event | They get the native `Event`. |
+| `toast.getHistory()`, `toast.getToasts()` | Removed. |
+| `unstyled`, `invert`, `gap`, `hotkey`, `swipeDirections`, `mobileOffset`, `dir`, `toasterId` | Removed. The hotkey is Alt+T. |
+| `position` on one toast | Removed: the `Toaster` places every toast. |
+| `left` and `right` positions | `start` and `end` of the page's direction: they flip in right-to-left pages. |
+| The stack opened on hover only: a toast focused with Tab left it collapsed | It opens on keyboard focus too. |
+| A promise toast dismissed while loading came back with the result | Stays closed. |
+| Selectors on `[data-sonner-toast]` and its attributes | Use `[data-slot="toast"]`, `data-type`, `data-front` and `data-expanded`, or `classNames`. |
