@@ -150,6 +150,36 @@ describe("AlertDialog behavior", () => {
     });
   });
 
+  it("focuses Cancel when Action comes first, opened as a browser would", async () => {
+    // Two details hide the bug from the test above: jsdom has no layout, so
+    // ui-sdk's first-tabbable fallback finds nothing, and `fireEvent` wraps
+    // the click in `act`, which flushes Cancel's registration before focus.
+    // Click outside `act`, on a laid-out page, to get the browser's order.
+    vi.spyOn(Element.prototype, "getClientRects").mockReturnValue(
+      Object.assign([new DOMRect(0, 0, 1, 1)], { item: () => null }),
+    );
+    const actEnvironment = globalThis as { IS_REACT_ACT_ENVIRONMENT?: boolean };
+    actEnvironment.IS_REACT_ACT_ENVIRONMENT = false;
+    try {
+      render(
+        <AlertDialog>
+          <AlertDialogTrigger>Delete</AlertDialogTrigger>
+          <AlertDialogContent>
+            <AlertDialogTitle>Title</AlertDialogTitle>
+            <AlertDialogAction>Confirm</AlertDialogAction>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+          </AlertDialogContent>
+        </AlertDialog>,
+      );
+      screen.getByRole("button", { name: "Delete" }).click();
+      await waitFor(() => {
+        expect(screen.getByRole("button", { name: "Cancel" })).toHaveFocus();
+      });
+    } finally {
+      actEnvironment.IS_REACT_ACT_ENVIRONMENT = true;
+    }
+  });
+
   it("closes from Action and reports the click", async () => {
     const onClick = vi.fn();
     const onOpenChange = vi.fn();

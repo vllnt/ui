@@ -20,7 +20,6 @@ import {
   type NarrowPartProps,
   openAutoFocus,
   openState,
-  useElementRef,
   withDataAttributes,
 } from "../../../lib/ui-sdk";
 import {
@@ -32,9 +31,35 @@ import {
 import { cn } from "../../../lib/utils";
 import { buttonVariants } from "../../atoms/button/button";
 
-const CancelContext = React.createContext<
-  ((element: HTMLElement | null) => void) | null
->(null);
+/**
+ * Where Cancel puts its element. A ref, not state: ui-sdk calls
+ * `initialFocus` as the dialog opens, before a state update from Cancel's
+ * effect has re-rendered the content, so state would still be empty then.
+ */
+const CancelContext =
+  React.createContext<null | React.RefObject<HTMLElement | null>>(null);
+
+function assignRef<T>(ref: React.Ref<T> | undefined, node: null | T) {
+  if (typeof ref === "function") {
+    ref(node);
+  } else if (ref) {
+    ref.current = node;
+  }
+}
+
+/** A callback ref that stores the node in `target` and still feeds the caller's `ref`. */
+function useStoredRef<T extends HTMLElement>(
+  target: null | React.RefObject<HTMLElement | null>,
+  ref: React.Ref<T> | undefined,
+) {
+  return React.useCallback(
+    (node: null | T) => {
+      assignRef(target, node);
+      assignRef(ref, node);
+    },
+    [target, ref],
+  );
+}
 
 const contentAttributes =
   (named: boolean) =>
@@ -153,8 +178,9 @@ const AlertDialogContent = ({
     /** Radix-compatible: call `preventDefault()` to leave focus where your handler put it. */
     onOpenAutoFocus?: (event: Event) => void;
   }) => {
-  const [cancel, setCancel] = React.useState<HTMLElement | null>(null);
-  const [content, contentReference] = useElementRef(ref);
+  const cancel = React.useRef<HTMLElement | null>(null);
+  const content = React.useRef<HTMLElement | null>(null);
+  const contentReference = useStoredRef(content, ref);
   const slot = asChildProps({ asChild, children });
   const named =
     props["aria-label"] !== undefined && props["aria-labelledby"] === undefined;
@@ -162,7 +188,7 @@ const AlertDialogContent = ({
   useRegisterDismissHandlers({ onEscapeKeyDown });
 
   return (
-    <CancelContext value={setCancel}>
+    <CancelContext value={cancel}>
       <AlertDialogOverlay />
       <AlertDialogContentPart
         className={cn(
@@ -172,7 +198,11 @@ const AlertDialogContent = ({
         finalFocus={finalFocus ?? closeAutoFocus(onCloseAutoFocus)}
         initialFocus={
           initialFocus ??
-          openAutoFocus(() => cancel ?? content, onOpenAutoFocus)
+          (() =>
+            openAutoFocus(
+              () => cancel.current ?? content.current,
+              onOpenAutoFocus,
+            )())
         }
         keepMounted={forceMount}
         ref={contentReference}
@@ -291,16 +321,8 @@ const AlertDialogCancel = ({
   ...props
 }: AsChildProps &
   NarrowPartProps<React.ComponentProps<typeof AlertDialogClose>>) => {
-  const register = React.use(CancelContext);
-  const [cancel, cancelReference] = useElementRef(ref);
+  const cancelReference = useStoredRef(React.use(CancelContext), ref);
   const slot = asChildProps({ asChild, children });
-
-  React.useEffect(() => {
-    register?.(cancel);
-    return () => {
-      register?.(null);
-    };
-  }, [cancel, register]);
 
   return (
     <AlertDialogClose
