@@ -123,11 +123,18 @@ export function Example() {
 }
 ```
 
+In Next.js App Router server components, import by subpath so the route ships
+only that component's client JS: `import { Button } from "@vllnt/ui/button"`,
+`import { cn } from "@vllnt/ui/utils"`. The subpath is the component's
+directory name and exports the same names as the root.
+
 ### Export surface
 
 | Import path | What |
 |-------------|------|
 | `@vllnt/ui` | All components, hooks, types, and the `cn()` utility |
+| `@vllnt/ui/<component>` | One component directory (for example `@vllnt/ui/button`), the same names the root exports from it |
+| `@vllnt/ui/utils` | `cn()` |
 | `@vllnt/ui/tailwind-preset` | Tailwind preset config |
 | `@vllnt/ui/styles.css` | Tailwind base + theme variables + utilities |
 | `@vllnt/ui/themes/default.css` | Theme CSS variables only |
