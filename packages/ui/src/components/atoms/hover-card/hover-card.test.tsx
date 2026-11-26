@@ -160,3 +160,47 @@ describe("HoverCard delays", () => {
     expect(screen.queryByText("Card body")).not.toBeInTheDocument();
   });
 });
+
+describe("HoverCard dismissal handlers", () => {
+  const renderOpen = (
+    handlers: React.ComponentProps<typeof HoverCardContent>,
+  ) => {
+    const onOpenChange = vi.fn();
+    render(
+      <HoverCard defaultOpen onOpenChange={onOpenChange}>
+        <HoverCardTrigger href="#profile">Trigger</HoverCardTrigger>
+        <HoverCardContent {...handlers}>Card body</HoverCardContent>
+      </HoverCard>,
+    );
+    return onOpenChange;
+  };
+
+  it("keeps the card open when onEscapeKeyDown prevents the default", () => {
+    const onEscapeKeyDown = vi.fn((event: KeyboardEvent) => {
+      event.preventDefault();
+    });
+    const onOpenChange = renderOpen({ onEscapeKeyDown });
+    fireEvent.keyDown(screen.getByText("Trigger"), { key: "Escape" });
+    expect(onEscapeKeyDown).toHaveBeenCalledTimes(1);
+    expect(onOpenChange).not.toHaveBeenCalled();
+    expect(screen.getByText("Card body")).toBeInTheDocument();
+  });
+
+  it("closes on Escape when onEscapeKeyDown leaves the default alone", () => {
+    const onEscapeKeyDown = vi.fn();
+    const onOpenChange = renderOpen({ onEscapeKeyDown });
+    fireEvent.keyDown(screen.getByText("Trigger"), { key: "Escape" });
+    expect(onEscapeKeyDown).toHaveBeenCalledTimes(1);
+    expect(onOpenChange).toHaveBeenCalledWith(false, expect.anything());
+  });
+
+  it("keeps the content mounted while closed with forceMount", () => {
+    render(
+      <HoverCard>
+        <HoverCardTrigger href="#profile">Trigger</HoverCardTrigger>
+        <HoverCardContent forceMount>Kept card</HoverCardContent>
+      </HoverCard>,
+    );
+    expect(screen.getByText("Kept card")).toBeInTheDocument();
+  });
+});

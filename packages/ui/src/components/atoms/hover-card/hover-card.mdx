@@ -33,3 +33,7 @@ import { HoverCard, HoverCardContent, HoverCardTrigger } from '@vllnt/ui'
 
 <Controls />
 
+
+## Dismissal
+
+`HoverCardContent` takes `onEscapeKeyDown`, `onPointerDownOutside`, `onInteractOutside` and `onFocusOutside`; call `event.preventDefault()` in one to keep the card open. `forceMount` keeps the content in the page while closed.
