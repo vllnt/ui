@@ -186,11 +186,11 @@ export const COMPONENT_SEO: readonly ComponentSeo[] = [
   },
   {
     description:
-      "Build swipeable galleries, testimonials, or sliders with Carousel, a React component built on Embla with buttons and keyboard nav. Install via the shadcn CLI.",
+      "Build swipeable galleries, testimonials, or sliders with Carousel, a React component built on ui-sdk with buttons and keyboard nav. Install via the shadcn CLI.",
     faqs: [
       {
         answer:
-          "Carousel is a React slider component from VLLNT UI built on Embla Carousel. It scrolls through slides horizontally or vertically with previous and next buttons, keyboard navigation, and drag or touch swiping.",
+          "Carousel is a React slider component from VLLNT UI built on the ui-sdk carousel. It scrolls through slides horizontally or vertically with previous and next buttons, keyboard navigation, and drag or touch swiping.",
         question: "What is Carousel?",
       },
       {
@@ -200,15 +200,15 @@ export const COMPONENT_SEO: readonly ComponentSeo[] = [
       },
       {
         answer:
-          "Yes. Set the orientation prop to vertical for a stacked layout, and pass Embla plugins such as autoplay plus opts and setApi to configure and control the underlying Embla instance.",
-        question: "Does Carousel support vertical scrolling and plugins?",
+          "Yes. Set the orientation prop to vertical for a stacked layout, and use opts and setApi to configure the carousel and control it from your code. Embla plugins are not supported.",
+        question: "Does Carousel support vertical scrolling?",
       },
     ],
     related: ["slideshow", "animated-list", "bento-grid"],
     slug: "carousel",
     title: "Carousel — swipeable content slider in React | VLLNT UI",
     whatItIs:
-      "Carousel is a scrollable slider built on Embla Carousel. Compose it from Carousel, CarouselContent, and CarouselItem, then add CarouselPrevious and CarouselNext buttons that disable automatically at the first and last slide. It supports horizontal or vertical orientation, arrow-key navigation, drag and touch swiping, and Embla plugins through the opts, plugins, and setApi props. Use it for image galleries, testimonials, onboarding steps, or product showcases.",
+      "Carousel is a scrollable slider built on the ui-sdk carousel. Compose it from Carousel, CarouselContent, and CarouselItem, then add CarouselPrevious and CarouselNext buttons that mark themselves aria-disabled at the first and last slide. It supports horizontal or vertical orientation, arrow-key navigation, drag and touch swiping, and the opts and setApi props. Use it for image galleries, testimonials, onboarding steps, or product showcases.",
   },
   {
     description:
