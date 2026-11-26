@@ -2,35 +2,40 @@ import { forwardRef } from "react";
 
 import { type GlassPeerExports, resolveGlassRenderer } from "./glass-renderer";
 
-const GlassView = () => null;
-const BlurView = () => null;
+const glassView = () => undefined;
+const blurView = () => undefined;
 const yes = () => true;
 const no = () => false;
 const throwing = () => {
   throw new Error("The native module is missing");
 };
 
+/** Module exports keyed as the peers name them (PascalCase component names). */
+const moduleExports = (
+  entries: readonly (readonly [string, unknown])[],
+): Readonly<Record<string, unknown>> => Object.fromEntries(entries);
+
 /** The exports of `expo-glass-effect` on a device that has Liquid Glass. */
-const liquidGlass = {
-  GlassView,
-  isGlassEffectAPIAvailable: yes,
-  isLiquidGlassAvailable: yes,
-};
+const liquidGlass = moduleExports([
+  ["GlassView", glassView],
+  ["isGlassEffectAPIAvailable", yes],
+  ["isLiquidGlassAvailable", yes],
+]);
 
 /** The exports of `expo-blur`. */
-const blur = { BlurView };
+const blur = moduleExports([["BlurView", blurView]]);
 
 describe("resolveGlassRenderer", () => {
   it("draws Liquid Glass when the device supports it", () => {
     expect(resolveGlassRenderer({ blur, glassEffect: liquidGlass })).toEqual({
-      glassView: GlassView,
+      glassView,
       kind: "glass",
     });
   });
 
   it("draws Liquid Glass without expo-blur installed", () => {
     expect(resolveGlassRenderer({ glassEffect: liquidGlass })).toEqual({
-      glassView: GlassView,
+      glassView,
       kind: "glass",
     });
   });
@@ -65,26 +70,33 @@ describe("resolveGlassRenderer", () => {
       { ...liquidGlass, isGlassEffectAPIAvailable: throwing },
     ],
     ["expo-glass-effect is not installed", undefined],
+    // eslint-disable-next-line unicorn/no-null -- a module can export null
     ["expo-glass-effect exports nothing", null],
     ["expo-glass-effect exports no GlassView", {}],
-    ["expo-glass-effect exports no availability checks", { GlassView }],
+    [
+      "expo-glass-effect exports no availability checks",
+      moduleExports([["GlassView", glassView]]),
+    ],
     [
       "expo-glass-effect exports a GlassView that is not a component",
-      { ...liquidGlass, GlassView: 42 },
+      { ...liquidGlass, ...moduleExports([["GlassView", 42]]) },
     ],
   ])("falls back to a blur view when %s", (_name, glassEffect) => {
     expect(resolveGlassRenderer({ blur, glassEffect })).toEqual({
-      blurView: BlurView,
+      blurView,
       kind: "blur",
     });
   });
 
   it("accepts a forwardRef BlurView, the web export of expo-blur", () => {
-    const ForwardedBlurView = forwardRef(() => null);
+    const forwardedBlurView = forwardRef(() => undefined);
+    forwardedBlurView.displayName = "ForwardedBlurView";
 
     expect(
-      resolveGlassRenderer({ blur: { BlurView: ForwardedBlurView } }),
-    ).toEqual({ blurView: ForwardedBlurView, kind: "blur" });
+      resolveGlassRenderer({
+        blur: moduleExports([["BlurView", forwardedBlurView]]),
+      }),
+    ).toEqual({ blurView: forwardedBlurView, kind: "blur" });
   });
 
   it.each<readonly [string, GlassPeerExports]>([
@@ -96,7 +108,7 @@ describe("resolveGlassRenderer", () => {
     ],
     [
       "expo-blur exports a BlurView that is not a component",
-      { blur: { BlurView: 42 } },
+      { blur: moduleExports([["BlurView", 42]]) },
     ],
     [
       "the device has no Liquid Glass and expo-blur is not installed",
