@@ -94,3 +94,77 @@ describe("Slider", () => {
     ).toBeInTheDocument();
   });
 });
+
+const part = (container: HTMLElement, slot: string) => {
+  const element = container.querySelector(`[data-slot="slider-${slot}"]`);
+  if (!(element instanceof HTMLElement)) throw new Error(`No ${slot}`);
+  return element;
+};
+
+describe("Slider parts", () => {
+  it("merges each part's className with its defaults", () => {
+    const { container } = render(
+      <Slider
+        aria-label="Volume"
+        className="h-2.5"
+        controlClassName="gap-1"
+        defaultValue={[40]}
+        rangeClassName="bg-success"
+        thumbClassName="size-6"
+        trackClassName="bg-muted"
+      />,
+    );
+    expect(part(container, "control")).toHaveClass("relative", "gap-1");
+    expect(part(container, "track")).toHaveClass("rounded-full", "bg-muted");
+    expect(part(container, "track")).not.toHaveClass("bg-secondary");
+    expect(part(container, "indicator")).toHaveClass("absolute", "bg-success");
+    expect(part(container, "indicator")).not.toHaveClass("bg-primary");
+    expect(part(container, "thumb")).toHaveClass("rounded-full", "size-6");
+    expect(part(container, "thumb")).not.toHaveClass("size-5");
+  });
+
+  it("keeps the default part classes without the new props", () => {
+    const { container } = render(
+      <Slider aria-label="Volume" defaultValue={[40]} />,
+    );
+    expect(part(container, "track").className).toBe(
+      "relative h-2 w-full grow overflow-hidden rounded-full bg-secondary",
+    );
+    expect(part(container, "indicator").className).toBe(
+      "absolute h-full bg-primary",
+    );
+  });
+
+  it("passes thumbProps to every thumb, over the root's name", () => {
+    render(
+      <Slider
+        aria-label="Volume"
+        defaultValue={[40]}
+        thumbProps={{ "aria-label": "Music volume", "data-part": "knob" }}
+      />,
+    );
+    expect(
+      screen.getByRole("slider", { name: "Music volume" }),
+    ).toBeInTheDocument();
+    expect(
+      document.querySelector('[data-slot="slider-thumb"]'),
+    ).toHaveAttribute("data-part", "knob");
+  });
+
+  it("calls a thumbProps function with each thumb's index", () => {
+    render(
+      <Slider
+        defaultValue={[20, 80]}
+        thumbProps={(index) => ({
+          "aria-label": index === 0 ? "Minimum price" : "Maximum price",
+        })}
+      />,
+    );
+    expect(screen.getByRole("slider", { name: "Minimum price" })).toHaveValue(
+      "20",
+    );
+    expect(screen.getByRole("slider", { name: "Maximum price" })).toHaveValue(
+      "80",
+    );
+  });
+});
