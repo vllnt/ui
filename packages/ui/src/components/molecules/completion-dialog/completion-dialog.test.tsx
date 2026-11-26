@@ -169,6 +169,47 @@ describe("CompletionDialog dialog semantics (WAI-ARIA APG modal dialog)", () => 
     expect(handlers.onConfirm).toHaveBeenCalledTimes(1);
   });
 
+  it("ignores shortcut letters typed into a field inside the dialog", () => {
+    const handlers = makeHandlers();
+    render(
+      <CompletionDialog
+        {...handlers}
+        description={
+          <>
+            <input aria-label="Name" />
+            <textarea aria-label="Notes" />
+            <select aria-label="Plan">
+              <option>Free</option>
+            </select>
+            <div aria-label="Rich" contentEditable role="textbox" />
+            <div aria-label="Plain" contentEditable="false" role="group" />
+            <input aria-label="Agree" type="checkbox" />
+          </>
+        }
+        isOpen
+        title="Done?"
+      />,
+    );
+    ["Name", "Notes", "Plan", "Rich"].forEach((label) => {
+      fireEvent.keyDown(screen.getByLabelText(label), { key: "d" });
+      fireEvent.keyDown(screen.getByLabelText(label), { key: "S" });
+    });
+    expect(handlers.onConfirm).not.toHaveBeenCalled();
+    expect(handlers.onCancel).not.toHaveBeenCalled();
+    // A control that takes no text, or a held modifier, is not a text field.
+    fireEvent.keyDown(screen.getByLabelText("Agree"), { key: "d" });
+    fireEvent.keyDown(screen.getByLabelText("Plain"), { key: "s" });
+    expect(handlers.onConfirm).toHaveBeenCalledTimes(1);
+    expect(handlers.onCancel).toHaveBeenCalledTimes(1);
+    ["altKey", "ctrlKey", "metaKey"].forEach((modifier) => {
+      fireEvent.keyDown(screen.getByRole("dialog"), {
+        key: "d",
+        [modifier]: true,
+      });
+    });
+    expect(handlers.onConfirm).toHaveBeenCalledTimes(1);
+  });
+
   it("returns focus to the element that was focused before it opened", async () => {
     const handlers = makeHandlers();
     const view = (isOpen: boolean) => (
