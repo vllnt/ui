@@ -40,10 +40,10 @@ const flowRuntime = vi.hoisted(() => {
       ),
     ),
     fitView: vi.fn(() => Promise.resolve()),
+    flowLibraryLoads: 0,
     getNodesBounds: vi.fn(() => ({ height: 80, width: 120, x: 0, y: 0 })),
     getViewport: vi.fn(() => ({ x: 0, y: 0, zoom: 1 })),
     getViewportForBounds: vi.fn(() => ({ x: 10, y: 20, zoom: 1.25 })),
-    flowLibraryLoads: 0,
     imageLibraryLoads: 0,
     toPng: vi.fn(() => Promise.resolve("data:image/png;base64,diagram")),
     zoomTo: vi.fn(() => Promise.resolve()),
@@ -62,47 +62,47 @@ vi.mock("html-to-image", () => {
 vi.mock("@xyflow/react", () => {
   flowRuntime.flowLibraryLoads += 1;
   return {
-  Background: () => <div data-testid="flow-background" />,
-  BackgroundVariant: { Dots: "dots" },
-  getNodesBounds: flowRuntime.getNodesBounds,
-  getViewportForBounds: flowRuntime.getViewportForBounds,
-  ReactFlow: ({
-    children,
-    className,
-    colorMode,
-    edges,
-    nodes,
-    onNodeClick,
-  }: MockReactFlowProps) => {
-    const firstNode = nodes[0];
-    const handleNodeClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-      if (firstNode) onNodeClick?.(event, firstNode);
-    };
+    Background: () => <div data-testid="flow-background" />,
+    BackgroundVariant: { Dots: "dots" },
+    getNodesBounds: flowRuntime.getNodesBounds,
+    getViewportForBounds: flowRuntime.getViewportForBounds,
+    ReactFlow: ({
+      children,
+      className,
+      colorMode,
+      edges,
+      nodes,
+      onNodeClick,
+    }: MockReactFlowProps) => {
+      const firstNode = nodes[0];
+      const handleNodeClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+        if (firstNode) onNodeClick?.(event, firstNode);
+      };
 
-    return (
-      <div
-        className={`react-flow__viewport ${className ?? ""}`}
-        data-color-mode={colorMode}
-        data-edge-count={edges.length}
-        data-node-count={nodes.length}
-        data-testid="react-flow"
-      >
-        <button onClick={handleNodeClick} type="button">
-          Mock first node
-        </button>
-        {children}
-      </div>
-    );
-  },
-  ReactFlowProvider: ({ children }: { children: React.ReactNode }) => (
-    <div data-testid="react-flow-provider">{children}</div>
-  ),
-  useReactFlow: () => ({
-    fitView: flowRuntime.fitView,
-    getNodes: () => flowRuntime.currentNodes,
-    getViewport: flowRuntime.getViewport,
-    zoomTo: flowRuntime.zoomTo,
-  }),
+      return (
+        <div
+          className={`react-flow__viewport ${className ?? ""}`}
+          data-color-mode={colorMode}
+          data-edge-count={edges.length}
+          data-node-count={nodes.length}
+          data-testid="react-flow"
+        >
+          <button onClick={handleNodeClick} type="button">
+            Mock first node
+          </button>
+          {children}
+        </div>
+      );
+    },
+    ReactFlowProvider: ({ children }: { children: React.ReactNode }) => (
+      <div data-testid="react-flow-provider">{children}</div>
+    ),
+    useReactFlow: () => ({
+      fitView: flowRuntime.fitView,
+      getNodes: () => flowRuntime.currentNodes,
+      getViewport: flowRuntime.getViewport,
+      zoomTo: flowRuntime.zoomTo,
+    }),
   };
 });
 
@@ -280,21 +280,29 @@ describe("FlowDiagram", () => {
   });
 
   it("opens fullscreen mode and closes it from the portal control", async () => {
-    await renderDiagram(<FlowDiagram allowFullscreen edges={edges} nodes={nodes} />);
+    await renderDiagram(
+      <FlowDiagram allowFullscreen edges={edges} nodes={nodes} />,
+    );
 
     fireEvent.click(screen.getByLabelText("Fullscreen"));
 
     expect(
-      screen.getByRole("dialog", { name: "Flow diagram fullscreen view" }),
+      await screen.findByRole("dialog", {
+        name: "Flow diagram fullscreen view",
+      }),
     ).toBeInTheDocument();
-    expect(document.body.style.overflow).toBe("hidden");
+    await waitFor(() => {
+      expect(document.documentElement.style.overflow).toBe("hidden");
+    });
 
     fireEvent.click(screen.getByLabelText("Close fullscreen"));
 
-    expect(
-      screen.queryByRole("dialog", { name: "Flow diagram fullscreen view" }),
-    ).not.toBeInTheDocument();
-    expect(document.body.style.overflow).toBe("");
+    await waitFor(() => {
+      expect(
+        screen.queryByRole("dialog", { name: "Flow diagram fullscreen view" }),
+      ).not.toBeInTheDocument();
+    });
+    expect(document.documentElement.style.overflow).not.toBe("hidden");
   });
 
   it("copies the rendered flow image to the clipboard", async () => {

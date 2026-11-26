@@ -79,3 +79,7 @@ type TOCSection = {
 | `id` | `string` | Yes | - |
 | `title` | `string` | Yes | - |
 
+
+## Open state
+
+Pass `open` and `onOpenChange`, or the older `isOpen` and `onClose`; they work together, and `open` wins. The panel renders on the ui-sdk sheet: it traps focus, locks page scroll, closes on Escape and returns focus to the element that opened it.

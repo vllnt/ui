@@ -2,7 +2,6 @@
 
 import * as React from "react";
 
-import { useReturnFocus } from "../../../lib/use-return-focus";
 import { cn } from "../../../lib/utils";
 import {
   Dialog,
@@ -135,18 +134,11 @@ export function ShareDialog({
     [platforms, onShare, onOpenChange],
   );
 
-  const {
-    onCloseAutoFocus: handleCloseAutoFocus,
-    onOpenAutoFocus: handleOpenAutoFocus,
-  } = useReturnFocus();
-
   return (
     <Dialog onOpenChange={onOpenChange} open={open}>
       <DialogContent
         {...(description ? {} : { "aria-describedby": undefined })}
         className="sm:max-w-sm"
-        onCloseAutoFocus={handleCloseAutoFocus}
-        onOpenAutoFocus={handleOpenAutoFocus}
       >
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>

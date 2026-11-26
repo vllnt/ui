@@ -1,15 +1,14 @@
 "use client";
 
-import { Children, memo, useEffect, useRef } from "react";
+import { Children, memo } from "react";
 
 import type { ReactNode } from "react";
 
 import type { MaterialProps } from "../../../lib/material";
 import type { HeadingTag } from "../../../lib/types";
-import { useBodyScrollLock } from "../../../lib/use-body-scroll-lock";
-import { useEscapeKey } from "../../../lib/use-escape-key";
-import { useFocusContainment } from "../../../lib/use-focus-containment";
+import { type OpenAliases, openAliases } from "../../../lib/ui-sdk-dialog";
 import { cn } from "../../../lib/utils";
+import { Dialog, DialogClose, DialogContent } from "../dialog/dialog";
 
 export type KeyboardShortcut = {
   description: string;
@@ -22,11 +21,10 @@ export type KeyboardShortcutsHelpProps = {
   className?: string;
   closeIcon?: ReactNode;
   footer?: ReactNode;
-  isOpen: boolean;
-  onClose: () => void;
   shortcuts: readonly KeyboardShortcut[];
   title?: string;
-} & MaterialProps;
+} & MaterialProps &
+  OpenAliases;
 
 function DefaultCloseIcon(): React.ReactNode {
   return (
@@ -77,17 +75,13 @@ function ShortcutsList({
 
 type ShortcutsHeaderProps = {
   as: HeadingTag;
-  closeButtonRef: React.Ref<HTMLButtonElement>;
   closeIcon?: ReactNode;
-  onClose: () => void;
   title: string;
 };
 
 function ShortcutsHeader({
   as: Heading,
-  closeButtonRef,
   closeIcon,
-  onClose,
   title,
 }: ShortcutsHeaderProps): React.ReactNode {
   return (
@@ -95,15 +89,12 @@ function ShortcutsHeader({
       <Heading className="text-lg font-semibold" id="shortcuts-title">
         {title}
       </Heading>
-      <button
+      <DialogClose
         aria-label="Close shortcuts help"
         className="flex size-8 items-center justify-center rounded-md hover:bg-secondary"
-        onClick={onClose}
-        ref={closeButtonRef}
-        type="button"
       >
         {closeIcon ?? <DefaultCloseIcon />}
-      </button>
+      </DialogClose>
     </div>
   );
 }
@@ -116,58 +107,25 @@ function KeyboardShortcutsHelpImpl({
   isOpen,
   material = "glass",
   onClose,
+  onOpenChange,
+  open,
   shortcuts,
   title = "Keyboard Shortcuts",
 }: KeyboardShortcutsHelpProps): React.ReactNode {
-  const closeButtonRef = useRef<HTMLButtonElement>(null);
-  const dialogRef = useRef<HTMLDivElement>(null);
-
-  // Declared before the focus effect so the opener gets recorded first.
-  useFocusContainment(dialogRef, isOpen);
-
-  // Move focus to the close button when the modal opens.
-  useEffect(() => {
-    if (isOpen) {
-      closeButtonRef.current?.focus();
-    }
-  }, [isOpen]);
-
-  useEscapeKey(onClose, { enabled: isOpen, preventDefault: true });
-  useBodyScrollLock(isOpen);
-
-  if (!isOpen) return null;
+  const state = openAliases({ isOpen, onClose, onOpenChange, open });
 
   return (
-    <div
-      aria-labelledby="shortcuts-title"
-      aria-modal="true"
-      className="fixed inset-0 z-50 flex items-center justify-center"
-      data-material={material}
-      ref={dialogRef}
-      // react-doctor-disable-next-line react-doctor/prefer-html-dialog -- useFocusContainment traps Tab, useEscapeKey closes and useBodyScrollLock locks scroll; a native <dialog> top layer would also sit above portalled popovers and toasts
-      role="dialog"
-    >
-      {/* Backdrop */}
-      <div
-        aria-hidden="true"
-        className="vllnt-glass-scrim absolute inset-0"
-        onClick={onClose}
-      />
-
-      {/* Modal */}
-      <div
+    <Dialog onOpenChange={state.handleOpenChange} open={state.open}>
+      <DialogContent
+        aria-labelledby="shortcuts-title"
         className={cn(
-          "vllnt-glass-floating vllnt-glass-dense relative z-10 w-full max-w-sm rounded-lg border p-6 mx-4",
+          "block w-[calc(100%-2rem)] max-w-sm rounded-lg",
           className,
         )}
+        closeButton={false}
+        material={material}
       >
-        <ShortcutsHeader
-          as={Heading}
-          closeButtonRef={closeButtonRef}
-          closeIcon={closeIcon}
-          onClose={onClose}
-          title={title}
-        />
+        <ShortcutsHeader as={Heading} closeIcon={closeIcon} title={title} />
 
         {/* Shortcuts List */}
         <ShortcutsList shortcuts={shortcuts} />
@@ -178,8 +136,8 @@ function KeyboardShortcutsHelpImpl({
             {footer}
           </div>
         ) : null}
-      </div>
-    </div>
+      </DialogContent>
+    </Dialog>
   );
 }
 
