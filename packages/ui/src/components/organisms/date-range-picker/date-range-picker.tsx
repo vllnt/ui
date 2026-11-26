@@ -11,7 +11,8 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "../../atoms/popover/popover";
-import { Calendar, type DateRange } from "../../molecules/calendar/calendar";
+import type { DateRange } from "../../molecules/calendar/calendar";
+import { LazyCalendar } from "../../molecules/calendar/calendar-lazy";
 
 const rangeFormatter = new Intl.DateTimeFormat("en-US", {
   day: "numeric",
@@ -90,7 +91,7 @@ const DateRangePicker = ({
         aria-label={popoverLabel}
         className={cn("w-auto p-0", className)}
       >
-        <Calendar
+        <LazyCalendar
           defaultMonth={selected?.from}
           initialFocus
           mode="range"

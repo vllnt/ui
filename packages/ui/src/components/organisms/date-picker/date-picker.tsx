@@ -11,10 +11,8 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "../../atoms/popover/popover";
-import {
-  Calendar,
-  type CalendarProps,
-} from "../../molecules/calendar/calendar";
+import type { CalendarProps } from "../../molecules/calendar/calendar";
+import { LazyCalendar } from "../../molecules/calendar/calendar-lazy";
 
 const defaultDateFormatter = new Intl.DateTimeFormat("en-US", {
   day: "numeric",
@@ -85,7 +83,7 @@ const DatePicker = ({
         aria-label={popoverLabel}
         className={cn("w-auto p-0", className)}
       >
-        <Calendar
+        <LazyCalendar
           defaultMonth={selectedDate}
           initialFocus
           mode="single"
