@@ -4,7 +4,6 @@ import * as React from "react";
 
 import { CalendarIcon } from "lucide-react";
 
-import { focusCalendarDay } from "../../../lib/focus-calendar-day";
 import { cn } from "../../../lib/utils";
 import { Button } from "../../atoms/button/button";
 import {
@@ -12,10 +11,8 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "../../atoms/popover/popover";
-import {
-  Calendar,
-  type CalendarProps,
-} from "../../molecules/calendar/calendar";
+import type { CalendarProps } from "../../molecules/calendar/calendar";
+import { LazyCalendar } from "../../molecules/calendar/calendar-lazy";
 
 const defaultDateFormatter = new Intl.DateTimeFormat("en-US", {
   day: "numeric",
@@ -85,10 +82,10 @@ const DatePicker = ({
         align="start"
         aria-label={popoverLabel}
         className={cn("w-auto p-0", className)}
-        onOpenAutoFocus={focusCalendarDay}
       >
-        <Calendar
+        <LazyCalendar
           defaultMonth={selectedDate}
+          initialFocus
           mode="single"
           onSelect={handleSelect}
           selected={selectedDate}

@@ -32,7 +32,6 @@ describe("collectPublicExports", () => {
       "cn",
       "moveRovingFocus",
       "useReturnFocus",
-      "focusCalendarDay",
       "CHECKLIST_PROGRESS_EVENT",
       "parseChecklistStorageValue",
     ];

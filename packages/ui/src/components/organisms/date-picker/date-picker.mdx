@@ -5,7 +5,7 @@ import * as Stories from './date-picker.stories'
 
 # DatePicker
 
-Calendar-popover date input — text field with a calendar grid for picking a single date. Pure presentation; the host owns the date value and supplies the optional min / max bounds.
+Calendar-popover date input — text field with a calendar grid for picking a single date. Pure presentation; the host owns the date value and can bound it with `calendarProps`. The calendar loads when the popover first opens, and a blank placeholder of the same size holds its place until it arrives.
 
 Pair with \`Calendar\` (the underlying month grid) for embedded calendar UI without the popover.
 
@@ -29,7 +29,7 @@ import { DatePicker } from '@vllnt/ui'
 <DatePicker
   value={date}
   onValueChange={setDate}
-  min={today}
+  calendarProps={{ fromDate: today }}
 />
 ```
 
@@ -41,5 +41,6 @@ import { DatePicker } from '@vllnt/ui'
 
 ## Notes
 
-- The date input is locale-aware via the underlying \`Calendar\` primitive.
+- The calendar takes `locale` and `weekStartsOn` through `calendarProps`.
+- Focus lands on the selected day (else today) when the popover opens, and arrow keys, Page Up and Page Down move through the dates.
 - Pair with \`Form\` and \`Label\` for accessible form composition.

@@ -2,9 +2,7 @@
 
 import { useState } from "react";
 
-import type { DateRange } from "react-day-picker";
-
-import { Calendar } from "../../molecules/calendar/calendar";
+import { Calendar, type DateRange } from "../../molecules/calendar/calendar";
 
 /** Calendar that selects a start and end date as a range. */
 export type RangeCalendarProps = {
