@@ -1,5 +1,4 @@
-import { create } from "qrcode";
-
+import { encodeQrMatrix } from "../../../lib/qr-encoder";
 import { cn } from "../../../lib/utils";
 
 /**
@@ -59,11 +58,8 @@ function encodeQrCode(
     return cached;
   }
 
-  const { modules } = create(value, { errorCorrectionLevel: level });
-  const encoding = {
-    count: modules.size,
-    path: buildPath(modules.data, modules.size, margin),
-  };
+  const { modules, size } = encodeQrMatrix(value, level);
+  const encoding = { count: size, path: buildPath(modules, size, margin) };
   if (!cacheable) {
     return encoding;
   }

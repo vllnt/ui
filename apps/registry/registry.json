@@ -5708,8 +5708,7 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.3.0",
-        "qrcode"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "core",
       "version": "0.3.0",

@@ -34,6 +34,11 @@ export {
 export { createCommandRanker } from "./lib/command-rank";
 export { commandScore } from "./lib/command-score";
 export { copyText } from "./lib/copy-text";
+export {
+  encodeQrMatrix,
+  type QrErrorLevel,
+  type QrMatrix,
+} from "./lib/qr-encoder";
 export { formatChange, normalizeDate } from "./lib/format";
 export {
   isStatusTone,
