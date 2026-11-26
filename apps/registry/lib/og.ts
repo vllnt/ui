@@ -96,7 +96,12 @@ export function generateTwitterMetadata(
 }
 
 type PageMetadataInput = Metadata & {
-  /** Path the canonical + hreflang alternates point at; defaults to `pathname`. */
+  /**
+   * Path the canonical points at; defaults to `pathname`. When it names
+   * another page, the page lists no hreflang alternates: hreflang belongs on
+   * canonical pages, and Lighthouse fails a canonical that is another hreflang
+   * URL.
+   */
   readonly canonicalPath?: string;
   /** A hosted social image that replaces the generated `/api/og` card. */
   readonly image?: { readonly alt: string; readonly src: string };
@@ -133,7 +138,10 @@ export function pageMetadata({
     ...metadata,
     alternates: {
       canonical: canonical(canonicalPathname, locale),
-      languages: languageAlternates(canonicalPathname),
+      languages:
+        canonicalPathname === pathname
+          ? languageAlternates(pathname)
+          : undefined,
       ...alternates,
     },
     openGraph: hostedImage ? { ...openGraph, images: hostedImage } : openGraph,
