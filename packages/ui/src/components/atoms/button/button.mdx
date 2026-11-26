@@ -83,3 +83,12 @@ import { Button } from '@vllnt/ui'
 
 <Canvas of={Stories.VariantUnstyled} sourceState="shown" />
 
+## UnstyledButton: without tailwind-merge
+
+`UnstyledButton` (also from `@vllnt/ui/button`) is a `button` with no classes of its own. It joins `className` with `cx`, so its module never imports `tailwind-merge` and adds none to a client bundle. `Button` merges classes with `cn`, which brings `tailwind-merge` (about 7 kB gzip). `type` defaults to `"button"`. It has no `asChild`; use `Button variant="unstyled"` for that. Give `className` its own `focus-visible:` and `disabled:` styles.
+
+```tsx
+import { UnstyledButton } from "@vllnt/ui/button";
+
+<UnstyledButton className="rounded-sm px-3 focus-visible:ring-2">A</UnstyledButton>
+```

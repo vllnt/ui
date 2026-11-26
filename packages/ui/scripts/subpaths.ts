@@ -9,7 +9,7 @@
  * The subpaths are derived from the barrel, so they cannot drift from it:
  * one subpath per component directory named in `src/components/index.ts`,
  * re-exporting exactly the names the root exports from that directory, plus
- * `utils` for `cn`. `scripts/write-subpaths.ts` calls `writeSubpaths` after
+ * `utils` for `cn` and `cx`. `scripts/write-subpaths.ts` calls `writeSubpaths` after
  * tsup; `package.json` maps `./*` to `dist/subpaths/*.js` and `*.d.ts`.
  *
  * Each `.js` file re-exports from the directory's own modules and carries no
@@ -42,7 +42,10 @@ type Entry = ExportName & { isTypeOnly: boolean; specifier: string };
 const COMPONENT_SPECIFIER = /^\.\/[a-z]+\/[a-z0-9-]+(?:\/[a-z0-9-]+)?$/;
 
 /** Root-index modules outside the barrel that get a subpath of their own. */
-const LIBRARY_SUBPATHS: Record<string, string> = { "./lib/utils": "utils" };
+const LIBRARY_SUBPATHS: Record<string, string> = {
+  "./lib/cx": "utils",
+  "./lib/utils": "utils",
+};
 
 /** The `export { … } from "…"` statements of a file. */
 function exportStatements(
@@ -147,13 +150,15 @@ export function collectSubpaths(
       throw new Error(`Subpath "${name}" is both a component and a library.`);
     }
   }
+  const exportedLibraries = new Set<string>();
   for (const statement of exportStatements(rootIndex, "index.ts")) {
     const name = LIBRARY_SUBPATHS[statement.specifier];
     if (!name) continue;
+    exportedLibraries.add(statement.specifier);
     for (const entry of statement.elements) addEntry(subpaths, name, entry);
   }
-  for (const [specifier, name] of Object.entries(LIBRARY_SUBPATHS)) {
-    if (!subpaths.has(name)) {
+  for (const specifier of Object.keys(LIBRARY_SUBPATHS)) {
+    if (!exportedLibraries.has(specifier)) {
       throw new Error(`src/index.ts no longer exports ${specifier}.`);
     }
   }
