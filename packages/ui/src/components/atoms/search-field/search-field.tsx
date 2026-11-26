@@ -4,26 +4,8 @@ import * as React from "react";
 
 import { Search, X } from "lucide-react";
 
+import { useControllableState } from "../../../lib/use-controllable-state";
 import { cn } from "../../../lib/utils";
-
-function useSearchValue(
-  value: string | undefined,
-  defaultValue: string,
-  onValueChange?: (value: string) => void,
-) {
-  const [internalValue, setInternalValue] = React.useState(defaultValue);
-  const currentValue = value ?? internalValue;
-
-  const setValue = (nextValue: string) => {
-    if (value === undefined) {
-      setInternalValue(nextValue);
-    }
-
-    onValueChange?.(nextValue);
-  };
-
-  return [currentValue, setValue] as const;
-}
 
 /** Search input with a leading icon and a clear button. */
 export type SearchFieldProps = Omit<
@@ -44,11 +26,11 @@ const SearchField = ({
   value,
   ...props
 }: SearchFieldProps & { ref?: React.Ref<HTMLInputElement> }) => {
-  const [currentValue, setValue] = useSearchValue(
-    value,
+  const [currentValue, setValue] = useControllableState({
     defaultValue,
-    onValueChange,
-  );
+    onChange: onValueChange,
+    value,
+  });
 
   return (
     <div className="relative w-full">

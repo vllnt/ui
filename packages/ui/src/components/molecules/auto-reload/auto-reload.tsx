@@ -7,9 +7,9 @@ import {
   useCallback,
   useId,
   useMemo,
-  useState,
 } from "react";
 
+import { useControllableState } from "../../../lib/use-controllable-state";
 import { cn } from "../../../lib/utils";
 import { Button } from "../../atoms/button/button";
 import { Input } from "../../atoms/input/input";
@@ -347,47 +347,29 @@ function useAutoReloadController(options: ControllerOptions): ControllerState {
     reloadAmountCents: controlledReload,
     thresholdCents: controlledThreshold,
   } = options;
-  const [uncontrolledEnabled, setUncontrolledEnabled] =
-    useState(defaultEnabled);
-  const [uncontrolledThreshold, setUncontrolledThreshold] = useState(
-    defaultThresholdCents,
-  );
-  const [uncontrolledReloadAmount, setUncontrolledReloadAmount] = useState(
-    defaultReloadAmountCents,
-  );
-  const enabled = controlledEnabled ?? uncontrolledEnabled;
-
-  const handleToggle = useCallback(
-    (next: boolean) => {
-      if (controlledEnabled === undefined) setUncontrolledEnabled(next);
-      onToggle?.(next);
-    },
-    [controlledEnabled, onToggle],
-  );
-
-  const setReloadAmount = useCallback(
-    (next: number) => {
-      if (controlledReload === undefined) setUncontrolledReloadAmount(next);
-      onReloadAmountChange?.(next);
-    },
-    [controlledReload, onReloadAmountChange],
-  );
-
-  const setThreshold = useCallback(
-    (next: number) => {
-      if (controlledThreshold === undefined) setUncontrolledThreshold(next);
-      onThresholdChange?.(next);
-    },
-    [controlledThreshold, onThresholdChange],
-  );
+  const [enabled, handleToggle] = useControllableState({
+    defaultValue: defaultEnabled,
+    onChange: onToggle,
+    value: controlledEnabled,
+  });
+  const [reloadAmount, setReloadAmount] = useControllableState({
+    defaultValue: defaultReloadAmountCents,
+    onChange: onReloadAmountChange,
+    value: controlledReload,
+  });
+  const [threshold, setThreshold] = useControllableState({
+    defaultValue: defaultThresholdCents,
+    onChange: onThresholdChange,
+    value: controlledThreshold,
+  });
 
   return {
     enabled,
     handleToggle,
-    reloadAmount: controlledReload ?? uncontrolledReloadAmount,
+    reloadAmount,
     setReloadAmount,
     setThreshold,
-    threshold: controlledThreshold ?? uncontrolledThreshold,
+    threshold,
   };
 }
 

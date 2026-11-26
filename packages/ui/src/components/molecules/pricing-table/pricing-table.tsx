@@ -8,12 +8,12 @@ import {
   type Ref,
   useCallback,
   useRef,
-  useState,
 } from "react";
 
 import { Check, X } from "lucide-react";
 
 import { keyByOccurrence } from "../../../lib/occurrence-keys";
+import { useControllableState } from "../../../lib/use-controllable-state";
 import { cn } from "../../../lib/utils";
 import { Button, type ButtonProps } from "../../atoms/button/button";
 
@@ -446,17 +446,11 @@ export const PricingTable = ({
     ...rest
   } = props;
 
-  const [uncontrolledPeriod, setUncontrolledPeriod] =
-    useState<PricingPeriod>(defaultPeriod);
-  const period = controlledPeriod ?? uncontrolledPeriod;
-
-  const handlePeriodChange = useCallback(
-    (next: PricingPeriod) => {
-      if (controlledPeriod === undefined) setUncontrolledPeriod(next);
-      onPeriodChange?.(next);
-    },
-    [controlledPeriod, onPeriodChange],
-  );
+  const [period, handlePeriodChange] = useControllableState<PricingPeriod>({
+    defaultValue: defaultPeriod,
+    onChange: onPeriodChange,
+    value: controlledPeriod,
+  });
 
   return (
     <div className={cn("flex flex-col gap-6", className)} ref={ref} {...rest}>

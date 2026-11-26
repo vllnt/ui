@@ -4,6 +4,7 @@ import * as React from "react";
 
 import { CalendarIcon } from "lucide-react";
 
+import { useControllableState } from "../../../lib/use-controllable-state";
 import { cn } from "../../../lib/utils";
 import { Button } from "../../atoms/button/button";
 import {
@@ -56,19 +57,12 @@ const DateRangePicker = ({
   ref,
   value,
 }: DateRangePickerProps & { ref?: React.Ref<HTMLButtonElement> }) => {
-  const [internalValue, setInternalValue] = React.useState<
-    DateRange | undefined
-  >(defaultValue);
-  const selected = value ?? internalValue;
+  const [selected, handleSelect] = useControllableState<DateRange | undefined>({
+    defaultValue,
+    onChange: onValueChange,
+    value,
+  });
   const label = formatRange(selected);
-
-  const handleSelect = (range: DateRange | undefined) => {
-    if (value === undefined) {
-      setInternalValue(range);
-    }
-
-    onValueChange?.(range);
-  };
 
   return (
     <Popover>

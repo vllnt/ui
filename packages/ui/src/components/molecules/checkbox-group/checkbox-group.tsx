@@ -2,6 +2,7 @@
 
 import * as React from "react";
 
+import { useControllableState } from "../../../lib/use-controllable-state";
 import { cn } from "../../../lib/utils";
 import { Checkbox } from "../../atoms/checkbox/checkbox";
 import { Label } from "../../atoms/label/label";
@@ -29,22 +30,21 @@ function useCheckboxGroupValue(
   defaultValue: string[],
   onValueChange?: (value: string[]) => void,
 ) {
-  const [internalValue, setInternalValue] = React.useState(defaultValue);
-  const values = value ?? internalValue;
+  const [values, setValues] = useControllableState({
+    defaultValue,
+    onChange: onValueChange,
+    value,
+  });
 
   const toggle = React.useCallback(
     (item: string) => {
-      const nextValues = values.includes(item)
-        ? values.filter((entry) => entry !== item)
-        : [...values, item];
-
-      if (value === undefined) {
-        setInternalValue(nextValues);
-      }
-
-      onValueChange?.(nextValues);
+      setValues(
+        values.includes(item)
+          ? values.filter((entry) => entry !== item)
+          : [...values, item],
+      );
     },
-    [onValueChange, value, values],
+    [setValues, values],
   );
 
   return { toggle, values };

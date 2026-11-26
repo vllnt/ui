@@ -5,6 +5,7 @@ import * as React from "react";
 import { Clock } from "lucide-react";
 
 import { moveRovingFocus } from "../../../lib/roving-focus";
+import { useControllableState } from "../../../lib/use-controllable-state";
 import { cn } from "../../../lib/utils";
 import { Button } from "../../atoms/button/button";
 import {
@@ -117,18 +118,16 @@ const TimePicker = ({
   ref,
   value,
 }: TimePickerProps & { ref?: React.Ref<HTMLButtonElement> }) => {
-  const [internalValue, setInternalValue] = React.useState(defaultValue);
-  const currentValue = value ?? internalValue;
+  const [currentValue, setValue] = useControllableState({
+    defaultValue,
+    onChange: onValueChange,
+    value,
+  });
   const hourColumnRef = React.useRef<HTMLDivElement>(null);
   const { hour, minute } = splitTime(currentValue);
 
   const commit = (nextHour: string, nextMinute: string) => {
-    const next = `${nextHour || "00"}:${nextMinute || "00"}`;
-    if (value === undefined) {
-      setInternalValue(next);
-    }
-
-    onValueChange?.(next);
+    setValue(`${nextHour || "00"}:${nextMinute || "00"}`);
   };
 
   return (
