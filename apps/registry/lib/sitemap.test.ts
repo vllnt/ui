@@ -44,10 +44,14 @@ describe("sitemap URLs", () => {
   it("lists the request and report pages in both locales", () => {
     const all = urls(dated({ articles }));
 
-    for (const path of ["/request-component", "/report"]) {
-      expect(all).toContain(`${SITE}${path}`);
-      expect(all).toContain(`${SITE}/fr${path}`);
-    }
+    expect(all).toEqual(
+      expect.arrayContaining([
+        `${SITE}/request-component`,
+        `${SITE}/fr/request-component`,
+        `${SITE}/report`,
+        `${SITE}/fr/report`,
+      ]),
+    );
   });
 
   it("no longer lists the platform=native variants", () => {
