@@ -385,3 +385,102 @@ describe("createNativeTheme input handling", () => {
     expect(darkTheme.colors.primary).not.toBe("#123456");
   });
 });
+
+const GLASS_SCHEMES: readonly (readonly [string, NativeTheme])[] = [
+  ["light", lightTheme],
+  ["dark", darkTheme],
+];
+
+const ALPHA_COLOR = /^#[\da-f]{8}$/;
+const OPAQUE_COLOR = /^#[\da-f]{6}$/;
+
+describe("native glass tokens", () => {
+  it("rides on the theme for each scheme and survives overrides", () => {
+    expect(lightTheme.glass).toBe(nativeTokens.glass.light);
+    expect(darkTheme.glass).toBe(nativeTokens.glass.dark);
+    expect(createNativeTheme("dark").glass).toBe(darkTheme.glass);
+    expect(
+      createNativeTheme("light", { colors: { primary: "#123456" } }).glass,
+    ).toBe(lightTheme.glass);
+  });
+
+  describe.each(GLASS_SCHEMES)("%s", (_, theme) => {
+    const { colors, glass } = theme;
+    const { solid, ...surface } = glass;
+
+    it("names its steps after the design tokens", () => {
+      expect(Object.keys(glass.blur)).toEqual(
+        Object.keys(designTokens.blur.glass),
+      );
+      expect(Object.keys(glass.tint)).toHaveLength(
+        Object.keys(designTokens.material.glass).filter((name) =>
+          name.startsWith("tint-"),
+        ).length,
+      );
+      expect(Object.keys(glass.shadow)).toEqual(["glass", "glassFloating"]);
+    });
+
+    it("writes tint and hairline with alpha, and the text roles opaque", () => {
+      const withAlpha = [...Object.values(glass.tint), glass.hairline];
+      const opaque = [glass.foreground, glass.mutedForeground, glass.input];
+
+      expect(withAlpha.filter((color) => !ALPHA_COLOR.test(color))).toEqual([]);
+      expect(opaque.filter((color) => !OPAQUE_COLOR.test(color))).toEqual([]);
+      expect(glass.foreground).toBe(colors.foreground);
+    });
+
+    it("keeps every blur at or under the budget ceiling", () => {
+      const ceiling = Number.parseFloat(designTokens.blur.glass.lg.value);
+
+      expect(glass.blur.lg).toBe(ceiling);
+      expect(Math.max(...Object.values(glass.blur))).toBe(ceiling);
+    });
+
+    it.each(Object.entries(glass.shadow))(
+      "gives %s the React Native shadow props and an elevation",
+      (_name, shadow) => {
+        expect(shadow.shadowColor).toMatch(OPAQUE_COLOR);
+        expect(shadow.shadowOpacity).toBeGreaterThan(0);
+        expect(shadow.shadowOpacity).toBeLessThanOrEqual(1);
+        expect(shadow.shadowRadius).toBeGreaterThan(0);
+        expect(Number.isInteger(shadow.elevation)).toBe(true);
+        expect(shadow.elevation).toBeGreaterThan(0);
+        expect(Object.keys(shadow.shadowOffset)).toEqual(["height", "width"]);
+      },
+    );
+
+    it("raises the floating shadow above the plain one", () => {
+      expect(glass.shadow.glassFloating.elevation).toBeGreaterThan(
+        glass.shadow.glass.elevation,
+      );
+    });
+
+    it("has a solid fallback of the same shape: opaque, unblurred, the Card color", () => {
+      expect(Object.keys(solid)).toEqual(Object.keys(surface));
+      expect(Object.keys(solid.tint)).toEqual(Object.keys(surface.tint));
+      expect(Object.values(solid.tint)).toEqual(
+        Object.values(solid.tint).map(() => colors.card),
+      );
+      expect(solid.hairline).toBe(colors.border);
+      expect(Object.values(solid.blur)).toEqual(
+        Object.values(solid.blur).map(() => 0),
+      );
+      expect(solid.shadow.glass.elevation).toBeLessThan(
+        solid.shadow.glassFloating.elevation,
+      );
+    });
+
+    it("keeps text and control boundaries legible on the solid fallback", () => {
+      const ground = solid.tint.top;
+      const ratios = {
+        foreground: contrastRatio(solid.foreground, ground),
+        input: contrastRatio(solid.input, ground),
+        mutedForeground: contrastRatio(solid.mutedForeground, ground),
+      };
+
+      expect(ratios.foreground).toBeGreaterThanOrEqual(4.5);
+      expect(ratios.mutedForeground).toBeGreaterThanOrEqual(4.5);
+      expect(ratios.input).toBeGreaterThanOrEqual(3);
+    });
+  });
+});
