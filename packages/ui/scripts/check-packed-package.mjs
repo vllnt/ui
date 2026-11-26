@@ -13,6 +13,8 @@ import {
 import { tmpdir } from "node:os";
 import { dirname, join, resolve } from "node:path";
 
+import { collectSubpaths } from "./subpaths.ts";
+
 const packageDirectory = resolve(import.meta.dirname, "..");
 const temporaryDirectory = await mkdtemp(join(tmpdir(), "vllnt-ui-pack-"));
 const relativeSpecifierPattern =
@@ -41,12 +43,33 @@ function assertFile(path, field) {
   }
 }
 
-/** Names of the `@vllnt/ui/<name>` subpaths in a packed package. */
+/** The subpaths the barrel defines, with the names each one must export. */
+const expectedSubpaths = collectSubpaths(
+  readFileSync(join(packageDirectory, "src/components/index.ts"), "utf8"),
+  readFileSync(join(packageDirectory, "src/index.ts"), "utf8"),
+).map(({ modules, name, types }) => ({
+  name,
+  types,
+  values: modules.flatMap(({ names }) => names.map(({ exported }) => exported)),
+}));
+
+/**
+ * Names of the `@vllnt/ui/<name>` subpaths in a packed package, which must be
+ * exactly the subpaths the barrel defines.
+ */
 function packedSubpaths(packedDirectory) {
   const names = readdirSync(join(packedDirectory, "dist/subpaths"))
     .filter((file) => file.endsWith(".js"))
-    .map((file) => file.slice(0, -".js".length));
-  if (names.length === 0) throw new Error("Packed dist/subpaths is empty.");
+    .map((file) => file.slice(0, -".js".length))
+    .sort();
+  const expected = expectedSubpaths.map(({ name }) => name).sort();
+  const missing = expected.filter((name) => !names.includes(name));
+  const extra = names.filter((name) => !expected.includes(name));
+  if (missing.length > 0 || extra.length > 0) {
+    throw new Error(
+      `Packed dist/subpaths differs from the barrel. Missing: ${missing.join(", ") || "none"}. Extra: ${extra.join(", ") || "none"}.`,
+    );
+  }
   return names;
 }
 
@@ -218,16 +241,21 @@ async function assertNodeResolution(manifest, packedDirectory) {
       'if (!preset.default) throw new Error("Missing tailwind preset default export.");',
       'const { default: manifest } = await import("@vllnt/ui/package.json", { with: { type: "json" } });',
       'if (manifest.name !== "@vllnt/ui") throw new Error(`Invalid package.json export: ${manifest.name}`);',
-      // Every subpath resolves to its own entry and exports the same values as
-      // the root, as the same module instances.
-      `const subpaths = ${JSON.stringify(packedSubpaths(packedDirectory))};`,
+      // Every subpath resolves to its own entry and exports exactly the
+      // barrel's values for it, as the same module instances as the root.
+      `const subpaths = ${JSON.stringify(
+        expectedSubpaths.map(({ name, values }) => ({ name, values })),
+      )};`,
       'const root = await import("@vllnt/ui");',
-      "for (const name of subpaths) {",
+      "for (const { name, values } of subpaths) {",
       "  const resolved = import.meta.resolve(`@vllnt/ui/${name}`);",
       "  if (!resolved.endsWith(`/dist/subpaths/${name}.js`)) throw new Error(`Invalid subpath entry: ${resolved}`);",
       "  const subpath = await import(`@vllnt/ui/${name}`);",
-      "  for (const [key, value] of Object.entries(subpath)) {",
-      "    if (root[key] !== value) throw new Error(`@vllnt/ui/${name} exports ${key}, which differs from the root export.`);",
+      '  const keys = Object.keys(subpath).sort().join(", ");',
+      '  const expected = [...values].sort().join(", ");',
+      "  if (keys !== expected) throw new Error(`@vllnt/ui/${name} exports [${keys}], expected [${expected}].`);",
+      "  for (const key of values) {",
+      "    if (root[key] !== subpath[key]) throw new Error(`@vllnt/ui/${name} exports ${key}, which differs from the root export.`);",
       "  }",
       "}",
       "",
@@ -257,8 +285,9 @@ async function assertNodeResolution(manifest, packedDirectory) {
 }
 
 /**
- * Type-checks a consumer that imports a type and a value from every subpath,
- * under the two module resolutions consumers use.
+ * Type-checks an ES module consumer that imports, by name, every value and
+ * type the barrel defines for every subpath, under the two module resolutions
+ * consumers use.
  */
 async function assertSubpathTypes(packedDirectory) {
   const nodeModulesDirectory = join(temporaryDirectory, "node_modules");
@@ -267,19 +296,32 @@ async function assertSubpathTypes(packedDirectory) {
       linkInstalledPackage(name, nodeModulesDirectory),
     ),
   );
-  const lines = packedSubpaths(packedDirectory).map(
-    (name, index) => `import * as subpath${index} from "@vllnt/ui/${name}";`,
+  packedSubpaths(packedDirectory);
+  const values = [];
+  const lines = expectedSubpaths.map(
+    ({ name, types, values: names }, index) => {
+      const imports = [
+        ...names.map((value) => {
+          values.push(`s${index}_${value}`);
+          return `${value} as s${index}_${value}`;
+        }),
+        ...types.map((type) => `type ${type} as s${index}_${type}`),
+      ];
+      return `import { ${imports.join(", ")} } from "@vllnt/ui/${name}";`;
+    },
   );
   lines.push(
-    'import { Button, type ButtonProps } from "@vllnt/ui/button";',
-    'import { cn } from "@vllnt/ui/utils";',
+    'import type { ButtonProps } from "@vllnt/ui/button";',
     'const props: ButtonProps = { variant: "outline" };',
-    "export const checked = [Button, cn, props, " +
-      lines.map((_, index) => `subpath${index}`).join(", ") +
-      "];",
+    `export const checked = [props, ${values.join(", ")}];`,
     "",
   );
   await writeFile(join(temporaryDirectory, "consumer.ts"), lines.join("\n"));
+  // Check the consumer as an ES module, the only form the exports support.
+  await writeFile(
+    join(temporaryDirectory, "package.json"),
+    '{ "private": true, "type": "module" }\n',
+  );
 
   const tsc = join(packageDirectory, "node_modules/typescript/bin/tsc");
   for (const [module, moduleResolution] of [

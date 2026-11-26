@@ -128,6 +128,15 @@ describe("subpath exports", () => {
         rootIndex,
       ),
     ).toThrow('Subpath "utils" is both a component and a library.');
+    expect(() =>
+      collectSubpaths(`${componentsIndex}\nexport const X = 1;`, rootIndex),
+    ).toThrow("unsupported statement");
+    expect(() =>
+      collectSubpaths('export { Foo } from "../lib/foo";', rootIndex),
+    ).toThrow("unsupported export");
+    expect(() =>
+      collectSubpaths('export { Foo } from "./foo";', rootIndex),
+    ).toThrow("unsupported export");
     expect(() => collectSubpaths(componentsIndex, "")).toThrow(
       "no longer exports ./lib/utils",
     );

@@ -12,8 +12,10 @@
  * `utils` for `cn`. `scripts/write-subpaths.ts` calls `writeSubpaths` after
  * tsup; `package.json` maps `./*` to `dist/subpaths/*.js` and `*.d.ts`.
  *
- * Each `.js` file re-exports from the component's own module and carries no
- * client directive of its own, so a server-safe component stays server-safe.
+ * Each `.js` file re-exports from the directory's own modules and carries no
+ * client directive of its own, so it reaches the client modules of that
+ * directory only: `button` is server-safe, while `spinner` and `chart` mix a
+ * server-safe module with a client one and bring both.
  * Each `.d.ts` file re-exports the same names from the root declarations.
  */
 
@@ -35,6 +37,9 @@ export type Subpath = {
 };
 
 type Entry = ExportName & { isTypeOnly: boolean; specifier: string };
+
+/** A barrel specifier inside `src/components`. */
+const COMPONENT_SPECIFIER = /^\.\/[a-z]+\/[a-z0-9-]+(?:\/[a-z0-9-]+)?$/;
 
 /** Root-index modules outside the barrel that get a subpath of their own. */
 const LIBRARY_SUBPATHS: Record<string, string> = { "./lib/utils": "utils" };
@@ -102,12 +107,28 @@ export function collectSubpaths(
 ): Subpath[] {
   const subpaths = new Map<string, Subpath>();
 
+  const barrel = ts.createSourceFile(
+    "components/index.ts",
+    componentsIndex,
+    ts.ScriptTarget.Latest,
+  );
+  for (const statement of barrel.statements) {
+    if (!ts.isExportDeclaration(statement)) {
+      throw new Error(
+        `components/index.ts: unsupported statement: ${statement.getText(barrel)}`,
+      );
+    }
+  }
+
   for (const statement of exportStatements(
     componentsIndex,
     "components/index.ts",
   )) {
+    // `./<level>/<directory>` or `./<level>/<directory>/<module>`.
     const path = statement.specifier.replace(/^\.\//, "");
-    const directory = path.split("/")[1];
+    const directory = COMPONENT_SPECIFIER.test(statement.specifier)
+      ? path.split("/")[1]
+      : undefined;
     if (!directory || statement.elements.length === 0) {
       throw new Error(
         `components/index.ts: unsupported export: ${statement.text}`,
