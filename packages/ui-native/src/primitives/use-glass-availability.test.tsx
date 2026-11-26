@@ -50,7 +50,7 @@ type HookOptions = {
   readonly useDefaultService?: boolean;
 };
 
-type HookProps = { readonly service: GlassAccessibilityService | undefined };
+type HookProps = { readonly service?: GlassAccessibilityService };
 
 /** Renders the hook under a `ThemeProvider` and, by default, waits for answers. */
 async function renderAvailability(
