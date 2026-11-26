@@ -149,6 +149,7 @@ export default async function FamilyPage({ params }: Props) {
       <main
         className="flex-1 overflow-y-auto bg-background"
         data-pagefind-ignore={platformParameter === undefined ? undefined : ""}
+        id="main"
       >
         <section className="border-b border-border">
           <div className="mx-auto max-w-7xl px-4 py-16 lg:px-8">
