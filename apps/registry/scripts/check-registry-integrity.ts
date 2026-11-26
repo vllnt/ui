@@ -16,6 +16,9 @@
  *   5. Shim imports resolve — every name a shim imports from "@vllnt/ui" must
  *      be a public export of the package (packages/ui/src/index.ts), otherwise
  *      the installed file fails to type-check (TS2305).
+ *   6. Variants dependency — a shim that imports "class-variance-authority"
+ *      (the rewrite of `lib/variants`) must list it in its item's dependencies:
+ *      "@vllnt/ui" no longer installs it.
  *
  * Usage: pnpm -F @vllnt/ui-registry registry:integrity
  */
@@ -165,6 +168,15 @@ for (const item of registry.items) {
     if (RELATIVE_SPECIFIER.test(shimSource)) {
       errors.push(
         `Shim "${file.path}" still imports a relative path; shadcn installs would break.`,
+      );
+    }
+    if (
+      /from\s+["']class-variance-authority["']/.test(shimSource) &&
+      !(item.dependencies ?? []).includes("class-variance-authority")
+    ) {
+      errors.push(
+        `Shim "${file.path}" imports class-variance-authority, but item ` +
+          `"${item.name}" does not list it in "dependencies".`,
       );
     }
     const missing = importedNames(shimSource, "@vllnt/ui").filter(

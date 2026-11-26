@@ -13,6 +13,9 @@
  *     as a single npm peer dep — `import { Dialog, cn } from "@vllnt/ui"` etc.
  *
  * Rewrites applied to each component source (at any `../` depth):
+ *   - `from "../../../lib/variants"`              → `from "class-variance-authority"`,
+ *     added to the item's `dependencies`: the package ships its own `cva`, an
+ *     installed file uses the real one, and `variants.test.ts` proves they agree
  *   - `from "../../../lib/utils"`                 → `from "@vllnt/ui"`
  *   - `from "../../../lib/use-X"`                 → `from "@vllnt/ui"`
  *   - `from "../<sibling>/<sibling>"`             → `from "@vllnt/ui"`
@@ -68,6 +71,7 @@ const componentsRoot = join(repoRoot, "packages/ui/src/components");
 const shimsRoot = join(repoRoot, "apps/registry/registry/default");
 
 const PACKAGE_NAME = "@vllnt/ui";
+const VARIANTS_PACKAGE = "class-variance-authority";
 
 // Dynamic relative imports the rewrite resolves correctly, by component: the
 // target is a module whose public export is read by name (FlowDiagramContent).
@@ -202,7 +206,11 @@ const rewriteSameFolderImports = (source: string): string =>
 const rewriteImports = (source: string): string => {
   // Collect import lines that target lib utilities or sibling components
   // and replace each with a single deduped `import ... from "@vllnt/ui"` block.
-  let code = source;
+  // `lib/variants` goes first: the public barrel does not export `cva`.
+  let code = source.replace(
+    /from\s+["'](?:\.\.\/)+lib\/variants["']/g,
+    `from "${VARIANTS_PACKAGE}"`,
+  );
 
   // `../../../lib/<module>` → `@vllnt/ui`. Matches any single-segment kebab-case
   // lib module (utils, types, theme-presets, use-*, …) at any depth. The rewrite
@@ -293,11 +301,19 @@ for (const item of registry.items) {
   // No transitive registry pulls — @vllnt/ui covers all internals
   item.registryDependencies = [];
 
-  // Ensure @vllnt/ui is in npm dependencies (preserve any other declared deps)
+  // Ensure @vllnt/ui is in npm dependencies (preserve any other declared deps),
+  // and the variants package when the installed file imports it.
   const otherDeps = (item.dependencies ?? []).filter(
     (dep) => !dep.startsWith(`${PACKAGE_NAME}@`) && dep !== PACKAGE_NAME,
   );
-  item.dependencies = [PACKAGE_DEP, ...otherDeps];
+  const needsVariants =
+    code.includes(`from "${VARIANTS_PACKAGE}"`) &&
+    !otherDeps.includes(VARIANTS_PACKAGE);
+  item.dependencies = [
+    PACKAGE_DEP,
+    ...otherDeps,
+    ...(needsVariants ? [VARIANTS_PACKAGE] : []),
+  ];
 
   // Stamp version + stability per the registry item schema (see #253).
   // Defaults to the published @vllnt/ui version + "stable"; per-component
