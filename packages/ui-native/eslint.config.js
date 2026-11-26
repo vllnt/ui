@@ -33,6 +33,15 @@ export default [
     },
   },
   {
+    // The optional peers load through a literal `require` in a `try` block so
+    // Metro treats them as optional dependencies; an `import` would be hard.
+    files: ["src/primitives/glass-peers.ts"],
+    rules: {
+      "@typescript-eslint/no-require-imports": "off",
+      "unicorn/prefer-module": "off",
+    },
+  },
+  {
     files: ["src/components/**/*.{ts,tsx}"],
     rules: {
       "no-restricted-imports": [

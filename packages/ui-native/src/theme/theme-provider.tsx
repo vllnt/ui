@@ -12,6 +12,7 @@ import {
 import { useColorScheme } from "react-native";
 
 const ThemeContext = createContext<NativeTheme>(lightTheme);
+const GlassEnabledContext = createContext(true);
 
 /** Color selection accepted by {@link ThemeProvider}. */
 export type ThemeSelection = "system" | ThemeColorScheme;
@@ -20,6 +21,13 @@ export type ThemeSelection = "system" | ThemeColorScheme;
 export type ThemeProviderProps = {
   readonly children: ReactNode;
   readonly colorScheme?: ThemeSelection;
+  /**
+   * Global glass switch, the native twin of web `html[data-glass="off"]`.
+   * `false` draws every glass surface below solid, whatever its `material`.
+   * Leave it unset to follow the nearest outer provider, which defaults to
+   * glass on.
+   */
+  readonly glass?: boolean;
   readonly override?: NativeThemeOverride;
 };
 
@@ -27,9 +35,11 @@ export type ThemeProviderProps = {
 function ThemeProvider({
   children,
   colorScheme = "system",
+  glass,
   override,
 }: ThemeProviderProps) {
   const systemColorScheme = useColorScheme();
+  const inheritedGlass = use(GlassEnabledContext);
   const resolvedColorScheme =
     colorScheme === "system"
       ? systemColorScheme === "dark"
@@ -41,7 +51,11 @@ function ThemeProvider({
     [override, resolvedColorScheme],
   );
 
-  return <ThemeContext value={theme}>{children}</ThemeContext>;
+  return (
+    <GlassEnabledContext value={glass ?? inheritedGlass}>
+      <ThemeContext value={theme}>{children}</ThemeContext>
+    </GlassEnabledContext>
+  );
 }
 ThemeProvider.displayName = "ThemeProvider";
 
@@ -50,4 +64,9 @@ function useTheme(): NativeTheme {
   return use(ThemeContext);
 }
 
-export { ThemeProvider, useTheme };
+/** Reads the global glass switch set by `ThemeProvider`; `true` by default. */
+function useGlassEnabled(): boolean {
+  return use(GlassEnabledContext);
+}
+
+export { ThemeProvider, useGlassEnabled, useTheme };

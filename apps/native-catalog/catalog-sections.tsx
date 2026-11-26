@@ -24,9 +24,11 @@ import {
   Dialog,
   Display,
   EmptyState,
+  GlassSurface,
   Heading,
   Icon,
   Input,
+  type Material,
   NumberTicker,
   ProgressBar,
   SearchBar,
@@ -43,9 +45,10 @@ import {
   Text,
   Textarea,
   type ThemeSelection,
+  useGlassTextColor,
   useTheme,
 } from "@vllnt/ui-native";
-import type { ReactNode } from "react";
+import { type ReactNode, useState } from "react";
 import { View } from "react-native";
 
 import { SquareGlyph } from "../../packages/ui-native/src/tests/fixture-data";
@@ -178,6 +181,98 @@ export function FoundationSection({
         Interaction count: {presses}
       </Text>
       <Separator />
+    </Section>
+  );
+}
+
+const materials: readonly Material[] = ["glass", "solid"];
+const materialLabels: Readonly<Record<Material, string>> = {
+  glass: "Glass",
+  solid: "Solid",
+};
+
+/** Text that takes its color from the surface around it, as N2 components will. */
+function GlassText({
+  children,
+  tone = "default",
+}: {
+  readonly children: ReactNode;
+  readonly tone?: "default" | "muted";
+}) {
+  const color = useGlassTextColor(tone);
+  return (
+    <Text style={{ color }} tone={tone}>
+      {children}
+    </Text>
+  );
+}
+GlassText.displayName = "GlassText";
+
+export function GlassSection() {
+  const theme = useTheme();
+  const [material, setMaterial] = useState<Material>("glass");
+
+  return (
+    <Section title="Glass material">
+      <Row>
+        {materials.map((value) => (
+          <Button
+            key={value}
+            onPress={() => {
+              setMaterial(value);
+            }}
+            size="sm"
+            variant={value === material ? "default" : "outline"}
+          >
+            {materialLabels[value]}
+          </Button>
+        ))}
+      </Row>
+      <View
+        style={{
+          borderRadius: theme.radius.lg,
+          overflow: "hidden",
+          padding: theme.spacing[6],
+        }}
+      >
+        <View
+          pointerEvents="none"
+          style={{
+            backgroundColor: theme.colors.primary,
+            borderRadius: theme.radius.full,
+            height: 96,
+            position: "absolute",
+            right: theme.spacing[4],
+            top: theme.spacing[2],
+            width: 96,
+          }}
+        />
+        <View
+          pointerEvents="none"
+          style={{
+            backgroundColor: theme.colors.destructive,
+            borderRadius: theme.radius.full,
+            bottom: theme.spacing[2],
+            height: 72,
+            left: theme.spacing[4],
+            position: "absolute",
+            width: 72,
+          }}
+        />
+        <GlassSurface
+          elevated
+          material={material}
+          style={{ gap: theme.spacing[1], padding: theme.spacing[4] }}
+        >
+          <GlassText>Static glass container</GlassText>
+          <GlassText tone="muted">
+            Material: {materialLabels[material]}
+          </GlassText>
+        </GlassSurface>
+      </View>
+      <Text size="small" tone="muted">
+        Glass turns solid under Reduce Transparency or a high-contrast setting.
+      </Text>
     </Section>
   );
 }

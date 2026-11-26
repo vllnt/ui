@@ -33,4 +33,17 @@ describe("native catalog", () => {
     expect(screen.getByText("Catalog review complete")).toBeOnTheScreen();
     expect(screen.getByText("Interaction count: 1")).toBeOnTheScreen();
   });
+
+  it("switches the glass demo between the glass and solid material", () => {
+    render(<App />);
+
+    expect(screen.getByText("Static glass container")).toBeOnTheScreen();
+    expect(screen.getByText("Material: Glass")).toBeOnTheScreen();
+
+    fireEvent.press(screen.getByRole("button", { name: "Solid" }));
+    expect(screen.getByText("Material: Solid")).toBeOnTheScreen();
+
+    fireEvent.press(screen.getByRole("button", { name: "Glass" }));
+    expect(screen.getByText("Material: Glass")).toBeOnTheScreen();
+  });
 });
