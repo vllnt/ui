@@ -6850,6 +6850,18 @@
       {
         "id": "overlay-tooltip--default",
         "name": "Default"
+      },
+      {
+        "id": "overlay-tooltip--with-arrow",
+        "name": "With Arrow"
+      },
+      {
+        "id": "overlay-tooltip--close-delay",
+        "name": "Close Delay"
+      },
+      {
+        "id": "overlay-tooltip--toggleable",
+        "name": "Toggleable"
       }
     ],
     "title": "Tooltip"

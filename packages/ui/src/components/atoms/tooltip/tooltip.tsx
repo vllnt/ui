@@ -55,7 +55,9 @@ type TooltipProps = React.ComponentProps<typeof TooltipRoot> & {
   /**
    * A press on the trigger (finger, mouse or keyboard) opens and closes the
    * tooltip, so it opens on touch screens too; an outside press or Escape
-   * closes it. Meant for an info button that exists to show the tip. Defaults to off.
+   * closes it. With a mouse, hovering opens it first, so the first press keeps
+   * it open and the next closes it. Meant for an info button that exists to
+   * show the tip. Defaults to off.
    */
   toggleable?: boolean;
 };
@@ -164,7 +166,9 @@ type ArrowProps = Omit<
 const TooltipArrow = ({ className, ref, ...props }: ArrowProps) => (
   <TooltipArrowPart
     className={cn(
-      "size-2.5 rotate-45 bg-popover data-[side=bottom]:-top-1 data-[side=left]:-right-1 data-[side=right]:-left-1 data-[side=top]:-bottom-1",
+      // An 8 px square offset by half its size: the diamond's centre sits on
+      // the content's edge, so it stays inside the 6 px padding.
+      "size-2 rotate-45 bg-popover data-[side=bottom]:-top-1 data-[side=left]:-right-1 data-[side=right]:-left-1 data-[side=top]:-bottom-1",
       className,
     )}
     ref={ref}

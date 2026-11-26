@@ -214,16 +214,35 @@ describe("TooltipArrow", () => {
   });
 
   it("lets the content stop clipping once it holds an arrow", () => {
+    const holdsArrow = ':has(> [data-slot="tooltip-arrow"])';
     render(
-      <Tooltip defaultOpen>
-        <TooltipTrigger>Trigger</TooltipTrigger>
-        <TooltipContent>Body</TooltipContent>
-      </Tooltip>,
+      <>
+        <Tooltip defaultOpen>
+          <TooltipTrigger>With</TooltipTrigger>
+          <TooltipContent>
+            <TooltipArrow />
+            With arrow
+          </TooltipContent>
+        </Tooltip>
+        <Tooltip defaultOpen>
+          <TooltipTrigger>Without</TooltipTrigger>
+          <TooltipContent>Without arrow</TooltipContent>
+        </Tooltip>
+      </>,
     );
-    expect(screen.getByText("Body")).toHaveClass(
+    const withArrow = screen.getByText("With arrow");
+    const withoutArrow = screen.getByText("Without arrow");
+    expect(withArrow).toHaveClass(
       "overflow-hidden",
       "has-[>[data-slot=tooltip-arrow]]:overflow-visible",
     );
+    expect(withoutArrow).toHaveClass(
+      "overflow-hidden",
+      "has-[>[data-slot=tooltip-arrow]]:overflow-visible",
+    );
+    // The overflow-visible rule applies where this selector matches.
+    expect(withArrow.matches(holdsArrow)).toBe(true);
+    expect(withoutArrow.matches(holdsArrow)).toBe(false);
   });
 });
 

@@ -41,7 +41,7 @@ import {
 
 ## Arrow
 
-Put a `TooltipArrow` inside `TooltipContent` to point at the trigger. It follows the side the tooltip lands on, including after a flip, and is hidden from assistive technology. The content stops clipping its children once it holds an arrow. Style it with `className`, for example a background that matches your content.
+Put a `TooltipArrow` inside `TooltipContent` to point at the trigger. It follows the side the tooltip lands on, including after a flip, and is hidden from assistive technology. The content stops clipping its children once it holds an arrow. It is filled with `bg-popover`, which does not match the default glass content; style it with `className`, for example a background that matches your content.
 
 <Canvas of={Stories.WithArrow} sourceState="shown" />
 
@@ -53,7 +53,7 @@ Put a `TooltipArrow` inside `TooltipContent` to point at the trigger. It follows
 
 ## Touch
 
-Touch screens have no hover, so a plain tooltip never opens there. `toggleable` on `Tooltip` makes a press on the trigger (finger, mouse or keyboard) open and close it; an outside press or Escape closes it too. Use it on an info button that exists to show the tip.
+Touch screens have no hover, so a plain tooltip never opens there. `toggleable` on `Tooltip` makes a press on the trigger (finger, mouse or keyboard) open and close it; an outside press or Escape closes it too. With a mouse, hovering opens it first, so the first press keeps it open and the next closes it. Use it on an info button that exists to show the tip.
 
 <Canvas of={Stories.Toggleable} sourceState="shown" />
 

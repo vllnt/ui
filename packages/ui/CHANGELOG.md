@@ -41,7 +41,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
   keeps the tooltip open for that many milliseconds after the pointer leaves
   (default 0). `toggleable` makes a press on the trigger open and close the
   tooltip, so it opens on touch screens (default off). Without them, tooltips
-  behave as before.
+  behave and look as before; `TooltipContent` carries one extra class,
+  `has-[>[data-slot=tooltip-arrow]]:overflow-visible`, which applies only when
+  an arrow is inside.
 - **`Kbd` `variant="glass"`** - a chip for a glass surface: 9 % ink wash, 75 % ink
   text, no border. Place it on the dense glass tint.
 - **`StatusIndicator` `icon`** - a mark shown in place of the dot. The tone
