@@ -133,6 +133,8 @@ directory name and exports the same names as the root.
 | Import path | What |
 |-------------|------|
 | `@vllnt/ui` | All components, hooks, types, and the `cn()` utility |
+| `@vllnt/ui/<component>` | One component directory (for example `@vllnt/ui/button`), the same names the root exports from it |
+| `@vllnt/ui/utils` | `cn()` |
 | `@vllnt/ui/tailwind-preset` | Tailwind preset config |
 | `@vllnt/ui/styles.css` | Tailwind base + theme variables + utilities |
 | `@vllnt/ui/themes/default.css` | Theme CSS variables only |

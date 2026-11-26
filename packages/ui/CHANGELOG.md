@@ -38,8 +38,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
   `@vllnt/ui/button`, `@vllnt/ui/toggle-group`) re-exports exactly the names the
   root exports from that component directory, and `@vllnt/ui/utils` exports
   `cn`. A Next.js server component that imports a subpath no longer pulls every
-  `"use client"` component into the route's client JS, and a server-safe
-  component such as `Button` or `Separator` adds none. The subpaths are
+  `"use client"` component into the route's client JS, only those of that
+  directory: a server-safe component such as `Button` or `Separator` adds none. The subpaths are
   generated from the barrel at build time; the root export is unchanged.
 
 ### Changed
