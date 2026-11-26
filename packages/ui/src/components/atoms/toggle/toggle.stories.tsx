@@ -18,7 +18,7 @@ const meta = {
     },
     variant: {
       control: "select",
-      options: ["default", "outline"],
+      options: ["default", "outline", "unstyled"],
     },
   },
   component: Toggle,
@@ -33,3 +33,11 @@ export const Default: Story = {};
 export const SizeLg: Story = { args: { size: "lg" } };
 export const SizeSm: Story = { args: { size: "sm" } };
 export const VariantOutline: Story = { args: { variant: "outline" } };
+/** No classes of its own: the toggle draws only what `className` gives it. */
+export const VariantUnstyled: Story = {
+  args: {
+    className:
+      "rounded-sm border border-dashed border-border px-2 py-1 text-foreground data-[state=on]:border-solid",
+    variant: "unstyled",
+  },
+};

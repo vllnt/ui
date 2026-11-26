@@ -57,6 +57,11 @@ import { Toggle } from '@vllnt/ui'
 | ----- | ------- |
 | `default` | Yes |
 | `outline` | - |
+| `unstyled` | - |
 
 <Canvas of={Stories.VariantOutline} sourceState="shown" />
+
+`unstyled` adds no classes: the toggle keeps its pressed state, `aria-pressed`, `data-state`, keyboard and `asChild`, and draws only what `className` gives it. `size` has no effect with it.
+
+<Canvas of={Stories.VariantUnstyled} sourceState="shown" />
 

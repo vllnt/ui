@@ -63,6 +63,7 @@ const toList = (value: string | undefined) =>
  * Toggles that share one value. A `single` group presses one at a time: it
  * reads as a radio group and its value is a string. The other `type` presses
  * any number: it reads as a toolbar and its value is a list.
+ * `variant="unstyled"` drops the group's and the items' classes.
  */
 const ToggleGroup = ({
   children,
@@ -103,7 +104,14 @@ const ToggleGroup = ({
 
   return (
     <ToggleGroupPrimitive
-      className={cn("flex items-center justify-center gap-1", className)}
+      className={
+        cn(
+          variant === "unstyled"
+            ? undefined
+            : "flex items-center justify-center gap-1",
+          className,
+        ) || undefined
+      }
       multiple={type === "multiple"}
       ref={ref}
       render={groupRender}
@@ -164,13 +172,15 @@ const ToggleGroupItem = ({
 
   return (
     <Toggle
-      className={cn(
-        toggleVariants({
-          size: context.size ?? size,
-          variant: context.variant ?? variant,
-        }),
-        className,
-      )}
+      className={
+        cn(
+          toggleVariants({
+            size: context.size ?? size,
+            variant: context.variant ?? variant,
+          }),
+          className,
+        ) || undefined
+      }
       ref={ref}
       render={render}
       {...props}

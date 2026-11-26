@@ -8,6 +8,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Added
 
+- **`Toggle`, `ToggleGroup` and `ToggleGroupItem` `variant="unstyled"`** - keeps
+  the pressed state, roles, `aria-pressed` / `aria-checked`, `data-state`,
+  keyboard and `asChild`, and adds no classes of its own: each part's class list
+  is only its `className`, and `size` has no effect. On `ToggleGroup` it also
+  drops the group's layout classes and applies to every item.
+  `toggleVariants({ variant: "unstyled" })` returns only the caller's classes;
+  the other variants render the same class strings as before.
 - **ui-sdk compat helpers** - the helpers the components are written with are
   public, for apps and agents that build their own parts the same way: `Slot`,
   `asChildProps`, `withDataAttributes`, `openState`, `checkedState`,

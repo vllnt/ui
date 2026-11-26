@@ -1,7 +1,7 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 
-import { Toggle } from "./toggle";
+import { Toggle, toggleVariants } from "./toggle";
 
 describe("Toggle", () => {
   it("applies custom className", () => {
@@ -59,5 +59,41 @@ describe("Toggle Radix-compatible state", () => {
     const link = screen.getByRole("link", { name: "Bold" });
     expect(link).toHaveAttribute("data-state", "off");
     expect(screen.queryByRole("button")).toBeNull();
+  });
+
+  describe('variant="unstyled"', () => {
+    it("renders only the caller's classes and keeps the pressed state", () => {
+      const onPressedChange = vi.fn();
+      render(
+        <Toggle
+          aria-label="Bold"
+          className="chip"
+          onPressedChange={onPressedChange}
+          size="lg"
+          variant="unstyled"
+        />,
+      );
+      const toggle = screen.getByRole("button", { name: "Bold" });
+      expect(toggle.className).toBe("chip");
+      expect(toggle).toHaveAttribute("aria-pressed", "false");
+      expect(toggle).toHaveAttribute("data-state", "off");
+      fireEvent.click(toggle);
+      expect(onPressedChange).toHaveBeenCalledWith(true, expect.anything());
+      expect(toggle).toHaveAttribute("aria-pressed", "true");
+      expect(toggle).toHaveAttribute("data-state", "on");
+    });
+
+    it("renders no class attribute without a className", () => {
+      render(<Toggle aria-label="Bold" variant="unstyled" />);
+      expect(screen.getByRole("button")).not.toHaveAttribute("class");
+    });
+
+    it("gives toggleVariants no classes of its own", () => {
+      expect(toggleVariants({ variant: "unstyled" })).toBe("");
+      expect(
+        toggleVariants({ className: "a", size: "sm", variant: "unstyled" }),
+      ).toBe("a");
+      expect(toggleVariants()).toContain("data-[state=on]:bg-accent");
+    });
   });
 });
