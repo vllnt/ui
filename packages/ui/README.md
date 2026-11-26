@@ -317,7 +317,7 @@ import {
 | `Switch` | `{ Switch }` | ui-sdk switch |
 | `Toggle` | `{ Toggle, toggleVariants }` | ui-sdk toggle |
 | `ToggleGroup` | `{ ToggleGroup, ToggleGroupItem }` | ui-sdk toggle group |
-| `InputOTP` | `{ InputOTP, InputOTPGroup, InputOTPSlot, InputOTPSeparator }` | OTP input via `input-otp` |
+| `InputOTP` | `{ InputOTP, InputOTPGroup, InputOTPSlot, InputOTPSeparator }` | ui-sdk OTP input |
 | `Label` | `{ Label }` | ui-sdk label |
 | `Calendar` | `{ Calendar }` | Date picker via `react-day-picker` |
 
@@ -331,7 +331,7 @@ import {
 | `Separator` | `{ Separator }` | `div` line; `role="separator"` when not decorative |
 | `ResizablePanel` | `{ ResizablePanel, ResizablePanelGroup, ResizableHandle }` | Via `react-resizable-panels` |
 | `Collapsible` | `{ Collapsible, CollapsibleTrigger, CollapsibleContent }` | ui-sdk collapsible |
-| `Carousel` | `{ Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext }` | Via `embla-carousel-react` |
+| `Carousel` | `{ Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext }` | ui-sdk carousel |
 | `Tabs` | `{ Tabs, TabsList, TabsTrigger, TabsContent }` | ui-sdk tabs |
 | `Accordion` | `{ Accordion, AccordionItem, AccordionTrigger, AccordionContent }` | ui-sdk accordion |
 
@@ -346,7 +346,7 @@ import {
 | `Popover` | `{ Popover, PopoverTrigger, PopoverContent }` | ui-sdk popover |
 | `Tooltip` | `{ Tooltip, TooltipTrigger, TooltipContent, TooltipProvider }` | ui-sdk tooltip (wrap app in `TooltipProvider`) |
 | `HoverCard` | `{ HoverCard, HoverCardTrigger, HoverCardContent }` | ui-sdk hover card |
-| `Toast` | `{ toast, Toaster }` | Toast notifications via `sonner`. Add `<Toaster />` to layout, trigger with `toast()` |
+| `Toast` | `{ toast, Toaster }` | Toast notifications via ui-sdk toast. Add `<Toaster />` to layout, trigger with `toast()` |
 | `Alert` | `{ Alert, AlertTitle, AlertDescription, alertVariants }` | Static alert banner |
 | `Badge` | `{ Badge, badgeVariants }` | Inline status label. Variants: default, secondary, destructive, outline |
 | `Skeleton` | `{ Skeleton }` | Loading placeholder |
