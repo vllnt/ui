@@ -162,6 +162,8 @@ export function Example() {
 | Import Path | What |
 |-------------|------|
 | `@vllnt/ui` | All components, types, and utilities |
+| `@vllnt/ui/<component>` | One component directory, for example `@vllnt/ui/button`, `@vllnt/ui/toggle-group`, `@vllnt/ui/dropdown-menu`: the same names the root exports from it |
+| `@vllnt/ui/utils` | `cn` |
 | `@vllnt/ui/tailwind-preset` | Tailwind CSS preset config |
 | `@vllnt/ui/styles.css` | Full styles (Tailwind base + theme variables + utilities) |
 | `@vllnt/ui/themes/default.css` | Theme CSS variables only (no Tailwind base) |
@@ -171,6 +173,16 @@ export function Example() {
 ### Bundle size
 
 Import everything from `@vllnt/ui`; you pay only for what you use. The package ships one ESM file per module and marks only its CSS files as having side effects, so any bundler that honours `sideEffects` (webpack, Turbopack, Rollup, Vite, esbuild) drops the components you do not import. Heavy dependencies, such as the `CodeBlock` syntax highlighter and the `FlowDiagram` image export, load through `import()` only when used.
+
+**Next.js App Router: import by subpath.** A server component that imports from the root `@vllnt/ui` makes Next treat every `"use client"` module the root re-exports as a client reference, so the route ships client JS for components it never renders. Import from the component's subpath instead:
+
+```tsx
+import { Button } from "@vllnt/ui/button"; // server-safe: no client JS
+import { ToggleGroup, ToggleGroupItem } from "@vllnt/ui/toggle-group"; // client component, and only its own code
+import { cn } from "@vllnt/ui/utils";
+```
+
+A subpath is named after the component's directory (`src/components/<level>/<name>`) and exports exactly what the root exports from it. Subpaths are generated from the root barrel at build time, so the two cannot drift.
 
 Every component pays a shared base of about 20 KB minified for `cn` (`clsx` and `tailwind-merge`). Most single components then add a few KB on top: `Button` is about 25 KB in total and `Dialog` about 65 KB. CI fails if a named import grows past its budget, or if any module grows past 320 KB up front (`pnpm -F @vllnt/ui size`).
 

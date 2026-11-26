@@ -1,5 +1,5 @@
 import { spawnSync } from "node:child_process";
-import { readFileSync, statSync } from "node:fs";
+import { readdirSync, readFileSync, statSync } from "node:fs";
 import {
   mkdir,
   mkdtemp,
@@ -25,7 +25,9 @@ function run(command, arguments_, cwd = packageDirectory) {
     stdio: ["ignore", "pipe", "inherit"],
   });
   if (result.status !== 0) {
-    throw new Error(`${command} ${arguments_.join(" ")} failed.`);
+    throw new Error(
+      `${command} ${arguments_.join(" ")} failed.\n${result.stdout ?? ""}`,
+    );
   }
   return result.stdout.trim();
 }
@@ -39,10 +41,26 @@ function assertFile(path, field) {
   }
 }
 
+/** Names of the `@vllnt/ui/<name>` subpaths in a packed package. */
+function packedSubpaths(packedDirectory) {
+  const names = readdirSync(join(packedDirectory, "dist/subpaths"))
+    .filter((file) => file.endsWith(".js"))
+    .map((file) => file.slice(0, -".js".length));
+  if (names.length === 0) throw new Error("Packed dist/subpaths is empty.");
+  return names;
+}
+
 function assertExportTargets(value, path, packedDirectory) {
   if (typeof value === "string") {
     if (!value.startsWith("./") || value.startsWith("./src/")) {
       throw new Error(`Packed ${path} has an invalid target: ${value}.`);
+    }
+    if (value.includes("*")) {
+      // A subpath pattern: every subpath must have this target file.
+      for (const name of packedSubpaths(packedDirectory)) {
+        assertFile(join(packedDirectory, value.replaceAll("*", name)), path);
+      }
+      return;
     }
     assertFile(join(packedDirectory, value), path);
     return;
@@ -200,10 +218,96 @@ async function assertNodeResolution(manifest, packedDirectory) {
       'if (!preset.default) throw new Error("Missing tailwind preset default export.");',
       'const { default: manifest } = await import("@vllnt/ui/package.json", { with: { type: "json" } });',
       'if (manifest.name !== "@vllnt/ui") throw new Error(`Invalid package.json export: ${manifest.name}`);',
+      // Every subpath resolves to its own entry and exports the same values as
+      // the root, as the same module instances.
+      `const subpaths = ${JSON.stringify(packedSubpaths(packedDirectory))};`,
+      'const root = await import("@vllnt/ui");',
+      "for (const name of subpaths) {",
+      '  const resolved = import.meta.resolve(`@vllnt/ui/${name}`);',
+      '  if (!resolved.endsWith(`/dist/subpaths/${name}.js`)) throw new Error(`Invalid subpath entry: ${resolved}`);',
+      "  const subpath = await import(`@vllnt/ui/${name}`);",
+      "  for (const [key, value] of Object.entries(subpath)) {",
+      '    if (root[key] !== value) throw new Error(`@vllnt/ui/${name} exports ${key}, which differs from the root export.`);',
+      "  }",
+      "}",
       "",
     ].join("\n"),
   );
-  run(process.execPath, [consumer], temporaryDirectory);
+  // Dependencies import their own CSS (for example @xyflow/react), which a
+  // bundler handles and Node does not, so the check loads `.css` as empty.
+  await writeFile(
+    join(temporaryDirectory, "css-hooks.mjs"),
+    [
+      "export async function load(url, context, nextLoad) {",
+      '  if (url.endsWith(".css")) return { format: "module", shortCircuit: true, source: "" };',
+      "  return nextLoad(url, context);",
+      "}",
+      "",
+    ].join("\n"),
+  );
+  await writeFile(
+    join(temporaryDirectory, "register-css-hooks.mjs"),
+    'import { register } from "node:module";\nregister("./css-hooks.mjs", import.meta.url);\n',
+  );
+  run(
+    process.execPath,
+    ["--import", "./register-css-hooks.mjs", consumer],
+    temporaryDirectory,
+  );
+}
+
+/**
+ * Type-checks a consumer that imports a type and a value from every subpath,
+ * under the two module resolutions consumers use.
+ */
+async function assertSubpathTypes(packedDirectory) {
+  const nodeModulesDirectory = join(temporaryDirectory, "node_modules");
+  await Promise.all(
+    ["@types/react", "@types/react-dom"].map((name) =>
+      linkInstalledPackage(name, nodeModulesDirectory),
+    ),
+  );
+  const lines = packedSubpaths(packedDirectory).map(
+    (name, index) => `import * as subpath${index} from "@vllnt/ui/${name}";`,
+  );
+  lines.push(
+    'import { Button, type ButtonProps } from "@vllnt/ui/button";',
+    'import { cn } from "@vllnt/ui/utils";',
+    "const props: ButtonProps = { variant: \"outline\" };",
+    "export const checked = [Button, cn, props, " +
+      lines.map((_, index) => `subpath${index}`).join(", ") +
+      "];",
+    "",
+  );
+  await writeFile(join(temporaryDirectory, "consumer.ts"), lines.join("\n"));
+
+  const tsc = join(packageDirectory, "node_modules/typescript/bin/tsc");
+  for (const [module, moduleResolution] of [
+    ["nodenext", "nodenext"],
+    ["esnext", "bundler"],
+  ]) {
+    run(
+      process.execPath,
+      [
+        tsc,
+        "--noEmit",
+        "--strict",
+        "--skipLibCheck",
+        "--jsx",
+        "react-jsx",
+        "--module",
+        module,
+        "--moduleResolution",
+        moduleResolution,
+        "--target",
+        "es2022",
+        "--types",
+        "react",
+        "consumer.ts",
+      ],
+      temporaryDirectory,
+    );
+  }
 }
 
 try {
@@ -251,9 +355,10 @@ try {
 
   await assertResolvableRelativeSpecifiers(packedDirectory);
   await assertNodeResolution(manifest, packedDirectory);
+  await assertSubpathTypes(packedDirectory);
 
   console.log(
-    `Packed web package resolves every export, internal ESM specifier, root entry, and tailwind preset from published files (${manifest.version}).`,
+    `Packed web package resolves every export, internal ESM specifier, root entry, tailwind preset and subpath (runtime and types) from published files (${manifest.version}).`,
   );
 } finally {
   await rm(temporaryDirectory, { force: true, recursive: true });

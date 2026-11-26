@@ -123,6 +123,11 @@ export function Example() {
 }
 ```
 
+In Next.js App Router server components, import by subpath so the route ships
+only that component's client JS: `import { Button } from "@vllnt/ui/button"`,
+`import { cn } from "@vllnt/ui/utils"`. The subpath is the component's
+directory name and exports the same names as the root.
+
 ### Export surface
 
 | Import path | What |
