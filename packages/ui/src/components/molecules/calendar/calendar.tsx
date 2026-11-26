@@ -308,11 +308,7 @@ function CalendarMonth({
           </CalendarWeekdays>
           <tbody>
             {grid.weeks.map((week) => (
-              <tr
-                className={calendarLayout.week}
-                key={week[0]?.date}
-                role="row"
-              >
+              <tr className={calendarLayout.week} key={week[0]?.date}>
                 {week.map((cell) => (
                   <DayCell
                     cell={cell}
