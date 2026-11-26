@@ -7,18 +7,16 @@ import { expect, test } from "@playwright/test";
  * where they failed. Lighthouse runs the same axe rules, in both color schemes.
  */
 
-declare global {
-  interface Window {
-    axe: {
-      run: (
-        context: Document,
-        options: object,
-      ) => Promise<{
-        violations: { id: string; nodes: { target: unknown }[] }[];
-      }>;
-    };
-  }
-}
+type AxeWindow = {
+  axe: {
+    run: (
+      context: Document,
+      options: object,
+    ) => Promise<{
+      violations: { id: string; nodes: { target: unknown }[] }[];
+    }>;
+  };
+};
 
 const axeScriptPath = createRequire(import.meta.url).resolve(
   "axe-core/axe.min.js",
@@ -39,7 +37,7 @@ for (const colorScheme of ["light", "dark"] as const) {
 
         const { violations } = await page.evaluate(
           (rules) =>
-            window.axe.run(document, {
+            (window as unknown as AxeWindow).axe.run(document, {
               runOnly: { type: "rule", values: rules },
             }),
           AXE_RULES,
