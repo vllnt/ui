@@ -48,22 +48,41 @@ jobs:
               index=$((index + 1))
               flags="--only-categories=seo,accessibility,best-practices,performance --output=json --quiet --chrome-flags=--headless=new"
               if [ "$preset" = desktop ]; then flags="$flags --preset=desktop"; fi
-              # shellcheck disable=SC2086
-              npx --yes lighthouse@13.6.0 "$url" $flags --output-path="reports/$index-$preset.json"
+              # A run can fail once on a slow response or a trace error, so try up to three times.
+              audited=false
+              for attempt in 1 2 3; do
+                # shellcheck disable=SC2086
+                if npx --yes lighthouse@13.6.0 "$url" $flags --output-path="reports/$index-$preset.json"; then
+                  audited=true
+                  break
+                fi
+                echo "::warning::Lighthouse attempt $attempt failed for $url ($preset)"
+                sleep 30
+              done
+              if [ "$audited" = false ]; then
+                echo "$url $preset" >> failed.txt
+              fi
               sleep 20
             done
           done
 
       - name: Write scores to the job summary
+        if: always()
         run: |
           node --input-type=module <<'SCRIPT'
-          import { readdirSync, readFileSync, appendFileSync } from "node:fs";
+          import { appendFileSync, existsSync, readdirSync, readFileSync } from "node:fs";
           const rows = readdirSync("reports").sort((a, b) => parseInt(a) - parseInt(b)).map((file) => {
             const report = JSON.parse(readFileSync(`reports/${file}`, "utf8"));
             const score = (id) => { const value = report.categories[id]?.score; return typeof value === "number" ? Math.round(value * 100) : "n/a"; };
             const preset = file.includes("desktop") ? "desktop" : "mobile";
             return `| ${report.finalDisplayedUrl} | ${preset} | ${score("seo")} | ${score("accessibility")} | ${score("best-practices")} | ${score("performance")} |`;
           });
+          if (existsSync("failed.txt")) {
+            for (const line of readFileSync("failed.txt", "utf8").trim().split("\n")) {
+              const [url, preset] = line.split(" ");
+              rows.push(`| ${url} | ${preset} | failed | failed | failed | failed |`);
+            }
+          }
           const table = ["| Page | Form factor | SEO | Accessibility | Best practices | Performance |", "| --- | --- | --- | --- | --- | --- |", ...rows].join("\n");
           appendFileSync(process.env.GITHUB_STEP_SUMMARY, `## Lighthouse: ${process.env.LABEL}\n\n${table}\n`);
           console.log(table);
@@ -71,8 +90,16 @@ jobs:
         env:
           LABEL: ${{ inputs.label }}
 
-      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+      - if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: lighthouse-${{ inputs.label }}
           path: reports/
           retention-days: 90
+
+      - name: Fail when a page could not be audited
+        run: |
+          if [ -f failed.txt ]; then
+            echo "::error::Lighthouse could not audit: $(paste -sd ', ' failed.txt)"
+            exit 1
+          fi
