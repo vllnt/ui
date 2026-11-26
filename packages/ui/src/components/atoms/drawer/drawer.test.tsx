@@ -408,3 +408,27 @@ describe("Drawer dismissal", () => {
     });
   });
 });
+
+describe("DrawerContent overlay", () => {
+  it("draws the veil by default and none with overlay none", () => {
+    const { unmount } = render(
+      <Drawer defaultOpen>
+        <DrawerContent>
+          <DrawerTitle>Title</DrawerTitle>
+        </DrawerContent>
+      </Drawer>,
+    );
+    expect(document.body.querySelector("[data-vaul-overlay]")).not.toBeNull();
+    unmount();
+
+    render(
+      <Drawer defaultOpen>
+        <DrawerContent overlay="none">
+          <DrawerTitle>Title</DrawerTitle>
+        </DrawerContent>
+      </Drawer>,
+    );
+    expect(document.body.querySelector("[data-vaul-overlay]")).toBeNull();
+    expect(screen.getByRole("dialog")).toBeInTheDocument();
+  });
+});

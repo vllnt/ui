@@ -1,7 +1,7 @@
 import { useState } from "react";
 
-import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, it, vi } from "vitest";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import {
   TableOfContentsPanel,
@@ -58,7 +58,9 @@ describe("TableOfContentsPanel", () => {
     const handleClose = vi.fn();
     render(<TableOfContentsPanel {...baseProps} onClose={handleClose} />);
     const backdrop = screen.getByTestId("toc-backdrop");
-    fireEvent.keyDown(window, { key: "Escape" });
+    fireEvent.keyDown(screen.getByRole("dialog"), { key: "Escape" });
+    fireEvent.pointerDown(backdrop);
+    fireEvent.pointerUp(backdrop);
     fireEvent.click(backdrop);
     expect(handleClose).toHaveBeenCalledTimes(2);
   });
@@ -82,6 +84,17 @@ describe("TableOfContentsPanel", () => {
 });
 
 describe("TableOfContentsPanel focus management", () => {
+  // jsdom has no layout: report one client rect so ui-sdk sees the controls as visible.
+  beforeEach(() => {
+    vi.spyOn(Element.prototype, "getClientRects").mockReturnValue(
+      Object.assign([new DOMRect(0, 0, 1, 1)], { item: () => null }),
+    );
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
   function Harness() {
     const [open, setOpen] = useState(false);
     return (
@@ -105,15 +118,17 @@ describe("TableOfContentsPanel focus management", () => {
     );
   }
 
-  it("keeps Tab inside the panel and returns focus to the opener", () => {
+  it("keeps Tab inside the panel and returns focus to the opener", async () => {
     render(<Harness />);
     const opener = screen.getByRole("button", { name: "opener" });
     opener.focus();
     fireEvent.click(opener);
-    const close = screen.getByRole("button", {
+    const close = await screen.findByRole("button", {
       name: "Close table of contents",
     });
-    expect(close).toHaveFocus();
+    await waitFor(() => {
+      expect(close).toHaveFocus();
+    });
 
     const panel = screen.getByRole("dialog");
     const buttons = panel.querySelectorAll<HTMLElement>("button");
@@ -129,6 +144,36 @@ describe("TableOfContentsPanel focus management", () => {
     expect(panel.contains(document.activeElement)).toBe(true);
 
     fireEvent.click(close);
-    expect(opener).toHaveFocus();
+    await waitFor(() => {
+      expect(opener).toHaveFocus();
+    });
+  });
+});
+
+describe("TableOfContentsPanel open and onOpenChange", () => {
+  it("opens with open, and reports a close through onOpenChange and onClose", () => {
+    const handleClose = vi.fn();
+    const handleOpenChange = vi.fn();
+    render(
+      <TableOfContentsPanel
+        {...baseProps}
+        isOpen={undefined}
+        onClose={handleClose}
+        onOpenChange={handleOpenChange}
+        open
+      />,
+    );
+
+    fireEvent.click(screen.getByLabelText("Close table of contents"));
+
+    expect(handleOpenChange).toHaveBeenCalledWith(false);
+    expect(handleClose).toHaveBeenCalledTimes(1);
+  });
+
+  it("draws one close button, the header's, and the glass scrim", () => {
+    render(<TableOfContentsPanel {...baseProps} />);
+
+    expect(screen.getAllByRole("button", { name: /close/i })).toHaveLength(1);
+    expect(screen.getByTestId("toc-backdrop")).toHaveClass("vllnt-glass-scrim");
   });
 });

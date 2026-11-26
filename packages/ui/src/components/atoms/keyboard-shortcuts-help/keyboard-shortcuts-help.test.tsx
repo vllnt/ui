@@ -1,7 +1,7 @@
 import { useState } from "react";
 
-import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, it, vi } from "vitest";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { KeyboardShortcutsHelp } from "./keyboard-shortcuts-help";
 
@@ -44,7 +44,10 @@ describe("KeyboardShortcutsHelp", () => {
   });
 
   it.each([
-    ["Escape is pressed", () => fireEvent.keyDown(window, { key: "Escape" })],
+    [
+      "Escape is pressed",
+      () => fireEvent.keyDown(screen.getByRole("dialog"), { key: "Escape" }),
+    ],
     [
       "the close button is clicked",
       () => fireEvent.click(screen.getByRole("button")),
@@ -64,6 +67,17 @@ describe("KeyboardShortcutsHelp", () => {
 });
 
 describe("KeyboardShortcutsHelp focus management", () => {
+  // jsdom has no layout: report one client rect so ui-sdk sees the controls as visible.
+  beforeEach(() => {
+    vi.spyOn(Element.prototype, "getClientRects").mockReturnValue(
+      Object.assign([new DOMRect(0, 0, 1, 1)], { item: () => null }),
+    );
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
   function Harness() {
     const [open, setOpen] = useState(false);
     return (
@@ -87,13 +101,17 @@ describe("KeyboardShortcutsHelp focus management", () => {
     );
   }
 
-  it("keeps Tab inside the dialog and returns focus to the opener", () => {
+  it("keeps Tab inside the dialog and returns focus to the opener", async () => {
     render(<Harness />);
     const opener = screen.getByRole("button", { name: "opener" });
     opener.focus();
     fireEvent.click(opener);
-    const close = screen.getByRole("button", { name: "Close shortcuts help" });
-    expect(close).toHaveFocus();
+    const close = await screen.findByRole("button", {
+      name: "Close shortcuts help",
+    });
+    await waitFor(() => {
+      expect(close).toHaveFocus();
+    });
 
     fireEvent.keyDown(close, { key: "Tab" });
     expect(close).toHaveFocus();
@@ -101,6 +119,47 @@ describe("KeyboardShortcutsHelp focus management", () => {
     expect(close).toHaveFocus();
 
     fireEvent.click(close);
-    expect(opener).toHaveFocus();
+    await waitFor(() => {
+      expect(opener).toHaveFocus();
+    });
+  });
+});
+
+describe("KeyboardShortcutsHelp open and onOpenChange", () => {
+  it("opens with open, and reports a close through onOpenChange and onClose", () => {
+    const handleClose = vi.fn();
+    const handleOpenChange = vi.fn();
+    render(
+      <KeyboardShortcutsHelp
+        onClose={handleClose}
+        onOpenChange={handleOpenChange}
+        open
+        shortcuts={shortcuts}
+      />,
+    );
+    expect(screen.getByRole("dialog")).toBeInTheDocument();
+
+    fireEvent.keyDown(screen.getByRole("dialog"), { key: "Escape" });
+
+    expect(handleOpenChange).toHaveBeenCalledWith(false);
+    expect(handleClose).toHaveBeenCalledTimes(1);
+  });
+
+  it("names the dialog by its title and locks page scroll while open", async () => {
+    const { rerender } = render(
+      <KeyboardShortcutsHelp isOpen shortcuts={shortcuts} title="Hotkeys" />,
+    );
+    expect(screen.getByRole("dialog", { name: "Hotkeys" })).toHaveAttribute(
+      "aria-modal",
+      "true",
+    );
+    await waitFor(() => {
+      expect(document.documentElement.style.overflow).toBe("hidden");
+    });
+
+    rerender(<KeyboardShortcutsHelp shortcuts={shortcuts} />);
+    await waitFor(() => {
+      expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+    });
   });
 });

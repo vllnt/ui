@@ -192,3 +192,50 @@ describe("Tooltip delay", () => {
     );
   });
 });
+
+describe("Tooltip dismissal handlers", () => {
+  const renderOpen = (
+    handlers: React.ComponentProps<typeof TooltipContent>,
+  ) => {
+    const onOpenChange = vi.fn();
+    render(
+      <TooltipProvider>
+        <Tooltip defaultOpen onOpenChange={onOpenChange}>
+          <TooltipTrigger>Trigger</TooltipTrigger>
+          <TooltipContent {...handlers}>Tip body</TooltipContent>
+        </Tooltip>
+      </TooltipProvider>,
+    );
+    return onOpenChange;
+  };
+
+  it("keeps the tooltip open when onEscapeKeyDown prevents the default", () => {
+    const onEscapeKeyDown = vi.fn((event: KeyboardEvent) => {
+      event.preventDefault();
+    });
+    const onOpenChange = renderOpen({ onEscapeKeyDown });
+    fireEvent.keyDown(screen.getByText("Trigger"), { key: "Escape" });
+    expect(onEscapeKeyDown).toHaveBeenCalledTimes(1);
+    expect(onOpenChange).not.toHaveBeenCalled();
+  });
+
+  it("closes on Escape when onEscapeKeyDown leaves the default alone", () => {
+    const onEscapeKeyDown = vi.fn();
+    const onOpenChange = renderOpen({ onEscapeKeyDown });
+    fireEvent.keyDown(screen.getByText("Trigger"), { key: "Escape" });
+    expect(onEscapeKeyDown).toHaveBeenCalledTimes(1);
+    expect(onOpenChange).toHaveBeenCalledWith(false, expect.anything());
+  });
+
+  it("accepts forceMount without putting it on the element", () => {
+    render(
+      <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger>Trigger</TooltipTrigger>
+          <TooltipContent forceMount>Tip body</TooltipContent>
+        </Tooltip>
+      </TooltipProvider>,
+    );
+    expect(screen.getByText("Tip body")).not.toHaveAttribute("forcemount");
+  });
+});

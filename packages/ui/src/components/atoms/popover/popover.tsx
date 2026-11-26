@@ -16,8 +16,15 @@ import {
   openState,
   Slot,
   useElementRef,
+  useLazyElementRef,
   withDataAttributes,
 } from "../../../lib/ui-sdk";
+import {
+  DismissContext,
+  type DismissHandlers,
+  useDismissRoot,
+  useRegisterDismissHandlers,
+} from "../../../lib/ui-sdk-dismiss";
 import { cn } from "../../../lib/utils";
 
 type AnchorContextValue = {
@@ -28,13 +35,19 @@ type AnchorContextValue = {
 const AnchorContext = React.createContext<AnchorContextValue | null>(null);
 
 /** Holds the open state. Renders no element. */
-const Popover = (props: React.ComponentProps<typeof PopoverRoot>) => {
+const Popover = ({
+  onOpenChange,
+  ...props
+}: React.ComponentProps<typeof PopoverRoot>) => {
   const [anchor, setAnchor] = React.useState<HTMLElement | null>(null);
   const value = React.useMemo(() => ({ anchor, setAnchor }), [anchor]);
+  const dismiss = useDismissRoot(onOpenChange);
 
   return (
     <AnchorContext value={value}>
-      <PopoverRoot {...props} />
+      <DismissContext value={dismiss.ref}>
+        <PopoverRoot onOpenChange={dismiss.handleOpenChange} {...props} />
+      </DismissContext>
     </AnchorContext>
   );
 };
@@ -92,9 +105,12 @@ const PopoverAnchor = ({
 };
 PopoverAnchor.displayName = "PopoverAnchor";
 
-type ContentProps = MaterialProps &
+type ContentProps = DismissHandlers &
+  MaterialProps &
   Omit<React.ComponentProps<typeof PopoverContentPart>, "render"> & {
     asChild?: boolean;
+    /** Keeps the panel in the page while closed, like Radix's `forceMount`. */
+    forceMount?: boolean;
     /** Radix-compatible: `preventDefault()` keeps focus where the handler put it. */
     onCloseAutoFocus?: (event: Event) => void;
     /** Radix-compatible: `preventDefault()` keeps focus where the handler put it. */
@@ -111,17 +127,28 @@ const PopoverContent = ({
   children,
   className,
   finalFocus,
+  forceMount,
   initialFocus,
   material = "glass",
   onCloseAutoFocus,
+  onEscapeKeyDown,
+  onFocusOutside,
+  onInteractOutside,
   onOpenAutoFocus,
+  onPointerDownOutside,
   ref,
   sideOffset = 4,
   ...props
 }: ContentProps) => {
   const anchor = React.use(AnchorContext)?.anchor ?? undefined;
-  const [content, contentReference] = useElementRef(ref);
+  const [content, contentReference] = useLazyElementRef(ref);
   const slot = asChildProps({ asChild, children });
+  useRegisterDismissHandlers({
+    onEscapeKeyDown,
+    onFocusOutside,
+    onInteractOutside,
+    onPointerDownOutside,
+  });
   // Radix gave the content no name of its own, so an `aria-label` named it.
   // ui-sdk labels it by the trigger; drop that when the caller names it.
   const named =
@@ -136,14 +163,17 @@ const PopoverContent = ({
       align={align}
       anchor={anchor}
       className={cn(
-        "vllnt-glass-floating vllnt-glass-dense z-50 w-72 rounded-md border p-4 text-popover-foreground outline-none [--radix-popover-content-available-height:var(--available-height)] [--radix-popover-content-available-width:var(--available-width)] [--radix-popover-content-transform-origin:var(--transform-origin)] [--radix-popover-trigger-height:var(--anchor-height)] [--radix-popover-trigger-width:var(--anchor-width)] data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
+        "vllnt-glass-floating vllnt-glass-dense z-50 w-72 rounded-md border p-4 text-popover-foreground outline-none vllnt-radix-popover data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
         className,
       )}
       data-material={material}
-      finalFocus={finalFocus ?? closeAutoFocus(onCloseAutoFocus, () => content)}
-      initialFocus={
-        initialFocus ?? openAutoFocus(() => content, onOpenAutoFocus)
+      finalFocus={
+        finalFocus ?? closeAutoFocus(onCloseAutoFocus, () => content.current)
       }
+      initialFocus={
+        initialFocus ?? openAutoFocus(() => content.current, onOpenAutoFocus)
+      }
+      keepMounted={forceMount}
       ref={contentReference}
       render={withDataAttributes("div", attributes, slot.render)}
       sideOffset={sideOffset}

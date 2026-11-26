@@ -1,6 +1,7 @@
 import type { Edge, FitViewOptions, Node } from "@xyflow/react";
 
 import type { Material } from "../../../lib/material";
+import type { OpenAliases } from "../../../lib/ui-sdk-dialog";
 
 export type FlowDiagramNode = {
   data: {
@@ -64,11 +65,7 @@ export type FlowControlsProps = {
 export type FlowFullscreenProps = {
   /** Children to render in fullscreen */
   children: React.ReactNode;
-  /** Whether fullscreen is active */
-  isOpen: boolean;
-  /** Callback to close fullscreen */
-  onClose: () => void;
-};
+} & OpenAliases;
 
 export type UseFlowDiagramOptions = {
   /** Enable copy capability */

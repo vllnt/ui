@@ -1,15 +1,14 @@
 "use client";
 
-import { memo, useEffect, useRef } from "react";
+import { memo } from "react";
 
 import type { ReactNode } from "react";
 
 import type { MaterialProps } from "../../../lib/material";
 import type { HeadingTag } from "../../../lib/types";
-import { useBodyScrollLock } from "../../../lib/use-body-scroll-lock";
-import { useEscapeKey } from "../../../lib/use-escape-key";
-import { useFocusContainment } from "../../../lib/use-focus-containment";
+import { type OpenAliases, openAliases } from "../../../lib/ui-sdk-dialog";
 import { cn } from "../../../lib/utils";
+import { Sheet, SheetClose, SheetContent, SheetOverlay } from "../sheet/sheet";
 
 export type TOCSection = {
   id: string;
@@ -24,8 +23,6 @@ export type TableOfContentsPanelProps = {
   completedSections: Set<string>;
   completionCount: number;
   currentSectionIndex: number;
-  isOpen: boolean;
-  onClose: () => void;
   onReset?: () => void;
   onSelectSection: (index: number) => void;
   progressLabel?: string;
@@ -33,58 +30,18 @@ export type TableOfContentsPanelProps = {
   sections: TOCSection[];
   title?: string;
   totalSections: number;
-} & MaterialProps;
-
-function useTocPanelBehavior(
-  isOpen: boolean,
-  onClose: () => void,
-): {
-  closeButtonRef: React.RefObject<HTMLButtonElement | null>;
-  panelRef: React.RefObject<HTMLDivElement | null>;
-} {
-  const panelRef = useRef<HTMLDivElement>(null);
-  const closeButtonRef = useRef<HTMLButtonElement>(null);
-
-  // Declared before the focus effect so the opener gets recorded first.
-  useFocusContainment(panelRef, isOpen);
-
-  // Move focus to the close button when the panel opens.
-  useEffect(() => {
-    if (isOpen) {
-      closeButtonRef.current?.focus();
-    }
-  }, [isOpen]);
-
-  useEscapeKey(onClose, { enabled: isOpen, preventDefault: true });
-  useBodyScrollLock(isOpen);
-
-  return { closeButtonRef, panelRef };
-}
-
-function TocBackdrop({ onClose }: { onClose: () => void }): React.ReactNode {
-  return (
-    <div
-      aria-hidden="true"
-      className="vllnt-glass-scrim absolute inset-0"
-      data-testid="toc-backdrop"
-      onClick={onClose}
-    />
-  );
-}
+} & MaterialProps &
+  OpenAliases;
 
 type TocHeaderProps = {
-  closeButtonRef: React.RefObject<HTMLButtonElement | null>;
   closeIcon: ReactNode;
   Heading: HeadingTag;
-  onClose: () => void;
   title: string;
 };
 
 function TocHeader({
-  closeButtonRef,
   closeIcon,
   Heading,
-  onClose,
   title,
 }: TocHeaderProps): React.ReactNode {
   return (
@@ -92,12 +49,9 @@ function TocHeader({
       <Heading className="text-lg font-semibold" id="toc-title">
         {title}
       </Heading>
-      <button
+      <SheetClose
         aria-label="Close table of contents"
         className="flex size-8 items-center justify-center rounded-md hover:bg-secondary"
-        onClick={onClose}
-        ref={closeButtonRef}
-        type="button"
       >
         {closeIcon ?? (
           <svg
@@ -115,7 +69,7 @@ function TocHeader({
             />
           </svg>
         )}
-      </button>
+      </SheetClose>
     </div>
   );
 }
@@ -173,12 +127,8 @@ function TocProgress({
 
 type TocSectionListProps = Pick<
   TableOfContentsPanelProps,
-  | "completedSections"
-  | "currentSectionIndex"
-  | "onClose"
-  | "onSelectSection"
-  | "sections"
->;
+  "completedSections" | "currentSectionIndex" | "onSelectSection" | "sections"
+> & { onClose: () => void };
 
 function TocSectionList({
   completedSections,
@@ -258,47 +208,35 @@ function TableOfContentsPanelImpl({
   isOpen,
   material = "glass",
   onClose,
+  onOpenChange,
   onReset,
   onSelectSection,
+  open,
   progressLabel = "Progress",
   resetLabel = "Reset Progress",
   sections,
   title = "Table of Contents",
   totalSections,
 }: TableOfContentsPanelProps): React.ReactNode {
-  const { closeButtonRef, panelRef } = useTocPanelBehavior(isOpen, onClose);
-
-  if (!isOpen) return null;
+  const state = openAliases({ isOpen, onClose, onOpenChange, open });
 
   return (
-    <div
-      aria-labelledby="toc-title"
-      aria-modal="true"
-      className="fixed inset-0 z-50"
-      data-material={material}
-      // react-doctor-disable-next-line react-doctor/prefer-html-dialog -- useFocusContainment traps Tab, useEscapeKey closes and useBodyScrollLock locks scroll; a native <dialog> top layer would also sit above portalled popovers and toasts
-      role="dialog"
-    >
-      {/* Backdrop */}
-      <TocBackdrop onClose={onClose} />
-
-      {/* Panel */}
-      <div
+    <Sheet onOpenChange={state.handleOpenChange} open={state.open}>
+      <SheetOverlay data-testid="toc-backdrop" material={material} />
+      <SheetContent
+        aria-labelledby="toc-title"
         className={cn(
-          "vllnt-glass vllnt-glass-dense absolute right-0 top-0 h-full w-full max-w-md border-l",
+          // Plain glass shadow: the sheet's floating shadow drops.
+          "[--vllnt-glass-shadow:var(--shadow-glass)] w-full max-w-md gap-0 p-0 sm:max-w-md",
           className,
         )}
-        ref={panelRef}
+        closeButton={false}
+        material={material}
+        overlay="none"
       >
         <div className="flex h-full flex-col">
           {/* Header */}
-          <TocHeader
-            closeButtonRef={closeButtonRef}
-            closeIcon={closeIcon}
-            Heading={Heading}
-            onClose={onClose}
-            title={title}
-          />
+          <TocHeader closeIcon={closeIcon} Heading={Heading} title={title} />
 
           {/* Progress */}
           <TocProgress
@@ -311,7 +249,9 @@ function TableOfContentsPanelImpl({
           <TocSectionList
             completedSections={completedSections}
             currentSectionIndex={currentSectionIndex}
-            onClose={onClose}
+            onClose={() => {
+              state.handleOpenChange(false);
+            }}
             onSelectSection={onSelectSection}
             sections={sections}
           />
@@ -321,8 +261,8 @@ function TableOfContentsPanelImpl({
             <TocFooter onReset={onReset} resetLabel={resetLabel} />
           ) : null}
         </div>
-      </div>
-    </div>
+      </SheetContent>
+    </Sheet>
   );
 }
 

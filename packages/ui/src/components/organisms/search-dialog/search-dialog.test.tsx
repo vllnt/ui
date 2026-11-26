@@ -1,4 +1,10 @@
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import {
+  createEvent,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+} from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 
 import { SearchDialog, type SearchItem } from "./search-dialog";
@@ -226,12 +232,24 @@ describe("SearchDialog", () => {
     });
   });
 
-  it("opens with the keyboard shortcut", () => {
+  it.each([
+    ["Cmd+K", { metaKey: true }],
+    ["Ctrl+K", { ctrlKey: true }],
+  ])("opens with %s", async (_name, modifier) => {
     renderSearchDialog();
 
-    fireEvent.keyDown(window, { key: "k", metaKey: true });
+    fireEvent.keyDown(document.body, { key: "k", ...modifier });
 
-    expect(screen.getByRole("dialog")).toBeInTheDocument();
+    expect(await screen.findByRole("dialog")).toBeInTheDocument();
+  });
+
+  it("leaves other key combinations alone", () => {
+    renderSearchDialog();
+
+    fireEvent.keyDown(document.body, { key: "k" });
+    fireEvent.keyDown(document.body, { key: "j", metaKey: true });
+
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
   });
 
   it("shows the shortcut on the trigger with the Kbd atom", () => {
@@ -251,18 +269,153 @@ describe("SearchDialog", () => {
   it("ignores keyboard shortcuts from text inputs and when disabled", () => {
     const input = document.createElement("input");
     document.body.append(input);
+    input.focus();
     const { unmount } = renderSearchDialog();
 
-    fireEvent.keyDown(input, { key: "k", metaKey: true });
+    const typed = createEvent.keyDown(input, { key: "k", metaKey: true });
+    fireEvent(input, typed);
 
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+    // The field keeps its own Cmd+K: the search does not claim the key.
+    expect(typed.defaultPrevented).toBe(false);
     input.remove();
     unmount();
 
     renderSearchDialog({ enableKeyboardShortcut: false });
-    fireEvent.keyDown(window, { key: "k", metaKey: true });
+    fireEvent.keyDown(document.body, { key: "k", metaKey: true });
 
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+  });
+});
+
+describe("SearchDialog docs search", () => {
+  const placeholder = "Search docs and components...";
+
+  function openDocumentationSearch(
+    documentationSearch: (query: string) => Promise<SearchItem[]>,
+    props: Partial<Parameters<typeof SearchDialog>[0]> = {},
+  ) {
+    render(
+      <SearchDialog
+        docsSearch={documentationSearch}
+        items={componentItems}
+        onSelect={vi.fn()}
+        searchPlaceholder={placeholder}
+        {...props}
+      />,
+    );
+    fireEvent.click(screen.getByRole("button", { name: /search/i }));
+    fireEvent.click(screen.getByRole("tab", { name: "Docs" }));
+
+    return (value: string) => {
+      fireEvent.change(screen.getByPlaceholderText(placeholder), {
+        target: { value },
+      });
+    };
+  }
+
+  it("does not search below the minimum query length", async () => {
+    const documentationSearch = vi.fn().mockResolvedValue([]);
+    const type = openDocumentationSearch(documentationSearch);
+
+    type("d");
+    await new Promise((resolve) => {
+      setTimeout(resolve, 20);
+    });
+
+    expect(documentationSearch).not.toHaveBeenCalled();
+  });
+
+  it("honours minDocsSearchLength", async () => {
+    const documentationSearch = vi.fn().mockResolvedValue([]);
+    const type = openDocumentationSearch(documentationSearch, {
+      minDocsSearchLength: 4,
+    });
+
+    type("dar");
+    await new Promise((resolve) => {
+      setTimeout(resolve, 20);
+    });
+    expect(documentationSearch).not.toHaveBeenCalled();
+
+    type("dark");
+    await waitFor(() => {
+      expect(documentationSearch).toHaveBeenCalledWith("dark");
+    });
+  });
+
+  it("shows no results when the search rejects", async () => {
+    const documentationSearch = vi.fn().mockRejectedValue(new Error("offline"));
+    const type = openDocumentationSearch(documentationSearch, {
+      docsEmptyText: "No docs",
+    });
+
+    type("dark");
+
+    expect(await screen.findByText("No docs")).toBeInTheDocument();
+  });
+
+  it("shows the loading text while the search runs, then the results", async () => {
+    const resolvers: ((items: SearchItem[]) => void)[] = [];
+    const documentationSearch = vi.fn().mockImplementation(
+      () =>
+        new Promise<SearchItem[]>((done) => {
+          resolvers.push(done);
+        }),
+    );
+    const type = openDocumentationSearch(documentationSearch);
+
+    type("dark");
+    expect(await screen.findByText("Searching docs...")).toBeInTheDocument();
+
+    resolvers[0]?.([{ id: "docs:/dark", title: "Dark mode" }]);
+
+    expect(await screen.findByText("Dark mode")).toBeInTheDocument();
+    expect(screen.queryByText("Searching docs...")).not.toBeInTheDocument();
+  });
+
+  it("keeps the answer to the latest query when an older one arrives late", async () => {
+    const pending = new Map<string, (items: SearchItem[]) => void>();
+    const documentationSearch = vi.fn().mockImplementation(
+      (query: string) =>
+        new Promise<SearchItem[]>((done) => {
+          pending.set(query, done);
+        }),
+    );
+    const type = openDocumentationSearch(documentationSearch);
+
+    type("dark");
+    await waitFor(() => {
+      expect(documentationSearch).toHaveBeenCalledWith("dark");
+    });
+    type("light");
+    await waitFor(() => {
+      expect(documentationSearch).toHaveBeenCalledWith("light");
+    });
+
+    pending.get("light")?.([{ id: "docs:/light", title: "Light theme" }]);
+    expect(await screen.findByText("Light theme")).toBeInTheDocument();
+    pending.get("dark")?.([{ id: "docs:/dark", title: "Dark theme" }]);
+    await new Promise((resolve) => {
+      setTimeout(resolve, 20);
+    });
+
+    expect(screen.queryByText("Dark theme")).not.toBeInTheDocument();
+    expect(screen.getByText("Light theme")).toBeInTheDocument();
+  });
+
+  it("drops the docs results when the scope goes back to components", async () => {
+    const documentationSearch = vi
+      .fn()
+      .mockResolvedValue([{ id: "docs:/dark", title: "Dark mode" }]);
+    const type = openDocumentationSearch(documentationSearch);
+
+    type("dark");
+    expect(await screen.findByText("Dark mode")).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("tab", { name: "Components" }));
+
+    expect(screen.queryByText("Dark mode")).not.toBeInTheDocument();
   });
 });
 

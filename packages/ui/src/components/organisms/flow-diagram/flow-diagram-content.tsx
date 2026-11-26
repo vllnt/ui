@@ -2,24 +2,32 @@
 
 import "@xyflow/react/dist/style.css";
 
-import { memo, useCallback, useEffect } from "react";
+import { lazy, memo, Suspense, useCallback, useEffect } from "react";
 
 import {
   type Node,
   type NodeMouseHandler,
   ReactFlowProvider,
 } from "@xyflow/react";
+import type { ReactNode } from "react";
 
 import { cn } from "../../../lib/utils";
 
 import { FlowCanvas } from "./flow-canvas";
-import { FlowFullscreen } from "./flow-fullscreen";
 import type {
   FlowDiagramEdge,
   FlowDiagramNode,
   FlowDiagramProps,
 } from "./types";
 import { useFlowDiagram } from "./use-flow-diagram";
+
+// The ui-sdk dialog loads when a diagram first goes fullscreen, not with the
+// canvas; the placeholder in the page holds the diagram's place until then.
+const FlowFullscreen = lazy(() =>
+  import("./flow-fullscreen").then((module_) => ({
+    default: module_.FlowFullscreen,
+  })),
+);
 
 /**
  * Validates nodes and edges, logging warnings for common issues.
@@ -53,6 +61,34 @@ function validateFlowData(
       nodesWithoutPosition.map((n) => n.id),
     );
   }
+}
+
+/**
+ * The diagram in fullscreen: a placeholder holds its place in the page while
+ * the dialog loads, then the dialog shows the canvas.
+ */
+function FlowFullscreenView({
+  children,
+  className,
+  height,
+  onClose,
+}: Pick<FlowDiagramProps, "className" | "height"> & {
+  children: ReactNode;
+  onClose: () => void;
+}) {
+  return (
+    <>
+      <div
+        className={cn("rounded-lg border border-border bg-muted/50", className)}
+        style={{ height }}
+      />
+      <Suspense fallback={null}>
+        <FlowFullscreen isOpen onClose={onClose}>
+          {children}
+        </FlowFullscreen>
+      </Suspense>
+    </>
+  );
 }
 
 const FlowDiagramInner = memo(function FlowDiagramInner({
@@ -119,18 +155,13 @@ const FlowDiagramInner = memo(function FlowDiagramInner({
 
   if (isFullscreen) {
     return (
-      <>
-        <div
-          className={cn(
-            "rounded-lg border border-border bg-muted/50",
-            className,
-          )}
-          style={{ height }}
-        />
-        <FlowFullscreen isOpen={isFullscreen} onClose={closeFullscreen}>
-          <FlowCanvas {...canvasProps} />
-        </FlowFullscreen>
-      </>
+      <FlowFullscreenView
+        className={className}
+        height={height}
+        onClose={closeFullscreen}
+      >
+        <FlowCanvas {...canvasProps} />
+      </FlowFullscreenView>
     );
   }
 

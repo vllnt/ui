@@ -15,131 +15,58 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { X } from "lucide-react";
 
 import type { MaterialProps } from "../../../lib/material";
+import type { NarrowPartProps } from "../../../lib/ui-sdk";
 import {
-  type AsChildProps,
-  asChildProps,
-  closeAutoFocus,
-  type DataAttributes,
-  type NarrowPartProps,
-  openAutoFocus,
-  openState,
-  useElementRef,
-  withDataAttributes,
-} from "../../../lib/ui-sdk";
-import {
-  DismissContext,
-  type DismissHandlers,
-  useDismissRoot,
-  useRegisterDismissHandlers,
-} from "../../../lib/ui-sdk-dismiss";
+  createDialogParts,
+  type DialogContentOptions,
+  useDialogPopup,
+} from "../../../lib/ui-sdk-dialog";
+import type { DismissHandlers } from "../../../lib/ui-sdk-dismiss";
 import { cn } from "../../../lib/utils";
 
-const contentAttributes =
-  (named: boolean) =>
-  (state: { open: boolean }): DataAttributes => ({
-    ...openState(state),
-    ...(named ? { "aria-labelledby": undefined } : {}),
-  });
+const parts = createDialogParts(
+  "Sheet",
+  {
+    Backdrop: DialogBackdrop,
+    Close: SheetClosePart,
+    Description: SheetDescriptionPart,
+    Root: SheetRoot,
+    Title: SheetTitlePart,
+    Trigger: SheetTriggerPart,
+  },
+  {
+    description: "text-sm text-muted-foreground",
+    footer: "flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2",
+    header: "flex flex-col space-y-2 text-center sm:text-left",
+    title: "text-lg font-semibold text-foreground",
+    veil: "fixed inset-0 z-50 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
+  },
+);
 
-type SheetRootProps = React.ComponentProps<typeof SheetRoot>;
-
-type SheetProps = Omit<SheetRootProps, "onOpenChange"> & {
+type SheetProps = Omit<
+  React.ComponentProps<typeof SheetRoot>,
+  "onOpenChange"
+> & {
   onOpenChange?: (open: boolean) => void;
 };
 
 /** Holds the open state. Renders no element. */
-const Sheet = ({ onOpenChange, ...props }: SheetProps) => {
-  const dismiss = useDismissRoot((open) => {
-    onOpenChange?.(open);
-  });
-
-  return (
-    <DismissContext value={dismiss.ref}>
-      <SheetRoot onOpenChange={dismiss.handleOpenChange} {...props} />
-    </DismissContext>
-  );
-};
-Sheet.displayName = "Sheet";
-
-const SheetTrigger = ({
-  asChild,
-  children,
-  ...props
-}: AsChildProps &
-  NarrowPartProps<React.ComponentProps<typeof SheetTriggerPart>>) => {
-  const slot = asChildProps({ asChild, children });
-
-  return (
-    <SheetTriggerPart
-      render={withDataAttributes("button", openState, slot.render)}
-      {...props}
-    >
-      {slot.children}
-    </SheetTriggerPart>
-  );
-};
-SheetTrigger.displayName = "SheetTrigger";
-
-const SheetClose = ({
-  asChild,
-  children,
-  ...props
-}: AsChildProps &
-  NarrowPartProps<React.ComponentProps<typeof SheetClosePart>>) => {
-  const slot = asChildProps({ asChild, children });
-
-  return (
-    <SheetClosePart render={slot.render} {...props}>
-      {slot.children}
-    </SheetClosePart>
-  );
-};
-SheetClose.displayName = "SheetClose";
-
+const Sheet: ((props: SheetProps) => React.JSX.Element) & {
+  displayName: string;
+} = parts.Root;
+const SheetTrigger = parts.Trigger;
+const SheetClose = parts.Close;
+const SheetPortal = parts.Portal;
 /**
- * Kept for compatibility. ui-sdk renders a dialog in place, in the browser top
- * layer, so there is nothing to portal and this renders its children as is.
- * `container` and `forceMount` have no effect here.
+ * Veil behind the panel. It dims the page; pass `material` to draw a glass or
+ * solid scrim instead. `forceMount` has no effect: ui-sdk keeps the backdrop
+ * mounted until its exit animation ends.
  */
-const SheetPortal = ({
-  children,
-}: {
-  children?: React.ReactNode;
-  container?: HTMLElement | null;
-  forceMount?: true;
-}): React.ReactNode => children;
-SheetPortal.displayName = "SheetPortal";
-
-/**
- * Veil behind the panel. `forceMount` has no effect: ui-sdk keeps the
- * backdrop mounted until its exit animation ends.
- */
-const SheetOverlay = ({
-  asChild,
-  children,
-  className,
-  forceMount: _forceMount,
-  ...props
-}: AsChildProps &
-  NarrowPartProps<React.ComponentProps<typeof DialogBackdrop>> & {
-    forceMount?: true;
-  }) => {
-  const slot = asChildProps({ asChild, children });
-
-  return (
-    <DialogBackdrop
-      className={cn(
-        "fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
-        className,
-      )}
-      render={withDataAttributes("div", openState, slot.render)}
-      {...props}
-    >
-      {slot.children}
-    </DialogBackdrop>
-  );
-};
-SheetOverlay.displayName = "SheetOverlay";
+const SheetOverlay = parts.Overlay;
+const SheetHeader = parts.Header;
+const SheetFooter = parts.Footer;
+const SheetTitle = parts.Title;
+const SheetDescription = parts.Description;
 
 const sheetVariants = cva(
   "vllnt-glass-floating vllnt-glass-dense fixed z-50 gap-4 p-6 transition ease-in-out data-[state=closed]:duration-300 data-[state=open]:duration-500 data-[state=open]:animate-in data-[state=closed]:animate-out",
@@ -171,17 +98,16 @@ export type SheetLabels = {
 };
 
 export type SheetContentProps = {
-  /** Keeps the panel in the page while closed, like Radix's `forceMount`. */
-  forceMount?: boolean;
+  /**
+   * Draws the close button in the corner. Pass `false` when the content has
+   * its own, like a `SheetClose` in a header. Defaults to `true`.
+   */
+  closeButton?: boolean;
   /** Localizable strings. */
   labels?: SheetLabels;
-  /** Radix-compatible: call `preventDefault()` to leave focus where your handler put it. */
-  onCloseAutoFocus?: (event: Event) => void;
-  /** Radix-compatible: call `preventDefault()` to leave focus where your handler put it. */
-  onOpenAutoFocus?: (event: Event) => void;
-} & DismissHandlers &
+} & DialogContentOptions &
+  DismissHandlers &
   MaterialProps &
-  AsChildProps &
   NarrowPartProps<React.ComponentProps<typeof SheetContentPart>> &
   VariantProps<typeof sheetVariants>;
 
@@ -193,6 +119,7 @@ const SheetContent = ({
   asChild,
   children,
   className,
+  closeButton = true,
   finalFocus,
   forceMount,
   initialFocus,
@@ -204,123 +131,60 @@ const SheetContent = ({
   onInteractOutside,
   onOpenAutoFocus,
   onPointerDownOutside,
+  overlay = "scrim",
   ref,
   side = "right",
   ...props
 }: SheetContentProps) => {
-  const [content, contentReference] = useElementRef(ref);
-  const slot = asChildProps({ asChild, children });
-  const named =
-    props["aria-label"] !== undefined && props["aria-labelledby"] === undefined;
-  useRegisterDismissHandlers({
+  const {
+    closeFocus,
+    keepMounted,
+    openFocus,
+    panelChildren,
+    panelReference,
+    render,
+  } = useDialogPopup({
+    asChild,
+    children,
+    forceMount,
+    names: props,
+    onCloseAutoFocus,
     onEscapeKeyDown,
     onFocusOutside,
     onInteractOutside,
+    onOpenAutoFocus,
     onPointerDownOutside,
+    ref,
   });
 
   return (
     <>
-      <SheetOverlay />
+      {overlay === "scrim" ? <SheetOverlay /> : null}
       <SheetContentPart
         className={cn(sheetVariants({ side }), className)}
         data-material={material}
-        finalFocus={finalFocus ?? closeAutoFocus(onCloseAutoFocus)}
-        initialFocus={
-          initialFocus ?? openAutoFocus(() => content, onOpenAutoFocus)
-        }
-        keepMounted={forceMount}
-        ref={contentReference}
-        render={withDataAttributes(
-          "div",
-          contentAttributes(named),
-          slot.render,
-        )}
+        finalFocus={finalFocus ?? closeFocus}
+        initialFocus={initialFocus ?? openFocus}
+        keepMounted={keepMounted}
+        ref={panelReference}
+        render={render}
         {...props}
       >
-        {slot.children}
+        {panelChildren}
         {/* Last in the DOM, so the first tabbable element of the content, not
             Close, takes the initial focus. Its position stays `absolute`, so
             Close still sits in the corner. */}
-        <SheetClosePart className="absolute right-3 top-3 inline-flex size-6 items-center justify-center rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-secondary">
-          <X className="size-4" />
-          <span className="sr-only">{labels?.close ?? "Close"}</span>
-        </SheetClosePart>
+        {closeButton ? (
+          <SheetClosePart className="absolute right-3 top-3 inline-flex size-6 items-center justify-center rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-secondary">
+            <X className="size-4" />
+            <span className="sr-only">{labels?.close ?? "Close"}</span>
+          </SheetClosePart>
+        ) : null}
       </SheetContentPart>
     </>
   );
 };
 SheetContent.displayName = "SheetContent";
-
-const SheetHeader = ({
-  className,
-  ...props
-}: React.HTMLAttributes<HTMLDivElement>) => (
-  <div
-    className={cn(
-      "flex flex-col space-y-2 text-center sm:text-left",
-      className,
-    )}
-    {...props}
-  />
-);
-SheetHeader.displayName = "SheetHeader";
-
-const SheetFooter = ({
-  className,
-  ...props
-}: React.HTMLAttributes<HTMLDivElement>) => (
-  <div
-    className={cn(
-      "flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2",
-      className,
-    )}
-    {...props}
-  />
-);
-SheetFooter.displayName = "SheetFooter";
-
-const SheetTitle = ({
-  asChild,
-  children,
-  className,
-  ...props
-}: AsChildProps &
-  NarrowPartProps<React.ComponentProps<typeof SheetTitlePart>>) => {
-  const slot = asChildProps({ asChild, children });
-
-  return (
-    <SheetTitlePart
-      className={cn("text-lg font-semibold text-foreground", className)}
-      render={slot.render}
-      {...props}
-    >
-      {slot.children}
-    </SheetTitlePart>
-  );
-};
-SheetTitle.displayName = "SheetTitle";
-
-const SheetDescription = ({
-  asChild,
-  children,
-  className,
-  ...props
-}: AsChildProps &
-  NarrowPartProps<React.ComponentProps<typeof SheetDescriptionPart>>) => {
-  const slot = asChildProps({ asChild, children });
-
-  return (
-    <SheetDescriptionPart
-      className={cn("text-sm text-muted-foreground", className)}
-      render={slot.render}
-      {...props}
-    >
-      {slot.children}
-    </SheetDescriptionPart>
-  );
-};
-SheetDescription.displayName = "SheetDescription";
 
 export {
   Sheet,

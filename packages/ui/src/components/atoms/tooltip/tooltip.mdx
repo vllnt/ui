@@ -38,3 +38,7 @@ import {
 
 <Controls />
 
+
+## Dismissal
+
+`TooltipContent` takes `onEscapeKeyDown`, `onPointerDownOutside`, `onInteractOutside` and `onFocusOutside`; call `event.preventDefault()` in one to keep the tooltip open. A closed tooltip stays in the page, hidden, so `forceMount` is accepted and has no effect.

@@ -407,6 +407,70 @@
   }
 }
 
+/*
+ * Radix-compatible popup variables. A ui-sdk popup positions itself with
+ * --anchor-width, --available-height and the like. Apps, and our combobox
+ * and select, still size against the names the Radix part had, so each popup
+ * wears the class of the part it replaces.
+ */
+@layer components {
+  .vllnt-radix-popover {
+    --radix-popover-content-available-height: var(--available-height);
+    --radix-popover-content-available-width: var(--available-width);
+    --radix-popover-content-transform-origin: var(--transform-origin);
+    --radix-popover-trigger-height: var(--anchor-height);
+    --radix-popover-trigger-width: var(--anchor-width);
+  }
+
+  .vllnt-radix-hover-card {
+    --radix-hover-card-content-available-height: var(--available-height);
+    --radix-hover-card-content-available-width: var(--available-width);
+    --radix-hover-card-content-transform-origin: var(--transform-origin);
+    --radix-hover-card-trigger-height: var(--anchor-height);
+    --radix-hover-card-trigger-width: var(--anchor-width);
+  }
+
+  .vllnt-radix-tooltip {
+    --radix-tooltip-content-available-height: var(--available-height);
+    --radix-tooltip-content-available-width: var(--available-width);
+    --radix-tooltip-content-transform-origin: var(--transform-origin);
+    --radix-tooltip-trigger-height: var(--anchor-height);
+    --radix-tooltip-trigger-width: var(--anchor-width);
+  }
+
+  .vllnt-radix-select {
+    --radix-select-content-available-height: var(--available-height);
+    --radix-select-content-available-width: var(--available-width);
+    --radix-select-content-transform-origin: var(--transform-origin);
+    --radix-select-trigger-height: var(--anchor-height);
+    --radix-select-trigger-width: var(--anchor-width);
+  }
+
+  .vllnt-radix-dropdown-menu {
+    --radix-dropdown-menu-content-available-height: var(--available-height);
+    --radix-dropdown-menu-content-available-width: var(--available-width);
+    --radix-dropdown-menu-content-transform-origin: var(--transform-origin);
+    --radix-dropdown-menu-trigger-height: var(--anchor-height);
+    --radix-dropdown-menu-trigger-width: var(--anchor-width);
+  }
+
+  .vllnt-radix-context-menu {
+    --radix-context-menu-content-available-height: var(--available-height);
+    --radix-context-menu-content-available-width: var(--available-width);
+    --radix-context-menu-content-transform-origin: var(--transform-origin);
+    --radix-context-menu-trigger-height: var(--anchor-height);
+    --radix-context-menu-trigger-width: var(--anchor-width);
+  }
+
+  .vllnt-radix-menubar {
+    --radix-menubar-content-available-height: var(--available-height);
+    --radix-menubar-content-available-width: var(--available-width);
+    --radix-menubar-content-transform-origin: var(--transform-origin);
+    --radix-menubar-trigger-height: var(--anchor-height);
+    --radix-menubar-trigger-width: var(--anchor-width);
+  }
+}
+
 /* CodeBlock syntax colours as OKLCH channels ("L C H"), consumed as
    oklch(var(--vllnt-code-*)). Each token keeps WCAG AA (4.5:1) on the
    --background of the default theme and of every preset in themes/presets.css,

@@ -299,3 +299,18 @@ describe("AlertDialog behavior", () => {
     expect(screen.getByRole("button", { name: "Cancel" })).not.toHaveFocus();
   });
 });
+
+describe("AlertDialogContent overlay", () => {
+  it("draws no veil with overlay none", () => {
+    render(
+      <AlertDialog defaultOpen>
+        <AlertDialogContent overlay="none">
+          <AlertDialogTitle>Title</AlertDialogTitle>
+          <AlertDialogCancel>Cancel</AlertDialogCancel>
+        </AlertDialogContent>
+      </AlertDialog>,
+    );
+    expect(document.body.querySelector(".inset-0")).toBeNull();
+    expect(screen.getByRole("alertdialog")).toBeInTheDocument();
+  });
+});

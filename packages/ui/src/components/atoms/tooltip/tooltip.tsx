@@ -14,6 +14,12 @@ import {
   type DataAttributes,
   withDataAttributes,
 } from "../../../lib/ui-sdk";
+import {
+  DismissContext,
+  type DismissHandlers,
+  useDismissRoot,
+  useRegisterDismissHandlers,
+} from "../../../lib/ui-sdk-dismiss";
 import { cn } from "../../../lib/utils";
 
 /** A ui-sdk part's props with a plain string `className`, as Radix had. */
@@ -48,14 +54,18 @@ type TooltipProps = React.ComponentProps<typeof TooltipRoot> & {
   delayDuration?: number;
 };
 
-const Tooltip = ({ delayDuration, ...props }: TooltipProps) => {
+const Tooltip = ({ delayDuration, onOpenChange, ...props }: TooltipProps) => {
   const provided = React.use(DelayContext);
+  const dismiss = useDismissRoot(onOpenChange);
 
   return (
-    <TooltipRoot
-      delay={delayDuration ?? provided ?? DEFAULT_DELAY_DURATION}
-      {...props}
-    />
+    <DismissContext value={dismiss.ref}>
+      <TooltipRoot
+        delay={delayDuration ?? provided ?? DEFAULT_DELAY_DURATION}
+        onOpenChange={dismiss.handleOpenChange}
+        {...props}
+      />
+    </DismissContext>
   );
 };
 Tooltip.displayName = "Tooltip";
@@ -97,12 +107,18 @@ const contentState = (state: {
     : "closed",
 });
 
-type ContentProps = MaterialProps &
+type ContentProps = DismissHandlers &
+  MaterialProps &
   Omit<
     PlainClass<React.ComponentProps<typeof TooltipContentPart>>,
     "render"
   > & {
     asChild?: boolean;
+    /**
+     * Radix-compatible, no effect: ui-sdk keeps a closed tooltip in the page,
+     * hidden, so there is nothing to force.
+     */
+    forceMount?: boolean;
     ref?: React.Ref<HTMLDivElement>;
   };
 
@@ -111,17 +127,28 @@ const TooltipContent = ({
   children,
   className,
   collisionPadding = 0,
+  forceMount: _forceMount,
   material = "glass",
+  onEscapeKeyDown,
+  onFocusOutside,
+  onInteractOutside,
+  onPointerDownOutside,
   ref,
   sideOffset = 4,
   ...props
 }: ContentProps) => {
   const slot = asChildProps({ asChild, children });
+  useRegisterDismissHandlers({
+    onEscapeKeyDown,
+    onFocusOutside,
+    onInteractOutside,
+    onPointerDownOutside,
+  });
 
   return (
     <TooltipContentPart
       className={cn(
-        "vllnt-glass vllnt-glass-dense z-50 bg-transparent overflow-hidden rounded-md border px-3 py-1.5 text-sm text-popover-foreground animate-in fade-in-0 zoom-in-95 [--radix-tooltip-content-available-height:var(--available-height)] [--radix-tooltip-content-available-width:var(--available-width)] [--radix-tooltip-content-transform-origin:var(--transform-origin)] [--radix-tooltip-trigger-height:var(--anchor-height)] [--radix-tooltip-trigger-width:var(--anchor-width)] data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
+        "vllnt-glass vllnt-glass-dense z-50 bg-transparent overflow-hidden rounded-md border px-3 py-1.5 text-sm text-popover-foreground animate-in fade-in-0 zoom-in-95 vllnt-radix-tooltip data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
         className,
       )}
       collisionPadding={collisionPadding}

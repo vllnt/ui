@@ -66,6 +66,7 @@ export {
   openState,
   Slot,
   useElementRef,
+  useLazyElementRef,
   withDataAttributes,
 } from "./lib/ui-sdk";
 export {
