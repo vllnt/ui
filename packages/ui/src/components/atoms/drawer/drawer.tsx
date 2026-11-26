@@ -15,26 +15,36 @@ import {
 } from "@ui-sdk/react/drawer";
 
 import type { MaterialProps } from "../../../lib/material";
+import type { DataAttributes, NarrowPartProps } from "../../../lib/ui-sdk";
 import {
-  type AsChildProps,
-  asChildProps,
-  closeAutoFocus,
-  type DataAttributes,
-  type NarrowPartProps,
-  openAutoFocus,
-  openState,
-  useElementRef,
-  withDataAttributes,
-} from "../../../lib/ui-sdk";
-import {
-  DismissContext,
-  type DismissHandlers,
-  useDismissRoot,
-  useRegisterDismissHandlers,
-} from "../../../lib/ui-sdk-dismiss";
+  createDialogParts,
+  type DialogContentOptions,
+  useDialogPopup,
+} from "../../../lib/ui-sdk-dialog";
+import type { DismissHandlers } from "../../../lib/ui-sdk-dismiss";
 import { cn } from "../../../lib/utils";
 
 const AutoFocusContext = React.createContext(true);
+
+const parts = createDialogParts(
+  "Drawer",
+  {
+    Backdrop: DrawerBackdrop,
+    Close: DrawerClosePart,
+    Description: DrawerDescriptionPart,
+    Root: DrawerRoot,
+    Title: DrawerTitlePart,
+    Trigger: DrawerTriggerPart,
+  },
+  {
+    description: "text-sm text-muted-foreground",
+    footer: "mt-auto flex flex-col gap-2 p-4",
+    header: "grid gap-1.5 p-4 text-center sm:text-left",
+    title: "text-lg font-semibold leading-none tracking-tight",
+    veil: "fixed inset-0 z-50 m-0 size-full",
+    veilAttributes: { "data-vaul-overlay": "" },
+  },
+);
 
 /** Tuning props of the previous drawer library. Each one has no effect. */
 type VaulOnlyProps = {
@@ -123,133 +133,67 @@ const Drawer = ({
   side,
   snapPoint,
   ...props
-}: DrawerProps) => {
-  const dismiss = useDismissRoot((open) => {
-    onOpenChange?.(open);
-    if (!open) {
-      onClose?.();
-    }
-  });
-
-  return (
-    <DismissContext value={dismiss.ref}>
-      <AutoFocusContext value={autoFocus}>
-        <DrawerRoot
-          {...withoutVaulOnly(props)}
-          onOpenChange={dismiss.handleOpenChange}
-          onOpenChangeComplete={onOpenChangeComplete ?? onAnimationEnd}
-          onSnapPointChange={
-            onSnapPointChange ??
-            (setActiveSnapPoint &&
-              ((point) => {
-                setActiveSnapPoint(point);
-              }))
-          }
-          side={side ?? direction}
-          snapPoint={snapPoint ?? activeSnapPoint}
-        />
-      </AutoFocusContext>
-    </DismissContext>
-  );
-};
+}: DrawerProps) => (
+  <AutoFocusContext value={autoFocus}>
+    <parts.Root
+      {...withoutVaulOnly(props)}
+      onOpenChange={(open) => {
+        onOpenChange?.(open);
+        if (!open) {
+          onClose?.();
+        }
+      }}
+      onOpenChangeComplete={onOpenChangeComplete ?? onAnimationEnd}
+      onSnapPointChange={
+        onSnapPointChange ??
+        (setActiveSnapPoint &&
+          ((point) => {
+            setActiveSnapPoint(point);
+          }))
+      }
+      side={side ?? direction}
+      snapPoint={snapPoint ?? activeSnapPoint}
+    />
+  </AutoFocusContext>
+);
 Drawer.displayName = "Drawer";
 
-const DrawerTrigger = ({
-  asChild,
-  children,
-  ...props
-}: AsChildProps &
-  NarrowPartProps<React.ComponentProps<typeof DrawerTriggerPart>>) => {
-  const slot = asChildProps({ asChild, children });
-
-  return (
-    <DrawerTriggerPart
-      render={withDataAttributes("button", openState, slot.render)}
-      {...props}
-    >
-      {slot.children}
-    </DrawerTriggerPart>
-  );
-};
-DrawerTrigger.displayName = "DrawerTrigger";
-
+const DrawerTrigger = parts.Trigger;
 /**
  * Kept for compatibility. ui-sdk renders a drawer in the browser top layer, so
  * there is nothing to portal and this renders its children as is. `container`
  * and `forceMount` have no effect here.
  */
-const DrawerPortal = ({
-  children,
-}: {
-  children?: React.ReactNode;
-  container?: HTMLElement | null;
-  forceMount?: true;
-}): React.ReactNode => children;
-DrawerPortal.displayName = "DrawerPortal";
-
-const DrawerClose = ({
-  asChild,
-  children,
-  ...props
-}: AsChildProps &
-  NarrowPartProps<React.ComponentProps<typeof DrawerClosePart>>) => {
-  const slot = asChildProps({ asChild, children });
-
-  return (
-    <DrawerClosePart render={slot.render} {...props}>
-      {slot.children}
-    </DrawerClosePart>
-  );
-};
-DrawerClose.displayName = "DrawerClose";
-
-const overlayAttributes = (state: { open: boolean }): DataAttributes => ({
-  ...openState(state),
-  "data-vaul-overlay": "",
-});
-
+const DrawerPortal = parts.Portal;
+const DrawerClose = parts.Close;
 /**
  * Veil behind the sheet. `forceMount` has no effect: ui-sdk keeps the
  * backdrop mounted until its exit animation ends.
  */
-const DrawerOverlay = ({
-  asChild,
-  children,
-  className,
-  forceMount: _forceMount,
-  ...props
-}: AsChildProps &
-  NarrowPartProps<React.ComponentProps<typeof DrawerBackdrop>> & {
-    forceMount?: true;
-  }) => {
-  const slot = asChildProps({ asChild, children });
+const DrawerOverlay = parts.Overlay;
+const DrawerHeader = parts.Header;
+const DrawerFooter = parts.Footer;
+const DrawerTitle = parts.Title;
+const DrawerDescription = parts.Description;
 
-  return (
-    <DrawerBackdrop
-      className={cn("fixed inset-0 z-50 m-0 size-full bg-black/80", className)}
-      render={withDataAttributes("div", overlayAttributes, slot.render)}
-      {...props}
-    >
-      {slot.children}
-    </DrawerBackdrop>
-  );
-};
-DrawerOverlay.displayName = "DrawerOverlay";
+export type DrawerContentProps = DialogContentOptions &
+  DismissHandlers &
+  MaterialProps &
+  NarrowPartProps<React.ComponentProps<typeof DrawerContentPart>>;
 
-const contentAttributes =
-  (named: boolean) =>
-  (state: { open: boolean; side: string }): DataAttributes => ({
-    ...openState(state),
-    "data-vaul-drawer": "",
-    "data-vaul-drawer-direction": state.side,
-    ...(named ? { "aria-labelledby": undefined } : {}),
-  });
+const drawerAttributes = (state: {
+  open: boolean;
+  side: string;
+}): DataAttributes => ({
+  "data-vaul-drawer": "",
+  "data-vaul-drawer-direction": state.side,
+});
 
 /**
  * Sheet panel of a {@link Drawer}, rendered in the browser top layer with its
  * veil and a handle bar. The drawer positions the panel at its edge, so the
  * panel needs no positioning classes. With `asChild`, the single child element
- * renders as the panel and the handle bar drops out.
+ * renders as the panel.
  */
 const DrawerContent = ({
   asChild,
@@ -265,34 +209,36 @@ const DrawerContent = ({
   onInteractOutside,
   onOpenAutoFocus,
   onPointerDownOutside,
+  overlay = "scrim",
   ref,
   ...props
-}: DismissHandlers &
-  MaterialProps &
-  AsChildProps &
-  NarrowPartProps<React.ComponentProps<typeof DrawerContentPart>> & {
-    /** Keeps the panel in the page while closed, like Radix's `forceMount`. */
-    forceMount?: boolean;
-    /** Radix-compatible: call `preventDefault()` to leave focus where your handler put it. */
-    onCloseAutoFocus?: (event: Event) => void;
-    /** Radix-compatible: call `preventDefault()` to leave focus where your handler put it. */
-    onOpenAutoFocus?: (event: Event) => void;
-  }) => {
+}: DrawerContentProps) => {
   const autoFocus = React.use(AutoFocusContext);
-  const [content, contentReference] = useElementRef(ref);
-  const slot = asChildProps({ asChild, children });
-  const named =
-    props["aria-label"] !== undefined && props["aria-labelledby"] === undefined;
-  useRegisterDismissHandlers({
+  const {
+    closeFocus,
+    keepMounted,
+    openFocus,
+    panelChildren,
+    panelReference,
+    render,
+  } = useDialogPopup({
+    asChild,
+    attributes: drawerAttributes,
+    children,
+    forceMount,
+    names: props,
+    onCloseAutoFocus,
     onEscapeKeyDown,
     onFocusOutside,
     onInteractOutside,
+    onOpenAutoFocus,
     onPointerDownOutside,
+    ref,
   });
 
   return (
     <>
-      <DrawerOverlay />
+      {overlay === "scrim" ? <DrawerOverlay /> : null}
       <DrawerContentPart
         className={cn(
           "vllnt-glass-floating vllnt-glass-dense mt-24 flex h-auto flex-col rounded-t-[10px] border",
@@ -307,94 +253,20 @@ const DrawerContent = ({
           className,
         )}
         data-material={material}
-        finalFocus={finalFocus ?? closeAutoFocus(onCloseAutoFocus)}
-        initialFocus={
-          initialFocus ??
-          (autoFocus ? openAutoFocus(() => content, onOpenAutoFocus) : "none")
-        }
-        keepMounted={forceMount}
-        ref={contentReference}
-        render={withDataAttributes(
-          "div",
-          contentAttributes(named),
-          slot.render,
-        )}
+        finalFocus={finalFocus ?? closeFocus}
+        initialFocus={initialFocus ?? (autoFocus ? openFocus : "none")}
+        keepMounted={keepMounted}
+        ref={panelReference}
+        render={render}
         {...props}
       >
         <div className="mx-auto mt-4 h-2 w-[100px] rounded-full bg-secondary" />
-        {slot.children}
+        {panelChildren}
       </DrawerContentPart>
     </>
   );
 };
 DrawerContent.displayName = "DrawerContent";
-
-const DrawerHeader = ({
-  className,
-  ...props
-}: React.HTMLAttributes<HTMLDivElement>) => (
-  <div
-    className={cn("grid gap-1.5 p-4 text-center sm:text-left", className)}
-    {...props}
-  />
-);
-DrawerHeader.displayName = "DrawerHeader";
-
-const DrawerFooter = ({
-  className,
-  ...props
-}: React.HTMLAttributes<HTMLDivElement>) => (
-  <div
-    className={cn("mt-auto flex flex-col gap-2 p-4", className)}
-    {...props}
-  />
-);
-DrawerFooter.displayName = "DrawerFooter";
-
-const DrawerTitle = ({
-  asChild,
-  children,
-  className,
-  ...props
-}: AsChildProps &
-  NarrowPartProps<React.ComponentProps<typeof DrawerTitlePart>>) => {
-  const slot = asChildProps({ asChild, children });
-
-  return (
-    <DrawerTitlePart
-      className={cn(
-        "text-lg font-semibold leading-none tracking-tight",
-        className,
-      )}
-      render={slot.render}
-      {...props}
-    >
-      {slot.children}
-    </DrawerTitlePart>
-  );
-};
-DrawerTitle.displayName = "DrawerTitle";
-
-const DrawerDescription = ({
-  asChild,
-  children,
-  className,
-  ...props
-}: AsChildProps &
-  NarrowPartProps<React.ComponentProps<typeof DrawerDescriptionPart>>) => {
-  const slot = asChildProps({ asChild, children });
-
-  return (
-    <DrawerDescriptionPart
-      className={cn("text-sm text-muted-foreground", className)}
-      render={slot.render}
-      {...props}
-    >
-      {slot.children}
-    </DrawerDescriptionPart>
-  );
-};
-DrawerDescription.displayName = "DrawerDescription";
 
 export {
   Drawer,

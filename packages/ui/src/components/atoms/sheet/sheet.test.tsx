@@ -522,3 +522,43 @@ describe("Sheet focus handlers", () => {
     expect(screen.getByLabelText("Name")).not.toHaveFocus();
   });
 });
+
+describe("SheetContent options", () => {
+  it("draws no veil with overlay none, and keeps the panel modal", () => {
+    render(
+      <Sheet defaultOpen>
+        <SheetContent overlay="none">
+          <SheetTitle>Title</SheetTitle>
+        </SheetContent>
+      </Sheet>,
+    );
+    expect(document.body.querySelector(".inset-0")).toBeNull();
+    expect(screen.getByRole("dialog")).toHaveAttribute("aria-modal", "true");
+  });
+
+  it("draws the veil by default", () => {
+    render(
+      <Sheet defaultOpen>
+        <SheetContent>
+          <SheetTitle>Title</SheetTitle>
+        </SheetContent>
+      </Sheet>,
+    );
+    expect(document.body.querySelector(".inset-0")).not.toBeNull();
+  });
+
+  it("draws no corner close button with closeButton={false}", () => {
+    render(
+      <Sheet defaultOpen>
+        <SheetContent closeButton={false}>
+          <SheetTitle>Title</SheetTitle>
+          <SheetClose>Done</SheetClose>
+        </SheetContent>
+      </Sheet>,
+    );
+    expect(
+      screen.queryByRole("button", { name: "Close" }),
+    ).not.toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Done" })).toBeInTheDocument();
+  });
+});

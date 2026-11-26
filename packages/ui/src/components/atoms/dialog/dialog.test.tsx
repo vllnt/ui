@@ -509,3 +509,34 @@ describe("Dialog focus handlers", () => {
     expect(screen.getByLabelText("Name")).not.toHaveFocus();
   });
 });
+
+describe("DialogContent options", () => {
+  it("names the corner close button from labels.close", () => {
+    render(
+      <Dialog defaultOpen>
+        <DialogContent labels={{ close: "Fermer" }}>
+          <DialogTitle>Title</DialogTitle>
+        </DialogContent>
+      </Dialog>,
+    );
+    expect(screen.getByRole("button", { name: "Fermer" })).toBeInTheDocument();
+    expect(
+      screen.queryByRole("button", { name: "Close" }),
+    ).not.toBeInTheDocument();
+  });
+
+  it("draws no corner close button with closeButton={false}", () => {
+    render(
+      <Dialog defaultOpen>
+        <DialogContent closeButton={false}>
+          <DialogTitle>Title</DialogTitle>
+          <DialogClose>Done</DialogClose>
+        </DialogContent>
+      </Dialog>,
+    );
+    expect(
+      screen.queryByRole("button", { name: "Close" }),
+    ).not.toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Done" })).toBeInTheDocument();
+  });
+});
