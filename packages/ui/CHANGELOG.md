@@ -8,13 +8,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Added
 
-- **Per-component subpath exports** - `@vllnt/ui/<component>` (for example
-  `@vllnt/ui/button`, `@vllnt/ui/toggle-group`) re-exports exactly the names the
-  root exports from that component directory, and `@vllnt/ui/utils` exports
-  `cn`. A Next.js server component that imports a subpath no longer pulls every
-  `"use client"` component into the route's client JS, and a server-safe
-  component such as `Button` or `Separator` adds none. The subpaths are
-  generated from the barrel at build time; the root export is unchanged.
 - **`Separator` `variant`** - `variant="dashed"` draws a dashed 1 px border over a
   transparent fill, in both orientations. The default stays `solid`.
 - **`Link` `size`, `foreground` and `skip`** - `size="sm" | "default" | "lg"`
@@ -41,6 +34,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
   switch by pointer, not by screen width.
 - **`size.measure-prose` token** - 720 px (`--size-measure-prose`), for lead
   copy and descriptions.
+- **Per-component subpath exports** - `@vllnt/ui/<component>` (for example
+  `@vllnt/ui/button`, `@vllnt/ui/toggle-group`) re-exports exactly the names the
+  root exports from that component directory, and `@vllnt/ui/utils` exports
+  `cn`. A Next.js server component that imports a subpath no longer pulls every
+  `"use client"` component into the route's client JS, and a server-safe
+  component such as `Button` or `Separator` adds none. The subpaths are
+  generated from the barrel at build time; the root export is unchanged.
 
 ### Changed
 
