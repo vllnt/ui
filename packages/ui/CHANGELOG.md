@@ -8,6 +8,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Added
 
+- **`Button` `variant="unstyled"`** - keeps the button's behaviour (`asChild`,
+  `disabled`, ref, every native attribute) and adds no classes of its own: the
+  element's class list is only the caller's `className`, and `size` has no
+  effect. `buttonVariants({ variant: "unstyled" })` returns only the caller's
+  classes. Every other variant and size renders the same class string as
+  before.
 - **`Separator` `variant`** - `variant="dashed"` draws a dashed 1 px border over a
   transparent fill, in both orientations. The default stays `solid`.
 - **`Link` `size`, `foreground` and `skip`** - `size="sm" | "default" | "lg"`

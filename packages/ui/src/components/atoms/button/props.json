@@ -1,10 +1,10 @@
 [
   {
     "name": "variant",
-    "type": "\"default\" | \"secondary\" | \"outline\" | \"ghost\" | \"destructive\" | \"link\"",
+    "type": "\"default\" | \"secondary\" | \"outline\" | \"ghost\" | \"destructive\" | \"link\" | \"unstyled\"",
     "required": false,
     "defaultValue": "\"default\"",
-    "description": "Visual variant. Use \"destructive\" only for irreversible actions; \"link\" only inside text flow."
+    "description": "Visual variant. Use \"destructive\" only for irreversible actions; \"link\" only inside text flow; \"unstyled\" adds no classes, so the button draws only its className (size has no effect)."
   },
   {
     "name": "size",

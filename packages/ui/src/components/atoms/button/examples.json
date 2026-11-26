@@ -16,5 +16,11 @@
     "description": "Disabled button with a spinner — keeps width stable so layouts don't jump.",
     "code": "import { Button, Spinner } from \"@vllnt/ui\";\n\nexport function Demo() {\n  return (\n    <Button disabled>\n      <Spinner className=\"h-4 w-4\" />\n      Saving…\n    </Button>\n  );\n}\n",
     "framework": "react"
+  },
+  {
+    "title": "Unstyled",
+    "description": "Keeps the button behaviour and adds no classes, for controls with their own look, such as a game key.",
+    "code": "import { Button } from \"@vllnt/ui/button\";\n\nexport function Demo() {\n  return (\n    <Button className=\"rounded-sm border border-dashed border-border px-3 py-1\" variant=\"unstyled\">\n      A\n    </Button>\n  );\n}\n",
+    "framework": "react"
   }
 ]
