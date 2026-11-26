@@ -20,7 +20,7 @@
   {
     "title": "Unstyled",
     "description": "Keeps the button behaviour and adds no classes, for controls with their own look, such as a game key.",
-    "code": "import { Button } from \"@vllnt/ui/button\";\n\nexport function Demo() {\n  return (\n    <Button className=\"rounded-sm border border-dashed border-border px-3 py-1\" variant=\"unstyled\">\n      A\n    </Button>\n  );\n}\n",
+    "code": "import { Button } from \"@vllnt/ui\";\n\nexport function Demo() {\n  return (\n    <Button className=\"rounded-sm border border-dashed border-border px-3 py-1\" variant=\"unstyled\">\n      A\n    </Button>\n  );\n}\n",
     "framework": "react"
   }
 ]
