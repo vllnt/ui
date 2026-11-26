@@ -8,6 +8,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Added
 
+- **Docs in the package** - the tarball now ships `llms.txt`, one Markdown page per
+  component in `docs/components/` (import, props, variants) and the `vllnt-ui` agent
+  skill in `skills/vllnt-ui/SKILL.md`, so agents read the docs of the installed
+  version from `node_modules/@vllnt/ui/`. They are written at pack time; the build
+  and the JavaScript bundles do not change.
+
 - **`Separator` `variant`** - `variant="dashed"` draws a dashed 1 px border over a
   transparent fill, in both orientations. The default stays `solid`.
 - **`Link` `size`, `foreground` and `skip`** - `size="sm" | "default" | "lg"`

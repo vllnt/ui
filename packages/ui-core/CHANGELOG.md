@@ -6,6 +6,9 @@ All notable changes to `@vllnt/ui-core` are documented in this file.
 
 ### Added
 
+- `llms.txt` in the tarball: an index of the README, tokens, contracts and
+  changelog for agents reading `node_modules/@vllnt/ui-core/`. Written at pack time.
+
 - `nativeTokens.glass`: the glass material per color scheme, generated from
   `packages/design/tokens.json`. It holds the tint steps, hairline,
   `mutedForeground`, `input` and `foreground` text roles, blur radii and the

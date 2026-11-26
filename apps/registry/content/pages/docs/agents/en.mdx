@@ -12,6 +12,18 @@ og:
 
 VLLNT UI exposes agent-readable surfaces so coding agents can discover components, inspect install contracts, and cite current documentation without scraping the rendered site.
 
+## Docs inside the package
+
+The installed package carries the docs for its own version, so an agent reads the API the app actually has, not the latest site. Canary builds include them, and so will the next stable release.
+
+```text
+node_modules/@vllnt/ui/llms.txt                  index with relative links
+node_modules/@vllnt/ui/docs/components/<name>.md one page per component: import, props, variants
+node_modules/@vllnt/ui/skills/vllnt-ui/SKILL.md  the vllnt-ui agent skill
+```
+
+`@vllnt/ui-core` and `@vllnt/ui-native` ship an `llms.txt` in the same place. Point the app's `AGENTS.md` at `node_modules/@vllnt/ui/llms.txt` so the agent opens it first.
+
 ## llms.txt
 
 Use `/llms.txt` for a compact overview of the registry. It includes install guidance, core docs links, and component links grouped by category.

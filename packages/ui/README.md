@@ -8,6 +8,8 @@ See [CHANGELOG.md](./CHANGELOG.md) for release history and [MIGRATION.md](./MIGR
 
 An agent can read this library as text and JSON, without scraping pages. The site is <https://ui.vllnt.com>.
 
+The installed package carries the docs for its own version. Start at `node_modules/@vllnt/ui/llms.txt`: it links one Markdown page per component in `docs/components/` (import, props and variants) and the agent skill in `skills/vllnt-ui/SKILL.md`. The site below always describes the latest release.
+
 | URL | Returns |
 | --- | --- |
 | `https://ui.vllnt.com/llms.txt` | A short plain-text overview: install steps, docs links, and components grouped by category. |

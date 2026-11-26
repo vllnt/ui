@@ -1,5 +1,5 @@
 import { spawnSync } from "node:child_process";
-import { readdirSync, readFileSync, statSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import {
   mkdir,
   mkdtemp,
@@ -13,6 +13,11 @@ import {
 import { tmpdir } from "node:os";
 import { dirname, join, resolve } from "node:path";
 
+import {
+  PACKAGES,
+  planComponentDocs,
+  readMetadata,
+} from "../../../scripts/agent-docs.mjs";
 import { collectSubpaths } from "./subpaths.ts";
 
 const packageDirectory = resolve(import.meta.dirname, "..");
@@ -71,6 +76,38 @@ function packedSubpaths(packedDirectory) {
     );
   }
   return names;
+}
+
+/**
+ * The prepack (scripts/agent-docs.mjs) ships an llms.txt index, a page for
+ * every exported component and an exact copy of the agent skill, for agents
+ * that read node_modules/@vllnt/ui.
+ */
+function assertAgentDocs(packedDirectory) {
+  const config = PACKAGES.ui;
+  const pages = planComponentDocs(packageDirectory, config, readMetadata(config));
+  const missing = pages.filter(
+    ({ path }) => !existsSync(join(packedDirectory, path)),
+  );
+  if (pages.length === 0 || missing.length > 0) {
+    throw new Error(
+      `Packed docs/components is missing ${missing.length || "all"} of ${pages.length} component pages: ${missing
+        .slice(0, 10)
+        .map(({ path }) => path)
+        .join(", ")}.`,
+    );
+  }
+  assertFile(join(packedDirectory, "llms.txt"), "llms.txt agent docs index");
+  for (const [from, to] of config.copies) {
+    const packed = join(packedDirectory, to);
+    assertFile(packed, to);
+    if (
+      readFileSync(packed, "utf8") !==
+      readFileSync(join(packageDirectory, "../..", from), "utf8")
+    ) {
+      throw new Error(`Packed ${to} differs from ${from}.`);
+    }
+  }
 }
 
 function assertExportTargets(value, path, packedDirectory) {
@@ -427,6 +464,7 @@ try {
   );
 
   assertNoLocalProtocols(manifest);
+  assertAgentDocs(packedDirectory);
 
   for (const field of ["main", "module", "types"]) {
     const target = manifest[field];
