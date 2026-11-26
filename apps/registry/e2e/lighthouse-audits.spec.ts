@@ -76,3 +76,15 @@ test.describe("indexable form pages", () => {
     });
   }
 });
+
+/**
+ * A page can have no `h2` of its own (the articles index with no published
+ * article), so footer column titles must be `h2` to keep the heading order.
+ */
+test("footer column titles do not skip a heading level", async ({ page }) => {
+  await page.goto("/articles");
+  const footer = page.getByRole("contentinfo");
+
+  await expect(footer.getByRole("heading", { level: 2 }).first()).toBeVisible();
+  await expect(footer.getByRole("heading", { level: 3 })).toHaveCount(0);
+});

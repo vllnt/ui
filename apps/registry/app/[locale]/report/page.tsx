@@ -22,7 +22,6 @@ export async function generateMetadata({
     locale,
     og: { description: t("metaDescription"), title: t("title"), type: "page" },
     pathname: "/report",
-    robots: { follow: true, index: false },
     title: `${t("title")} · VLLNT UI`,
   });
 }
