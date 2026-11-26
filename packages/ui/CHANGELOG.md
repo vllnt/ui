@@ -43,8 +43,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - **`Slider` part classes and `thumbProps`** - `controlClassName`,
   `trackClassName`, `rangeClassName` and `thumbClassName` are merged into each
   part's default classes, and `thumbProps` (an object, or a function of the
-  thumb's index) passes extra props to every thumb, winning over the name the
-  root passes on. Without them, the slider renders as before.
+  thumb's index) passes extra props, such as `aria-label` or `data-*`, to
+  every thumb; each replaces the same attribute the root passes on. Without
+  them, the slider renders as before.
 - **Touch-target utilities** - the Tailwind preset adds `min-h-target`,
   `min-w-target` (`--size-target-min`, 44 px) and `h-control-xs`
   (`--size-control-xs`, 32 px, 44 px under `@media (pointer: coarse)`). They

@@ -5767,6 +5767,10 @@
       {
         "id": "core-slider--default",
         "name": "Default"
+      },
+      {
+        "id": "core-slider--part-classes",
+        "name": "Part Classes"
       }
     ],
     "title": "Slider"

@@ -1,12 +1,5 @@
-import {
-  Meta,
-  Primary,
-  Controls,
-  Story,
-  Canvas,
-  Source,
-} from "@storybook/addon-docs/blocks";
-import * as Stories from "./slider.stories";
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './slider.stories'
 
 <Meta of={Stories} />
 
@@ -25,7 +18,7 @@ pnpm dlx shadcn@latest add https://ui.vllnt.com/r/slider.json
 ## Import
 
 ```tsx
-import { Slider } from "@vllnt/ui";
+import { Slider } from '@vllnt/ui'
 ```
 
 ## Usage
@@ -46,7 +39,7 @@ import { Slider } from "@vllnt/ui";
 
 ## Part classes and thumb props
 
-`className` styles the root. `controlClassName`, `trackClassName`, `rangeClassName` and `thumbClassName` style the control (the box that takes presses), the track, its filled range and every thumb; each is merged with the defaults, so a class you pass wins over the default it conflicts with. `thumbProps` passes extra props to every thumb, or, as a function of the thumb's index, to each thumb of a range: for example its own `aria-label`. The spoken value comes from `format` on the root.
+`className` styles the root. `controlClassName`, `trackClassName`, `rangeClassName` and `thumbClassName` style the control (the box that takes presses), the track, its filled range and every thumb; each is merged with the defaults, so a class you pass wins over the default it conflicts with. `thumbProps` passes extra props to every thumb, or, as a function of the thumb's index, to each thumb of a range: for example its own `aria-label` or `data-*`. Each replaces the same attribute the root passes on; with `aria-labelledby` on the root, also pass `"aria-labelledby": undefined` so the thumb's `aria-label` names it. The spoken value comes from `format` on the root.
 
 <Canvas of={Stories.PartClasses} sourceState="shown" />
 

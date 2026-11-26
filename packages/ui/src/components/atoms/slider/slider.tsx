@@ -11,11 +11,15 @@ import type * as React from "react";
 
 import { cn } from "../../../lib/utils";
 
-/** Props a thumb takes besides its index and class. */
+/**
+ * Props a thumb takes besides its index and class, plus `data-*`. No
+ * `aria-valuetext`: the root's `format` sets the spoken value.
+ */
 type SliderThumbProps = Omit<
   React.ComponentProps<typeof SliderThumb>,
-  "className" | "index" | "render"
->;
+  "aria-valuetext" | "className" | "index" | "render"
+> &
+  Partial<Record<`data-${string}`, string>>;
 
 type SliderProps = Omit<
   React.ComponentProps<typeof SliderPrimitive>,
@@ -35,9 +39,11 @@ type SliderProps = Omit<
   thumbClassName?: string;
   /**
    * Extra props for every thumb (for example its own `aria-label`, or
-   * `data-*`), or a function of the thumb's index for a range slider. They win
-   * over the `aria-label`, `aria-labelledby` and `aria-describedby` the root
-   * passes on. The spoken value comes from `format` on the root.
+   * `data-*`), or a function of the thumb's index for a range slider. Each one
+   * replaces the same attribute the root passes on, so a thumb `aria-label`
+   * replaces the root's `aria-label`; when the root has `aria-labelledby`,
+   * also pass `"aria-labelledby": undefined`, which otherwise names the thumb.
+   * The spoken value comes from `format` on the root.
    */
   thumbProps?: ((index: number) => SliderThumbProps) | SliderThumbProps;
   /** Classes merged into the track. */
