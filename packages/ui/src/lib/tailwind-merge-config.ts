@@ -100,6 +100,7 @@ type ClassGroup = Config<string, string>["classGroups"][string];
 // value wins, so `border-2` must meet the width group before the color group.
 const classGroupEntries: readonly (readonly [string, ClassGroup])[] = [
   ["aspect", [{ aspect: ["auto", "square", "video", isArbitraryValue] }]],
+  ["box", [{ box: ["border", "content"] }]],
   [
     "display",
     [
@@ -139,6 +140,8 @@ const classGroupEntries: readonly (readonly [string, ClassGroup])[] = [
   ["inset", [{ inset: [inset] }]],
   ["inset-x", [{ "inset-x": [inset] }]],
   ["inset-y", [{ "inset-y": [inset] }]],
+  ["start", [{ start: [inset] }]],
+  ["end", [{ end: [inset] }]],
   ["top", [{ top: [inset] }]],
   ["right", [{ right: [inset] }]],
   ["bottom", [{ bottom: [inset] }]],
@@ -213,6 +216,8 @@ const classGroupEntries: readonly (readonly [string, ClassGroup])[] = [
   ["m", [{ m: [margin] }]],
   ["mx", [{ mx: [margin] }]],
   ["my", [{ my: [margin] }]],
+  ["ms", [{ ms: [margin] }]],
+  ["me", [{ me: [margin] }]],
   ["mt", [{ mt: [margin] }]],
   ["mr", [{ mr: [margin] }]],
   ["mb", [{ mb: [margin] }]],
@@ -697,11 +702,20 @@ const config: Config<string, string> = {
     flex: ["basis", "grow", "shrink"],
     "font-size": ["leading"],
     gap: ["gap-x", "gap-y"],
-    inset: ["inset-x", "inset-y", "top", "right", "bottom", "left"],
+    inset: [
+      "inset-x",
+      "inset-y",
+      "start",
+      "end",
+      "top",
+      "right",
+      "bottom",
+      "left",
+    ],
     "inset-x": ["right", "left"],
     "inset-y": ["top", "bottom"],
     "line-clamp": ["display", "overflow"],
-    m: ["mx", "my", "mt", "mr", "mb", "ml"],
+    m: ["mx", "my", "ms", "me", "mt", "mr", "mb", "ml"],
     mx: ["mr", "ml"],
     my: ["mt", "mb"],
     overflow: ["overflow-x", "overflow-y"],
