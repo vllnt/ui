@@ -323,7 +323,7 @@ const SelectContent = ({
     <SelectContentPart
       alignItemWithTrigger={!popper}
       className={cn(
-        "vllnt-glass-floating vllnt-glass-dense relative z-50 bg-transparent p-0 flex max-h-96 min-w-[8rem] flex-col overflow-hidden rounded-md border text-popover-foreground [--radix-select-content-available-height:var(--available-height)] [--radix-select-content-available-width:var(--available-width)] [--radix-select-content-transform-origin:var(--transform-origin)] [--radix-select-trigger-height:var(--anchor-height)] [--radix-select-trigger-width:var(--anchor-width)] motion-safe:data-[state=open]:animate-in motion-safe:data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
+        "vllnt-glass-floating vllnt-glass-dense relative z-50 bg-transparent p-0 flex max-h-96 min-w-[8rem] flex-col overflow-hidden rounded-md border text-popover-foreground vllnt-radix-select motion-safe:data-[state=open]:animate-in motion-safe:data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
         popper &&
           "data-[side=bottom]:translate-y-1 data-[side=left]:-translate-x-1 data-[side=right]:translate-x-1 data-[side=top]:-translate-y-1",
         className,

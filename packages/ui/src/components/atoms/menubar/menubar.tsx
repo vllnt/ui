@@ -39,7 +39,7 @@ const {
   label: "px-2 py-1.5 text-sm font-semibold",
   labelledByTrigger: true,
   popup:
-    "vllnt-glass-floating vllnt-glass-dense z-50 bg-transparent overflow-hidden rounded-md border p-1 text-popover-foreground [--radix-menubar-content-available-height:var(--available-height)] [--radix-menubar-content-available-width:var(--available-width)] [--radix-menubar-content-transform-origin:var(--transform-origin)] [--radix-menubar-trigger-height:var(--anchor-height)] [--radix-menubar-trigger-width:var(--anchor-width)] data-[state=open]:animate-in data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
+    "vllnt-glass-floating vllnt-glass-dense z-50 bg-transparent overflow-hidden rounded-md border p-1 text-popover-foreground vllnt-radix-menubar data-[state=open]:animate-in data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
 });
 
 /** What the bar tells its menus: which one is open, and who hears changes. */
