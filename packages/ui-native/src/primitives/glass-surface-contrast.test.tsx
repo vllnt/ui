@@ -1,6 +1,5 @@
-import type { ReactNode } from "react";
-
 import { darkTheme, lightTheme } from "@vllnt/ui-core";
+import type { ReactNode } from "react";
 
 import {
   fakeService,

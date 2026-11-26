@@ -281,49 +281,61 @@ describe("GlassSurface solid fallback", () => {
     });
   });
 
-  const reasons: readonly (readonly [
-    string,
-    PeerModes,
-    GlassSurfaceProps,
-    RenderOptions,
-  ])[] = [
-    ["material is solid", LIQUID_GLASS, { material: "solid" }, {}],
-    [
-      "Reduce Transparency is on",
-      LIQUID_GLASS,
-      {},
-      { state: { reduceTransparency: true } },
-    ],
-    [
-      "Increase Contrast is on",
-      LIQUID_GLASS,
-      {},
-      { state: { darkerSystemColors: true } },
-    ],
-    [
-      "High Text Contrast is on",
-      LIQUID_GLASS,
-      {},
-      { state: { highTextContrast: true } },
-    ],
-    ["the global switch is off", LIQUID_GLASS, {}, { glass: false }],
-    [
-      "the platform has not answered yet",
-      LIQUID_GLASS,
-      {},
-      { state: { reduceTransparency: "pending" } },
-    ],
-    [
-      "the device has no Liquid Glass and expo-blur is missing",
-      { blur: "absent", glassEffect: "no-liquid-glass" },
-      {},
-      {},
-    ],
+  type Reason = {
+    readonly modes: PeerModes;
+    readonly name: string;
+    readonly options: RenderOptions;
+    readonly props: GlassSurfaceProps;
+  };
+
+  const reasons: readonly Reason[] = [
+    {
+      modes: LIQUID_GLASS,
+      name: "material is solid",
+      options: {},
+      props: { material: "solid" },
+    },
+    {
+      modes: LIQUID_GLASS,
+      name: "Reduce Transparency is on",
+      options: { state: { reduceTransparency: true } },
+      props: {},
+    },
+    {
+      modes: LIQUID_GLASS,
+      name: "Increase Contrast is on",
+      options: { state: { darkerSystemColors: true } },
+      props: {},
+    },
+    {
+      modes: LIQUID_GLASS,
+      name: "High Text Contrast is on",
+      options: { state: { highTextContrast: true } },
+      props: {},
+    },
+    {
+      modes: LIQUID_GLASS,
+      name: "the global switch is off",
+      options: { glass: false },
+      props: {},
+    },
+    {
+      modes: LIQUID_GLASS,
+      name: "the platform has not answered yet",
+      options: { state: { reduceTransparency: "pending" } },
+      props: {},
+    },
+    {
+      modes: { blur: "absent", glassEffect: "no-liquid-glass" },
+      name: "the device has no Liquid Glass and expo-blur is missing",
+      options: {},
+      props: {},
+    },
   ];
 
   it.each(reasons)(
-    "draws solid when %s",
-    async (_name, modes, props, options) => {
+    "draws solid when $name",
+    async ({ modes, options, props }) => {
       await withGlassSandbox(modes, async (sandbox) => {
         const { root } = await renderSurface(sandbox, props, options);
 
@@ -519,41 +531,46 @@ describe("nested GlassSurface", () => {
   });
 });
 
-describe("useGlassTextColor", () => {
-  type Expected = { readonly muted: string; readonly text: string };
+type TextColorCase = {
+  readonly expected: { readonly muted: string; readonly text: string };
+  readonly modes: PeerModes;
+  readonly props?: GlassSurfaceProps;
+  readonly scheme: "dark" | "light";
+};
 
-  async function expectTextColors(
-    modes: PeerModes,
-    scheme: "dark" | "light",
-    expected: Expected,
-    props: GlassSurfaceProps = {},
-  ) {
-    await withGlassSandbox(modes, async (sandbox) => {
-      const fake = fakeService();
-      const { GlassSurface, useGlassTextColor } = sandbox.surface;
-      const { ThemeProvider } = sandbox.theme;
-      function wrapper({ children }: { readonly children: ReactNode }) {
-        return (
-          <ThemeProvider colorScheme={scheme}>
-            <GlassSurface accessibilityService={fake.service} {...props}>
-              {children}
-            </GlassSurface>
-          </ThemeProvider>
-        );
-      }
-      const { result } = sandbox.testing.renderHook(
-        () => ({
-          muted: useGlassTextColor("muted"),
-          text: useGlassTextColor("default"),
-        }),
-        { wrapper },
+async function expectTextColors({
+  expected,
+  modes,
+  props = {},
+  scheme,
+}: TextColorCase) {
+  await withGlassSandbox(modes, async (sandbox) => {
+    const fake = fakeService();
+    const { GlassSurface, useGlassTextColor } = sandbox.surface;
+    const { ThemeProvider } = sandbox.theme;
+    function wrapper({ children }: { readonly children: ReactNode }) {
+      return (
+        <ThemeProvider colorScheme={scheme}>
+          <GlassSurface accessibilityService={fake.service} {...props}>
+            {children}
+          </GlassSurface>
+        </ThemeProvider>
       );
-      await settlePreferences(sandbox.testing);
+    }
+    const { result } = sandbox.testing.renderHook(
+      () => ({
+        muted: useGlassTextColor("muted"),
+        text: useGlassTextColor("default"),
+      }),
+      { wrapper },
+    );
+    await settlePreferences(sandbox.testing);
 
-      expect(result.current).toEqual(expected);
-    });
-  }
+    expect(result.current).toEqual(expected);
+  });
+}
 
+describe("useGlassTextColor", () => {
   it("is undefined outside a surface, so the caller keeps its own color", async () => {
     await withGlassSandbox(LIQUID_GLASS, ({ surface, testing }) => {
       const { result } = testing.renderHook(() => ({
@@ -568,9 +585,13 @@ describe("useGlassTextColor", () => {
   it.each(SCHEMES)(
     "gives the %s glass colors while glass draws",
     async (scheme) => {
-      await expectTextColors(LIQUID_GLASS, scheme, {
-        muted: THEMES[scheme].glass.mutedForeground,
-        text: THEMES[scheme].glass.foreground,
+      await expectTextColors({
+        expected: {
+          muted: THEMES[scheme].glass.mutedForeground,
+          text: THEMES[scheme].glass.foreground,
+        },
+        modes: LIQUID_GLASS,
+        scheme,
       });
     },
   );
@@ -578,43 +599,47 @@ describe("useGlassTextColor", () => {
   it.each(SCHEMES)(
     "gives the %s solid colors in the fallback",
     async (scheme) => {
-      await expectTextColors(NO_PEERS, scheme, {
-        muted: THEMES[scheme].glass.solid.mutedForeground,
-        text: THEMES[scheme].glass.solid.foreground,
+      await expectTextColors({
+        expected: {
+          muted: THEMES[scheme].glass.solid.mutedForeground,
+          text: THEMES[scheme].glass.solid.foreground,
+        },
+        modes: NO_PEERS,
+        scheme,
       });
     },
   );
 
   it("follows the drawn material, not the requested one", async () => {
-    await expectTextColors(
-      LIQUID_GLASS,
-      "light",
-      {
+    await expectTextColors({
+      expected: {
         muted: lightTheme.glass.solid.mutedForeground,
         text: lightTheme.glass.solid.foreground,
       },
-      { material: "solid" },
-    );
+      modes: LIQUID_GLASS,
+      props: { material: "solid" },
+      scheme: "light",
+    });
   });
 });
 
-describe("ThemeProvider glass switch", () => {
-  async function expectGlassEnabled(
-    expected: boolean,
-    nest?: (theme: GlassSandbox["theme"], children: ReactNode) => ReactNode,
-  ) {
-    await withGlassSandbox(NO_PEERS, ({ testing, theme }) => {
-      function wrapper({ children }: { readonly children: ReactNode }) {
-        return nest === undefined ? children : nest(theme, children);
-      }
-      const { result } = testing.renderHook(() => theme.useGlassEnabled(), {
-        wrapper,
-      });
-
-      expect(result.current).toBe(expected);
+async function expectGlassEnabled(
+  expected: boolean,
+  nest?: (theme: GlassSandbox["theme"], children: ReactNode) => ReactNode,
+) {
+  await withGlassSandbox(NO_PEERS, ({ testing, theme }) => {
+    function wrapper({ children }: { readonly children: ReactNode }) {
+      return nest === undefined ? children : nest(theme, children);
+    }
+    const { result } = testing.renderHook(() => theme.useGlassEnabled(), {
+      wrapper,
     });
-  }
 
+    expect(result.current).toBe(expected);
+  });
+}
+
+describe("ThemeProvider glass switch", () => {
   it("is on without a provider", async () => {
     await expectGlassEnabled(true);
   });

@@ -167,7 +167,7 @@ export const LIQUID_GLASS: PeerModes = {
   glassEffect: "available",
 };
 
-/** The peers an app has with only `expo-blur` installed. */
+/** The peers of an app that installs `expo-blur` and nothing else. */
 export const BLUR_ONLY: PeerModes = { blur: "present", glassEffect: "absent" };
 
 /** The peers an app has with neither optional package installed. */
@@ -175,7 +175,7 @@ export const NO_PEERS: PeerModes = { blur: "absent", glassEffect: "absent" };
 
 type Listener = (enabled: boolean) => void;
 
-/** What a fake preference answers when the platform is asked. */
+/** What a fake preference answers to the platform's query. */
 export type PreferenceAnswer = "pending" | "rejects" | boolean;
 
 /** A fake platform preference the test can flip and inspect. */
@@ -189,10 +189,12 @@ export type FakePreference = {
   readonly settle: (enabled: boolean) => void;
 };
 
-/** Preference that answers `answer` when asked and keeps its listeners. */
+const ignoreAnswer = () => void 0;
+
+/** Preference that answers `answer` to a query and keeps its listeners. */
 export function fakePreference(answer: PreferenceAnswer): FakePreference {
   const listeners = new Set<Listener>();
-  let settle: (enabled: boolean) => void = () => void 0;
+  let settle: (enabled: boolean) => void = ignoreAnswer;
   const pending = new Promise<boolean>((resolve) => {
     settle = resolve;
   });
@@ -203,7 +205,9 @@ export function fakePreference(answer: PreferenceAnswer): FakePreference {
   };
   return {
     emit(enabled) {
-      for (const listener of listeners) listener(enabled);
+      listeners.forEach((listener) => {
+        listener(enabled);
+      });
     },
     listenerCount: () => listeners.size,
     preference: {

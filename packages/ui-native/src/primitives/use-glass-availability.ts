@@ -8,7 +8,7 @@ import { useGlassEnabled } from "../theme/theme-provider";
 
 import { glassRenderer } from "./glass-peers";
 
-/** One platform preference that turns glass off while it is on. */
+/** One platform preference that turns glass off when enabled. */
 export type GlassPreference = {
   readonly addListener: (listener: (enabled: boolean) => void) => {
     readonly remove: () => void;
@@ -100,12 +100,11 @@ function useGlassPreference(preference: GlassPreference): boolean {
 }
 
 /**
- * Whether a glass surface may draw glass now. It is `false` while Reduce
+ * Whether a glass surface may draw glass now. Returns `false` while Reduce
  * Transparency, Increase Contrast (iOS) or High Text Contrast (Android) is on,
  * while `ThemeProvider` sets `glass={false}`, and when neither
- * `expo-glass-effect` nor `expo-blur` is present. It also stays `false` until
- * the platform reports the three preferences, and it flips live when one
- * changes.
+ * `expo-glass-effect` nor `expo-blur` is present. Stays `false` until the
+ * platform reports the three preferences, and flips live when one changes.
  *
  * @param service Preference source; tests inject a fake.
  * @returns `true` when glass may render.

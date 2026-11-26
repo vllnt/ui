@@ -1,5 +1,4 @@
 import type { ComponentType } from "react";
-
 import type { ColorValue, ViewProps } from "react-native";
 
 /** Props this package passes to `GlassView` from `expo-glass-effect`. */

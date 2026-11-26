@@ -13,6 +13,8 @@ import {
   withGlassSandbox,
 } from "../tests/glass-fixtures";
 
+import type { GlassAccessibilityService } from "./use-glass-availability";
+
 // Each test loads React Native and the test renderer into a fresh registry.
 jest.setTimeout(30_000);
 
@@ -48,6 +50,8 @@ type HookOptions = {
   readonly useDefaultService?: boolean;
 };
 
+type HookProps = { readonly service: GlassAccessibilityService | undefined };
+
 /** Renders the hook under a `ThemeProvider` and, by default, waits for answers. */
 async function renderAvailability(
   { availability, testing, theme }: GlassSandbox,
@@ -62,7 +66,7 @@ async function renderAvailability(
     );
   }
   const rendered = testing.renderHook(
-    ({ service }) => availability.useGlassAvailability(service),
+    ({ service }: HookProps) => availability.useGlassAvailability(service),
     {
       initialProps: {
         service: options.useDefaultService === true ? undefined : fake.service,
