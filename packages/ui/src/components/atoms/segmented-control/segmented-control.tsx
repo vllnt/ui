@@ -39,7 +39,7 @@ const segmentedControlVariants = cva(
 );
 
 const segmentedControlItemVariants = cva(
-  "inline-flex flex-1 items-center justify-center rounded-md px-3 text-sm font-medium whitespace-nowrap transition-all motion-reduce:transition-none outline-none ring-offset-background focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=on]:bg-background data-[state=on]:text-foreground data-[state=on]:shadow-sm",
+  "inline-flex flex-1 items-center justify-center rounded-md px-3 text-sm font-medium whitespace-nowrap transition-all motion-reduce:transition-none outline-none ring-offset-background focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=on]:bg-background data-[state=on]:text-foreground data-[state=on]:shadow-sm forced-colors:data-[state=on]:bg-[color:Highlight] forced-colors:data-[state=on]:text-[color:HighlightText]",
   {
     defaultVariants: {
       size: "default",
