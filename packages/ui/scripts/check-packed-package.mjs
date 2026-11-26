@@ -223,11 +223,11 @@ async function assertNodeResolution(manifest, packedDirectory) {
       `const subpaths = ${JSON.stringify(packedSubpaths(packedDirectory))};`,
       'const root = await import("@vllnt/ui");',
       "for (const name of subpaths) {",
-      '  const resolved = import.meta.resolve(`@vllnt/ui/${name}`);',
-      '  if (!resolved.endsWith(`/dist/subpaths/${name}.js`)) throw new Error(`Invalid subpath entry: ${resolved}`);',
+      "  const resolved = import.meta.resolve(`@vllnt/ui/${name}`);",
+      "  if (!resolved.endsWith(`/dist/subpaths/${name}.js`)) throw new Error(`Invalid subpath entry: ${resolved}`);",
       "  const subpath = await import(`@vllnt/ui/${name}`);",
       "  for (const [key, value] of Object.entries(subpath)) {",
-      '    if (root[key] !== value) throw new Error(`@vllnt/ui/${name} exports ${key}, which differs from the root export.`);',
+      "    if (root[key] !== value) throw new Error(`@vllnt/ui/${name} exports ${key}, which differs from the root export.`);",
       "  }",
       "}",
       "",
@@ -273,7 +273,7 @@ async function assertSubpathTypes(packedDirectory) {
   lines.push(
     'import { Button, type ButtonProps } from "@vllnt/ui/button";',
     'import { cn } from "@vllnt/ui/utils";',
-    "const props: ButtonProps = { variant: \"outline\" };",
+    'const props: ButtonProps = { variant: "outline" };',
     "export const checked = [Button, cn, props, " +
       lines.map((_, index) => `subpath${index}`).join(", ") +
       "];",

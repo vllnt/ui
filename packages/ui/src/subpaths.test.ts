@@ -41,14 +41,14 @@ describe("subpath exports", () => {
       ...componentsIndex.matchAll(/export (?:type )?\{([^}]*)\}/g),
     ]
       .flatMap((match) => match[1]?.split(",") ?? [])
-      .map((name) =>
-        name
+      .flatMap((name) => {
+        const exported = name
           .replace(/^\s*type\s+/, "")
           .split(/\s+as\s+/)
           .at(-1)
-          ?.trim(),
-      )
-      .filter((name): name is string => Boolean(name));
+          ?.trim();
+        return exported ? [exported] : [];
+      });
     const subpathNames = subpaths
       .filter(({ name }) => name !== "utils")
       .flatMap(({ name }) => exportedNames(name));

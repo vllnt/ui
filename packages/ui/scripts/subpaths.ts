@@ -109,7 +109,9 @@ export function collectSubpaths(
     const path = statement.specifier.replace(/^\.\//, "");
     const directory = path.split("/")[1];
     if (!directory || statement.elements.length === 0) {
-      throw new Error(`components/index.ts: unsupported export: ${statement.text}`);
+      throw new Error(
+        `components/index.ts: unsupported export: ${statement.text}`,
+      );
     }
     for (const entry of statement.elements) {
       addEntry(subpaths, directory, {
