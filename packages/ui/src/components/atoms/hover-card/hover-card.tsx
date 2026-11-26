@@ -6,7 +6,9 @@ import {
   HoverCard as HoverCardRoot,
   HoverCardContent as HoverCardContentPart,
   HoverCardTrigger as HoverCardTriggerPart,
+  type HoverCardTriggerState,
 } from "@ui-sdk/react/hover-card";
+import { renderElement, type RenderProp } from "@ui-sdk/react/primitive";
 
 import type { MaterialProps } from "../../../lib/material";
 import {
@@ -30,10 +32,21 @@ type HoverCardProps = Omit<
   openDelay?: number;
 };
 
+/** The content's id, so the trigger can describe itself with the open card. */
+const ContentIdContext = React.createContext<string | undefined>(undefined);
+
 const HoverCard = ({
   openDelay = DEFAULT_OPEN_DELAY,
   ...props
-}: HoverCardProps) => <HoverCardRoot delay={openDelay} {...props} />;
+}: HoverCardProps) => {
+  const contentId = React.useId();
+
+  return (
+    <ContentIdContext value={contentId}>
+      <HoverCardRoot delay={openDelay} {...props} />
+    </ContentIdContext>
+  );
+};
 HoverCard.displayName = "HoverCard";
 
 type TriggerProps = Omit<
@@ -44,12 +57,37 @@ type TriggerProps = Omit<
   ref?: React.Ref<HTMLAnchorElement>;
 };
 
+/**
+ * The render function of the trigger. While the card is open it describes the
+ * link (`aria-describedby`), so a screen reader announces the preview with it.
+ */
+function triggerRender(
+  contentId: string | undefined,
+  render?: RenderProp<HoverCardTriggerState>,
+): RenderProp<HoverCardTriggerState> {
+  return (props, state) =>
+    renderElement(
+      "a",
+      {
+        ...props,
+        ...openState(state),
+        "aria-describedby":
+          [props["aria-describedby"], state.open && contentId]
+            .filter(Boolean)
+            .join(" ") || undefined,
+      },
+      render,
+      state,
+    );
+}
+
 const HoverCardTrigger = ({ asChild, children, ...props }: TriggerProps) => {
+  const contentId = React.use(ContentIdContext);
   const slot = asChildProps({ asChild, children });
 
   return (
     <HoverCardTriggerPart
-      render={withDataAttributes("a", openState, slot.render)}
+      render={triggerRender(contentId, slot.render)}
       {...props}
     >
       {slot.children}
@@ -78,6 +116,7 @@ const HoverCardContent = ({
   sideOffset = 4,
   ...props
 }: ContentProps) => {
+  const contentId = React.use(ContentIdContext);
   const slot = asChildProps({ asChild, children });
 
   return (
@@ -89,6 +128,7 @@ const HoverCardContent = ({
       )}
       collisionPadding={collisionPadding}
       data-material={material}
+      id={contentId}
       ref={ref}
       render={withDataAttributes("div", openState, slot.render)}
       sideOffset={sideOffset}
