@@ -181,6 +181,7 @@ export default async function ComponentPage(props: Props) {
       <main
         className="flex-1 overflow-y-auto bg-background overflow-x-hidden"
         data-pagefind-ignore={platformParameter === undefined ? undefined : ""}
+        id="main"
       >
         <div className="mx-auto max-w-7xl px-4 py-8 lg:px-8">
           <div className="grid grid-cols-1 xl:grid-cols-[minmax(0,1fr)_200px] gap-8">
