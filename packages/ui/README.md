@@ -329,7 +329,7 @@ import {
 | `AspectRatio` | `{ AspectRatio }` | CSS `aspect-ratio` box |
 | `ScrollArea` | `{ ScrollArea, ScrollBar }` | ui-sdk scroll area |
 | `Separator` | `{ Separator }` | `div` line; `role="separator"` when not decorative |
-| `ResizablePanel` | `{ ResizablePanel, ResizablePanelGroup, ResizableHandle }` | Via `react-resizable-panels` |
+| `ResizablePanel` | `{ ResizablePanel, ResizablePanelGroup, ResizableHandle }` | Via ui-sdk |
 | `Collapsible` | `{ Collapsible, CollapsibleTrigger, CollapsibleContent }` | ui-sdk collapsible |
 | `Carousel` | `{ Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext }` | Via `embla-carousel-react` |
 | `Tabs` | `{ Tabs, TabsList, TabsTrigger, TabsContent }` | ui-sdk tabs |
