@@ -4,6 +4,7 @@ import { createContext, use, useCallback, useId } from "react";
 
 import {
   Accordion as AccordionPrimitive,
+  AccordionHeader,
   AccordionItem as AccordionItemPrimitive,
   AccordionPanel,
   AccordionTrigger as AccordionTriggerPrimitive,
@@ -11,6 +12,7 @@ import {
 import { renderElement } from "@ui-sdk/react/primitive";
 import type { ReactNode, RefCallback } from "react";
 
+import type { HeadingTag } from "../../../lib/types";
 import { withDataAttributes } from "../../../lib/ui-sdk";
 import { cn } from "../../../lib/utils";
 
@@ -154,6 +156,8 @@ function AccordionItem({
 }
 
 export type AccordionTriggerProps = {
+  /** Heading tag around the trigger. Defaults to `h3`. */
+  as?: HeadingTag;
   children: ReactNode;
   className?: string;
   icon?: ReactNode;
@@ -162,6 +166,7 @@ export type AccordionTriggerProps = {
 };
 
 function AccordionTrigger({
+  as: heading = "h3",
   children,
   className,
   icon,
@@ -170,48 +175,54 @@ function AccordionTrigger({
   const baseId = useAccordionId();
 
   return (
-    <AccordionTriggerPrimitive
-      className={getTriggerClassName(className)}
-      id={getPartId(baseId, "trigger", value)}
-      // ui-sdk leaves out `aria-controls`; the panel id comes from the value.
-      render={withDataAttributes("button", () => ({
-        "aria-controls": getPartId(baseId, "content", value),
-      }))}
+    <AccordionHeader
+      // Reset what a heading adds, so the trigger looks as it did without one.
+      className="m-0 text-inherit [font:inherit]"
+      render={(props, state) => renderElement(heading, props, undefined, state)}
     >
-      {({ open }) => (
-        <>
-          <span className="text-sm">{children}</span>
-          {icon ? (
-            <span
-              className={cn(
-                "size-4 flex-shrink-0 transition-transform duration-200",
-                open && "rotate-180",
-              )}
-            >
-              {icon}
-            </span>
-          ) : (
-            <svg
-              aria-hidden="true"
-              className={cn(
-                "size-4 flex-shrink-0 transition-transform duration-200",
-                open && "rotate-180",
-              )}
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                d="m6 9 6 6 6-6"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-              />
-            </svg>
-          )}
-        </>
-      )}
-    </AccordionTriggerPrimitive>
+      <AccordionTriggerPrimitive
+        className={getTriggerClassName(className)}
+        id={getPartId(baseId, "trigger", value)}
+        // ui-sdk leaves out `aria-controls`; the panel id comes from the value.
+        render={withDataAttributes("button", () => ({
+          "aria-controls": getPartId(baseId, "content", value),
+        }))}
+      >
+        {({ open }) => (
+          <>
+            <span className="text-sm">{children}</span>
+            {icon ? (
+              <span
+                className={cn(
+                  "size-4 flex-shrink-0 transition-transform duration-200",
+                  open && "rotate-180",
+                )}
+              >
+                {icon}
+              </span>
+            ) : (
+              <svg
+                aria-hidden="true"
+                className={cn(
+                  "size-4 flex-shrink-0 transition-transform duration-200",
+                  open && "rotate-180",
+                )}
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="m6 9 6 6 6-6"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                />
+              </svg>
+            )}
+          </>
+        )}
+      </AccordionTriggerPrimitive>
+    </AccordionHeader>
   );
 }
 
