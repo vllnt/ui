@@ -4,6 +4,7 @@ import * as React from "react";
 
 import { Clock } from "lucide-react";
 
+import { useControllableState } from "../../../lib/use-controllable-state";
 import { cn } from "../../../lib/utils";
 
 /** Native time input styled to match the design system. */
@@ -24,8 +25,11 @@ const TimeField = ({
   value,
   ...props
 }: TimeFieldProps & { ref?: React.Ref<HTMLInputElement> }) => {
-  const [internalValue, setInternalValue] = React.useState(defaultValue);
-  const currentValue = value ?? internalValue;
+  const [currentValue, setValue] = useControllableState({
+    defaultValue,
+    onChange: onValueChange,
+    value,
+  });
 
   return (
     <div className="relative w-full">
@@ -37,11 +41,7 @@ const TimeField = ({
           className,
         )}
         onChange={(event) => {
-          if (value === undefined) {
-            setInternalValue(event.target.value);
-          }
-
-          onValueChange?.(event.target.value);
+          setValue(event.target.value);
         }}
         ref={ref}
         type="time"

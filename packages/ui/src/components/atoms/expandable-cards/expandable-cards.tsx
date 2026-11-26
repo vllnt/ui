@@ -2,6 +2,13 @@
 
 import * as React from "react";
 
+import {
+  Collapsible,
+  CollapsiblePanel,
+  CollapsibleTrigger,
+} from "@ui-sdk/react/collapsible";
+
+import { useControllableState } from "../../../lib/use-controllable-state";
 import { cn } from "../../../lib/utils";
 
 /** Single expandable card entry. */
@@ -20,6 +27,12 @@ export type ExpandableCardItem = {
 export type ExpandableCardsProps = React.ComponentPropsWithoutRef<"div"> & {
   /** Cards rendered as an accordion-like stack. */
   cards: ExpandableCardItem[];
+  /** Id of the card that starts open. Ignored once `expandedId` has a value. */
+  defaultExpandedId?: null | string;
+  /** Id of the open card, or `null` for none. Pair it with `onExpandedIdChange`. */
+  expandedId?: null | string;
+  /** Called with the id of the card that opened, or `null` when it closed. */
+  onExpandedIdChange?: (id: null | string) => void;
 };
 
 /**
@@ -35,13 +48,20 @@ export type ExpandableCardsProps = React.ComponentPropsWithoutRef<"div"> & {
 export const ExpandableCards = ({
   cards,
   className,
+  defaultExpandedId = null,
+  expandedId: expandedIdProperty,
+  onExpandedIdChange,
   ref,
   ...props
 }: ExpandableCardsProps & { ref?: React.Ref<HTMLDivElement> }) => {
-  const [expandedId, setExpandedId] = React.useState<null | string>(null);
+  const [expandedId, setExpandedId] = useControllableState<null | string>({
+    defaultValue: defaultExpandedId,
+    onChange: onExpandedIdChange,
+    value: expandedIdProperty,
+  });
 
   const toggle = (id: string): void => {
-    setExpandedId((current) => (current === id ? null : id));
+    setExpandedId(expandedId === id ? null : id);
   };
 
   return (
@@ -69,34 +89,30 @@ function ExpandableCard({
   onToggle: (id: string) => void;
 }) {
   return (
-    <div className="overflow-hidden rounded-xl border bg-card text-card-foreground shadow-sm">
-      <button
-        aria-expanded={expanded}
-        className="flex w-full flex-col items-start gap-1 p-4 text-left transition-colors hover:bg-accent hover:text-accent-foreground"
-        onClick={() => {
-          onToggle(card.id);
-        }}
-        type="button"
-      >
+    <Collapsible
+      className="overflow-hidden rounded-xl border bg-card text-card-foreground shadow-sm"
+      onOpenChange={() => {
+        onToggle(card.id);
+      }}
+      open={expanded}
+    >
+      <CollapsibleTrigger className="flex w-full flex-col items-start gap-1 p-4 text-left transition-colors hover:bg-accent hover:text-accent-foreground">
         <span className="font-medium">{card.title}</span>
         {card.description === undefined ? null : (
           <span className="text-sm text-muted-foreground">
             {card.description}
           </span>
         )}
-      </button>
-      <div
-        className={cn(
-          "grid transition-all duration-300 motion-reduce:transition-none",
-          expanded ? "grid-rows-[1fr]" : "grid-rows-[0fr]",
-        )}
+      </CollapsibleTrigger>
+      {/* Kept in the page while closed, so the content stays in the HTML. */}
+      <CollapsiblePanel
+        className="h-[var(--collapsible-panel-height)] overflow-hidden transition-[height] duration-300 motion-reduce:transition-none data-[ending-style]:h-0 data-[starting-style]:h-0"
+        keepMounted
       >
-        <div className="overflow-hidden">
-          <div className="px-4 pb-4 text-sm text-muted-foreground">
-            {card.content}
-          </div>
+        <div className="px-4 pb-4 text-sm text-muted-foreground">
+          {card.content}
         </div>
-      </div>
-    </div>
+      </CollapsiblePanel>
+    </Collapsible>
   );
 }

@@ -3,6 +3,7 @@
 import * as React from "react";
 
 import { moveRovingFocus } from "../../../lib/roving-focus";
+import { useControllableState } from "../../../lib/use-controllable-state";
 import { cn } from "../../../lib/utils";
 
 /** A single tab descriptor. */
@@ -21,6 +22,8 @@ export type AnimatedTabsProps = React.ComponentPropsWithoutRef<"div"> & {
   onValueChange?: (value: string) => void;
   /** Tabs rendered in order. */
   tabs: AnimatedTab[];
+  /** Active tab value. Pair it with `onValueChange` to control the tabs. */
+  value?: string;
 };
 
 type IndicatorStyle = {
@@ -86,9 +89,16 @@ export const AnimatedTabs = ({
   onValueChange,
   ref,
   tabs,
+  value,
   ...props
 }: AnimatedTabsProps & { ref?: React.Ref<HTMLDivElement> }) => {
-  const [active, setActive] = React.useState(defaultValue ?? tabs[0]?.value);
+  const [active, setActive] = useControllableState<string | undefined>({
+    defaultValue: defaultValue ?? tabs[0]?.value,
+    onChange: (next) => {
+      if (next !== undefined) onValueChange?.(next);
+    },
+    value,
+  });
   const [indicator, setIndicator] = React.useState<IndicatorStyle>({
     left: 0,
     width: 0,
@@ -98,11 +108,6 @@ export const AnimatedTabs = ({
   React.useLayoutEffect(() => {
     setIndicator(indicatorPosition(buttons.current.get(active ?? "") ?? null));
   }, [active]);
-
-  const handleSelect = (value: string): void => {
-    setActive(value);
-    onValueChange?.(value);
-  };
 
   const hasActiveTab = tabs.some((tab) => tab.value === active);
 
@@ -134,7 +139,7 @@ export const AnimatedTabs = ({
           key={tab.value}
           label={tab.label}
           onSelect={() => {
-            handleSelect(tab.value);
+            setActive(tab.value);
           }}
           reference={(node) => {
             if (node === null) {

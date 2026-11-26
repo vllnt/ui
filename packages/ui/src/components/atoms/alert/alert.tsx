@@ -43,6 +43,7 @@ const Alert = ({
   }) => (
   <div
     className={cn(alertVariants({ variant }), className)}
+    data-slot="alert"
     ref={ref}
     role="alert"
     {...props}
@@ -60,6 +61,7 @@ const AlertTitle = ({
 }) => (
   <h5
     className={cn("mb-1 font-medium leading-none tracking-tight", className)}
+    data-slot="alert-title"
     ref={ref}
     {...props}
   >
@@ -77,6 +79,7 @@ const AlertDescription = ({
 }) => (
   <div
     className={cn("text-sm [&_p]:leading-relaxed", className)}
+    data-slot="alert-description"
     ref={ref}
     {...props}
   />

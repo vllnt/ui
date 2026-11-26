@@ -1,3 +1,5 @@
+import { createRef } from "react";
+
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 
@@ -497,4 +499,76 @@ describe("Tabs variant", () => {
       expect(b).toHaveFocus();
     },
   );
+});
+
+describe("Tabs extension props", () => {
+  it("forwards refs and rest props to every part", () => {
+    const rootRef = createRef<HTMLDivElement>();
+    const listRef = createRef<HTMLDivElement>();
+    const triggerRef = createRef<HTMLButtonElement>();
+    const panelRef = createRef<HTMLDivElement>();
+    render(
+      <Tabs data-testid="root" defaultValue="a" ref={rootRef}>
+        <TabsList data-testid="list" ref={listRef}>
+          <TabsTrigger data-testid="trigger" ref={triggerRef} value="a">
+            A
+          </TabsTrigger>
+        </TabsList>
+        <TabsContent data-testid="panel" ref={panelRef} value="a">
+          Panel A
+        </TabsContent>
+      </Tabs>,
+    );
+    expect(rootRef.current).toBe(screen.getByTestId("root"));
+    expect(listRef.current).toBe(screen.getByTestId("list"));
+    expect(triggerRef.current).toBe(screen.getByTestId("trigger"));
+    expect(panelRef.current).toBe(screen.getByTestId("panel"));
+  });
+
+  it("names every part for debugging", () => {
+    expect(Tabs.displayName).toBe("Tabs");
+    expect(TabsList.displayName).toBe("TabsList");
+    expect(TabsTrigger.displayName).toBe("TabsTrigger");
+    expect(TabsContent.displayName).toBe("TabsContent");
+  });
+
+  it("moves between tabs with the vertical arrow keys when orientation is vertical", () => {
+    render(
+      <Tabs defaultValue="a" orientation="vertical">
+        <TabsList aria-label="Letters">
+          <TabsTrigger value="a">A</TabsTrigger>
+          <TabsTrigger value="b">B</TabsTrigger>
+        </TabsList>
+        <TabsContent value="a">Panel A</TabsContent>
+        <TabsContent value="b">Panel B</TabsContent>
+      </Tabs>,
+    );
+    expect(screen.getByRole("tablist")).toHaveAttribute(
+      "aria-orientation",
+      "vertical",
+    );
+    const a = screen.getByRole("tab", { name: "A" });
+    a.focus();
+    fireEvent.keyDown(a, { key: "ArrowDown" });
+    expect(screen.getByRole("tab", { name: "B" })).toHaveFocus();
+  });
+
+  it("does not select a disabled trigger", () => {
+    const onValueChange = vi.fn();
+    render(
+      <Tabs defaultValue="a" onValueChange={onValueChange}>
+        <TabsList aria-label="Letters">
+          <TabsTrigger value="a">A</TabsTrigger>
+          <TabsTrigger disabled value="b">
+            B
+          </TabsTrigger>
+        </TabsList>
+        <TabsContent value="a">Panel A</TabsContent>
+        <TabsContent value="b">Panel B</TabsContent>
+      </Tabs>,
+    );
+    fireEvent.click(screen.getByRole("tab", { name: "B" }));
+    expect(onValueChange).not.toHaveBeenCalled();
+    expect(screen.getByText("Panel A")).toBeInTheDocument();
+  });
 });

@@ -1,9 +1,10 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 
 import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 
+import { useControllableState } from "../../../lib/use-controllable-state";
 import { cn } from "../../../lib/utils";
 import { Avatar, AvatarFallback } from "../../atoms/avatar/avatar";
 import { Badge } from "../../atoms/badge/badge";
@@ -308,22 +309,16 @@ const ActivityLog = ({
   ...props
 }: ActivityLogProps & { ref?: React.Ref<HTMLDivElement> }) => {
   const totalPages = Math.max(1, Math.ceil(items.length / pageSize));
-  const [uncontrolledPage, setUncontrolledPage] = useState(defaultPage);
-  const currentPage = Math.min(
-    Math.max(page ?? uncontrolledPage, 1),
-    totalPages,
-  );
+  const [requestedPage, handlePageChange] = useControllableState({
+    defaultValue: defaultPage,
+    onChange: onPageChange,
+    value: page,
+  });
+  const currentPage = Math.min(Math.max(requestedPage, 1), totalPages);
   const pageNumbers = useMemo(
     () => buildPageNumbers(currentPage, totalPages),
     [currentPage, totalPages],
   );
-
-  function handlePageChange(nextPage: number) {
-    if (page === undefined) {
-      setUncontrolledPage(nextPage);
-    }
-    onPageChange?.(nextPage);
-  }
 
   return (
     <Card className={cn("w-full", className)} ref={ref} {...props}>

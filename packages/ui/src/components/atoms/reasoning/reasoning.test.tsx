@@ -39,6 +39,30 @@ describe("Reasoning", () => {
     expect(onOpenChange).toHaveBeenLastCalledWith(false);
   });
 
+  it("follows `open` when controlled and reports the request", () => {
+    const onOpenChange = vi.fn();
+    const { rerender } = render(
+      <Reasoning onOpenChange={onOpenChange} open={false} steps={["Step A"]} />,
+    );
+    fireEvent.click(screen.getByRole("button"));
+    expect(onOpenChange).toHaveBeenCalledWith(true);
+    expect(screen.queryByText("Step A")).not.toBeInTheDocument();
+
+    rerender(<Reasoning onOpenChange={onOpenChange} open steps={["Step A"]} />);
+    expect(screen.getByText("Step A")).toBeInTheDocument();
+  });
+
+  it("points the trigger at the panel only while the panel exists", () => {
+    render(<Reasoning steps={["Step A"]} />);
+    const trigger = screen.getByRole("button");
+    expect(trigger).not.toHaveAttribute("aria-controls");
+    fireEvent.click(trigger);
+    const panelId = trigger.getAttribute("aria-controls") ?? "";
+    expect(document.querySelector(`[id="${panelId}"]`)).toHaveTextContent(
+      "Step A",
+    );
+  });
+
   it("auto-expands while streaming", () => {
     render(<Reasoning isStreaming steps={["Thinking hard"]} />);
     expect(screen.getByText("Thinking hard")).toBeInTheDocument();

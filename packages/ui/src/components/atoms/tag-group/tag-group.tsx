@@ -4,6 +4,7 @@ import * as React from "react";
 
 import { X } from "lucide-react";
 
+import { useControllableState } from "../../../lib/use-controllable-state";
 import { cn } from "../../../lib/utils";
 
 /** Selection behaviour for a TagGroup. */
@@ -64,20 +65,18 @@ function useTagSelection({
   selectionMode,
   value,
 }: TagSelectionOptions) {
-  const [internalValue, setInternalValue] = React.useState(defaultValue);
-  const selectedValues = value ?? internalValue;
+  const [selectedValues, setSelectedValues] = useControllableState({
+    defaultValue,
+    onChange: onValueChange,
+    value,
+  });
 
   const select = (item: string) => {
     if (selectionMode === "none") {
       return;
     }
 
-    const next = nextSelection(selectedValues, item, selectionMode);
-    if (value === undefined) {
-      setInternalValue(next);
-    }
-
-    onValueChange?.(next);
+    setSelectedValues(nextSelection(selectedValues, item, selectionMode));
   };
 
   return { select, selectedValues };

@@ -6,6 +6,7 @@ import { Listbox, ListboxItem } from "@ui-sdk/react/listbox";
 import { mergeProps, renderElement } from "@ui-sdk/react/primitive";
 import { Check } from "lucide-react";
 
+import { reselectProps } from "../../../lib/reselect";
 import { cn } from "../../../lib/utils";
 
 /** Selection behaviour for a ListBox. */
@@ -39,7 +40,10 @@ const ReselectContext = React.createContext<
  * one tab stop, ArrowUp / ArrowDown / Home / End move focus between enabled
  * options, Enter or Space toggles selection.
  */
-export type ListBoxProps = {
+export type ListBoxProps = Omit<
+  React.ComponentPropsWithoutRef<"div">,
+  "defaultValue" | "onChange" | "value"
+> & {
   children: React.ReactNode;
   className?: string;
   defaultValue?: string[];
@@ -60,6 +64,7 @@ const ListBox = ({
   ref,
   selectionMode = "single",
   value,
+  ...props
 }: ListBoxProps & { ref?: React.Ref<HTMLDivElement> }) => {
   const multiple = selectionMode === "multiple";
   // A press on the selected option still reports the value, as before ui-sdk.
@@ -76,6 +81,7 @@ const ListBox = ({
   return (
     <ReselectContext value={reselect}>
       <Listbox<string, boolean>
+        {...props}
         // Keys move focus and Enter, Space or a press selects, as before.
         activation="manual"
         aria-label={label}
@@ -113,7 +119,10 @@ function getItemClassName(className: string | undefined) {
 }
 
 /** Single option within a ListBox. */
-export type ListBoxItemProps = {
+export type ListBoxItemProps = Omit<
+  React.ComponentPropsWithoutRef<"div">,
+  "value"
+> & {
   children: React.ReactNode;
   className?: string;
   disabled?: boolean;
@@ -126,33 +135,33 @@ const ListBoxItem = ({
   disabled = false,
   ref,
   value,
+  ...props
 }: ListBoxItemProps & { ref?: React.Ref<HTMLDivElement> }) => {
   const reselect = React.use(ReselectContext);
   const onReselect = reselect
-    ? {
-        onClick: () => {
-          reselect(value);
-        },
-        onKeyDown: (event: React.KeyboardEvent) => {
-          if (event.key === "Enter" || event.key === " ") {
-            reselect(value);
-          }
-        },
+    ? () => {
+        reselect(value);
       }
-    : {};
+    : undefined;
   const renderItem = (
-    props: Record<string, unknown>,
+    elementProps: Record<string, unknown>,
     state: { disabled: boolean; selected: boolean },
   ) =>
     renderElement(
       "div",
-      state.selected && !state.disabled ? mergeProps(props, onReselect) : props,
+      state.selected && !state.disabled
+        ? mergeProps(
+            elementProps,
+            reselectProps(onReselect, { keyboard: true }),
+          )
+        : elementProps,
       undefined,
       state,
     );
 
   return (
     <ListboxItem
+      {...props}
       className={getItemClassName(className)}
       data-value={value}
       disabled={disabled}

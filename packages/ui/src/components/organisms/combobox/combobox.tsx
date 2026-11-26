@@ -4,6 +4,7 @@ import * as React from "react";
 
 import { Check, ChevronsUpDown } from "lucide-react";
 
+import { useControllableState } from "../../../lib/use-controllable-state";
 import { cn } from "../../../lib/utils";
 import { Button } from "../../atoms/button/button";
 import {
@@ -38,13 +39,22 @@ export type ComboboxProps = {
   "aria-labelledby"?: string;
   className?: string;
   commandClassName?: string;
+  /** Whether the list is open at first. Ignored once `open` has a value. */
+  defaultOpen?: boolean;
+  /** The chosen option's value at first. Ignored once `value` has a value. */
+  defaultValue?: string;
+  /** Disables the trigger. */
+  disabled?: boolean;
   emptyText?: string;
   /**
    * Id for the trigger button, e.g. for `<label htmlFor>`. The chosen option's
    * label follows that label in the trigger's name.
    */
   id?: string;
+  onOpenChange?: (open: boolean) => void;
   onValueChange?: (value: string) => void;
+  /** Controls whether the list is open. */
+  open?: boolean;
   options: ComboboxOption[];
   placeholder?: string;
   /**
@@ -56,25 +66,6 @@ export type ComboboxProps = {
   triggerClassName?: string;
   value?: string;
 };
-
-function useComboboxValue(
-  value: string | undefined,
-  onValueChange?: (value: string) => void,
-) {
-  const [internalValue, setInternalValue] = React.useState(value ?? "");
-
-  const resolvedValue = value ?? internalValue;
-
-  const setResolvedValue = (nextValue: string) => {
-    if (value === undefined) {
-      setInternalValue(nextValue);
-    }
-
-    onValueChange?.(nextValue);
-  };
-
-  return { resolvedValue, setResolvedValue };
-}
 
 function labelledByIds({
   ariaLabel,
@@ -196,29 +187,36 @@ function ComboboxListPanel({
   );
 }
 
-const Combobox = ({
-  "aria-describedby": ariaDescribedBy,
-  "aria-label": ariaLabel,
-  "aria-labelledby": ariaLabelledBy,
-  className,
-  commandClassName,
-  emptyText = "No option found.",
-  id,
+type ComboboxStateOptions = Pick<
+  ComboboxProps,
+  | "defaultOpen"
+  | "defaultValue"
+  | "onOpenChange"
+  | "onValueChange"
+  | "open"
+  | "options"
+  | "value"
+>;
+
+function useComboboxState({
+  defaultOpen = false,
+  defaultValue = "",
+  onOpenChange,
   onValueChange,
+  open: openProperty,
   options,
-  placeholder = "Select an option",
-  popoverLabel,
-  ref: reference,
-  searchPlaceholder = "Search options...",
-  triggerClassName,
   value,
-}: ComboboxProps & { ref?: React.Ref<HTMLButtonElement> }) => {
-  const [open, setOpen] = React.useState(false);
-  const naming = useTriggerNaming({ ariaLabel, ariaLabelledBy, id });
-  const { resolvedValue, setResolvedValue } = useComboboxValue(
+}: ComboboxStateOptions) {
+  const [open, setOpen] = useControllableState({
+    defaultValue: defaultOpen,
+    onChange: onOpenChange,
+    value: openProperty,
+  });
+  const [resolvedValue, setResolvedValue] = useControllableState({
+    defaultValue,
+    onChange: onValueChange,
     value,
-    onValueChange,
-  );
+  });
   const selectedOption = options.find(
     (option) => option.value === resolvedValue,
   );
@@ -227,6 +225,30 @@ const Combobox = ({
     setResolvedValue(nextValue === resolvedValue ? "" : nextValue);
     setOpen(false);
   };
+
+  return { handleSelect, open, resolvedValue, selectedOption, setOpen };
+}
+
+const Combobox = ({
+  "aria-describedby": ariaDescribedBy,
+  "aria-label": ariaLabel,
+  "aria-labelledby": ariaLabelledBy,
+  className,
+  commandClassName,
+  disabled,
+  emptyText = "No option found.",
+  id,
+  options,
+  placeholder = "Select an option",
+  popoverLabel,
+  ref: reference,
+  searchPlaceholder = "Search options...",
+  triggerClassName,
+  ...stateProps
+}: ComboboxProps & { ref?: React.Ref<HTMLButtonElement> }) => {
+  const naming = useTriggerNaming({ ariaLabel, ariaLabelledBy, id });
+  const { handleSelect, open, resolvedValue, selectedOption, setOpen } =
+    useComboboxState({ ...stateProps, options });
 
   return (
     <Popover onOpenChange={setOpen} open={open}>
@@ -238,6 +260,7 @@ const Combobox = ({
           aria-label={ariaLabel}
           aria-labelledby={naming.labelledBy}
           className={cn("w-full justify-between", triggerClassName)}
+          disabled={disabled}
           id={naming.triggerId}
           ref={reference}
           role="combobox"

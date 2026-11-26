@@ -12,6 +12,12 @@ import {
   TableRow,
 } from "./table";
 
+function slotsOf(container: HTMLElement): (string | undefined)[] {
+  return [...container.querySelectorAll<HTMLElement>("[data-slot]")].map(
+    (element) => element.dataset.slot,
+  );
+}
+
 describe("Table", () => {
   it("renders rows + cells in a table", () => {
     render(
@@ -53,5 +59,40 @@ describe("Table", () => {
       </Table>,
     );
     expect(container.querySelector("table")).toHaveClass("extra");
+  });
+
+  it("names every part with data-slot, so a consumer can target it", () => {
+    const { container } = render(
+      <Table>
+        <TableCaption>Caption</TableCaption>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Name</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          <TableRow>
+            <TableCell>Ada</TableCell>
+          </TableRow>
+        </TableBody>
+        <TableFooter>
+          <TableRow>
+            <TableCell>Total</TableCell>
+          </TableRow>
+        </TableFooter>
+      </Table>,
+    );
+    expect(new Set(slotsOf(container))).toEqual(
+      new Set([
+        "table",
+        "table-caption",
+        "table-header",
+        "table-row",
+        "table-head",
+        "table-body",
+        "table-cell",
+        "table-footer",
+      ]),
+    );
   });
 });

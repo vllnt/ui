@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 
 import { Check, ChevronRight, Search } from "lucide-react";
 
+import { useControllableState } from "../../../lib/use-controllable-state";
 import { cn } from "../../../lib/utils";
 import { Badge } from "../../atoms/badge/badge";
 import { Button } from "../../atoms/button/button";
@@ -33,11 +34,16 @@ export type ScopeSelectorSelection = {
 
 export type ScopeSelectorProps = {
   className?: string;
+  /** Whether the list is open at first. Ignored once `open` has a value. */
+  defaultOpen?: boolean;
   defaultValue?: string;
   disabled?: boolean;
   emptyMessage?: string;
   nodes: ScopeSelectorNode[];
+  onOpenChange?: (open: boolean) => void;
   onValueChange?: (selection: ScopeSelectorSelection) => void;
+  /** Controls whether the list is open. */
+  open?: boolean;
   placeholder?: string;
   searchPlaceholder?: string;
   value?: string;
@@ -380,20 +386,36 @@ function ScopeSelectorPopoverBody({
   );
 }
 
+type ScopeSelectorStateOptions = Pick<
+  ScopeSelectorProps,
+  | "defaultOpen"
+  | "defaultValue"
+  | "nodes"
+  | "onOpenChange"
+  | "onValueChange"
+  | "open"
+  | "value"
+>;
+
 function useScopeSelectorState({
+  defaultOpen = false,
   defaultValue,
   nodes,
+  onOpenChange,
   onValueChange,
+  open: openProperty,
   value,
-}: Pick<
-  ScopeSelectorProps,
-  "defaultValue" | "nodes" | "onValueChange" | "value"
->): ScopeSelectorState {
-  const [open, setOpen] = useState(false);
+}: ScopeSelectorStateOptions): ScopeSelectorState {
+  const [open, setOpen] = useControllableState({
+    defaultValue: defaultOpen,
+    onChange: onOpenChange,
+    value: openProperty,
+  });
   const [query, setQuery] = useState("");
-  const [uncontrolledValue, setUncontrolledValue] = useState(defaultValue);
+  const [selectedValue, setSelectedValue] = useControllableState<
+    string | undefined
+  >({ defaultValue, value });
   const [currentPath, setCurrentPath] = useState<ScopeSelectorNode[]>([]);
-  const selectedValue = value ?? uncontrolledValue;
   const selectedSelection = useMemo(
     () => findSelection(nodes, selectedValue),
     [nodes, selectedValue],
@@ -406,9 +428,7 @@ function useScopeSelectorState({
   const currentLevelNodes = getVisibleNodes(nodes, currentPath);
 
   function handleSelect(selection: ScopeSelectorSelection) {
-    if (value === undefined) {
-      setUncontrolledValue(selection.node.id);
-    }
+    setSelectedValue(selection.node.id);
     setCurrentPath(selection.path.slice(0, -1));
     setQuery("");
     setOpen(false);
@@ -451,20 +471,26 @@ function useScopeSelectorState({
 
 const ScopeSelector = ({
   className,
+  defaultOpen,
   defaultValue,
   disabled,
   emptyMessage = "No scopes available.",
   nodes,
+  onOpenChange,
   onValueChange,
+  open,
   placeholder = "Select scope",
   ref,
   searchPlaceholder = "Search scopes...",
   value,
 }: ScopeSelectorProps & { ref?: React.Ref<HTMLButtonElement> }) => {
   const state = useScopeSelectorState({
+    defaultOpen,
     defaultValue,
     nodes,
+    onOpenChange,
     onValueChange,
+    open,
     value,
   });
 

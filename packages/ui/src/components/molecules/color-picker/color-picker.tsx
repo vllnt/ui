@@ -3,6 +3,7 @@
 import * as React from "react";
 
 import { keyByOccurrence } from "../../../lib/occurrence-keys";
+import { useControllableState } from "../../../lib/use-controllable-state";
 import { cn } from "../../../lib/utils";
 import { Button } from "../../atoms/button/button";
 import { Input } from "../../atoms/input/input";
@@ -98,16 +99,11 @@ const ColorPicker = ({
   swatches = presetSwatches,
   value,
 }: ColorPickerProps & { ref?: React.Ref<HTMLButtonElement> }) => {
-  const [internalValue, setInternalValue] = React.useState(defaultValue);
-  const currentValue = value ?? internalValue;
-
-  const update = (next: string) => {
-    if (value === undefined) {
-      setInternalValue(next);
-    }
-
-    onValueChange?.(next);
-  };
+  const [currentValue, update] = useControllableState({
+    defaultValue,
+    onChange: onValueChange,
+    value,
+  });
 
   return (
     <Popover>

@@ -1,5 +1,8 @@
 "use client";
 
+import { type FocusEvent, useCallback, useEffect, useRef } from "react";
+
+import { moveRovingFocus } from "../../../lib/roving-focus";
 import { cn } from "../../../lib/utils";
 
 const FOCUSABLE_SELECTOR = [
@@ -10,6 +13,27 @@ const FOCUSABLE_SELECTOR = [
   "textarea:not([disabled])",
   '[tabindex]:not([tabindex="-1"])',
 ].join(",");
+
+// The toolbar marks each control it manages. A custom control that the toolbar
+// moved out of the tab order (`tabindex="-1"`) no longer matches
+// `FOCUSABLE_SELECTOR`, so the mark keeps it reachable by the arrow keys.
+const ITEM_SELECTOR = `${FOCUSABLE_SELECTOR},[data-toolbar-item]`;
+
+/**
+ * Leaves `current` as the single control of the toolbar in the tab order, or
+ * the first enabled control when `current` left the toolbar or got disabled.
+ */
+function syncTabStops(toolbar: HTMLElement, current: Element | null): void {
+  const items = [...toolbar.querySelectorAll<HTMLElement>(ITEM_SELECTOR)];
+  const enabled = items.filter(
+    (item) => !item.matches(':disabled, [aria-disabled="true"]'),
+  );
+  const stop = enabled.find((item) => item === current) ?? enabled[0];
+  items.forEach((item) => {
+    item.dataset.toolbarItem = "";
+    item.tabIndex = item === stop ? 0 : -1;
+  });
+}
 
 /** Orientation shared by the toolbar and its separators. */
 export type ToolbarOrientation = "horizontal" | "vertical";
@@ -22,7 +46,9 @@ export type ToolbarProps = {
 
 /**
  * Horizontal (or vertical) container that groups related controls with
- * `role="toolbar"` and roving arrow-key navigation (Arrow keys, Home, End).
+ * `role="toolbar"`. The toolbar is one tab stop: Tab enters on the control
+ * that had focus last, and the arrow keys along `orientation`, Home and End
+ * move between controls.
  * @example
  * <Toolbar aria-label="Formatting">
  *   <Button>Bold</Button>
@@ -32,51 +58,61 @@ export type ToolbarProps = {
  */
 const Toolbar = ({
   className,
+  onFocus,
   onKeyDown,
   orientation = "horizontal",
   ref,
   ...props
 }: ToolbarProps & { ref?: React.Ref<HTMLDivElement> }) => {
+  const toolbarRef = useRef<HTMLDivElement | null>(null);
+  const lastFocusedRef = useRef<Element | null>(null);
+
+  const setRef = useCallback(
+    (node: HTMLDivElement | null) => {
+      toolbarRef.current = node;
+      if (typeof ref === "function") {
+        ref(node);
+      } else if (ref) {
+        ref.current = node;
+      }
+    },
+    [ref],
+  );
+
+  // Controls come and go, and get disabled, without the toolbar rendering.
+  useEffect(() => {
+    const toolbar = toolbarRef.current;
+    if (!toolbar) return;
+    const sync = (): void => {
+      syncTabStops(toolbar, lastFocusedRef.current);
+    };
+    sync();
+    const observer = new MutationObserver(sync);
+    observer.observe(toolbar, {
+      attributeFilter: ["aria-disabled", "disabled"],
+      attributes: true,
+      childList: true,
+      subtree: true,
+    });
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
+  function handleFocus(event: FocusEvent<HTMLDivElement>): void {
+    onFocus?.(event);
+    if (
+      event.target instanceof HTMLElement &&
+      event.target.matches("[data-toolbar-item]")
+    ) {
+      lastFocusedRef.current = event.target;
+      syncTabStops(event.currentTarget, event.target);
+    }
+  }
+
   function handleKeyDown(event: React.KeyboardEvent<HTMLDivElement>): void {
     onKeyDown?.(event);
-    if (event.defaultPrevented) return;
-
-    const nextKey = orientation === "horizontal" ? "ArrowRight" : "ArrowDown";
-    const previousKey = orientation === "horizontal" ? "ArrowLeft" : "ArrowUp";
-    const isNext = event.key === nextKey;
-    const isPrevious = event.key === previousKey;
-    const isHome = event.key === "Home";
-    const isEnd = event.key === "End";
-
-    if (!isNext && !isPrevious && !isHome && !isEnd) return;
-
-    const items = [
-      ...event.currentTarget.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR),
-    ];
-    if (items.length === 0) return;
-
-    event.preventDefault();
-    const active =
-      document.activeElement instanceof HTMLElement
-        ? document.activeElement
-        : null;
-    const currentIndex = active ? items.indexOf(active) : -1;
-
-    let nextIndex = 0;
-    if (isHome) {
-      nextIndex = 0;
-    } else if (isEnd) {
-      nextIndex = items.length - 1;
-    } else if (isNext) {
-      nextIndex = currentIndex < 0 ? 0 : (currentIndex + 1) % items.length;
-    } else {
-      nextIndex =
-        currentIndex < 0
-          ? items.length - 1
-          : (currentIndex - 1 + items.length) % items.length;
-    }
-
-    items[nextIndex]?.focus();
+    moveRovingFocus(event, ITEM_SELECTOR, { orientation });
   }
 
   return (
@@ -87,8 +123,9 @@ const Toolbar = ({
         orientation === "vertical" ? "flex-col" : "flex-row",
         className,
       )}
+      onFocus={handleFocus}
       onKeyDown={handleKeyDown}
-      ref={ref}
+      ref={setRef}
       role="toolbar"
       {...props}
     />

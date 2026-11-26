@@ -1,9 +1,15 @@
 "use client";
 
-import { Children, useCallback, useEffect, useId, useState } from "react";
+import { Children, useEffect } from "react";
 
+import {
+  Collapsible,
+  CollapsiblePanel,
+  CollapsibleTrigger,
+} from "@ui-sdk/react/collapsible";
 import { Brain, ChevronDown } from "lucide-react";
 
+import { useControllableState } from "../../../lib/use-controllable-state";
 import { cn } from "../../../lib/utils";
 
 export type ReasoningProps = {
@@ -16,31 +22,23 @@ export type ReasoningProps = {
   isStreaming?: boolean;
   /** Called whenever the expanded state changes. */
   onOpenChange?: (open: boolean) => void;
+  /** Controls whether the panel shows its steps. Pair it with `onOpenChange`. */
+  open?: boolean;
   /** Reasoning steps rendered as an ordered list when expanded. */
   steps?: string[];
 };
 
 function ReasoningTrigger({
-  contentId,
   duration,
   isOpen,
   isStreaming,
-  onToggle,
 }: {
-  contentId: string;
   duration?: number;
   isOpen: boolean;
   isStreaming: boolean;
-  onToggle: () => void;
 }) {
   return (
-    <button
-      aria-controls={contentId}
-      aria-expanded={isOpen}
-      className="flex w-full items-center gap-2 px-3 py-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
-      onClick={onToggle}
-      type="button"
-    >
+    <CollapsibleTrigger className="flex w-full items-center gap-2 px-3 py-2 text-sm text-muted-foreground transition-colors hover:text-foreground">
       <Brain className="size-4 shrink-0" />
       <span className="font-medium">
         {isStreaming ? "Reasoning" : "Reasoned"}
@@ -57,28 +55,23 @@ function ReasoningTrigger({
           isOpen ? "rotate-180" : "rotate-0",
         )}
       />
-    </button>
+    </CollapsibleTrigger>
   );
 }
 
 function ReasoningContent({
   children,
-  contentId,
   isStreaming,
   steps,
 }: {
   children?: React.ReactNode;
-  contentId: string;
   isStreaming: boolean;
   steps?: string[];
 }) {
   const hasSteps = steps !== undefined && steps.length > 0;
 
   return (
-    <div
-      className="border-t border-border px-3 py-2 text-sm text-muted-foreground"
-      id={contentId}
-    >
+    <CollapsiblePanel className="border-t border-border px-3 py-2 text-sm text-muted-foreground">
       {hasSteps ? (
         <ol className="list-decimal space-y-1 pl-4">
           {Children.map(steps, (step) => (
@@ -96,7 +89,7 @@ function ReasoningContent({
           &#9611;
         </span>
       ) : null}
-    </div>
+    </CollapsiblePanel>
   );
 }
 
@@ -116,11 +109,15 @@ export const Reasoning = ({
   duration,
   isStreaming = false,
   onOpenChange,
+  open,
   ref,
   steps,
 }: ReasoningProps & { ref?: React.Ref<HTMLDivElement> }) => {
-  const [isOpen, setIsOpen] = useState(isStreaming);
-  const contentId = useId();
+  const [isOpen, setIsOpen] = useControllableState({
+    defaultValue: isStreaming,
+    onChange: onOpenChange,
+    value: open,
+  });
 
   useEffect(() => {
     if (!isStreaming) return;
@@ -130,36 +127,24 @@ export const Reasoning = ({
     return () => {
       cancelAnimationFrame(frame);
     };
-  }, [isStreaming]);
-
-  const handleToggle = useCallback(() => {
-    const next = !isOpen;
-    setIsOpen(next);
-    onOpenChange?.(next);
-  }, [isOpen, onOpenChange]);
+  }, [isStreaming, setIsOpen]);
 
   return (
-    <div
+    <Collapsible
       className={cn("rounded-lg border border-border bg-muted/30", className)}
+      onOpenChange={setIsOpen}
+      open={isOpen}
       ref={ref}
     >
       <ReasoningTrigger
-        contentId={contentId}
         duration={duration}
         isOpen={isOpen}
         isStreaming={isStreaming}
-        onToggle={handleToggle}
       />
-      {isOpen ? (
-        <ReasoningContent
-          contentId={contentId}
-          isStreaming={isStreaming}
-          steps={steps}
-        >
-          {children}
-        </ReasoningContent>
-      ) : null}
-    </div>
+      <ReasoningContent isStreaming={isStreaming} steps={steps}>
+        {children}
+      </ReasoningContent>
+    </Collapsible>
   );
 };
 Reasoning.displayName = "Reasoning";

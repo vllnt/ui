@@ -59,4 +59,35 @@ describe("TLDRSection", () => {
     const regionId = toggle.getAttribute("aria-controls") ?? "";
     expect(document.querySelector(`[id="${regionId}"]`)).toBeInTheDocument();
   });
+
+  it("reports each toggle and can start open", () => {
+    const onOpenChange = vi.fn();
+    render(
+      <TLDRSection defaultOpen label="TLDR" onOpenChange={onOpenChange}>
+        <p>Body content</p>
+      </TLDRSection>,
+    );
+    const toggle = screen.getByRole("button", { name: "TLDR" });
+    expect(toggle).toHaveAttribute("aria-expanded", "true");
+    fireEvent.click(toggle);
+    expect(onOpenChange).toHaveBeenLastCalledWith(false);
+    expect(toggle).toHaveAttribute("aria-expanded", "false");
+  });
+
+  it("follows `open` when controlled", () => {
+    const { rerender } = render(
+      <TLDRSection label="TLDR" open={false}>
+        <p>Body content</p>
+      </TLDRSection>,
+    );
+    const toggle = screen.getByRole("button", { name: "TLDR" });
+    fireEvent.click(toggle);
+    expect(toggle).toHaveAttribute("aria-expanded", "false");
+    rerender(
+      <TLDRSection label="TLDR" open>
+        <p>Body content</p>
+      </TLDRSection>,
+    );
+    expect(toggle).toHaveAttribute("aria-expanded", "true");
+  });
 });

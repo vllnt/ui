@@ -1,6 +1,6 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import type { ComponentProps, ReactNode } from "react";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 
 import {
   AgentActivity,
@@ -109,6 +109,40 @@ describe("AgentActivity", () => {
     ).not.toBeNull();
     fireEvent.click(toggle);
     expect(screen.getByText("Hidden detail")).toBeVisible();
+  });
+
+  it("reports each toggle and closes the details again", () => {
+    const onOpenChange = vi.fn();
+    render(
+      activity(
+        { onOpenChange, status: "completed" },
+        <AgentStepDetail>Open detail</AgentStepDetail>,
+      ),
+    );
+    expect(screen.getByText("Open detail")).toBeVisible();
+    fireEvent.click(screen.getByRole("button", { name: "Hide details" }));
+    expect(onOpenChange).toHaveBeenLastCalledWith(false, expect.anything());
+    expect(screen.getByText("Open detail")).not.toBeVisible();
+    fireEvent.click(screen.getByRole("button", { name: "Show details" }));
+    expect(onOpenChange).toHaveBeenLastCalledWith(true, expect.anything());
+  });
+
+  it("follows `open` when controlled", () => {
+    const { rerender } = render(
+      activity(
+        { open: false, status: "completed" },
+        <AgentStepDetail>Controlled detail</AgentStepDetail>,
+      ),
+    );
+    fireEvent.click(screen.getByRole("button", { name: "Show details" }));
+    expect(screen.getByText("Controlled detail")).not.toBeVisible();
+    rerender(
+      activity(
+        { open: true, status: "completed" },
+        <AgentStepDetail>Controlled detail</AgentStepDetail>,
+      ),
+    );
+    expect(screen.getByText("Controlled detail")).toBeVisible();
   });
 
   it("propagates AgentActivity labels to the step toggle", () => {

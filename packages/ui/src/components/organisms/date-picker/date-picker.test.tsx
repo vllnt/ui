@@ -89,3 +89,10 @@ describe("DatePicker", () => {
     ).toBeInTheDocument();
   });
 });
+
+describe("DatePicker defaultValue", () => {
+  it("shows the default date and keeps it uncontrolled", () => {
+    render(<DatePicker defaultValue={new Date(2026, 3, 19)} />);
+    expect(screen.getByRole("button")).toHaveTextContent("April 19, 2026");
+  });
+});

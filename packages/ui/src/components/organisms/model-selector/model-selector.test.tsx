@@ -88,6 +88,39 @@ describe("ModelSelector", () => {
   });
 });
 
+describe("ModelSelector uncontrolled selection", () => {
+  it("keeps the selection itself when selectedModelId is left out", () => {
+    const onSelectModel = vi.fn();
+    render(
+      <ModelSelector
+        defaultSelectedModelId="openai/gpt-4o"
+        models={models}
+        onOpenChange={vi.fn()}
+        onSelectModel={onSelectModel}
+        open
+      />,
+    );
+    expect(getModelItem("GPT-4o")).toHaveAttribute("aria-disabled", "true");
+
+    fireEvent.click(getModelItem("Claude 3.5 Sonnet"));
+
+    expect(onSelectModel).toHaveBeenCalledWith("anthropic/claude-3-5-sonnet");
+    expect(getModelItem("Claude 3.5 Sonnet")).toHaveAttribute(
+      "aria-disabled",
+      "true",
+    );
+    expect(getModelItem("GPT-4o")).not.toHaveAttribute("aria-disabled", "true");
+  });
+
+  it("works without onSelectModel", () => {
+    render(<ModelSelector models={models} onOpenChange={vi.fn()} open />);
+    expect(() => {
+      fireEvent.click(getModelItem("GPT-4o"));
+    }).not.toThrow();
+    expect(getModelItem("GPT-4o")).toHaveAttribute("aria-disabled", "true");
+  });
+});
+
 describe("ModelSelector keyboard", () => {
   it("navigates the model list from the search box and selects with Enter", () => {
     const onSelectModel = vi.fn();

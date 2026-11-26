@@ -8,6 +8,12 @@ import {
   DataListValue,
 } from "./data-list";
 
+function slotsOf(container: HTMLElement): (string | undefined)[] {
+  return [...container.querySelectorAll<HTMLElement>("[data-slot]")].map(
+    (element) => element.dataset.slot,
+  );
+}
+
 describe("DataList", () => {
   it("renders labels and values semantically with custom class names", () => {
     render(
@@ -35,5 +41,22 @@ describe("DataList", () => {
       </DataList>,
     );
     expect(screen.getByText("Owner").parentElement).toHaveClass("py-3");
+  });
+
+  it("names every part with data-slot, so a consumer can target it", () => {
+    const { container } = render(
+      <DataList>
+        <DataListItem>
+          <DataListLabel>Owner</DataListLabel>
+          <DataListValue>Ada</DataListValue>
+        </DataListItem>
+      </DataList>,
+    );
+    expect(slotsOf(container)).toEqual([
+      "data-list",
+      "data-list-item",
+      "data-list-label",
+      "data-list-value",
+    ]);
   });
 });

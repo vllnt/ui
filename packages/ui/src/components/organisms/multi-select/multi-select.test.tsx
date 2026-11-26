@@ -138,3 +138,29 @@ describe("MultiSelect", () => {
     ).toBeInTheDocument();
   });
 });
+
+describe("MultiSelect open state", () => {
+  it("starts open with defaultOpen", () => {
+    render(<MultiSelect defaultOpen options={OPTIONS} />);
+    expect(screen.getByRole("listbox")).toBeInTheDocument();
+  });
+
+  it("reports open changes and follows `open` when controlled", () => {
+    const onOpenChange = vi.fn();
+    const { rerender } = render(
+      <MultiSelect
+        onOpenChange={onOpenChange}
+        open={false}
+        options={OPTIONS}
+      />,
+    );
+    fireEvent.click(screen.getByRole("combobox"));
+    expect(onOpenChange).toHaveBeenCalledWith(true);
+    expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
+
+    rerender(
+      <MultiSelect onOpenChange={onOpenChange} open options={OPTIONS} />,
+    );
+    expect(screen.getByRole("listbox")).toBeInTheDocument();
+  });
+});

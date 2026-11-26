@@ -1,4 +1,4 @@
-import { render } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { stubAnimationFrame } from "../../../__tests__/stub-animation-frame";
@@ -14,6 +14,26 @@ describe("ThinkingBlock", () => {
   it("is visible when rendered", () => {
     const { container } = render(<ThinkingBlock />);
     expect(container.firstChild).toBeVisible();
+  });
+});
+
+describe("ThinkingBlock toggle", () => {
+  it("starts closed, opens on press and reports the change", () => {
+    const onOpenChange = vi.fn();
+    render(<ThinkingBlock onOpenChange={onOpenChange} thinking="Mulling" />);
+    const trigger = screen.getByRole("button", { name: "Thinking" });
+    expect(trigger).toHaveAttribute("aria-expanded", "false");
+    expect(screen.queryByText("Mulling")).not.toBeInTheDocument();
+    fireEvent.click(trigger);
+    expect(onOpenChange).toHaveBeenCalledWith(true);
+    expect(screen.getByText("Mulling")).toBeInTheDocument();
+  });
+
+  it("follows `open` when controlled", () => {
+    const { rerender } = render(<ThinkingBlock open thinking="Mulling" />);
+    expect(screen.getByText("Mulling")).toBeInTheDocument();
+    rerender(<ThinkingBlock open={false} thinking="Mulling" />);
+    expect(screen.queryByText("Mulling")).not.toBeInTheDocument();
   });
 });
 

@@ -11,6 +11,7 @@ import {
   useState,
 } from "react";
 
+import { useControllableState } from "../../../lib/use-controllable-state";
 import { cn } from "../../../lib/utils";
 
 /**
@@ -110,22 +111,6 @@ function flattenVisible(arguments_: FlattenArguments): FlatNode[] {
       }),
     ];
   });
-}
-
-function useControlled<T>(
-  controlled: T | undefined,
-  defaultValue: T,
-): readonly [T, (next: T) => void, boolean] {
-  const [internal, setInternal] = useState<T>(defaultValue);
-  const isControlled = controlled !== undefined;
-  const value = isControlled ? controlled : internal;
-  const setValue = useCallback(
-    (next: T) => {
-      if (!isControlled) setInternal(next);
-    },
-    [isControlled],
-  );
-  return [value, setValue, isControlled];
 }
 
 function toggleSet(set: ReadonlySet<string>, id: string): string[] {
@@ -254,34 +239,33 @@ function useTreeState(arguments_: {
     selected,
     selectionMode,
   } = arguments_;
-  const [expandedState, setExpandedState] = useControlled<string[]>(
-    expanded,
-    defaultExpanded,
-  );
-  const [selectedState, setSelectedState] = useControlled<string[]>(
-    selected,
-    defaultSelected,
-  );
+  const [expandedState, setExpandedState] = useControllableState({
+    defaultValue: defaultExpanded,
+    onChange: onExpandedChange,
+    value: expanded,
+  });
+  const [selectedState, setSelectedState] = useControllableState({
+    defaultValue: defaultSelected,
+    onChange: onSelect,
+    value: selected,
+  });
   const expandedSet = useMemo(() => new Set(expandedState), [expandedState]);
   const selectedSet = useMemo(() => new Set(selectedState), [selectedState]);
 
   const applyExpand = useCallback(
     (id: string) => {
-      const next = toggleSet(expandedSet, id);
-      setExpandedState(next);
-      onExpandedChange?.(next);
+      setExpandedState(toggleSet(expandedSet, id));
     },
-    [expandedSet, onExpandedChange, setExpandedState],
+    [expandedSet, setExpandedState],
   );
 
   const applySelect = useCallback(
     (id: string) => {
-      const next =
-        selectionMode === "single" ? [id] : toggleSet(selectedSet, id);
-      setSelectedState(next);
-      onSelect?.(next);
+      setSelectedState(
+        selectionMode === "single" ? [id] : toggleSet(selectedSet, id),
+      );
     },
-    [onSelect, selectedSet, selectionMode, setSelectedState],
+    [selectedSet, selectionMode, setSelectedState],
   );
 
   return { applyExpand, applySelect, expandedSet, selectedSet };
