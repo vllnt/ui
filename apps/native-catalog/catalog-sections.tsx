@@ -1,3 +1,5 @@
+import { type ReactNode, useState } from "react";
+
 import {
   Accordion,
   AccordionContent,
@@ -48,7 +50,6 @@ import {
   useGlassTextColor,
   useTheme,
 } from "@vllnt/ui-native";
-import { type ReactNode, useState } from "react";
 import { View } from "react-native";
 
 import { SquareGlyph } from "../../packages/ui-native/src/tests/fixture-data";
