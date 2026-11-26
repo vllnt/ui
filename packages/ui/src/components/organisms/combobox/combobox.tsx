@@ -28,14 +28,21 @@ export type ComboboxOption = {
 };
 
 export type ComboboxProps = {
-  /** Accessible name for the trigger when no `<label>` points at `id`. */
   "aria-describedby"?: string;
+  /**
+   * Accessible name for the trigger when no `<label>` points at `id`. The
+   * chosen option's label follows it in the name.
+   */
   "aria-label"?: string;
+  /** Like `aria-label`, from the element with this id. */
   "aria-labelledby"?: string;
   className?: string;
   commandClassName?: string;
   emptyText?: string;
-  /** Id for the trigger button, e.g. for `<label htmlFor>`. */
+  /**
+   * Id for the trigger button, e.g. for `<label htmlFor>`. The chosen option's
+   * label follows that label in the trigger's name.
+   */
   id?: string;
   onValueChange?: (value: string) => void;
   options: ComboboxOption[];
@@ -69,6 +76,47 @@ function useComboboxValue(
   return { resolvedValue, setResolvedValue };
 }
 
+function labelledByIds({
+  ariaLabel,
+  ariaLabelledBy,
+  id,
+  triggerId,
+  valueId,
+}: {
+  ariaLabel?: string;
+  ariaLabelledBy?: string;
+  id?: string;
+  triggerId: string;
+  valueId: string;
+}): string | undefined {
+  if (ariaLabelledBy !== undefined) {
+    return `${ariaLabelledBy} ${valueId}`;
+  }
+  // The trigger names itself: its `aria-label`, or the `<label>` for its id.
+  return ariaLabel !== undefined || id !== undefined
+    ? `${triggerId} ${valueId}`
+    : undefined;
+}
+
+/**
+ * Ids of the popover, the trigger and its value text, and the trigger's
+ * `aria-labelledby`. `aria-label` and a `<label>` replace the button's text in
+ * its name, which would hide the chosen option, so the name takes that label
+ * first and the value after it.
+ */
+function useTriggerNaming(names: {
+  ariaLabel?: string;
+  ariaLabelledBy?: string;
+  id?: string;
+}) {
+  const contentId = React.useId();
+  const triggerId = names.id ?? `${contentId}-trigger`;
+  const valueId = `${contentId}-value`;
+  const labelledBy = labelledByIds({ ...names, triggerId, valueId });
+
+  return { contentId, labelledBy, triggerId, valueId };
+}
+
 function ComboboxOptionItem({
   onSelect,
   option,
@@ -82,6 +130,8 @@ function ComboboxOptionItem({
 
   return (
     <CommandItem
+      // `aria-selected` is ui-sdk's, and follows the highlight.
+      aria-checked={selectedValue === option.value}
       disabled={option.disabled}
       onSelect={() => {
         onSelect(option.value);
@@ -164,7 +214,7 @@ const Combobox = ({
   value,
 }: ComboboxProps & { ref?: React.Ref<HTMLButtonElement> }) => {
   const [open, setOpen] = React.useState(false);
-  const contentId = React.useId();
+  const naming = useTriggerNaming({ ariaLabel, ariaLabelledBy, id });
   const { resolvedValue, setResolvedValue } = useComboboxValue(
     value,
     onValueChange,
@@ -182,18 +232,18 @@ const Combobox = ({
     <Popover onOpenChange={setOpen} open={open}>
       <PopoverTrigger asChild>
         <Button
-          aria-controls={contentId}
+          aria-controls={naming.contentId}
           aria-describedby={ariaDescribedBy}
           aria-expanded={open}
           aria-label={ariaLabel}
-          aria-labelledby={ariaLabelledBy}
+          aria-labelledby={naming.labelledBy}
           className={cn("w-full justify-between", triggerClassName)}
-          id={id}
+          id={naming.triggerId}
           ref={reference}
           role="combobox"
           variant="outline"
         >
-          <span className="truncate">
+          <span className="truncate" id={naming.valueId}>
             {selectedOption ? selectedOption.label : placeholder}
           </span>
           <ChevronsUpDown
@@ -205,7 +255,7 @@ const Combobox = ({
       <ComboboxListPanel
         className={className}
         commandClassName={commandClassName}
-        contentId={contentId}
+        contentId={naming.contentId}
         emptyText={emptyText}
         label={popoverLabel ?? ariaLabel ?? placeholder}
         onSelect={handleSelect}
