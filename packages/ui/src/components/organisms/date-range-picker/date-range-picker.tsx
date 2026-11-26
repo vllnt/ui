@@ -3,9 +3,7 @@
 import * as React from "react";
 
 import { CalendarIcon } from "lucide-react";
-import type { DateRange } from "react-day-picker";
 
-import { focusCalendarDay } from "../../../lib/focus-calendar-day";
 import { cn } from "../../../lib/utils";
 import { Button } from "../../atoms/button/button";
 import {
@@ -13,7 +11,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "../../atoms/popover/popover";
-import { Calendar } from "../../molecules/calendar/calendar";
+import { Calendar, type DateRange } from "../../molecules/calendar/calendar";
 
 const rangeFormatter = new Intl.DateTimeFormat("en-US", {
   day: "numeric",
@@ -91,10 +89,10 @@ const DateRangePicker = ({
         align="start"
         aria-label={popoverLabel}
         className={cn("w-auto p-0", className)}
-        onOpenAutoFocus={focusCalendarDay}
       >
         <Calendar
           defaultMonth={selected?.from}
+          initialFocus
           mode="range"
           numberOfMonths={numberOfMonths}
           onSelect={handleSelect}

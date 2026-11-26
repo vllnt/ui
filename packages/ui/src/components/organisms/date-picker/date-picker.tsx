@@ -4,7 +4,6 @@ import * as React from "react";
 
 import { CalendarIcon } from "lucide-react";
 
-import { focusCalendarDay } from "../../../lib/focus-calendar-day";
 import { cn } from "../../../lib/utils";
 import { Button } from "../../atoms/button/button";
 import {
@@ -85,10 +84,10 @@ const DatePicker = ({
         align="start"
         aria-label={popoverLabel}
         className={cn("w-auto p-0", className)}
-        onOpenAutoFocus={focusCalendarDay}
       >
         <Calendar
           defaultMonth={selectedDate}
+          initialFocus
           mode="single"
           onSelect={handleSelect}
           selected={selectedDate}

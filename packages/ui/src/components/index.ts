@@ -647,7 +647,11 @@ export {
   type ActivityHeatmapItem,
   type ActivityHeatmapProps,
 } from "./organisms/activity-heatmap/activity-heatmap";
-export { Calendar, type CalendarProps } from "./molecules/calendar/calendar";
+export {
+  Calendar,
+  type CalendarProps,
+  type DateRange,
+} from "./molecules/calendar/calendar";
 export {
   type ChoroplethColorScale,
   ChoroplethLegend,

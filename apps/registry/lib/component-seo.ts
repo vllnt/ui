@@ -98,11 +98,11 @@ export const COMPONENT_SEO: readonly ComponentSeo[] = [
   },
   {
     description:
-      "Add a date picker calendar in React for selecting single dates or ranges. Built on react-day-picker with keyboard navigation. Install via the shadcn CLI.",
+      "Add a date picker calendar in React for selecting single dates or ranges. Built on ui-sdk with keyboard navigation. Install via the shadcn CLI.",
     faqs: [
       {
         answer:
-          "Calendar is a date picker calendar component for React built on react-day-picker. It renders a month grid for selecting dates and supports single, multiple, and range selection.",
+          "Calendar is a date picker calendar component for React built on ui-sdk. It renders a month grid for selecting dates and supports single, multiple, and range selection.",
         question: "What is Calendar?",
       },
       {
@@ -112,8 +112,8 @@ export const COMPONENT_SEO: readonly ComponentSeo[] = [
       },
       {
         answer:
-          "Yes. Calendar wraps react-day-picker's DayPicker and forwards all of its props, so you can set the selection mode, disabled dates, and other options while keeping the VLLNT UI styling.",
-        question: "Is Calendar built on react-day-picker?",
+          "Yes. Calendar wraps ui-sdk's calendar and keeps the familiar props (mode, selected, onSelect, disabled, fromDate, toDate, numberOfMonths), so you can set the selection mode, disabled dates, and other options while keeping the VLLNT UI styling.",
+        question: "Is Calendar built on ui-sdk?",
       },
     ],
     related: [
@@ -125,7 +125,7 @@ export const COMPONENT_SEO: readonly ComponentSeo[] = [
     slug: "calendar",
     title: "Calendar — date picker calendar in React | VLLNT UI",
     whatItIs:
-      "Calendar is a date picker calendar for React, built on react-day-picker. It renders a month grid for selecting dates and forwards every DayPicker prop, so you can switch between single, multiple, and range selection modes. Styling matches the rest of the system, with outside days shown by default and custom chevron navigation. Use it inline or inside a popover to build date pickers, booking flows, and scheduling interfaces.",
+      "Calendar is a date picker calendar for React, built on ui-sdk. It renders a month grid for selecting dates, so you can switch between single, multiple, and range selection modes. Styling matches the rest of the system, with outside days shown by default and custom chevron navigation. Use it inline or inside a popover to build date pickers, booking flows, and scheduling interfaces.",
   },
   {
     description:

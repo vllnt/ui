@@ -319,7 +319,7 @@ import {
 | `ToggleGroup` | `{ ToggleGroup, ToggleGroupItem }` | ui-sdk toggle group |
 | `InputOTP` | `{ InputOTP, InputOTPGroup, InputOTPSlot, InputOTPSeparator }` | OTP input via `input-otp` |
 | `Label` | `{ Label }` | ui-sdk label |
-| `Calendar` | `{ Calendar }` | Date picker via `react-day-picker` |
+| `Calendar` | `{ Calendar }` | Date picker via ui-sdk |
 
 ### Layout
 

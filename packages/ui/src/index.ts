@@ -41,7 +41,6 @@ export {
   statusDotVariants,
   type StatusTone,
 } from "./lib/status-dot";
-export { focusCalendarDay } from "./lib/focus-calendar-day";
 export { keyByOccurrence } from "./lib/occurrence-keys";
 export {
   moveRovingFocus,
