@@ -68,6 +68,88 @@ describe("SearchDialog", () => {
     expect(screen.getByRole("tab", { name: "Everything" })).toBeInTheDocument();
   });
 
+  describe("scope tabs", () => {
+    function openWithTabs() {
+      render(
+        <SearchDialog
+          docsSearch={vi.fn().mockResolvedValue([])}
+          items={componentItems}
+          onSelect={vi.fn()}
+        />,
+      );
+      fireEvent.click(screen.getByRole("button", { name: /search/i }));
+
+      return {
+        components: screen.getByRole("tab", { name: "Components" }),
+        docs: screen.getByRole("tab", { name: "Docs" }),
+        everything: screen.getByRole("tab", { name: "Everything" }),
+      };
+    }
+
+    it("keeps one tab stop, on the selected tab", () => {
+      const { components, docs, everything } = openWithTabs();
+
+      expect(components).toHaveAttribute("tabindex", "0");
+      expect(docs).toHaveAttribute("tabindex", "-1");
+      expect(everything).toHaveAttribute("tabindex", "-1");
+
+      fireEvent.click(docs);
+
+      expect(components).toHaveAttribute("tabindex", "-1");
+      expect(docs).toHaveAttribute("tabindex", "0");
+    });
+
+    it("moves focus and selection with the arrow keys, Home and End", () => {
+      const { components, docs, everything } = openWithTabs();
+      components.focus();
+
+      fireEvent.keyDown(components, { key: "ArrowRight" });
+      expect(docs).toHaveFocus();
+      expect(docs).toHaveAttribute("aria-selected", "true");
+
+      fireEvent.keyDown(docs, { key: "ArrowRight" });
+      expect(everything).toHaveFocus();
+      expect(everything).toHaveAttribute("aria-selected", "true");
+
+      fireEvent.keyDown(everything, { key: "ArrowRight" });
+      expect(components).toHaveFocus();
+      expect(components).toHaveAttribute("aria-selected", "true");
+
+      fireEvent.keyDown(components, { key: "ArrowLeft" });
+      expect(everything).toHaveFocus();
+
+      fireEvent.keyDown(everything, { key: "Home" });
+      expect(components).toHaveFocus();
+
+      fireEvent.keyDown(components, { key: "End" });
+      expect(everything).toHaveFocus();
+      expect(everything).toHaveAttribute("aria-selected", "true");
+    });
+
+    it("wires every tab to a tabpanel that holds the results and is named by the selected tab", () => {
+      const { components, docs, everything } = openWithTabs();
+      const panel = screen.getByRole("tabpanel");
+
+      [components, docs, everything].forEach((tab) => {
+        expect(tab).toHaveAttribute("aria-controls", panel.id);
+      });
+      expect(panel).toContainElement(screen.getByRole("listbox"));
+      expect(panel).toHaveAccessibleName("Components");
+
+      fireEvent.click(docs);
+
+      expect(screen.getByRole("tabpanel")).toHaveAccessibleName("Docs");
+    });
+
+    it("renders no tabs or tabpanel without docs search", () => {
+      renderSearchDialog();
+      fireEvent.click(screen.getByRole("button", { name: /search/i }));
+
+      expect(screen.queryByRole("tablist")).not.toBeInTheDocument();
+      expect(screen.queryByRole("tabpanel")).not.toBeInTheDocument();
+    });
+  });
+
   it("searches docs and highlights matching snippet text", async () => {
     const documentationResult: SearchItem = {
       description: "/docs",

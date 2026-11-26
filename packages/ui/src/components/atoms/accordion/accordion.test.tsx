@@ -76,6 +76,33 @@ describe("Accordion", () => {
       },
     );
 
+    it("puts each trigger in a heading, h3 unless `as` says otherwise", () => {
+      render(
+        <Accordion>
+          <AccordionItem value="a">
+            <AccordionTrigger value="a">Default</AccordionTrigger>
+            <AccordionContent value="a">Body</AccordionContent>
+          </AccordionItem>
+          <AccordionItem value="b">
+            <AccordionTrigger as="h2" value="b">
+              Section
+            </AccordionTrigger>
+            <AccordionContent value="b">Body</AccordionContent>
+          </AccordionItem>
+        </Accordion>,
+      );
+      const heading = screen.getByRole("heading", { level: 3 });
+      expect(
+        within(heading).getByRole("button", { name: "Default" }),
+      ).toBeInTheDocument();
+      expect(
+        within(screen.getByRole("heading", { level: 2 })).getByRole("button", {
+          name: "Section",
+        }),
+      ).toBeInTheDocument();
+      expect(heading).toHaveClass("m-0");
+    });
+
     it("keeps ids unique across Accordions that reuse the same item values", () => {
       render(
         <>

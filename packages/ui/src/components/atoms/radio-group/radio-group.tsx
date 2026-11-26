@@ -9,6 +9,7 @@ import {
 import { Circle } from "lucide-react";
 import type * as React from "react";
 
+import { HIT_AREA_24 } from "../../../lib/hit-area";
 import { checkedState, withDataAttributes } from "../../../lib/ui-sdk";
 import { cn } from "../../../lib/utils";
 
@@ -57,6 +58,7 @@ const RadioGroupItem = ({
   return (
     <Radio
       className={cn(
+        HIT_AREA_24,
         "aspect-square size-4 rounded-full border border-primary text-primary ring-offset-background focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
         className,
       )}

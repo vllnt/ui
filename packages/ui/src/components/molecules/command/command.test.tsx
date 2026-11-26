@@ -121,6 +121,24 @@ describe("CommandDialog", () => {
     expect(dialog.querySelector("[cmdk-root]")).not.toBeNull();
   });
 
+  it("names the dialog from the title prop", () => {
+    render(
+      <CommandDialog defaultOpen title="Jump to page">
+        <CommandInput placeholder="Type a command" />
+        <CommandList>
+          <CommandItem>Profile</CommandItem>
+        </CommandList>
+      </CommandDialog>,
+    );
+
+    expect(
+      screen.getByRole("dialog", { name: "Jump to page" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByRole("dialog", { name: "Command Menu" }),
+    ).not.toBeInTheDocument();
+  });
+
   it("runs an item and reports the dialog closing through onOpenChange", () => {
     const onSelect = vi.fn();
     const onOpenChange = vi.fn();

@@ -32,16 +32,54 @@ describe("Combobox", () => {
       </>,
     );
     expect(
-      screen.getByRole("combobox", { name: "Framework" }),
+      screen.getByRole("combobox", { name: "Framework Select an option" }),
+    ).toHaveAttribute("id", "framework");
+    expect(
+      screen.getByRole("combobox", { name: "Runtime Select an option" }),
+    ).toBeInTheDocument();
+  });
+
+  it("keeps the chosen option in the trigger's name, whichever way it is named", () => {
+    render(
+      <>
+        <label htmlFor="by-label">Framework</label>
+        <Combobox id="by-label" options={options} value="react" />
+        <Combobox aria-label="Runtime" options={options} value="react" />
+        <span id="stack">Stack</span>
+        <Combobox aria-labelledby="stack" options={options} value="react" />
+      </>,
+    );
+    expect(
+      screen.getByRole("combobox", { name: "Framework React" }),
     ).toBeInTheDocument();
     expect(
-      screen.getByRole("combobox", { name: "Runtime" }),
+      screen.getByRole("combobox", { name: "Runtime React" }),
     ).toBeInTheDocument();
+    expect(
+      screen.getByRole("combobox", { name: "Stack React" }),
+    ).toBeInTheDocument();
+  });
+
+  it("marks the chosen option checked, whichever option is highlighted", () => {
+    render(<Combobox aria-label="Framework" options={options} value="react" />);
+    fireEvent.click(screen.getByRole("combobox"));
+    const checked = () =>
+      screen
+        .getAllByRole("option")
+        .map((option) => option.getAttribute("aria-checked"));
+    expect(checked()).toEqual(["false", "true", "false"]);
+    // The highlight moves on its own and leaves the chosen option alone.
+    fireEvent.keyDown(screen.getByPlaceholderText("Search options..."), {
+      key: "ArrowDown",
+    });
+    expect(checked()).toEqual(["false", "true", "false"]);
   });
 
   it("names its popover dialog and points aria-controls at it when open", () => {
     render(<Combobox aria-label="Framework" options={options} />);
-    const trigger = screen.getByRole("combobox", { name: "Framework" });
+    const trigger = screen.getByRole("combobox", {
+      name: "Framework Select an option",
+    });
     expect(trigger).toHaveAttribute("aria-haspopup", "dialog");
     expect(trigger).toHaveAttribute("aria-controls");
     fireEvent.click(trigger);

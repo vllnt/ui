@@ -36,6 +36,48 @@ describe("HoverCard", () => {
     expect(screen.getByText("Open card")).toHaveAttribute("data-state", "open");
   });
 
+  it("describes the trigger by the card while it is open", () => {
+    const { rerender } = render(
+      <HoverCard open>
+        <HoverCardTrigger href="#profile">Trigger</HoverCardTrigger>
+        <HoverCardContent>Open card</HoverCardContent>
+      </HoverCard>,
+    );
+    const trigger = screen.getByRole("link", { name: "Trigger" });
+
+    expect(trigger).toHaveAttribute(
+      "aria-describedby",
+      screen.getByText("Open card").id,
+    );
+    expect(trigger).toHaveAccessibleDescription("Open card");
+
+    rerender(
+      <HoverCard open={false}>
+        <HoverCardTrigger href="#profile">Trigger</HoverCardTrigger>
+        <HoverCardContent>Open card</HoverCardContent>
+      </HoverCard>,
+    );
+
+    expect(trigger).not.toHaveAttribute("aria-describedby");
+  });
+
+  it("keeps a description the trigger already has", () => {
+    render(
+      <HoverCard open>
+        <HoverCardTrigger aria-describedby="hint" href="#profile">
+          Trigger
+        </HoverCardTrigger>
+        <HoverCardContent>Open card</HoverCardContent>
+      </HoverCard>,
+    );
+    const trigger = screen.getByRole("link", { name: "Trigger" });
+
+    expect(trigger.getAttribute("aria-describedby")?.split(" ")).toEqual([
+      "hint",
+      screen.getByText("Open card").id,
+    ]);
+  });
+
   it("renders the child as the trigger with asChild", () => {
     render(
       <HoverCard>

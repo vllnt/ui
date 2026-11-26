@@ -575,6 +575,41 @@
 }
 
 /*
+ * Reduced motion. Library components stop their own motion: the enter and exit
+ * animations (tailwindcss-animate's `animate-in` / `animate-out`, and the
+ * accordion's) and the transitions that move or resize (`transition`,
+ * `transition-all`, `transition-transform`, `transition-[...]`) finish at once,
+ * so a component needs no `motion-reduce:` classes of its own for them. The
+ * `transition-colors`, `transition-opacity` and `transition-shadow` utilities
+ * are not motion and are not matched. The rule keys on those class names, so an
+ * animation a consuming app writes itself is left alone, and a loader marked
+ * `data-motion="essential"` keeps turning, slower (see Spinner). The duration
+ * is not zero: ui-sdk waits for the end of an exit animation before it removes
+ * a popup.
+ */
+@media (prefers-reduced-motion: reduce) {
+  :is(
+      [class*="animate-in"],
+      [class*="animate-out"],
+      [class*="animate-accordion"]
+    ):not([data-motion="essential"]) {
+    animation-delay: 0s !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+
+  :is(
+      [class~="transition"],
+      [class*="transition-all"],
+      [class*="transition-transform"],
+      [class*="transition-["]
+    ):not([data-motion="essential"]) {
+    transition-delay: 0s !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/*
  * Safari < 15.4 lacks oklch(): every `oklch(var(--token) / a)` color drops to
  * its initial value, leaving the sticky navbar (and body) illegible. Give the
  * core chrome a solid sRGB fallback, theme-aware. Gated so any browser with

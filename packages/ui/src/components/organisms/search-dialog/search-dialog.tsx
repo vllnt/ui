@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  type KeyboardEvent as ReactKeyboardEvent,
   useCallback,
   useEffect,
   useId,
@@ -11,6 +12,7 @@ import {
 
 import { Search } from "lucide-react";
 
+import { moveRovingFocus } from "../../../lib/roving-focus";
 import { cn } from "../../../lib/utils";
 import { Button } from "../../atoms/button/button";
 import { Kbd } from "../../atoms/kbd/kbd";
@@ -125,6 +127,12 @@ function HighlightedText({ query, text }: { query: string; text: string }) {
   );
 }
 
+// Arrow keys, Home and End move between the tabs and select the one they land
+// on (WAI-ARIA APG tabs, automatic activation).
+function handleTabsKeyDown(event: ReactKeyboardEvent<HTMLDivElement>): void {
+  moveRovingFocus(event, '[role="tab"]', { activate: true });
+}
+
 function ScopeTabs({
   getTabId,
   labels,
@@ -144,7 +152,9 @@ function ScopeTabs({
     <div
       aria-label="Search scope"
       className="grid grid-cols-3 gap-1 border-b p-1"
+      onKeyDown={handleTabsKeyDown}
       role="tablist"
+      tabIndex={-1}
     >
       {scopes.map((nextScope) => (
         <button
@@ -160,6 +170,7 @@ function ScopeTabs({
             onScopeChange(nextScope);
           }}
           role="tab"
+          tabIndex={scope === nextScope ? 0 : -1}
           type="button"
         >
           {labels[nextScope]}
@@ -372,13 +383,8 @@ function SearchDialogList({
   sortedItems: SearchItem[];
   trimmedQuery: string;
 }) {
-  return (
-    <CommandList
-      aria-labelledby={activeTabId}
-      className="max-h-[420px]"
-      id={panelId}
-      role={activeTabId === undefined ? undefined : "tabpanel"}
-    >
+  const list = (
+    <CommandList aria-labelledby={activeTabId} className="max-h-[420px]">
       <CommandEmpty>{currentEmptyText}</CommandEmpty>
       {showComponents ? (
         <ComponentResultsGroup
@@ -403,6 +409,15 @@ function SearchDialogList({
         />
       ) : null}
     </CommandList>
+  );
+
+  // The listbox keeps its own role, so the tabs' panel is a wrapper around it.
+  return panelId === undefined ? (
+    list
+  ) : (
+    <div aria-labelledby={activeTabId} id={panelId} role="tabpanel">
+      {list}
+    </div>
   );
 }
 

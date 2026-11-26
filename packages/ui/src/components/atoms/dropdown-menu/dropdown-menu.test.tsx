@@ -398,6 +398,38 @@ describe("DropdownMenu items", () => {
   });
 });
 
+describe("DropdownMenu glyphs", () => {
+  it("keeps the check, radio and submenu glyphs out of the item names", () => {
+    render(
+      <DropdownMenu defaultOpen>
+        <DropdownMenuTrigger>Menu</DropdownMenuTrigger>
+        <DropdownMenuContent>
+          <DropdownMenuCheckboxItem checked>Bold</DropdownMenuCheckboxItem>
+          <DropdownMenuRadioGroup value="small">
+            <DropdownMenuRadioItem value="small">Small</DropdownMenuRadioItem>
+          </DropdownMenuRadioGroup>
+          <DropdownMenuSub>
+            <DropdownMenuSubTrigger>More</DropdownMenuSubTrigger>
+          </DropdownMenuSub>
+        </DropdownMenuContent>
+      </DropdownMenu>,
+    );
+
+    expect(
+      screen.getByRole("menuitemcheckbox", { name: "Bold" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("menuitemradio", { name: "Small" }),
+    ).toBeInTheDocument();
+    expect(screen.getByRole("menuitem", { name: "More" })).toBeInTheDocument();
+    expect(
+      ["✓", "○", "›"].map((glyph) =>
+        screen.getByText(glyph).getAttribute("aria-hidden"),
+      ),
+    ).toEqual(["true", "true", "true"]);
+  });
+});
+
 describe("DropdownMenu checkable items", () => {
   it("toggles a checkbox item with the Radix data-state values", () => {
     const onCheckedChange = vi.fn();

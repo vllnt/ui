@@ -6,6 +6,7 @@ import { Rating as RatingPrimitive, RatingItem } from "@ui-sdk/react/rating";
 import { Star } from "lucide-react";
 import type { KeyboardEvent, ReactNode } from "react";
 
+import { HIT_AREA_24_RADIO_CHILD } from "../../../lib/hit-area";
 import { moveRovingFocus } from "../../../lib/roving-focus";
 import { cn } from "../../../lib/utils";
 
@@ -41,6 +42,7 @@ function handleEndKeys(event: KeyboardEvent<HTMLDivElement>): void {
 function getItemClassName(readOnly: boolean) {
   return ({ fill }: { fill: number }) =>
     cn(
+      HIT_AREA_24_RADIO_CHILD,
       "inline-flex rounded-sm text-muted-foreground transition-colors has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-ring [&>[role=radio]]:outline-none",
       !readOnly && "hover:text-amber-600 dark:hover:text-amber-500",
       fill === 1 && "text-amber-600 dark:text-amber-500",

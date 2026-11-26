@@ -12,7 +12,7 @@ import {
 import { cn } from "../../../lib/utils";
 
 const toggleVariants = cva(
-  "inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors hover:bg-secondary hover:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[disabled]:pointer-events-none data-[disabled]:opacity-50 data-[state=on]:bg-accent data-[state=on]:text-accent-foreground [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
+  "inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors hover:bg-secondary hover:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[disabled]:pointer-events-none data-[disabled]:opacity-50 data-[state=on]:bg-accent data-[state=on]:text-accent-foreground forced-colors:data-[state=on]:bg-[color:Highlight] forced-colors:data-[state=on]:text-[color:HighlightText] [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
   {
     defaultVariants: {
       size: "default",

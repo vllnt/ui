@@ -93,6 +93,29 @@ function matchesShortcut(event: KeyboardEvent, shortcut: string): boolean {
   );
 }
 
+const TEXT_ENTRY =
+  'input, textarea, select, [contenteditable]:not([contenteditable="false"]), [role="textbox"], [role="searchbox"], [role="combobox"]';
+const NON_TEXT_INPUTS = new Set([
+  "button",
+  "checkbox",
+  "color",
+  "file",
+  "image",
+  "radio",
+  "range",
+  "reset",
+  "submit",
+]);
+
+/** Whether a letter typed here is text, not a shortcut (WCAG 2.1.4). */
+function isTextEntry(target: Node): boolean {
+  const field = target instanceof Element ? target.closest(TEXT_ENTRY) : null;
+  return (
+    field !== null &&
+    !(field instanceof HTMLInputElement && NON_TEXT_INPUTS.has(field.type))
+  );
+}
+
 type DialogActionsProps = Pick<
   DialogBodyProps,
   | "cancelLabel"
@@ -144,7 +167,8 @@ type DialogShortcutsOptions = Pick<DialogBodyProps, "onCancel" | "onConfirm"> &
 
 /**
  * Runs the single-key shortcuts for keys pressed inside the dialog; a key
- * pressed elsewhere on the page does nothing. It listens on the document in the
+ * pressed elsewhere on the page, or while typing in a field, does nothing, and
+ * so does a key held with Alt, Ctrl or Meta. It listens on the document in the
  * bubble phase, after React has run the handlers inside the dialog, so one of
  * them can claim a key with `preventDefault()`.
  */
@@ -162,7 +186,8 @@ function useDialogShortcuts(
       if (
         event.defaultPrevented ||
         !(event.target instanceof Node) ||
-        !dialogRef.current?.contains(event.target)
+        !dialogRef.current?.contains(event.target) ||
+        isTextEntry(event.target)
       ) {
         return;
       }
