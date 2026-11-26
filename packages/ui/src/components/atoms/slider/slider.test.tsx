@@ -22,7 +22,7 @@ describe("Slider", () => {
     expect(thumb).toHaveAttribute("aria-valuetext", "40");
   });
 
-  it("gives every value its own named thumb", () => {
+  it("gives every value its own thumb, named Minimum and Maximum in a range", () => {
     render(
       <Slider
         aria-label="Price range"
@@ -31,11 +31,98 @@ describe("Slider", () => {
         step={1}
       />,
     );
-    const thumbs = screen.getAllByRole("slider", { name: "Price range" });
+    const thumbs = screen.getAllByRole("slider");
     expect(thumbs.map((thumb) => (thumb as HTMLInputElement).value)).toEqual([
       "20",
       "80",
     ]);
+    expect(thumbs.map((thumb) => thumb.getAttribute("aria-label"))).toEqual([
+      "Price range Minimum",
+      "Price range Maximum",
+    ]);
+  });
+
+  it("names the two thumbs of a range from aria-labelledby too", () => {
+    render(
+      <>
+        <span id="range-label">Brightness</span>
+        <Slider
+          aria-labelledby="range-label"
+          defaultValue={[20, 80]}
+          max={100}
+          step={1}
+        />
+      </>,
+    );
+
+    expect(
+      screen.getByRole("slider", { name: "Brightness Minimum" }),
+    ).toHaveValue("20");
+    expect(
+      screen.getByRole("slider", { name: "Brightness Maximum" }),
+    ).toHaveValue("80");
+  });
+
+  it("names the thumbs Minimum and Maximum when the range has no label", () => {
+    render(<Slider defaultValue={[20, 80]} max={100} step={1} />);
+
+    expect(screen.getByRole("slider", { name: "Minimum" })).toHaveValue("20");
+    expect(screen.getByRole("slider", { name: "Maximum" })).toHaveValue("80");
+  });
+
+  it("takes each thumb's whole name from thumbLabels", () => {
+    render(
+      <Slider
+        aria-label="Price range"
+        defaultValue={[20, 80]}
+        max={100}
+        step={1}
+        thumbLabels={["Lowest price", "Highest price"]}
+      />,
+    );
+
+    expect(screen.getByRole("slider", { name: "Lowest price" })).toHaveValue(
+      "20",
+    );
+    expect(screen.getByRole("slider", { name: "Highest price" })).toHaveValue(
+      "80",
+    );
+  });
+
+  it("falls back to the default name for a thumb without a thumbLabels entry", () => {
+    render(
+      <Slider
+        aria-label="Price range"
+        defaultValue={[20, 80]}
+        max={100}
+        step={1}
+        thumbLabels={["Lowest price"]}
+      />,
+    );
+
+    expect(
+      screen.getByRole("slider", { name: "Lowest price" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("slider", { name: "Price range Maximum" }),
+    ).toBeInTheDocument();
+  });
+
+  it("keeps the shared name for a single thumb and for three or more", () => {
+    const { rerender } = render(
+      <Slider aria-label="Volume" defaultValue={[40]} max={100} step={1} />,
+    );
+    expect(screen.getAllByRole("slider", { name: "Volume" })).toHaveLength(1);
+
+    rerender(
+      <Slider
+        aria-label="Volume"
+        defaultValue={[10, 40, 70]}
+        max={100}
+        step={1}
+      />,
+    );
+    expect(screen.getAllByRole("slider", { name: "Volume" })).toHaveLength(3);
   });
 
   it("reports changes and commits as lists", () => {
