@@ -278,7 +278,7 @@ function appendSegment(bits: number[], { data, mode }: Segment): void {
     });
   } else if (mode === ALPHANUMERIC) {
     chunks(data, 2).forEach((pair) => {
-      const value = [...pair].reduce(
+      const value = (pair.match(/./gu) ?? []).reduce(
         (sum, character) =>
           sum * 45 + ALPHANUMERIC_CHARACTERS.indexOf(character),
         0,

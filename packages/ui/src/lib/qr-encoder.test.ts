@@ -16,11 +16,15 @@ const capacityOf = nodeRequire("qrcode/lib/core/version") as {
 const levelsOf = nodeRequire(
   "qrcode/lib/core/error-correction-level",
 ) as Record<QrErrorLevel, unknown>;
-const modesOf = nodeRequire("qrcode/lib/core/mode") as {
-  ALPHANUMERIC: unknown;
-  BYTE: unknown;
-  NUMERIC: unknown;
-};
+const modesOf = nodeRequire("qrcode/lib/core/mode") as Record<
+  "ALPHANUMERIC" | "BYTE" | "NUMERIC",
+  unknown
+>;
+
+/** Splits a string into code points, like spreading it. */
+function characters(text: string): string[] {
+  return text.match(/./gsu) ?? [];
+}
 
 /** The module matrix `qrcode` produces, the reference for every case. */
 function reference(value: string, level: QrErrorLevel) {
@@ -58,13 +62,13 @@ function randomText(
 }
 
 const ALPHABETS = {
-  alphanumeric: [..."0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ $%*+-./:"],
+  alphanumeric: characters("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ $%*+-./:"),
   ascii: Array.from({ length: 95 }, (_, index) =>
     String.fromCodePoint(32 + index),
   ),
-  digits: [..."0123456789"],
-  mixed: [..."0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdef .-:/"],
-  unicode: [..."0123456789ABCéü日本😀xyz"],
+  digits: characters("0123456789"),
+  mixed: characters("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdef .-:/"),
+  unicode: characters("0123456789ABCéü日本😀xyz"),
 };
 
 const SAMPLES = [
@@ -105,12 +109,12 @@ const SAMPLES = [
 // field widths (10, 27), alignment pattern spacing (32) and the largest.
 const BOUNDARY_VERSIONS = [1, 2, 6, 7, 9, 10, 13, 14, 26, 27, 32, 39, 40];
 const BOUNDARY_MODES = [
-  { alphabet: [..."0123456789"], mode: modesOf.NUMERIC },
+  { alphabet: characters("0123456789"), mode: modesOf.NUMERIC },
   {
-    alphabet: [..."ABCDEFGHIJKLMNOPQRSTUVWXYZ $%*+-./:"],
+    alphabet: characters("ABCDEFGHIJKLMNOPQRSTUVWXYZ $%*+-./:"),
     mode: modesOf.ALPHANUMERIC,
   },
-  { alphabet: [..."abcdefghijklmnopqrstuvwxyz"], mode: modesOf.BYTE },
+  { alphabet: characters("abcdefghijklmnopqrstuvwxyz"), mode: modesOf.BYTE },
 ];
 
 function boundaryTexts(level: QrErrorLevel): string[] {
@@ -161,7 +165,7 @@ describe("encodeQrMatrix against qrcode", () => {
       const runAlphabets = [
         ALPHABETS.digits,
         ALPHABETS.alphanumeric.slice(10),
-        [..."abcdefghijklmnopqrstuvwxyz"],
+        characters("abcdefghijklmnopqrstuvwxyz"),
       ];
       Array.from({ length: 25 }).forEach(() => {
         const runs = 1 + Math.floor(next() * 12);
