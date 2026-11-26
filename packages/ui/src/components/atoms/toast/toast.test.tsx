@@ -357,8 +357,14 @@ describe("Toaster", () => {
     render(<Toaster theme="light" />);
     await showToast("Tokens");
     const style = regionElement().style;
-    expect(style.getPropertyValue("--normal-bg")).toBe("var(--popover)");
-    expect(style.getPropertyValue("--normal-border")).toBe("var(--border)");
+    // The tokens are bare oklch triplets, so each needs the oklch() wrapper.
+    expect(style.getPropertyValue("--normal-bg")).toBe("oklch(var(--popover))");
+    expect(style.getPropertyValue("--normal-border")).toBe(
+      "oklch(var(--border))",
+    );
+    expect(style.getPropertyValue("--normal-text")).toBe(
+      "oklch(var(--popover-foreground))",
+    );
     expect(style.getPropertyValue("--border-radius")).toBe("var(--radius)");
   });
 

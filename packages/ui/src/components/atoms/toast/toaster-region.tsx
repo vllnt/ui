@@ -74,11 +74,13 @@ const DEFAULT_ICONS: ToasterIcons = {
   warning: <TriangleAlertIcon className="size-4" />,
 };
 
+// The page's colour tokens are bare oklch triplets (`--popover: 1 0 0`), so
+// each needs the `oklch()` wrapper to be a colour the toast can paint with.
 const BASE_VARIABLES = {
   "--border-radius": "var(--radius)",
-  "--normal-bg": "var(--popover)",
-  "--normal-border": "var(--border)",
-  "--normal-text": "var(--popover-foreground)",
+  "--normal-bg": "oklch(var(--popover))",
+  "--normal-border": "oklch(var(--border))",
+  "--normal-text": "oklch(var(--popover-foreground))",
 };
 
 // The colors that follow the Toaster's `theme` prop rather than the page.
