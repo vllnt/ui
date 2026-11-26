@@ -22,7 +22,7 @@ const axeScriptPath = createRequire(import.meta.url).resolve(
   "axe-core/axe.min.js",
 );
 
-const AXE_PAGES = ["/vs", "/fr/vs", "/articles"] as const;
+const AXE_PAGES = ["/vs", "/fr/vs", "/articles", "/themes"] as const;
 const AXE_RULES = ["color-contrast", "heading-order"];
 
 for (const colorScheme of ["light", "dark"] as const) {
