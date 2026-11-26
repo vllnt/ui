@@ -1,10 +1,31 @@
 import { render, screen } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 
 import { TutorialIntroContent } from "./tutorial-intro-content";
 
+const markdownParser = vi.hoisted(() => ({ loads: 0 }));
+
+vi.mock("react-markdown", async (importOriginal) => {
+  markdownParser.loads += 1;
+  return importOriginal();
+});
+
 describe("TutorialIntroContent", () => {
-  it("renders the supplied title and markdown content", () => {
+  it("loads the markdown parser on demand and shows the text meanwhile", async () => {
+    expect(markdownParser.loads).toBe(0);
+    render(
+      <TutorialIntroContent
+        content="Intro paragraph with **strong text**."
+        title="Start here"
+      />,
+    );
+    expect(screen.getByText(/Intro paragraph with/)).toBeInTheDocument();
+    expect(screen.queryByText("strong text")).not.toBeInTheDocument();
+    expect(await screen.findByText("strong text")).toBeInTheDocument();
+    expect(markdownParser.loads).toBe(1);
+  });
+
+  it("renders the supplied title and markdown content", async () => {
     render(
       <TutorialIntroContent
         content="Intro paragraph with **strong text**."
@@ -12,25 +33,23 @@ describe("TutorialIntroContent", () => {
       />,
     );
     expect(screen.getByRole("heading", { name: "Start here" })).toBeVisible();
+    expect(await screen.findByText("strong text")).toHaveClass("font-semibold");
     expect(screen.getByText(/Intro paragraph with/)).toBeInTheDocument();
-    expect(screen.getByText("strong text")).toHaveClass("font-semibold");
   });
 
-  it("renders links and inline code with the expected semantics", () => {
+  it("renders links and inline code with the expected semantics", async () => {
     render(
       <TutorialIntroContent
         content="Use [`pnpm`](https://pnpm.io) for installs."
         title="Setup"
       />,
     );
-    expect(screen.getByText("pnpm").tagName).toBe("CODE");
-    expect(screen.getByText("pnpm").closest("a")).toHaveAttribute(
-      "href",
-      "https://pnpm.io",
-    );
+    const code = await screen.findByText("pnpm");
+    expect(code.tagName).toBe("CODE");
+    expect(code.closest("a")).toHaveAttribute("href", "https://pnpm.io");
   });
 
-  it("strips MDX component tags before markdown rendering", () => {
+  it("strips MDX component tags before markdown rendering", async () => {
     render(
       <TutorialIntroContent
         content={[
@@ -41,7 +60,7 @@ describe("TutorialIntroContent", () => {
         title="Hybrid content"
       />,
     );
-    expect(screen.getByText("Visible copy.")).toBeInTheDocument();
+    expect(await screen.findByText("Visible copy.")).toBeInTheDocument();
     expect(
       screen.queryByText("Hidden client-only content"),
     ).not.toBeInTheDocument();
