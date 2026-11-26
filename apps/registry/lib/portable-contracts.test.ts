@@ -47,6 +47,7 @@ const buttonVariants = {
   link: true,
   outline: true,
   secondary: true,
+  unstyled: true,
 } satisfies Record<ButtonVariant, true> &
   Record<NonNullable<ButtonProps["variant"]>, true>;
 

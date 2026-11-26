@@ -1049,6 +1049,10 @@
       {
         "id": "core-button--variant-secondary",
         "name": "Variant Secondary"
+      },
+      {
+        "id": "core-button--variant-unstyled",
+        "name": "Variant Unstyled"
       }
     ],
     "title": "Button"

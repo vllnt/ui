@@ -20,7 +20,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
   `disabled`, ref, every native attribute) and adds no classes of its own: the
   element's class list is only the caller's `className`, and `size` has no
   effect. `buttonVariants({ variant: "unstyled" })` returns only the caller's
-  classes. Every other variant and size renders the same class string as
+  classes, merged with `cn`. The caller styles focus and disabled states. Every other variant and size renders the same class string as
   before.
 - **`SegmentedControl` `fit` and `variant`** - `fit` hugs the content (root
   `w-auto`, items `flex-none`); `variant="hairline"` swaps the filled track for a

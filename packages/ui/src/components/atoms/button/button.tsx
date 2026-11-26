@@ -49,15 +49,12 @@ type ButtonVariantOptions = {
 
 /**
  * Button classes. `variant: "unstyled"` adds none of its own: the result is
- * the caller's `className` (or `class`), and `size` has no effect.
+ * the caller's `className` (or `class`), merged with `cn`, and `size` has no
+ * effect.
  */
-const buttonVariants = ({
-  class: classValue,
-  className,
-  size,
-  variant,
-}: ButtonVariantOptions = {}): string =>
-  variant === "unstyled"
+const buttonVariants = (options?: ButtonVariantOptions | null): string => {
+  const { class: classValue, className, size, variant } = options ?? {};
+  return variant === "unstyled"
     ? cn(classValue, className)
     : styledButtonVariants({
         // cva flattens the array, so the string matches passing each value.
@@ -65,6 +62,7 @@ const buttonVariants = ({
         size,
         variant,
       });
+};
 
 export type ButtonProps = {
   asChild?: boolean;
