@@ -83,7 +83,8 @@ test.describe("indexable form pages", () => {
  */
 test("footer column titles do not skip a heading level", async ({ page }) => {
   await page.goto("/articles");
-  const footer = page.getByRole("contentinfo");
+  // The site footer renders inside <main>, so it has no contentinfo role.
+  const footer = page.locator("footer").last();
 
   await expect(footer.getByRole("heading", { level: 2 }).first()).toBeVisible();
   await expect(footer.getByRole("heading", { level: 3 })).toHaveCount(0);
