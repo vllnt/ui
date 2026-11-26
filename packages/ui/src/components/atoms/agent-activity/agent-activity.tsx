@@ -5,12 +5,14 @@ import {
   createContext,
   type ReactNode,
   use,
-  useCallback,
-  useId,
   useMemo,
-  useState,
 } from "react";
 
+import {
+  Collapsible,
+  CollapsiblePanel,
+  CollapsibleTrigger,
+} from "@ui-sdk/react/collapsible";
 import {
   AlertTriangle,
   CheckCircle2,
@@ -222,6 +224,10 @@ export type AgentStepProps = {
   defaultOpen?: boolean;
   /** Optional icon shown to the left of the title. */
   icon?: ReactNode;
+  /** Called with the next state when a press toggles the details. */
+  onOpenChange?: (open: boolean) => void;
+  /** Controls whether the details are open. Pair it with `onOpenChange`. */
+  open?: boolean;
   /** Step status. */
   status: AgentStepStatus;
 } & ComponentPropsWithoutRef<"li">;
@@ -274,24 +280,20 @@ function splitChildren(children: ReactNode): ContentSplit {
  * @public
  */
 type StepRowProps = {
-  detailsId: string;
   hasDetails: boolean;
   header: ReactNode;
   icon: ReactNode;
   iconClass: string;
   labels: Required<AgentActivityLabels>;
-  onToggle: () => void;
   open: boolean;
 };
 
 function StepRow({
-  detailsId,
   hasDetails,
   header,
   icon,
   iconClass,
   labels,
-  onToggle,
   open,
 }: StepRowProps): ReactNode {
   return (
@@ -307,13 +309,9 @@ function StepRow({
       </span>
       <div className="flex min-w-0 flex-1 flex-col gap-1">{header}</div>
       {hasDetails ? (
-        <button
-          aria-controls={detailsId}
-          aria-expanded={open}
+        <CollapsibleTrigger
           aria-label={open ? labels.collapse : labels.expand}
           className="ml-auto inline-flex size-6 shrink-0 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-foreground/10 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-          onClick={onToggle}
-          type="button"
         >
           <ChevronDown
             aria-hidden="true"
@@ -322,7 +320,7 @@ function StepRow({
               open ? "rotate-180" : "rotate-0",
             )}
           />
-        </button>
+        </CollapsibleTrigger>
       ) : null}
     </div>
   );
@@ -337,19 +335,15 @@ export const AgentStep = ({
     className,
     defaultOpen = true,
     icon,
+    onOpenChange,
+    open: openProperty,
     status,
     ...rest
   } = props;
   const split = useMemo(() => splitChildren(children), [children]);
   const palette = STATUS_CLASSES[status];
   const hasDetails = split.body.length > 0;
-  const [open, setOpen] = useState(defaultOpen);
-  const detailsId = useId();
   const labels = use(AgentActivityLabelsContext);
-
-  const handleToggle = useCallback(() => {
-    setOpen((value) => !value);
-  }, []);
 
   const contextValue = useMemo<StepContextValue>(() => ({ status }), [status]);
   const resolvedIcon = icon ?? DEFAULT_STATUS_ICON[status];
@@ -367,25 +361,33 @@ export const AgentStep = ({
       {...rest}
     >
       <StepContext.Provider value={contextValue}>
-        <StepRow
-          detailsId={detailsId}
-          hasDetails={hasDetails}
-          header={split.header}
-          icon={resolvedIcon}
-          iconClass={palette.iconClass}
-          labels={labels}
-          onToggle={handleToggle}
-          open={open}
-        />
-        {hasDetails ? (
-          <div
-            className="border-t border-border/60 px-3 py-2 text-xs"
-            hidden={!open}
-            id={detailsId}
-          >
-            <div className="flex flex-col gap-2 pl-8">{split.body}</div>
-          </div>
-        ) : null}
+        <Collapsible
+          className="contents"
+          defaultOpen={defaultOpen}
+          onOpenChange={onOpenChange}
+          open={openProperty}
+        >
+          {({ open }) => (
+            <>
+              <StepRow
+                hasDetails={hasDetails}
+                header={split.header}
+                icon={resolvedIcon}
+                iconClass={palette.iconClass}
+                labels={labels}
+                open={open}
+              />
+              {hasDetails ? (
+                <CollapsiblePanel
+                  className="border-t border-border/60 px-3 py-2 text-xs"
+                  keepMounted
+                >
+                  <div className="flex flex-col gap-2 pl-8">{split.body}</div>
+                </CollapsiblePanel>
+              ) : null}
+            </>
+          )}
+        </Collapsible>
       </StepContext.Provider>
     </li>
   );

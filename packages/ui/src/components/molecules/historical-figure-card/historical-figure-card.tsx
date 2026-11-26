@@ -1,13 +1,12 @@
 "use client";
 
-import {
-  Children,
-  type ComponentPropsWithoutRef,
-  type ReactNode,
-  useCallback,
-  useState,
-} from "react";
+import { Children, type ComponentPropsWithoutRef, type ReactNode } from "react";
 
+import {
+  Collapsible,
+  CollapsiblePanel,
+  CollapsibleTrigger,
+} from "@ui-sdk/react/collapsible";
 import { ChevronDown, User } from "lucide-react";
 
 import { keyByOccurrence } from "../../../lib/occurrence-keys";
@@ -335,34 +334,26 @@ function FigureBio({
   collapseLabel,
   expandLabel,
 }: FigureBioProps): ReactNode {
-  const [open, setOpen] = useState(false);
-  const handleToggle = useCallback(() => {
-    setOpen((value) => !value);
-  }, []);
-
   return (
-    <div className="flex flex-col gap-2">
-      <button
-        aria-expanded={open}
-        className="inline-flex w-fit items-center gap-1 text-sm font-medium text-primary underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-        onClick={handleToggle}
-        type="button"
-      >
-        {open ? collapseLabel : expandLabel}
-        <ChevronDown
-          aria-hidden="true"
-          className={cn(
-            "size-4 transition-transform",
-            open ? "rotate-180" : "rotate-0",
-          )}
-        />
-      </button>
-      {open ? (
-        <div className="text-sm leading-relaxed text-foreground">
-          {biography}
-        </div>
-      ) : null}
-    </div>
+    <Collapsible className="flex flex-col gap-2">
+      <CollapsibleTrigger className="inline-flex w-fit items-center gap-1 text-sm font-medium text-primary underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
+        {({ open }) => (
+          <>
+            {open ? collapseLabel : expandLabel}
+            <ChevronDown
+              aria-hidden="true"
+              className={cn(
+                "size-4 transition-transform",
+                open ? "rotate-180" : "rotate-0",
+              )}
+            />
+          </>
+        )}
+      </CollapsibleTrigger>
+      <CollapsiblePanel className="text-sm leading-relaxed text-foreground">
+        {biography}
+      </CollapsiblePanel>
+    </Collapsible>
   );
 }
 

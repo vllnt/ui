@@ -1,7 +1,7 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import type { ReactNode } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 
 import { Curriculum, CurriculumLesson, CurriculumModule } from "./curriculum";
 
@@ -74,6 +74,51 @@ describe("CurriculumModule", () => {
     expect(
       screen.getByRole("link", { name: "Available HTML Basics" }),
     ).toBeInTheDocument();
+  });
+
+  it("reports the open modules after each toggle", () => {
+    const onExpandedModulesChange = vi.fn();
+    render(
+      <Curriculum
+        defaultExpandedModules={["mod-1"]}
+        onExpandedModulesChange={onExpandedModulesChange}
+        title="Course"
+      >
+        <CurriculumModule id="mod-1" title="Module 1">
+          <CurriculumLesson href="/a" title="A" />
+        </CurriculumModule>
+        <CurriculumModule id="mod-2" title="Module 2">
+          <CurriculumLesson href="/b" title="B" />
+        </CurriculumModule>
+      </Curriculum>,
+    );
+    const second = screen.getByRole("button", { name: /module 2/i });
+    expect(second).toHaveAttribute("aria-expanded", "false");
+    fireEvent.click(second);
+    expect(onExpandedModulesChange).toHaveBeenLastCalledWith([
+      "mod-1",
+      "mod-2",
+    ]);
+    expect(second).toHaveAttribute("aria-expanded", "true");
+    fireEvent.click(screen.getByRole("button", { name: /module 1/i }));
+    expect(onExpandedModulesChange).toHaveBeenLastCalledWith(["mod-2"]);
+  });
+
+  it("follows expandedModules when controlled", () => {
+    const tree = (expandedModules: string[]) => (
+      <Curriculum expandedModules={expandedModules} title="Course">
+        <CurriculumModule id="mod-1" title="Module 1">
+          <CurriculumLesson href="/a" title="A" />
+        </CurriculumModule>
+      </Curriculum>
+    );
+    const { rerender } = render(tree([]));
+    const trigger = screen.getByRole("button", { name: /module 1/i });
+    fireEvent.click(trigger);
+    expect(trigger).toHaveAttribute("aria-expanded", "false");
+    rerender(tree(["mod-1"]));
+    expect(trigger).toHaveAttribute("aria-expanded", "true");
+    expect(screen.getByRole("link", { name: /A$/ })).toBeInTheDocument();
   });
 
   it("removes lesson progress when a lesson unmounts", () => {
