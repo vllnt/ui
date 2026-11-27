@@ -3,7 +3,8 @@ import path from "node:path";
 
 import { describe, expect, it } from "vitest";
 
-const FIX = "Use hover:bg-secondary (DESIGN.md, Dark surfaces are pure black).";
+const FIX =
+  "Use hover:bg-secondary (DESIGN.md, Dark surfaces are flat and near black).";
 const SOURCE_DIRECTORIES = ["app", "components"] as const;
 const CLASS_DELIMITERS = /[\s"'`{}]+/;
 
@@ -15,8 +16,8 @@ const STATE_VARIANT =
 
 /**
  * Links and buttons that moved off `hover:bg-muted`, with the number of
- * `hover:bg-secondary` classes in each file. Dark `--muted` is the page color
- * (#000000), so a muted hover fill does not show.
+ * `hover:bg-secondary` classes in each file. Dark `--muted` can be the page color
+ * (#000000 in the presets), so a muted hover fill may not show.
  */
 const MIGRATED_HOVERS: readonly (readonly [string, number])[] = [
   ["app/[locale]/components/[slug]/component-page-sections.tsx", 2],

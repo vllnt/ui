@@ -4,9 +4,10 @@ import { join, relative } from "node:path";
 import { describe, expect, it } from "vitest";
 
 /*
- * Dark surfaces are pure black (DESIGN.md, "Dark surfaces are pure black"):
- * --background, --muted, --card and --popover all render #000000, so a
- * hairline border is what gives a raised surface or a divider its edge.
+ * Dark surfaces are flat and near black (DESIGN.md, "Dark surfaces are flat and near black"):
+ * --background and --card render #000000 and --popover #0a0a0a, so a
+ * hairline border is what gives a raised surface or a divider its edge. A
+ * preset can keep --muted at #000000 as well.
  */
 
 const COMPONENTS_ROOT = __dirname;
@@ -46,14 +47,14 @@ const SECONDARY_STRUCTURAL_FILLS: readonly (readonly [string, number])[] = [
 ];
 
 const SURFACE_FIX =
-  "A bg-card or bg-popover fill is #000000 in dark, the page color. Draw its edge with border (the --border hairline).";
+  "A bg-card or bg-popover fill is #000000 or #0a0a0a in dark, next to the page color. Draw its edge with border (the --border hairline).";
 const DIVIDER_FIX =
-  "bg-muted is #000000 in dark, so this divider disappears. Use bg-border.";
+  "bg-muted can be the page color in dark, so this divider disappears. Use bg-border.";
 const STRUCTURAL_FIX =
-  "bg-muted is #000000 in dark, so a skeleton, track or handle drawn only with this fill disappears. Use bg-secondary (#262626) at the same opacity.";
+  "bg-muted can be the page color in dark, so a skeleton, track or handle drawn only with this fill disappears. Use bg-secondary (#141414) at the same opacity.";
 
 const STROKE_FIX =
-  "stroke-muted is #000000 in dark, so an SVG ring, arc or track drawn with it disappears. Use stroke-secondary (#262626).";
+  "stroke-muted can be the page color in dark, so an SVG ring, arc or track drawn with it disappears. Use stroke-secondary (#141414).";
 
 /** The class name without its variant prefix: `data-[x]:hover:bg-card` is `bg-card`. */
 function baseClass(name: string): string {

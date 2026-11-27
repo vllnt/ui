@@ -67,13 +67,14 @@ Values are OKLCH channels; the sRGB hex is what renders on an sRGB display.
 | Token | Role | Light | Dark |
 |-------|------|-------|------|
 | `--background` | Page surface | `1 0 0` (#ffffff) | `0 0 0` (#000000) |
-| `--foreground` | Primary text | `0.1445 0 0` (#0a0a0a) | `0.9848 0 0` (#fafafa) |
+| `--foreground` | Primary text | `0 0 0` (#000000) | `1 0 0` (#ffffff) |
+| `--primary` | Primary fill and ink; `--primary-foreground` is its inverse | `0 0 0` (#000000) | `1 0 0` (#ffffff) |
 | `--card` | Raised, contained surface | `1 0 0` (#ffffff) | `0 0 0` (#000000) |
-| `--popover` | Overlay surface: menus, popovers, dialogs | `1 0 0` (#ffffff) | `0 0 0` (#000000) |
-| `--muted` | Sunken bands and quiet fills | `0.9703 0 0` (#f5f5f5) | `0 0 0` (#000000) |
-| `--secondary` | Hover, selected, active and data-state fills; control tracks | `0.9703 0 0` (#f5f5f5) | `0.2686 0 0` (#262626) |
-| `--accent` | Fills that pair with `--accent-foreground` (menu items, ghost buttons); a brand color in presets | `0.9703 0 0` (#f5f5f5) | `0.2686 0 0` (#262626) |
-| `--muted-foreground` | Secondary text | `0.525 0 0` (#6a6a6a) | `0.7153 0 0` (#a3a3a3) |
+| `--popover` | Overlay surface: menus, popovers, dialogs | `1 0 0` (#ffffff) | `0.1448 0 0` (#0a0a0a) |
+| `--muted` | Sunken bands and quiet fills | `0.9703 0 0` (#f5f5f5) | `0.1913 0 0` (#141414) |
+| `--secondary` | Hover, selected, active and data-state fills; control tracks | `0.9703 0 0` (#f5f5f5) | `0.1913 0 0` (#141414) |
+| `--accent` | Fills that pair with `--accent-foreground` (menu items, ghost buttons); a brand color in presets | `0.9703 0 0` (#f5f5f5) | `0.209 0 0` (#181818) |
+| `--muted-foreground` | Secondary text | `0.525 0 0` (#6a6a6a) | `0.6334 0 0` (#8a8a8a) |
 | `--destructive` | Danger fill **and** danger text | `0.55 0.2078 25.326` (#cf1f29) | `0.7 0.18 25.721` (#fa6961) |
 | `--destructive-foreground` | Text on a destructive fill | `0.9848 0 0` (#fafafa) | `0.2044 0 0` (#171717) |
 | `--success` | Success fill **and** success text | `0.5 0.11 155` (#1e7546) | `0.78 0.16 155` (#4ed589) |
@@ -81,42 +82,51 @@ Values are OKLCH channels; the sRGB hex is what renders on an sRGB display.
 | `--info` | Informational fill **and** text | `0.5 0.15 255` (#1762b6) | `0.74 0.12 245` (#65b2f1) |
 | `--success-foreground` / `--warning-foreground` / `--info-foreground` | Text on that fill (same pairing as destructive) | `0.9848 0 0` (#fafafa) | `0.2044 0 0` (#171717) |
 | `--diff-added` / `--diff-removed` | Added / removed line surfaces; `--foreground` is the text on them | `0.94 0.04 150` (#d9f3dd) / `0.94 0.03 25` (#ffe4e1) | `0.26 0.05 150` (#102b17) / `0.26 0.055 25` (#3b1816) |
-| `--border` | Decorative hairline (cards, separators, tables) | `0.9219 0 0` (#e5e5e5) | `0.2686 0 0` (#262626) |
+| `--border` | Decorative hairline (cards, separators, tables) | `0.9219 0 0` (#e5e5e5) | `0.235 0 0` (#1e1e1e) |
 | `--input` | Form-control boundary | `0.6167 0 0` (#858585) | `0.5208 0 0` (#696969) |
 | `--ring` | Focus ring | `0.1445 0 0` (#0a0a0a) | `0.8697 0 0` (#d4d4d4) |
+| `--sidebar` | Sidebar surface | `0.9848 0 0` (#fafafa) | `0.1448 0 0` (#0a0a0a) |
+| `--pill` / `--pill-border` | Fill and 1px edge of a code pill (`.code-pill`) | `0.9703 0 0` (#f5f5f5) / `0.9219 0 0` (#e5e5e5) | `0.1913 0 0` (#141414) / `0.2686 0 0` (#262626) |
+| `--composer-border` | Edge of a message composer | `0.8699 0 0` (#d4d4d4) | `0.285 0 0` (#2a2a2a) |
+| `--status-needs-you` | Status mark: needs your input | `0.554 0.135 66.44` | `0.795 0.162 86.05` |
+| `--status-unread` | Status mark: unread | `0.546 0.215 262.88` | `0.623 0.188 259.81` |
+| `--status-failed` | Status mark: failed | `0.577 0.215 27.33` | `0.637 0.208 25.33` |
+| `--status-done` | Status mark: done | `0.527 0.137 150.07` | `0.723 0.219 149.58` |
+| `--status-ring` | Status mark: idle ring | `0.556 0 0` (#737373) | `0.715 0 0` (#a3a3a3) |
 
-**Dark surfaces are pure black.** In dark mode `--background`, `--muted`,
-`--card` and `--popover` are all `0 0 0` (#000000). Hairlines separate the
-surfaces, not lightness:
+**Dark surfaces are flat and near black.** In dark mode `--background` and
+`--card` are `0 0 0` (#000000), `--popover` is `0.1448 0 0` (#0a0a0a), and
+`--muted` and `--secondary` are `0.1913 0 0` (#141414). Hairlines carry most of
+the separation, not lightness:
 
 ```
-background = muted = card = popover = #000000
-separated by --border (#262626)
-hover, selected and active fills: --secondary, --accent (#262626)
+background = card = #000000, popover = #0a0a0a, muted = secondary = #141414
+separated by --border (#1e1e1e)
+hover, selected and active fills: --secondary (#141414), --accent (#181818)
 ```
 
 Grey stays only for `--muted-foreground` text, `--border`, `--input`, the
 hover, selected and active fills (`--secondary`, `--accent`) and structural
-fills (below). So a raised
-surface (card, popover, menu, dialog, panel) draws `border` (the `--border`
-hairline); a `bg-card` or `bg-popover` without one is invisible on the page.
-The hairline is 1.39:1 against black, a depth cue and not a control boundary
-(`--input` carries that). In light mode `--muted`, `--secondary` and `--accent`
-are one value, so the split only shows in dark. Hover, focus, active, selected
-and data-state feedback on an actionable element uses `bg-secondary` (or
-`bg-secondary/50`), never `bg-muted`: in dark, `--muted` is the page color, so
-the fill would not show. Not `bg-accent` either: presets set `--accent` to a
-brand color, while their `--secondary` stays a quiet neutral that keeps the row
-text readable (6.65 to 12.53:1 across the dark presets). Menu items and ghost
-buttons keep `bg-accent` with `text-accent-foreground`.
+fills (below). So a raised surface (card, popover, menu, dialog, panel) draws
+`border` (the `--border` hairline); a `bg-card` without one is invisible on the
+page. The hairline is 1.26:1 against black, a depth cue and not a control
+boundary (`--input` carries that). In light mode `--muted`, `--secondary` and
+`--accent` are one value; in dark, `--muted` and `--secondary` are one value and
+`--accent` is one step lighter. Hover, focus, active, selected and data-state
+feedback on an actionable element uses `bg-secondary` (or `bg-secondary/50`),
+never `bg-muted`: `--muted` is the quiet band role, not a feedback role. Not
+`bg-accent` either: presets set `--accent` to a brand color, while their
+`--secondary` stays a quiet neutral that keeps the row text readable (6.65 to
+12.53:1 across the dark presets). Menu items and ghost buttons keep
+`bg-accent` with `text-accent-foreground`.
 `packages/ui/src/components/muted-state-feedback.test.ts` and
 `apps/registry/lib/hover-fills.test.ts` enforce it.
 
 A **structural fill** is a fill that is the whole visual of its element:
 skeletons, progress, meter and usage tracks, the drawer handle, empty heatmap
-cells and the neutral Gantt bar. It uses `bg-secondary` (#262626), at the same
-opacity as before. Chips, code spans and panels keep `bg-muted`: their text and
-border carry them.
+cells and the neutral Gantt bar. It uses `bg-secondary` (#141414 in dark), at
+the same opacity as before. Chips, code spans and panels keep `bg-muted`: their
+text and border carry them.
 `packages/ui/src/components/black-surface-borders.test.ts` and
 `apps/registry/lib/structural-fills.test.ts` enforce it. Product themes that
 override these roles keep their own values; PaaS has no color overrides, so it
@@ -158,13 +168,15 @@ themes, which own those roles. Tests enforce it and fail on any regression:
 | Diff text | `--foreground` on `--diff-added` and `--diff-removed` | 4.5:1 |
 | Control boundary | `--input` against background, card, popover, muted | 3:1 |
 | Focus ring | `--ring` against background | 3:1 |
+| Workbench text | `--foreground` and `--muted-foreground` on `--sidebar` and `--pill` | 4.5:1 |
+| Status marks | `--status-needs-you`, `-unread`, `-failed`, `-done`, `-ring` on background, card, popover, `--sidebar` and `--pill`. They are dots and rings, not text | 3:1 |
 
-Default theme ratios: muted-foreground 5.41 (light, on background) / 4.96 (light, on muted), 8.33 (dark, on every surface: they are all #000000);
-destructive text 5.41 / 4.96 (light), 7.26 (dark, on every surface);
-destructive-foreground on destructive 5.18 (light), 6.20 (dark); input 3.69 (light, on background, card and popover) / 3.38 (light, on muted), 3.83 (dark, on every surface);
-success / warning / info text on muted 5.22 / 5.60 / 5.57 (light), 11.20 / 11.88 / 9.19 (dark), and on their 10% tint 4.95 / 5.33 / 5.24 (light);
+Default theme ratios: muted-foreground 5.41 (light, on background) / 4.96 (light, on muted), 6.08 (dark, on background and card) / 5.73 (dark, on popover) / 5.34 (dark, on muted);
+destructive text 5.41 / 4.96 (light), 7.26 (dark, on background and card) / 6.84 (dark, on popover) / 6.37 (dark, on muted);
+destructive-foreground on destructive 5.18 (light), 6.20 (dark); input 3.69 (light, on background, card and popover) / 3.38 (light, on muted), 3.83 (dark, on background and card) / 3.61 (dark, on popover) / 3.36 (dark, on muted);
+success / warning / info text on muted 5.22 / 5.60 / 5.57 (light), 9.83 / 10.42 / 8.06 (dark), and on their 10% tint 4.95 / 5.33 / 5.24 (light);
 success / warning / info foreground on its fill 5.46 / 5.85 / 5.82 (light), 9.56 / 10.14 / 7.85 (dark);
-foreground on diff-added / diff-removed 16.80 / 16.44 (light), 14.58 / 15.15 (dark).
+foreground on diff-added / diff-removed 17.81 / 17.44 (light), 15.22 / 15.81 (dark).
 
 **Rules**
 - Draw form-control boundaries (input, textarea, select trigger, checkbox, switch off-track, composers) with `border-input`, never `border` / `border-border`. `--border` is decorative and stays low contrast.
@@ -180,10 +192,10 @@ A product theme is a named override layer on the core tokens, authored in the `t
 
 | Theme | `data-theme` | Identity |
 |-------|--------------|----------|
-| Maia | `maia` | Ink: no accent, `--primary` is the ink colour (#000000 light, #FFFFFF dark; pure black on purpose, while core `--primary` stays #171717 in light) on white / black, core Inter + JetBrains Mono, weights 400 to 600, tighter scale, radius sm 6 / md 8 / lg 12 / xl 16 |
-| PaaS | `paas` | Core neutrals and status tones, JetBrains Mono for sans, display and mono. Dark is the design default; light works too. No accent: `--primary` stays the core neutral |
+| Maia | `maia` | The default theme. It overrides nothing, so `data-theme="maia"` renders as the core does (flat, monochrome, JetBrains Mono, radius 4 / 6). The attribute stays valid |
+| PaaS | `paas` | Core neutrals and status tones, JetBrains Mono for sans, display and mono with its own fallback stack. Dark is the design default; light works too. No accent: `--primary` follows the core |
 
-Maia's palette comes from a Penpot export kept for review in `packages/design/sources/` (the generator never reads it). That copy is the 8 Nov pink export. Maia is now Ink (owner decision, 11 Nov): the export's `accent` no longer becomes `--primary`, its Figtree faces and its 700 weights are not used, and every other value still follows it. Its product-specific names map onto core roles:
+Maia was the first product theme and its values became the core default (#768). The Penpot export kept for review in `packages/design/sources/` (the generator never reads it) is the 8 Nov pink export and is provenance only. Its product-specific names still map onto core roles:
 
 | Maia token | Core role |
 |------------|-----------|
@@ -198,9 +210,9 @@ Maia's palette comes from a Penpot export kept for review in `packages/design/so
 | `diff.added`, `diff.removed` | `--diff-added`, `--diff-removed` |
 | `background`, `foreground`, `border`, `input` | same-named roles |
 
-Status foregrounds are not in the export: Maia uses white on its light fills and black on its dark fills. `--secondary`, `--secondary-foreground` and `--ring` inherit the core values.
+Status foregrounds are not in the export; the core carries them.
 
-On the web, `--radius` carries a theme's `md` step only, because Tailwind derives `rounded-sm` and `rounded-lg` from it (`--radius` minus 4px / 2px). Maia's full radius scale ships in the `@vllnt/ui-core` outputs (`productThemes`, `tamaguiTokens`) and the Penpot token sets.
+On the web, `--radius` carries a theme's `md` step only, because Tailwind derives `rounded-sm` and `rounded-lg` from it (`--radius` minus 4px / 2px). A theme's full radius scale ships in the `@vllnt/ui-core` outputs (`productThemes`, `tamaguiTokens`) and the Penpot token sets.
 
 Other outputs from the same source, drift-checked by `pnpm tokens:check`:
 
@@ -218,7 +230,7 @@ Other outputs from the same source, drift-checked by `pnpm tokens:check`:
 
 | Family | CSS variable | Default | Role |
 |--------|--------------|---------|------|
-| Sans | `--font-sans` | Inter, then the system sans stack | Body + UI text (`Text`, `Prose`) |
+| Sans | `--font-sans` | JetBrains Mono, then the system mono stack (the same stack as Mono) | Body + UI text (`Text`, `Prose`) |
 | Display | `--font-display` | `var(--font-sans)` | Headings + hero (`Heading`, `Display`) — set a serif/display face here for a brand identity |
 | Mono | `--font-mono` | JetBrains Mono, then the system mono stack | Code, tabular |
 
@@ -226,27 +238,29 @@ Other outputs from the same source, drift-checked by `pnpm tokens:check`:
 
 | Token | CSS variable | Size | Weight | Line height |
 |-------|--------------|------|--------|-------------|
-| Display | `--font-size-display` | 3.75rem (60px) | 600 (`--font-weight-display`) | 1.05 |
-| H1 | `--font-size-h1` | 3rem (48px) | 600 (`--font-weight-heading`) | 1.1 |
-| H2 | `--font-size-h2` | 2.25rem (36px) | 600 | 1.2 |
-| H3 | `--font-size-h3` | 1.875rem (30px) | 600 | 1.25 |
-| H4 | `--font-size-h4` | 1.5rem (24px) | 600 | 1.3 |
-| H5 | `--font-size-h5` | 1.25rem (20px) | 600 | 1.4 |
-| H6 | `--font-size-h6` | 1.125rem (18px) | 600 | 1.5 |
-| Body large | `--font-size-body-lg` | 1.125rem (18px) | 400 | 1.7 |
-| Body | `--font-size-body` | 1rem (16px) | 400 | 1.6 |
-| Body small | `--font-size-body-sm` | 0.875rem (14px) | 400 | 1.5 |
+| Display | `--font-size-display` | 1.75rem (28px) | 600 (`--font-weight-display`) | 1.1 |
+| H1 | `--font-size-h1` | 1.25rem (20px) | 500 (`--font-weight-heading`) | 1.3 |
+| H2 | `--font-size-h2` | 0.875rem (14px) | 500 | 1.4 |
+| H3 | `--font-size-h3` | 0.8125rem (13px) | 500 | 1.4 |
+| H4 | `--font-size-h4` | 0.8125rem (13px) | 500 | 1.4 |
+| H5 | `--font-size-h5` | 0.8125rem (13px) | 500 | 1.4 |
+| H6 | `--font-size-h6` | 0.8125rem (13px) | 500 | 1.4 |
+| Body large | `--font-size-body-lg` | 0.9375rem (15px) | 400 | 1.6 |
+| Body | `--font-size-body` | 0.875rem (14px) | 400 | 1.5 |
+| Body small | `--font-size-body-sm` | 0.8125rem (13px) | 400 | 1.45 |
 | Caption | `--font-size-caption` | 0.75rem (12px) | 400 | 1.4 |
-| Label | `--font-size-label` | 0.75rem (12px) | 500 (`--font-weight-label`) | 1.4 |
+| Label | `--font-size-label` | 0.6875rem (11px) | 500 (`--font-weight-label`) | 1.4 |
 | Code | inherit | inherit | 400 mono | 1.5 |
 
-Product themes override these steps. Maia sets Display 28/600, H5 20/600, H6 15/600, Body 14/400, Body small 13/400, Caption 12/500 and Label 11/600; its Mono 12/400 is `font-mono` at the Caption size with the body weight. No theme uses weight 700. Maia's Label is set in capitals in the design; the tokens carry no text-transform role (a theme cannot add roles), so add `uppercase` where the Label step is used. Steps a theme does not set (H1 to H4, Body large) keep the core size.
+Product themes override these steps. The core scale is the dense workbench scale: body 14, headings 13 to 20, caption 12 and label 11, in one mono family. Body large (15) is bigger than H2 to H6 (13 to 14), so the scale does not strictly decrease; keep Body large for lead text. No theme uses weight 700. A theme cannot add a text-transform role, so add `uppercase` where a Label is set in capitals.
 
 **Rules**
 - The `Text` / `Heading` / `Display` / `Prose` foundation primitives consume the tokens above — style them by overriding tokens, not by forking the components.
-- Headings use `font-semibold` (600), **never** `font-bold` (700+) at display sizes — letter shapes crush. The heading weight token defaults to 600.
+- Headings use the heading weight token (`font-medium`, 500), **never** `font-bold` (700+) at display sizes — letter shapes crush. `Display` keeps 600.
 - Code uses the core mono stack (JetBrains Mono, then the system mono stack) via `font-mono`.
 - Tabular numerals for data tables, charts, transactions: `font-variant-numeric: tabular-nums`.
+
+**Workbench utilities.** `styles.css` ships `.code-pill` (inline code: `--pill` fill, `--pill-border` edge, mono 12px) and CSS-only text spinners for terminal-style status: `.ascii` with `.ascii-run` (a running task), `.ascii-wait` (waiting or reconnecting) and `.ascii-load` (a loading region). Add `aria-hidden="true"` and keep a text label beside the spinner. Under `prefers-reduced-motion` a spinner keeps its first frame. The matching Tailwind colours are `bg-sidebar`, `bg-pill`, `border-pill-border`, `border-composer` and `text-status-needs-you`, `-unread`, `-failed`, `-done`, `-ring`.
 
 ---
 
@@ -291,22 +305,22 @@ Product themes override these steps. Maia sets Display 28/600, H5 20/600, H6 15/
 |-------|-------|
 | `radius-none` | 0 |
 | `radius-sm` | 4px |
-| `radius-md` | 8px (default) |
+| `radius-md` | 8px |
 | `radius-lg` | 12px |
 | `radius-xl` | 16px |
 | `radius-full` | 9999px |
-| `radius-control` | 6px (`--radius-control`) |
-| `radius-surface` | 8px (`--radius-surface`) |
+| `radius-control` | 4px (`--radius-control`) |
+| `radius-surface` | 6px (`--radius-surface`) |
 
-Cards, popovers, dialogs use `radius-md`. Pills, avatars use `radius-full`. Long surfaces (panels, sheets) use `radius-lg`.
+Surfaces (cards, popovers, dialogs, panels) are 6px, controls (buttons, inputs) 4px. Pills and avatars use `radius-full`. On the web `--radius` is 0.375rem, so Tailwind's `rounded-lg`, `rounded-md` and `rounded-sm` are 6, 4 and 2px.
 
-`radius-control` and `radius-surface` are role names for controls (buttons, inputs) and surfaces (cards, panels). The Penpot libraries use the same two names, but their `md`, `lg` and `xl` are 6, 8 and 12 where the code's are 8, 12 and 16. To get the same pixels in code and in Penpot, use the role names, not the `md` / `lg` / `xl` steps. Themes cannot override the two roles.
+`radius-control` and `radius-surface` are role names for controls (buttons, inputs) and surfaces (cards, panels). The Penpot libraries use the same two names, but their `md`, `lg` and `xl` are 6, 8 and 12 where the code's are 8, 12 and 16 (`sm` is 4 in both). To get the same pixels in code and in Penpot, use the role names, not the `md` / `lg` / `xl` steps. Themes cannot override the two roles.
 
 ---
 
 ## 7. Elevation
 
-Use sparingly. Chrome-bearing surfaces (bars, panels, menus, popovers, dialogs, sheets, docks, map overlays) are glass by default, see "Glass material" below. Other components are flat with `border` + `bg-background`.
+The default is flat: a surface is `border` + `bg-card` (or `bg-popover`) with no shadow, in light and dark. Glass is opt-in, see "Glass material" below.
 
 | Token | Value |
 |-------|-------|
@@ -317,13 +331,13 @@ Use sparingly. Chrome-bearing surfaces (bars, panels, menus, popovers, dialogs, 
 
 No coloured shadows. No multi-layered glow effects.
 
-**Library shadows.** Three shadow tokens carry the Penpot library's values, with a separate set per mode (dark adds an inset 1px top highlight). They are emitted as CSS variables and as Penpot `shadow` tokens; the Tailwind classes above are unchanged.
+**Library shadows.** Three shadow tokens are emitted as CSS variables and as Penpot `shadow` tokens, with a separate set per mode. All three are `none` in both modes. A Penpot shadow token cannot be empty, so Penpot gets one transparent layer with no offset and no blur. The Tailwind classes above are unchanged.
 
 | Token | Variable | Light | Dark |
 |-------|----------|-------|------|
-| `shadow.raised` | `--shadow-raised` | `0 1px 3px #0000001A, 0 1px 2px #0000000F` | `0 1px 3px #00000066, 0 1px 2px #0000003D, inset 0 1px 0 #FFFFFF14` |
-| `shadow.overlay` | `--shadow-overlay` | `0 8px 24px #00000024` | `0 8px 24px #00000080, inset 0 1px 0 #FFFFFF1F` |
-| `shadow.floating` | `--shadow-floating` | `0 16px 40px #0000002E` | `0 16px 40px #00000099, inset 0 1px 0 #FFFFFF29` |
+| `shadow.raised` | `--shadow-raised` | `none` | `none` |
+| `shadow.overlay` | `--shadow-overlay` | `none` | `none` |
+| `shadow.floating` | `--shadow-floating` | `none` | `none` |
 
 **Grain and contact layers.** Two opacity tokens set how strong a Surface grain or contact-shadow layer is when a component draws one. Nothing draws either unless it opts in.
 
@@ -334,7 +348,7 @@ No coloured shadows. No multi-layered glow effects.
 
 ### Glass material
 
-Glass is the default material of chrome-bearing surfaces. A glass part is a tint drawn top to bottom, a white sheen over it, a backdrop blur, a 1 px outer edge and a two-layer shadow. Solid is the same part with an opaque `card` tint, no blur, no sheen and the `raised` or `floating` shadow. The tokens follow the Penpot glass-default recipe (r5 and r8); tone follows the theme (light or dark), never the backdrop.
+Glass is opt-in. The default theme is solid: `:root` and `.dark` hold the solid values, so the `vllnt-glass*` classes and every component that takes `material` draw an opaque part with no blur and no shadow. Inside a glass scope (below) a glass part is a tint drawn top to bottom, a white sheen over it, a backdrop blur, a 1 px outer edge and a two-layer shadow. Solid is the same part with an opaque `card` tint, no blur, no sheen and no shadow. Glass is for AR and media HUDs over a live image, not for a 2D page. The tokens follow the Penpot glass-default recipe (r5 and r8); tone follows the theme (light or dark), never the backdrop. The table lists the glass values, which apply inside `[data-glass="on"]`.
 
 | Token | Variable | Light | Dark |
 |-------|----------|-------|------|
@@ -366,13 +380,20 @@ The dark default tint is `#1C1C1CB2` to `#1414149C`. The first draft of the reci
 
 Inside glass, `text-muted-foreground` and `border-input` read `glass-muted-foreground` and `glass-input` (Tailwind preset). Muted text on the default tint fails AA, so it belongs on the dense tint. The hairline edge is decorative; a border that identifies a control uses `glass-input`. A theme preset has its own foreground, so under a preset the default tint is the dense tint.
 
-**The `material` prop.** Every glass component takes `material="glass" | "solid"`, default `"glass"`. It writes `data-material`, and `[data-material="solid"]` redeclares the glass variables with the solid values, so the part and everything inside it turn solid. `DialogContent` passes it to its overlay. `ProgressiveBlur` draws no blur when solid.
+**Opt in.** Put `data-glass="on"` on `<html>` for glass everywhere, or on one surface for glass inside it. `GlassCard`, `GlassPanel`, `GlassProgress` and `LiquidGlass` set it on their own root when `material` is `"glass"`, so they stay glass on any page. The scope only sets variables; the `vllnt-glass*` classes draw the part.
+
+```html
+<html data-glass="on">  <!-- glass everywhere -->
+<div data-glass="on" class="vllnt-glass vllnt-glass-dense">Glass here only</div>
+```
+
+**The `material` prop.** Every glass component takes `material="glass" | "solid"`, default `"glass"`. It writes `data-material`. `"glass"` is glass inside a glass scope and solid elsewhere. `[data-material="solid"]` redeclares the glass variables with the solid values, so the part and everything inside it turn solid, scope or not. `DialogContent` passes it to its overlay. `ProgressiveBlur` draws no blur when solid.
 
 ```tsx
 <GlassPanel material="solid">Always opaque</GlassPanel>
 ```
 
-**Automatic solid.** CSS redeclares the same variables, with no script, when any of these holds:
+**Automatic solid.** Inside a glass scope, CSS redeclares the same variables with the solid values, with no script, when any of these holds:
 
 | Condition | Source |
 |-----------|--------|
@@ -380,7 +401,7 @@ Inside glass, `text-muted-foreground` and `border-input` read `glass-muted-foreg
 | `prefers-contrast: more` | Operating system setting |
 | `forced-colors: active` | Windows high contrast |
 | No `backdrop-filter` or `-webkit-backdrop-filter` | `@supports not (...)` |
-| `html[data-glass="off"]` | App switch |
+| `html[data-glass="off"]` | App switch: every glass scope below it turns solid |
 
 The glass classes live in `styles.css`; an app that loads only `themes/default.css` has the tokens but not the classes.
 
@@ -391,7 +412,7 @@ const lowPower = navigator.hardwareConcurrency <= 4 || navigator.connection?.sav
 document.documentElement.dataset.glass = lowPower ? "off" : "on";
 ```
 
-**Contrast.** `packages/ui/src/lib/glass-contrast.test.ts` measures every theme in light and dark: WCAG relative luminance, sRGB blend with alphas as stored, every point from the top to the bottom of the part, over white, mid-grey `#808080` and black, on both the CSS gradient and the flat top tint. Text needs 4.5:1, a control boundary 3:1. Worst case, default theme:
+**Contrast.** `packages/ui/src/lib/glass-contrast.test.ts` measures every theme in light and dark, with the glass values of the opt-in scope: WCAG relative luminance, sRGB blend with alphas as stored, every point from the top to the bottom of the part, over white, mid-grey `#808080` and black, on both the CSS gradient and the flat top tint. Text needs 4.5:1, a control boundary 3:1. Worst case, default theme:
 
 | Text on glass | Tint | Light | Dark | Needs |
 |---------------|------|-------|------|-------|
@@ -412,6 +433,7 @@ The dark default foreground is the tightest figure (white backdrop, top of the p
 | Blurred layers on screen at once | 5 at most, the scrim counts, a `ProgressiveBlur` counts as its `layers` | Design rule |
 | Glass inside glass | Allowed; each nested part adds a layer | Design rule |
 | Every glass part switchable to solid | `data-material` on every glass component | `glass-budget.test.ts` |
+| Solid is the base, glass is opt-in | `:root` and `.dark` hold the solid values and no blur; `[data-glass="on"]` holds the glass values | `glass-tokens.test.mjs`, `glass-budget.test.ts` |
 
 ---
 
@@ -483,7 +505,7 @@ The dark default foreground is the tightest figure (white backdrop, top of the p
 - Live regions for async state changes (`aria-live="polite"` for toasts, `assertive` for errors).
 - Color is **never** the only signal — pair with icon, text, or pattern.
 - Animations respect `prefers-reduced-motion`.
-- Glass turns solid under `prefers-reduced-transparency`, `prefers-contrast: more` and `forced-colors: active`, and text on glass meets AA in both tints (see "Glass material").
+- Glass is opt-in. It turns solid under `prefers-reduced-transparency`, `prefers-contrast: more` and `forced-colors: active`, and text on glass meets AA in both tints (see "Glass material").
 - Components shipping a defined ARIA pattern (combobox, dialog, menu, tabs) declare their full keyboard map in `meta.json` per #255.
 
 ### Touch targets
@@ -523,7 +545,7 @@ The Penpot libraries keep one `size.target.min` and `size.control-xs` per densit
 
 | Pattern | Why banned |
 |---------|------------|
-| `font-bold` on display headings | Crushes letter shapes; use `font-semibold` |
+| `font-bold` on display headings | Crushes letter shapes; use the heading weight (500) or `font-semibold` for `Display` |
 | `bg-black` / `bg-white` | Breaks dark mode; use `bg-background` / `bg-foreground` |
 | Tailwind palette literals (`bg-zinc-500`) | Bypasses tokens; breaks theming |
 | Bounce easings | Visual noise; doesn't scale to small distances |
