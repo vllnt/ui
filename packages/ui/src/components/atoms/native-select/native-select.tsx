@@ -34,7 +34,7 @@ const NativeSelect = /* @__PURE__ */ named(
       >
         {children}
       </select>
-      <ChevronDown className="pointer-events-none mr-3 size-4 self-center justify-self-end opacity-50 [grid-area:1/1]" />
+      <ChevronDown className="pointer-events-none ml-auto mr-3 size-4 self-center opacity-50 [grid-area:1/1]" />
     </div>
   ),
 );
