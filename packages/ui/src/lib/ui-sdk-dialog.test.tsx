@@ -72,7 +72,7 @@ describe("openAliases", () => {
   });
 });
 
-describe("createDialogParts", () => {
+describe("dialog part builders", () => {
   it.each([
     [
       "Dialog",

@@ -14,34 +14,24 @@ import {
 import { X } from "lucide-react";
 
 import type { MaterialProps } from "../../../lib/material";
+import { named } from "../../../lib/named";
 import type { NarrowPartProps } from "../../../lib/ui-sdk";
 import {
-  createDialogParts,
+  dialogBox,
+  dialogClose,
   type DialogContentOptions,
+  dialogDescription,
+  dialogOverlay,
+  dialogPortal,
+  dialogRoot,
+  dialogTitle,
+  dialogTrigger,
+  type OverlayLook,
   useDialogPopup,
 } from "../../../lib/ui-sdk-dialog";
 import type { DismissHandlers } from "../../../lib/ui-sdk-dismiss";
 import { cn } from "../../../lib/utils";
 import { cva, type VariantProps } from "../../../lib/variants";
-
-const parts = createDialogParts(
-  "Sheet",
-  {
-    Backdrop: DialogBackdrop,
-    Close: SheetClosePart,
-    Description: SheetDescriptionPart,
-    Root: SheetRoot,
-    Title: SheetTitlePart,
-    Trigger: SheetTriggerPart,
-  },
-  {
-    description: "text-sm text-muted-foreground",
-    footer: "flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2",
-    header: "flex flex-col space-y-2 text-center sm:text-left",
-    title: "text-lg font-semibold text-foreground",
-    veil: "fixed inset-0 z-50 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
-  },
-);
 
 type SheetProps = Omit<
   React.ComponentProps<typeof SheetRoot>,
@@ -53,20 +43,44 @@ type SheetProps = Omit<
 /** Holds the open state. Renders no element. */
 const Sheet: ((props: SheetProps) => React.JSX.Element) & {
   displayName: string;
-} = parts.Root;
-const SheetTrigger = parts.Trigger;
-const SheetClose = parts.Close;
-const SheetPortal = parts.Portal;
+} = /* @__PURE__ */ dialogRoot("Sheet", SheetRoot);
+const SheetTrigger = /* @__PURE__ */ dialogTrigger(
+  "SheetTrigger",
+  SheetTriggerPart,
+);
+const SheetClose = /* @__PURE__ */ dialogClose("SheetClose", SheetClosePart);
+const SheetPortal = /* @__PURE__ */ dialogPortal("SheetPortal");
 /**
  * Veil behind the panel. It dims the page; pass `material` to draw a glass or
  * solid scrim instead. `forceMount` has no effect: ui-sdk keeps the backdrop
  * mounted until its exit animation ends.
  */
-const SheetOverlay = parts.Overlay;
-const SheetHeader = parts.Header;
-const SheetFooter = parts.Footer;
-const SheetTitle = parts.Title;
-const SheetDescription = parts.Description;
+const OVERLAY_LOOK: OverlayLook = {
+  veil: "fixed inset-0 z-50 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
+};
+const SheetOverlay = /* @__PURE__ */ dialogOverlay(
+  "SheetOverlay",
+  DialogBackdrop,
+  OVERLAY_LOOK,
+);
+const SheetHeader = /* @__PURE__ */ dialogBox(
+  "SheetHeader",
+  "flex flex-col space-y-2 text-center sm:text-left",
+);
+const SheetFooter = /* @__PURE__ */ dialogBox(
+  "SheetFooter",
+  "flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2",
+);
+const SheetTitle = /* @__PURE__ */ dialogTitle(
+  "SheetTitle",
+  SheetTitlePart,
+  "text-lg font-semibold text-foreground",
+);
+const SheetDescription = /* @__PURE__ */ dialogDescription(
+  "SheetDescription",
+  SheetDescriptionPart,
+  "text-sm text-muted-foreground",
+);
 
 const sheetVariants = cva(
   "vllnt-glass-floating vllnt-glass-dense fixed z-50 gap-4 p-6 transition ease-in-out data-[state=closed]:duration-300 data-[state=open]:duration-500 data-[state=open]:animate-in data-[state=closed]:animate-out",
@@ -115,76 +129,78 @@ export type SheetContentProps = {
  * Side panel of a {@link Sheet}, rendered in the browser top layer above the
  * page. It sits on the `side` edge of the screen and slides in from there.
  */
-const SheetContent = ({
-  asChild,
-  children,
-  className,
-  closeButton = true,
-  finalFocus,
-  forceMount,
-  initialFocus,
-  labels,
-  material = "glass",
-  onCloseAutoFocus,
-  onEscapeKeyDown,
-  onFocusOutside,
-  onInteractOutside,
-  onOpenAutoFocus,
-  onPointerDownOutside,
-  overlay = "scrim",
-  ref,
-  side = "right",
-  ...props
-}: SheetContentProps) => {
-  const {
-    closeFocus,
-    keepMounted,
-    openFocus,
-    panelChildren,
-    panelReference,
-    render,
-  } = useDialogPopup({
+const SheetContent = /* @__PURE__ */ named(
+  "SheetContent",
+  ({
     asChild,
     children,
+    className,
+    closeButton = true,
+    finalFocus,
     forceMount,
-    names: props,
+    initialFocus,
+    labels,
+    material = "glass",
     onCloseAutoFocus,
     onEscapeKeyDown,
     onFocusOutside,
     onInteractOutside,
     onOpenAutoFocus,
     onPointerDownOutside,
+    overlay = "scrim",
     ref,
-  });
+    side = "right",
+    ...props
+  }: SheetContentProps) => {
+    const {
+      closeFocus,
+      keepMounted,
+      openFocus,
+      panelChildren,
+      panelReference,
+      render,
+    } = useDialogPopup({
+      asChild,
+      children,
+      forceMount,
+      names: props,
+      onCloseAutoFocus,
+      onEscapeKeyDown,
+      onFocusOutside,
+      onInteractOutside,
+      onOpenAutoFocus,
+      onPointerDownOutside,
+      ref,
+    });
 
-  return (
-    <>
-      {overlay === "scrim" ? <SheetOverlay /> : null}
-      <SheetContentPart
-        className={cn(sheetVariants({ side }), className)}
-        data-material={material}
-        finalFocus={finalFocus ?? closeFocus}
-        initialFocus={initialFocus ?? openFocus}
-        keepMounted={keepMounted}
-        ref={panelReference}
-        render={render}
-        {...props}
-      >
-        {panelChildren}
-        {/* Last in the DOM, so the first tabbable element of the content, not
+    return (
+      <>
+        {overlay === "scrim" ? <SheetOverlay /> : null}
+        <SheetContentPart
+          className={cn(sheetVariants({ side }), className)}
+          data-material={material}
+          finalFocus={finalFocus ?? closeFocus}
+          initialFocus={initialFocus ?? openFocus}
+          keepMounted={keepMounted}
+          ref={panelReference}
+          render={render}
+          {...props}
+        >
+          {panelChildren}
+          {/* Last in the DOM, so the first tabbable element of the content, not
             Close, takes the initial focus. Its position stays `absolute`, so
             Close still sits in the corner. */}
-        {closeButton ? (
-          <SheetClosePart className="absolute right-3 top-3 inline-flex size-6 items-center justify-center rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-secondary">
-            <X className="size-4" />
-            <span className="sr-only">{labels?.close ?? "Close"}</span>
-          </SheetClosePart>
-        ) : null}
-      </SheetContentPart>
-    </>
-  );
-};
-SheetContent.displayName = "SheetContent";
+          {closeButton ? (
+            <SheetClosePart className="absolute right-3 top-3 inline-flex size-6 items-center justify-center rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-secondary">
+              <X className="size-4" />
+              <span className="sr-only">{labels?.close ?? "Close"}</span>
+            </SheetClosePart>
+          ) : null}
+        </SheetContentPart>
+      </>
+    );
+  },
+);
 
 export {
   Sheet,

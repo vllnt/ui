@@ -3,6 +3,7 @@ import * as React from "react";
 import type { RenderProp } from "@ui-sdk/react/primitive";
 
 import type { Material } from "./material";
+import { named } from "./named";
 import {
   type AsChildProps,
   asChildProps,
@@ -24,34 +25,23 @@ import { cn } from "./utils";
 
 /**
  * Radix dialog parts on ui-sdk, shared by the dialog, alert dialog, sheet and
- * drawer. `createDialogParts` builds the parts that differ in nothing but
- * their class strings; `useDialogPopup` is what every content panel shares.
+ * drawer. `dialogRoot`, `dialogTrigger` and the other `dialog*` builders make
+ * the parts that differ in nothing but their class strings; `useDialogPopup`
+ * is what every content panel shares.
  *
- * Each dialog calls `createDialogParts` with its own ui-sdk parts and class
+ * Each dialog calls a builder per part with its own ui-sdk part and class
  * strings, so the DOM stays what each Radix-based atom rendered. Class strings
- * stay in the atoms, where Tailwind sees them.
+ * stay in the atoms, where Tailwind sees them. A builder has no shared state:
+ * the atoms call it as a pure annotated call, so a bundler drops the parts a
+ * page does not import, and `DialogHeader` does not pull in the ui-sdk dialog.
  */
 
 type Part = React.JSXElementConstructor<never>;
 
-/** The ui-sdk parts that make up a dialog-like popup. */
-type DialogUi = {
-  Backdrop: Part;
-  Close: Part;
-  Description: Part;
-  Root: Part;
-  Title: Part;
-  Trigger: Part;
-};
-
-/** What differs between the dialogs: their class strings. */
-type DialogLook = {
-  description: string;
-  footer: string;
-  header: string;
+/** What the backdrop takes from its dialog: its class strings. */
+type OverlayLook = {
   /** Material of the backdrop when the caller passes none. Without one, the backdrop is the plain dimming veil. */
   material?: Material;
-  title: string;
   /** Layout and animation of the backdrop. */
   veil: string;
   /** Extra attributes on the backdrop, like vaul's marker. */
@@ -63,17 +53,17 @@ type PropsOf<Component> = Component extends (props: infer Props) => unknown
   ? Props
   : never;
 
-type PartProps<Ui extends DialogUi, Key extends keyof DialogUi> = AsChildProps &
-  NarrowPartProps<PropsOf<Ui[Key]>>;
+type PartProps<TPart extends Part> = AsChildProps &
+  NarrowPartProps<PropsOf<TPart>>;
 
-type DialogRootProps<Ui extends DialogUi> = Omit<
-  PropsOf<Ui["Root"]>,
+type DialogRootProps<TRoot extends Part> = Omit<
+  PropsOf<TRoot>,
   "onOpenChange"
 > & {
   onOpenChange?: (open: boolean) => void;
 };
 
-type DialogOverlayProps<Ui extends DialogUi> = PartProps<Ui, "Backdrop"> & {
+type DialogOverlayProps<TBackdrop extends Part> = PartProps<TBackdrop> & {
   /** Keeps the veil in the page while closed. It has no effect: ui-sdk keeps the backdrop mounted until its exit animation ends. */
   forceMount?: true;
   /**
@@ -95,18 +85,6 @@ type Named<Props extends object, Result> = ((props: Props) => Result) & {
   displayName: string;
 };
 
-type DialogParts<Ui extends DialogUi> = {
-  Close: Named<PartProps<Ui, "Close">, React.JSX.Element>;
-  Description: Named<PartProps<Ui, "Description">, React.JSX.Element>;
-  Footer: Named<React.HTMLAttributes<HTMLDivElement>, React.JSX.Element>;
-  Header: Named<React.HTMLAttributes<HTMLDivElement>, React.JSX.Element>;
-  Overlay: Named<DialogOverlayProps<Ui>, React.JSX.Element>;
-  Portal: Named<DialogPortalProps, React.ReactNode>;
-  Root: Named<DialogRootProps<Ui>, React.JSX.Element>;
-  Title: Named<PartProps<Ui, "Title">, React.JSX.Element>;
-  Trigger: Named<PartProps<Ui, "Trigger">, React.JSX.Element>;
-};
-
 type LoosePart = React.ComponentType<Record<string, unknown>>;
 
 /** The part with the loose props the factory hands it. Public types stay the part's own. */
@@ -117,13 +95,6 @@ type LooseProps = Record<string, unknown> & {
   children?: React.ReactNode;
   className?: string;
 };
-
-function named<Props extends object, Result>(
-  component: (props: Props) => Result,
-  displayName: string,
-): Named<Props, Result> {
-  return Object.assign(component, { displayName });
-}
 
 /** A part that takes `asChild` and a base class, like a title or a description. */
 function textPart(Part: LoosePart, base: string) {
@@ -201,7 +172,7 @@ function triggerPart(Part: LoosePart) {
 }
 
 /** The veil behind the panel, in the dialog's look. */
-function overlayPart(Part: LoosePart, look: DialogLook) {
+function overlayPart(Part: LoosePart, look: OverlayLook) {
   return function OverlayPart({
     asChild,
     children,
@@ -247,30 +218,70 @@ function portalPart() {
   };
 }
 
-/**
- * The parts every dialog shares, named after the dialog (`name`) and wearing
- * its look. The content panel stays with the dialog: `useDialogPopup` holds
- * what its panels have in common.
- */
-function createDialogParts<Ui extends DialogUi>(
-  name: string,
-  ui: Ui,
-  look: DialogLook,
-): DialogParts<Ui> {
-  return {
-    Close: named(closePart(loose(ui.Close)), `${name}Close`),
-    Description: named(
-      textPart(loose(ui.Description), look.description),
-      `${name}Description`,
-    ),
-    Footer: named(boxPart(look.footer), `${name}Footer`),
-    Header: named(boxPart(look.header), `${name}Header`),
-    Overlay: named(overlayPart(loose(ui.Backdrop), look), `${name}Overlay`),
-    Portal: named(portalPart(), `${name}Portal`),
-    Root: named(rootPart(loose(ui.Root)), name),
-    Title: named(textPart(loose(ui.Title), look.title), `${name}Title`),
-    Trigger: named(triggerPart(loose(ui.Trigger)), `${name}Trigger`),
-  };
+/** The root: holds the open state and runs the content's dismissal callbacks. */
+export function dialogRoot<TRoot extends Part>(
+  displayName: string,
+  Root: TRoot,
+): Named<DialogRootProps<TRoot>, React.JSX.Element> {
+  return named(displayName, rootPart(loose(Root)));
+}
+
+/** The trigger, with the Radix `data-state` attribute. */
+export function dialogTrigger<TTrigger extends Part>(
+  displayName: string,
+  Trigger: TTrigger,
+): Named<PartProps<TTrigger>, React.JSX.Element> {
+  return named(displayName, triggerPart(loose(Trigger)));
+}
+
+/** A close button that takes `asChild`. */
+export function dialogClose<TClose extends Part>(
+  displayName: string,
+  Close: TClose,
+): Named<PartProps<TClose>, React.JSX.Element> {
+  return named(displayName, closePart(loose(Close)));
+}
+
+/** The portal, kept for compatibility. It renders its children as they are. */
+export function dialogPortal(
+  displayName: string,
+): Named<DialogPortalProps, React.ReactNode> {
+  return named(displayName, portalPart());
+}
+
+/** The veil behind the panel, in the dialog's look. */
+export function dialogOverlay<TBackdrop extends Part>(
+  displayName: string,
+  Backdrop: TBackdrop,
+  look: OverlayLook,
+): Named<DialogOverlayProps<TBackdrop>, React.JSX.Element> {
+  return named(displayName, overlayPart(loose(Backdrop), look));
+}
+
+/** A header or a footer: a static element with the dialog's class. */
+export function dialogBox(
+  displayName: string,
+  className: string,
+): Named<React.HTMLAttributes<HTMLDivElement>, React.JSX.Element> {
+  return named(displayName, boxPart(className));
+}
+
+/** The title, which takes `asChild` and the dialog's class. */
+export function dialogTitle<TTitle extends Part>(
+  displayName: string,
+  Title: TTitle,
+  className: string,
+): Named<PartProps<TTitle>, React.JSX.Element> {
+  return named(displayName, textPart(loose(Title), className));
+}
+
+/** The description, which takes `asChild` and the dialog's class. */
+export function dialogDescription<TDescription extends Part>(
+  displayName: string,
+  Description: TDescription,
+  className: string,
+): Named<PartProps<TDescription>, React.JSX.Element> {
+  return named(displayName, textPart(loose(Description), className));
 }
 
 /** Both spellings of a modal's open state: `isOpen`/`onClose` and `open`/`onOpenChange`. */
@@ -415,14 +426,11 @@ function useDialogPopup<State extends { open: boolean } = { open: boolean }>({
 }
 
 export {
-  createDialogParts,
   type DialogContentOptions,
-  type DialogLook,
-  type DialogParts,
   type DialogPopup,
-  type DialogUi,
   type OpenAliases,
   openAliases,
+  type OverlayLook,
   type PopupFocusHandlers,
   type PopupOverlay,
   useDialogPopup,
