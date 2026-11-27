@@ -31,10 +31,25 @@ const preset: Partial<Config> = {
         "accordion-up": "accordion-up 0.2s ease-out",
         shimmer: "shimmer 2s infinite",
       },
+      // The large radius steps follow the surface radius, so a component's
+      // `rounded-xl` or `rounded-2xl` takes the theme's corner like the rest.
       borderRadius: {
+        "2xl": "var(--radius-surface)",
+        "3xl": "var(--radius-surface)",
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
+        xl: "var(--radius-surface)",
+      },
+      // Every shadow step reads a theme shadow token, so the flat default theme
+      // (no shadows) removes them all and a theme with shadows brings them back.
+      boxShadow: {
+        "2xl": "var(--shadow-floating)",
+        DEFAULT: "var(--shadow-raised)",
+        lg: "var(--shadow-overlay)",
+        md: "var(--shadow-overlay)",
+        sm: "var(--shadow-raised)",
+        xl: "var(--shadow-floating)",
       },
       colors: {
         accent: {

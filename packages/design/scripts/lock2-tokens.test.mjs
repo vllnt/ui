@@ -288,13 +288,13 @@ describe("shadow tokens (K-shadow-overlay)", () => {
     });
   }
 
-  it("exposes --shadow-raised, -overlay and -floating as none in :root and in .dark", () => {
+  it("exposes --shadow-raised, -overlay and -floating as an empty shadow (0 0 #0000) in :root and in .dark", () => {
     for (const css of [defaultCss, stylesCss]) {
       const dark = css.slice(css.indexOf(".dark {"));
       const light = css.slice(0, css.indexOf(".dark {"));
       for (const name of surfaceShadows) {
-        assert.ok(light.includes(`--shadow-${name}: none;`), `light ${name}`);
-        assert.ok(dark.includes(`--shadow-${name}: none;`), `dark ${name}`);
+        assert.ok(light.includes(`--shadow-${name}: 0 0 #0000;`), `light ${name}`);
+        assert.ok(dark.includes(`--shadow-${name}: 0 0 #0000;`), `dark ${name}`);
       }
     }
   });

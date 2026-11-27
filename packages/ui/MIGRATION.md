@@ -73,9 +73,12 @@ screen looks different. Check these:
    system mono fallbacks. No font file is shipped: load JetBrains Mono yourself,
    or override both variables.
 3. **Radius.** `--radius` is 0.375rem. `rounded-lg`, `rounded-md` and
-   `rounded-sm` are 6, 4 and 2 px (they were 8, 6 and 4 px).
+   `rounded-sm` are 6, 4 and 2 px (they were 8, 6 and 4 px). With the preset,
+   `rounded-xl`, `rounded-2xl` and `rounded-3xl` are the surface radius (6 px).
 4. **Shadows.** `--shadow-raised`, `--shadow-overlay` and `--shadow-floating` are
-   `none`. Draw a surface edge with `border`.
+   empty (`0 0 #0000`). With the preset, every `shadow-*` step reads them, so
+   `shadow-lg` draws nothing in the default theme. Draw a surface edge with
+   `border`; a theme that sets the three tokens brings shadows back.
 5. **Type.** Headings weigh 500. Body is 14 px, h1 20 px, display 28 px.
 6. **Colours.** Light foreground and primary are `#000`; dark are `#fff`. Dark
    `--popover` is `#0a0a0a`, `--muted` and `--secondary` `#141414`, `--accent`
