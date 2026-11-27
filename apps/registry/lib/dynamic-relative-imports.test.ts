@@ -82,7 +82,10 @@ describe("assertNoDynamicRelativeImports", () => {
   it("accepts a specifier on the allow list and rejects the others", () => {
     const allowed = new Set(["./flow-diagram-content"]);
     expect(
-      checking('import("./flow-diagram-content"); import("../other");', allowed),
+      checking(
+        'import("./flow-diagram-content"); import("../other");',
+        allowed,
+      ),
     ).toThrow("(found: ../other)");
     expect(
       checking('import("./flow-diagram-content");', allowed),
