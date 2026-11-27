@@ -83,7 +83,8 @@ const PlatformAllowsGlassContext = createContext<boolean | undefined>(
 /**
  * Observes one preference and removes the native subscription on unmount. The
  * value stays `true` until the platform answers, so glass never shows to a
- * user who may have turned it off.
+ * user who may have turned it off. A platform without the API, such as
+ * react-native-web, throws on the call; the value then stays `true` (solid).
  */
 function useGlassPreference(preference: GlassPreference): boolean {
   const [enabled, setEnabled] = useState(true);
@@ -91,23 +92,28 @@ function useGlassPreference(preference: GlassPreference): boolean {
   useEffect(() => {
     let mounted = true;
     let changed = false;
-    const subscription = preference.addListener((value) => {
-      changed = true;
-      if (mounted) setEnabled(value);
-    });
+    let subscription: ReturnType<GlassPreference["addListener"]> | undefined;
 
-    void preference.isEnabled().then(
-      (value) => {
-        if (mounted && !changed) setEnabled(value);
-      },
-      (error: unknown) => {
-        void error;
-      },
-    );
+    try {
+      subscription = preference.addListener((value) => {
+        changed = true;
+        if (mounted) setEnabled(value);
+      });
+      void preference.isEnabled().then(
+        (value) => {
+          if (mounted && !changed) setEnabled(value);
+        },
+        (error: unknown) => {
+          void error;
+        },
+      );
+    } catch {
+      // The platform cannot report this preference, so glass stays off.
+    }
 
     return () => {
       mounted = false;
-      subscription.remove();
+      subscription?.remove();
     };
   }, [preference]);
 

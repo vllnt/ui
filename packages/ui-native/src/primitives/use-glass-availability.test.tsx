@@ -377,5 +377,49 @@ describe("useGlassAvailability", () => {
         expect(result.current).toBe(expected);
       },
     );
+
+    it.each([
+      "isDarkerSystemColorsEnabled",
+      "isHighTextContrastEnabled",
+      "isReduceTransparencyEnabled",
+    ] as const)(
+      "stays off without crashing when %s is missing, as on react-native-web",
+      async (query) => {
+        mockedRenderer.mockReturnValue(GLASS_RENDERER);
+        answerPlatform({ darker: false, highText: false, reduce: false });
+        jest.spyOn(AccessibilityInfo, query).mockImplementation(() => {
+          throw new TypeError(`AccessibilityInfo.${query} is not a function`);
+        });
+
+        const { result } = renderHook(() => useGlassAvailability(), {
+          wrapper: ThemeOnly,
+        });
+        await settlePreferences();
+
+        expect(result.current).toBe(false);
+      },
+    );
+
+    it("stays off without crashing when the platform cannot subscribe", async () => {
+      mockedRenderer.mockReturnValue(GLASS_RENDERER);
+      answerPlatform({ darker: false, highText: false, reduce: false });
+      const addEventListener = jest
+        .spyOn(AccessibilityInfo, "addEventListener")
+        .mockImplementation(() => {
+          throw new TypeError("unsupported event");
+        });
+
+      try {
+        const { result, unmount } = renderHook(() => useGlassAvailability(), {
+          wrapper: ThemeOnly,
+        });
+        await settlePreferences();
+
+        expect(result.current).toBe(false);
+        unmount();
+      } finally {
+        addEventListener.mockRestore();
+      }
+    });
   });
 });
