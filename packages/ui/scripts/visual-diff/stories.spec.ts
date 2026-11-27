@@ -1,7 +1,8 @@
 /**
  * One screenshot per Storybook story, theme and state, for the visual diff
  * (`run.mjs`). Each capture freezes what moves on its own: the clock (timers,
- * animation frames, Date), Math.random, CSS animations and SVG animations.
+ * animation frames, Date), React's scheduler, Math.random, CSS animations
+ * and SVG animations.
  * Two captures of the same build are pixel-identical.
  *
  * Every story gets a light and a dark shot. Stories whose component directory
@@ -91,6 +92,31 @@ const render = async (page: Page, id: string, theme: string) => {
   page.on("requestfailed", (request) => pending.delete(request));
   page.on("requestfinished", (request) => pending.delete(request));
   await page.addInitScript(() => {
+    // React's scheduler posts its work through a MessageChannel, a real-time
+    // task that races the fake clock's timers. As a microtask, the work runs
+    // right after the timer or event that caused it, the same way every run.
+    class Port {
+      onmessage: ((event: { data: unknown }) => void) | null = null;
+      other: Port | undefined;
+      addEventListener(type: string, listener: (event: { data: unknown }) => void) {
+        if (type === "message") this.onmessage = listener;
+      }
+      close() {}
+      postMessage(data: unknown) {
+        queueMicrotask(() => this.other?.onmessage?.({ data }));
+      }
+      removeEventListener() {}
+      start() {}
+    }
+    class Channel {
+      port1 = new Port();
+      port2 = new Port();
+      constructor() {
+        this.port1.other = this.port2;
+        this.port2.other = this.port1;
+      }
+    }
+    Object.defineProperty(globalThis, "MessageChannel", { value: Channel });
     let seed = 1;
     Math.random = () => {
       seed = Math.trunc(seed + 0x6d_2b_79_f5);
@@ -125,11 +151,16 @@ const render = async (page: Page, id: string, theme: string) => {
  * on, the shot shows it as rendered, so a lost trigger still shows as a diff.
  */
 const enter = async (page: Page, state: (typeof STATES)[number]) => {
-  const root = page.locator("#storybook-root");
+  // Searches the whole page, not only #storybook-root: a dialog may render in
+  // place or in a portal at the end of <body>, and both should pick the same
+  // control. Storybook's own elements are left out.
+  const storybookChrome = ":not(.sb-wrapper *, #storybook-highlights-root *)";
   // Tries each selector in turn, so a button wins over a focusable wrapper.
   const act = async (selectors: string[], action: "click" | "hover") => {
     for (const selector of selectors) {
-      const target = root.locator(`${selector}:visible`).first();
+      const target = page
+        .locator(`body ${selector}${storybookChrome}:visible`)
+        .first();
       if ((await target.count()) === 0) continue;
       await target[action]({ timeout: 3000 }).catch(() => undefined);
       return;

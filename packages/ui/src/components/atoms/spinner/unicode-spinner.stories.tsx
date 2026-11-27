@@ -310,6 +310,9 @@ export const Moon: Story = {
 };
 
 export const Noise: Story = {
+  // Random frames never land the same way twice; the other spinners cover
+  // the component in the visual diff.
+  tags: ["visual-skip"],
   args: {
     animation: "noise",
     label: "Noise",

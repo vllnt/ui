@@ -27,6 +27,7 @@ import {
   writeFileSync,
 } from "node:fs";
 import { createRequire } from "node:module";
+import { createServer } from "node:net";
 import { dirname, join, resolve } from "node:path";
 import { parseArgs } from "node:util";
 
@@ -50,8 +51,23 @@ const fail = (message) => {
 
 const plain = (text) => text.replaceAll(/\u001B\[\d+m/g, "");
 
-/** Runs one capture pass and returns its Playwright JSON report. */
-function capture(out, storybook, name, update) {
+/** Asks the OS for a free port, so parallel runs never share a server. */
+const freePort = () =>
+  new Promise((resolvePort, reject) => {
+    const server = createServer();
+    server.on("error", reject);
+    server.listen(0, "127.0.0.1", () => {
+      const { port } = server.address();
+      server.close(() => resolvePort(port));
+    });
+  });
+
+/**
+ * Runs one capture pass and returns its Playwright JSON report. A pass that
+ * could not run (server, config or spec error) stops the diff: an empty
+ * report must never read as "no change".
+ */
+async function capture(out, storybook, name, update) {
   const report = join(out, `${name}.json`);
   const cli = join(
     dirname(createRequire(import.meta.url).resolve("playwright/package.json")),
@@ -60,13 +76,24 @@ function capture(out, storybook, name, update) {
   const config = join(import.meta.dirname, "playwright.config.ts");
   const result = spawnSync(
     process.execPath,
-    [cli, "test", "-c", config, `--update-snapshots=${update}`],
+    [
+      cli,
+      "test",
+      "-c",
+      config,
+      `--update-snapshots=${update}`,
+      // A changed head shot is taken up to twice more: a real change differs
+      // every time, while the rare animation that is not fully frozen
+      // usually matches on a retry. Those are counted as "Matched on retry".
+      `--retries=${name === "head" ? 2 : 0}`,
+    ],
     {
       env: {
         ...process.env,
         VISUAL_DIFF_DEEP: values.deep,
         VISUAL_DIFF_HTML: join(out, name === "head" ? "html" : `${name}-html`),
         VISUAL_DIFF_OUTPUT: join(out, `${name}-results`),
+        VISUAL_DIFF_PORT: String(await freePort()),
         VISUAL_DIFF_REPORT: report,
         VISUAL_DIFF_SHARD: values.shard,
         VISUAL_DIFF_SNAPSHOTS: join(out, "snapshots"),
@@ -79,7 +106,12 @@ function capture(out, storybook, name, update) {
   if (!existsSync(report)) {
     fail(`The ${name} capture wrote no report (exit ${result.status}).`);
   }
-  return JSON.parse(readFileSync(report, "utf8"));
+  const parsed = JSON.parse(readFileSync(report, "utf8"));
+  const errors = parsed.errors ?? [];
+  if (errors.length > 0) {
+    fail(`The ${name} capture failed: ${plain(errors[0].message ?? "")}`);
+  }
+  return parsed;
 }
 
 /** Flattens a Playwright JSON report into { title, status, message }. */
@@ -87,8 +119,10 @@ function shots(report) {
   const found = [];
   const walk = (suite) => {
     for (const spec of suite.specs ?? []) {
-      const result = spec.tests[0]?.results.at(-1);
+      const results = spec.tests[0]?.results ?? [];
+      const result = results.at(-1);
       found.push({
+        attempts: results.length,
         message: plain(result?.error?.message ?? ""),
         status: result?.status ?? "skipped",
         title: spec.title,
@@ -103,12 +137,20 @@ function shots(report) {
 /** Sorts every head shot into same, changed, new or failed, against base. */
 function compare(baseShots, headShots) {
   const base = new Map(baseShots.map((shot) => [shot.title, shot]));
-  const summary = { changed: [], errors: [], new: [], removed: [], same: 0 };
+  const summary = {
+    changed: [],
+    errors: [],
+    new: [],
+    removed: [],
+    retried: [],
+    same: 0,
+  };
   for (const shot of headShots) {
     const before = base.get(shot.title);
     const firstLine = (text) => text.split("\n")[0] ?? "";
     if (shot.status === "passed") {
       summary.same += 1;
+      if (shot.attempts > 1) summary.retried.push({ title: shot.title });
     } else if (before && before.status !== "passed") {
       summary.errors.push({
         reason: `base: ${firstLine(before.message)}`,
@@ -155,15 +197,16 @@ function toMarkdown(summary) {
       : `**${failing} shot(s) differ from the base build.** The \`visual-diff-*\` artifacts hold a Playwright report (html/index.html) with the before, after and diff image of each.`;
   return [
     `## Visual diff\n\n${headline}\n`,
-    "| Same | Changed | New | Removed | Failed to render |",
-    "| --- | --- | --- | --- | --- |",
-    `| ${summary.same} | ${summary.changed.length} | ${summary.new.length} | ${summary.removed.length} | ${summary.errors.length} |\n`,
+    "| Same | Changed | New | Removed | Failed to render | Matched on retry |",
+    "| --- | --- | --- | --- | --- | --- |",
+    `| ${summary.same} | ${summary.changed.length} | ${summary.new.length} | ${summary.removed.length} | ${summary.errors.length} | ${summary.retried.length} |\n`,
     section("Changed", summary.changed, (row) => row.detail),
     section("Removed", summary.removed, () => "story gone in head"),
     section("Failed to render", summary.errors, (row) =>
       row.reason.replaceAll("|", String.raw`\|`),
     ),
     section("New", summary.new, () => "no base shot"),
+    section("Matched on retry", summary.retried, () => "same, after a retry"),
   ].join("\n");
 }
 
@@ -185,14 +228,21 @@ function report(summary, out) {
 
 if (values.merge) {
   if (positionals.length === 0) fail("Usage: run.mjs --merge <out> [<out> ...]");
-  const merged = { changed: [], errors: [], new: [], removed: [], same: 0 };
+  const merged = {
+    changed: [],
+    errors: [],
+    new: [],
+    removed: [],
+    retried: [],
+    same: 0,
+  };
   for (const directory of positionals) {
     const file = join(directory, "summary.json");
     if (!existsSync(file)) fail(`${file} not found: a shard did not finish.`);
     const part = JSON.parse(readFileSync(file, "utf8"));
     merged.same += part.same;
-    for (const key of ["changed", "errors", "new", "removed"]) {
-      merged[key].push(...part[key]);
+    for (const key of ["changed", "errors", "new", "removed", "retried"]) {
+      merged[key].push(...(part[key] ?? []));
     }
   }
   report(merged);
@@ -208,6 +258,9 @@ for (const directory of [values.base, values.head]) {
 }
 const out = resolve(values.out);
 mkdirSync(out, { recursive: true });
-const baseShots = shots(capture(out, values.base, "base", "all"));
-const headShots = shots(capture(out, values.head, "head", "none"));
+const baseShots = shots(await capture(out, values.base, "base", "all"));
+const headShots = shots(await capture(out, values.head, "head", "none"));
+if (baseShots.length + headShots.length === 0 && !process.env.VISUAL_DIFF_ONLY) {
+  fail("No shot was captured: check the Storybook builds and the shard.");
+}
 report(compare(baseShots, headShots), out);
