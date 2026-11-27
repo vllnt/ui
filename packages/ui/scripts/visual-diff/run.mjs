@@ -49,6 +49,13 @@ const fail = (message) => {
   process.exit(2);
 };
 
+/**
+ * A shot with this many differing pixels or fewer is listed as tiny and does
+ * not fail the diff: on CI, a glyph can land one pixel differently between
+ * two captures of the same build, and no visible change is that small.
+ */
+const TINY_PIXELS = 3;
+
 const plain = (text) => text.replaceAll(/\u001B\[\d+m/g, "");
 
 /** Asks the OS for a free port, so parallel runs never share a server. */
@@ -145,6 +152,7 @@ function compare(baseShots, headShots) {
     removed: [],
     retried: [],
     same: 0,
+    tiny: [],
   };
   for (const shot of headShots) {
     const before = base.get(shot.title);
@@ -161,7 +169,9 @@ function compare(baseShots, headShots) {
       summary.new.push({ title: shot.title });
     } else if (/pixels \(ratio|Expected an image/.test(shot.message)) {
       const pixels = /(\d+) pixels \(ratio/.exec(shot.message)?.[1];
-      summary.changed.push({
+      const list =
+        pixels && Number(pixels) <= TINY_PIXELS ? summary.tiny : summary.changed;
+      list.push({
         detail: pixels
           ? `${pixels} px`
           : (/Expected an image[^\n]*/.exec(shot.message)?.[0] ?? "size"),
@@ -194,13 +204,15 @@ function toMarkdown(summary) {
   const failing = failingCount(summary);
   const headline =
     failing === 0
-      ? "No visual change: every shot is pixel-identical to the base build."
+      ? summary.tiny.length === 0
+        ? "No visual change: every shot is pixel-identical to the base build."
+        : `No visible change: ${summary.tiny.length} shot(s) differ by ${TINY_PIXELS} pixels or fewer (listed below); every other shot is pixel-identical.`
       : `**${failing} shot(s) differ from the base build.** The \`visual-diff-*\` artifacts hold a Playwright report (html/index.html) with the before, after and diff image of each.`;
   return [
     `## Visual diff\n\n${headline}\n`,
-    "| Same | Changed | New | Removed | Failed to render | Matched on retry |",
-    "| --- | --- | --- | --- | --- | --- |",
-    `| ${summary.same} | ${summary.changed.length} | ${summary.new.length} | ${summary.removed.length} | ${summary.errors.length} | ${summary.retried.length} |\n`,
+    `| Same | Changed | New | Removed | Failed to render | Matched on retry | Tiny (≤ ${TINY_PIXELS} px) |`,
+    "| --- | --- | --- | --- | --- | --- | --- |",
+    `| ${summary.same} | ${summary.changed.length} | ${summary.new.length} | ${summary.removed.length} | ${summary.errors.length} | ${summary.retried.length} | ${summary.tiny.length} |\n`,
     section("Changed", summary.changed, (row) => row.detail),
     section("Removed", summary.removed, () => "story gone in head"),
     section("Failed to render", summary.errors, (row) =>
@@ -208,6 +220,7 @@ function toMarkdown(summary) {
     ),
     section("New", summary.new, () => "no base shot"),
     section("Matched on retry", summary.retried, () => "same, after a retry"),
+    section(`Tiny (≤ ${TINY_PIXELS} px, not failing)`, summary.tiny, (row) => row.detail),
   ].join("\n");
 }
 
@@ -236,13 +249,14 @@ if (values.merge) {
     removed: [],
     retried: [],
     same: 0,
+    tiny: [],
   };
   for (const directory of positionals) {
     const file = join(directory, "summary.json");
     if (!existsSync(file)) fail(`${file} not found: a shard did not finish.`);
     const part = JSON.parse(readFileSync(file, "utf8"));
     merged.same += part.same;
-    for (const key of ["changed", "errors", "new", "removed", "retried"]) {
+    for (const key of ["changed", "errors", "new", "removed", "retried", "tiny"]) {
       merged[key].push(...(part[key] ?? []));
     }
   }

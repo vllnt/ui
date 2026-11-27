@@ -60,9 +60,13 @@ Bare ticked checkboxes don't count.
 The **Visual Diff** check screenshots every Storybook story of the PR and of
 the base branch on the same runner, in light and dark, and compares them pixel
 by pixel. Components the PR touches also get open, hover, focus and 390 px
-shots. The clock, `Math.random`, CSS and SVG animations are frozen, so two
-captures of one build are identical: any listed shot is a real change.
+shots. The clock, React's scheduler, `Math.random`, CSS and SVG animations
+are frozen, so two captures of one build match.
 
+- A changed shot is taken up to twice more; one that matches only on a retry
+  is listed as "Matched on retry" and does not fail. A shot that differs by 3
+  pixels or fewer is listed as "Tiny" and does not fail either. Any other
+  change fails the check.
 - The job summary lists each changed, removed or failed shot. The
   `visual-diff-*` artifacts hold a Playwright report (`html/index.html`) with
   the before, after and diff image of each.
