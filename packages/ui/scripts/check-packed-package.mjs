@@ -323,9 +323,10 @@ async function assertNodeResolution(manifest, packedDirectory) {
 
 /**
  * Bundles a consumer of the plain exports from the packed subpaths and checks
- * that no `tailwind-merge` code reaches the bundle. A `Separator` consumer is
- * the control: it must bring `tailwind-merge`, so the check can fail. Runs
- * after `assertNodeResolution`, which links the dependencies.
+ * that no `tailwind-merge` or `class-variance-authority` code reaches the
+ * bundle. `Separator` and `ToggleGroup` consumers are the controls: they must
+ * bring those packages, so the check can fail. Runs after
+ * `assertNodeResolution`, which links the dependencies.
  */
 async function assertTailwindMergeFree() {
   const { build } = await import("esbuild");
@@ -352,24 +353,43 @@ async function assertTailwindMergeFree() {
       'export { PlainSeparator } from "@vllnt/ui/separator";',
       'export { UnstyledButton } from "@vllnt/ui/button";',
       'export { cx } from "@vllnt/ui/utils";',
+      'export { UnstyledToggleGroup, UnstyledToggleGroupItem } from "@vllnt/ui/toggle-group";',
     ].join("\n"),
   );
-  const leaked = plain.filter((path) => path.includes("tailwind-merge"));
+  const forbidden = ["tailwind-merge", "class-variance-authority"];
+  const leaked = plain.filter((path) =>
+    forbidden.some((name) => path.includes(`/${name}/`)),
+  );
   if (leaked.length > 0) {
     throw new Error(
-      `PlainSeparator, UnstyledButton and cx bundle tailwind-merge: ${leaked.join(", ")}`,
+      `The plain exports bundle tailwind-merge or class-variance-authority: ${leaked.join(", ")}`,
     );
   }
-  if (!plain.some((path) => path.endsWith("plain-separator.js"))) {
-    throw new Error(
-      `The plain bundle is missing PlainSeparator: ${plain.join(", ")}`,
-    );
-  }
-  const control = await bundledInputs(
-    'export { Separator } from "@vllnt/ui/separator";',
+  const expected = ["plain-separator.js", "unstyled-toggle-group.js"];
+  const missing = expected.filter(
+    (file) => !plain.some((path) => path.endsWith(file)),
   );
-  if (!control.some((path) => path.includes("tailwind-merge"))) {
-    throw new Error("The Separator control bundle has no tailwind-merge.");
+  if (missing.length > 0) {
+    throw new Error(
+      `The plain bundle is missing ${missing.join(", ")}: ${plain.join(", ")}`,
+    );
+  }
+  const controls = [
+    ["Separator", "separator", ["tailwind-merge"]],
+    ["ToggleGroup", "toggle-group", forbidden],
+  ];
+  const absent = await Promise.all(
+    controls.map(async ([name, subpath, packages]) => {
+      const control = await bundledInputs(
+        `export { ${name} } from "@vllnt/ui/${subpath}";`,
+      );
+      return packages
+        .filter((pkg) => !control.some((path) => path.includes(`/${pkg}/`)))
+        .map((pkg) => `${name} lacks ${pkg}`);
+    }),
+  );
+  if (absent.flat().length > 0) {
+    throw new Error(`Control bundles: ${absent.flat().join("; ")}.`);
   }
 }
 
@@ -491,7 +511,7 @@ try {
   await assertSubpathTypes(packedDirectory);
 
   console.log(
-    `Packed web package resolves every export, internal ESM specifier, root entry, tailwind preset and subpath (runtime and types) from published files, and the plain exports bundle without tailwind-merge (${manifest.version}).`,
+    `Packed web package resolves every export, internal ESM specifier, root entry, tailwind preset and subpath (runtime and types) from published files, and the plain exports bundle without tailwind-merge or class-variance-authority (${manifest.version}).`,
   );
 } finally {
   await rm(temporaryDirectory, { force: true, recursive: true });

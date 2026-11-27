@@ -190,7 +190,7 @@ A subpath is named after the component's directory (`src/components/<level>/<nam
 - Hooks, theme presets and a few helpers (for example `copyText` and `statusDotVariants`) are not in a component directory, so they are root-only: import them from `@vllnt/ui`.
 - Subpaths need `moduleResolution` set to `bundler`, `node16` or `nodenext` in TypeScript, as `@vllnt/ui/tailwind-preset` already does.
 
-Every component pays a shared base of about 20 KB minified for `cn` (`clsx` and `tailwind-merge`). `UnstyledButton`, `PlainSeparator` and `cx` skip it: they join classes with `clsx` alone, so a conflicting class does not replace another, and each stays under 1.3 KB. Most single components then add a few KB on top: `Button` is about 25 KB in total and `Dialog` about 65 KB. CI fails if a named import grows past its budget, or if any module grows past 320 KB up front (`pnpm -F @vllnt/ui size`).
+Every component pays a shared base of about 20 KB minified for `cn` (`clsx` and `tailwind-merge`). `UnstyledButton`, `PlainSeparator` and `cx` skip it: they join classes with `clsx` alone, so a conflicting class does not replace another, and each stays under 1.3 KB. Most single components then add a few KB on top: `Button` is about 25 KB in total and `Dialog` about 65 KB. `UnstyledToggleGroup` imports neither `tailwind-merge` nor `class-variance-authority` but keeps Radix: about 26 KB minified against 48 KB for `ToggleGroup`. Import it from a `"use client"` module: a server component that imports `@vllnt/ui/toggle-group` also brings `ToggleGroup`. CI fails if a named import grows past its budget, or if any module grows past 320 KB up front (`pnpm -F @vllnt/ui size`).
 
 ## Theming
 

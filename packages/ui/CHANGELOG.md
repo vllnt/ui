@@ -40,6 +40,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
   conflicting `className` adds to the default classes instead of replacing
   them. None of the three imports `tailwind-merge`, so a bundle that uses only
   them carries none of its code. `cn`, `Button` and `Separator` stay the same.
+- **`UnstyledToggleGroup` and `UnstyledToggleGroupItem`** - `ToggleGroup`
+  without styles, from `@vllnt/ui/toggle-group`: the same Radix behaviour (roving
+  focus, arrow keys, Home and End, radio items when `type="single"`, pressed
+  buttons otherwise) and no classes of their own; `className` reaches the element
+  as given. Neither imports `tailwind-merge` nor `class-variance-authority`: about
+  9 KB gzip against 16 KB for `ToggleGroup`. Import them from a `"use client"`
+  module; a server-component import of the subpath also brings `ToggleGroup`.
+  `ToggleGroup` stays the same.
 - **`Text` `dt`, `dd`, `li` and `measure`** - `as` takes `dt`, `dd` and `li`;
   `measure="prose" | "narrow"` caps the width with `size.measure-prose` (720 px,
   new) or `size.measure-narrow` (480 px).

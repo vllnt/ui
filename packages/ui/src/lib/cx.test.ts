@@ -90,11 +90,16 @@ describe("cx", () => {
     "lib/cx.ts",
     "components/atoms/button/unstyled-button.tsx",
     "components/atoms/separator/plain-separator.tsx",
-  ])("%s never imports tailwind-merge", (file) => {
+    "components/molecules/toggle-group/unstyled-toggle-group.tsx",
+  ])("%s never imports tailwind-merge or class-variance-authority", (file) => {
     const imports = runtimeImports(join(source, file));
     const packages = [...imports].filter((name) => !name.startsWith("/"));
     expect(
-      packages.filter((name) => name.startsWith("tailwind-merge")),
+      packages.filter((name) =>
+        ["tailwind-merge", "class-variance-authority"].some((forbidden) =>
+          name.startsWith(forbidden),
+        ),
+      ),
     ).toEqual([]);
     expect(imports).not.toContain(join(source, "lib/utils.ts"));
   });
@@ -103,5 +108,13 @@ describe("cx", () => {
     expect(
       runtimeImports(join(source, "components/atoms/separator/separator.tsx")),
     ).toContain("tailwind-merge");
+  });
+
+  it("detects class-variance-authority in ToggleGroup (control)", () => {
+    const imports = runtimeImports(
+      join(source, "components/molecules/toggle-group/toggle-group.tsx"),
+    );
+    expect(imports).toContain("class-variance-authority");
+    expect(imports).toContain("tailwind-merge");
   });
 });
