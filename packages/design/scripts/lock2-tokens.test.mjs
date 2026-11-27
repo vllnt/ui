@@ -97,25 +97,37 @@ describe("brand.status", () => {
   });
 });
 
+// Radius roles (D14). The values are the flat workbench geometry (owner
+// decision 27 Nov 2026, issue #768): control 4 and surface 6. They were 6 and 8.
 describe("radius roles (D14)", () => {
-  it("adds control 6 and surface 8 and leaves md, lg and xl alone", () => {
-    assert.equal(tokens.radius.control, "0.375rem");
-    assert.equal(tokens.radius.surface, "0.5rem");
+  it("sets control 4 and surface 6 and leaves sm, md, lg and xl alone", () => {
+    assert.equal(tokens.radius.control, "0.25rem");
+    assert.equal(tokens.radius.surface, "0.375rem");
     assert.deepEqual(
       [tokens.radius.sm, tokens.radius.md, tokens.radius.lg, tokens.radius.xl],
       ["0.25rem", "0.5rem", "0.75rem", "1rem"],
     );
     const core = penpot["vllnt/core"].radius;
-    assert.deepEqual(core.control, { $value: "6", $type: "borderRadius" });
-    assert.deepEqual(core.surface, { $value: "8", $type: "borderRadius" });
+    assert.deepEqual(core.control, { $value: "4", $type: "borderRadius" });
+    assert.deepEqual(core.surface, { $value: "6", $type: "borderRadius" });
     assert.equal(core.md.$value, "8");
   });
 
   it("exposes both roles as CSS variables on the web", () => {
     for (const css of [defaultCss, stylesCss]) {
-      assert.match(css, /--radius-control: 0\.375rem;/);
-      assert.match(css, /--radius-surface: 0\.5rem;/);
+      assert.match(css, /--radius-control: 0\.25rem;/);
+      assert.match(css, /--radius-surface: 0\.375rem;/);
     }
+  });
+
+  it("derives the base --radius from the surface role, in the core and in every product theme", () => {
+    for (const css of [defaultCss, stylesCss]) {
+      assert.match(css, /--radius: 0\.375rem;/);
+    }
+    assert.deepEqual(productsCss.match(/--radius: [^;]+;/g), [
+      "--radius: 0.375rem;",
+      "--radius: 0.375rem;",
+    ]);
   });
 });
 
@@ -127,9 +139,10 @@ describe("caption and label weights (D29 Q42)", () => {
     assert.equal(penpotToken("vllnt/core", "font.weight.label").$value, "500");
   });
 
-  it("keeps the Maia Ink scale: caption 500, label 600", () => {
-    assert.equal(penpotToken("vllnt/maia/dark", "font.weight.caption").$value, "500");
-    assert.equal(penpotToken("vllnt/maia/dark", "font.weight.label").$value, "600");
+  it("lets Maia inherit them: it sets no font weight of its own", () => {
+    for (const mode of modes) {
+      assert.equal(penpot[`vllnt/maia/${mode}`].font, undefined, mode);
+    }
   });
 
   for (const [name, css] of [
@@ -223,12 +236,13 @@ const shadowLayer = (offsetY, blur, color, inset = false) => ({
 });
 
 /**
- * The libraries' shadow tokens (lock 2 readback, 18 Nov 2026): `vllnt/core` holds the
- * light value, `vllnt/mode/dark` the dark one. The additive and increased-contrast
- * sets hold no shadow (every layer is transparent); code has no such mode. `glass`
- * and `glass-floating` are the two glass shadows of the glass-default r8 recipe
- * (22 Nov 2026).
+ * The shadow tokens. `vllnt/core` holds the light value, `vllnt/<product>/dark` the
+ * dark one. `glass` and `glass-floating` are the two glass shadows of the glass-default
+ * r8 recipe (22 Nov 2026). `raised`, `overlay` and `floating` are none (owner decision
+ * 27 Nov 2026, issue #768): they were the lock 2 library layers (18 Nov 2026), and
+ * Penpot holds none as one transparent layer.
  */
+const noShadowLayer = [shadowLayer(0, 0, "#00000000")];
 const libraryShadows = {
   glass: {
     dark: [shadowLayer(1, 2, "#00000066"), shadowLayer(4, 14, "#0000004D")],
@@ -238,26 +252,15 @@ const libraryShadows = {
     dark: [shadowLayer(1, 2, "#00000080"), shadowLayer(10, 28, "#00000080")],
     light: [shadowLayer(1, 2, "#00000014"), shadowLayer(10, 28, "#0000001F")],
   },
-  floating: {
-    dark: [shadowLayer(16, 40, "#00000099"), shadowLayer(1, 0, "#FFFFFF29", true)],
-    light: [shadowLayer(16, 40, "#0000002E")],
-  },
-  overlay: {
-    dark: [shadowLayer(8, 24, "#00000080"), shadowLayer(1, 0, "#FFFFFF1F", true)],
-    light: [shadowLayer(8, 24, "#00000024")],
-  },
-  raised: {
-    dark: [
-      shadowLayer(1, 3, "#00000066"),
-      shadowLayer(1, 2, "#0000003D"),
-      shadowLayer(1, 0, "#FFFFFF14", true),
-    ],
-    light: [shadowLayer(1, 3, "#0000001A"), shadowLayer(1, 2, "#0000000F")],
-  },
+  floating: { dark: noShadowLayer, light: noShadowLayer },
+  overlay: { dark: noShadowLayer, light: noShadowLayer },
+  raised: { dark: noShadowLayer, light: noShadowLayer },
 };
 
+const surfaceShadows = ["floating", "overlay", "raised"];
+
 describe("shadow tokens (K-shadow-overlay)", () => {
-  it("sets raised, overlay, floating and the two glass shadows on vllnt/core with the library's light layers", () => {
+  it("sets raised, overlay, floating and the two glass shadows on vllnt/core with the light layers", () => {
     const core = penpot["vllnt/core"].shadow;
     assert.deepEqual(Object.keys(core).sort(), Object.keys(libraryShadows).sort());
     for (const [name, layers] of Object.entries(libraryShadows)) {
@@ -265,19 +268,18 @@ describe("shadow tokens (K-shadow-overlay)", () => {
     }
   });
 
-  it("makes shadow.overlay the 0/8/24 black 14% drop shadow", () => {
-    const [layer, ...rest] = penpot["vllnt/core"].shadow.overlay.$value;
-    assert.equal(rest.length, 0);
-    assert.deepEqual(
-      [layer.offsetX, layer.offsetY, layer.blur, layer.spread, layer.color],
-      ["0", "8", "24", "0", "#00000024"],
-    );
-    const alpha = Number.parseInt(layer.color.slice(7), 16) / 255;
-    assert.ok(alpha > 0.139 && alpha < 0.142, `alpha ${alpha}`);
+  it("makes raised, overlay and floating none: an empty layer list in tokens.json", () => {
+    for (const name of surfaceShadows) {
+      assert.deepEqual(tokens.shadow[name].light, [], `${name} light`);
+      assert.deepEqual(tokens.shadow[name].dark, [], `${name} dark`);
+    }
+    for (const name of ["glass", "glass-floating"]) {
+      assert.ok(tokens.shadow[name].light.length > 0, `${name} keeps its layers`);
+    }
   });
 
   for (const name of themeNames) {
-    it(`gives vllnt/${name}/dark the library's dark layers and vllnt/${name}/light none`, () => {
+    it(`gives vllnt/${name}/dark the dark layers and vllnt/${name}/light none`, () => {
       const dark = penpot[`vllnt/${name}/dark`].shadow;
       for (const [token, layers] of Object.entries(libraryShadows)) {
         assert.deepEqual(dark[token], { $type: "shadow", $value: layers.dark }, token);
@@ -286,21 +288,13 @@ describe("shadow tokens (K-shadow-overlay)", () => {
     });
   }
 
-  it("exposes --shadow-* in :root for light and in .dark for dark", () => {
-    const cssLayer = (layer) =>
-      `${layer.inset ? "inset " : ""}${layer.offsetX}px ${layer.offsetY}px ${layer.blur}px ${layer.spread}px ${layer.color}`;
+  it("exposes --shadow-raised, -overlay and -floating as none in :root and in .dark", () => {
     for (const css of [defaultCss, stylesCss]) {
       const dark = css.slice(css.indexOf(".dark {"));
       const light = css.slice(0, css.indexOf(".dark {"));
-      for (const [name, layers] of Object.entries(libraryShadows)) {
-        assert.ok(
-          light.includes(`--shadow-${name}: ${layers.light.map(cssLayer).join(", ")};`),
-          `light ${name}`,
-        );
-        assert.ok(
-          dark.includes(`--shadow-${name}: ${layers.dark.map(cssLayer).join(", ")};`),
-          `dark ${name}`,
-        );
+      for (const name of surfaceShadows) {
+        assert.ok(light.includes(`--shadow-${name}: none;`), `light ${name}`);
+        assert.ok(dark.includes(`--shadow-${name}: none;`), `dark ${name}`);
       }
     }
   });
@@ -412,9 +406,11 @@ describe("Maia Ink (K-ink-regen)", () => {
     }
   });
 
-  it("keeps the light primary pure black on purpose, while core keeps #171717", () => {
-    assert.equal(penpot["vllnt/maia/light"].color.primary.$value, "#000000");
-    assert.equal(penpot["vllnt/paas/light"].color.primary.$value, "#171717");
+  it("makes the primary pure black in light and white in dark, in core and so in every theme", () => {
+    for (const name of themeNames) {
+      assert.equal(penpot[`vllnt/${name}/light`].color.primary.$value, "#000000", name);
+      assert.equal(penpot[`vllnt/${name}/dark`].color.primary.$value, "#FFFFFF", name);
+    }
   });
 
   it("carries no Figtree and none of the old pink accent hexes in the tokens or the stylesheets", () => {

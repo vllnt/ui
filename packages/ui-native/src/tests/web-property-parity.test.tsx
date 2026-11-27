@@ -113,11 +113,13 @@ it.each(["default", "lg", "sm"] as const)(
   },
 );
 
+// Glyphs use the body, h5 and h4 steps of the type scale. In the dense default
+// scale (issue #768) h4 and h5 are both 13 and body is 14.
 it.each([
-  ["sm", 16],
-  ["md", 20],
-  ["lg", 24],
-  [undefined, 24],
+  ["sm", 14],
+  ["md", 13],
+  ["lg", 13],
+  [undefined, 13],
 ] as const)("sizes rating glyphs: %s", (size, fontSize) => {
   renderThemed(<Rating label="Score" labels={rated} max={1} size={size} />);
   expect(screen.getByText("☆")).toHaveStyle({ fontSize });

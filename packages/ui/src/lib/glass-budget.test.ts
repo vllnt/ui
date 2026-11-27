@@ -108,8 +108,8 @@ describe("glass backdrop-filter budget", () => {
     ).toEqual([]);
   });
 
-  it("keeps every blur token at or below blur.glass.lg, 24 px", () => {
-    const root = block(readTheme("default.css"), ":root");
+  it("keeps every blur token at or below blur.glass.lg, 24 px, in the glass scope", () => {
+    const root = block(readTheme("default.css"), '[data-glass="on"]');
     const radii = Object.entries(root)
       .filter(([name]) => name.startsWith("blur-glass-"))
       .map(([name, value]) => [name, Number.parseFloat(value)] as const);
@@ -123,6 +123,16 @@ describe("glass backdrop-filter budget", () => {
       radii.filter(([, radius]) => radius > 24).map(([name]) => name),
     ).toEqual([]);
     expect(root["blur-glass-lg"]).toBe("24px");
+  });
+
+  it("blurs nothing outside the glass scope: the base theme has every blur token at 0", () => {
+    const base = block(readTheme("default.css"), ":root");
+    expect(
+      Object.entries(base)
+        .filter(([name]) => name.startsWith("blur-glass-"))
+        .map(([, value]) => value),
+    ).toEqual(["0px", "0px", "0px", "0px"]);
+    expect(base["vllnt-glass-backdrop"]).toBe("none");
   });
 
   it("gives every library glass surface a material prop that reaches data-material", () => {

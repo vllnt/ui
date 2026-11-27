@@ -22,13 +22,13 @@
 @layer base {
   :root {
     --background: 1 0 0;
-    --foreground: 0.1445 0 0;
+    --foreground: 0 0 0;
     --card: 1 0 0;
-    --card-foreground: 0.1445 0 0;
+    --card-foreground: 0 0 0;
     --popover: 1 0 0;
-    --popover-foreground: 0.1445 0 0;
-    --primary: 0.2044 0 0;
-    --primary-foreground: 0.9848 0 0;
+    --popover-foreground: 0 0 0;
+    --primary: 0 0 0;
+    --primary-foreground: 1 0 0;
     --secondary: 0.9703 0 0;
     --secondary-foreground: 0.2044 0 0;
     --muted: 0.9703 0 0;
@@ -48,42 +48,51 @@
     --border: 0.9219 0 0;
     --input: 0.6167 0 0;
     --ring: 0.1445 0 0;
-    --radius: 0.5rem;
+    --sidebar: 0.9848 0 0;
+    --pill: 0.9703 0 0;
+    --pill-border: 0.9219 0 0;
+    --composer-border: 0.8699 0 0;
+    --status-needs-you: 0.554 0.135 66.44;
+    --status-unread: 0.546 0.215 262.88;
+    --status-failed: 0.577 0.215 27.33;
+    --status-done: 0.527 0.137 150.07;
+    --status-ring: 0.556 0 0;
+    --radius: 0.375rem;
     /* Typography — theme-overridable font tokens (issue #465). Override any of
        these on a theme scope to restyle the Text/Heading/Display/Prose primitives
-       without editing the library. Defaults reproduce the house style (sans, 600). */
-    --font-sans: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+       without editing the library. Defaults reproduce the house style (mono, heading 500). */
+    --font-sans: "JetBrains Mono", ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
     --font-display: var(--font-sans);
-    --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-    --font-weight-heading: 600;
+    --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+    --font-weight-heading: 500;
     --font-weight-display: 600;
     --font-weight-label: 500;
-    --font-size-display: 3.75rem;
-    --line-height-display: 1.05;
-    --font-size-h1: 3rem;
-    --line-height-h1: 1.1;
-    --font-size-h2: 2.25rem;
-    --line-height-h2: 1.2;
-    --font-size-h3: 1.875rem;
-    --line-height-h3: 1.25;
-    --font-size-h4: 1.5rem;
-    --line-height-h4: 1.3;
-    --font-size-h5: 1.25rem;
+    --font-size-display: 1.75rem;
+    --line-height-display: 1.1;
+    --font-size-h1: 1.25rem;
+    --line-height-h1: 1.3;
+    --font-size-h2: 0.875rem;
+    --line-height-h2: 1.4;
+    --font-size-h3: 0.8125rem;
+    --line-height-h3: 1.4;
+    --font-size-h4: 0.8125rem;
+    --line-height-h4: 1.4;
+    --font-size-h5: 0.8125rem;
     --line-height-h5: 1.4;
-    --font-size-h6: 1.125rem;
-    --line-height-h6: 1.5;
-    --font-size-body-lg: 1.125rem;
-    --line-height-body-lg: 1.7;
-    --font-size-body: 1rem;
-    --line-height-body: 1.6;
-    --font-size-body-sm: 0.875rem;
-    --line-height-body-sm: 1.5;
+    --font-size-h6: 0.8125rem;
+    --line-height-h6: 1.4;
+    --font-size-body-lg: 0.9375rem;
+    --line-height-body-lg: 1.6;
+    --font-size-body: 0.875rem;
+    --line-height-body: 1.5;
+    --font-size-body-sm: 0.8125rem;
+    --line-height-body-sm: 1.45;
     --font-size-caption: 0.75rem;
     --line-height-caption: 1.4;
-    --font-size-label: 0.75rem;
+    --font-size-label: 0.6875rem;
     --line-height-label: 1.4;
-    --radius-control: 0.375rem;
-    --radius-surface: 0.5rem;
+    --radius-control: 0.25rem;
+    --radius-surface: 0.375rem;
     --spacing-page-gutter: 1.25rem;
     --spacing-page-gutter-tablet: 3rem;
     --spacing-page-gutter-desktop: 6rem;
@@ -94,6 +103,122 @@
     --size-target-min: 2.75rem;
     --opacity-grain: 1;
     --opacity-contact: 1;
+    --shadow-raised: none;
+    --shadow-overlay: none;
+    --shadow-floating: none;
+    --depth-z-0-offset: 0px;
+    --depth-z-0-shadow: none;
+    --depth-z-1-offset: 2px;
+    --depth-z-1-shadow: var(--shadow-raised);
+    --depth-z-2-offset: 8px;
+    --depth-z-2-shadow: var(--shadow-overlay);
+    --depth-z-3-offset: 16px;
+    --depth-z-3-shadow: var(--shadow-floating);
+    --depth-z-4-offset: 32px;
+    --depth-z-4-shadow: var(--shadow-floating);
+    --color-glass-border: #00000024;
+    --material-highlight-top: #FFFFFFCC;
+    --material-glass-opacity-sm: 1;
+    --material-glass-opacity-md: 1;
+    --material-glass-opacity-lg: 1;
+    --material-glass-opacity-xl: 1;
+    --material-glass-tint: var(--card);
+    --material-glass-highlight: oklch(var(--border));
+    --material-glass-hairline: oklch(var(--border));
+    --material-glass-tint-top: oklch(var(--card));
+    --material-glass-tint-bottom: oklch(var(--card));
+    --material-glass-tint-dense-top: oklch(var(--card));
+    --material-glass-tint-dense-bottom: oklch(var(--card));
+    --material-glass-hairline-edge: oklch(var(--border));
+    --material-glass-sheen-opacity: 0;
+    --shadow-glass: var(--shadow-raised);
+    --shadow-glass-floating: var(--shadow-floating);
+    --blur-glass-sm: 0px;
+    --blur-glass-md: 0px;
+    --blur-glass-lg: 0px;
+    --blur-glass-default: 0px;
+    --material-glass-opacity-default: var(--material-glass-opacity-lg);
+    --depth-z-0-tint: var(--material-glass-opacity-default);
+    --depth-z-1-tint: var(--material-glass-opacity-default);
+    --depth-z-2-tint: var(--material-glass-opacity-default);
+    --depth-z-3-tint: var(--material-glass-opacity-xl);
+    --depth-z-4-tint: var(--material-glass-opacity-xl);
+    --color-glass-input: var(--input);
+    --color-glass-muted-foreground: var(--muted-foreground);
+    --vllnt-glass-backdrop: none;
+  }
+  .dark {
+    --background: 0 0 0;
+    --foreground: 1 0 0;
+    --card: 0 0 0;
+    --card-foreground: 1 0 0;
+    --popover: 0.1448 0 0;
+    --popover-foreground: 0.9461 0 0;
+    --primary: 1 0 0;
+    --primary-foreground: 0 0 0;
+    --secondary: 0.1913 0 0;
+    --secondary-foreground: 0.9461 0 0;
+    --muted: 0.1913 0 0;
+    --muted-foreground: 0.6334 0 0;
+    --accent: 0.209 0 0;
+    --accent-foreground: 0.9461 0 0;
+    --destructive: 0.7 0.18 25.721;
+    --destructive-foreground: 0.2044 0 0;
+    --success: 0.78 0.16 155;
+    --success-foreground: 0.2044 0 0;
+    --warning: 0.82 0.15 85;
+    --warning-foreground: 0.2044 0 0;
+    --info: 0.74 0.12 245;
+    --info-foreground: 0.2044 0 0;
+    --diff-added: 0.26 0.05 150;
+    --diff-removed: 0.26 0.055 25;
+    --border: 0.235 0 0;
+    --input: 0.5208 0 0;
+    --ring: 0.8697 0 0;
+    --sidebar: 0.1448 0 0;
+    --pill: 0.1913 0 0;
+    --pill-border: 0.2686 0 0;
+    --composer-border: 0.285 0 0;
+    --status-needs-you: 0.795 0.162 86.05;
+    --status-unread: 0.623 0.188 259.81;
+    --status-failed: 0.637 0.208 25.33;
+    --status-done: 0.723 0.219 149.58;
+    --status-ring: 0.715 0 0;
+    --shadow-raised: none;
+    --shadow-overlay: none;
+    --shadow-floating: none;
+    --color-glass-border: #FFFFFF2E;
+    --material-highlight-top: #FFFFFF2E;
+    --depth-z-1-shadow: var(--shadow-raised);
+    --depth-z-2-shadow: var(--shadow-overlay);
+    --depth-z-3-shadow: var(--shadow-floating);
+    --depth-z-4-shadow: var(--shadow-floating);
+    --material-glass-tint: var(--card);
+    --material-glass-highlight: oklch(var(--border));
+    --material-glass-hairline: oklch(var(--border));
+    --material-glass-tint-top: oklch(var(--card));
+    --material-glass-tint-bottom: oklch(var(--card));
+    --material-glass-tint-dense-top: oklch(var(--card));
+    --material-glass-tint-dense-bottom: oklch(var(--card));
+    --material-glass-hairline-edge: oklch(var(--border));
+    --shadow-glass: var(--shadow-raised);
+    --shadow-glass-floating: var(--shadow-floating);
+    --material-glass-opacity-default: var(--material-glass-opacity-lg);
+    --depth-z-0-tint: var(--material-glass-opacity-default);
+    --depth-z-1-tint: var(--material-glass-opacity-default);
+    --depth-z-2-tint: var(--material-glass-opacity-default);
+    --depth-z-3-tint: var(--material-glass-opacity-xl);
+    --depth-z-4-tint: var(--material-glass-opacity-xl);
+    --color-glass-input: var(--input);
+    --color-glass-muted-foreground: var(--muted-foreground);
+  }
+  @media (pointer: coarse) {
+    :root {
+      --size-control-xs: var(--size-target-min);
+    }
+  }
+  /* Glass material, opt in: data-glass="on" on the root or on one surface. The values above are solid. */
+  [data-glass="on"] {
     --blur-glass-sm: 8px;
     --blur-glass-md: 12px;
     --blur-glass-lg: 24px;
@@ -106,103 +231,53 @@
     --material-glass-tint: var(--background);
     --material-glass-highlight: var(--material-highlight-top);
     --material-glass-hairline: var(--color-glass-border);
-    --depth-z-0-offset: 0px;
-    --depth-z-0-shadow: none;
     --depth-z-0-tint: var(--material-glass-opacity-default);
-    --depth-z-1-offset: 2px;
-    --depth-z-1-shadow: var(--shadow-raised);
     --depth-z-1-tint: var(--material-glass-opacity-default);
-    --depth-z-2-offset: 8px;
-    --depth-z-2-shadow: var(--shadow-overlay);
     --depth-z-2-tint: var(--material-glass-opacity-default);
-    --depth-z-3-offset: 16px;
-    --depth-z-3-shadow: var(--shadow-floating);
     --depth-z-3-tint: var(--material-glass-opacity-xl);
-    --depth-z-4-offset: 32px;
-    --depth-z-4-shadow: var(--shadow-floating);
     --depth-z-4-tint: var(--material-glass-opacity-xl);
-    --color-glass-border: #00000024;
     --color-glass-input: 0.464 0 0;
     --color-glass-muted-foreground: 0.3715 0 0;
-    --material-highlight-top: #FFFFFFCC;
     --material-glass-tint-top: #FFFFFFA3;
     --material-glass-tint-bottom: #FFFFFF80;
     --material-glass-tint-dense-top: #FFFFFFE6;
     --material-glass-tint-dense-bottom: #FFFFFFD6;
     --material-glass-hairline-edge: #00000014;
     --material-glass-sheen-opacity: 1;
-    --shadow-raised: 0px 1px 3px 0px #0000001A, 0px 1px 2px 0px #0000000F;
-    --shadow-overlay: 0px 8px 24px 0px #00000024;
-    --shadow-floating: 0px 16px 40px 0px #0000002E;
     --shadow-glass: 0px 1px 2px 0px #0000000D, 0px 4px 14px 0px #0000000F;
     --shadow-glass-floating: 0px 1px 2px 0px #00000014, 0px 10px 28px 0px #0000001F;
+    --vllnt-glass-backdrop: initial;
   }
-  .dark {
-    --background: 0 0 0;
-    --foreground: 0.9848 0 0;
-    --card: 0 0 0;
-    --card-foreground: 0.9848 0 0;
-    --popover: 0 0 0;
-    --popover-foreground: 0.9848 0 0;
-    --primary: 0.9848 0 0;
-    --primary-foreground: 0.2044 0 0;
-    --secondary: 0.2686 0 0;
-    --secondary-foreground: 0.9848 0 0;
-    --muted: 0 0 0;
-    --muted-foreground: 0.7153 0 0;
-    --accent: 0.2686 0 0;
-    --accent-foreground: 0.9848 0 0;
-    --destructive: 0.7 0.18 25.721;
-    --destructive-foreground: 0.2044 0 0;
-    --success: 0.78 0.16 155;
-    --success-foreground: 0.2044 0 0;
-    --warning: 0.82 0.15 85;
-    --warning-foreground: 0.2044 0 0;
-    --info: 0.74 0.12 245;
-    --info-foreground: 0.2044 0 0;
-    --diff-added: 0.26 0.05 150;
-    --diff-removed: 0.26 0.055 25;
-    --border: 0.2686 0 0;
-    --input: 0.5208 0 0;
-    --ring: 0.8697 0 0;
-    --shadow-raised: 0px 1px 3px 0px #00000066, 0px 1px 2px 0px #0000003D, inset 0px 1px 0px 0px #FFFFFF14;
-    --shadow-overlay: 0px 8px 24px 0px #00000080, inset 0px 1px 0px 0px #FFFFFF1F;
-    --shadow-floating: 0px 16px 40px 0px #00000099, inset 0px 1px 0px 0px #FFFFFF29;
-    --shadow-glass: 0px 1px 2px 0px #00000066, 0px 4px 14px 0px #0000004D;
-    --shadow-glass-floating: 0px 1px 2px 0px #00000080, 0px 10px 28px 0px #00000080;
-    --color-glass-border: #FFFFFF2E;
+  .dark[data-glass="on"],
+  .dark [data-glass="on"],
+  [data-glass="on"] .dark {
+    --material-glass-opacity-default: var(--material-glass-opacity-lg);
+    --material-glass-tint: var(--background);
+    --material-glass-highlight: var(--material-highlight-top);
+    --material-glass-hairline: var(--color-glass-border);
+    --depth-z-0-tint: var(--material-glass-opacity-default);
+    --depth-z-1-tint: var(--material-glass-opacity-default);
+    --depth-z-2-tint: var(--material-glass-opacity-default);
+    --depth-z-3-tint: var(--material-glass-opacity-xl);
+    --depth-z-4-tint: var(--material-glass-opacity-xl);
     --color-glass-input: 0.7155 0 0;
     --color-glass-muted-foreground: 0.8699 0 0;
-    --material-highlight-top: #FFFFFF2E;
     --material-glass-tint-top: #1C1C1CB2;
     --material-glass-tint-bottom: #1414149C;
     --material-glass-tint-dense-top: #121212E0;
     --material-glass-tint-dense-bottom: #121212D1;
     --material-glass-hairline-edge: #FFFFFF1A;
     --material-glass-sheen-opacity: 0.17;
-    --material-glass-opacity-default: var(--material-glass-opacity-lg);
-    --material-glass-tint: var(--background);
-    --material-glass-highlight: var(--material-highlight-top);
-    --material-glass-hairline: var(--color-glass-border);
-    --depth-z-0-tint: var(--material-glass-opacity-default);
-    --depth-z-1-shadow: var(--shadow-raised);
-    --depth-z-1-tint: var(--material-glass-opacity-default);
-    --depth-z-2-shadow: var(--shadow-overlay);
-    --depth-z-2-tint: var(--material-glass-opacity-default);
-    --depth-z-3-shadow: var(--shadow-floating);
-    --depth-z-3-tint: var(--material-glass-opacity-xl);
-    --depth-z-4-shadow: var(--shadow-floating);
-    --depth-z-4-tint: var(--material-glass-opacity-xl);
+    --shadow-glass: 0px 1px 2px 0px #00000066, 0px 4px 14px 0px #0000004D;
+    --shadow-glass-floating: 0px 1px 2px 0px #00000080, 0px 10px 28px 0px #00000080;
+    --vllnt-glass-backdrop: initial;
   }
-  @media (pointer: coarse) {
-    :root {
-      --size-control-xs: var(--size-target-min);
-    }
-  }
-  /* Solid material: the vllnt/material/solid values replace the glass tokens. */
+  /* Solid again: the vllnt/material/solid values replace the glass tokens. */
   @media (prefers-reduced-transparency: reduce), (prefers-contrast: more), (forced-colors: active) {
-    :root,
-    .dark {
+    [data-glass="on"],
+    .dark[data-glass="on"],
+    .dark [data-glass="on"],
+    [data-glass="on"] .dark {
       --material-glass-opacity-sm: 1;
       --material-glass-opacity-md: 1;
       --material-glass-opacity-lg: 1;
@@ -234,8 +309,10 @@
     }
   }
   @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-    :root,
-    .dark {
+    [data-glass="on"],
+    .dark[data-glass="on"],
+    .dark [data-glass="on"],
+    [data-glass="on"] .dark {
       --material-glass-opacity-sm: 1;
       --material-glass-opacity-md: 1;
       --material-glass-opacity-lg: 1;
@@ -266,9 +343,11 @@
       --vllnt-glass-backdrop: none;
     }
   }
-  :root[data-glass="off"],
-  :root[data-glass="off"] .dark,
-  [data-material="solid"] {
+  :root[data-glass="off"] [data-glass="on"],
+  :root[data-glass="off"] [data-glass="on"] .dark,
+  [data-material="solid"],
+  [data-material="solid"] [data-glass="on"],
+  [data-material="solid"] [data-glass="on"] .dark {
     --material-glass-opacity-sm: 1;
     --material-glass-opacity-md: 1;
     --material-glass-opacity-lg: 1;
@@ -315,10 +394,13 @@
  * with .vllnt-glass-dense), a white sheen over it (a specular gradient and an
  * inner highlight, both scaled by --material-glass-sheen-opacity), the
  * backdrop blur, a 1 px outer edge and a two-layer shadow. Every value reads a
- * token, so the solid scopes in the theme block above (reduced transparency,
- * more contrast, forced colors, no backdrop-filter, html[data-glass="off"],
- * [data-material="solid"]) turn it solid without any rule here. Border width
- * stays on the component (`border`).
+ * token. The theme block above is solid by default: there these classes draw
+ * an opaque card with a border and no shadow. Glass applies only inside a
+ * `data-glass="on"` scope (the root, or one surface such as GlassCard), and the
+ * solid scopes (reduced transparency, more contrast, forced colors, no
+ * backdrop-filter, html[data-glass="off"], [data-material="solid"]) turn that
+ * scope solid again without any rule here. Border width stays on the
+ * component (`border`).
  *
  * Two tint classes. Default (`vllnt-glass`): islands, bars, buttons and chips
  * with foreground text only. Dense (`vllnt-glass vllnt-glass-dense`): panels
@@ -404,6 +486,132 @@
   .vllnt-glass-scrim {
     --vllnt-glass-blur: var(--blur-glass-sm);
     background-color: oklch(var(--material-glass-tint) / 0.8);
+  }
+}
+
+/*
+ * Workbench utilities, built from the default theme's tokens only.
+ *
+ * `.code-pill` is inline code: the pill fill, a 1 px pill border and a corner
+ * 2 px tighter than --radius.
+ *
+ * `.ascii` is a CSS-only spinner that moves as terminal text, never as a
+ * coloured pulse: `ascii-run` for a running task, `ascii-wait` for thinking,
+ * waiting or reconnecting, `ascii-load` for a loading region. Write it as
+ * `<span class="ascii ascii-run" aria-hidden="true"></span>` beside a text
+ * label. Under `prefers-reduced-motion` it keeps its first frame.
+ */
+@layer components {
+  .code-pill {
+    background-color: oklch(var(--pill));
+    border: 1px solid oklch(var(--pill-border));
+    border-radius: calc(var(--radius) - 2px);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    line-height: 1rem;
+    padding: 0 0.375rem;
+  }
+
+  .ascii {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-variant-ligatures: none;
+    line-height: 1;
+    text-align: left;
+    white-space: pre;
+  }
+
+  .ascii-run {
+    width: 1ch;
+  }
+
+  .ascii-run::before {
+    animation: ascii-run 0.8s infinite;
+    content: "⠋";
+  }
+
+  .ascii-wait {
+    width: 3ch;
+  }
+
+  .ascii-wait::before {
+    animation: ascii-wait 1.2s infinite;
+    content: ".  ";
+  }
+
+  .ascii-load {
+    width: 1ch;
+  }
+
+  .ascii-load::before {
+    animation: ascii-load 0.6s infinite;
+    content: "|";
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ascii::before {
+      animation: none;
+    }
+  }
+}
+
+@keyframes ascii-run {
+  0% {
+    content: "⠋";
+  }
+  10% {
+    content: "⠙";
+  }
+  20% {
+    content: "⠹";
+  }
+  30% {
+    content: "⠸";
+  }
+  40% {
+    content: "⠼";
+  }
+  50% {
+    content: "⠴";
+  }
+  60% {
+    content: "⠦";
+  }
+  70% {
+    content: "⠧";
+  }
+  80% {
+    content: "⠇";
+  }
+  90% {
+    content: "⠏";
+  }
+}
+
+@keyframes ascii-wait {
+  0% {
+    content: ".  ";
+  }
+  33% {
+    content: ".. ";
+  }
+  66% {
+    content: "...";
+  }
+}
+
+@keyframes ascii-load {
+  0% {
+    content: "|";
+  }
+  25% {
+    content: "/";
+  }
+  50% {
+    content: "-";
+  }
+  75% {
+    content: "\\";
   }
 }
 

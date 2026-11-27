@@ -39,12 +39,15 @@ const [designTokens, componentContracts] = await Promise.all([
 // now. The native base palette keeps its #050505 page and the lifted card,
 // popover and muted values, because native components draw tracks and
 // skeletons with `muted` alone and would vanish on a near-black page.
+// `mutedForeground` stays the lighter grey: the web value is 4.38:1 on the
+// lifted muted, below the 4.5:1 text minimum.
 const nativeColorOverrides = {
   dark: {
     background: "#050505",
     card: "#0a0a0a",
     popover: "#0a0a0a",
     muted: "#262626",
+    mutedForeground: "#a3a3a3",
   },
   light: {},
 };
@@ -77,6 +80,15 @@ const expectedSemanticColors = [
   "border",
   "input",
   "ring",
+  "sidebar",
+  "pill",
+  "pillBorder",
+  "composerBorder",
+  "statusNeedsYou",
+  "statusUnread",
+  "statusFailed",
+  "statusDone",
+  "statusRing",
 ];
 
 const modes = ["dark", "light"];
@@ -141,6 +153,9 @@ const glassLeaves = [
   ...tokenLeaves(designTokens.depth, ["depth"]),
 ];
 
+/** The shadow tokens a glass surface draws. */
+const glassShadowNames = ["glass", "glass-floating"];
+
 const isReference = (value) => value.startsWith("{");
 const isHexAlpha = (value) => /^#[0-9A-F]{8}$/.test(value);
 
@@ -191,6 +206,9 @@ function glassPenpotType(path) {
 const noShadow = [
   { offsetX: "0", offsetY: "0", blur: "0", spread: "0", color: "#00000000", inset: false },
 ];
+
+/** A shadow token's Penpot value: the layers, or the transparent layer when the shadow is none. */
+const penpotShadow = (layers) => penpotToken(layers.length > 0 ? layers : noShadow, "shadow");
 
 /** A glass token's Penpot value: references pass through, lengths become numbers. */
 function penpotGlassToken(path, value) {
@@ -347,7 +365,7 @@ function validateTokenGroups(colorRoles) {
   }
   for (const [name, token] of Object.entries(designTokens.shadow)) {
     for (const mode of modes) {
-      assert(token[mode].length > 0, `shadow.${name}.${mode} needs at least one layer.`);
+      assert(Array.isArray(token[mode]), `shadow.${name}.${mode} must be a list of layers (empty means none).`);
     }
   }
 }
@@ -476,7 +494,7 @@ function declarationLines(mode, indentation) {
 
 function typographyLines(indentation) {
   const lines = [
-    `${indentation}--radius: ${designTokens.radius.md};`,
+    `${indentation}--radius: ${designTokens.radius.surface};`,
     `${indentation}/* Typography — theme-overridable font tokens (issue #465). */`,
   ];
   for (const family of Object.values(designTokens.typography.fontFamily)) {
@@ -510,9 +528,28 @@ function scalarLines(indentation) {
     ...[...sizeLeaves, ...opacityLeaves].map(
       ([path, leaf]) => `${indentation}${pathVariable(path)}: ${leaf.value};`,
     ),
-    ...glassLines(glassLeaves, indentation),
-    ...glassModeLines("light", indentation),
   ];
+}
+
+// Material. Solid is the base: `:root` and `.dark` carry the solid values. The
+// glass values apply only in a `data-glass="on"` scope (the root or one
+// surface), and the solid fallbacks beat that scope.
+
+const glassName = ([path]) => path.join(".");
+
+/**
+ * The glass tokens the solid material overrides, by name: the
+ * `material.solid` set, the tokens that follow it (the default opacity, the
+ * depth tints) and the two glass text roles. Each has a solid value at the base
+ * and a glass value in a glass scope. Every other glass token has one value.
+ */
+function materialNames() {
+  return new Set([
+    ...Object.keys(designTokens.material.solid),
+    ...solidDerivedLeaves().map(glassName),
+    "color.glass-input",
+    "color.glass-muted-foreground",
+  ]);
 }
 
 /** Glass tokens as CSS variables; a reference becomes `var()` of the token it names. */
@@ -523,32 +560,15 @@ function glassLines(leaves, indentation) {
 }
 
 /** Glass colours that differ per mode, as CSS variables for one mode. */
-function glassModeLines(mode, indentation) {
-  return glassModeTokens.map(
-    ([path, token]) => `${indentation}${pathVariable(path)}: ${token[mode]};`,
-  );
-}
-
-/**
- * Dark scope: the glass tokens that point at a mode-dependent value. A `var()`
- * resolves where it is declared, so a nested `.dark` scope has to declare them
- * again to read the dark roles.
- */
-function glassDarkLines(indentation) {
-  return [
-    ...glassModeLines("dark", indentation),
-    ...glassLines(
-      glassLeaves.filter(([, leaf]) => isReference(leaf.value)),
-      indentation,
-    ),
-  ];
+function glassModeLines(mode, indentation, tokens) {
+  return tokens.map(([path, token]) => `${indentation}${pathVariable(path)}: ${token[mode]};`);
 }
 
 /**
  * Glass tokens that follow the ones the solid set overrides (the default
  * opacity, the depth tints). A `var()` resolves where it is declared, so a
- * `data-material="solid"` surface has to declare them again to follow its own
- * values instead of the root's.
+ * solid scope has to declare them again to follow its own values instead of
+ * the root's.
  */
 function solidDerivedLeaves() {
   const overridden = new Set(Object.keys(designTokens.material.solid));
@@ -588,41 +608,117 @@ function solidLines(indentation) {
   ];
 }
 
+/** A `var()` resolves where it is declared, so a nested `.dark` scope declares the lines that read one again. */
+const readsVariable = (line) => line.includes("var(");
+
+/**
+ * The material tokens of the base scope for one mode: the glass tokens with
+ * one value, and the solid values. A dark scope repeats only what is mode
+ * dependent or reads a variable.
+ */
+function baseMaterialLines(mode, indentation) {
+  const material = materialNames();
+  const leaves = glassLines(
+    glassLeaves.filter((leaf) => !material.has(glassName(leaf))),
+    indentation,
+  );
+  const modes = glassModeLines(
+    mode,
+    indentation,
+    glassModeTokens.filter(([path]) => !material.has(path.join("."))),
+  );
+  return mode === "light"
+    ? [...leaves, ...modes, ...solidLines(indentation)]
+    : [...modes, ...[...leaves, ...solidLines(indentation)].filter(readsVariable)];
+}
+
+/** The material tokens of a glass scope for one mode: the glass values, and the filter on. */
+function glassScopeLines(mode, indentation) {
+  const material = materialNames();
+  const leaves = glassLeaves.filter((leaf) => material.has(glassName(leaf)));
+  return [
+    ...glassLines(
+      mode === "light" ? leaves : leaves.filter(([, leaf]) => isReference(leaf.value)),
+      indentation,
+    ),
+    ...glassModeLines(
+      mode,
+      indentation,
+      glassModeTokens.filter(([path]) => material.has(path.join("."))),
+    ),
+    ...shadowLines(mode, indentation, glassShadowNames),
+    `${indentation}--vllnt-glass-backdrop: initial;`,
+  ];
+}
+
 /** Conditions that turn glass into solid, with no script. Each one is a CSS at-rule. */
 const solidConditions = [
   "@media (prefers-reduced-transparency: reduce), (prefers-contrast: more), (forced-colors: active)",
   "@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)))",
 ];
 
-/** Automatic solid fallbacks, the `data-glass="off"` app switch and the per-surface `data-material="solid"`. */
-function solidBlocks(indentation) {
+/**
+ * The glass scope: a surface (or the root) that opts in with `data-glass="on"`.
+ * The dark forms cover the root, a surface and a `.dark` subtree inside the
+ * scope, and win over the base `.dark` by specificity.
+ */
+const glassScope = {
+  light: ['[data-glass="on"]'],
+  dark: ['.dark[data-glass="on"]', '.dark [data-glass="on"]', '[data-glass="on"] .dark'],
+};
+
+/**
+ * What turns a glass scope solid by hand: the `data-glass="off"` app switch and
+ * the `data-material="solid"` surface, and a glass scope inside either one.
+ */
+const solidSwitches = [
+  ':root[data-glass="off"] [data-glass="on"]',
+  ':root[data-glass="off"] [data-glass="on"] .dark',
+  '[data-material="solid"]',
+  '[data-material="solid"] [data-glass="on"]',
+  '[data-material="solid"] [data-glass="on"] .dark',
+];
+
+/** The opt-in glass scope, then the solid fallbacks and switches, which come later and so win. */
+function materialBlocks(indentation) {
   const inner = `${indentation}  `;
-  const body = `${inner}  `;
+  const selectors = (list, level) => list.join(`,\n${level}`);
   return [
-    `${indentation}/* Solid material: the vllnt/material/solid values replace the glass tokens. */`,
+    `${indentation}/* Glass material, opt in: data-glass="on" on the root or on one surface. The values above are solid. */`,
+    `${indentation}${selectors(glassScope.light, indentation)} {`,
+    ...glassScopeLines("light", inner),
+    `${indentation}}`,
+    `${indentation}${selectors(glassScope.dark, indentation)} {`,
+    ...glassScopeLines("dark", inner),
+    `${indentation}}`,
+    `${indentation}/* Solid again: the vllnt/material/solid values replace the glass tokens. */`,
     ...solidConditions.flatMap((condition) => [
       `${indentation}${condition} {`,
-      `${inner}:root,`,
-      `${inner}.dark {`,
-      ...solidLines(body),
+      `${inner}${selectors([...glassScope.light, ...glassScope.dark], inner)} {`,
+      ...solidLines(`${inner}  `),
       `${inner}}`,
       `${indentation}}`,
     ]),
-    `${indentation}:root[data-glass="off"],`,
-    `${indentation}:root[data-glass="off"] .dark,`,
-    `${indentation}[data-material="solid"] {`,
+    `${indentation}${selectors(solidSwitches, indentation)} {`,
     ...solidLines(inner),
     `${indentation}}`,
   ];
 }
 
-/** `--shadow-<name>`: the token's layers for one mode as a CSS `box-shadow` value. */
-function shadowLines(mode, indentation) {
-  return Object.entries(designTokens.shadow).map(
-    ([name, token]) =>
-      `${indentation}--shadow-${name}: ${token[mode].map(cssShadowLayer).join(", ")};`,
-  );
+/** `--shadow-<name>`: the token's layers for one mode as a CSS `box-shadow` value; no layers is `none`. */
+function shadowLines(mode, indentation, names) {
+  return Object.entries(designTokens.shadow)
+    .filter(([name]) => names.includes(name))
+    .map(
+      ([name, token]) =>
+        `${indentation}--shadow-${name}: ${token[mode].length > 0 ? token[mode].map(cssShadowLayer).join(", ") : "none"};`,
+    );
 }
+
+/** The shadow tokens a surface draws whatever its material: raised, overlay, floating. */
+const surfaceShadowNames = Object.keys(designTokens.shadow).filter(
+  (name) => !glassShadowNames.includes(name),
+);
 
 /** Under a coarse pointer, each size token with a `coarse` reference takes that token's value. */
 function coarsePointerLines(indentation) {
@@ -649,15 +745,16 @@ function renderDefaultTheme() {
     ...declarationLines("light", "  "),
     ...typographyLines("  "),
     ...scalarLines("  "),
-    ...shadowLines("light", "  "),
+    ...shadowLines("light", "  ", surfaceShadowNames),
+    ...baseMaterialLines("light", "  "),
     "}",
     ".dark {",
     ...declarationLines("dark", "  "),
-    ...shadowLines("dark", "  "),
-    ...glassDarkLines("  "),
+    ...shadowLines("dark", "  ", surfaceShadowNames),
+    ...baseMaterialLines("dark", "  "),
     "}",
     ...coarsePointerLines(""),
-    ...solidBlocks(""),
+    ...materialBlocks(""),
     "",
   ].join("\n");
 }
@@ -670,7 +767,7 @@ function renderStylesThemeBlock() {
     1,
     "    /* Typography — theme-overridable font tokens (issue #465). Override any of",
     "       these on a theme scope to restyle the Text/Heading/Display/Prose primitives",
-    "       without editing the library. Defaults reproduce the house style (sans, 600). */",
+    "       without editing the library. Defaults reproduce the house style (mono, heading 500). */",
   );
 
   return [
@@ -680,15 +777,16 @@ function renderStylesThemeBlock() {
     ...declarationLines("light", "    "),
     ...typography,
     ...scalarLines("    "),
-    ...shadowLines("light", "    "),
+    ...shadowLines("light", "    ", surfaceShadowNames),
+    ...baseMaterialLines("light", "    "),
     "  }",
     "  .dark {",
     ...declarationLines("dark", "    "),
-    ...shadowLines("dark", "    "),
-    ...glassDarkLines("    "),
+    ...shadowLines("dark", "    ", surfaceShadowNames),
+    ...baseMaterialLines("dark", "    "),
     "  }",
     ...coarsePointerLines("  "),
-    ...solidBlocks("  "),
+    ...materialBlocks("  "),
     "}",
     "",
     "",
@@ -793,9 +891,6 @@ const semanticKeyByRole = Object.fromEntries(
   ]),
 );
 
-/** The shadow tokens a glass surface draws. */
-const glassShadowNames = ["glass", "glass-floating"];
-
 /** The glass tint steps, `tint-top` to `tint-dense-bottom`: the mode tokens whose name starts with `tint-`. */
 const glassTintSteps = Object.entries(designTokens.material.glass)
   .filter(([name, node]) => name.startsWith("tint-") && typeof node.light === "string")
@@ -846,6 +941,7 @@ function referencedShadowLayers(reference, mode) {
  * A shadow token as a React Native shadow. A CSS shadow has many layers and a
  * spread; React Native has one outer shadow, so:
  *
+ * - No layers means no shadow: every field is zero.
  * - Inset layers and `spread` are dropped. Native has neither.
  * - The layer drawn is the one with the largest blur, the visible ambient
  *   shadow; a tie goes to the higher alpha, then to the first layer. The small
@@ -861,6 +957,15 @@ function referencedShadowLayers(reference, mode) {
  *   `shadowOpacity` and `shadowRadius`.
  */
 function nativeShadow(name, layers) {
+  if (layers.length === 0) {
+    return {
+      elevation: 0,
+      shadowColor: "#000000",
+      shadowOffset: { height: 0, width: 0 },
+      shadowOpacity: 0,
+      shadowRadius: 0,
+    };
+  }
   const outer = layers.filter((layer) => !layer.inset);
   assert(outer.length > 0, `${name} needs a layer that is not inset for native.`);
   for (const layer of outer) {
@@ -1137,7 +1242,7 @@ function renderProductThemes() {
     return [
       `${selector} {`,
       ...paletteLines(resolved.colors.light, "  "),
-      `  --radius: ${resolved.radius.md};`,
+      `  --radius: ${resolved.radius.surface};`,
       ...themeTypographyLines(theme, "  "),
       ...themeOpacityLines(theme, "  "),
       "}",
@@ -1236,9 +1341,7 @@ function penpotTokens() {
         penpotToken(value, "opacity"),
       ),
       radius: mapValues(core.radius, penpotRadius),
-      shadow: mapValues(designTokens.shadow, (token) =>
-        penpotToken(token.light, "shadow"),
-      ),
+      shadow: mapValues(designTokens.shadow, (token) => penpotShadow(token.light)),
       size: penpotGroup(designTokens.size, (value) =>
         penpotToken(penpotNumber(value), "sizing"),
       ),
@@ -1282,9 +1385,7 @@ function penpotTokens() {
         },
         material: penpotModeGroup("material", mode),
         ...(mode === "dark" && {
-          shadow: mapValues(designTokens.shadow, (token) =>
-            penpotToken(token.dark, "shadow"),
-          ),
+          shadow: mapValues(designTokens.shadow, (token) => penpotShadow(token.dark)),
         }),
         ...penpotThemeOverrides(theme),
       };
