@@ -16,7 +16,7 @@ export default [
   {
     // Build-tool configs outside the typed component surface are not linted
     // (postcss.config.mjs, tailwind.config.ts, tsup/playwright configs).
-    ignores: ['node_modules/**', 'dist/**', 'storybook-static/**', '.storybook/**', 'eslint.config.js', 'eslint-rules/**', 'scripts/**', 'playwright-ct.config.ts', 'playwright/**', 'postcss.config.mjs', 'tailwind.config.ts', 'tsup.config.ts', 'src/**/*.visual.tsx', 'src/**/*.stories.tsx', 'src/**/*.stories.ts'],
+    ignores: ['node_modules/**', 'dist/**', 'storybook-static/**', 'storybook-base/**', '.visual-diff/**', '.storybook/**', 'eslint.config.js', 'eslint-rules/**', 'scripts/**', 'playwright-ct.config.ts', 'playwright/**', 'postcss.config.mjs', 'tailwind.config.ts', 'tsup.config.ts', 'src/**/*.visual.tsx', 'src/**/*.stories.tsx', 'src/**/*.stories.ts'],
   },
   ...react,
   {

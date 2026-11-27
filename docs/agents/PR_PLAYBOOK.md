@@ -55,6 +55,28 @@ Plus, paste in the PR body **one of**:
 
 Bare ticked checkboxes don't count.
 
+### Visual diff (CI)
+
+The **Visual Diff** check screenshots every Storybook story of the PR and of
+the base branch on the same runner, in light and dark, and compares them pixel
+by pixel. Components the PR touches also get open, hover, focus and 390 px
+shots. The clock, `Math.random`, CSS and SVG animations are frozen, so two
+captures of one build are identical: any listed shot is a real change.
+
+- The job summary lists each changed, removed or failed shot. The
+  `visual-diff-*` artifacts hold a Playwright report (`html/index.html`) with
+  the before, after and diff image of each.
+- An unintended change is a regression: fix it.
+- If every change is intended, name each one in the PR body, add the
+  `visual-change-approved` label and re-run the **Visual Diff** job. Remove the
+  label when a later push changes the visuals again.
+- Locally: build both Storybooks (`pnpm -F @vllnt/ui build-storybook` on each
+  checkout), then
+  `pnpm -F @vllnt/ui visual:diff --base <main storybook-static> --head <storybook-static>`.
+  Results go to `packages/ui/.visual-diff`.
+- A story that cannot render the same way twice gets the `visual-skip` tag and
+  a comment saying why.
+
 ## 5. Story coverage
 
 ```bash

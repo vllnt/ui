@@ -24,6 +24,7 @@
 - [ ] `pnpm lint`
 - [ ] `pnpm test:once`
 - [ ] `pnpm -F @vllnt/ui test:visual` (if UI changed)
+- [ ] Visual Diff check green, or every listed change is intended, named in this PR and approved with the `visual-change-approved` label
 - [ ] `pnpm build`
 - [ ] Manual verification:
 
