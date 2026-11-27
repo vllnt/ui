@@ -2,6 +2,10 @@
 
 Platform-neutral design tokens and portable component contracts shared by the VLLNT UI web and React Native renderers.
 
+## For AI agents
+
+The installed package carries the docs for its own version. Start at `node_modules/@vllnt/ui-core/llms.txt`: it links the README, `tokens.json` and `component-contracts.json`.
+
 ## Install
 
 ```bash

@@ -4,6 +4,11 @@ All notable changes to `@vllnt/ui-native` are documented in this file.
 
 ## [Unreleased]
 
+### Added
+
+- `llms.txt` and `docs/PARITY.md` in the tarball, for agents reading
+  `node_modules/@vllnt/ui-native/`. Written at pack time.
+
 ## [0.1.0] - 2026-11-20
 
 ### Added

@@ -81,6 +81,8 @@ export async function checkPackedPackage({
       await assertFile(join(packedDirectory, target), `exports.${condition}`);
     }
 
+    // Written by the package's prepack (scripts/agent-docs.mjs) for agents reading node_modules.
+    await assertFile(join(packedDirectory, "llms.txt"), "llms.txt agent docs index");
     await verify(manifest, packedDirectory);
   } finally {
     await rm(temporaryDirectory, { force: true, recursive: true });
