@@ -100,22 +100,27 @@ function vocabulary(): string[] {
 
 const firstPart = (name: string): string => name.split("-")[0] ?? name;
 
-/** Values of other kinds that a color group would accept: `bg-[length:2px]`. */
+/**
+ * Values of other kinds that a color group would accept, as in
+ * `bg-[length:2px]`. The list leaves out the brackets so the Tailwind class
+ * scan, which reads this file, does not turn them into CSS: the bracketed
+ * `image:url(a.png)` made Next fail to resolve `a.png`.
+ */
 const OPEN_VALUES = [
-  "[#fff]",
-  "[1px]",
-  "[color:red]",
-  "[length:2px]",
-  "[position:top]",
-  "[percentage:10%]",
-  "[size:2px]",
-  "[url(a.png)]",
-  "[image:url(a.png)]",
-  "[number:1]",
-  "[family-name:x]",
-  "[absolute-size:2px]",
-  "[line-width:2px]",
-  "[shadow:0_0_1px_red]",
+  "#fff",
+  "1px",
+  "color:red",
+  "length:2px",
+  "position:top",
+  "percentage:10%",
+  "size:2px",
+  "url(a.png)",
+  "image:url(a.png)",
+  "number:1",
+  "family-name:x",
+  "absolute-size:2px",
+  "line-width:2px",
+  "shadow:0_0_1px_red",
 ];
 
 describe("cn with the pruned tailwind-merge config", () => {
@@ -186,7 +191,7 @@ describe("cn with the pruned tailwind-merge config", () => {
       const probes = [
         ...vocabulary(),
         ...[...new Set(reps.map(firstPart))].flatMap((word) =>
-          OPEN_VALUES.map((value) => `${word}-${value}`),
+          OPEN_VALUES.map((value) => `${word}-[${value}]`),
         ),
       ];
       const differing = probes.flatMap((probe) =>
