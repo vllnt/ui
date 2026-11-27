@@ -166,51 +166,26 @@ describe("penpot-tokens.json", () => {
 });
 
 /**
- * Maia is the Ink direction (owner decision 11 Nov 2026): no accent, the primary is
- * the ink colour inverted per mode, Inter, no weight 700. The export copy in
- * `sources/` is the 8 Nov pink export, so three things no longer follow it: the
- * primary (its `accent`), the sans and display faces, and the 700 weights. Every
- * other value is still checked against it. The light primary is pure black
- * (#000000) on purpose (owner, 19 Nov 2026); core keeps #171717.
+ * Maia is the default (owner decision 27 Nov 2026, issue #768): the flat monochrome
+ * workbench look is the core theme, so the Maia theme overrides nothing and is kept only
+ * so `data-theme="maia"` stays valid. The export copy in `sources/` is the 8 Nov pink
+ * export. It is provenance and no longer drives any value, so the tests that compared
+ * Maia's colours, radius, faces and scale with it are replaced by the tests below.
+ * The generator test further down still reads it.
  */
 const inkPrimary = { dark: "#FFFFFF", light: "#000000" };
 
-describe("Maia mapping", () => {
-  const colorMap = {
-    accent: "muted",
-    background: "background",
-    border: "border",
-    card: "surface-raised",
-    destructive: "status.unsupported",
-    "diff-added": "diff.added",
-    "diff-removed": "diff.removed",
-    foreground: "foreground",
-    info: "status.candidate",
-    input: "input",
-    muted: "muted",
-    "muted-foreground": "muted-foreground",
-    popover: "surface-raised",
-    "primary-foreground": "accent-foreground",
-    success: "status.implemented",
-    warning: "status.deprecated",
-  };
+describe("Maia is the default", () => {
+  it("overrides nothing", () => {
+    assert.deepEqual(Object.keys(tokens.themes.maia).sort(), ["description", "label"]);
+  });
 
   for (const mode of modes) {
-    it(`reproduces the exported ${mode} colors`, () => {
-      const exported = maiaExport[`Maia/${mode}`].color;
-      const generated = penpot[`vllnt/maia/${mode}`].color;
-      const exportedHex = (path) =>
-        path
-          .split(".")
-          .reduce((node, key) => node[key], exported)
-          .$value.toUpperCase();
-      for (const [role, source] of Object.entries(colorMap)) {
-        assert.equal(generated[role].$value, exportedHex(source), role);
-      }
-      assert.equal(
-        generated["muted-foreground"].$value,
-        exportedHex("status.planned"),
-        "neutral status is muted-foreground",
+    it(`gives the ${mode} palette the core values`, () => {
+      // PaaS overrides no colour either, so both sets hold the core palette.
+      assert.deepEqual(
+        penpot[`vllnt/maia/${mode}`].color,
+        penpot[`vllnt/paas/${mode}`].color,
       );
     });
 
@@ -223,7 +198,29 @@ describe("Maia mapping", () => {
         maiaExport[`Maia/${mode}`].color.accent.$value.toUpperCase(),
       );
     });
+
+    it(`adds no ${mode} radius, face, weight or type step: it inherits core`, () => {
+      const generated = penpot[`vllnt/maia/${mode}`];
+      assert.equal(generated.radius, undefined);
+      assert.equal(generated.font, undefined);
+    });
   }
+
+  it("declares the same palette as the default in products.css", () => {
+    const defaultCss = readText("../ui/themes/default.css");
+    const block = (css, selector) => css.slice(css.indexOf(`${selector} {`), css.indexOf("}", css.indexOf(`${selector} {`)));
+    for (const [selector, base] of [
+      ['html[data-theme="maia"]', ":root"],
+      ['html[data-theme="maia"].dark', ".dark"],
+    ]) {
+      const maia = block(productsCss, selector);
+      const core = block(defaultCss, base);
+      for (const variable of semanticVariables) {
+        const pattern = new RegExp(`${variable}: ([^;]+);`);
+        assert.equal(maia.match(pattern)?.[1], core.match(pattern)?.[1], `${selector} ${variable}`);
+      }
+    }
+  });
 
   it("keeps the export's state aliases on the roles the PR maps them to", () => {
     const state = maiaExport["Maia/dark"].color.state;
@@ -246,41 +243,55 @@ describe("Maia mapping", () => {
       assert.equal(roleByStatus[status], role, name);
     }
   });
+});
 
-  it("reproduces the exported radius and families", () => {
-    const radius = maiaExport["Maia/core"].radius;
-    const generated = penpot["vllnt/maia/dark"];
-    for (const step of ["sm", "md", "lg", "xl"]) {
-      assert.equal(generated.radius[step].$value, radius[step].$value, step);
-    }
-    const family = maiaExport["Maia/core"].font.family;
-    assert.deepEqual(generated.font.family.mono.$value, family.mono.$value);
-    assert.equal(generated.font.family.sans, undefined, "Maia inherits the core Inter");
-    assert.equal(generated.font.family.display, undefined, "Maia inherits the core display");
-  });
-
-  it("sets the approved type scale", () => {
-    const sizes = penpot["vllnt/maia/dark"].font.size;
-    const weights = penpot["vllnt/maia/dark"].font.weight;
+describe("core type scale (dense workbench)", () => {
+  it("sets the approved sizes and line heights", () => {
+    const scale = tokens.typography.scale;
     assert.deepEqual(
       Object.fromEntries(
-        Object.entries(sizes).map(([step, token]) => [step, token.$value]),
+        Object.entries(scale).map(([step, token]) => [step, [token.fontSize, token.lineHeight]]),
       ),
       {
-        bodySmall: "13",
-        body: "14",
-        caption: "12",
+        display: ["1.75rem", "1.1"],
+        h1: ["1.25rem", "1.3"],
+        h2: ["0.875rem", "1.4"],
+        h3: ["0.8125rem", "1.4"],
+        h4: ["0.8125rem", "1.4"],
+        h5: ["0.8125rem", "1.4"],
+        h6: ["0.8125rem", "1.4"],
+        bodyLarge: ["0.9375rem", "1.6"],
+        body: ["0.875rem", "1.5"],
+        bodySmall: ["0.8125rem", "1.45"],
+        caption: ["0.75rem", "1.4"],
+        label: ["0.6875rem", "1.4"],
+      },
+    );
+  });
+
+  it("writes the sizes to Penpot in points and uses no weight 700", () => {
+    const { size, weight } = penpot["vllnt/core"].font;
+    assert.deepEqual(
+      Object.fromEntries(Object.entries(size).map(([step, token]) => [step, token.$value])),
+      {
         display: "28",
-        h5: "20",
-        h6: "15",
+        h1: "20",
+        h2: "14",
+        h3: "13",
+        h4: "13",
+        h5: "13",
+        h6: "13",
+        bodyLarge: "15",
+        body: "14",
+        bodySmall: "13",
+        caption: "12",
         label: "11",
       },
     );
-    assert.equal(weights.display.$value, "600");
-    assert.equal(weights.heading.$value, "600");
-    assert.equal(weights.label.$value, "600");
-    for (const [name, token] of Object.entries(weights)) {
-      assert.notEqual(token.$value, "700", `${name}: Ink uses no weight 700`);
+    assert.equal(weight.heading.$value, "500");
+    assert.equal(weight.display.$value, "600");
+    for (const [name, token] of Object.entries(weight)) {
+      assert.notEqual(token.$value, "700", `${name}: no weight 700`);
     }
   });
 });
@@ -308,14 +319,16 @@ describe("core fonts", () => {
   const uiCoreTokens = readText("../ui-core/tokens.json");
   const uiCoreTs = readText("../ui-core/src/generated/design-tokens.ts");
 
-  it("sets Inter first in the core sans stack, then the system fallbacks", () => {
-    assert.match(fontFamily.sans.value, /^Inter, system-ui, /);
-    assert.match(fontFamily.sans.value, /sans-serif$/);
+  const coreStack =
+    "'JetBrains Mono', ui-monospace, \"SF Mono\", SFMono-Regular, Menlo, Consolas, \"Liberation Mono\", monospace";
+
+  it("sets JetBrains Mono first in the core sans stack, then the monospace system fallbacks", () => {
+    assert.equal(fontFamily.sans.value, coreStack);
+    assert.match(fontFamily.sans.value, /monospace$/);
   });
 
-  it("sets JetBrains Mono first in the core mono stack, then the system fallbacks", () => {
-    assert.match(fontFamily.mono.value, /^'JetBrains Mono', ui-monospace, /);
-    assert.match(fontFamily.mono.value, /monospace$/);
+  it("sets the same stack for the core mono face", () => {
+    assert.equal(fontFamily.mono.value, coreStack);
   });
 
   it("keeps the display face pointing at sans", () => {
@@ -327,30 +340,26 @@ describe("core fonts", () => {
       ["themes/default.css", defaultCss],
       ["styles.css", stylesCss],
     ]) {
-      assert.match(
-        css,
-        /--font-sans: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;/,
-        name,
-      );
-      assert.match(
-        css,
-        /--font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;/,
-        name,
-      );
+      const stack =
+        '"JetBrains Mono", ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace';
+      assert.ok(css.includes(`--font-sans: ${stack};`), `${name} sans`);
+      assert.ok(css.includes(`--font-mono: ${stack};`), `${name} mono`);
       assert.match(css, /--font-display: var\(--font-sans\);/, name);
     }
     assert.equal(uiCoreTokens, readText("tokens.json"));
-    assert.ok(uiCoreTs.includes(fontFamily.sans.value), "ui-core design-tokens.ts sans");
-    assert.ok(uiCoreTs.includes(fontFamily.mono.value), "ui-core design-tokens.ts mono");
-    assert.deepEqual(penpot["vllnt/core"].font.family.sans.$value, ["Inter"]);
+    // design-tokens.ts holds JSON, so the stack's double quotes are escaped there.
+    const inJson = (stack) => JSON.stringify(stack).slice(1, -1);
+    assert.ok(uiCoreTs.includes(inJson(fontFamily.sans.value)), "ui-core design-tokens.ts sans");
+    assert.ok(uiCoreTs.includes(inJson(fontFamily.mono.value)), "ui-core design-tokens.ts mono");
+    assert.deepEqual(penpot["vllnt/core"].font.family.sans.$value, ["JetBrains Mono"]);
     assert.deepEqual(penpot["vllnt/core"].font.family.mono.$value, ["JetBrains Mono"]);
     assert.equal(penpot["vllnt/core"].font.family.display.$value, "{font.family.sans}");
   });
 
-  it("keeps the product theme stacks: Maia inherits the core Inter, PaaS uses JetBrains Mono", () => {
+  it("keeps the product theme stacks: Maia inherits the core stack, PaaS sets its own JetBrains Mono stack", () => {
     const jetbrains =
       "'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace";
-    assert.deepEqual(tokens.themes.maia.typography.fontFamily, { mono: jetbrains });
+    assert.equal(tokens.themes.maia.typography, undefined);
     assert.deepEqual(tokens.themes.paas.typography.fontFamily, {
       sans: jetbrains,
       display: jetbrains,
@@ -358,13 +367,11 @@ describe("core fonts", () => {
     });
     const doubleQuoted = (stack) => stack.replaceAll("'", '"');
     assert.deepEqual(productsCss.match(/--font-(?:sans|display|mono): .*;/g), [
-      `--font-mono: ${doubleQuoted(jetbrains)};`,
       `--font-sans: ${doubleQuoted(jetbrains)};`,
       `--font-display: ${doubleQuoted(jetbrains)};`,
       `--font-mono: ${doubleQuoted(jetbrains)};`,
     ]);
-    assert.equal(penpot["vllnt/maia/dark"].font.family.sans, undefined);
-    assert.deepEqual(penpot["vllnt/maia/dark"].font.family.mono.$value, ["JetBrains Mono"]);
+    assert.equal(penpot["vllnt/maia/dark"].font, undefined);
     for (const mode of modes) {
       for (const face of ["sans", "display", "mono"]) {
         assert.deepEqual(

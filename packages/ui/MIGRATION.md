@@ -58,6 +58,33 @@ Known differences that remain:
   outside ones, as in Radix), and `onFocusOutside` is now accepted on `Dialog`,
   `Sheet` and `Drawer` content too.
 
+## The default theme is flat
+
+No export, prop or class name changes. The values behind the tokens do, so every
+screen looks different. Check these:
+
+1. **Glass is opt-in.** `:root` and `.dark` hold the solid values, so a part
+   with `material="glass"` draws solid. To get glass, set `data-glass="on"` on
+   `<html>` (everywhere) or on one surface. `GlassCard`, `GlassPanel`,
+   `GlassProgress` and `LiquidGlass` set it on their own root. `material="solid"`
+   and `data-glass="off"` still work; an app that set `data-glass="off"` only to
+   get solid can drop it.
+2. **Fonts.** `--font-sans` and `--font-mono` are one JetBrains Mono stack with
+   system mono fallbacks. No font file is shipped: load JetBrains Mono yourself,
+   or override both variables.
+3. **Radius.** `--radius` is 0.375rem. `rounded-lg`, `rounded-md` and
+   `rounded-sm` are 6, 4 and 2 px (they were 8, 6 and 4 px).
+4. **Shadows.** `--shadow-raised`, `--shadow-overlay` and `--shadow-floating` are
+   `none`. Draw a surface edge with `border`.
+5. **Type.** Headings weigh 500. Body is 14 px, h1 20 px, display 28 px.
+6. **Colours.** Light foreground and primary are `#000`; dark are `#fff`. Dark
+   `--popover` is `#0a0a0a`, `--muted` and `--secondary` `#141414`, `--accent`
+   `#181818` and `--border` `#1e1e1e`. Update visual snapshots.
+7. **New roles.** `--sidebar`, `--pill`, `--pill-border`, `--composer-border` and
+   `--status-*` exist in both modes. A theme that does not set them inherits
+   these values.
+8. **Maia theme** is the same as the default. Keep or drop `data-theme="maia"`.
+
 ## Packages no longer installed
 
 `@vllnt/ui` now installs 12 runtime packages instead of 23. These are gone:

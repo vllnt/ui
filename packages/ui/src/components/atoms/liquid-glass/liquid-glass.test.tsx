@@ -17,3 +17,12 @@ it("LiquidGlass keeps the animation name out of inline styles so motion-reduce:a
   expect(sheen?.getAttribute("style") ?? "").not.toMatch(/animation(-name)?:/);
   expect(sheen).toHaveClass("motion-reduce:animate-none");
 });
+
+it("LiquidGlass opts into the glass scope by default and not with material=solid", () => {
+  const { container, rerender } = render(<LiquidGlass>Content</LiquidGlass>);
+  expect(container.firstChild).toHaveAttribute("data-material", "glass");
+  expect(container.firstChild).toHaveAttribute("data-glass", "on");
+  rerender(<LiquidGlass material="solid">Content</LiquidGlass>);
+  expect(container.firstChild).toHaveAttribute("data-material", "solid");
+  expect(container.firstChild).not.toHaveAttribute("data-glass");
+});

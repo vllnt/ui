@@ -13,11 +13,11 @@ const SKIPPED_SUFFIXES = [
 ] as const;
 
 const FIX =
-  "Use bg-secondary at the same opacity (DESIGN.md, Dark surfaces are pure black).";
+  "Use bg-secondary at the same opacity (DESIGN.md, Dark surfaces are flat and near black).";
 
 /**
  * Fills that moved off `bg-muted`: each file with its classes, one entry per
- * occurrence. Dark `--muted` is the page color (#000000), so these use
+ * occurrence. Dark `--muted` can be the page color (#000000 in the presets), so these use
  * `--secondary`: it matches the old muted fill in the default theme and stays
  * readable under the text in every preset, where `--accent` is a brand color.
  */

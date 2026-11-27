@@ -85,6 +85,21 @@ export function palette(theme: string, mode: Mode): Palette {
   };
 }
 
+/**
+ * `palette()` with the glass material on. The base theme is solid; glass lives in
+ * the `data-glass="on"` scope of default.css, with the dark values in the
+ * `.dark` forms of the scope. Glass tokens are not overridden by any theme, so
+ * the scope applies on top of every theme's cascade.
+ */
+export function glassPalette(theme: string, mode: Mode): Palette {
+  const base = readTheme("default.css");
+  return {
+    ...palette(theme, mode),
+    ...block(base, '[data-glass="on"]'),
+    ...(mode === "dark" ? block(base, '[data-glass="on"] .dark') : {}),
+  };
+}
+
 function linearToSrgb(channel: number): number {
   const encoded =
     channel <= 0.0031308

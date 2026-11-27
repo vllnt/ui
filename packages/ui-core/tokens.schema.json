@@ -303,12 +303,12 @@
         "role": { "type": "string", "minLength": 1 },
         "light": {
           "type": "array",
-          "minItems": 1,
+          "description": "Layers drawn in light mode. An empty list is no shadow.",
           "items": { "$ref": "#/$defs/shadowLayer" }
         },
         "dark": {
           "type": "array",
-          "minItems": 1,
+          "description": "Layers drawn in dark mode. An empty list is no shadow.",
           "items": { "$ref": "#/$defs/shadowLayer" }
         }
       },

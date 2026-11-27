@@ -113,11 +113,14 @@ it.each(["default", "lg", "sm"] as const)(
   },
 );
 
+// Glyphs use the body, bodyLarge and h1 steps of the type scale, so each size
+// is larger than the one below it. In the dense default scale (issue #768) the
+// h2 to h6 steps sit below body and would invert the order.
 it.each([
-  ["sm", 16],
-  ["md", 20],
-  ["lg", 24],
-  [undefined, 24],
+  ["sm", 14],
+  ["md", 15],
+  ["lg", 20],
+  [undefined, 20],
 ] as const)("sizes rating glyphs: %s", (size, fontSize) => {
   renderThemed(<Rating label="Score" labels={rated} max={1} size={size} />);
   expect(screen.getByText("☆")).toHaveStyle({ fontSize });
@@ -488,7 +491,7 @@ it("takes rating glyph and large control sizes from the theme", () => {
       colorScheme="light"
       override={{
         spacing: { 12: 60 },
-        typography: { scale: { h4: { fontSize: 30, lineHeight: 36 } } },
+        typography: { scale: { h1: { fontSize: 30, lineHeight: 36 } } },
       }}
     >
       <Rating label="Score" labels={rated} max={1} size="lg" />

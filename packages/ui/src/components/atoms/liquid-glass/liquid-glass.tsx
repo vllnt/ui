@@ -33,6 +33,7 @@ export const LiquidGlass = /* @__PURE__ */ named(
           "vllnt-glass vllnt-glass-dense relative overflow-hidden rounded-xl border",
           className,
         )}
+        data-glass={material === "glass" ? "on" : undefined}
         data-material={material}
         ref={ref}
         {...props}

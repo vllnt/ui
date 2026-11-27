@@ -20,6 +20,7 @@ const GlassPanel = /* @__PURE__ */ named(
         "vllnt-glass vllnt-glass-dense rounded-2xl border",
         className,
       )}
+      data-glass={material === "glass" ? "on" : undefined}
       data-material={material}
       ref={ref}
       {...props}

@@ -40,8 +40,8 @@ export type RatingProps = Omit<ViewProps, "children"> & {
 };
 
 const MAX_OPTIONS = 100;
-/** Theme type-scale entries whose font size each rating size uses. */
-const GLYPH_SCALE = { lg: "h4", md: "h5", sm: "body" } as const;
+/** Type-scale steps for each rating size, chosen so lg > md > sm in every scale. */
+const GLYPH_SCALE = { lg: "h1", md: "bodyLarge", sm: "body" } as const;
 const styles = StyleSheet.create({
   option: {
     alignItems: "center",

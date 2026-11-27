@@ -158,39 +158,116 @@ describe.each(CASES)("%s theme (%s) contrast contract", (preset, mode) => {
   });
 });
 
-const BLACK_SURFACES = ["background", "muted", "card", "popover"] as const;
-const GREY_FILLS = ["secondary", "accent", "border"] as const;
+/** What each default dark token renders as: Maia's flat monochrome column (issue #768), as 8-bit sRGB. */
+const DARK_RENDERED: Readonly<Record<string, readonly number[]>> = {
+  accent: [24, 24, 24],
+  background: [0, 0, 0],
+  border: [30, 30, 30],
+  card: [0, 0, 0],
+  muted: [20, 20, 20],
+  popover: [10, 10, 10],
+  secondary: [20, 20, 20],
+};
 
-/** Rendered sRGB of every named token that is not `expected`. */
+/** Rendered sRGB of every named token that is not what `expected` says. */
 function offColor(
   colors: Palette,
-  names: readonly string[],
-  expected: readonly number[],
+  expected: Readonly<Record<string, readonly number[]>>,
 ): string[] {
-  return names
+  return Object.entries(expected)
     .filter(
-      (name) =>
-        oklchToRgb(token(colors, name)).join(",") !== expected.join(","),
+      ([name, rgb]) =>
+        oklchToRgb(token(colors, name)).join(",") !== rgb.join(","),
     )
-    .map((name) => `${name}: ${oklchToRgb(token(colors, name)).join(",")}`);
+    .map(([name]) => `${name}: ${oklchToRgb(token(colors, name)).join(",")}`);
 }
 
-describe("default dark theme is pure black with hairline borders", () => {
+describe("default dark theme is flat black with hairline borders", () => {
   const colors = palette("default", "dark");
 
-  it("renders background, muted, card and popover as #000000", () => {
-    expect(offColor(colors, BLACK_SURFACES, [0, 0, 0])).toEqual([]);
+  it("renders background and card as #000000, the popover as #0A0A0A", () => {
+    expect(
+      offColor(colors, {
+        background: DARK_RENDERED.background ?? [],
+        card: DARK_RENDERED.card ?? [],
+        popover: DARK_RENDERED.popover ?? [],
+      }),
+    ).toEqual([]);
   });
 
-  it("renders hover, selected and active fills and the border as #262626", () => {
-    expect(offColor(colors, GREY_FILLS, [38, 38, 38])).toEqual([]);
+  it("renders muted and secondary as #141414, accent as #181818 and the border as #1E1E1E", () => {
+    expect(
+      offColor(colors, {
+        accent: DARK_RENDERED.accent ?? [],
+        border: DARK_RENDERED.border ?? [],
+        muted: DARK_RENDERED.muted ?? [],
+        secondary: DARK_RENDERED.secondary ?? [],
+      }),
+    ).toEqual([]);
   });
 
   it("matches PaaS, which has no color overrides of its own", () => {
     const paas = palette("paas", "dark");
-    const different = [...BLACK_SURFACES, ...GREY_FILLS, "input"].filter(
+    const different = [...Object.keys(DARK_RENDERED), "input"].filter(
       (name) => token(paas, name) !== token(colors, name),
     );
     expect(different).toEqual([]);
+  });
+
+  it("matches Maia, which is the default", () => {
+    const maia = palette("maia", "dark");
+    const different = Object.keys(colors).filter(
+      (name) => token(maia, name) !== token(colors, name),
+    );
+    expect(different).toEqual([]);
+  });
+});
+
+/*
+ * The roles the flat workbench default adds (issue #768). `sidebar` and `pill`
+ * are surfaces; the status colours are marks (WCAG 1.4.11, 3:1), never text.
+ * The border roles are hairlines, not control boundaries: a control uses
+ * `input`. Presets do not set these roles. The tests cover the default and the
+ * product themes, which equal it.
+ */
+const WORKBENCH_TEXT_PAIRS: readonly Pair[] = [
+  ["foreground", "sidebar"],
+  ["muted-foreground", "sidebar"],
+  ["foreground", "pill"],
+  ["muted-foreground", "pill"],
+];
+
+const WORKBENCH_MARKS = [
+  "status-needs-you",
+  "status-unread",
+  "status-failed",
+  "status-done",
+  "status-ring",
+] as const;
+
+const WORKBENCH_MARK_SURFACES = [
+  "background",
+  "card",
+  "popover",
+  "sidebar",
+  "pill",
+] as const;
+
+describe.each(
+  ["default", ...PRODUCT_THEMES].flatMap((name) =>
+    (["light", "dark"] as const).map((mode) => [name, mode] as const),
+  ),
+)("%s theme (%s): workbench roles", (theme, mode) => {
+  const colors = palette(theme, mode);
+
+  it("keeps text on the sidebar and the pill at 4.5:1", () => {
+    expect(failures(colors, WORKBENCH_TEXT_PAIRS, 4.5)).toEqual([]);
+  });
+
+  it("keeps the status marks at 3:1 on every workbench surface", () => {
+    const pairs = WORKBENCH_MARKS.flatMap((mark): Pair[] =>
+      WORKBENCH_MARK_SURFACES.map((surface): Pair => [mark, surface]),
+    );
+    expect(failures(colors, pairs, 3)).toEqual([]);
   });
 });

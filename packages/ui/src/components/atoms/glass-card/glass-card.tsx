@@ -32,6 +32,7 @@ export const GlassCard = /* @__PURE__ */ named(
           "vllnt-glass vllnt-glass-dense rounded-xl border p-6 text-card-foreground",
           className,
         )}
+        data-glass={material === "glass" ? "on" : undefined}
         data-material={material}
         ref={ref}
         {...props}

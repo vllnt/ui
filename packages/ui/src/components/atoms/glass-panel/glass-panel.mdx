@@ -37,6 +37,7 @@ import { GlassPanel } from '@vllnt/ui'
 
 ## Notes
 
+- The panel sets `data-glass="on"` on its own root, so it is glass on any page, even though the default theme is solid. The page-wide switch is `data-glass="on"` on `<html>`.
 - The panel uses the default glass tint. Add the `vllnt-glass-dense` class for body text, muted text or a control border, which need the denser tint to stay AA.
 - `material="solid"` draws an opaque panel. The panel also turns solid on its own under `prefers-reduced-transparency`, `prefers-contrast: more`, `forced-colors: active`, without `backdrop-filter` support, and under `html[data-glass="off"]`.
 - Keep few frosted layers on screen at once; the budget in `DESIGN.md` allows 5.

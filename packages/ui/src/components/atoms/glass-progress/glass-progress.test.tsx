@@ -30,6 +30,8 @@ it("GlassProgress draws the default tint, not the dense one, and opts out with m
   expect(container.firstChild).toHaveClass("vllnt-glass");
   expect(container.firstChild).not.toHaveClass("vllnt-glass-dense");
   expect(container.firstChild).toHaveAttribute("data-material", "glass");
+  expect(container.firstChild).toHaveAttribute("data-glass", "on");
   rerender(<GlassProgress material="solid" value={40} />);
   expect(container.firstChild).toHaveAttribute("data-material", "solid");
+  expect(container.firstChild).not.toHaveAttribute("data-glass");
 });

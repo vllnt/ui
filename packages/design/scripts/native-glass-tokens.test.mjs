@@ -25,6 +25,16 @@ const readNativeTokens = (typescript) =>
   );
 
 const modes = ["dark", "light"];
+
+/** A shadow with no layers, in React Native units. */
+const noShadow = {
+  elevation: 0,
+  shadowColor: "#000000",
+  shadowOffset: { height: 0, width: 0 },
+  shadowOpacity: 0,
+  shadowRadius: 0,
+};
+
 const tokens = readJson("packages/design/tokens.json");
 const penpot = readJson("packages/design/generated/penpot-tokens.json");
 const native = readNativeTokens(
@@ -153,21 +163,20 @@ describe("nativeTokens.glass is derived from tokens.json", () => {
       shadowOpacity: 0.502,
       shadowRadius: 14,
     });
-    // The solid fallback maps shadow.raised (light: 0 1 3 #0000001A wins) and shadow.floating.
-    assert.deepEqual(native.glass.light.solid.shadow.glass, {
-      elevation: 1,
-      shadowColor: "#000000",
-      shadowOffset: { height: 1, width: 0 },
-      shadowOpacity: 0.102,
-      shadowRadius: 1.5,
+    // The solid fallback maps shadow.raised and shadow.floating, which are none: no layers, no shadow.
+    for (const mode of modes) {
+      for (const name of ["glass", "glassFloating"]) {
+        assert.deepEqual(native.glass[mode].solid.shadow[name], noShadow, `${mode} solid ${name}`);
+      }
+    }
+  });
+
+  it("maps a shadow with no layers to a shadow with every field zero", () => {
+    const generated = generateWithTokens((copy) => {
+      copy.shadow.glass.light = [];
     });
-    assert.deepEqual(native.glass.light.solid.shadow.glassFloating, {
-      elevation: 18,
-      shadowColor: "#000000",
-      shadowOffset: { height: 16, width: 0 },
-      shadowOpacity: 0.18,
-      shadowRadius: 20,
-    });
+    assert.deepEqual(generated.glass.light.shadow.glass, noShadow);
+    assert.deepEqual(generated.glass.dark.shadow.glass, native.glass.dark.shadow.glass);
   });
 
   it("skips inset layers and picks the layer with the largest blur, then the higher alpha", () => {
@@ -205,7 +214,7 @@ describe("nativeTokens.glass is derived from tokens.json", () => {
       copy.blur.glass.sm.value = "9px";
       copy.material.solid["material.glass.tint-top"] = "{color.popover}";
       copy.material.solid["material.glass.hairline"] = "{color.glass-border}";
-      copy.material.solid["shadow.glass"] = "{shadow.overlay}";
+      copy.material.solid["shadow.glass"] = "{shadow.glass-floating}";
     });
     const { dark, light } = generated.glass;
     assert.equal(light.tint.top, "#123456ab");
@@ -216,12 +225,13 @@ describe("nativeTokens.glass is derived from tokens.json", () => {
     assert.equal(light.solid.tint.top, generated.color.light.popover);
     assert.equal(dark.solid.tint.top, generated.color.dark.popover);
     assert.equal(dark.solid.hairline, "#abcdef12");
+    // shadow.glass-floating, light: 0 1 2 #00000014 and 0 10 28 #0000001F. The 28 px layer wins.
     assert.deepEqual(light.solid.shadow.glass, {
-      elevation: 10,
+      elevation: 12,
       shadowColor: "#000000",
-      shadowOffset: { height: 8, width: 0 },
-      shadowOpacity: 0.141,
-      shadowRadius: 12,
+      shadowOffset: { height: 10, width: 0 },
+      shadowOpacity: 0.122,
+      shadowRadius: 14,
     });
     // Untouched values stay put.
     assert.equal(dark.tint.top, native.glass.dark.tint.top);

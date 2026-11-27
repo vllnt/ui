@@ -36,11 +36,25 @@ solid values of every glass token, and `$metadata.tokenSetOrder`. The themes
 set; the last two mirror the CSS fallbacks for `prefers-reduced-transparency`
 and `prefers-contrast: more`.
 
+### Glass is opt-in
+
+In the CSS, `:root` and `.dark` hold the solid value of every glass token, so
+the default theme is flat. The glass values apply only inside an opt-in scope:
+`[data-glass="on"]` in light, and `.dark[data-glass="on"]`,
+`.dark [data-glass="on"]` and `[data-glass="on"] .dark` in dark. The solid
+fallbacks (`prefers-reduced-transparency`, `prefers-contrast: more`,
+`forced-colors`, no `backdrop-filter`) come after the scope and win. The hand
+switches come last: `:root[data-glass="off"] [data-glass="on"]` and
+`[data-material="solid"]`. The Penpot sets are unchanged: `vllnt/core` and
+`vllnt/<theme>/<mode>` keep the glass values, and `vllnt/material/solid` the
+solid ones.
+
 ## Sources
 
 `sources/` holds read-only copies of design exports, with their provenance in
 `sources/README.md`. The generator never reads them. `scripts/product-themes.test.mjs`
-compares the Maia theme and the generated Penpot sets against the Maia copy.
+checks the Maia state aliases against the Maia copy. Maia itself equals the
+default theme and overrides nothing.
 
 Run the tests with `pnpm -F @vllnt/design-source test:once`.
 
@@ -52,13 +66,19 @@ The token file follows `tokens.schema.json`:
 - `version`: target library version for the token contract.
 - `source`: pointers back to the human guide and CSS theme implementation.
 - `color.semantic`: CSS variable names, light/dark OKLCH channels, and intended roles.
+  It includes the workbench roles `sidebar`, `pill`, `pill-border`,
+  `composer-border`, `status-needs-you`, `status-unread`, `status-failed`,
+  `status-done` and `status-ring`. The generator fails when the role names or
+  their order differ from its expected list. The Tailwind preset exposes them as `sidebar`, `pill`,
+  `pill-border`, `composer` and `status-*`.
 - `typography.scale`: font size plus explicit font-size and line-height CSS variables.
 - `spacing.scale`: 4-point spacing tokens mapped to rem values.
 - `color.badge-label` and `brand.status`: Penpot alias names. Each leaf is
   `{ value, role }` with `value` a `{color.<role>}` reference. They reach the
   Penpot sets and `designTokens` only; the web uses the role itself.
-- `radius`: allowed radius tokens. `control` (6) and `surface` (8) are role
-  names; themes cannot override them.
+- `radius`: allowed radius tokens. `control` (4) and `surface` (6) are role
+  names; themes cannot override them. The web `--radius` (the Tailwind base) is
+  `surface`.
 - `size`: `{ value, role }` leaves with a px or rem length (`control-xs`,
   `target.min`). A leaf with `coarse: "{size.<name>}"` takes that token's value
   under `@media (pointer: coarse)`; the generator writes the rule.
@@ -67,12 +87,16 @@ The token file follows `tokens.schema.json`:
   `description`, an optional `defaultMode`, and optional overrides of existing
   core roles: `color.light` / `color.dark` (OKLCH channels), `typography`
   (`fontFamily`, `fontWeight`, `scale`), `radius` and `opacity`. Every key must
-  already exist in the core, so a theme cannot add roles.
+  already exist in the core, so a theme cannot add roles. `maia` has no
+  overrides: it equals the default and stays so `data-theme="maia"` is valid.
 - `elevation`: allowed shadow tokens (Tailwind classes; not exported to Penpot).
 - `shadow`: `{ role, light, dark }` library shadows (`raised`, `overlay`,
   `floating`). Each mode is a list of layers `{ offsetX, offsetY, blur, spread,
   color, inset }`; the generator writes `--shadow-<name>` in both modes and the
   Penpot `shadow` tokens (light in `vllnt/core`, dark in each `<theme>/dark` set).
+  An empty list is no shadow: the CSS gets `none`, native gets zeros and Penpot
+  gets one transparent layer with no offset and no blur, because a Penpot token
+  cannot be empty. `raised`, `overlay` and `floating` are empty in both modes.
 - `spacing.page-gutter`, `spacing.page-gutter-tablet`, `spacing.page-gutter-desktop`:
   `{ value: "{spacing.N}", role }` aliases of the scale, the page padding of the
   shared site shell (20 below 768 px, 48 from 768 px, 96 from 1200 px).
@@ -89,7 +113,7 @@ The token file follows `tokens.schema.json`:
   Penpot solid set. Every glass variable needs a solid entry.
 - `shadow.glass` and `shadow.glass-floating`: the two-layer glass shadows, with
   the other library shadows. Their solid values are `shadow.raised` and
-  `shadow.floating`.
+  `shadow.floating`, so the solid base has no shadow.
 - `color.glass-muted-foreground` and `color.glass-input`: the muted text and
   control border colours that pass AA on the dense glass tint. They are read
   inside glass only; see "Glass material" in `DESIGN.md`.

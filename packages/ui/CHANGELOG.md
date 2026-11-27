@@ -8,6 +8,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Added
 
+- **Workbench roles and utilities** - nine new colour roles, in light and dark:
+  `--sidebar`, `--pill`, `--pill-border`, `--composer-border`,
+  `--status-needs-you`, `--status-unread`, `--status-failed`, `--status-done`
+  and `--status-ring`. The Tailwind preset exposes them, with alpha, as
+  `sidebar`, `pill`, `pill-border`, `composer` and `status-needs-you`,
+  `-unread`, `-failed`, `-done`, `-ring`. `styles.css` adds `.code-pill` and the
+  CSS-only text spinners `.ascii`, `.ascii-run`, `.ascii-wait` and `.ascii-load`
+  (they keep their first frame under `prefers-reduced-motion`). The roles also
+  reach `@vllnt/ui-core` and the Penpot token sets.
 - **ui-sdk compat helpers** - the helpers the components are written with are
   public, for apps and agents that build their own parts the same way: `Slot`,
   `asChildProps`, `withDataAttributes`, `openState`, `checkedState`,
@@ -110,6 +119,27 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Changed
 
+- **The default theme is flat and monochrome** (#768) - the look of the Maia
+  theme is now the default. Light: black ink on white, `--primary` black. Dark:
+  black page and card, `--popover` #0a0a0a, `--muted` and `--secondary` #141414,
+  `--accent` #181818, `--border` #1e1e1e, `--muted-foreground` #8a8a8a. The
+  `--shadow-raised`, `--shadow-overlay` and `--shadow-floating` tokens are
+  `none`. `--radius` is 0.375rem (`rounded-lg`, `rounded-md` and `rounded-sm`
+  are 6, 4 and 2 px), `--radius-surface` 6 px and `--radius-control` 4 px.
+  `--font-sans` and `--font-mono` are one JetBrains Mono stack with system mono
+  fallbacks (no font file is shipped). Headings weigh 500 and the type scale is
+  denser (body 14 px, h1 20 px, display 28 px; display stays 600).
+  `--input` and the light `--muted-foreground` keep their values, which meet
+  WCAG AA. `data-theme="maia"` is the same as the default. Every story and
+  snapshot re-renders; see MIGRATION.md.
+- **Glass is opt-in** (#768) - `:root` and `.dark` hold the solid values of the
+  glass tokens, so a `material="glass"` part draws solid unless it sits in a
+  glass scope: `data-glass="on"` on `<html>` or on one surface. `GlassCard`,
+  `GlassPanel`, `GlassProgress` and `LiquidGlass` set `data-glass="on"` on their
+  own root, so they stay glass. `data-glass="off"` and `material="solid"` still
+  win, and the reduced-transparency, more-contrast, forced-colors and
+  no-backdrop-filter fallbacks still turn a glass scope solid. Contrast tests
+  now measure glass inside the scope.
 - **Fewer dependencies, smaller bundles** - `@vllnt/ui` installs 12 runtime
   packages instead of 23. Calendar, date pickers, resizable panels, toasts,
   one-time-code input, carousel, the disclosure components and the hand-built

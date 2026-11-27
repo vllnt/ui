@@ -4,7 +4,7 @@ import path from "node:path";
 import { describe, expect, it } from "vitest";
 
 const FIX =
-  "bg-muted is #000000 in dark, so a skeleton, track or placeholder drawn only with this fill disappears. Use bg-secondary (DESIGN.md, Dark surfaces are pure black).";
+  "bg-muted can be the page color in dark (#000000 in the presets), so a skeleton, track or placeholder drawn only with this fill disappears. Use bg-secondary (DESIGN.md, Dark surfaces are flat and near black).";
 const SOURCE_DIRECTORIES = ["app", "components"] as const;
 const CLASS_DELIMITERS = /[\s"'`{}]+/;
 

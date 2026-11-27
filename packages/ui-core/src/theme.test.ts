@@ -183,10 +183,15 @@ describe("generated design contracts", () => {
     expect(nativeTokens.spacing[4]).toBe(16);
     expect(nativeTokens.spacing[16]).toBe(64);
     expect(nativeTokens.spacing[24]).toBe(96);
-    expect(nativeTokens.radius).toMatchObject({ full: 9999, md: 8 });
+    expect(nativeTokens.radius).toMatchObject({
+      control: 4,
+      full: 9999,
+      md: 8,
+      surface: 6,
+    });
     expect(nativeTokens.typography.scale.body).toEqual({
-      fontSize: 16,
-      lineHeight: 25.6,
+      fontSize: 14,
+      lineHeight: 21,
     });
   });
 
@@ -219,15 +224,19 @@ describe("product themes", () => {
   );
 
   it("makes Maia's primary the ink colour (Ink: no accent) and keeps core accent a quiet surface", () => {
+    // Maia is the default theme (issue #768): its light palette is the core one.
+    expect(productThemes.maia.colors.light).toEqual(lightTheme.colors);
     const { dark, light } = productThemes.maia.colors;
     expect(dark.primary).toBe("#ffffff");
     expect(dark.primary).toBe(dark.foreground);
     expect(dark.background).toBe("#000000");
     expect(light.primary).toBe("#000000");
     expect(light.primary).toBe(light.foreground);
-    expect(lightTheme.colors.primary).toBe("#171717");
+    expect(lightTheme.colors.primary).toBe("#000000");
     expect(light.background).toBe("#ffffff");
-    expect(dark.accent).toBe(dark.muted);
+    expect(dark.accent).toBe("#181818");
+    expect(dark.muted).toBe("#141414");
+    expect(dark.secondary).toBe(dark.muted);
     expect(light.accent).toBe(light.muted);
   });
 
@@ -243,9 +252,9 @@ describe("product themes", () => {
 
   it("sets each theme's typefaces", () => {
     expect(productThemes.maia.typography.fontFamily).toEqual({
-      display: "Inter",
+      display: "JetBrains Mono",
       mono: "JetBrains Mono",
-      sans: "Inter",
+      sans: "JetBrains Mono",
     });
     expect(productThemes.paas.typography.fontFamily).toEqual({
       display: "JetBrains Mono",
@@ -254,22 +263,32 @@ describe("product themes", () => {
     });
   });
 
-  it("carries Maia's type scale and radius steps in points", () => {
+  it("gives Maia the default type scale and radius steps in points", () => {
     const { radius, typography } = productThemes.maia;
-    expect(radius).toMatchObject({ lg: 12, md: 8, sm: 6, xl: 16 });
+    expect(radius).toEqual(nativeTokens.radius);
+    expect(radius).toMatchObject({
+      control: 4,
+      lg: 12,
+      md: 8,
+      sm: 4,
+      surface: 6,
+    });
+    expect(typography.scale).toEqual(nativeTokens.typography.scale);
     expect(typography.scale.display.fontSize).toBe(28);
-    expect(typography.scale.h5.fontSize).toBe(20);
-    expect(typography.scale.h6.fontSize).toBe(15);
+    expect(typography.scale.h1.fontSize).toBe(20);
+    expect(typography.scale.h2.fontSize).toBe(14);
+    expect(typography.scale.h5.fontSize).toBe(13);
+    expect(typography.scale.h6.fontSize).toBe(13);
     expect(typography.scale.body.fontSize).toBe(14);
     expect(typography.scale.bodySmall.fontSize).toBe(13);
     expect(typography.scale.caption.fontSize).toBe(12);
     expect(typography.scale.label.fontSize).toBe(11);
     expect(typography.fontWeight).toMatchObject({
       body: 400,
-      caption: 500,
+      caption: 400,
       display: 600,
-      heading: 600,
-      label: 600,
+      heading: 500,
+      label: 500,
     });
   });
 
@@ -343,8 +362,8 @@ describe("createNativeTheme", () => {
     });
 
     expect(theme.colors.primary).toBe("#ffffff");
-    expect(theme.colors.primary).not.toBe(darkTheme.colors.primary);
     expect(theme.colors.background).toBe("#000000");
+    expect(theme.colors.background).not.toBe(darkTheme.colors.background);
   });
 
   it("merges semantic overrides without dropping defaults", () => {
@@ -465,9 +484,14 @@ describe("native glass tokens", () => {
       expect(Object.values(solid.blur)).toEqual(
         Object.values(solid.blur).map(() => 0),
       );
-      expect(solid.shadow.glass.elevation).toBeLessThan(
-        solid.shadow.glassFloating.elevation,
-      );
+      // The solid shadows are the raised and floating ones, which are none.
+      expect(
+        Object.values(solid.shadow).map((shadow) => [
+          shadow.elevation,
+          shadow.shadowOpacity,
+          shadow.shadowRadius,
+        ]),
+      ).toEqual(Object.values(solid.shadow).map(() => [0, 0, 0]));
     });
 
     it("keeps text and control boundaries legible on the solid fallback", () => {

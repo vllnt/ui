@@ -52,7 +52,7 @@ it("keeps heading semantics independent from visual size", () => {
   );
   const heading = screen.getByRole("header", { name: "Account" });
   expect(heading).not.toHaveProp("aria-level");
-  expect(heading).toHaveStyle({ fontSize: 48 });
+  expect(heading).toHaveStyle({ fontSize: 20 });
 });
 
 it("renders text, badge, and compound card regions", () => {

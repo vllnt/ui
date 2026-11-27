@@ -1,5 +1,6 @@
 import {
   contrast,
+  glassPalette,
   type Mode,
   oklchToRgb,
   type Palette,
@@ -11,7 +12,8 @@ import {
 import { THEME_PRESETS } from "./theme-presets";
 
 /*
- * WCAG 2.2 AA on the glass material, from the shipped theme CSS, by the method
+ * WCAG 2.2 AA on the glass material, from the shipped theme CSS (the
+ * `data-glass="on"` scope: the base theme is solid), by the method
  * of the glass-default r8 recipe: relative luminance, an sRGB alpha blend with
  * each alpha taken as its stored byte over 255, every point from the top to
  * the bottom of the part (0 to 1 in 0.01 steps), over a white, a mid-grey
@@ -185,20 +187,28 @@ function role(colors: Palette, name: string): number[] {
   return oklchToRgb(token(colors, name));
 }
 
-describe("the recipe's AA method, with the code foreground", () => {
+describe("the recipe's AA method, with the recipe's foreground", () => {
+  /*
+   * The recipe's own foreground (near black, near white). The shipped foreground
+   * is pure black and pure white since the flat workbench default (issue #768),
+   * so these fixtures calibrate the method against the recipe's published
+   * numbers; a check further down requires the shipped foreground to reach 4.5:1.
+   */
   const foreground: Record<Mode, Rgb> = {
     dark: [250, 250, 250],
     light: [10, 10, 10],
   };
 
-  it.each(MODES)(
-    "reads the %s foreground token as the recipe's rgb",
-    (mode) => {
-      expect(role(palette("default", mode), "foreground")).toEqual(
-        foreground[mode],
-      );
-    },
-  );
+  const shippedForeground: Record<Mode, Rgb> = {
+    dark: [255, 255, 255],
+    light: [0, 0, 0],
+  };
+
+  it.each(MODES)("reads the %s foreground token as pure ink", (mode) => {
+    expect(role(palette("default", mode), "foreground")).toEqual(
+      shippedForeground[mode],
+    );
+  });
 
   type Fixture = {
     expected: number;
@@ -296,7 +306,7 @@ describe.each(
     MODES.map((mode): [string, Mode] => [name, mode]),
   ),
 )("%s theme (%s): text on glass", (theme, mode) => {
-  const colors = palette(theme, mode);
+  const colors = glassPalette(theme, mode);
   const { default: ownDefault, dense, sheen } = surface(colors);
   const standard = [DEFAULT_THEME, ...PRODUCT_THEMES].includes(theme)
     ? ownDefault
@@ -335,7 +345,7 @@ describe.each(
     MODES.map((mode): [string, Mode] => [name, mode]),
   ),
 )("%s theme (%s): the Kbd glass chip", (theme, mode) => {
-  const colors = palette(theme, mode);
+  const colors = glassPalette(theme, mode);
   const { dense, sheen } = surface(colors);
 
   it("keeps its 75 % ink text over the 9 % ink wash at 4.5:1 on the dense tint", () => {
@@ -352,7 +362,7 @@ describe("why the Kbd glass chip sits on the dense tint", () => {
   it.each(MODES)(
     "fails the chip text on the default tint in %s mode",
     (mode) => {
-      const colors = palette("default", mode);
+      const colors = glassPalette("default", mode);
       const { default: standard, sheen } = surface(colors);
       expect(
         worstChip(shippedStacks(standard, sheen), role(colors, "foreground")),
@@ -365,7 +375,7 @@ describe("why glass has a dense tint and its own muted and input colours", () =>
   it.each(MODES)(
     "fails the glass muted-foreground on the default tint in %s mode",
     (mode) => {
-      const colors = palette("default", mode);
+      const colors = glassPalette("default", mode);
       const { default: standard, sheen } = surface(colors);
       expect(
         worst(
@@ -377,7 +387,7 @@ describe("why glass has a dense tint and its own muted and input colours", () =>
   );
 
   it("fails the plain dark muted-foreground on the dense tint", () => {
-    const colors = palette("default", "dark");
+    const colors = glassPalette("default", "dark");
     const { dense, sheen } = surface(colors);
     expect(
       worst(shippedStacks(dense, sheen), role(colors, "muted-foreground")),
@@ -385,7 +395,7 @@ describe("why glass has a dense tint and its own muted and input colours", () =>
   });
 
   it("fails the plain light muted-foreground on the default tint", () => {
-    const colors = palette("default", "light");
+    const colors = glassPalette("default", "light");
     const { default: standard, sheen } = surface(colors);
     expect(
       worst(shippedStacks(standard, sheen), role(colors, "muted-foreground")),

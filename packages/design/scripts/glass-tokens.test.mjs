@@ -247,130 +247,156 @@ describe("glass tokens match the Penpot glass-default r5 recipe", () => {
   });
 });
 
+/** Body of the rule whose selector list is `selectors`, found at or after `from`. */
+function scopeBody(css, selectors, from = 0) {
+  const escape = (text) => text.replaceAll(/[.*+?^${}()|[\]\\]/g, String.raw`\$&`);
+  const pattern = new RegExp(
+    String.raw`\n\s*${selectors.map(escape).join(String.raw`,\s*`)}\s*\{`,
+  );
+  const match = pattern.exec(css.slice(from));
+  assert.ok(match, `missing ${selectors.join(", ")}`);
+  return blockBody(css.slice(from), match[0].trim().slice(0, -1).trimEnd());
+}
+
 describe("glass CSS", () => {
-  const solidHeaders = {
+  const glassScope = {
+    dark: ['.dark[data-glass="on"]', '.dark [data-glass="on"]', '[data-glass="on"] .dark'],
+    light: ['[data-glass="on"]'],
+  };
+  const solidSwitches = [
+    ':root[data-glass="off"] [data-glass="on"]',
+    ':root[data-glass="off"] [data-glass="on"] .dark',
+    '[data-material="solid"]',
+    '[data-material="solid"] [data-glass="on"]',
+    '[data-material="solid"] [data-glass="on"] .dark',
+  ];
+  const conditions = {
     media:
       "@media (prefers-reduced-transparency: reduce), (prefers-contrast: more), (forced-colors: active)",
-    off: '[data-material="solid"]',
     supports:
       "@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)))",
   };
 
+  /** The solid material: every glass opacity 1, card tint, border lines, no blur, no backdrop filter. */
+  function assertSolid(body, label) {
+    for (const name of [
+      "material-glass-opacity-sm",
+      "material-glass-opacity-md",
+      "material-glass-opacity-lg",
+      "material-glass-opacity-xl",
+    ]) {
+      assert.equal(declaration(body, name), "1", `${label} ${name}`);
+    }
+    assert.equal(declaration(body, "material-glass-tint"), "var(--card)", label);
+    assert.equal(declaration(body, "material-glass-hairline"), "oklch(var(--border))", label);
+    assert.equal(declaration(body, "material-glass-highlight"), "oklch(var(--border))", label);
+    for (const name of [
+      "material-glass-tint-top",
+      "material-glass-tint-bottom",
+      "material-glass-tint-dense-top",
+      "material-glass-tint-dense-bottom",
+    ]) {
+      assert.equal(declaration(body, name), "oklch(var(--card))", `${label} ${name}`);
+    }
+    assert.equal(declaration(body, "material-glass-hairline-edge"), "oklch(var(--border))", label);
+    assert.equal(declaration(body, "material-glass-sheen-opacity"), "0", label);
+    assert.equal(declaration(body, "shadow-glass"), "var(--shadow-raised)", label);
+    assert.equal(declaration(body, "shadow-glass-floating"), "var(--shadow-floating)", label);
+    for (const name of ["blur-glass-sm", "blur-glass-md", "blur-glass-lg", "blur-glass-default"]) {
+      assert.equal(declaration(body, name), "0px", `${label} ${name}`);
+    }
+    assert.equal(declaration(body, "vllnt-glass-backdrop"), "none", label);
+    assert.equal(declaration(body, "color-glass-muted-foreground"), "var(--muted-foreground)", label);
+    assert.equal(declaration(body, "color-glass-input"), "var(--input)", label);
+  }
+
   for (const [file, css] of Object.entries(cssFiles)) {
     describe(file, () => {
-      it("declares the glass defaults in :root", () => {
+      const root = css.slice(0, css.indexOf(".dark {"));
+      const dark = blockBody(css, ".dark");
+
+      it("is solid by default: :root carries the solid values, not the glass ones", () => {
+        assertSolid(root, ":root");
+        assert.equal(declaration(root, "material-glass-opacity-default"), "var(--material-glass-opacity-lg)");
+      });
+
+      it("keeps one value for the glass tokens the solid set leaves alone", () => {
+        assert.equal(declaration(root, "color-glass-border"), "#00000024");
+        assert.equal(declaration(root, "material-highlight-top"), "#FFFFFFCC");
+        assert.equal(declaration(root, "depth-z-2-offset"), "8px");
+        assert.equal(declaration(dark, "color-glass-border"), "#FFFFFF2E");
+        assert.equal(declaration(dark, "material-highlight-top"), "#FFFFFF2E");
+      });
+
+      it("re-declares the variables that read another variable in .dark", () => {
+        assert.equal(declaration(dark, "material-glass-opacity-default"), "var(--material-glass-opacity-lg)");
+        assert.equal(declaration(dark, "depth-z-3-tint"), "var(--material-glass-opacity-xl)");
+        assert.equal(declaration(dark, "material-glass-tint"), "var(--card)");
+        assert.equal(declaration(dark, "shadow-glass"), "var(--shadow-raised)");
+        assert.equal(declaration(dark, "color-glass-input"), "var(--input)");
+      });
+
+      it("declares the glass values in the light opt-in scope", () => {
+        const body = scopeBody(css, glassScope.light);
         for (const [name, value] of [
           ["blur-glass-sm", "8px"],
           ["blur-glass-md", "12px"],
           ["blur-glass-lg", "24px"],
+          ["blur-glass-default", "20px"],
           ["material-glass-opacity-sm", "0.6"],
           ["material-glass-opacity-md", "0.72"],
           ["material-glass-opacity-lg", "0.82"],
           ["material-glass-opacity-xl", "0.9"],
+          ["material-glass-opacity-default", "var(--material-glass-opacity-lg)"],
+          ["material-glass-tint", "var(--background)"],
+          ["material-glass-highlight", "var(--material-highlight-top)"],
+          ["material-glass-hairline", "var(--color-glass-border)"],
+          ["shadow-glass", "0px 1px 2px 0px #0000000D, 0px 4px 14px 0px #0000000F"],
+          ["vllnt-glass-backdrop", "initial"],
         ]) {
-          assert.equal(declaration(css, name), value, name);
+          assert.equal(declaration(body, name), value, name);
         }
-        assert.equal(
-          declaration(css, "material-glass-opacity-default"),
-          "var(--material-glass-opacity-lg)",
-        );
+        for (const [path, , values] of r8Modes) {
+          const name = path.replaceAll(".", "-");
+          const written = declaration(body, name);
+          // The glass text roles are channels; the tints are hex.
+          if (path.startsWith("material.")) {
+            assert.equal(written?.toUpperCase(), values.light.toUpperCase(), `${name} light`);
+          } else {
+            assert.ok(written, `${name} light`);
+          }
+        }
       });
 
-      it("declares the r8 glass tokens in :root and .dark", () => {
-        const root = css.slice(0, css.indexOf(".dark {"));
-        const dark = blockBody(css, ".dark");
+      it("declares the dark glass values in the dark opt-in scope", () => {
+        const body = scopeBody(css, glassScope.dark);
         for (const [path, , values] of r8Modes.filter(([path]) => path.startsWith("material."))) {
           const name = path.replaceAll(".", "-");
-          assert.equal(declaration(root, name)?.toUpperCase(), values.light.toUpperCase(), `${name} light`);
-          assert.equal(declaration(dark, name)?.toUpperCase(), values.dark.toUpperCase(), `${name} dark`);
+          assert.equal(declaration(body, name)?.toUpperCase(), values.dark.toUpperCase(), `${name} dark`);
         }
-        assert.equal(declaration(root, "blur-glass-default"), "20px");
-        assert.equal(
-          declaration(root, "shadow-glass"),
-          "0px 1px 2px 0px #0000000D, 0px 4px 14px 0px #0000000F",
-        );
-        assert.equal(
-          declaration(dark, "shadow-glass-floating"),
-          "0px 1px 2px 0px #00000080, 0px 10px 28px 0px #00000080",
-        );
+        assert.equal(declaration(body, "shadow-glass"), "0px 1px 2px 0px #00000066, 0px 4px 14px 0px #0000004D");
+        assert.equal(declaration(body, "shadow-glass-floating"), "0px 1px 2px 0px #00000080, 0px 10px 28px 0px #00000080");
+        assert.equal(declaration(body, "material-glass-tint"), "var(--background)");
+        assert.equal(declaration(body, "vllnt-glass-backdrop"), "initial");
       });
 
-      for (const [key, header] of Object.entries(solidHeaders)) {
-        it(`turns glass solid in ${key}`, () => {
-          const body = blockBody(css, header);
-          for (const name of [
-            "material-glass-opacity-sm",
-            "material-glass-opacity-md",
-            "material-glass-opacity-lg",
-            "material-glass-opacity-xl",
-          ]) {
-            assert.equal(declaration(body, name), "1", name);
-          }
-          assert.equal(declaration(body, "material-glass-tint"), "var(--card)");
-          assert.equal(
-            declaration(body, "material-glass-hairline"),
-            "oklch(var(--border))",
-          );
-          assert.equal(
-            declaration(body, "material-glass-highlight"),
-            "oklch(var(--border))",
-          );
-          for (const name of [
-            "material-glass-tint-top",
-            "material-glass-tint-bottom",
-            "material-glass-tint-dense-top",
-            "material-glass-tint-dense-bottom",
-          ]) {
-            assert.equal(declaration(body, name), "oklch(var(--card))", name);
-          }
-          assert.equal(
-            declaration(body, "material-glass-hairline-edge"),
-            "oklch(var(--border))",
-          );
-          assert.equal(declaration(body, "material-glass-sheen-opacity"), "0");
-          assert.equal(declaration(body, "shadow-glass"), "var(--shadow-raised)");
-          assert.equal(declaration(body, "shadow-glass-floating"), "var(--shadow-floating)");
-          for (const name of [
-            "blur-glass-sm",
-            "blur-glass-md",
-            "blur-glass-lg",
-            "blur-glass-default",
-          ]) {
-            assert.equal(declaration(body, name), "0px", name);
-          }
-          assert.equal(declaration(body, "vllnt-glass-backdrop"), "none");
-          assert.equal(
-            declaration(body, "color-glass-muted-foreground"),
-            "var(--muted-foreground)",
-          );
-          assert.equal(declaration(body, "color-glass-input"), "var(--input)");
+      for (const [key, header] of Object.entries(conditions)) {
+        it(`turns the opt-in scope solid again in ${key}`, () => {
+          const at = css.indexOf(header);
+          assert.notEqual(at, -1, `missing ${header}`);
+          const body = scopeBody(css, [...glassScope.light, ...glassScope.dark], at);
+          assertSolid(body, key);
+          assert.ok(at > css.indexOf(glassScope.light[0]), `${key} must come after the opt-in scope`);
         });
       }
 
       it('switches glass off with html[data-glass="off"] and per element with data-material="solid"', () => {
-        const selectorList = css
-          .slice(0, css.indexOf('[data-material="solid"] {'))
-          .split("\n")
-          .slice(-3)
-          .map((line) => line.trim())
-          .join(" ");
-        assert.equal(
-          selectorList,
-          ':root[data-glass="off"], :root[data-glass="off"] .dark, ',
+        const body = scopeBody(css, solidSwitches);
+        assertSolid(body, "switches");
+        assert.ok(
+          css.indexOf(solidSwitches[0]) > css.indexOf(conditions.supports),
+          "the switches must come after the fallbacks",
         );
-      });
-
-      it("re-declares the derived glass variables in .dark", () => {
-        const dark = blockBody(css, ".dark");
-        assert.equal(
-          declaration(dark, "material-glass-opacity-default"),
-          "var(--material-glass-opacity-lg)",
-        );
-        assert.equal(
-          declaration(dark, "depth-z-3-tint"),
-          "var(--material-glass-opacity-xl)",
-        );
-        assert.equal(declaration(dark, "color-glass-border"), "#FFFFFF2E");
       });
     });
   }
