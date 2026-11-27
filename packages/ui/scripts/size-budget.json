@@ -47,6 +47,11 @@
     { "name": "PlainSeparator", "export": "PlainSeparator", "maxBytes": 1300 },
     { "name": "cx", "export": "cx", "maxBytes": 600 },
     {
+      "name": "UnstyledToggleGroup",
+      "export": "UnstyledToggleGroup",
+      "maxBytes": 28000
+    },
+    {
       "name": "* (every export, up front)",
       "export": "*",
       "maxBytes": 2176900
