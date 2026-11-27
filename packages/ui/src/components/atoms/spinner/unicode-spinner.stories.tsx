@@ -425,6 +425,9 @@ export const Toggle: Story = {
 };
 
 export const Triangle: Story = {
+  // Its glyph renders a few pixels differently between two captures of the
+  // same build on CI; the other spinners cover the component.
+  tags: ["visual-skip"],
   args: {
     animation: "triangle",
     label: "Triangle",

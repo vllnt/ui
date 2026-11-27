@@ -96,6 +96,7 @@ async function capture(out, storybook, name, update) {
         VISUAL_DIFF_PORT: String(await freePort()),
         VISUAL_DIFF_REPORT: report,
         VISUAL_DIFF_SHARD: values.shard,
+        VISUAL_DIFF_SKIP_INDEX: resolve(values.head, "index.json"),
         VISUAL_DIFF_SNAPSHOTS: join(out, "snapshots"),
         VISUAL_DIFF_STORYBOOK: resolve(storybook),
         VISUAL_DIFF_WORKERS: values.workers,

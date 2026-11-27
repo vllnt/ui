@@ -42,10 +42,28 @@ const shardOf = (id: string) => {
 };
 const directoryOf = (entry: Entry) => entry.importPath.split("/").at(-2) ?? "";
 
+/**
+ * Stories tagged `visual-skip` in either build: run.mjs points
+ * VISUAL_DIFF_SKIP_INDEX at the head build, so a story skipped by the change
+ * is left out of the base capture too, instead of showing as removed.
+ */
+const skipped = new Set(
+  [index, ...(process.env.VISUAL_DIFF_SKIP_INDEX
+    ? [
+        JSON.parse(readFileSync(process.env.VISUAL_DIFF_SKIP_INDEX, "utf8")) as {
+          entries: Record<string, Entry>;
+        },
+      ]
+    : [])]
+    .flatMap((built) => Object.values(built.entries))
+    .filter((entry) => entry.tags?.includes("visual-skip"))
+    .map((entry) => entry.id),
+);
+
 const stories = Object.values(index.entries).filter(
   (entry) =>
     entry.type === "story" &&
-    !entry.tags?.includes("visual-skip") &&
+    !skipped.has(entry.id) &&
     shardOf(entry.id) === shardIndex &&
     (only.length === 0 || only.some((part) => entry.id.includes(part))),
 );
