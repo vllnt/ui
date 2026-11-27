@@ -6,6 +6,19 @@ jest
   .spyOn(AccessibilityInfo, "isReduceMotionEnabled")
   .mockImplementation(() => new Promise(() => {}));
 
+// Glass availability is tested through injected services. Keep the three
+// platform preferences that turn glass off pending, so an unrelated render
+// stays on the solid surface and nothing updates after its assertions.
+for (const method of [
+  "isDarkerSystemColorsEnabled",
+  "isHighTextContrastEnabled",
+  "isReduceTransparencyEnabled",
+]) {
+  jest
+    .spyOn(AccessibilityInfo, method)
+    .mockImplementation(() => new Promise(() => {}));
+}
+
 // Screen-reader-dependent behavior (toast expiry, marquee motion) is tested by
 // overriding this spy per test; keep it pending for unrelated render tests.
 jest
