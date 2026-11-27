@@ -274,7 +274,6 @@ const CarouselNext = /* @__PURE__ */ named(
   },
 );
 
-export type { CarouselApi } from "./carousel-api";
 export {
   Carousel,
   CarouselContent,

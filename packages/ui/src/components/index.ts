@@ -630,12 +630,15 @@ export {
 } from "./atoms/collapsible/collapsible";
 export {
   Carousel,
-  type CarouselApi,
   CarouselContent,
   CarouselItem,
   CarouselNext,
   CarouselPrevious,
 } from "./molecules/carousel/carousel";
+export {
+  type CarouselApi,
+  createCarouselApi,
+} from "./molecules/carousel/carousel-api";
 
 // New shadcn primitives - Utilities
 export {
@@ -652,6 +655,8 @@ export {
   type CalendarProps,
   type DateRange,
 } from "./molecules/calendar/calendar";
+export { calendarLayout } from "./molecules/calendar/calendar-layout";
+export { LazyCalendar } from "./molecules/calendar/calendar-lazy";
 export {
   type ChoroplethColorScale,
   ChoroplethLegend,

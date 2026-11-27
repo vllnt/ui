@@ -58,6 +58,7 @@ export {
 export {
   type AsChildProps,
   asChildProps,
+  assignRef,
   checkedState,
   closeAutoFocus,
   type DataAttributes,
@@ -87,6 +88,30 @@ export {
   type MenuLook,
   useMenuContentOptions,
 } from "./lib/ui-sdk-menu";
+export {
+  dialogBox,
+  dialogClose,
+  type DialogContentOptions,
+  dialogDescription,
+  dialogOverlay,
+  type DialogPopup,
+  dialogPortal,
+  dialogRoot,
+  dialogTitle,
+  dialogTrigger,
+  type OpenAliases,
+  openAliases,
+  type OverlayLook,
+  type PopupFocusHandlers,
+  type PopupOverlay,
+  useDialogPopup,
+} from "./lib/ui-sdk-dialog";
+export { HIT_AREA_24, HIT_AREA_24_RADIO_CHILD } from "./lib/hit-area";
+export { reselectProps } from "./lib/reselect";
+export {
+  type ControllableStateOptions,
+  useControllableState,
+} from "./lib/use-controllable-state";
 export { useBodyScrollLock } from "./lib/use-body-scroll-lock";
 export { useDebounce } from "./lib/use-debounce";
 export { useEscapeKey } from "./lib/use-escape-key";

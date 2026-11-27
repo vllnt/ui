@@ -5,12 +5,12 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import {
   Carousel,
-  type CarouselApi,
   CarouselContent,
   CarouselItem,
   CarouselNext,
   CarouselPrevious,
 } from "./carousel";
+import type { CarouselApi } from "./carousel-api";
 
 const SLIDE_WIDTH = 100;
 
