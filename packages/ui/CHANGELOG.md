@@ -28,6 +28,33 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
   primary; `variant="skip"` is a skip-to-content link, hidden until focused,
   then shown at the top left, 44 px high, above other content.
 - **`Button` size `icon-lg`** - a 44 px square icon button (`size-11`).
+
+- **More ui-sdk helpers are public** - the dialog part builders (`dialogRoot`,
+  `dialogTrigger`, `dialogClose`, `dialogPortal`, `dialogOverlay`, `dialogBox`,
+  `dialogTitle`, `dialogDescription`, `useDialogPopup`, `openAliases`),
+  `useControllableState`, `useLazyElementRef`, `assignRef`, `reselectProps`,
+  `HIT_AREA_24` / `HIT_AREA_24_RADIO_CHILD`, and their types, so apps and
+  agents can build parts the same way the kit does.
+- **In-house replacements, exported** - `encodeQrMatrix` (QR codes, matches the
+  `qrcode` package module for module), `createSchemaResolver` (react-hook-form
+  resolver for any Standard Schema, such as Zod 4), `createCarouselApi`,
+  `LazyCalendar`, `calendarLayout`, `FlowDiagramContent`.
+- **New props, all optional** - `Accordion` `as` (heading level);
+  `CommandDialog` `title`; `Slider` `thumbLabels`; `Calendar` `fixedWeeks`,
+  `locale`, `weekStartsOn`, `initialFocus` (and the `DateRange` type);
+  `Sheet` and `Drawer` `material`, `overlay`, `labels`, `closeButton`;
+  `Popover`, `HoverCard` and `Tooltip` `onEscapeKeyDown`,
+  `onPointerDownOutside`, `onInteractOutside`, `forceMount`; `open` /
+  `onOpenChange` next to `isOpen` / `onClose` on `KeyboardShortcutsHelp`,
+  `TableOfContentsPanel`, `FlowFullscreen` and `ShareDialog`; `open` /
+  `onOpenChange` on the disclosure components (`FAQ`, `ExpandableCards`,
+  `TLDRSection`, `Reasoning`, `ThinkingBlock`, `AgentActivity`, `Curriculum`,
+  `HistoricalFigureCard`); `defaultValue`, `defaultOpen`, `open`,
+  `onOpenChange` and `disabled` on `Combobox`, and the open-state props on
+  `MultiSelect`, `ScopeSelector` and `ModelSelector`; a controlled `value` on
+  `AnimatedTabs`; `ref`, `orientation` and trigger `disabled` on `Tabs`.
+- **`data-slot`** on the parts of `Card`, `Alert`, `Panel`, `DataList` and
+  `Table`, like the ui-sdk parts.
 - **`SegmentedControl` `fit` and `variant`** - `fit` hugs the content (root
   `w-auto`, items `flex-none`); `variant="hairline"` swaps the filled track for a
   transparent one with a 1 px input-colour border (`glass-input` inside glass).
@@ -49,6 +76,31 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Changed
 
+- **Fewer dependencies, smaller bundles** - `@vllnt/ui` installs 12 runtime
+  packages instead of 23. Calendar, date pickers, resizable panels, toasts,
+  one-time-code input, carousel, the disclosure components and the hand-built
+  modals now run on ui-sdk; class variants, class joining, the animation
+  plugin, QR encoding and the schema resolver are small in-house helpers.
+  Heavy parts load on demand: the MDX compiler, `react-markdown`,
+  `@xyflow/react`, the toast region and the date pickers' calendar. Every
+  `displayName` is set through a pure `named()` call, so bundlers drop the
+  parts an app does not import. Minified sizes (`scripts/check-size.mjs`):
+  every export 2,318 KB → 1,848 KB (gzip 708 → 575 KB), `Dialog` 112 → 82 KB,
+  `DataTable` 230 → 125 KB, `MDXContent` 627 → 276 KB, `FlowDiagram` 224 →
+  23 KB, `TutorialMDX` 252 → 136 KB, `Button` 23 → 19 KB, and importing
+  `DialogHeader` alone 109 → 17 KB. Budgets are tightened to match.
+- **Breaking: dates, resizable, toast, carousel, one-time code, `cn`** -
+  `Calendar`, `RangeCalendar`, `DatePicker`, `DateRangePicker`, the
+  `Resizable` parts, `toast`/`Toaster`, `Carousel` and `InputOTP` move off
+  `react-day-picker`, `react-resizable-panels`, `sonner`, `embla-carousel-react`
+  and `input-otp`. Common props keep working; the rest is listed in
+  `MIGRATION.md`. `cn` merges only the class groups the library uses.
+  `DataTable`'s filter is a native `<select>`.
+- **Toolbar** - one tab stop, arrow keys move between items (APG toolbar).
+- **`Dialog`, `Sheet`, `Drawer`, `AlertDialog`** share one set of part
+  builders, and `KeyboardShortcutsHelp`, `TableOfContentsPanel`,
+  `FlowFullscreen` and `ShareDialog` render through them instead of their own
+  focus and scroll-lock code.
 - **Built on ui-sdk** - the interactive components now sit on Vercel's ui-sdk
   (`@ui-sdk/react` and `@ui-sdk/core`, pinned to `0.1.0-beta.7`) instead of Radix,
   cmdk and vaul: Accordion, AlertDialog, Avatar, Checkbox, Collapsible, Command,
@@ -87,6 +139,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Removed
 
+- **Third-party packages replaced** - `react-day-picker`,
+  `react-resizable-panels`, `sonner`, `input-otp`, `embla-carousel-react`,
+  `tailwindcss-animate`, `@hookform/resolvers`, `class-variance-authority` and
+  `clsx` are no longer dependencies; `qrcode` and `zod` are dev dependencies
+  only (tests). `focusCalendarDay` is removed (use `Calendar` `initialFocus`).
 - **Radix, cmdk and vaul** - `@radix-ui/react-alert-dialog`, `-avatar`,
   `-checkbox`, `-collapsible`, `-context-menu`, `-dialog`, `-dropdown-menu`,
   `-hover-card`, `-label`, `-menubar`, `-navigation-menu`, `-popover`,
@@ -96,6 +153,21 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Fixed
 
+- **Accessibility** - `AlertDialog` focuses Cancel first even when Action
+  comes first; `CompletionDialog`'s one-key shortcuts ignore typing in fields
+  and modified keys; `Combobox` announces its label and chosen value and marks
+  the chosen option; `Accordion` triggers sit in headings; animations and
+  transitions respect `prefers-reduced-motion`; `Switch`, `Slider`, `Toggle`,
+  `ToggleGroup` and `SegmentedControl` stay visible in forced-colors mode;
+  `SearchDialog` scope tabs use arrow keys and a named tab panel; menu glyphs
+  are hidden from screen readers; `Sheet` no longer opens with focus on Close;
+  range `Slider` thumbs are named Minimum and Maximum; `Checkbox`, `Radio`,
+  `Switch`, `Slider` thumbs and `Rating` stars get 24 px hit areas without
+  moving; `HoverCard` content describes its trigger while open; `FAQ` answers
+  are no longer clipped at 24 rem and closed answers leave the tab order.
+- **Toast surface** - toasts take the popover background, border and text
+  colours; they were transparent because the colour tokens reached them as
+  bare channel values.
 - **`Kbd` `shortcut`** - each key cap has an explicit React key, so a
   multi-key shortcut no longer logs the "unique key prop" warning in
   development.

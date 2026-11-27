@@ -129,7 +129,7 @@ The preset configures:
 - **Animations**: `accordion-down`, `accordion-up`, `shimmer`
 - **Font**: `mono` family via `--font-mono` variable
 - **Dark mode**: class-based (`darkMode: ["class"]`)
-- **Plugin**: `tailwindcss-animate`
+- **Plugin**: an in-house animation plugin with the `tailwindcss-animate` utilities (`animate-in`, `fade-in`, `zoom-in`, `slide-in-from-*`, …), no extra package needed
 
 ### 2. Import Styles
 

@@ -85,7 +85,8 @@ Peer ranges: `react >=19.0.0`, `react-dom >=19.0.0`, `tailwindcss ^3.4.0`,
 `next-themes >=0.4.0`, `next >=15.0.0` (optional).
 
 **1. Tailwind preset** — pulls in theme colors, animations,
-class-based dark mode (`darkMode: ["class"]`) and `tailwindcss-animate`:
+class-based dark mode (`darkMode: ["class"]`) and the `tailwindcss-animate`
+utilities (built in, no extra package):
 
 ```ts
 // tailwind.config.ts
