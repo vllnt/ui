@@ -202,6 +202,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - **Toast surface** - toasts take the popover background, border and text
   colours; they were transparent because the colour tokens reached them as
   bare channel values.
+- **Toast contrast** - a toast's description now follows the page's mode, like
+  the popover background it sits on, so a `theme` that differs from the page
+  no longer puts light-mode grey on a dark toast (2:1). The light `richColors`
+  text colours are a little darker, so each reaches 4.5:1 on its background
+  (sonner's reached 3.1 to 4.4).
 - **`Kbd` `shortcut`** - each key cap has an explicit React key, so a
   multi-key shortcut no longer logs the "unique key prop" warning in
   development.

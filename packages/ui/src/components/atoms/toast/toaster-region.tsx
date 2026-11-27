@@ -84,13 +84,15 @@ const BASE_VARIABLES = {
   "--normal-text": "oklch(var(--popover-foreground))",
 };
 
-// The colors that follow the Toaster's `theme` prop rather than the page.
+// The colors that follow the Toaster's `theme` prop rather than the page. The
+// light text colors are sonner's, darkened enough to reach 4.5:1 on
+// their backgrounds (WCAG AA). The description is not here: it sits on the
+// page's popover color, so it follows the page (`DESCRIPTION_CLASS`).
 const PALETTES = {
   dark: {
     "--cancel-bg": "rgba(255, 255, 255, 0.3)",
     "--close-hover-bg": "hsl(0, 0%, 12%)",
     "--close-hover-border": "hsl(0, 0%, 25%)",
-    "--description": "#e8e8e8",
     "--error-bg": "hsl(358, 76%, 10%)",
     "--error-border": "hsl(357, 89%, 16%)",
     "--error-text": "hsl(358, 100%, 81%)",
@@ -108,19 +110,18 @@ const PALETTES = {
     "--cancel-bg": "rgba(0, 0, 0, 0.08)",
     "--close-hover-bg": "hsl(0, 0%, 97.3%)",
     "--close-hover-border": "hsl(0, 0%, 90.9%)",
-    "--description": "#3f3f3f",
     "--error-bg": "hsl(359, 100%, 97%)",
     "--error-border": "hsl(359, 100%, 94%)",
-    "--error-text": "hsl(360, 100%, 45%)",
+    "--error-text": "hsl(360, 100%, 43.5%)",
     "--info-bg": "hsl(208, 100%, 97%)",
     "--info-border": "hsl(221, 91%, 93%)",
-    "--info-text": "hsl(210, 92%, 45%)",
+    "--info-text": "hsl(210, 92%, 43.5%)",
     "--success-bg": "hsl(143, 85%, 96%)",
     "--success-border": "hsl(145, 92%, 87%)",
-    "--success-text": "hsl(140, 100%, 27%)",
+    "--success-text": "hsl(140, 100%, 25.5%)",
     "--warning-bg": "hsl(49, 100%, 97%)",
     "--warning-border": "hsl(49, 91%, 84%)",
-    "--warning-text": "hsl(31, 92%, 45%)",
+    "--warning-text": "hsl(31, 92%, 35.5%)",
   },
 };
 
@@ -138,6 +139,10 @@ const RICH_COLORS: Record<string, string> = {
   warning:
     "[--toast-bg:var(--warning-bg)] [--toast-text:var(--warning-text)] ![border-color:var(--warning-border)] [&_[data-slot=toast-close]]:![border-color:var(--warning-border)]",
 };
+
+// sonner's description colors, picked by the page's mode like the popover
+// background they sit on, so they keep their contrast whatever `theme` says.
+const DESCRIPTION_CLASS = "text-[#3f3f3f] dark:text-[#e8e8e8]";
 
 const REGION_CLASS = cn(
   "toaster group group/toaster [font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,Segoe_UI,Roboto,Helvetica_Neue,Arial,Noto_Sans,sans-serif,Apple_Color_Emoji,Segoe_UI_Emoji,Segoe_UI_Symbol,Noto_Color_Emoji]",
@@ -345,7 +350,7 @@ function ToastView({
         <ToastDescription
           className={cn(
             "font-normal leading-[1.4]",
-            richColors ? "text-inherit" : "text-[color:var(--description)]",
+            richColors ? "text-inherit" : DESCRIPTION_CLASS,
             toastOptions.descriptionClassName,
             extras.descriptionClassName,
             slot("description"),

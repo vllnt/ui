@@ -126,6 +126,31 @@ function queuedById() {
   return Object.fromEntries(queued().map((item) => [item.id, item]));
 }
 
+/** WCAG relative luminance of an `hsl(h, s%, l%)` color. */
+function relativeLuminance(color: string): number {
+  const [hue = 0, saturation = 0, lightness = 0] = (
+    color.match(/[\d.]+/g) ?? []
+  ).map(Number);
+  const s = saturation / 100;
+  const l = lightness / 100;
+  const channel = (n: number) => {
+    const k = (n + hue / 30) % 12;
+    const value =
+      l - s * Math.min(l, 1 - l) * Math.max(-1, Math.min(k - 3, 9 - k, 1));
+    return value <= 0.03928 ? value / 12.92 : ((value + 0.055) / 1.055) ** 2.4;
+  };
+  return 0.2126 * channel(0) + 0.7152 * channel(8) + 0.0722 * channel(4);
+}
+
+/** WCAG contrast ratio of two `hsl(h, s%, l%)` colors. */
+function contrastRatio(first: string, second: string): number {
+  const [light = 0, dark = 0] = [
+    relativeLuminance(first),
+    relativeLuminance(second),
+  ].toSorted((a, b) => b - a);
+  return (light + 0.05) / (dark + 0.05);
+}
+
 function regionElement() {
   const element = document.querySelector<HTMLElement>(
     '[data-slot="toast-region"]',
@@ -342,16 +367,47 @@ describe("Toaster", () => {
   it("follows the theme prop for its palette", async () => {
     const { rerender } = render(<Toaster theme="light" />);
     await showToast("Palette");
-    expect(regionElement().style.getPropertyValue("--description")).toBe(
-      "#3f3f3f",
+    expect(regionElement().style.getPropertyValue("--error-bg")).toBe(
+      "hsl(359, 100%, 97%)",
     );
     rerender(<Toaster theme="dark" />);
     await waitFor(() => {
-      expect(regionElement().style.getPropertyValue("--description")).toBe(
-        "#e8e8e8",
+      expect(regionElement().style.getPropertyValue("--error-bg")).toBe(
+        "hsl(358, 76%, 10%)",
       );
     });
   });
+
+  it.each(["light", "dark"] as const)(
+    "gives rich colors text of at least 4.5:1 on their background (%s)",
+    async (theme) => {
+      render(<Toaster theme={theme} />);
+      await showToast("Contrast");
+      const style = regionElement().style;
+      const ratios = ["error", "info", "success", "warning"].map((type) =>
+        contrastRatio(
+          style.getPropertyValue(`--${type}-text`),
+          style.getPropertyValue(`--${type}-bg`),
+        ),
+      );
+      expect(Math.min(...ratios)).toBeGreaterThanOrEqual(4.5);
+    },
+  );
+
+  // The description sits on the page's popover color, so it follows the
+  // page's mode, not the theme prop: a light page with theme="dark" kept
+  // #e8e8e8 on white, and a dark page with theme="light" #3f3f3f on black.
+  it.each(["light", "dark"] as const)(
+    "colors the description by the page's mode (theme %s)",
+    async (theme) => {
+      render(<Toaster theme={theme} />);
+      await showToast("Mode", { description: "Details" });
+      expect(screen.getByText("Details")).toHaveClass(
+        "text-[#3f3f3f]",
+        "dark:text-[#e8e8e8]",
+      );
+    },
+  );
 
   it("takes the page's tokens for its surface", async () => {
     render(<Toaster theme="light" />);
