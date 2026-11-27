@@ -12,6 +12,7 @@ import {
 } from "@ui-sdk/react/carousel";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 
+import { named } from "../../../lib/named";
 import { cn } from "../../../lib/utils";
 import { Button } from "../../atoms/button/button";
 
@@ -84,184 +85,194 @@ function CarouselApiSync({
   return null;
 }
 
-const Carousel = ({
-  children,
-  className,
-  opts,
-  orientation = "horizontal",
-  ref,
-  setApi,
-  ...props
-}: CarouselProps &
-  React.HTMLAttributes<HTMLDivElement> & {
-    ref?: React.Ref<HTMLDivElement>;
-  }) => {
-  const [{ api, controller, emit }] = React.useState(createCarouselApi);
+const Carousel = /* @__PURE__ */ named(
+  "Carousel",
+  ({
+    children,
+    className,
+    opts,
+    orientation = "horizontal",
+    ref,
+    setApi,
+    ...props
+  }: CarouselProps &
+    React.HTMLAttributes<HTMLDivElement> & {
+      ref?: React.Ref<HTMLDivElement>;
+    }) => {
+    const [{ api, controller, emit }] = React.useState(createCarouselApi);
 
-  return (
-    <OrientationContext value={orientation}>
-      <CarouselPrimitive
-        align={opts?.align}
-        className={cn("relative", className)}
-        controller={controller}
-        defaultPage={
-          opts?.startIndex === undefined ? undefined : opts.startIndex + 1
-        }
-        drag={opts?.watchDrag}
-        dragFree={opts?.dragFree}
-        loop={opts?.loop}
-        onPageChange={() => {
-          // The page store updates right after this callback.
-          queueMicrotask(() => {
-            emit("select");
-          });
-        }}
-        orientation={orientation}
-        ref={ref}
-        skipSnaps={opts?.skipSnaps}
-        slidesPerPage={opts?.slidesToScroll}
-        {...props}
-      >
-        {({ pageCount }) => (
-          <>
-            <CarouselApiSync
-              api={api}
-              emit={emit}
-              pageCount={pageCount}
-              setApi={setApi}
-            />
-            {children}
-          </>
-        )}
-      </CarouselPrimitive>
-    </OrientationContext>
-  );
-};
-Carousel.displayName = "Carousel";
+    return (
+      <OrientationContext value={orientation}>
+        <CarouselPrimitive
+          align={opts?.align}
+          className={cn("relative", className)}
+          controller={controller}
+          defaultPage={
+            opts?.startIndex === undefined ? undefined : opts.startIndex + 1
+          }
+          drag={opts?.watchDrag}
+          dragFree={opts?.dragFree}
+          loop={opts?.loop}
+          onPageChange={() => {
+            // The page store updates right after this callback.
+            queueMicrotask(() => {
+              emit("select");
+            });
+          }}
+          orientation={orientation}
+          ref={ref}
+          skipSnaps={opts?.skipSnaps}
+          slidesPerPage={opts?.slidesToScroll}
+          {...props}
+        >
+          {({ pageCount }) => (
+            <>
+              <CarouselApiSync
+                api={api}
+                emit={emit}
+                pageCount={pageCount}
+                setApi={setApi}
+              />
+              {children}
+            </>
+          )}
+        </CarouselPrimitive>
+      </OrientationContext>
+    );
+  },
+);
 
 // Slides carry their gap as end padding, and the content takes it back with a
 // negative end margin: ui-sdk pages by slide boxes, so padding at the start
 // would offset every page after the first. The content stays on its own
 // layer, as embla's inline transform kept it, so text renders as it did.
-const CarouselContent = ({
-  className,
-  ref,
-  ...props
-}: React.HTMLAttributes<HTMLDivElement> & {
-  ref?: React.Ref<HTMLDivElement>;
-}) => {
-  const orientation = React.use(OrientationContext);
+const CarouselContent = /* @__PURE__ */ named(
+  "CarouselContent",
+  ({
+    className,
+    ref,
+    ...props
+  }: React.HTMLAttributes<HTMLDivElement> & {
+    ref?: React.Ref<HTMLDivElement>;
+  }) => {
+    const orientation = React.use(OrientationContext);
 
-  return (
-    <CarouselViewport className="ring-offset-background [scrollbar-width:none] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 [&::-webkit-scrollbar]:hidden">
-      <CarouselContentPrimitive
+    return (
+      <CarouselViewport className="ring-offset-background [scrollbar-width:none] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 [&::-webkit-scrollbar]:hidden">
+        <CarouselContentPrimitive
+          className={cn(
+            "flex transform-gpu",
+            orientation === "horizontal" ? "-me-4" : "-mb-4 flex-col",
+            className,
+          )}
+          ref={ref}
+          {...props}
+        />
+      </CarouselViewport>
+    );
+  },
+);
+
+const CarouselItem = /* @__PURE__ */ named(
+  "CarouselItem",
+  ({
+    className,
+    ref,
+    ...props
+  }: React.HTMLAttributes<HTMLDivElement> & {
+    ref?: React.Ref<HTMLDivElement>;
+  }) => {
+    const orientation = React.use(OrientationContext);
+
+    return (
+      <CarouselItemPrimitive
         className={cn(
-          "flex transform-gpu",
-          orientation === "horizontal" ? "-me-4" : "-mb-4 flex-col",
+          "min-w-0 shrink-0 grow-0 basis-full",
+          orientation === "horizontal" ? "pe-4" : "pb-4",
           className,
         )}
         ref={ref}
         {...props}
       />
-    </CarouselViewport>
-  );
-};
-CarouselContent.displayName = "CarouselContent";
+    );
+  },
+);
 
-const CarouselItem = ({
-  className,
-  ref,
-  ...props
-}: React.HTMLAttributes<HTMLDivElement> & {
-  ref?: React.Ref<HTMLDivElement>;
-}) => {
-  const orientation = React.use(OrientationContext);
+const CarouselPrevious = /* @__PURE__ */ named(
+  "CarouselPrevious",
+  ({
+    className,
+    ref,
+    size = "icon",
+    variant = "outline",
+    ...props
+  }: React.ComponentProps<typeof Button> & {
+    ref?: React.Ref<HTMLButtonElement>;
+  }) => {
+    const orientation = React.use(OrientationContext);
 
-  return (
-    <CarouselItemPrimitive
-      className={cn(
-        "min-w-0 shrink-0 grow-0 basis-full",
-        orientation === "horizontal" ? "pe-4" : "pb-4",
-        className,
-      )}
-      ref={ref}
-      {...props}
-    />
-  );
-};
-CarouselItem.displayName = "CarouselItem";
+    return (
+      <CarouselPreviousPrimitive
+        ref={ref}
+        render={
+          <Button
+            className={cn(
+              "absolute size-8 rounded-full aria-disabled:pointer-events-none aria-disabled:opacity-50",
+              orientation === "horizontal"
+                ? "-left-12 top-1/2 -translate-y-1/2"
+                : "-top-12 left-1/2 -translate-x-1/2 rotate-90",
+              className,
+            )}
+            size={size}
+            variant={variant}
+            {...props}
+          >
+            <ArrowLeft className="size-4" />
+            <span className="sr-only">Previous slide</span>
+          </Button>
+        }
+      />
+    );
+  },
+);
 
-const CarouselPrevious = ({
-  className,
-  ref,
-  size = "icon",
-  variant = "outline",
-  ...props
-}: React.ComponentProps<typeof Button> & {
-  ref?: React.Ref<HTMLButtonElement>;
-}) => {
-  const orientation = React.use(OrientationContext);
+const CarouselNext = /* @__PURE__ */ named(
+  "CarouselNext",
+  ({
+    className,
+    ref,
+    size = "icon",
+    variant = "outline",
+    ...props
+  }: React.ComponentProps<typeof Button> & {
+    ref?: React.Ref<HTMLButtonElement>;
+  }) => {
+    const orientation = React.use(OrientationContext);
 
-  return (
-    <CarouselPreviousPrimitive
-      ref={ref}
-      render={
-        <Button
-          className={cn(
-            "absolute size-8 rounded-full aria-disabled:pointer-events-none aria-disabled:opacity-50",
-            orientation === "horizontal"
-              ? "-left-12 top-1/2 -translate-y-1/2"
-              : "-top-12 left-1/2 -translate-x-1/2 rotate-90",
-            className,
-          )}
-          size={size}
-          variant={variant}
-          {...props}
-        >
-          <ArrowLeft className="size-4" />
-          <span className="sr-only">Previous slide</span>
-        </Button>
-      }
-    />
-  );
-};
-CarouselPrevious.displayName = "CarouselPrevious";
-
-const CarouselNext = ({
-  className,
-  ref,
-  size = "icon",
-  variant = "outline",
-  ...props
-}: React.ComponentProps<typeof Button> & {
-  ref?: React.Ref<HTMLButtonElement>;
-}) => {
-  const orientation = React.use(OrientationContext);
-
-  return (
-    <CarouselNextPrimitive
-      ref={ref}
-      render={
-        <Button
-          className={cn(
-            "absolute size-8 rounded-full aria-disabled:pointer-events-none aria-disabled:opacity-50",
-            orientation === "horizontal"
-              ? "-right-12 top-1/2 -translate-y-1/2"
-              : "-bottom-12 left-1/2 -translate-x-1/2 rotate-90",
-            className,
-          )}
-          size={size}
-          variant={variant}
-          {...props}
-        >
-          <ArrowRight className="size-4" />
-          <span className="sr-only">Next slide</span>
-        </Button>
-      }
-    />
-  );
-};
-CarouselNext.displayName = "CarouselNext";
+    return (
+      <CarouselNextPrimitive
+        ref={ref}
+        render={
+          <Button
+            className={cn(
+              "absolute size-8 rounded-full aria-disabled:pointer-events-none aria-disabled:opacity-50",
+              orientation === "horizontal"
+                ? "-right-12 top-1/2 -translate-y-1/2"
+                : "-bottom-12 left-1/2 -translate-x-1/2 rotate-90",
+              className,
+            )}
+            size={size}
+            variant={variant}
+            {...props}
+          >
+            <ArrowRight className="size-4" />
+            <span className="sr-only">Next slide</span>
+          </Button>
+        }
+      />
+    );
+  },
+);
 
 export type { CarouselApi } from "./carousel-api";
 export {

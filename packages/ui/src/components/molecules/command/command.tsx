@@ -16,6 +16,7 @@ import { Search } from "lucide-react";
 
 import { createCommandRanker } from "../../../lib/command-rank";
 import { commandScore } from "../../../lib/command-score";
+import { named } from "../../../lib/named";
 import {
   type AsChildProps,
   asChildProps,
@@ -70,90 +71,90 @@ type CommandProps = Omit<
  * `onValueChange`, `value` on items) sits on top of the ui-sdk command, and
  * parts keep the `cmdk-*` attributes that styles and tests select on.
  */
-const Command = ({
-  asChild,
-  children,
-  className,
-  defaultValue,
-  filter,
-  label,
-  loop = false,
-  onValueChange,
-  ref,
-  shouldFilter = true,
-  value,
-  ...props
-}: CommandProps) => {
-  const [query, setQuery] = React.useState("");
-  const onSearchChangeRef = React.useRef<
-    ((search: string) => void) | undefined
-  >(undefined);
-  const slot = asChildProps({ asChild, children });
-  const setSearchHandler = React.useCallback((handler?: SearchHandler) => {
-    onSearchChangeRef.current = handler;
-  }, []);
-  const score = shouldFilter ? (filter ?? commandScore) : undefined;
-  const binding = React.useMemo(
-    () => ({ label, query, score, setQuery, setSearchHandler }),
-    [label, query, score, setSearchHandler],
-  );
-  const handleQueryChange = (next: string) => {
-    setQuery(next);
-    onSearchChangeRef.current?.(next);
-  };
-  const rank: React.ComponentProps<typeof CommandRoot>["filter"] = score
-    ? (item, search) => score(item.label, search, item.keywords)
-    : false;
+const Command = /* @__PURE__ */ named(
+  "Command",
+  ({
+    asChild,
+    children,
+    className,
+    defaultValue,
+    filter,
+    label,
+    loop = false,
+    onValueChange,
+    ref,
+    shouldFilter = true,
+    value,
+    ...props
+  }: CommandProps) => {
+    const [query, setQuery] = React.useState("");
+    const onSearchChangeRef = React.useRef<
+      ((search: string) => void) | undefined
+    >(undefined);
+    const slot = asChildProps({ asChild, children });
+    const setSearchHandler = React.useCallback((handler?: SearchHandler) => {
+      onSearchChangeRef.current = handler;
+    }, []);
+    const score = shouldFilter ? (filter ?? commandScore) : undefined;
+    const binding = React.useMemo(
+      () => ({ label, query, score, setQuery, setSearchHandler }),
+      [label, query, score, setSearchHandler],
+    );
+    const handleQueryChange = (next: string) => {
+      setQuery(next);
+      onSearchChangeRef.current?.(next);
+    };
+    const rank: React.ComponentProps<typeof CommandRoot>["filter"] = score
+      ? (item, search) => score(item.label, search, item.keywords)
+      : false;
 
-  return (
-    <SearchContext value={binding}>
-      <CommandRoot
-        autoHighlight
-        className={cn(
-          "flex h-full w-full flex-col overflow-hidden rounded-md bg-popover text-popover-foreground",
-          className,
-        )}
-        cmdk-root=""
-        defaultValue={defaultValue}
-        filter={rank}
-        loop={loop}
-        onQueryChange={handleQueryChange}
-        onValueChange={(next) => {
-          onValueChange?.(next ?? "");
-        }}
-        query={query}
-        ref={ref}
-        render={slot.render}
-        value={value}
-        {...props}
-      >
-        {slot.children}
-      </CommandRoot>
-    </SearchContext>
-  );
-};
-Command.displayName = "Command";
+    return (
+      <SearchContext value={binding}>
+        <CommandRoot
+          autoHighlight
+          className={cn(
+            "flex h-full w-full flex-col overflow-hidden rounded-md bg-popover text-popover-foreground",
+            className,
+          )}
+          cmdk-root=""
+          defaultValue={defaultValue}
+          filter={rank}
+          loop={loop}
+          onQueryChange={handleQueryChange}
+          onValueChange={(next) => {
+            onValueChange?.(next ?? "");
+          }}
+          query={query}
+          ref={ref}
+          render={slot.render}
+          value={value}
+          {...props}
+        >
+          {slot.children}
+        </CommandRoot>
+      </SearchContext>
+    );
+  },
+);
 
 export type CommandDialogProps = React.ComponentProps<typeof Dialog> & {
   /** Accessible name of the dialog, announced but not shown. Defaults to `"Command Menu"`. */
   title?: string;
 };
 
-const CommandDialog = ({
-  children,
-  title = "Command Menu",
-  ...props
-}: CommandDialogProps) => (
-  <Dialog {...props}>
-    <DialogContent className="overflow-hidden p-0 shadow-lg">
-      <DialogTitle className="sr-only">{title}</DialogTitle>
-      <Command className="[&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:font-medium [&_[cmdk-group-heading]]:text-muted-foreground [&_[cmdk-group]:not([hidden])_~[cmdk-group]]:pt-0 [&_[cmdk-group]]:px-2 [&_[cmdk-input-wrapper]_svg]:h-5 [&_[cmdk-input-wrapper]_svg]:w-5 [&_[cmdk-input]]:h-12 [&_[cmdk-item]]:px-2 [&_[cmdk-item]]:py-3 [&_[cmdk-item]_svg]:h-5 [&_[cmdk-item]_svg]:w-5">
-        {children}
-      </Command>
-    </DialogContent>
-  </Dialog>
+const CommandDialog = /* @__PURE__ */ named(
+  "CommandDialog",
+  ({ children, title = "Command Menu", ...props }: CommandDialogProps) => (
+    <Dialog {...props}>
+      <DialogContent className="overflow-hidden p-0 shadow-lg">
+        <DialogTitle className="sr-only">{title}</DialogTitle>
+        <Command className="[&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:font-medium [&_[cmdk-group-heading]]:text-muted-foreground [&_[cmdk-group]:not([hidden])_~[cmdk-group]]:pt-0 [&_[cmdk-group]]:px-2 [&_[cmdk-input-wrapper]_svg]:h-5 [&_[cmdk-input-wrapper]_svg]:w-5 [&_[cmdk-input]]:h-12 [&_[cmdk-item]]:px-2 [&_[cmdk-item]]:py-3 [&_[cmdk-item]_svg]:h-5 [&_[cmdk-item]_svg]:w-5">
+          {children}
+        </Command>
+      </DialogContent>
+    </Dialog>
+  ),
 );
-CommandDialog.displayName = "CommandDialog";
 
 type CommandInputProps = Omit<
   React.ComponentProps<"input">,
@@ -166,46 +167,42 @@ type CommandInputProps = Omit<
   value?: string;
 };
 
-const CommandInput = ({
-  className,
-  onValueChange,
-  ref,
-  value,
-  ...props
-}: CommandInputProps) => {
-  const search = React.use(SearchContext);
-  const setQuery = search?.setQuery;
-  const setSearchHandler = search?.setSearchHandler;
+const CommandInput = /* @__PURE__ */ named(
+  "CommandInput",
+  ({ className, onValueChange, ref, value, ...props }: CommandInputProps) => {
+    const search = React.use(SearchContext);
+    const setQuery = search?.setQuery;
+    const setSearchHandler = search?.setSearchHandler;
 
-  React.useEffect(() => {
-    setSearchHandler?.(onValueChange);
-  });
-  React.useEffect(() => {
-    if (value !== undefined) {
-      setQuery?.(value);
-    }
-  }, [setQuery, value]);
+    React.useEffect(() => {
+      setSearchHandler?.(onValueChange);
+    });
+    React.useEffect(() => {
+      if (value !== undefined) {
+        setQuery?.(value);
+      }
+    }, [setQuery, value]);
 
-  return (
-    <div
-      className="flex items-center border-b px-3 focus-within:border-ring"
-      cmdk-input-wrapper=""
-    >
-      <Search className="mr-2 size-4 shrink-0 opacity-50" />
-      <CommandInputPart
-        aria-label={search?.label}
-        className={cn(
-          "flex h-11 w-full rounded-md bg-transparent py-3 text-sm outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50",
-          className,
-        )}
-        cmdk-input=""
-        ref={ref}
-        {...props}
-      />
-    </div>
-  );
-};
-CommandInput.displayName = "CommandInput";
+    return (
+      <div
+        className="flex items-center border-b px-3 focus-within:border-ring"
+        cmdk-input-wrapper=""
+      >
+        <Search className="mr-2 size-4 shrink-0 opacity-50" />
+        <CommandInputPart
+          aria-label={search?.label}
+          className={cn(
+            "flex h-11 w-full rounded-md bg-transparent py-3 text-sm outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50",
+            className,
+          )}
+          cmdk-input=""
+          ref={ref}
+          {...props}
+        />
+      </div>
+    );
+  },
+);
 
 type CommandListProps = Omit<
   React.ComponentProps<typeof CommandListPart>,
@@ -238,44 +235,46 @@ const itemScore = (
 /** True inside `CommandList`: its listbox holds options and groups, nothing else. */
 const InListContext = React.createContext(false);
 
-const CommandList = ({ className, label, ref, ...props }: CommandListProps) => {
-  const search = React.use(SearchContext);
-  const [list, listReference] = useElementRef(ref);
-  const [ranker] = React.useState(createCommandRanker);
-  const query = search?.query ?? "";
-  const score = search?.score;
+const CommandList = /* @__PURE__ */ named(
+  "CommandList",
+  ({ className, label, ref, ...props }: CommandListProps) => {
+    const search = React.use(SearchContext);
+    const [list, listReference] = useElementRef(ref);
+    const [ranker] = React.useState(createCommandRanker);
+    const query = search?.query ?? "";
+    const score = search?.score;
 
-  React.useLayoutEffect(() => {
-    if (!list) {
-      return;
-    }
-    const arrange = () => {
-      ranker.arrange(list, (item) => itemScore(item, query, score));
-    };
-    arrange();
-    const observer = new MutationObserver(arrange);
-    observer.observe(list, { childList: true, subtree: true });
-    return () => {
-      observer.disconnect();
-    };
-  }, [list, query, ranker, score]);
+    React.useLayoutEffect(() => {
+      if (!list) {
+        return;
+      }
+      const arrange = () => {
+        ranker.arrange(list, (item) => itemScore(item, query, score));
+      };
+      arrange();
+      const observer = new MutationObserver(arrange);
+      observer.observe(list, { childList: true, subtree: true });
+      return () => {
+        observer.disconnect();
+      };
+    }, [list, query, ranker, score]);
 
-  return (
-    <InListContext value>
-      <CommandListPart
-        aria-label={label ?? search?.label ?? "Suggestions"}
-        className={cn(
-          "max-h-[300px] overflow-y-auto overflow-x-hidden",
-          className,
-        )}
-        cmdk-list=""
-        ref={listReference}
-        {...props}
-      />
-    </InListContext>
-  );
-};
-CommandList.displayName = "CommandList";
+    return (
+      <InListContext value>
+        <CommandListPart
+          aria-label={label ?? search?.label ?? "Suggestions"}
+          className={cn(
+            "max-h-[300px] overflow-y-auto overflow-x-hidden",
+            className,
+          )}
+          cmdk-list=""
+          ref={listReference}
+          {...props}
+        />
+      </InListContext>
+    );
+  },
+);
 
 type CommandEmptyProps = Omit<
   React.ComponentProps<typeof CommandEmptyPart>,
@@ -304,20 +303,22 @@ const presentational: RenderProp<unknown> = (props, state) =>
  * announces the message; inside the list, as with cmdk, the element is
  * presentational.
  */
-const CommandEmpty = ({ ref, ...props }: CommandEmptyProps) => {
-  const inList = React.use(InListContext);
+const CommandEmpty = /* @__PURE__ */ named(
+  "CommandEmpty",
+  ({ ref, ...props }: CommandEmptyProps) => {
+    const inList = React.use(InListContext);
 
-  return (
-    <CommandEmptyPart
-      className="py-6 text-center text-sm empty:py-0"
-      cmdk-empty=""
-      ref={ref}
-      render={inList ? presentational : undefined}
-      {...props}
-    />
-  );
-};
-CommandEmpty.displayName = "CommandEmpty";
+    return (
+      <CommandEmptyPart
+        className="py-6 text-center text-sm empty:py-0"
+        cmdk-empty=""
+        ref={ref}
+        render={inList ? presentational : undefined}
+        {...props}
+      />
+    );
+  },
+);
 
 type CommandGroupProps = Omit<
   React.ComponentProps<typeof CommandGroupPart>,
@@ -329,29 +330,25 @@ type CommandGroupProps = Omit<
   heading?: React.ReactNode;
 };
 
-const CommandGroup = ({
-  children,
-  className,
-  heading,
-  ref,
-  ...props
-}: CommandGroupProps) => (
-  <CommandGroupPart
-    className={cn(
-      "overflow-hidden p-1 [&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:py-1.5 [&_[cmdk-group-heading]]:text-xs [&_[cmdk-group-heading]]:font-medium [&_[cmdk-group-heading]]:text-muted-foreground",
-      className,
-    )}
-    cmdk-group=""
-    ref={ref}
-    {...props}
-  >
-    {heading ? (
-      <CommandGroupLabel cmdk-group-heading="">{heading}</CommandGroupLabel>
-    ) : null}
-    {children}
-  </CommandGroupPart>
+const CommandGroup = /* @__PURE__ */ named(
+  "CommandGroup",
+  ({ children, className, heading, ref, ...props }: CommandGroupProps) => (
+    <CommandGroupPart
+      className={cn(
+        "overflow-hidden p-1 [&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:py-1.5 [&_[cmdk-group-heading]]:text-xs [&_[cmdk-group-heading]]:font-medium [&_[cmdk-group-heading]]:text-muted-foreground",
+        className,
+      )}
+      cmdk-group=""
+      ref={ref}
+      {...props}
+    >
+      {heading ? (
+        <CommandGroupLabel cmdk-group-heading="">{heading}</CommandGroupLabel>
+      ) : null}
+      {children}
+    </CommandGroupPart>
+  ),
 );
-CommandGroup.displayName = "CommandGroup";
 
 /**
  * Visual divider between groups. It renders as a hidden decoration rather
@@ -359,24 +356,26 @@ CommandGroup.displayName = "CommandGroup";
  * Like cmdk's separator it hides while a search query is active unless you
  * pass `alwaysRender`.
  */
-const CommandSeparator = ({
-  alwaysRender = false,
-  className,
-  ref,
-  ...props
-}: React.ComponentProps<"div"> & { alwaysRender?: boolean }) => {
-  const searching = React.use(SearchContext)?.query !== "";
-  if (searching && !alwaysRender) return null;
-  return (
-    <div
-      aria-hidden="true"
-      className={cn("-mx-1 h-px bg-border", className)}
-      ref={ref}
-      {...props}
-    />
-  );
-};
-CommandSeparator.displayName = "CommandSeparator";
+const CommandSeparator = /* @__PURE__ */ named(
+  "CommandSeparator",
+  ({
+    alwaysRender = false,
+    className,
+    ref,
+    ...props
+  }: React.ComponentProps<"div"> & { alwaysRender?: boolean }) => {
+    const searching = React.use(SearchContext)?.query !== "";
+    if (searching && !alwaysRender) return null;
+    return (
+      <div
+        aria-hidden="true"
+        className={cn("-mx-1 h-px bg-border", className)}
+        ref={ref}
+        {...props}
+      />
+    );
+  },
+);
 
 const itemAttributes = (state: {
   disabled: boolean;
@@ -401,63 +400,64 @@ type CommandItemProps = Omit<
   value?: string;
 };
 
-const CommandItem = ({
-  asChild,
-  children,
-  className,
-  disabled,
-  keywords,
-  onSelect,
-  ref,
-  value,
-  ...props
-}: CommandItemProps) => {
-  const [item, itemReference] = useElementRef(ref);
-  const slot = asChildProps({ asChild, children });
-  const trimmed = value?.trim();
+const CommandItem = /* @__PURE__ */ named(
+  "CommandItem",
+  ({
+    asChild,
+    children,
+    className,
+    disabled,
+    keywords,
+    onSelect,
+    ref,
+    value,
+    ...props
+  }: CommandItemProps) => {
+    const [item, itemReference] = useElementRef(ref);
+    const slot = asChildProps({ asChild, children });
+    const trimmed = value?.trim();
 
-  return (
-    <CommandItemPart
-      className={cn(
-        "relative flex cursor-pointer select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none aria-selected:bg-accent aria-selected:text-accent-foreground data-[disabled=true]:opacity-50",
-        disabled && "pointer-events-none",
-        className,
-      )}
-      cmdk-item=""
-      data-keywords={keywords?.join(keywordSeparator)}
-      data-value={trimmed}
-      disabled={disabled}
-      keywords={keywords}
-      label={trimmed}
-      onSelect={() => {
-        onSelect?.(trimmed ?? item?.textContent?.trim() ?? "");
-      }}
-      ref={itemReference}
-      render={withDataAttributes("div", itemAttributes, slot.render)}
-      value={trimmed}
-      {...props}
-    >
-      {slot.children}
-    </CommandItemPart>
-  );
-};
-CommandItem.displayName = "CommandItem";
+    return (
+      <CommandItemPart
+        className={cn(
+          "relative flex cursor-pointer select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none aria-selected:bg-accent aria-selected:text-accent-foreground data-[disabled=true]:opacity-50",
+          disabled && "pointer-events-none",
+          className,
+        )}
+        cmdk-item=""
+        data-keywords={keywords?.join(keywordSeparator)}
+        data-value={trimmed}
+        disabled={disabled}
+        keywords={keywords}
+        label={trimmed}
+        onSelect={() => {
+          onSelect?.(trimmed ?? item?.textContent?.trim() ?? "");
+        }}
+        ref={itemReference}
+        render={withDataAttributes("div", itemAttributes, slot.render)}
+        value={trimmed}
+        {...props}
+      >
+        {slot.children}
+      </CommandItemPart>
+    );
+  },
+);
 
-const CommandShortcut = ({
-  className,
-  ...props
-}: React.HTMLAttributes<HTMLSpanElement>) => {
-  return (
-    <span
-      className={cn(
-        "ml-auto text-xs tracking-widest text-muted-foreground",
-        className,
-      )}
-      {...props}
-    />
-  );
-};
-CommandShortcut.displayName = "CommandShortcut";
+const CommandShortcut = /* @__PURE__ */ named(
+  "CommandShortcut",
+  ({ className, ...props }: React.HTMLAttributes<HTMLSpanElement>) => {
+    return (
+      <span
+        className={cn(
+          "ml-auto text-xs tracking-widest text-muted-foreground",
+          className,
+        )}
+        {...props}
+      />
+    );
+  },
+);
 
 export {
   Command,

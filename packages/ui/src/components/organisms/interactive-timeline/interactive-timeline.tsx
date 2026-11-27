@@ -15,6 +15,7 @@ import {
   useSyncExternalStore,
 } from "react";
 
+import { named } from "../../../lib/named";
 import { useMounted } from "../../../lib/use-mounted";
 import { cn } from "../../../lib/utils";
 
@@ -689,87 +690,93 @@ function ScrollArea({
  *
  * @public
  */
-export const InteractiveTimelineToolbar = ({
-  children,
-  className,
-  ref,
-  ...rest
-}: ComponentPropsWithoutRef<"div"> & { ref?: React.Ref<HTMLDivElement> }) => (
-  <div
-    className={cn(
-      "flex flex-wrap items-center gap-2 border-b border-border bg-muted/30 px-3 py-2",
-      className,
-    )}
-    ref={ref}
-    role="toolbar"
-    {...rest}
-  >
-    {children}
-  </div>
+export const InteractiveTimelineToolbar = /* @__PURE__ */ named(
+  "InteractiveTimelineToolbar",
+  ({
+    children,
+    className,
+    ref,
+    ...rest
+  }: ComponentPropsWithoutRef<"div"> & { ref?: React.Ref<HTMLDivElement> }) => (
+    <div
+      className={cn(
+        "flex flex-wrap items-center gap-2 border-b border-border bg-muted/30 px-3 py-2",
+        className,
+      )}
+      ref={ref}
+      role="toolbar"
+      {...rest}
+    >
+      {children}
+    </div>
+  ),
 );
-InteractiveTimelineToolbar.displayName = "InteractiveTimelineToolbar";
 
 /**
  * Zoom-in button. Doubles the zoom factor up to a max.
  *
  * @public
  */
-export const InteractiveTimelineZoomIn = ({
-  className,
-  ref,
-  ...rest
-}: Omit<ComponentPropsWithoutRef<"button">, "type"> & {
-  ref?: React.Ref<HTMLButtonElement>;
-}) => {
-  const { labels, zoomIn } = useTimelineContext();
-  return (
-    <button
-      aria-label={labels.zoomIn}
-      className={cn(
-        "inline-flex size-8 items-center justify-center rounded-md border border-border bg-background text-sm font-medium hover:bg-accent focus:outline-none focus-visible:ring-2 focus-visible:ring-ring",
-        className,
-      )}
-      onClick={zoomIn}
-      ref={ref}
-      type="button"
-      {...rest}
-    >
-      <span aria-hidden="true">+</span>
-    </button>
-  );
-};
-InteractiveTimelineZoomIn.displayName = "InteractiveTimelineZoomIn";
+export const InteractiveTimelineZoomIn = /* @__PURE__ */ named(
+  "InteractiveTimelineZoomIn",
+  ({
+    className,
+    ref,
+    ...rest
+  }: Omit<ComponentPropsWithoutRef<"button">, "type"> & {
+    ref?: React.Ref<HTMLButtonElement>;
+  }) => {
+    const { labels, zoomIn } = useTimelineContext();
+    return (
+      <button
+        aria-label={labels.zoomIn}
+        className={cn(
+          "inline-flex size-8 items-center justify-center rounded-md border border-border bg-background text-sm font-medium hover:bg-accent focus:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+          className,
+        )}
+        onClick={zoomIn}
+        ref={ref}
+        type="button"
+        {...rest}
+      >
+        <span aria-hidden="true">+</span>
+      </button>
+    );
+  },
+);
 
 /**
  * Zoom-out button.
  *
  * @public
  */
-export const InteractiveTimelineZoomOut = ({
-  className,
-  ref,
-  ...rest
-}: Omit<ComponentPropsWithoutRef<"button">, "type"> & {
-  ref?: React.Ref<HTMLButtonElement>;
-}) => {
-  const { labels, zoomOut } = useTimelineContext();
-  return (
-    <button
-      aria-label={labels.zoomOut}
-      className={cn(
-        "inline-flex size-8 items-center justify-center rounded-md border border-border bg-background text-sm font-medium hover:bg-accent focus:outline-none focus-visible:ring-2 focus-visible:ring-ring",
-        className,
-      )}
-      onClick={zoomOut}
-      ref={ref}
-      type="button"
-      {...rest}
-    >
-      <span aria-hidden="true">−</span>
-    </button>
-  );
-};
-InteractiveTimelineZoomOut.displayName = "InteractiveTimelineZoomOut";
+export const InteractiveTimelineZoomOut = /* @__PURE__ */ named(
+  "InteractiveTimelineZoomOut",
+  ({
+    className,
+    ref,
+    ...rest
+  }: Omit<ComponentPropsWithoutRef<"button">, "type"> & {
+    ref?: React.Ref<HTMLButtonElement>;
+  }) => {
+    const { labels, zoomOut } = useTimelineContext();
+    return (
+      <button
+        aria-label={labels.zoomOut}
+        className={cn(
+          "inline-flex size-8 items-center justify-center rounded-md border border-border bg-background text-sm font-medium hover:bg-accent focus:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+          className,
+        )}
+        onClick={zoomOut}
+        ref={ref}
+        type="button"
+        {...rest}
+      >
+        <span aria-hidden="true">−</span>
+      </button>
+    );
+  },
+);
 
 /**
  * Today button. Centers the view on `Date.now()` if it falls inside the
@@ -777,32 +784,34 @@ InteractiveTimelineZoomOut.displayName = "InteractiveTimelineZoomOut";
  *
  * @public
  */
-export const InteractiveTimelineToday = ({
-  children,
-  className,
-  ref,
-  ...rest
-}: Omit<ComponentPropsWithoutRef<"button">, "type"> & {
-  ref?: React.Ref<HTMLButtonElement>;
-}) => {
-  const { centerToday, labels } = useTimelineContext();
-  return (
-    <button
-      aria-label={labels.today}
-      className={cn(
-        "inline-flex h-8 items-center rounded-md border border-border bg-background px-3 text-xs font-medium hover:bg-accent focus:outline-none focus-visible:ring-2 focus-visible:ring-ring",
-        className,
-      )}
-      onClick={centerToday}
-      ref={ref}
-      type="button"
-      {...rest}
-    >
-      {children ?? "Today"}
-    </button>
-  );
-};
-InteractiveTimelineToday.displayName = "InteractiveTimelineToday";
+export const InteractiveTimelineToday = /* @__PURE__ */ named(
+  "InteractiveTimelineToday",
+  ({
+    children,
+    className,
+    ref,
+    ...rest
+  }: Omit<ComponentPropsWithoutRef<"button">, "type"> & {
+    ref?: React.Ref<HTMLButtonElement>;
+  }) => {
+    const { centerToday, labels } = useTimelineContext();
+    return (
+      <button
+        aria-label={labels.today}
+        className={cn(
+          "inline-flex h-8 items-center rounded-md border border-border bg-background px-3 text-xs font-medium hover:bg-accent focus:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+          className,
+        )}
+        onClick={centerToday}
+        ref={ref}
+        type="button"
+        {...rest}
+      >
+        {children ?? "Today"}
+      </button>
+    );
+  },
+);
 
 /**
  * Category filter chips. Toggles visibility of events by category.
@@ -813,45 +822,47 @@ export type InteractiveTimelineFilterProps = {
   categories: InteractiveTimelineCategory[];
 } & Omit<ComponentPropsWithoutRef<"div">, "children">;
 
-export const InteractiveTimelineFilter = ({
-  categories,
-  className,
-  ref,
-  ...rest
-}: InteractiveTimelineFilterProps & { ref?: React.Ref<HTMLDivElement> }) => {
-  const { toggleCategory, visibleCategories } = useTimelineContext();
-  return (
-    <div
-      className={cn("flex flex-wrap items-center gap-1.5", className)}
-      ref={ref}
-      role="group"
-      {...rest}
-    >
-      {categories.map((category) => {
-        const active = visibleCategories.has(category.id);
-        const palette = COLOR_PALETTE[category.color ?? "neutral"];
-        return (
-          <button
-            aria-pressed={active}
-            className={cn(
-              "inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-xs font-medium",
-              active ? palette.chipActive : palette.chip,
-            )}
-            data-category-id={category.id}
-            key={category.id}
-            onClick={() => {
-              toggleCategory(category.id);
-            }}
-            type="button"
-          >
-            {category.label}
-          </button>
-        );
-      })}
-    </div>
-  );
-};
-InteractiveTimelineFilter.displayName = "InteractiveTimelineFilter";
+export const InteractiveTimelineFilter = /* @__PURE__ */ named(
+  "InteractiveTimelineFilter",
+  ({
+    categories,
+    className,
+    ref,
+    ...rest
+  }: InteractiveTimelineFilterProps & { ref?: React.Ref<HTMLDivElement> }) => {
+    const { toggleCategory, visibleCategories } = useTimelineContext();
+    return (
+      <div
+        className={cn("flex flex-wrap items-center gap-1.5", className)}
+        ref={ref}
+        role="group"
+        {...rest}
+      >
+        {categories.map((category) => {
+          const active = visibleCategories.has(category.id);
+          const palette = COLOR_PALETTE[category.color ?? "neutral"];
+          return (
+            <button
+              aria-pressed={active}
+              className={cn(
+                "inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-xs font-medium",
+                active ? palette.chipActive : palette.chip,
+              )}
+              data-category-id={category.id}
+              key={category.id}
+              onClick={() => {
+                toggleCategory(category.id);
+              }}
+              type="button"
+            >
+              {category.label}
+            </button>
+          );
+        })}
+      </div>
+    );
+  },
+);
 
 const FALLBACK_TRACK: InteractiveTimelineTrack = {
   color: "neutral",
@@ -1057,81 +1068,83 @@ function useTimelineFilter(
  *
  * @public
  */
-export const InteractiveTimeline = (props: InteractiveTimelineProps) => {
-  const {
-    categories = [],
-    children,
-    className,
-    endDate,
-    events = [],
-    labels,
-    onEventClick = noop,
-    ref,
-    startDate,
-    tracks: trackProperty,
-    ...rest
-  } = props;
+export const InteractiveTimeline = /* @__PURE__ */ named(
+  "InteractiveTimeline",
+  (props: InteractiveTimelineProps) => {
+    const {
+      categories = [],
+      children,
+      className,
+      endDate,
+      events = [],
+      labels,
+      onEventClick = noop,
+      ref,
+      startDate,
+      tracks: trackProperty,
+      ...rest
+    } = props;
 
-  const { endTime, resolvedLabels, startTime, tracks } = useTimelineFrame({
-    endDate,
-    labels,
-    startDate,
-    trackProperty,
-  });
-  const scrollerId = useId();
+    const { endTime, resolvedLabels, startTime, tracks } = useTimelineFrame({
+      endDate,
+      labels,
+      startDate,
+      trackProperty,
+    });
+    const scrollerId = useId();
 
-  const [zoom, setZoom] = useState<number>(1);
+    const [zoom, setZoom] = useState<number>(1);
 
-  const { filteredEvents, toggleCategory, visibleCategories } =
-    useTimelineFilter(categories, events);
+    const { filteredEvents, toggleCategory, visibleCategories } =
+      useTimelineFilter(categories, events);
 
-  const { centerToday, zoomIn, zoomOut } = useToolbarHandlers({
-    endTime,
-    scrollerId,
-    setZoom,
-    startTime,
-    zoom,
-  });
+    const { centerToday, zoomIn, zoomOut } = useToolbarHandlers({
+      endTime,
+      scrollerId,
+      setZoom,
+      startTime,
+      zoom,
+    });
 
-  const { handleSelect, selectedId } = useEventSelection(onEventClick);
+    const { handleSelect, selectedId } = useEventSelection(onEventClick);
 
-  const ctx = useTimelineContextValue({
-    centerToday,
-    labels: resolvedLabels,
-    toggleCategory,
-    visibleCategories,
-    zoom,
-    zoomIn,
-    zoomOut,
-  });
+    const ctx = useTimelineContextValue({
+      centerToday,
+      labels: resolvedLabels,
+      toggleCategory,
+      visibleCategories,
+      zoom,
+      zoomIn,
+      zoomOut,
+    });
 
-  return (
-    <TimelineContext.Provider value={ctx}>
-      <section
-        aria-label={resolvedLabels.region}
-        className={cn(
-          "flex w-full flex-col overflow-hidden rounded-2xl border bg-background text-foreground",
-          className,
-        )}
-        ref={ref}
-        {...rest}
-      >
-        {children}
-        <div id={scrollerId}>
-          <ScrollArea
-            categories={categories}
-            endTime={endTime}
-            events={filteredEvents}
-            onSelect={handleSelect}
-            scrollerId={scrollerId}
-            selectedId={selectedId}
-            startTime={startTime}
-            tracks={tracks}
-            zoom={zoom}
-          />
-        </div>
-      </section>
-    </TimelineContext.Provider>
-  );
-};
-InteractiveTimeline.displayName = "InteractiveTimeline";
+    return (
+      <TimelineContext.Provider value={ctx}>
+        <section
+          aria-label={resolvedLabels.region}
+          className={cn(
+            "flex w-full flex-col overflow-hidden rounded-2xl border bg-background text-foreground",
+            className,
+          )}
+          ref={ref}
+          {...rest}
+        >
+          {children}
+          <div id={scrollerId}>
+            <ScrollArea
+              categories={categories}
+              endTime={endTime}
+              events={filteredEvents}
+              onSelect={handleSelect}
+              scrollerId={scrollerId}
+              selectedId={selectedId}
+              startTime={startTime}
+              tracks={tracks}
+              zoom={zoom}
+            />
+          </div>
+        </section>
+      </TimelineContext.Provider>
+    );
+  },
+);

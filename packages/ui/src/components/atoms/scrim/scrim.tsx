@@ -1,5 +1,6 @@
 import * as React from "react";
 
+import { named } from "../../../lib/named";
 import { cn } from "../../../lib/utils";
 import { cva, type VariantProps } from "../../../lib/variants";
 
@@ -39,17 +40,19 @@ export type ScrimProps = React.ComponentPropsWithoutRef<"div"> & {
  * </div>
  * ```
  */
-export const Scrim = ({
-  className,
-  level,
-  ref,
-  ...props
-}: ScrimProps & { ref?: React.Ref<HTMLDivElement> }): React.JSX.Element => (
-  <div
-    aria-hidden="true"
-    className={cn(scrimVariants({ level }), className)}
-    ref={ref}
-    {...props}
-  />
+export const Scrim = /* @__PURE__ */ named(
+  "Scrim",
+  ({
+    className,
+    level,
+    ref,
+    ...props
+  }: ScrimProps & { ref?: React.Ref<HTMLDivElement> }): React.JSX.Element => (
+    <div
+      aria-hidden="true"
+      className={cn(scrimVariants({ level }), className)}
+      ref={ref}
+      {...props}
+    />
+  ),
 );
-Scrim.displayName = "Scrim";

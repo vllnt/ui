@@ -4,6 +4,7 @@ import * as React from "react";
 
 import { Search, X } from "lucide-react";
 
+import { named } from "../../../lib/named";
 import { useControllableState } from "../../../lib/use-controllable-state";
 import { cn } from "../../../lib/utils";
 
@@ -17,53 +18,55 @@ export type SearchFieldProps = Omit<
   value?: string;
 };
 
-const SearchField = ({
-  className,
-  defaultValue = "",
-  onValueChange,
-  placeholder = "Search...",
-  ref,
-  value,
-  ...props
-}: SearchFieldProps & { ref?: React.Ref<HTMLInputElement> }) => {
-  const [currentValue, setValue] = useControllableState({
-    defaultValue,
-    onChange: onValueChange,
+const SearchField = /* @__PURE__ */ named(
+  "SearchField",
+  ({
+    className,
+    defaultValue = "",
+    onValueChange,
+    placeholder = "Search...",
+    ref,
     value,
-  });
+    ...props
+  }: SearchFieldProps & { ref?: React.Ref<HTMLInputElement> }) => {
+    const [currentValue, setValue] = useControllableState({
+      defaultValue,
+      onChange: onValueChange,
+      value,
+    });
 
-  return (
-    <div className="relative w-full">
-      <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
-      <input
-        {...props}
-        className={cn(
-          "flex h-10 w-full rounded-md border border-input bg-background px-9 py-2 text-base ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm [&::-webkit-search-cancel-button]:appearance-none",
-          className,
-        )}
-        onChange={(event) => {
-          setValue(event.target.value);
-        }}
-        placeholder={placeholder}
-        ref={ref}
-        type="search"
-        value={currentValue}
-      />
-      {currentValue ? (
-        <button
-          aria-label="Clear search"
-          className="absolute right-1.5 top-1/2 inline-flex size-6 -translate-y-1/2 items-center justify-center rounded-sm text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-          onClick={() => {
-            setValue("");
+    return (
+      <div className="relative w-full">
+        <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+        <input
+          {...props}
+          className={cn(
+            "flex h-10 w-full rounded-md border border-input bg-background px-9 py-2 text-base ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm [&::-webkit-search-cancel-button]:appearance-none",
+            className,
+          )}
+          onChange={(event) => {
+            setValue(event.target.value);
           }}
-          type="button"
-        >
-          <X aria-hidden="true" className="size-4" />
-        </button>
-      ) : null}
-    </div>
-  );
-};
-SearchField.displayName = "SearchField";
+          placeholder={placeholder}
+          ref={ref}
+          type="search"
+          value={currentValue}
+        />
+        {currentValue ? (
+          <button
+            aria-label="Clear search"
+            className="absolute right-1.5 top-1/2 inline-flex size-6 -translate-y-1/2 items-center justify-center rounded-sm text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+            onClick={() => {
+              setValue("");
+            }}
+            type="button"
+          >
+            <X aria-hidden="true" className="size-4" />
+          </button>
+        ) : null}
+      </div>
+    );
+  },
+);
 
 export { SearchField };

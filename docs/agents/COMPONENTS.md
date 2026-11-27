@@ -95,24 +95,37 @@ A component folder holds `{name}.tsx` plus its own helpers and unit tests (`atom
 Every named export — primitives **and compound subcomponents** — uses:
 
 ```tsx
-const Card = ({
-  className,
-  ref,
-  ...props
-}: CardProps & { ref?: React.Ref<HTMLDivElement> }) => (
-  <div ref={ref} className={cn("rounded-md border", className)} {...props} />
-);
-Card.displayName = "Card";
+import { named } from "../../../lib/named";
 
-const CardHeader = ({
-  className,
-  ref,
-  ...props
-}: React.ComponentPropsWithoutRef<"div"> & {
-  ref?: React.Ref<HTMLDivElement>;
-}) => <div ref={ref} className={cn("p-6", className)} {...props} />;
-CardHeader.displayName = "CardHeader";
+const Card = /* @__PURE__ */ named(
+  "Card",
+  ({
+    className,
+    ref,
+    ...props
+  }: CardProps & { ref?: React.Ref<HTMLDivElement> }) => (
+    <div ref={ref} className={cn("rounded-md border", className)} {...props} />
+  ),
+);
+
+const CardHeader = /* @__PURE__ */ named(
+  "CardHeader",
+  ({
+    className,
+    ref,
+    ...props
+  }: React.ComponentPropsWithoutRef<"div"> & {
+    ref?: React.Ref<HTMLDivElement>;
+  }) => <div ref={ref} className={cn("p-6", className)} {...props} />,
+);
 ```
+
+`displayName` comes from `named(displayName, component)` in `lib/named.ts`, written as a **pure annotated initializer**. Never write `Card.displayName = "Card";` as a statement: it has a side effect, so a bundler (esbuild, terser, SWC, Rollup) keeps `Card` and everything it uses in every bundle that loads the module, even when nothing imports `Card`. The annotated call lets a bundler drop an unused `Card`, so importing `DialogHeader` alone does not pull in the whole dialog. The `named-display-name` lint rule fails a `X.displayName = …` statement, a `X.Part = …` static statement, a `named(…)` call without `/* @__PURE__ */` and an annotated call with an argument webpack does not take as pure, and its message names the fix. It applies to `@vllnt/ui` (web); `@vllnt/ui-native` components keep their `X.displayName = …` statements.
+
+- A `function X() {}` component becomes `const X = /* @__PURE__ */ named("X", function X() {…})`.
+- A wrapper such as `memo` is annotated too: `named("X", /* @__PURE__ */ memo(Impl))`.
+- Compound statics go in the third argument, as a function, so `Tabs.List` stays available and droppable: `const Tabs = /* @__PURE__ */ named("Tabs", TabsRoot, () => ({ List: TabsList, Trigger: TabsTrigger }))`. Define the parts above that line. Webpack reads `/* @__PURE__ */` only when every argument is a literal, an identifier, a function or an annotated call; an object or array literal in the call makes it keep the component, which esbuild and terser would drop. Plain data goes in a const above the call (`const OVERLAY_LOOK = { … }`) and the call takes the identifier.
+- The dialog family builds its parts with `dialogRoot`, `dialogTrigger`, `dialogBox` and the other `dialog*` builders of `lib/ui-sdk-dialog.tsx`; each is one annotated call per part, never one `parts` object read per part.
 
 Context is read with `use()`, never `useContext()`:
 

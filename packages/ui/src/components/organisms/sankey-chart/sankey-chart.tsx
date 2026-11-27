@@ -1,5 +1,6 @@
 import * as React from "react";
 
+import { named } from "../../../lib/named";
 import { cn } from "../../../lib/utils";
 
 /**
@@ -370,54 +371,55 @@ function SankeyNodes({
  *
  * @public
  */
-export const SankeyChart = ({
-  className,
-  color = "currentColor",
-  height = DEFAULT_HEIGHT,
-  links,
-  nodePadding = DEFAULT_NODE_PADDING,
-  nodes,
-  nodeWidth = DEFAULT_NODE_WIDTH,
-  ref,
-  width = DEFAULT_WIDTH,
-  ...props
-}: SankeyChartProps & { ref?: React.Ref<HTMLDivElement> }) => {
-  if (nodes.length === 0) return null;
+export const SankeyChart = /* @__PURE__ */ named(
+  "SankeyChart",
+  ({
+    className,
+    color = "currentColor",
+    height = DEFAULT_HEIGHT,
+    links,
+    nodePadding = DEFAULT_NODE_PADDING,
+    nodes,
+    nodeWidth = DEFAULT_NODE_WIDTH,
+    ref,
+    width = DEFAULT_WIDTH,
+    ...props
+  }: SankeyChartProps & { ref?: React.Ref<HTMLDivElement> }) => {
+    if (nodes.length === 0) return null;
 
-  const layout = computeLayout(nodes, links, {
-    height,
-    nodePadding,
-    nodeWidth,
-    width,
-  });
+    const layout = computeLayout(nodes, links, {
+      height,
+      nodePadding,
+      nodeWidth,
+      width,
+    });
 
-  return (
-    <div
-      className={cn(
-        "rounded-2xl border border-border bg-background/40 p-3",
-        className,
-      )}
-      ref={ref}
-      {...props}
-    >
-      <svg
-        aria-label="Sankey chart"
-        className="h-full w-full"
-        height={height}
-        role="img"
-        viewBox={`0 0 ${width} ${height}`}
-        width={width}
+    return (
+      <div
+        className={cn(
+          "rounded-2xl border border-border bg-background/40 p-3",
+          className,
+        )}
+        ref={ref}
+        {...props}
       >
-        <SankeyLinks color={color} links={layout.links} />
-        <SankeyNodes
-          color={color}
-          nodes={layout.nodes}
-          nodeWidth={nodeWidth}
+        <svg
+          aria-label="Sankey chart"
+          className="h-full w-full"
+          height={height}
+          role="img"
+          viewBox={`0 0 ${width} ${height}`}
           width={width}
-        />
-      </svg>
-    </div>
-  );
-};
-
-SankeyChart.displayName = "SankeyChart";
+        >
+          <SankeyLinks color={color} links={layout.links} />
+          <SankeyNodes
+            color={color}
+            nodes={layout.nodes}
+            nodeWidth={nodeWidth}
+            width={width}
+          />
+        </svg>
+      </div>
+    );
+  },
+);

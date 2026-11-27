@@ -4,6 +4,7 @@ import * as React from "react";
 
 import { Minus, Plus } from "lucide-react";
 
+import { named } from "../../../lib/named";
 import { useControllableState } from "../../../lib/use-controllable-state";
 import { cn } from "../../../lib/utils";
 import { Button } from "../../atoms/button/button";
@@ -120,77 +121,79 @@ function NumberInputField({
   );
 }
 
-function NumberInputComponent({
-  className,
-  decrementLabel = "Decrease",
-  defaultValue,
-  disabled,
-  incrementLabel = "Increase",
-  max,
-  min,
-  onValueChange,
-  placeholder,
-  ref: reference,
-  step = 1,
-  value,
-  ...props
-}: NumberInputProps & { ref?: React.Ref<HTMLInputElement> }) {
-  const [resolvedValue, commitValue] = useControllableState<number | undefined>(
-    { defaultValue, onChange: onValueChange, value },
-  );
-  const parsedMin = getNumericBound(min);
-  const parsedMax = getNumericBound(max);
+const NumberInputComponent = /* @__PURE__ */ named(
+  "NumberInput",
+  function NumberInputComponent({
+    className,
+    decrementLabel = "Decrease",
+    defaultValue,
+    disabled,
+    incrementLabel = "Increase",
+    max,
+    min,
+    onValueChange,
+    placeholder,
+    ref: reference,
+    step = 1,
+    value,
+    ...props
+  }: NumberInputProps & { ref?: React.Ref<HTMLInputElement> }) {
+    const [resolvedValue, commitValue] = useControllableState<
+      number | undefined
+    >({ defaultValue, onChange: onValueChange, value });
+    const parsedMin = getNumericBound(min);
+    const parsedMax = getNumericBound(max);
 
-  const handleStepChange = (direction: number) => {
-    const baseValue = resolvedValue ?? parsedMin ?? 0;
-    commitValue(
-      clampNumber(baseValue + direction * step, parsedMin, parsedMax),
+    const handleStepChange = (direction: number) => {
+      const baseValue = resolvedValue ?? parsedMin ?? 0;
+      commitValue(
+        clampNumber(baseValue + direction * step, parsedMin, parsedMax),
+      );
+    };
+
+    return (
+      <div
+        className={cn(
+          "flex h-10 w-full items-center rounded-md border border-input bg-background ring-offset-background focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2",
+          disabled && "cursor-not-allowed opacity-50",
+          className,
+        )}
+      >
+        <StepButton
+          direction="decrement"
+          disabled={disabled}
+          label={decrementLabel}
+          onClick={() => {
+            handleStepChange(-1);
+          }}
+        />
+        <NumberInputField
+          {...props}
+          disabled={disabled}
+          onValueChange={(nextValue) => {
+            commitValue(
+              nextValue === undefined
+                ? undefined
+                : clampNumber(nextValue, parsedMin, parsedMax),
+            );
+          }}
+          placeholder={placeholder}
+          reference={reference}
+          resolvedValue={resolvedValue}
+        />
+        <StepButton
+          direction="increment"
+          disabled={disabled}
+          label={incrementLabel}
+          onClick={() => {
+            handleStepChange(1);
+          }}
+        />
+      </div>
     );
-  };
+  },
+);
 
-  return (
-    <div
-      className={cn(
-        "flex h-10 w-full items-center rounded-md border border-input bg-background ring-offset-background focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2",
-        disabled && "cursor-not-allowed opacity-50",
-        className,
-      )}
-    >
-      <StepButton
-        direction="decrement"
-        disabled={disabled}
-        label={decrementLabel}
-        onClick={() => {
-          handleStepChange(-1);
-        }}
-      />
-      <NumberInputField
-        {...props}
-        disabled={disabled}
-        onValueChange={(nextValue) => {
-          commitValue(
-            nextValue === undefined
-              ? undefined
-              : clampNumber(nextValue, parsedMin, parsedMax),
-          );
-        }}
-        placeholder={placeholder}
-        reference={reference}
-        resolvedValue={resolvedValue}
-      />
-      <StepButton
-        direction="increment"
-        disabled={disabled}
-        label={incrementLabel}
-        onClick={() => {
-          handleStepChange(1);
-        }}
-      />
-    </div>
-  );
-}
-
-NumberInputComponent.displayName = "NumberInput";
 const NumberInput = NumberInputComponent;
 
 export { NumberInput };

@@ -2,6 +2,7 @@
 
 import * as React from "react";
 
+import { named } from "../../../lib/named";
 import { keyByOccurrence } from "../../../lib/occurrence-keys";
 import { cn } from "../../../lib/utils";
 import { cva } from "../../../lib/variants";
@@ -274,49 +275,52 @@ function CheckoutButton({
  *
  * @public
  */
-export const OrderSummary = ({
-  checkoutLabel = DEFAULT_CHECKOUT_LABEL,
-  checkoutLoading = false,
-  className,
-  layout = "desktop",
-  lines,
-  onCheckout,
-  promo,
-  ref: reference,
-  title,
-  total,
-  ...props
-}: OrderSummaryProps & { ref?: React.Ref<HTMLElement> }): React.JSX.Element => {
-  const titleId = React.useId();
+export const OrderSummary = /* @__PURE__ */ named(
+  "OrderSummary",
+  ({
+    checkoutLabel = DEFAULT_CHECKOUT_LABEL,
+    checkoutLoading = false,
+    className,
+    layout = "desktop",
+    lines,
+    onCheckout,
+    promo,
+    ref: reference,
+    title,
+    total,
+    ...props
+  }: OrderSummaryProps & {
+    ref?: React.Ref<HTMLElement>;
+  }): React.JSX.Element => {
+    const titleId = React.useId();
 
-  return (
-    <section
-      aria-labelledby={title ? titleId : undefined}
-      className={className}
-      data-layout={layout}
-      ref={reference}
-      {...props}
-    >
-      <Card className={surfaceVariants({ layout })}>
-        {title ? (
-          <h2
-            className="text-lg font-semibold leading-none tracking-tight"
-            id={titleId}
-          >
-            {title}
-          </h2>
-        ) : null}
-        <SummaryRows lines={lines} total={total} />
-        <Separator />
-        {promo ? <PromoForm promo={promo} /> : null}
-        <CheckoutButton
-          label={checkoutLabel}
-          loading={checkoutLoading}
-          onCheckout={onCheckout}
-        />
-      </Card>
-    </section>
-  );
-};
-
-OrderSummary.displayName = "OrderSummary";
+    return (
+      <section
+        aria-labelledby={title ? titleId : undefined}
+        className={className}
+        data-layout={layout}
+        ref={reference}
+        {...props}
+      >
+        <Card className={surfaceVariants({ layout })}>
+          {title ? (
+            <h2
+              className="text-lg font-semibold leading-none tracking-tight"
+              id={titleId}
+            >
+              {title}
+            </h2>
+          ) : null}
+          <SummaryRows lines={lines} total={total} />
+          <Separator />
+          {promo ? <PromoForm promo={promo} /> : null}
+          <CheckoutButton
+            label={checkoutLabel}
+            loading={checkoutLoading}
+            onCheckout={onCheckout}
+          />
+        </Card>
+      </section>
+    );
+  },
+);

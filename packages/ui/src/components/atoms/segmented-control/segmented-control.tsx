@@ -8,6 +8,7 @@ import {
 } from "@ui-sdk/react/segmented-control";
 import type * as React from "react";
 
+import { named } from "../../../lib/named";
 import { asChildProps } from "../../../lib/ui-sdk";
 import { cn } from "../../../lib/utils";
 import { cva, type VariantProps } from "../../../lib/variants";
@@ -110,69 +111,76 @@ function selectOnKey(event: React.KeyboardEvent<HTMLDivElement>): void {
  *   <SegmentedControlItem value="list">List</SegmentedControlItem>
  * </SegmentedControl>
  */
-const SegmentedControl = ({
-  className,
-  fit,
-  onKeyDown,
-  onValueChange,
-  ref,
-  size,
-  variant,
-  ...props
-}: SegmentedControlProps & { ref?: React.Ref<HTMLDivElement> }) => (
-  <SegmentedControlPrimitive
-    className={cn(segmentedControlVariants({ fit, size, variant }), className)}
-    onKeyDown={(event) => {
-      onKeyDown?.(event);
-      selectOnKey(event);
-    }}
-    onValueChange={(value) => {
-      onValueChange?.(value ?? "");
-    }}
-    ref={ref}
-    {...props}
-  />
-);
-SegmentedControl.displayName = "SegmentedControl";
-
-const SegmentedControlItem = ({
-  asChild,
-  children,
-  className,
-  ref,
-  size,
-  ...props
-}: SegmentedControlItemProps & { ref?: React.Ref<HTMLButtonElement> }) => {
-  const slot = asChildProps({ asChild, children });
-  // ui-sdk marks an item of a disabled control with aria-disabled alone; the
-  // styles and Radix both use the native attribute, so add it.
-  const render = (
-    elementProps: React.HTMLAttributes<HTMLElement>,
-    state: SegmentedControlItemState,
-  ) =>
-    renderElement(
-      "button",
-      {
-        ...elementProps,
-        "data-state": state.checked ? "on" : "off",
-        ...(state.disabled ? { disabled: true } : {}),
-      },
-      slot.render,
-      state,
-    );
-
-  return (
-    <SegmentedControlItemPrimitive
-      className={cn(segmentedControlItemVariants({ size }), className)}
+const SegmentedControl = /* @__PURE__ */ named(
+  "SegmentedControl",
+  ({
+    className,
+    fit,
+    onKeyDown,
+    onValueChange,
+    ref,
+    size,
+    variant,
+    ...props
+  }: SegmentedControlProps & { ref?: React.Ref<HTMLDivElement> }) => (
+    <SegmentedControlPrimitive
+      className={cn(
+        segmentedControlVariants({ fit, size, variant }),
+        className,
+      )}
+      onKeyDown={(event) => {
+        onKeyDown?.(event);
+        selectOnKey(event);
+      }}
+      onValueChange={(value) => {
+        onValueChange?.(value ?? "");
+      }}
       ref={ref}
-      render={render}
       {...props}
-    >
-      {slot.children}
-    </SegmentedControlItemPrimitive>
-  );
-};
-SegmentedControlItem.displayName = "SegmentedControlItem";
+    />
+  ),
+);
+
+const SegmentedControlItem = /* @__PURE__ */ named(
+  "SegmentedControlItem",
+  ({
+    asChild,
+    children,
+    className,
+    ref,
+    size,
+    ...props
+  }: SegmentedControlItemProps & { ref?: React.Ref<HTMLButtonElement> }) => {
+    const slot = asChildProps({ asChild, children });
+    // ui-sdk marks an item of a disabled control with aria-disabled alone; the
+    // styles and Radix both use the native attribute, so add it.
+    const render = (
+      elementProps: React.HTMLAttributes<HTMLElement>,
+      state: SegmentedControlItemState,
+    ) =>
+      renderElement(
+        "button",
+        {
+          ...elementProps,
+          "data-state": state.checked ? "on" : "off",
+          ...(state.disabled ? { disabled: true } : {}),
+        },
+        slot.render,
+        state,
+      );
+
+    return (
+      <SegmentedControlItemPrimitive
+        className={cn(segmentedControlItemVariants({ size }), className)}
+        ref={ref}
+        render={render}
+        {...props}
+      >
+        {slot.children}
+      </SegmentedControlItemPrimitive>
+    );
+  },
+);
 
 export {
   SegmentedControl,

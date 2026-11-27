@@ -2,6 +2,8 @@
 
 import { firstDayOfWeek } from "@ui-sdk/core/date";
 
+import { named } from "../../../lib/named";
+
 import { calendarLayout } from "./calendar-layout";
 
 export type CalendarFallbackProps = {
@@ -36,59 +38,61 @@ function weekCount(month: Date, weekStartsOn: number) {
  * while the calendar loads. It uses the calendar's own layout classes and
  * the number of weeks each month will have.
  */
-function CalendarFallback({
-  fixedWeeks,
-  locale = pageLocale(),
-  month = new Date(),
-  numberOfMonths = 1,
-  weekStartsOn = firstDayOfWeek(locale),
-}: CalendarFallbackProps) {
-  const months = Math.max(1, Math.floor(numberOfMonths) || 1);
+const CalendarFallback = /* @__PURE__ */ named(
+  "CalendarFallback",
+  function CalendarFallback({
+    fixedWeeks,
+    locale = pageLocale(),
+    month = new Date(),
+    numberOfMonths = 1,
+    weekStartsOn = firstDayOfWeek(locale),
+  }: CalendarFallbackProps) {
+    const months = Math.max(1, Math.floor(numberOfMonths) || 1);
 
-  return (
-    <div aria-hidden="true" className={calendarLayout.root}>
-      <div className={calendarLayout.months}>
-        <nav className={calendarLayout.nav} />
-        {Array.from({ length: months }, (_, offset) => {
-          const weeks = fixedWeeks
-            ? 6
-            : weekCount(
-                new Date(month.getFullYear(), month.getMonth() + offset, 1),
-                weekStartsOn,
-              );
+    return (
+      <div aria-hidden="true" className={calendarLayout.root}>
+        <div className={calendarLayout.months}>
+          <nav className={calendarLayout.nav} />
+          {Array.from({ length: months }, (_, offset) => {
+            const weeks = fixedWeeks
+              ? 6
+              : weekCount(
+                  new Date(month.getFullYear(), month.getMonth() + offset, 1),
+                  weekStartsOn,
+                );
 
-          return (
-            <div className={calendarLayout.month} key={offset}>
-              <div className={calendarLayout.caption}>
-                <span className={calendarLayout.captionLabel}>&nbsp;</span>
-              </div>
-              <table className={calendarLayout.table}>
-                <thead className={calendarLayout.weekdays}>
-                  <tr>
-                    {DAYS_IN_WEEK.map((day) => (
-                      <th className={calendarLayout.weekday} key={day}>
-                        &nbsp;
-                      </th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody>
-                  {Array.from({ length: weeks }, (_week, row) => (
-                    <tr className={calendarLayout.week} key={row}>
+            return (
+              <div className={calendarLayout.month} key={offset}>
+                <div className={calendarLayout.caption}>
+                  <span className={calendarLayout.captionLabel}>&nbsp;</span>
+                </div>
+                <table className={calendarLayout.table}>
+                  <thead className={calendarLayout.weekdays}>
+                    <tr>
                       {DAYS_IN_WEEK.map((day) => (
-                        <td className={calendarLayout.cell} key={day} />
+                        <th className={calendarLayout.weekday} key={day}>
+                          &nbsp;
+                        </th>
                       ))}
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          );
-        })}
+                  </thead>
+                  <tbody>
+                    {Array.from({ length: weeks }, (_week, row) => (
+                      <tr className={calendarLayout.week} key={row}>
+                        {DAYS_IN_WEEK.map((day) => (
+                          <td className={calendarLayout.cell} key={day} />
+                        ))}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            );
+          })}
+        </div>
       </div>
-    </div>
-  );
-}
-CalendarFallback.displayName = "CalendarFallback";
+    );
+  },
+);
 
 export { CalendarFallback };

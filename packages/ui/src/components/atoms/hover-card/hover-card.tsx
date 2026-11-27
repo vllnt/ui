@@ -11,6 +11,7 @@ import {
 import { renderElement, type RenderProp } from "@ui-sdk/react/primitive";
 
 import type { MaterialProps } from "../../../lib/material";
+import { named } from "../../../lib/named";
 import {
   asChildProps,
   openState,
@@ -41,27 +42,29 @@ type HoverCardProps = Omit<
 /** The content's id, so the trigger can describe itself with the open card. */
 const ContentIdContext = React.createContext<string | undefined>(undefined);
 
-const HoverCard = ({
-  onOpenChange,
-  openDelay = DEFAULT_OPEN_DELAY,
-  ...props
-}: HoverCardProps) => {
-  const contentId = React.useId();
-  const dismiss = useDismissRoot(onOpenChange);
+const HoverCard = /* @__PURE__ */ named(
+  "HoverCard",
+  ({
+    onOpenChange,
+    openDelay = DEFAULT_OPEN_DELAY,
+    ...props
+  }: HoverCardProps) => {
+    const contentId = React.useId();
+    const dismiss = useDismissRoot(onOpenChange);
 
-  return (
-    <ContentIdContext value={contentId}>
-      <DismissContext value={dismiss.ref}>
-        <HoverCardRoot
-          delay={openDelay}
-          onOpenChange={dismiss.handleOpenChange}
-          {...props}
-        />
-      </DismissContext>
-    </ContentIdContext>
-  );
-};
-HoverCard.displayName = "HoverCard";
+    return (
+      <ContentIdContext value={contentId}>
+        <DismissContext value={dismiss.ref}>
+          <HoverCardRoot
+            delay={openDelay}
+            onOpenChange={dismiss.handleOpenChange}
+            {...props}
+          />
+        </DismissContext>
+      </ContentIdContext>
+    );
+  },
+);
 
 type TriggerProps = Omit<
   PlainClass<React.ComponentProps<typeof HoverCardTriggerPart>>,
@@ -95,20 +98,22 @@ function triggerRender(
     );
 }
 
-const HoverCardTrigger = ({ asChild, children, ...props }: TriggerProps) => {
-  const contentId = React.use(ContentIdContext);
-  const slot = asChildProps({ asChild, children });
+const HoverCardTrigger = /* @__PURE__ */ named(
+  "HoverCardTrigger",
+  ({ asChild, children, ...props }: TriggerProps) => {
+    const contentId = React.use(ContentIdContext);
+    const slot = asChildProps({ asChild, children });
 
-  return (
-    <HoverCardTriggerPart
-      render={triggerRender(contentId, slot.render)}
-      {...props}
-    >
-      {slot.children}
-    </HoverCardTriggerPart>
-  );
-};
-HoverCardTrigger.displayName = "HoverCardTrigger";
+    return (
+      <HoverCardTriggerPart
+        render={triggerRender(contentId, slot.render)}
+        {...props}
+      >
+        {slot.children}
+      </HoverCardTriggerPart>
+    );
+  },
+);
 
 type ContentProps = DismissHandlers &
   MaterialProps &
@@ -122,51 +127,53 @@ type ContentProps = DismissHandlers &
     ref?: React.Ref<HTMLDivElement>;
   };
 
-const HoverCardContent = ({
-  align = "center",
-  asChild,
-  children,
-  className,
-  collisionPadding = 0,
-  forceMount,
-  material = "glass",
-  onEscapeKeyDown,
-  onFocusOutside,
-  onInteractOutside,
-  onPointerDownOutside,
-  ref,
-  sideOffset = 4,
-  ...props
-}: ContentProps) => {
-  const contentId = React.use(ContentIdContext);
-  const slot = asChildProps({ asChild, children });
-  useRegisterDismissHandlers({
+const HoverCardContent = /* @__PURE__ */ named(
+  "HoverCardContent",
+  ({
+    align = "center",
+    asChild,
+    children,
+    className,
+    collisionPadding = 0,
+    forceMount,
+    material = "glass",
     onEscapeKeyDown,
     onFocusOutside,
     onInteractOutside,
     onPointerDownOutside,
-  });
+    ref,
+    sideOffset = 4,
+    ...props
+  }: ContentProps) => {
+    const contentId = React.use(ContentIdContext);
+    const slot = asChildProps({ asChild, children });
+    useRegisterDismissHandlers({
+      onEscapeKeyDown,
+      onFocusOutside,
+      onInteractOutside,
+      onPointerDownOutside,
+    });
 
-  return (
-    <HoverCardContentPart
-      align={align}
-      className={cn(
-        "vllnt-glass-floating vllnt-glass-dense z-50 bg-transparent w-64 rounded-md border p-4 text-popover-foreground outline-none vllnt-radix-hover-card data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
-        className,
-      )}
-      collisionPadding={collisionPadding}
-      data-material={material}
-      id={contentId}
-      keepMounted={forceMount}
-      ref={ref}
-      render={withDataAttributes("div", openState, slot.render)}
-      sideOffset={sideOffset}
-      {...props}
-    >
-      {slot.children}
-    </HoverCardContentPart>
-  );
-};
-HoverCardContent.displayName = "HoverCardContent";
+    return (
+      <HoverCardContentPart
+        align={align}
+        className={cn(
+          "vllnt-glass-floating vllnt-glass-dense z-50 bg-transparent w-64 rounded-md border p-4 text-popover-foreground outline-none vllnt-radix-hover-card data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
+          className,
+        )}
+        collisionPadding={collisionPadding}
+        data-material={material}
+        id={contentId}
+        keepMounted={forceMount}
+        ref={ref}
+        render={withDataAttributes("div", openState, slot.render)}
+        sideOffset={sideOffset}
+        {...props}
+      >
+        {slot.children}
+      </HoverCardContentPart>
+    );
+  },
+);
 
 export { HoverCard, HoverCardContent, HoverCardTrigger };

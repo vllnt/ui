@@ -2,6 +2,7 @@
 
 import { memo } from "react";
 
+import { named } from "../../../lib/named";
 import { keyByOccurrence } from "../../../lib/occurrence-keys";
 import { Badge } from "../../atoms/badge/badge";
 
@@ -290,5 +291,7 @@ function TutorialFiltersImpl({
   );
 }
 
-export const TutorialFilters = memo(TutorialFiltersImpl);
-TutorialFilters.displayName = "TutorialFilters";
+export const TutorialFilters = /* @__PURE__ */ named(
+  "TutorialFilters",
+  /* @__PURE__ */ memo(TutorialFiltersImpl),
+);

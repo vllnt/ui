@@ -4,6 +4,7 @@ import * as React from "react";
 
 import { Check, ChevronsUpDown } from "lucide-react";
 
+import { named } from "../../../lib/named";
 import { useControllableState } from "../../../lib/use-controllable-state";
 import { cn } from "../../../lib/utils";
 import { Button } from "../../atoms/button/button";
@@ -229,66 +230,68 @@ function useComboboxState({
   return { handleSelect, open, resolvedValue, selectedOption, setOpen };
 }
 
-const Combobox = ({
-  "aria-describedby": ariaDescribedBy,
-  "aria-label": ariaLabel,
-  "aria-labelledby": ariaLabelledBy,
-  className,
-  commandClassName,
-  disabled,
-  emptyText = "No option found.",
-  id,
-  options,
-  placeholder = "Select an option",
-  popoverLabel,
-  ref: reference,
-  searchPlaceholder = "Search options...",
-  triggerClassName,
-  ...stateProps
-}: ComboboxProps & { ref?: React.Ref<HTMLButtonElement> }) => {
-  const naming = useTriggerNaming({ ariaLabel, ariaLabelledBy, id });
-  const { handleSelect, open, resolvedValue, selectedOption, setOpen } =
-    useComboboxState({ ...stateProps, options });
+const Combobox = /* @__PURE__ */ named(
+  "Combobox",
+  ({
+    "aria-describedby": ariaDescribedBy,
+    "aria-label": ariaLabel,
+    "aria-labelledby": ariaLabelledBy,
+    className,
+    commandClassName,
+    disabled,
+    emptyText = "No option found.",
+    id,
+    options,
+    placeholder = "Select an option",
+    popoverLabel,
+    ref: reference,
+    searchPlaceholder = "Search options...",
+    triggerClassName,
+    ...stateProps
+  }: ComboboxProps & { ref?: React.Ref<HTMLButtonElement> }) => {
+    const naming = useTriggerNaming({ ariaLabel, ariaLabelledBy, id });
+    const { handleSelect, open, resolvedValue, selectedOption, setOpen } =
+      useComboboxState({ ...stateProps, options });
 
-  return (
-    <Popover onOpenChange={setOpen} open={open}>
-      <PopoverTrigger asChild>
-        <Button
-          aria-controls={naming.contentId}
-          aria-describedby={ariaDescribedBy}
-          aria-expanded={open}
-          aria-label={ariaLabel}
-          aria-labelledby={naming.labelledBy}
-          className={cn("w-full justify-between", triggerClassName)}
-          disabled={disabled}
-          id={naming.triggerId}
-          ref={reference}
-          role="combobox"
-          variant="outline"
-        >
-          <span className="truncate" id={naming.valueId}>
-            {selectedOption ? selectedOption.label : placeholder}
-          </span>
-          <ChevronsUpDown
-            aria-hidden="true"
-            className="ml-2 size-4 shrink-0 opacity-50"
-          />
-        </Button>
-      </PopoverTrigger>
-      <ComboboxListPanel
-        className={className}
-        commandClassName={commandClassName}
-        contentId={naming.contentId}
-        emptyText={emptyText}
-        label={popoverLabel ?? ariaLabel ?? placeholder}
-        onSelect={handleSelect}
-        options={options}
-        resolvedValue={resolvedValue}
-        searchPlaceholder={searchPlaceholder}
-      />
-    </Popover>
-  );
-};
-Combobox.displayName = "Combobox";
+    return (
+      <Popover onOpenChange={setOpen} open={open}>
+        <PopoverTrigger asChild>
+          <Button
+            aria-controls={naming.contentId}
+            aria-describedby={ariaDescribedBy}
+            aria-expanded={open}
+            aria-label={ariaLabel}
+            aria-labelledby={naming.labelledBy}
+            className={cn("w-full justify-between", triggerClassName)}
+            disabled={disabled}
+            id={naming.triggerId}
+            ref={reference}
+            role="combobox"
+            variant="outline"
+          >
+            <span className="truncate" id={naming.valueId}>
+              {selectedOption ? selectedOption.label : placeholder}
+            </span>
+            <ChevronsUpDown
+              aria-hidden="true"
+              className="ml-2 size-4 shrink-0 opacity-50"
+            />
+          </Button>
+        </PopoverTrigger>
+        <ComboboxListPanel
+          className={className}
+          commandClassName={commandClassName}
+          contentId={naming.contentId}
+          emptyText={emptyText}
+          label={popoverLabel ?? ariaLabel ?? placeholder}
+          onSelect={handleSelect}
+          options={options}
+          resolvedValue={resolvedValue}
+          searchPlaceholder={searchPlaceholder}
+        />
+      </Popover>
+    );
+  },
+);
 
 export { Combobox };

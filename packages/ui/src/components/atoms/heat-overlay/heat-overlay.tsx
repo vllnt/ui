@@ -2,6 +2,7 @@
 
 import { type ComponentPropsWithoutRef, useId } from "react";
 
+import { named } from "../../../lib/named";
 import { cn } from "../../../lib/utils";
 
 /**
@@ -132,52 +133,54 @@ const HeatBlob = (props: {
  *
  * @public
  */
-export const HeatOverlay = ({
-  ref,
-  ...props
-}: HeatOverlayProps & { ref?: React.Ref<SVGSVGElement> }) => {
-  const {
-    className,
-    defaultTone = "warning",
-    intensity = 48,
-    labels,
-    points,
-    ...rest
-  } = props;
-  const resolvedLabels = { ...DEFAULT_LABELS, ...labels };
-  const gradientId = useId();
-  if (points.length === 0) {
-    return null;
-  }
-  return (
-    <svg
-      aria-label={resolvedLabels.region}
-      className={cn(
-        "pointer-events-none absolute inset-0 z-10 h-full w-full",
-        className,
-      )}
-      data-heat-overlay
-      ref={ref}
-      role="img"
-      {...rest}
-    >
-      <defs>
-        <radialGradient cx="50%" cy="50%" id={gradientId} r="50%">
-          <stop offset="0%" stopColor="currentColor" stopOpacity="1" />
-          <stop offset="70%" stopColor="currentColor" stopOpacity="0.4" />
-          <stop offset="100%" stopColor="currentColor" stopOpacity="0" />
-        </radialGradient>
-      </defs>
-      {points.map((point) => (
-        <HeatBlob
-          defaultTone={defaultTone}
-          gradientId={gradientId}
-          intensity={intensity}
-          key={point.id}
-          point={point}
-        />
-      ))}
-    </svg>
-  );
-};
-HeatOverlay.displayName = "HeatOverlay";
+export const HeatOverlay = /* @__PURE__ */ named(
+  "HeatOverlay",
+  ({
+    ref,
+    ...props
+  }: HeatOverlayProps & { ref?: React.Ref<SVGSVGElement> }) => {
+    const {
+      className,
+      defaultTone = "warning",
+      intensity = 48,
+      labels,
+      points,
+      ...rest
+    } = props;
+    const resolvedLabels = { ...DEFAULT_LABELS, ...labels };
+    const gradientId = useId();
+    if (points.length === 0) {
+      return null;
+    }
+    return (
+      <svg
+        aria-label={resolvedLabels.region}
+        className={cn(
+          "pointer-events-none absolute inset-0 z-10 h-full w-full",
+          className,
+        )}
+        data-heat-overlay
+        ref={ref}
+        role="img"
+        {...rest}
+      >
+        <defs>
+          <radialGradient cx="50%" cy="50%" id={gradientId} r="50%">
+            <stop offset="0%" stopColor="currentColor" stopOpacity="1" />
+            <stop offset="70%" stopColor="currentColor" stopOpacity="0.4" />
+            <stop offset="100%" stopColor="currentColor" stopOpacity="0" />
+          </radialGradient>
+        </defs>
+        {points.map((point) => (
+          <HeatBlob
+            defaultTone={defaultTone}
+            gradientId={gradientId}
+            intensity={intensity}
+            key={point.id}
+            point={point}
+          />
+        ))}
+      </svg>
+    );
+  },
+);

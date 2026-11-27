@@ -2,6 +2,7 @@
 
 import type { ComponentPropsWithoutRef, ReactNode } from "react";
 
+import { named } from "../../../lib/named";
 import { statusDotVariants, type StatusTone } from "../../../lib/status-dot";
 import { cn } from "../../../lib/utils";
 
@@ -111,51 +112,53 @@ export type StateBadgeOverlayProps = {
  *
  * @public
  */
-export const StateBadgeOverlay = ({
-  ref,
-  ...props
-}: StateBadgeOverlayProps & { ref?: React.Ref<HTMLDivElement> }) => {
-  const {
-    anchor = "top-right",
-    className,
-    label,
-    labels,
-    state,
-    x,
-    y,
-    ...rest
-  } = props;
-  const resolvedLabels = { ...DEFAULT_LABELS, ...labels };
-  const text = label ?? STATE_LABEL[state];
-  return (
-    <div
-      aria-label={`${resolvedLabels.region}: ${STATE_LABEL[state]}`}
-      className={cn(
-        "pointer-events-none absolute z-20 inline-flex items-center gap-1 rounded-full border border-border bg-secondary px-2 py-0.5 text-[10px] font-medium uppercase tracking-wide text-foreground shadow-sm",
-        className,
-      )}
-      data-state-anchor={anchor}
-      data-state-badge-overlay
-      data-state-name={state}
-      ref={ref}
-      role="status"
-      style={{
-        left: x,
-        top: y,
-        transform: ANCHOR_TRANSFORM[anchor],
-      }}
-      {...rest}
-    >
-      <span
-        aria-hidden="true"
+export const StateBadgeOverlay = /* @__PURE__ */ named(
+  "StateBadgeOverlay",
+  ({
+    ref,
+    ...props
+  }: StateBadgeOverlayProps & { ref?: React.Ref<HTMLDivElement> }) => {
+    const {
+      anchor = "top-right",
+      className,
+      label,
+      labels,
+      state,
+      x,
+      y,
+      ...rest
+    } = props;
+    const resolvedLabels = { ...DEFAULT_LABELS, ...labels };
+    const text = label ?? STATE_LABEL[state];
+    return (
+      <div
+        aria-label={`${resolvedLabels.region}: ${STATE_LABEL[state]}`}
         className={cn(
-          statusDotVariants({ tone: STATE_TONE[state] }),
-          STATE_DOT_MOTION[state],
+          "pointer-events-none absolute z-20 inline-flex items-center gap-1 rounded-full border border-border bg-secondary px-2 py-0.5 text-[10px] font-medium uppercase tracking-wide text-foreground shadow-sm",
+          className,
         )}
-        data-state-badge-dot
-      />
-      {text}
-    </div>
-  );
-};
-StateBadgeOverlay.displayName = "StateBadgeOverlay";
+        data-state-anchor={anchor}
+        data-state-badge-overlay
+        data-state-name={state}
+        ref={ref}
+        role="status"
+        style={{
+          left: x,
+          top: y,
+          transform: ANCHOR_TRANSFORM[anchor],
+        }}
+        {...rest}
+      >
+        <span
+          aria-hidden="true"
+          className={cn(
+            statusDotVariants({ tone: STATE_TONE[state] }),
+            STATE_DOT_MOTION[state],
+          )}
+          data-state-badge-dot
+        />
+        {text}
+      </div>
+    );
+  },
+);

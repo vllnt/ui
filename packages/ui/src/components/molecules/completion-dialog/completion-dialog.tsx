@@ -5,6 +5,7 @@ import { memo, useEffect, useId, useRef } from "react";
 import type { ReactNode, RefObject } from "react";
 
 import type { MaterialProps } from "../../../lib/material";
+import { named } from "../../../lib/named";
 import type { HeadingTag } from "../../../lib/types";
 import { useBodyScrollLock } from "../../../lib/use-body-scroll-lock";
 import { useEscapeKey } from "../../../lib/use-escape-key";
@@ -512,5 +513,7 @@ function CompletionDialogImpl({
   );
 }
 
-export const CompletionDialog = memo(CompletionDialogImpl);
-CompletionDialog.displayName = "CompletionDialog";
+export const CompletionDialog = /* @__PURE__ */ named(
+  "CompletionDialog",
+  /* @__PURE__ */ memo(CompletionDialogImpl),
+);

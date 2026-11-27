@@ -19,6 +19,7 @@ import {
 } from "@ui-sdk/react/tabs";
 import type { ReactNode, Ref } from "react";
 
+import { named } from "../../../lib/named";
 import { reselectProps } from "../../../lib/reselect";
 import { useControllableState } from "../../../lib/use-controllable-state";
 import { cn } from "../../../lib/utils";
@@ -145,7 +146,7 @@ export type TabsProps = Omit<
  * `Tabs.List` and `Tabs.Trigger` read from context. Without a value, no tab
  * is active until the user picks one.
  */
-function Tabs({
+function TabsRoot({
   children,
   className,
   defaultValue = "",
@@ -211,46 +212,52 @@ export type TabsListProps = ComponentPropsWithoutRef<"div"> & {
  * `onKeyDown` runs first; calling `preventDefault()` in it opts out. Outside a
  * `Tabs` it falls back to the `underline` look.
  */
-function TabsList({
-  "aria-label": ariaLabel,
-  children,
-  className,
-  onKeyDown,
-  ref,
-  ...props
-}: TabsListProps & { ref?: Ref<HTMLDivElement> }): React.ReactNode {
-  const context = use(TabsContext);
+const TabsList = /* @__PURE__ */ named(
+  "TabsList",
+  function TabsList({
+    "aria-label": ariaLabel,
+    children,
+    className,
+    onKeyDown,
+    ref,
+    ...props
+  }: TabsListProps & { ref?: Ref<HTMLDivElement> }): React.ReactNode {
+    const context = use(TabsContext);
 
-  if (!context) {
-    // The ui-sdk list needs its root, and no trigger can render without one.
+    if (!context) {
+      // The ui-sdk list needs its root, and no trigger can render without one.
+      return (
+        <div
+          {...props}
+          aria-label={ariaLabel}
+          className={cn(tabsListVariants({ variant: "underline" }), className)}
+          onKeyDown={onKeyDown}
+          ref={ref}
+          role="tablist"
+          tabIndex={-1}
+        >
+          {children}
+        </div>
+      );
+    }
+
     return (
-      <div
+      <TabsListPrimitive
         {...props}
         aria-label={ariaLabel}
-        className={cn(tabsListVariants({ variant: "underline" }), className)}
+        className={cn(
+          tabsListVariants({ variant: context.variant }),
+          className,
+        )}
         onKeyDown={onKeyDown}
         ref={ref}
-        role="tablist"
         tabIndex={-1}
       >
         {children}
-      </div>
+      </TabsListPrimitive>
     );
-  }
-
-  return (
-    <TabsListPrimitive
-      {...props}
-      aria-label={ariaLabel}
-      className={cn(tabsListVariants({ variant: context.variant }), className)}
-      onKeyDown={onKeyDown}
-      ref={ref}
-      tabIndex={-1}
-    >
-      {children}
-    </TabsListPrimitive>
-  );
-}
+  },
+);
 
 export type TabsTriggerProps = Omit<
   ComponentPropsWithoutRef<"button">,
@@ -272,46 +279,49 @@ export type TabsTriggerProps = Omit<
  * (`"active"` or `"inactive"`) from the selected tab; the look follows the
  * `Tabs` variant and every variant draws a `focus-visible` ring.
  */
-function TabsTrigger({
-  "aria-controls": ariaControls,
-  "aria-hidden": ariaHidden,
-  children,
-  className,
-  id,
-  ref,
-  tabIndex,
-  value,
-  ...props
-}: TabsTriggerProps & { ref?: Ref<HTMLButtonElement> }): React.ReactNode {
-  const { firstTab, hasActiveTab, registerTab, reselect, variant } =
-    useTabsContext();
-  // With no active tab, the first trigger stays reachable with the Tab key.
-  const isFallbackStop = !hasActiveTab && firstTab === value;
+const TabsTrigger = /* @__PURE__ */ named(
+  "TabsTrigger",
+  function TabsTrigger({
+    "aria-controls": ariaControls,
+    "aria-hidden": ariaHidden,
+    children,
+    className,
+    id,
+    ref,
+    tabIndex,
+    value,
+    ...props
+  }: TabsTriggerProps & { ref?: Ref<HTMLButtonElement> }): React.ReactNode {
+    const { firstTab, hasActiveTab, registerTab, reselect, variant } =
+      useTabsContext();
+    // With no active tab, the first trigger stays reachable with the Tab key.
+    const isFallbackStop = !hasActiveTab && firstTab === value;
 
-  useEffect(() => registerTab(value), [registerTab, value]);
+    useEffect(() => registerTab(value), [registerTab, value]);
 
-  return (
-    <TabsTab
-      {...props}
-      aria-hidden={ariaHidden}
-      className={cn(tabsTriggerVariants({ variant }), className)}
-      id={id}
-      ref={ref}
-      render={renderTab(
-        {
-          "aria-controls": ariaControls,
-          tabIndex: tabIndex ?? (isFallbackStop ? 0 : undefined),
-        },
-        () => {
-          reselect(value);
-        },
-      )}
-      value={value}
-    >
-      {children}
-    </TabsTab>
-  );
-}
+    return (
+      <TabsTab
+        {...props}
+        aria-hidden={ariaHidden}
+        className={cn(tabsTriggerVariants({ variant }), className)}
+        id={id}
+        ref={ref}
+        render={renderTab(
+          {
+            "aria-controls": ariaControls,
+            tabIndex: tabIndex ?? (isFallbackStop ? 0 : undefined),
+          },
+          () => {
+            reselect(value);
+          },
+        )}
+        value={value}
+      >
+        {children}
+      </TabsTab>
+    );
+  },
+);
 
 export type TabsContentProps = Omit<
   ComponentPropsWithoutRef<"div">,
@@ -330,43 +340,43 @@ export type TabsContentProps = Omit<
   value: string;
 };
 
-function TabsContent({
-  "aria-hidden": ariaHidden,
-  "aria-labelledby": ariaLabelledBy,
-  children,
-  className,
-  id,
-  ref,
-  tabIndex,
-  value,
-  ...props
-}: TabsContentProps & { ref?: Ref<HTMLDivElement> }): React.ReactNode {
-  useTabsContext();
+const TabsContent = /* @__PURE__ */ named(
+  "TabsContent",
+  function TabsContent({
+    "aria-hidden": ariaHidden,
+    "aria-labelledby": ariaLabelledBy,
+    children,
+    className,
+    id,
+    ref,
+    tabIndex,
+    value,
+    ...props
+  }: TabsContentProps & { ref?: Ref<HTMLDivElement> }): React.ReactNode {
+    useTabsContext();
 
-  return (
-    <TabsPanel
-      {...props}
-      aria-hidden={ariaHidden}
-      className={cn("pt-4", className)}
-      id={id}
-      ref={ref}
-      render={renderPanel({ "aria-labelledby": ariaLabelledBy })}
-      tabIndex={tabIndex}
-      value={value}
-    >
-      {children}
-    </TabsPanel>
-  );
-}
+    return (
+      <TabsPanel
+        {...props}
+        aria-hidden={ariaHidden}
+        className={cn("pt-4", className)}
+        id={id}
+        ref={ref}
+        render={renderPanel({ "aria-labelledby": ariaLabelledBy })}
+        tabIndex={tabIndex}
+        value={value}
+      >
+        {children}
+      </TabsPanel>
+    );
+  },
+);
 
-Tabs.displayName = "Tabs";
-TabsList.displayName = "TabsList";
-TabsTrigger.displayName = "TabsTrigger";
-TabsContent.displayName = "TabsContent";
-
-// Attach sub-components
-Tabs.List = TabsList;
-Tabs.Trigger = TabsTrigger;
-Tabs.Content = TabsContent;
+/** The root, with the parts that read its context as statics: `Tabs.List`, `Tabs.Trigger` and `Tabs.Content`. */
+const Tabs = /* @__PURE__ */ named("Tabs", TabsRoot, () => ({
+  Content: TabsContent,
+  List: TabsList,
+  Trigger: TabsTrigger,
+}));
 
 export { Tabs, TabsContent, TabsList, TabsTrigger };

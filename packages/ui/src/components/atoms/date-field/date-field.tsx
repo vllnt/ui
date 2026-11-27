@@ -4,6 +4,7 @@ import * as React from "react";
 
 import { CalendarDays } from "lucide-react";
 
+import { named } from "../../../lib/named";
 import { useControllableState } from "../../../lib/use-controllable-state";
 import { cn } from "../../../lib/utils";
 
@@ -17,39 +18,41 @@ export type DateFieldProps = Omit<
   value?: string;
 };
 
-const DateField = ({
-  className,
-  defaultValue = "",
-  onValueChange,
-  ref,
-  value,
-  ...props
-}: DateFieldProps & { ref?: React.Ref<HTMLInputElement> }) => {
-  const [currentValue, setValue] = useControllableState({
-    defaultValue,
-    onChange: onValueChange,
+const DateField = /* @__PURE__ */ named(
+  "DateField",
+  ({
+    className,
+    defaultValue = "",
+    onValueChange,
+    ref,
     value,
-  });
+    ...props
+  }: DateFieldProps & { ref?: React.Ref<HTMLInputElement> }) => {
+    const [currentValue, setValue] = useControllableState({
+      defaultValue,
+      onChange: onValueChange,
+      value,
+    });
 
-  return (
-    <div className="relative w-full">
-      <CalendarDays className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
-      <input
-        {...props}
-        className={cn(
-          "flex h-10 w-full rounded-md border border-input bg-background py-2 pl-9 pr-3 text-base ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm [&::-webkit-calendar-picker-indicator]:opacity-60",
-          className,
-        )}
-        onChange={(event) => {
-          setValue(event.target.value);
-        }}
-        ref={ref}
-        type="date"
-        value={currentValue}
-      />
-    </div>
-  );
-};
-DateField.displayName = "DateField";
+    return (
+      <div className="relative w-full">
+        <CalendarDays className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+        <input
+          {...props}
+          className={cn(
+            "flex h-10 w-full rounded-md border border-input bg-background py-2 pl-9 pr-3 text-base ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm [&::-webkit-calendar-picker-indicator]:opacity-60",
+            className,
+          )}
+          onChange={(event) => {
+            setValue(event.target.value);
+          }}
+          ref={ref}
+          type="date"
+          value={currentValue}
+        />
+      </div>
+    );
+  },
+);
 
 export { DateField };

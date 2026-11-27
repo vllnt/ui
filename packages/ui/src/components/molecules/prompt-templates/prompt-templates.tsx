@@ -12,6 +12,7 @@ import {
 
 import { Search, Sparkles } from "lucide-react";
 
+import { named } from "../../../lib/named";
 import { cn } from "../../../lib/utils";
 import { Badge } from "../../atoms/badge/badge";
 import { Button } from "../../atoms/button/button";
@@ -590,37 +591,40 @@ function TemplateGrid({ controller, labels }: GridProps): ReactNode {
   );
 }
 
-export const PromptTemplates = ({
-  ref,
-  ...props
-}: PromptTemplatesProps & { ref?: React.Ref<HTMLElement> }) => {
-  const { categories, className, labels, onSelect, templates, ...rest } = props;
-  const resolvedLabels = useMemo(
-    () => ({ ...DEFAULT_LABELS, ...labels }),
-    [labels],
-  );
-  const controller = usePromptTemplatesController(templates, onSelect);
+export const PromptTemplates = /* @__PURE__ */ named(
+  "PromptTemplates",
+  ({
+    ref,
+    ...props
+  }: PromptTemplatesProps & { ref?: React.Ref<HTMLElement> }) => {
+    const { categories, className, labels, onSelect, templates, ...rest } =
+      props;
+    const resolvedLabels = useMemo(
+      () => ({ ...DEFAULT_LABELS, ...labels }),
+      [labels],
+    );
+    const controller = usePromptTemplatesController(templates, onSelect);
 
-  return (
-    <section
-      className={cn(
-        "flex flex-col gap-4 rounded-2xl border bg-background p-4",
-        className,
-      )}
-      ref={ref}
-      {...rest}
-    >
-      <FilterBar
-        categories={categories ?? []}
-        labels={resolvedLabels}
-        onCategoryChange={controller.handleCategoryChange}
-        onQueryChange={controller.handleQueryChange}
-        query={controller.query}
-        searchId={controller.searchId}
-        selectedCategory={controller.selectedCategory}
-      />
-      <TemplateGrid controller={controller} labels={resolvedLabels} />
-    </section>
-  );
-};
-PromptTemplates.displayName = "PromptTemplates";
+    return (
+      <section
+        className={cn(
+          "flex flex-col gap-4 rounded-2xl border bg-background p-4",
+          className,
+        )}
+        ref={ref}
+        {...rest}
+      >
+        <FilterBar
+          categories={categories ?? []}
+          labels={resolvedLabels}
+          onCategoryChange={controller.handleCategoryChange}
+          onQueryChange={controller.handleQueryChange}
+          query={controller.query}
+          searchId={controller.searchId}
+          selectedCategory={controller.selectedCategory}
+        />
+        <TemplateGrid controller={controller} labels={resolvedLabels} />
+      </section>
+    );
+  },
+);

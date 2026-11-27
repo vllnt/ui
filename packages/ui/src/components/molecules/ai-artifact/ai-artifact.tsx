@@ -22,6 +22,7 @@ import {
 } from "lucide-react";
 
 import { copyText } from "../../../lib/copy-text";
+import { named } from "../../../lib/named";
 import { cn } from "../../../lib/utils";
 import { Badge } from "../../atoms/badge/badge";
 import { Button } from "../../atoms/button/button";
@@ -392,86 +393,87 @@ function useArtifactController(
   );
 }
 
-export const AIArtifact = ({
-  ref,
-  ...props
-}: AIArtifactProps & { ref?: React.Ref<HTMLElement> }) => {
-  const {
-    children,
-    className,
-    defaultFullscreen = false,
-    filename,
-    labels,
-    language = "",
-    onEdit,
-    subtitle,
-    title,
-    type = "code",
-    value = "",
-    ...rest
-  } = props;
-  const resolvedLabels = useMemo(
-    () => ({ ...DEFAULT_LABELS, ...labels }),
-    [labels],
-  );
-  const contextValue = useArtifactController({
-    defaultFullscreen,
-    filename,
-    labels: resolvedLabels,
-    language,
-    onEdit,
-    title,
-    type,
-    value,
-  });
+export const AIArtifact = /* @__PURE__ */ named(
+  "AIArtifact",
+  ({ ref, ...props }: AIArtifactProps & { ref?: React.Ref<HTMLElement> }) => {
+    const {
+      children,
+      className,
+      defaultFullscreen = false,
+      filename,
+      labels,
+      language = "",
+      onEdit,
+      subtitle,
+      title,
+      type = "code",
+      value = "",
+      ...rest
+    } = props;
+    const resolvedLabels = useMemo(
+      () => ({ ...DEFAULT_LABELS, ...labels }),
+      [labels],
+    );
+    const contextValue = useArtifactController({
+      defaultFullscreen,
+      filename,
+      labels: resolvedLabels,
+      language,
+      onEdit,
+      title,
+      type,
+      value,
+    });
 
-  return (
-    <AIArtifactContext.Provider value={contextValue}>
-      <section
-        aria-label={typeof title === "string" ? title : undefined}
-        className={cn(
-          "flex flex-col gap-3 rounded-2xl border bg-background p-4",
-          className,
-        )}
-        data-fullscreen={contextValue.fullscreen ? "true" : "false"}
-        data-type={type}
-        ref={ref}
-        {...rest}
-      >
-        <ArtifactHeader
-          language={language}
-          subtitle={subtitle}
-          title={title}
-          type={type}
-        />
-        {children}
-      </section>
-    </AIArtifactContext.Provider>
-  );
-};
-AIArtifact.displayName = "AIArtifact";
+    return (
+      <AIArtifactContext.Provider value={contextValue}>
+        <section
+          aria-label={typeof title === "string" ? title : undefined}
+          className={cn(
+            "flex flex-col gap-3 rounded-2xl border bg-background p-4",
+            className,
+          )}
+          data-fullscreen={contextValue.fullscreen ? "true" : "false"}
+          data-type={type}
+          ref={ref}
+          {...rest}
+        >
+          <ArtifactHeader
+            language={language}
+            subtitle={subtitle}
+            title={title}
+            type={type}
+          />
+          {children}
+        </section>
+      </AIArtifactContext.Provider>
+    );
+  },
+);
 
 /**
  * Toolbar slot — wraps action buttons in a horizontal row.
  *
  * @public
  */
-export const AIArtifactToolbar = ({
-  className,
-  ref,
-  ...rest
-}: ComponentPropsWithoutRef<"div"> & { ref?: React.Ref<HTMLDivElement> }) => (
-  <div
-    className={cn(
-      "flex flex-wrap items-center gap-1.5 border-b border-border pb-2",
-      className,
-    )}
-    ref={ref}
-    role="toolbar"
-    {...rest}
-  />
+export const AIArtifactToolbar = /* @__PURE__ */ named(
+  "AIArtifactToolbar",
+  ({
+    className,
+    ref,
+    ...rest
+  }: ComponentPropsWithoutRef<"div"> & { ref?: React.Ref<HTMLDivElement> }) => (
+    <div
+      className={cn(
+        "flex flex-wrap items-center gap-1.5 border-b border-border pb-2",
+        className,
+      )}
+      ref={ref}
+      role="toolbar"
+      {...rest}
+    />
+  ),
 );
-AIArtifactToolbar.displayName = "AIArtifactToolbar";
 
 type ToolbarButtonProps = Omit<
   ComponentPropsWithoutRef<"button">,
@@ -484,41 +486,43 @@ type ToolbarButtonProps = Omit<
  *
  * @public
  */
-export const AIArtifactCopyButton = ({
-  className,
-  onClick,
-  ref,
-  ...rest
-}: ToolbarButtonProps & { ref?: React.Ref<HTMLButtonElement> }) => {
-  const { copied, copy, labels } = useAIArtifact();
-  const handleCopyArtifact = useCallback(
-    (event: React.MouseEvent<HTMLButtonElement>) => {
-      onClick?.(event);
-      if (event.defaultPrevented) return;
-      void copy();
-    },
-    [copy, onClick],
-  );
-  return (
-    <Button
-      aria-label={copied ? labels.copied : labels.copy}
-      className={cn("size-8", className)}
-      onClick={handleCopyArtifact}
-      ref={ref}
-      size="icon"
-      type="button"
-      variant="ghost"
-      {...rest}
-    >
-      {copied ? (
-        <Check aria-hidden="true" className="size-4" />
-      ) : (
-        <Copy aria-hidden="true" className="size-4" />
-      )}
-    </Button>
-  );
-};
-AIArtifactCopyButton.displayName = "AIArtifactCopyButton";
+export const AIArtifactCopyButton = /* @__PURE__ */ named(
+  "AIArtifactCopyButton",
+  ({
+    className,
+    onClick,
+    ref,
+    ...rest
+  }: ToolbarButtonProps & { ref?: React.Ref<HTMLButtonElement> }) => {
+    const { copied, copy, labels } = useAIArtifact();
+    const handleCopyArtifact = useCallback(
+      (event: React.MouseEvent<HTMLButtonElement>) => {
+        onClick?.(event);
+        if (event.defaultPrevented) return;
+        void copy();
+      },
+      [copy, onClick],
+    );
+    return (
+      <Button
+        aria-label={copied ? labels.copied : labels.copy}
+        className={cn("size-8", className)}
+        onClick={handleCopyArtifact}
+        ref={ref}
+        size="icon"
+        type="button"
+        variant="ghost"
+        {...rest}
+      >
+        {copied ? (
+          <Check aria-hidden="true" className="size-4" />
+        ) : (
+          <Copy aria-hidden="true" className="size-4" />
+        )}
+      </Button>
+    );
+  },
+);
 
 /**
  * Edit control. Renders nothing when the artifact has no `onEdit`
@@ -526,38 +530,40 @@ AIArtifactCopyButton.displayName = "AIArtifactCopyButton";
  *
  * @public
  */
-export const AIArtifactEditButton = ({
-  className,
-  onClick,
-  ref,
-  ...rest
-}: ToolbarButtonProps & { ref?: React.Ref<HTMLButtonElement> }) => {
-  const { hasOnEdit, labels, onEdit } = useAIArtifact();
-  const handleEditArtifact = useCallback(
-    (event: React.MouseEvent<HTMLButtonElement>) => {
-      onClick?.(event);
-      if (event.defaultPrevented) return;
-      onEdit();
-    },
-    [onClick, onEdit],
-  );
-  if (!hasOnEdit) return null;
-  return (
-    <Button
-      aria-label={labels.edit}
-      className={cn("size-8", className)}
-      onClick={handleEditArtifact}
-      ref={ref}
-      size="icon"
-      type="button"
-      variant="ghost"
-      {...rest}
-    >
-      <Pencil aria-hidden="true" className="size-4" />
-    </Button>
-  );
-};
-AIArtifactEditButton.displayName = "AIArtifactEditButton";
+export const AIArtifactEditButton = /* @__PURE__ */ named(
+  "AIArtifactEditButton",
+  ({
+    className,
+    onClick,
+    ref,
+    ...rest
+  }: ToolbarButtonProps & { ref?: React.Ref<HTMLButtonElement> }) => {
+    const { hasOnEdit, labels, onEdit } = useAIArtifact();
+    const handleEditArtifact = useCallback(
+      (event: React.MouseEvent<HTMLButtonElement>) => {
+        onClick?.(event);
+        if (event.defaultPrevented) return;
+        onEdit();
+      },
+      [onClick, onEdit],
+    );
+    if (!hasOnEdit) return null;
+    return (
+      <Button
+        aria-label={labels.edit}
+        className={cn("size-8", className)}
+        onClick={handleEditArtifact}
+        ref={ref}
+        size="icon"
+        type="button"
+        variant="ghost"
+        {...rest}
+      >
+        <Pencil aria-hidden="true" className="size-4" />
+      </Button>
+    );
+  },
+);
 
 /**
  * Download control — saves the artifact's `value` as a file with an
@@ -565,37 +571,39 @@ AIArtifactEditButton.displayName = "AIArtifactEditButton";
  *
  * @public
  */
-export const AIArtifactDownloadButton = ({
-  className,
-  onClick,
-  ref,
-  ...rest
-}: ToolbarButtonProps & { ref?: React.Ref<HTMLButtonElement> }) => {
-  const { download, labels } = useAIArtifact();
-  const handleDownloadArtifact = useCallback(
-    (event: React.MouseEvent<HTMLButtonElement>) => {
-      onClick?.(event);
-      if (event.defaultPrevented) return;
-      download();
-    },
-    [download, onClick],
-  );
-  return (
-    <Button
-      aria-label={labels.download}
-      className={cn("size-8", className)}
-      onClick={handleDownloadArtifact}
-      ref={ref}
-      size="icon"
-      type="button"
-      variant="ghost"
-      {...rest}
-    >
-      <Download aria-hidden="true" className="size-4" />
-    </Button>
-  );
-};
-AIArtifactDownloadButton.displayName = "AIArtifactDownloadButton";
+export const AIArtifactDownloadButton = /* @__PURE__ */ named(
+  "AIArtifactDownloadButton",
+  ({
+    className,
+    onClick,
+    ref,
+    ...rest
+  }: ToolbarButtonProps & { ref?: React.Ref<HTMLButtonElement> }) => {
+    const { download, labels } = useAIArtifact();
+    const handleDownloadArtifact = useCallback(
+      (event: React.MouseEvent<HTMLButtonElement>) => {
+        onClick?.(event);
+        if (event.defaultPrevented) return;
+        download();
+      },
+      [download, onClick],
+    );
+    return (
+      <Button
+        aria-label={labels.download}
+        className={cn("size-8", className)}
+        onClick={handleDownloadArtifact}
+        ref={ref}
+        size="icon"
+        type="button"
+        variant="ghost"
+        {...rest}
+      >
+        <Download aria-hidden="true" className="size-4" />
+      </Button>
+    );
+  },
+);
 
 /**
  * Fullscreen toggle. Updates the root's `data-fullscreen` attribute so
@@ -604,42 +612,44 @@ AIArtifactDownloadButton.displayName = "AIArtifactDownloadButton";
  *
  * @public
  */
-export const AIArtifactFullscreenButton = ({
-  className,
-  onClick,
-  ref,
-  ...rest
-}: ToolbarButtonProps & { ref?: React.Ref<HTMLButtonElement> }) => {
-  const { fullscreen, labels, toggleFullscreen } = useAIArtifact();
-  const handleToggleArtifactFullscreen = useCallback(
-    (event: React.MouseEvent<HTMLButtonElement>) => {
-      onClick?.(event);
-      if (event.defaultPrevented) return;
-      toggleFullscreen();
-    },
-    [onClick, toggleFullscreen],
-  );
-  return (
-    <Button
-      aria-label={fullscreen ? labels.exitFullscreen : labels.enterFullscreen}
-      aria-pressed={fullscreen}
-      className={cn("size-8", className)}
-      onClick={handleToggleArtifactFullscreen}
-      ref={ref}
-      size="icon"
-      type="button"
-      variant="ghost"
-      {...rest}
-    >
-      {fullscreen ? (
-        <Minimize2 aria-hidden="true" className="size-4" />
-      ) : (
-        <Maximize2 aria-hidden="true" className="size-4" />
-      )}
-    </Button>
-  );
-};
-AIArtifactFullscreenButton.displayName = "AIArtifactFullscreenButton";
+export const AIArtifactFullscreenButton = /* @__PURE__ */ named(
+  "AIArtifactFullscreenButton",
+  ({
+    className,
+    onClick,
+    ref,
+    ...rest
+  }: ToolbarButtonProps & { ref?: React.Ref<HTMLButtonElement> }) => {
+    const { fullscreen, labels, toggleFullscreen } = useAIArtifact();
+    const handleToggleArtifactFullscreen = useCallback(
+      (event: React.MouseEvent<HTMLButtonElement>) => {
+        onClick?.(event);
+        if (event.defaultPrevented) return;
+        toggleFullscreen();
+      },
+      [onClick, toggleFullscreen],
+    );
+    return (
+      <Button
+        aria-label={fullscreen ? labels.exitFullscreen : labels.enterFullscreen}
+        aria-pressed={fullscreen}
+        className={cn("size-8", className)}
+        onClick={handleToggleArtifactFullscreen}
+        ref={ref}
+        size="icon"
+        type="button"
+        variant="ghost"
+        {...rest}
+      >
+        {fullscreen ? (
+          <Minimize2 aria-hidden="true" className="size-4" />
+        ) : (
+          <Maximize2 aria-hidden="true" className="size-4" />
+        )}
+      </Button>
+    );
+  },
+);
 
 /**
  * Scrollable body slot. Render the actual payload here (code block,
@@ -647,52 +657,56 @@ AIArtifactFullscreenButton.displayName = "AIArtifactFullscreenButton";
  *
  * @public
  */
-export const AIArtifactContent = ({
-  className,
-  ref,
-  ...rest
-}: ComponentPropsWithoutRef<"div"> & { ref?: React.Ref<HTMLDivElement> }) => (
-  <div
-    aria-label={useAIArtifact().labels.content}
-    className={cn(
-      "min-h-[6rem] overflow-auto rounded-lg border border-border bg-muted/20 p-3 text-sm text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
-      className,
-    )}
-    ref={ref}
-    role="region"
-    tabIndex={0}
-    {...rest}
-  />
+export const AIArtifactContent = /* @__PURE__ */ named(
+  "AIArtifactContent",
+  ({
+    className,
+    ref,
+    ...rest
+  }: ComponentPropsWithoutRef<"div"> & { ref?: React.Ref<HTMLDivElement> }) => (
+    <div
+      aria-label={useAIArtifact().labels.content}
+      className={cn(
+        "min-h-[6rem] overflow-auto rounded-lg border border-border bg-muted/20 p-3 text-sm text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+        className,
+      )}
+      ref={ref}
+      role="region"
+      tabIndex={0}
+      {...rest}
+    />
+  ),
 );
-AIArtifactContent.displayName = "AIArtifactContent";
 
 /**
  * Version navigator container.
  *
  * @public
  */
-export const AIArtifactVersions = ({
-  children,
-  className,
-  ref,
-  ...rest
-}: ComponentPropsWithoutRef<"nav"> & { ref?: React.Ref<HTMLElement> }) => {
-  const { labels } = useAIArtifact();
-  return (
-    <nav
-      aria-label={labels.versions}
-      className={cn(
-        "flex flex-wrap items-center gap-1.5 border-t border-border pt-2",
-        className,
-      )}
-      ref={ref}
-      {...rest}
-    >
-      {children}
-    </nav>
-  );
-};
-AIArtifactVersions.displayName = "AIArtifactVersions";
+export const AIArtifactVersions = /* @__PURE__ */ named(
+  "AIArtifactVersions",
+  ({
+    children,
+    className,
+    ref,
+    ...rest
+  }: ComponentPropsWithoutRef<"nav"> & { ref?: React.Ref<HTMLElement> }) => {
+    const { labels } = useAIArtifact();
+    return (
+      <nav
+        aria-label={labels.versions}
+        className={cn(
+          "flex flex-wrap items-center gap-1.5 border-t border-border pt-2",
+          className,
+        )}
+        ref={ref}
+        {...rest}
+      >
+        {children}
+      </nav>
+    );
+  },
+);
 
 /**
  * Props for {@link AIArtifactVersion}.
@@ -712,27 +726,29 @@ export type AIArtifactVersionProps = {
  *
  * @public
  */
-export const AIArtifactVersion = ({
-  active = false,
-  className,
-  label,
-  ref,
-  ...rest
-}: AIArtifactVersionProps & { ref?: React.Ref<HTMLButtonElement> }) => (
-  <button
-    aria-current={active ? "true" : undefined}
-    className={cn(
-      "inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
-      active
-        ? "border-primary bg-primary text-primary-foreground"
-        : "border-border bg-background text-muted-foreground hover:bg-accent",
-      className,
-    )}
-    ref={ref}
-    type="button"
-    {...rest}
-  >
-    {label}
-  </button>
+export const AIArtifactVersion = /* @__PURE__ */ named(
+  "AIArtifactVersion",
+  ({
+    active = false,
+    className,
+    label,
+    ref,
+    ...rest
+  }: AIArtifactVersionProps & { ref?: React.Ref<HTMLButtonElement> }) => (
+    <button
+      aria-current={active ? "true" : undefined}
+      className={cn(
+        "inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+        active
+          ? "border-primary bg-primary text-primary-foreground"
+          : "border-border bg-background text-muted-foreground hover:bg-accent",
+        className,
+      )}
+      ref={ref}
+      type="button"
+      {...rest}
+    >
+      {label}
+    </button>
+  ),
 );
-AIArtifactVersion.displayName = "AIArtifactVersion";

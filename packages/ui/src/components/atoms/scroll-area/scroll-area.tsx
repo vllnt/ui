@@ -11,6 +11,7 @@ import {
   ScrollAreaViewport,
 } from "@ui-sdk/react/scroll-area";
 
+import { named } from "../../../lib/named";
 import { type DataAttributes, withDataAttributes } from "../../../lib/ui-sdk";
 import { cn } from "../../../lib/utils";
 
@@ -56,94 +57,98 @@ const visibleState = (state: { visible: boolean }): DataAttributes => ({
  * stop while its content overflows (axe scrollable-region-focusable), and
  * `aria-label` / `aria-labelledby` name it as a region.
  */
-const ScrollArea = ({
-  "aria-label": ariaLabel,
-  "aria-labelledby": ariaLabelledBy,
-  children,
-  className,
-  ref,
-  ...props
-}: React.ComponentProps<typeof ScrollAreaPrimitive> & {
-  ref?: React.Ref<HTMLDivElement>;
-}) => {
-  const viewportRef = React.useRef<HTMLDivElement>(null);
-  const overflows = useOverflows(viewportRef);
-  // Like Radix, clip the x axis unless a horizontal scrollbar renders.
-  const [horizontal, setHorizontal] = React.useState(false);
-  const named = Boolean(ariaLabel ?? ariaLabelledBy);
-  return (
-    <ScrollAreaPrimitive
-      className={cn("relative overflow-hidden", className)}
-      ref={ref}
-      {...props}
-    >
-      <HorizontalContext value={setHorizontal}>
-        <ScrollAreaViewport
-          aria-label={ariaLabel}
-          aria-labelledby={ariaLabelledBy}
-          className={cn(
-            "h-full w-full rounded-[inherit] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
-            // ui-sdk sets `overflow: auto` inline, so clipping x needs `!important`.
-            !horizontal && "!overflow-x-hidden",
-          )}
-          data-radix-scroll-area-viewport=""
-          ref={viewportRef}
-          role={named ? "region" : undefined}
-          tabIndex={overflows ? 0 : undefined}
-        >
-          <ScrollAreaContent style={{ display: "table", minWidth: "100%" }}>
-            {children}
-          </ScrollAreaContent>
-        </ScrollAreaViewport>
-        <ScrollBar />
-        <ScrollAreaCorner />
-      </HorizontalContext>
-    </ScrollAreaPrimitive>
-  );
-};
-ScrollArea.displayName = "ScrollArea";
+const ScrollArea = /* @__PURE__ */ named(
+  "ScrollArea",
+  ({
+    "aria-label": ariaLabel,
+    "aria-labelledby": ariaLabelledBy,
+    children,
+    className,
+    ref,
+    ...props
+  }: React.ComponentProps<typeof ScrollAreaPrimitive> & {
+    ref?: React.Ref<HTMLDivElement>;
+  }) => {
+    const viewportRef = React.useRef<HTMLDivElement>(null);
+    const overflows = useOverflows(viewportRef);
+    // Like Radix, clip the x axis unless a horizontal scrollbar renders.
+    const [horizontal, setHorizontal] = React.useState(false);
+    const hasName = Boolean(ariaLabel ?? ariaLabelledBy);
+    return (
+      <ScrollAreaPrimitive
+        className={cn("relative overflow-hidden", className)}
+        ref={ref}
+        {...props}
+      >
+        <HorizontalContext value={setHorizontal}>
+          <ScrollAreaViewport
+            aria-label={ariaLabel}
+            aria-labelledby={ariaLabelledBy}
+            className={cn(
+              "h-full w-full rounded-[inherit] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+              // ui-sdk sets `overflow: auto` inline, so clipping x needs `!important`.
+              !horizontal && "!overflow-x-hidden",
+            )}
+            data-radix-scroll-area-viewport=""
+            ref={viewportRef}
+            role={hasName ? "region" : undefined}
+            tabIndex={overflows ? 0 : undefined}
+          >
+            <ScrollAreaContent style={{ display: "table", minWidth: "100%" }}>
+              {children}
+            </ScrollAreaContent>
+          </ScrollAreaViewport>
+          <ScrollBar />
+          <ScrollAreaCorner />
+        </HorizontalContext>
+      </ScrollAreaPrimitive>
+    );
+  },
+);
 
-const ScrollBar = ({
-  className,
-  forceMount: _forceMount,
-  orientation = "vertical",
-  ref,
-  render,
-  ...props
-}: React.ComponentProps<typeof ScrollAreaScrollbar> & {
-  /** Accepted for compatibility: the scrollbar always stays mounted. */
-  forceMount?: true;
-  ref?: React.Ref<HTMLDivElement>;
-}) => {
-  const setHorizontal = React.use(HorizontalContext);
-  const isHorizontal = orientation === "horizontal";
-  React.useEffect(() => {
-    if (!isHorizontal || !setHorizontal) return;
-    setHorizontal(true);
-    return () => {
-      setHorizontal(false);
-    };
-  }, [isHorizontal, setHorizontal]);
+const ScrollBar = /* @__PURE__ */ named(
+  "ScrollBar",
+  ({
+    className,
+    forceMount: _forceMount,
+    orientation = "vertical",
+    ref,
+    render,
+    ...props
+  }: React.ComponentProps<typeof ScrollAreaScrollbar> & {
+    /** Accepted for compatibility: the scrollbar always stays mounted. */
+    forceMount?: true;
+    ref?: React.Ref<HTMLDivElement>;
+  }) => {
+    const setHorizontal = React.use(HorizontalContext);
+    const isHorizontal = orientation === "horizontal";
+    React.useEffect(() => {
+      if (!isHorizontal || !setHorizontal) return;
+      setHorizontal(true);
+      return () => {
+        setHorizontal(false);
+      };
+    }, [isHorizontal, setHorizontal]);
 
-  return (
-    <ScrollAreaScrollbar
-      className={cn(
-        "invisible flex touch-none select-none transition-colors data-[visible]:visible",
-        orientation === "vertical" &&
-          "h-full w-2.5 border-l border-l-transparent p-[1px]",
-        orientation === "horizontal" &&
-          "h-2.5 flex-col border-t border-t-transparent p-[1px]",
-        className,
-      )}
-      orientation={orientation}
-      ref={ref}
-      render={withDataAttributes("div", visibleState, render)}
-      {...props}
-    >
-      <ScrollAreaThumb className="relative flex-1 rounded-full bg-border" />
-    </ScrollAreaScrollbar>
-  );
-};
-ScrollBar.displayName = "ScrollBar";
+    return (
+      <ScrollAreaScrollbar
+        className={cn(
+          "invisible flex touch-none select-none transition-colors data-[visible]:visible",
+          orientation === "vertical" &&
+            "h-full w-2.5 border-l border-l-transparent p-[1px]",
+          orientation === "horizontal" &&
+            "h-2.5 flex-col border-t border-t-transparent p-[1px]",
+          className,
+        )}
+        orientation={orientation}
+        ref={ref}
+        render={withDataAttributes("div", visibleState, render)}
+        {...props}
+      >
+        <ScrollAreaThumb className="relative flex-1 rounded-full bg-border" />
+      </ScrollAreaScrollbar>
+    );
+  },
+);
 
 export { ScrollArea, ScrollBar };

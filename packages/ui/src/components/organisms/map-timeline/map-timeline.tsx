@@ -14,6 +14,7 @@ import {
   useState,
 } from "react";
 
+import { named } from "../../../lib/named";
 import { cn } from "../../../lib/utils";
 
 const VIEWBOX_WIDTH = 1000;
@@ -204,50 +205,52 @@ function ringCentroid(ring: GeoPosition[]): { x: number; y: number } {
  *
  * @public
  */
-export const MapTimelineLayer = ({
-  ref,
-  ...props
-}: MapTimelineLayerProps & { ref?: React.Ref<SVGGElement> }) => {
-  const {
-    color = "blue",
-    endYear,
-    geometry,
-    id,
-    label,
-    startYear,
-    ...rest
-  } = props;
-  const { year } = useTimelineContext();
-  if (year < startYear || year > endYear) return null;
-  const palette = PALETTE[color];
-  const rings = geometryRings(geometry);
-  const centroid = rings[0] ? ringCentroid(rings[0]) : { x: 0, y: 0 };
-  return (
-    <g data-layer-id={id} data-state="visible" ref={ref} {...rest}>
-      {rings.map((ring, index) => (
-        <path
-          d={`${ringToPath(ring)} Z`}
-          fill={palette.fill}
-          key={`${id ?? "layer"}-ring-${index.toString()}`}
-          stroke={palette.stroke}
-          strokeWidth={1.5}
-        />
-      ))}
-      {label ? (
-        <text
-          className="select-none fill-foreground text-[11px] font-semibold"
-          dominantBaseline="middle"
-          textAnchor="middle"
-          x={centroid.x}
-          y={centroid.y}
-        >
-          {label}
-        </text>
-      ) : null}
-    </g>
-  );
-};
-MapTimelineLayer.displayName = "MapTimelineLayer";
+export const MapTimelineLayer = /* @__PURE__ */ named(
+  "MapTimelineLayer",
+  ({
+    ref,
+    ...props
+  }: MapTimelineLayerProps & { ref?: React.Ref<SVGGElement> }) => {
+    const {
+      color = "blue",
+      endYear,
+      geometry,
+      id,
+      label,
+      startYear,
+      ...rest
+    } = props;
+    const { year } = useTimelineContext();
+    if (year < startYear || year > endYear) return null;
+    const palette = PALETTE[color];
+    const rings = geometryRings(geometry);
+    const centroid = rings[0] ? ringCentroid(rings[0]) : { x: 0, y: 0 };
+    return (
+      <g data-layer-id={id} data-state="visible" ref={ref} {...rest}>
+        {rings.map((ring, index) => (
+          <path
+            d={`${ringToPath(ring)} Z`}
+            fill={palette.fill}
+            key={`${id ?? "layer"}-ring-${index.toString()}`}
+            stroke={palette.stroke}
+            strokeWidth={1.5}
+          />
+        ))}
+        {label ? (
+          <text
+            className="select-none fill-foreground text-[11px] font-semibold"
+            dominantBaseline="middle"
+            textAnchor="middle"
+            x={centroid.x}
+            y={centroid.y}
+          >
+            {label}
+          </text>
+        ) : null}
+      </g>
+    );
+  },
+);
 
 /**
  * Props for {@link MapTimelineEvent}.
@@ -284,173 +287,181 @@ export type MapTimelineEventProps = {
  *
  * @public
  */
-export const MapTimelineEvent = ({
-  ref,
-  ...props
-}: MapTimelineEventProps & { ref?: React.Ref<SVGGElement> }) => {
-  const {
-    color = "red",
-    description,
-    id,
-    position,
-    title,
-    toleranceYears = 0,
-    year: eventYear,
-    ...rest
-  } = props;
-  const { year } = useTimelineContext();
-  const visible = Math.abs(year - eventYear) <= toleranceYears;
-  if (!visible) return null;
-  const palette = PALETTE[color];
-  const projected = projectEquirectangular(position);
-  return (
-    <g
-      data-event-id={id}
-      data-event-year={eventYear}
-      ref={ref}
-      transform={`translate(${projected.x.toString()}, ${projected.y.toString()})`}
-      {...rest}
-    >
-      <circle
-        className={cn("stroke-background", palette.dot)}
-        r="6"
-        strokeWidth="2"
+export const MapTimelineEvent = /* @__PURE__ */ named(
+  "MapTimelineEvent",
+  ({
+    ref,
+    ...props
+  }: MapTimelineEventProps & { ref?: React.Ref<SVGGElement> }) => {
+    const {
+      color = "red",
+      description,
+      id,
+      position,
+      title,
+      toleranceYears = 0,
+      year: eventYear,
+      ...rest
+    } = props;
+    const { year } = useTimelineContext();
+    const visible = Math.abs(year - eventYear) <= toleranceYears;
+    if (!visible) return null;
+    const palette = PALETTE[color];
+    const projected = projectEquirectangular(position);
+    return (
+      <g
+        data-event-id={id}
+        data-event-year={eventYear}
+        ref={ref}
+        transform={`translate(${projected.x.toString()}, ${projected.y.toString()})`}
+        {...rest}
       >
-        {title ? <title>{title}</title> : null}
-      </circle>
-      {title ? (
-        <text
-          className="select-none fill-foreground text-[10px] font-semibold"
-          dominantBaseline="middle"
-          textAnchor="middle"
-          y="-12"
+        <circle
+          className={cn("stroke-background", palette.dot)}
+          r="6"
+          strokeWidth="2"
         >
-          {title}
-        </text>
-      ) : null}
-      {description ? (
-        <text
-          className="select-none fill-muted-foreground text-[9px]"
-          dominantBaseline="middle"
-          textAnchor="middle"
-          y="20"
-        >
-          {description}
-        </text>
-      ) : null}
-    </g>
-  );
-};
-MapTimelineEvent.displayName = "MapTimelineEvent";
+          {title ? <title>{title}</title> : null}
+        </circle>
+        {title ? (
+          <text
+            className="select-none fill-foreground text-[10px] font-semibold"
+            dominantBaseline="middle"
+            textAnchor="middle"
+            y="-12"
+          >
+            {title}
+          </text>
+        ) : null}
+        {description ? (
+          <text
+            className="select-none fill-muted-foreground text-[9px]"
+            dominantBaseline="middle"
+            textAnchor="middle"
+            y="20"
+          >
+            {description}
+          </text>
+        ) : null}
+      </g>
+    );
+  },
+);
 
 /**
  * Container for the slider + play button row.
  *
  * @public
  */
-export const MapTimelineControls = ({
-  children,
-  className,
-  ref,
-  ...rest
-}: ComponentPropsWithoutRef<"div"> & { ref?: React.Ref<HTMLDivElement> }) => (
-  <div
-    className={cn(
-      "flex items-center gap-3 border-t border-border bg-muted/40 px-4 py-2",
-      className,
-    )}
-    ref={ref}
-    {...rest}
-  >
-    {children}
-  </div>
+export const MapTimelineControls = /* @__PURE__ */ named(
+  "MapTimelineControls",
+  ({
+    children,
+    className,
+    ref,
+    ...rest
+  }: ComponentPropsWithoutRef<"div"> & { ref?: React.Ref<HTMLDivElement> }) => (
+    <div
+      className={cn(
+        "flex items-center gap-3 border-t border-border bg-muted/40 px-4 py-2",
+        className,
+      )}
+      ref={ref}
+      {...rest}
+    >
+      {children}
+    </div>
+  ),
 );
-MapTimelineControls.displayName = "MapTimelineControls";
 
 /**
  * Range-input slider bound to the current year.
  *
  * @public
  */
-export const MapTimelineSlider = ({
-  className,
-  ref,
-  ...rest
-}: Omit<
-  ComponentPropsWithoutRef<"input">,
-  "max" | "min" | "onChange" | "type" | "value"
-> & { ref?: React.Ref<HTMLInputElement> }) => {
-  const { endYear, labels, setYear, startYear, year } = useTimelineContext();
-  const sliderId = useId();
-  const handleYearChange = (event: ChangeEvent<HTMLInputElement>): void => {
-    setYear(Number.parseInt(event.target.value, 10));
-  };
-  return (
-    <div className="flex flex-1 items-center gap-2 text-xs font-medium text-muted-foreground">
-      <span aria-hidden="true">{formatYear(startYear)}</span>
-      <input
-        aria-label={labels.slider}
-        aria-valuemax={endYear}
-        aria-valuemin={startYear}
-        aria-valuenow={year}
-        className={cn("flex-1 accent-primary", className)}
-        id={sliderId}
-        max={endYear}
-        min={startYear}
-        onChange={handleYearChange}
-        ref={ref}
-        type="range"
-        value={year}
-        {...rest}
-      />
-      <span aria-hidden="true">{formatYear(endYear)}</span>
-      <span
-        className="ml-2 inline-flex min-w-20 justify-center rounded-md border border-border bg-background px-2 py-0.5 text-foreground"
-        data-current-year={year}
-      >
-        {formatYear(year)}
-      </span>
-    </div>
-  );
-};
-MapTimelineSlider.displayName = "MapTimelineSlider";
+export const MapTimelineSlider = /* @__PURE__ */ named(
+  "MapTimelineSlider",
+  ({
+    className,
+    ref,
+    ...rest
+  }: Omit<
+    ComponentPropsWithoutRef<"input">,
+    "max" | "min" | "onChange" | "type" | "value"
+  > & { ref?: React.Ref<HTMLInputElement> }) => {
+    const { endYear, labels, setYear, startYear, year } = useTimelineContext();
+    const sliderId = useId();
+    const handleYearChange = (event: ChangeEvent<HTMLInputElement>): void => {
+      setYear(Number.parseInt(event.target.value, 10));
+    };
+    return (
+      <div className="flex flex-1 items-center gap-2 text-xs font-medium text-muted-foreground">
+        <span aria-hidden="true">{formatYear(startYear)}</span>
+        <input
+          aria-label={labels.slider}
+          aria-valuemax={endYear}
+          aria-valuemin={startYear}
+          aria-valuenow={year}
+          className={cn("flex-1 accent-primary", className)}
+          id={sliderId}
+          max={endYear}
+          min={startYear}
+          onChange={handleYearChange}
+          ref={ref}
+          type="range"
+          value={year}
+          {...rest}
+        />
+        <span aria-hidden="true">{formatYear(endYear)}</span>
+        <span
+          className="ml-2 inline-flex min-w-20 justify-center rounded-md border border-border bg-background px-2 py-0.5 text-foreground"
+          data-current-year={year}
+        >
+          {formatYear(year)}
+        </span>
+      </div>
+    );
+  },
+);
 
 /**
  * Play / pause toggle that auto-advances the year on `requestAnimationFrame`.
  *
  * @public
  */
-export const MapTimelinePlayButton = ({
-  className,
-  ref,
-  ...rest
-}: Omit<
-  ComponentPropsWithoutRef<"button">,
-  "aria-pressed" | "onClick" | "type"
-> & { ref?: React.Ref<HTMLButtonElement> }) => {
-  const { isPlaying, labels, setIsPlaying } = useTimelineContext();
-  const handleTogglePlayback = (): void => {
-    setIsPlaying(!isPlaying);
-  };
-  return (
-    <button
-      aria-label={isPlaying ? labels.pause : labels.play}
-      aria-pressed={isPlaying}
-      className={cn(
-        "inline-flex h-8 items-center rounded-md border border-border bg-background px-3 text-xs font-medium hover:bg-accent focus:outline-none focus-visible:ring-2 focus-visible:ring-ring",
-        className,
-      )}
-      data-playing={isPlaying ? "true" : undefined}
-      onClick={handleTogglePlayback}
-      ref={ref}
-      type="button"
-      {...rest}
-    >
-      <span aria-hidden="true">{isPlaying ? "❚❚" : "▶"}</span>
-    </button>
-  );
-};
-MapTimelinePlayButton.displayName = "MapTimelinePlayButton";
+export const MapTimelinePlayButton = /* @__PURE__ */ named(
+  "MapTimelinePlayButton",
+  ({
+    className,
+    ref,
+    ...rest
+  }: Omit<
+    ComponentPropsWithoutRef<"button">,
+    "aria-pressed" | "onClick" | "type"
+  > & { ref?: React.Ref<HTMLButtonElement> }) => {
+    const { isPlaying, labels, setIsPlaying } = useTimelineContext();
+    const handleTogglePlayback = (): void => {
+      setIsPlaying(!isPlaying);
+    };
+    return (
+      <button
+        aria-label={isPlaying ? labels.pause : labels.play}
+        aria-pressed={isPlaying}
+        className={cn(
+          "inline-flex h-8 items-center rounded-md border border-border bg-background px-3 text-xs font-medium hover:bg-accent focus:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+          className,
+        )}
+        data-playing={isPlaying ? "true" : undefined}
+        onClick={handleTogglePlayback}
+        ref={ref}
+        type="button"
+        {...rest}
+      >
+        <span aria-hidden="true">{isPlaying ? "❚❚" : "▶"}</span>
+      </button>
+    );
+  },
+);
 
 /**
  * Props for {@link MapTimeline}.
@@ -728,73 +739,72 @@ const Shell = function Shell({
  *
  * @public
  */
-export const MapTimeline = ({
-  ref,
-  ...props
-}: MapTimelineProps & { ref?: React.Ref<HTMLElement> }) => {
-  const {
-    backdrop,
-    backdropAlt,
-    children,
-    className,
-    endYear,
-    initialYear,
-    labels,
-    onYearChange,
-    speed = 25,
-    startYear,
-    ...rest
-  } = props;
-  const titleId = useId();
-  const resolvedLabels = useMemo(
-    () => ({ ...DEFAULT_LABELS, ...labels }),
-    [labels],
-  );
+export const MapTimeline = /* @__PURE__ */ named(
+  "MapTimeline",
+  ({ ref, ...props }: MapTimelineProps & { ref?: React.Ref<HTMLElement> }) => {
+    const {
+      backdrop,
+      backdropAlt,
+      children,
+      className,
+      endYear,
+      initialYear,
+      labels,
+      onYearChange,
+      speed = 25,
+      startYear,
+      ...rest
+    } = props;
+    const titleId = useId();
+    const resolvedLabels = useMemo(
+      () => ({ ...DEFAULT_LABELS, ...labels }),
+      [labels],
+    );
 
-  const { isPlaying, setIsPlaying, setYear, year } = useTimelineState({
-    endYear,
-    initialYear,
-    onYearChange,
-    speed,
-    startYear,
-  });
+    const { isPlaying, setIsPlaying, setYear, year } = useTimelineState({
+      endYear,
+      initialYear,
+      onYearChange,
+      speed,
+      startYear,
+    });
 
-  usePlayback({
-    endYear,
-    isPlaying,
-    setIsPlaying,
-    setYear,
-    speed,
-    startYear,
-    year,
-  });
+    usePlayback({
+      endYear,
+      isPlaying,
+      setIsPlaying,
+      setYear,
+      speed,
+      startYear,
+      year,
+    });
 
-  const ctx = useTimelineCtx({
-    endYear,
-    isPlaying,
-    labels: resolvedLabels,
-    setIsPlaying,
-    setYear,
-    speed,
-    startYear,
-    year,
-  });
+    const ctx = useTimelineCtx({
+      endYear,
+      isPlaying,
+      labels: resolvedLabels,
+      setIsPlaying,
+      setYear,
+      speed,
+      startYear,
+      year,
+    });
 
-  const buckets = bucketChildren(children);
-  return (
-    <TimelineContext.Provider value={ctx}>
-      <Shell
-        backdrop={backdrop}
-        backdropAlt={backdropAlt}
-        buckets={buckets}
-        className={className}
-        ref={ref}
-        region={resolvedLabels.region}
-        titleId={titleId}
-        year={year}
-        {...rest}
-      />
-    </TimelineContext.Provider>
-  );
-};
-MapTimeline.displayName = "MapTimeline";
+    const buckets = bucketChildren(children);
+    return (
+      <TimelineContext.Provider value={ctx}>
+        <Shell
+          backdrop={backdrop}
+          backdropAlt={backdropAlt}
+          buckets={buckets}
+          className={className}
+          ref={ref}
+          region={resolvedLabels.region}
+          titleId={titleId}
+          year={year}
+          {...rest}
+        />
+      </TimelineContext.Provider>
+    );
+  },
+);

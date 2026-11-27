@@ -10,6 +10,7 @@ import {
 } from "@ui-sdk/react/toggle";
 import type * as React from "react";
 
+import { named } from "../../../lib/named";
 import { asChildProps } from "../../../lib/ui-sdk";
 import { cn } from "../../../lib/utils";
 import type { VariantProps } from "../../../lib/variants";
@@ -64,60 +65,61 @@ const toList = (value: string | undefined) =>
  * reads as a radio group and its value is a string. The other `type` presses
  * any number: it reads as a toolbar and its value is a list.
  */
-const ToggleGroup = ({
-  children,
-  className,
-  ref,
-  rovingFocus: _rovingFocus,
-  size,
-  variant,
-  ...props
-}: ToggleGroupProps) => {
-  const { defaultValue, onValueChange, type, value, ...rest } = props;
-  const contextValue = useMemo(
-    () => ({ size, type, variant }),
-    [size, type, variant],
-  );
-  const values =
-    type === "single"
-      ? {
-          defaultValue: toList(defaultValue),
-          onValueChange: (next: string[]) => {
-            onValueChange?.(next[0] ?? "");
-          },
-          value: toList(value),
-        }
-      : { defaultValue, onValueChange, value };
-
-  // ui-sdk renders a plain group; Radix read as a radio group or a toolbar.
-  const groupRender = (
-    elementProps: React.HTMLAttributes<HTMLElement>,
-    state: ToggleGroupState,
-  ) =>
-    renderElement(
-      "div",
-      { ...elementProps, role: type === "single" ? "radiogroup" : "toolbar" },
-      undefined,
-      state,
+const ToggleGroup = /* @__PURE__ */ named(
+  "ToggleGroup",
+  ({
+    children,
+    className,
+    ref,
+    rovingFocus: _rovingFocus,
+    size,
+    variant,
+    ...props
+  }: ToggleGroupProps) => {
+    const { defaultValue, onValueChange, type, value, ...rest } = props;
+    const contextValue = useMemo(
+      () => ({ size, type, variant }),
+      [size, type, variant],
     );
+    const values =
+      type === "single"
+        ? {
+            defaultValue: toList(defaultValue),
+            onValueChange: (next: string[]) => {
+              onValueChange?.(next[0] ?? "");
+            },
+            value: toList(value),
+          }
+        : { defaultValue, onValueChange, value };
 
-  return (
-    <ToggleGroupPrimitive
-      className={cn("flex items-center justify-center gap-1", className)}
-      multiple={type === "multiple"}
-      ref={ref}
-      render={groupRender}
-      {...rest}
-      {...values}
-    >
-      <ToggleGroupContext.Provider value={contextValue}>
-        {children}
-      </ToggleGroupContext.Provider>
-    </ToggleGroupPrimitive>
-  );
-};
+    // ui-sdk renders a plain group; Radix read as a radio group or a toolbar.
+    const groupRender = (
+      elementProps: React.HTMLAttributes<HTMLElement>,
+      state: ToggleGroupState,
+    ) =>
+      renderElement(
+        "div",
+        { ...elementProps, role: type === "single" ? "radiogroup" : "toolbar" },
+        undefined,
+        state,
+      );
 
-ToggleGroup.displayName = "ToggleGroup";
+    return (
+      <ToggleGroupPrimitive
+        className={cn("flex items-center justify-center gap-1", className)}
+        multiple={type === "multiple"}
+        ref={ref}
+        render={groupRender}
+        {...rest}
+        {...values}
+      >
+        <ToggleGroupContext.Provider value={contextValue}>
+          {children}
+        </ToggleGroupContext.Provider>
+      </ToggleGroupPrimitive>
+    );
+  },
+);
 
 type ToggleGroupItemProps = Omit<
   React.ComponentProps<typeof Toggle>,
@@ -129,57 +131,58 @@ type ToggleGroupItemProps = Omit<
     value: string;
   };
 
-const ToggleGroupItem = ({
-  asChild,
-  children,
-  className,
-  ref,
-  size,
-  variant,
-  ...props
-}: ToggleGroupItemProps) => {
-  const context = use(ToggleGroupContext);
-  const slot = asChildProps({ asChild, children });
-  const single = context.type === "single";
-  const render = (
-    elementProps: React.HTMLAttributes<HTMLElement>,
-    state: { pressed: boolean },
-  ) =>
-    renderElement(
-      "button",
-      {
-        ...elementProps,
-        ...(single
-          ? {
-              "aria-checked": state.pressed,
-              "aria-pressed": undefined,
-              role: "radio",
-            }
-          : {}),
-        "data-state": state.pressed ? "on" : "off",
-      },
-      slot.render,
-      state,
+const ToggleGroupItem = /* @__PURE__ */ named(
+  "ToggleGroupItem",
+  ({
+    asChild,
+    children,
+    className,
+    ref,
+    size,
+    variant,
+    ...props
+  }: ToggleGroupItemProps) => {
+    const context = use(ToggleGroupContext);
+    const slot = asChildProps({ asChild, children });
+    const single = context.type === "single";
+    const render = (
+      elementProps: React.HTMLAttributes<HTMLElement>,
+      state: { pressed: boolean },
+    ) =>
+      renderElement(
+        "button",
+        {
+          ...elementProps,
+          ...(single
+            ? {
+                "aria-checked": state.pressed,
+                "aria-pressed": undefined,
+                role: "radio",
+              }
+            : {}),
+          "data-state": state.pressed ? "on" : "off",
+        },
+        slot.render,
+        state,
+      );
+
+    return (
+      <Toggle
+        className={cn(
+          toggleVariants({
+            size: context.size ?? size,
+            variant: context.variant ?? variant,
+          }),
+          className,
+        )}
+        ref={ref}
+        render={render}
+        {...props}
+      >
+        {slot.children}
+      </Toggle>
     );
-
-  return (
-    <Toggle
-      className={cn(
-        toggleVariants({
-          size: context.size ?? size,
-          variant: context.variant ?? variant,
-        }),
-        className,
-      )}
-      ref={ref}
-      render={render}
-      {...props}
-    >
-      {slot.children}
-    </Toggle>
-  );
-};
-
-ToggleGroupItem.displayName = "ToggleGroupItem";
+  },
+);
 
 export { ToggleGroup, ToggleGroupItem };

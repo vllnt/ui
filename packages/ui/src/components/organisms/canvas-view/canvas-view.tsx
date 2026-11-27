@@ -14,6 +14,7 @@ import type {
   PointerEvent as ReactPointerEvent,
 } from "react";
 
+import { named } from "../../../lib/named";
 import { cn } from "../../../lib/utils";
 
 export type CanvasViewport = {
@@ -621,76 +622,77 @@ function CanvasContentLayer({
   );
 }
 
-const CanvasView = ({
-  children,
-  className,
-  defaultViewport = DEFAULT_VIEWPORT,
-  maxZoom = 2,
-  minZoom = 0.5,
-  onViewportChange,
-  overlay,
-  ref,
-  zoomStep = 0.1,
-  ...props
-}: CanvasViewProps & { ref?: React.Ref<CanvasViewHandle> }) => {
-  const instructionsId = useId();
-  const interactionRef = useRef<HTMLElement>(null);
-  const viewportState = useViewportState({
-    defaultViewport,
-    maxZoom,
-    minZoom,
+const CanvasView = /* @__PURE__ */ named(
+  "CanvasView",
+  ({
+    children,
+    className,
+    defaultViewport = DEFAULT_VIEWPORT,
+    maxZoom = 2,
+    minZoom = 0.5,
     onViewportChange,
-  });
-  const keyboard = useCanvasKeyboardInteractions({
-    containerRef: interactionRef,
-    nudgeViewport: viewportState.nudgeViewport,
-    resetViewport: viewportState.resetViewport,
-    setViewport: viewportState.setViewport,
-    viewportRef: viewportState.viewportRef,
-    zoomStep,
-  });
-  const pointer = useCanvasPointerInteractions({
-    isSpacePressed: keyboard.isSpacePressed,
-    setViewport: viewportState.setViewport,
-    viewportRef: viewportState.viewportRef,
-  });
-  usePreventBodySelection(pointer.isDragging);
-  useCanvasViewHandle(ref, viewportState);
+    overlay,
+    ref,
+    zoomStep = 0.1,
+    ...props
+  }: CanvasViewProps & { ref?: React.Ref<CanvasViewHandle> }) => {
+    const instructionsId = useId();
+    const interactionRef = useRef<HTMLElement>(null);
+    const viewportState = useViewportState({
+      defaultViewport,
+      maxZoom,
+      minZoom,
+      onViewportChange,
+    });
+    const keyboard = useCanvasKeyboardInteractions({
+      containerRef: interactionRef,
+      nudgeViewport: viewportState.nudgeViewport,
+      resetViewport: viewportState.resetViewport,
+      setViewport: viewportState.setViewport,
+      viewportRef: viewportState.viewportRef,
+      zoomStep,
+    });
+    const pointer = useCanvasPointerInteractions({
+      isSpacePressed: keyboard.isSpacePressed,
+      setViewport: viewportState.setViewport,
+      viewportRef: viewportState.viewportRef,
+    });
+    usePreventBodySelection(pointer.isDragging);
+    useCanvasViewHandle(ref, viewportState);
 
-  return (
-    <div
-      className={cn(
-        "relative h-full min-h-[32rem] overflow-hidden rounded-sm border border-border bg-background",
-        className,
-      )}
-      {...props}
-    >
-      <CanvasInteractionLayer
-        containerRef={interactionRef}
-        instructionsId={instructionsId}
-        isDragging={pointer.isDragging}
-        isSpacePressed={keyboard.isSpacePressed}
-        onBlur={keyboard.handleBlur}
-        onKeyDown={keyboard.handleKeyDown}
-        onKeyUp={keyboard.handleKeyUp}
-        onPointerCancel={pointer.handlePointerCancel}
-        onPointerDown={pointer.handlePointerDown}
-        onPointerMove={pointer.handlePointerMove}
-        onPointerUp={pointer.handlePointerUp}
-        viewport={viewportState.viewport}
+    return (
+      <div
+        className={cn(
+          "relative h-full min-h-[32rem] overflow-hidden rounded-sm border border-border bg-background",
+          className,
+        )}
+        {...props}
       >
-        <CanvasContentLayer
+        <CanvasInteractionLayer
+          containerRef={interactionRef}
+          instructionsId={instructionsId}
           isDragging={pointer.isDragging}
-          overlay={overlay}
+          isSpacePressed={keyboard.isSpacePressed}
+          onBlur={keyboard.handleBlur}
+          onKeyDown={keyboard.handleKeyDown}
+          onKeyUp={keyboard.handleKeyUp}
+          onPointerCancel={pointer.handlePointerCancel}
+          onPointerDown={pointer.handlePointerDown}
+          onPointerMove={pointer.handlePointerMove}
+          onPointerUp={pointer.handlePointerUp}
           viewport={viewportState.viewport}
         >
-          {children}
-        </CanvasContentLayer>
-      </CanvasInteractionLayer>
-    </div>
-  );
-};
-
-CanvasView.displayName = "CanvasView";
+          <CanvasContentLayer
+            isDragging={pointer.isDragging}
+            overlay={overlay}
+            viewport={viewportState.viewport}
+          >
+            {children}
+          </CanvasContentLayer>
+        </CanvasInteractionLayer>
+      </div>
+    );
+  },
+);
 
 export { CanvasView };

@@ -2,6 +2,7 @@
 
 import * as React from "react";
 
+import { named } from "../../../lib/named";
 import { cn } from "../../../lib/utils";
 
 /** Props for {@link MagneticButton}. */
@@ -122,41 +123,45 @@ function usePointerTransform<T extends HTMLElement>({
  * <MagneticButton>Hover me</MagneticButton>
  * ```
  */
-export const MagneticButton = ({
-  children,
-  className,
-  ref,
-  strength = 0.4,
-  style,
-  ...props
-}: MagneticButtonProps & { ref?: React.Ref<HTMLButtonElement> }) => {
-  const reduced = usePrefersReducedMotion();
-  const { handlePointerLeave, handlePointerMove } =
-    usePointerTransform<HTMLButtonElement>({
-      compute: (pointer, bounds) => {
-        const offsetX = (pointer.x - bounds.left - bounds.width / 2) * strength;
-        const offsetY = (pointer.y - bounds.top - bounds.height / 2) * strength;
-        return `translate(${offsetX}px, ${offsetY}px)`;
-      },
-      enabled: !reduced,
-      keepTransform: style?.transform !== undefined,
-    });
+export const MagneticButton = /* @__PURE__ */ named(
+  "MagneticButton",
+  ({
+    children,
+    className,
+    ref,
+    strength = 0.4,
+    style,
+    ...props
+  }: MagneticButtonProps & { ref?: React.Ref<HTMLButtonElement> }) => {
+    const reduced = usePrefersReducedMotion();
+    const { handlePointerLeave, handlePointerMove } =
+      usePointerTransform<HTMLButtonElement>({
+        compute: (pointer, bounds) => {
+          const offsetX =
+            (pointer.x - bounds.left - bounds.width / 2) * strength;
+          const offsetY =
+            (pointer.y - bounds.top - bounds.height / 2) * strength;
+          return `translate(${offsetX}px, ${offsetY}px)`;
+        },
+        enabled: !reduced,
+        keepTransform: style?.transform !== undefined,
+      });
 
-  return (
-    <button
-      className={cn(
-        "transition-transform duration-200 ease-out will-change-transform",
-        className,
-      )}
-      onPointerLeave={handlePointerLeave}
-      onPointerMove={handlePointerMove}
-      ref={ref}
-      style={style}
-      type="button"
-      {...props}
-    >
-      {children}
-    </button>
-  );
-};
-MagneticButton.displayName = "MagneticButton";
+    return (
+      <button
+        className={cn(
+          "transition-transform duration-200 ease-out will-change-transform",
+          className,
+        )}
+        onPointerLeave={handlePointerLeave}
+        onPointerMove={handlePointerMove}
+        ref={ref}
+        style={style}
+        type="button"
+        {...props}
+      >
+        {children}
+      </button>
+    );
+  },
+);

@@ -6,6 +6,7 @@ import { ArrowDownRight, ArrowUpRight, Dot, Pause, Play } from "lucide-react";
 
 import { formatChange } from "../../../lib/format";
 import type { MaterialProps } from "../../../lib/material";
+import { named } from "../../../lib/named";
 import { keyByOccurrence } from "../../../lib/occurrence-keys";
 import { cn } from "../../../lib/utils";
 import { Badge } from "../../atoms/badge/badge";
@@ -132,60 +133,61 @@ function TickerTapeRow({ items }: { items: TickerTapeItem[] }) {
  * `prefers-reduced-motion`, pauses on hover or while focus is inside it, and
  * offers a pause / play button (WCAG 2.2.2 Pause, Stop, Hide).
  */
-export const TickerTape = ({
-  className,
-  items,
-  labels,
-  material = "glass",
-  pauseControl = true,
-  pauseOnHover = true,
-  ref: reference,
-  speedSeconds = 28,
-  ...props
-}: TickerTapeProps & { ref?: React.Ref<HTMLDivElement> }) => {
-  const [paused, setPaused] = React.useState(false);
-  if (items.length === 0) {
-    return null;
-  }
+export const TickerTape = /* @__PURE__ */ named(
+  "TickerTape",
+  ({
+    className,
+    items,
+    labels,
+    material = "glass",
+    pauseControl = true,
+    pauseOnHover = true,
+    ref: reference,
+    speedSeconds = 28,
+    ...props
+  }: TickerTapeProps & { ref?: React.Ref<HTMLDivElement> }) => {
+    const [paused, setPaused] = React.useState(false);
+    if (items.length === 0) {
+      return null;
+    }
 
-  return (
-    <div
-      aria-label="TickerTape"
-      className={cn(
-        "vllnt-glass vllnt-glass-dense relative overflow-hidden rounded-2xl border",
-        className,
-      )}
-      data-material={material}
-      ref={reference}
-      role="region"
-      {...props}
-    >
-      <style>{tickerTapeKeyframes}</style>
-      {pauseControl ? (
-        <TickerTapePauseToggle
-          labels={{ pause: "Pause", play: "Play", ...labels }}
-          onToggle={() => {
-            setPaused((value) => !value);
-          }}
-          paused={paused}
-        />
-      ) : null}
+    return (
       <div
+        aria-label="TickerTape"
         className={cn(
-          "flex w-max items-stretch [animation-iteration-count:infinite] [animation-name:ticker-tape-scroll] [animation-timing-function:linear] focus-within:[animation-play-state:paused] motion-reduce:animate-none",
-          pauseOnHover && "hover:[animation-play-state:paused]",
-          paused && "[animation-play-state:paused]",
+          "vllnt-glass vllnt-glass-dense relative overflow-hidden rounded-2xl border",
+          className,
         )}
-        data-ticker-tape-track=""
-        style={{ animationDuration: `${speedSeconds.toString()}s` }}
+        data-material={material}
+        ref={reference}
+        role="region"
+        {...props}
       >
-        <TickerTapeRow items={items} />
-        <div aria-hidden="true">
+        <style>{tickerTapeKeyframes}</style>
+        {pauseControl ? (
+          <TickerTapePauseToggle
+            labels={{ pause: "Pause", play: "Play", ...labels }}
+            onToggle={() => {
+              setPaused((value) => !value);
+            }}
+            paused={paused}
+          />
+        ) : null}
+        <div
+          className={cn(
+            "flex w-max items-stretch [animation-iteration-count:infinite] [animation-name:ticker-tape-scroll] [animation-timing-function:linear] focus-within:[animation-play-state:paused] motion-reduce:animate-none",
+            pauseOnHover && "hover:[animation-play-state:paused]",
+            paused && "[animation-play-state:paused]",
+          )}
+          data-ticker-tape-track=""
+          style={{ animationDuration: `${speedSeconds.toString()}s` }}
+        >
           <TickerTapeRow items={items} />
+          <div aria-hidden="true">
+            <TickerTapeRow items={items} />
+          </div>
         </div>
       </div>
-    </div>
-  );
-};
-
-TickerTape.displayName = "TickerTape";
+    );
+  },
+);

@@ -2,6 +2,7 @@
 
 import { type ComponentPropsWithoutRef, type ReactNode, useMemo } from "react";
 
+import { named } from "../../../lib/named";
 import { cn } from "../../../lib/utils";
 
 const MS_PER_DAY = 24 * 60 * 60 * 1000;
@@ -528,51 +529,53 @@ function TimelineColumn({
  *
  * @public
  */
-export const GanttChart = ({
-  ref,
-  ...props
-}: GanttChartProps & { ref?: React.Ref<HTMLDivElement> }) => {
-  const {
-    className,
-    endDate,
-    groups,
-    labels,
-    locale = DEFAULT_LOCALE,
-    milestones = [],
-    now,
-    scale = "month",
-    startDate,
-    taskColumnWidth = 200,
-    ...rest
-  } = props;
-  const resolvedLabels = useMemo(
-    () => ({ ...DEFAULT_LABELS, ...labels }),
-    [labels],
-  );
-  const geometry = useChartGeometry({ endDate, locale, scale, startDate });
-  const nowDate = useMemo(() => (now ? toDate(now) : new Date()), [now]);
+export const GanttChart = /* @__PURE__ */ named(
+  "GanttChart",
+  ({
+    ref,
+    ...props
+  }: GanttChartProps & { ref?: React.Ref<HTMLDivElement> }) => {
+    const {
+      className,
+      endDate,
+      groups,
+      labels,
+      locale = DEFAULT_LOCALE,
+      milestones = [],
+      now,
+      scale = "month",
+      startDate,
+      taskColumnWidth = 200,
+      ...rest
+    } = props;
+    const resolvedLabels = useMemo(
+      () => ({ ...DEFAULT_LABELS, ...labels }),
+      [labels],
+    );
+    const geometry = useChartGeometry({ endDate, locale, scale, startDate });
+    const nowDate = useMemo(() => (now ? toDate(now) : new Date()), [now]);
 
-  return (
-    <div
-      aria-label={resolvedLabels.region}
-      className={cn(
-        "flex w-full overflow-x-auto rounded-2xl border bg-background text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
-        className,
-      )}
-      ref={ref}
-      role="region"
-      tabIndex={0}
-      {...rest}
-    >
-      <LeftColumn groups={groups} taskColumnWidth={taskColumnWidth} />
-      <TimelineColumn
-        geometry={geometry}
-        groups={groups}
-        labels={resolvedLabels}
-        milestones={milestones}
-        now={nowDate}
-      />
-    </div>
-  );
-};
-GanttChart.displayName = "GanttChart";
+    return (
+      <div
+        aria-label={resolvedLabels.region}
+        className={cn(
+          "flex w-full overflow-x-auto rounded-2xl border bg-background text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+          className,
+        )}
+        ref={ref}
+        role="region"
+        tabIndex={0}
+        {...rest}
+      >
+        <LeftColumn groups={groups} taskColumnWidth={taskColumnWidth} />
+        <TimelineColumn
+          geometry={geometry}
+          groups={groups}
+          labels={resolvedLabels}
+          milestones={milestones}
+          now={nowDate}
+        />
+      </div>
+    );
+  },
+);

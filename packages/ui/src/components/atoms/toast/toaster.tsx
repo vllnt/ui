@@ -4,6 +4,8 @@ import * as React from "react";
 
 import { useTheme } from "next-themes";
 
+import { named } from "../../../lib/named";
+
 import { setDefaultToastDuration } from "./toast-api";
 import type { ToasterProps } from "./toaster-region";
 
@@ -21,40 +23,38 @@ function subscribeToNothing(): () => void {
   return noop;
 }
 
-const Toaster = ({
-  duration,
-  theme: themeProperty,
-  ...props
-}: ToasterProps) => {
-  const { theme = "system" } = useTheme();
-  const mounted = React.useSyncExternalStore(
-    subscribeToNothing,
-    () => true,
-    () => false,
-  );
-  const toastDuration = duration ?? props.toastOptions?.duration;
+const Toaster = /* @__PURE__ */ named(
+  "Toaster",
+  ({ duration, theme: themeProperty, ...props }: ToasterProps) => {
+    const { theme = "system" } = useTheme();
+    const mounted = React.useSyncExternalStore(
+      subscribeToNothing,
+      () => true,
+      () => false,
+    );
+    const toastDuration = duration ?? props.toastOptions?.duration;
 
-  React.useEffect(() => {
-    setDefaultToastDuration(toastDuration);
-    return () => {
-      setDefaultToastDuration(undefined);
-    };
-  }, [toastDuration]);
+    React.useEffect(() => {
+      setDefaultToastDuration(toastDuration);
+      return () => {
+        setDefaultToastDuration(undefined);
+      };
+    }, [toastDuration]);
 
-  if (!mounted) {
-    return null;
-  }
+    if (!mounted) {
+      return null;
+    }
 
-  return (
-    <React.Suspense fallback={null}>
-      <ToasterRegion
-        theme={themeProperty ?? (theme as ToasterProps["theme"])}
-        {...props}
-      />
-    </React.Suspense>
-  );
-};
-Toaster.displayName = "Toaster";
+    return (
+      <React.Suspense fallback={null}>
+        <ToasterRegion
+          theme={themeProperty ?? (theme as ToasterProps["theme"])}
+          {...props}
+        />
+      </React.Suspense>
+    );
+  },
+);
 
 export { Toaster };
 

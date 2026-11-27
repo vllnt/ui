@@ -4,6 +4,7 @@ import { memo } from "react";
 
 import type { ReactNode } from "react";
 
+import { named } from "../../../lib/named";
 import { cn } from "../../../lib/utils";
 
 export type StepNavigationProps = {
@@ -103,5 +104,7 @@ function StepNavigationImpl({
   );
 }
 
-export const StepNavigation = memo(StepNavigationImpl);
-StepNavigation.displayName = "StepNavigation";
+export const StepNavigation = /* @__PURE__ */ named(
+  "StepNavigation",
+  /* @__PURE__ */ memo(StepNavigationImpl),
+);

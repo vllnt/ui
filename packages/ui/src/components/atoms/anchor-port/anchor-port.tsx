@@ -1,3 +1,4 @@
+import { named } from "../../../lib/named";
 import { cn } from "../../../lib/utils";
 
 export type AnchorPortProps = React.ComponentPropsWithoutRef<"span"> & {
@@ -27,34 +28,35 @@ const sideClasses: Record<NonNullable<AnchorPortProps["side"]>, string> = {
   top: "self-start",
 };
 
-const AnchorPort = ({
-  className,
-  ref,
-  side = "right",
-  state = "idle",
-  tone = "bidirectional",
-  ...props
-}: AnchorPortProps & { ref?: React.Ref<HTMLSpanElement> }) => (
-  <span
-    aria-label={props["aria-label"] ?? `${tone} ${side} port ${state}`}
-    className={cn(
-      "inline-flex size-7 items-center justify-center rounded-full border shadow-sm",
-      toneClasses[tone],
-      stateClasses[state],
-      sideClasses[side],
-      className,
-    )}
-    data-side={side}
-    data-state={state}
-    data-tone={tone}
-    ref={ref}
-    role="img"
-    {...props}
-  >
-    <span className="size-2.5 rounded-full bg-current" />
-  </span>
+const AnchorPort = /* @__PURE__ */ named(
+  "AnchorPort",
+  ({
+    className,
+    ref,
+    side = "right",
+    state = "idle",
+    tone = "bidirectional",
+    ...props
+  }: AnchorPortProps & { ref?: React.Ref<HTMLSpanElement> }) => (
+    <span
+      aria-label={props["aria-label"] ?? `${tone} ${side} port ${state}`}
+      className={cn(
+        "inline-flex size-7 items-center justify-center rounded-full border shadow-sm",
+        toneClasses[tone],
+        stateClasses[state],
+        sideClasses[side],
+        className,
+      )}
+      data-side={side}
+      data-state={state}
+      data-tone={tone}
+      ref={ref}
+      role="img"
+      {...props}
+    >
+      <span className="size-2.5 rounded-full bg-current" />
+    </span>
+  ),
 );
-
-AnchorPort.displayName = "AnchorPort";
 
 export { AnchorPort };

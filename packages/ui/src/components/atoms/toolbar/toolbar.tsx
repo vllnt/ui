@@ -2,6 +2,7 @@
 
 import { type FocusEvent, useCallback, useEffect, useRef } from "react";
 
+import { named } from "../../../lib/named";
 import { moveRovingFocus } from "../../../lib/roving-focus";
 import { cn } from "../../../lib/utils";
 
@@ -56,82 +57,84 @@ export type ToolbarProps = {
  *   <Button>Italic</Button>
  * </Toolbar>
  */
-const Toolbar = ({
-  className,
-  onFocus,
-  onKeyDown,
-  orientation = "horizontal",
-  ref,
-  ...props
-}: ToolbarProps & { ref?: React.Ref<HTMLDivElement> }) => {
-  const toolbarRef = useRef<HTMLDivElement | null>(null);
-  const lastFocusedRef = useRef<Element | null>(null);
+const Toolbar = /* @__PURE__ */ named(
+  "Toolbar",
+  ({
+    className,
+    onFocus,
+    onKeyDown,
+    orientation = "horizontal",
+    ref,
+    ...props
+  }: ToolbarProps & { ref?: React.Ref<HTMLDivElement> }) => {
+    const toolbarRef = useRef<HTMLDivElement | null>(null);
+    const lastFocusedRef = useRef<Element | null>(null);
 
-  const setRef = useCallback(
-    (node: HTMLDivElement | null) => {
-      toolbarRef.current = node;
-      if (typeof ref === "function") {
-        ref(node);
-      } else if (ref) {
-        ref.current = node;
+    const setRef = useCallback(
+      (node: HTMLDivElement | null) => {
+        toolbarRef.current = node;
+        if (typeof ref === "function") {
+          ref(node);
+        } else if (ref) {
+          ref.current = node;
+        }
+      },
+      [ref],
+    );
+
+    // Controls come and go, and get disabled, without the toolbar rendering.
+    useEffect(() => {
+      const toolbar = toolbarRef.current;
+      if (!toolbar) return;
+      const sync = (): void => {
+        syncTabStops(toolbar, lastFocusedRef.current);
+      };
+      sync();
+      const observer = new MutationObserver(sync);
+      observer.observe(toolbar, {
+        attributeFilter: ["aria-disabled", "disabled"],
+        attributes: true,
+        childList: true,
+        subtree: true,
+      });
+      return () => {
+        observer.disconnect();
+      };
+    }, []);
+
+    function handleFocus(event: FocusEvent<HTMLDivElement>): void {
+      onFocus?.(event);
+      if (
+        event.target instanceof HTMLElement &&
+        event.target.matches("[data-toolbar-item]")
+      ) {
+        lastFocusedRef.current = event.target;
+        syncTabStops(event.currentTarget, event.target);
       }
-    },
-    [ref],
-  );
-
-  // Controls come and go, and get disabled, without the toolbar rendering.
-  useEffect(() => {
-    const toolbar = toolbarRef.current;
-    if (!toolbar) return;
-    const sync = (): void => {
-      syncTabStops(toolbar, lastFocusedRef.current);
-    };
-    sync();
-    const observer = new MutationObserver(sync);
-    observer.observe(toolbar, {
-      attributeFilter: ["aria-disabled", "disabled"],
-      attributes: true,
-      childList: true,
-      subtree: true,
-    });
-    return () => {
-      observer.disconnect();
-    };
-  }, []);
-
-  function handleFocus(event: FocusEvent<HTMLDivElement>): void {
-    onFocus?.(event);
-    if (
-      event.target instanceof HTMLElement &&
-      event.target.matches("[data-toolbar-item]")
-    ) {
-      lastFocusedRef.current = event.target;
-      syncTabStops(event.currentTarget, event.target);
     }
-  }
 
-  function handleKeyDown(event: React.KeyboardEvent<HTMLDivElement>): void {
-    onKeyDown?.(event);
-    moveRovingFocus(event, ITEM_SELECTOR, { orientation });
-  }
+    function handleKeyDown(event: React.KeyboardEvent<HTMLDivElement>): void {
+      onKeyDown?.(event);
+      moveRovingFocus(event, ITEM_SELECTOR, { orientation });
+    }
 
-  return (
-    <div
-      aria-orientation={orientation}
-      className={cn(
-        "flex items-center gap-1 rounded-md border border-border bg-background p-1",
-        orientation === "vertical" ? "flex-col" : "flex-row",
-        className,
-      )}
-      onFocus={handleFocus}
-      onKeyDown={handleKeyDown}
-      ref={setRef}
-      role="toolbar"
-      {...props}
-    />
-  );
-};
-Toolbar.displayName = "Toolbar";
+    return (
+      <div
+        aria-orientation={orientation}
+        className={cn(
+          "flex items-center gap-1 rounded-md border border-border bg-background p-1",
+          orientation === "vertical" ? "flex-col" : "flex-row",
+          className,
+        )}
+        onFocus={handleFocus}
+        onKeyDown={handleKeyDown}
+        ref={setRef}
+        role="toolbar"
+        {...props}
+      />
+    );
+  },
+);
 
 /** Props for the {@link ToolbarSeparator}. */
 export type ToolbarSeparatorProps = {
@@ -140,24 +143,26 @@ export type ToolbarSeparatorProps = {
 } & React.HTMLAttributes<HTMLDivElement>;
 
 /** Visual and semantic divider between groups of toolbar controls. */
-const ToolbarSeparator = ({
-  className,
-  orientation = "vertical",
-  ref,
-  ...props
-}: ToolbarSeparatorProps & { ref?: React.Ref<HTMLDivElement> }) => (
-  <div
-    aria-orientation={orientation}
-    className={cn(
-      "shrink-0 bg-border",
-      orientation === "vertical" ? "mx-1 h-6 w-px" : "my-1 h-px w-full",
-      className,
-    )}
-    ref={ref}
-    role="separator"
-    {...props}
-  />
+const ToolbarSeparator = /* @__PURE__ */ named(
+  "ToolbarSeparator",
+  ({
+    className,
+    orientation = "vertical",
+    ref,
+    ...props
+  }: ToolbarSeparatorProps & { ref?: React.Ref<HTMLDivElement> }) => (
+    <div
+      aria-orientation={orientation}
+      className={cn(
+        "shrink-0 bg-border",
+        orientation === "vertical" ? "mx-1 h-6 w-px" : "my-1 h-px w-full",
+        className,
+      )}
+      ref={ref}
+      role="separator"
+      {...props}
+    />
+  ),
 );
-ToolbarSeparator.displayName = "ToolbarSeparator";
 
 export { Toolbar, ToolbarSeparator };

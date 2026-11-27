@@ -12,6 +12,7 @@ import {
 import { renderElement } from "@ui-sdk/react/primitive";
 import type { ReactNode, RefCallback } from "react";
 
+import { named } from "../../../lib/named";
 import type { HeadingTag } from "../../../lib/types";
 import { withDataAttributes } from "../../../lib/ui-sdk";
 import { cn } from "../../../lib/utils";
@@ -104,7 +105,7 @@ export type AccordionProps = {
   type?: "multiple" | "single";
 };
 
-function Accordion({
+function AccordionRoot({
   children,
   className,
   defaultValue,
@@ -136,24 +137,27 @@ export type AccordionItemProps = {
   value: string;
 };
 
-function AccordionItem({
-  children,
-  className,
-  value,
-}: AccordionItemProps): React.ReactNode {
-  return (
-    <AccordionItemPrimitive
-      className={cn(
-        "first:rounded-t-lg last:rounded-b-lg overflow-hidden",
-        className,
-      )}
-      data-value={value}
-      value={value}
-    >
-      {children}
-    </AccordionItemPrimitive>
-  );
-}
+const AccordionItem = /* @__PURE__ */ named(
+  "AccordionItem",
+  function AccordionItem({
+    children,
+    className,
+    value,
+  }: AccordionItemProps): React.ReactNode {
+    return (
+      <AccordionItemPrimitive
+        className={cn(
+          "first:rounded-t-lg last:rounded-b-lg overflow-hidden",
+          className,
+        )}
+        data-value={value}
+        value={value}
+      >
+        {children}
+      </AccordionItemPrimitive>
+    );
+  },
+);
 
 export type AccordionTriggerProps = {
   /** Heading tag around the trigger. Defaults to `h3`. */
@@ -165,66 +169,69 @@ export type AccordionTriggerProps = {
   value: string;
 };
 
-function AccordionTrigger({
-  as: heading = "h3",
-  children,
-  className,
-  icon,
-  value,
-}: AccordionTriggerProps): React.ReactNode {
-  const baseId = useAccordionId();
+const AccordionTrigger = /* @__PURE__ */ named(
+  "AccordionTrigger",
+  function AccordionTrigger({
+    as: tag = "h3",
+    children,
+    className,
+    icon,
+    value,
+  }: AccordionTriggerProps): React.ReactNode {
+    const baseId = useAccordionId();
 
-  return (
-    <AccordionHeader
-      // Reset what a heading adds, so the trigger looks as it did without one.
-      className="m-0 text-inherit [font:inherit]"
-      render={(props, state) => renderElement(heading, props, undefined, state)}
-    >
-      <AccordionTriggerPrimitive
-        className={getTriggerClassName(className)}
-        id={getPartId(baseId, "trigger", value)}
-        // ui-sdk leaves out `aria-controls`; the panel id comes from the value.
-        render={withDataAttributes("button", () => ({
-          "aria-controls": getPartId(baseId, "content", value),
-        }))}
+    return (
+      <AccordionHeader
+        // Reset what a heading adds, so the trigger looks as it did without one.
+        className="m-0 text-inherit [font:inherit]"
+        render={(props, state) => renderElement(tag, props, undefined, state)}
       >
-        {({ open }) => (
-          <>
-            <span className="text-sm">{children}</span>
-            {icon ? (
-              <span
-                className={cn(
-                  "size-4 flex-shrink-0 transition-transform duration-200",
-                  open && "rotate-180",
-                )}
-              >
-                {icon}
-              </span>
-            ) : (
-              <svg
-                aria-hidden="true"
-                className={cn(
-                  "size-4 flex-shrink-0 transition-transform duration-200",
-                  open && "rotate-180",
-                )}
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  d="m6 9 6 6 6-6"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                />
-              </svg>
-            )}
-          </>
-        )}
-      </AccordionTriggerPrimitive>
-    </AccordionHeader>
-  );
-}
+        <AccordionTriggerPrimitive
+          className={getTriggerClassName(className)}
+          id={getPartId(baseId, "trigger", value)}
+          // ui-sdk leaves out `aria-controls`; the panel id comes from the value.
+          render={withDataAttributes("button", () => ({
+            "aria-controls": getPartId(baseId, "content", value),
+          }))}
+        >
+          {({ open }) => (
+            <>
+              <span className="text-sm">{children}</span>
+              {icon ? (
+                <span
+                  className={cn(
+                    "size-4 flex-shrink-0 transition-transform duration-200",
+                    open && "rotate-180",
+                  )}
+                >
+                  {icon}
+                </span>
+              ) : (
+                <svg
+                  aria-hidden="true"
+                  className={cn(
+                    "size-4 flex-shrink-0 transition-transform duration-200",
+                    open && "rotate-180",
+                  )}
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    d="m6 9 6 6 6-6"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                  />
+                </svg>
+              )}
+            </>
+          )}
+        </AccordionTriggerPrimitive>
+      </AccordionHeader>
+    );
+  },
+);
 
 export type AccordionContentProps = {
   children: ReactNode;
@@ -233,37 +240,42 @@ export type AccordionContentProps = {
   value: string;
 };
 
-function AccordionContent({
-  children,
-  className,
-  value,
-}: AccordionContentProps): React.ReactNode {
-  const baseId = useAccordionId();
-  const inertWhileClosed = useInertWhileClosed();
+const AccordionContent = /* @__PURE__ */ named(
+  "AccordionContent",
+  function AccordionContent({
+    children,
+    className,
+    value,
+  }: AccordionContentProps): React.ReactNode {
+    const baseId = useAccordionId();
+    const inertWhileClosed = useInertWhileClosed();
 
-  return (
-    <AccordionPanel
-      className="h-[var(--accordion-panel-height)] overflow-hidden transition-[height,opacity] duration-200 [--radix-accordion-content-height:var(--accordion-panel-height)] [--radix-accordion-content-width:var(--accordion-panel-width)] data-[ending-style]:h-0 data-[starting-style]:h-0 data-[ending-style]:opacity-0 data-[starting-style]:opacity-0"
-      id={getPartId(baseId, "content", value)}
-      keepMounted
-      ref={inertWhileClosed}
-      render={renderPanel}
-    >
-      <div
-        className={cn(
-          "p-4 pt-0 text-sm text-muted-foreground [&>p]:mb-2 [&>pre]:my-2",
-          className,
-        )}
+    return (
+      <AccordionPanel
+        className="h-[var(--accordion-panel-height)] overflow-hidden transition-[height,opacity] duration-200 [--radix-accordion-content-height:var(--accordion-panel-height)] [--radix-accordion-content-width:var(--accordion-panel-width)] data-[ending-style]:h-0 data-[starting-style]:h-0 data-[ending-style]:opacity-0 data-[starting-style]:opacity-0"
+        id={getPartId(baseId, "content", value)}
+        keepMounted
+        ref={inertWhileClosed}
+        render={renderPanel}
       >
-        {children}
-      </div>
-    </AccordionPanel>
-  );
-}
+        <div
+          className={cn(
+            "p-4 pt-0 text-sm text-muted-foreground [&>p]:mb-2 [&>pre]:my-2",
+            className,
+          )}
+        >
+          {children}
+        </div>
+      </AccordionPanel>
+    );
+  },
+);
 
-// Attach sub-components
-Accordion.Item = AccordionItem;
-Accordion.Trigger = AccordionTrigger;
-Accordion.Content = AccordionContent;
+/** The root, with its parts as statics: `Accordion.Item`, `Accordion.Trigger` and `Accordion.Content`. */
+const Accordion = /* @__PURE__ */ named("Accordion", AccordionRoot, () => ({
+  Content: AccordionContent,
+  Item: AccordionItem,
+  Trigger: AccordionTrigger,
+}));
 
 export { Accordion, AccordionContent, AccordionItem, AccordionTrigger };

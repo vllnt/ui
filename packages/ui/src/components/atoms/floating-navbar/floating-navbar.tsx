@@ -3,6 +3,7 @@
 import * as React from "react";
 
 import type { MaterialProps } from "../../../lib/material";
+import { named } from "../../../lib/named";
 import { cn } from "../../../lib/utils";
 
 /** Props for {@link FloatingNavbar}. `material="solid"` opts out of glass. */
@@ -77,29 +78,31 @@ function useScrollVisibility(reduced: boolean): boolean {
  * </FloatingNavbar>
  * ```
  */
-export const FloatingNavbar = ({
-  children,
-  className,
-  material = "glass",
-  ref,
-  ...props
-}: FloatingNavbarProps & { ref?: React.Ref<HTMLElement> }) => {
-  const reduced = usePrefersReducedMotion();
-  const visible = useScrollVisibility(reduced);
+export const FloatingNavbar = /* @__PURE__ */ named(
+  "FloatingNavbar",
+  ({
+    children,
+    className,
+    material = "glass",
+    ref,
+    ...props
+  }: FloatingNavbarProps & { ref?: React.Ref<HTMLElement> }) => {
+    const reduced = usePrefersReducedMotion();
+    const visible = useScrollVisibility(reduced);
 
-  return (
-    <nav
-      className={cn(
-        "vllnt-glass-floating fixed inset-x-0 top-4 z-50 mx-auto flex w-fit items-center gap-4 rounded-full border px-6 py-2 transition-transform duration-300",
-        visible ? "" : "-translate-y-[150%]",
-        className,
-      )}
-      data-material={material}
-      ref={ref}
-      {...props}
-    >
-      {children}
-    </nav>
-  );
-};
-FloatingNavbar.displayName = "FloatingNavbar";
+    return (
+      <nav
+        className={cn(
+          "vllnt-glass-floating fixed inset-x-0 top-4 z-50 mx-auto flex w-fit items-center gap-4 rounded-full border px-6 py-2 transition-transform duration-300",
+          visible ? "" : "-translate-y-[150%]",
+          className,
+        )}
+        data-material={material}
+        ref={ref}
+        {...props}
+      >
+        {children}
+      </nav>
+    );
+  },
+);

@@ -2,6 +2,7 @@
 
 import type { ComponentPropsWithoutRef, ReactNode } from "react";
 
+import { named } from "../../../lib/named";
 import { cn } from "../../../lib/utils";
 
 /**
@@ -123,66 +124,68 @@ const PinBody = (props: PinBodyInput): React.ReactElement => {
  *
  * @public
  */
-export const CommentPin = ({
-  ref,
-  ...props
-}: CommentPinProps & { ref?: React.Ref<HTMLDivElement> }) => {
-  const {
-    authorInitial,
-    className,
-    color,
-    labels,
-    onActivate,
-    state = "open",
-    unread,
-    x,
-    y,
-    ...rest
-  } = props;
-  const resolvedLabels = { ...DEFAULT_LABELS, ...labels };
-  const showBadge = typeof unread === "number" && unread > 0;
-  const ariaLabel = showBadge
-    ? `${resolvedLabels.region}, ${unread} ${resolvedLabels.unreadSuffix}`
-    : resolvedLabels.region;
-  const handleActivateComment = (): void => {
-    onActivate?.();
-  };
-  const body = (
-    <PinBody
-      accent={color}
-      authorInitial={authorInitial}
-      state={state}
-      unread={unread}
-    />
-  );
-  return (
-    <div
-      aria-label={onActivate ? undefined : ariaLabel}
-      className={cn(
-        "absolute z-30 inline-flex -translate-x-1/2 -translate-y-1/2",
-        className,
-      )}
-      data-comment-pin
-      data-comment-pin-state={state}
-      ref={ref}
-      role={onActivate ? undefined : "img"}
-      style={{ left: x, top: y }}
-      {...rest}
-    >
-      {onActivate ? (
-        <button
-          className="relative inline-flex rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-          data-comment-pin-trigger
-          onClick={handleActivateComment}
-          type="button"
-        >
-          {body}
-          <span className="sr-only">{ariaLabel}</span>
-        </button>
-      ) : (
-        <span className="relative inline-flex">{body}</span>
-      )}
-    </div>
-  );
-};
-CommentPin.displayName = "CommentPin";
+export const CommentPin = /* @__PURE__ */ named(
+  "CommentPin",
+  ({
+    ref,
+    ...props
+  }: CommentPinProps & { ref?: React.Ref<HTMLDivElement> }) => {
+    const {
+      authorInitial,
+      className,
+      color,
+      labels,
+      onActivate,
+      state = "open",
+      unread,
+      x,
+      y,
+      ...rest
+    } = props;
+    const resolvedLabels = { ...DEFAULT_LABELS, ...labels };
+    const showBadge = typeof unread === "number" && unread > 0;
+    const ariaLabel = showBadge
+      ? `${resolvedLabels.region}, ${unread} ${resolvedLabels.unreadSuffix}`
+      : resolvedLabels.region;
+    const handleActivateComment = (): void => {
+      onActivate?.();
+    };
+    const body = (
+      <PinBody
+        accent={color}
+        authorInitial={authorInitial}
+        state={state}
+        unread={unread}
+      />
+    );
+    return (
+      <div
+        aria-label={onActivate ? undefined : ariaLabel}
+        className={cn(
+          "absolute z-30 inline-flex -translate-x-1/2 -translate-y-1/2",
+          className,
+        )}
+        data-comment-pin
+        data-comment-pin-state={state}
+        ref={ref}
+        role={onActivate ? undefined : "img"}
+        style={{ left: x, top: y }}
+        {...rest}
+      >
+        {onActivate ? (
+          <button
+            className="relative inline-flex rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            data-comment-pin-trigger
+            onClick={handleActivateComment}
+            type="button"
+          >
+            {body}
+            <span className="sr-only">{ariaLabel}</span>
+          </button>
+        ) : (
+          <span className="relative inline-flex">{body}</span>
+        )}
+      </div>
+    );
+  },
+);

@@ -11,6 +11,7 @@ import {
 } from "@ui-sdk/react/otp-input";
 import { Dot } from "lucide-react";
 
+import { named } from "../../../lib/named";
 import type { NarrowPartProps } from "../../../lib/ui-sdk";
 import { cn } from "../../../lib/utils";
 
@@ -62,77 +63,81 @@ const codeOnly = (callback: ((value: string) => void) | undefined) =>
       }
     : undefined;
 
-const InputOTP = ({
-  className,
-  containerClassName,
-  inputMode,
-  maxLength = DEFAULT_MAX_LENGTH,
-  onChange,
-  onComplete,
-  pattern,
-  ref: reference,
-  textAlign,
-  ...props
-}: InputOTPProps) => {
-  const sdkPattern = React.useMemo<SdkPattern>(
-    () =>
-      pattern === undefined
-        ? ANY_CHARACTER
-        : typeof pattern === "string" && !PATTERN_KEYWORDS.has(pattern)
-          ? new RegExp(pattern)
-          : (pattern as SdkPattern),
-    [pattern],
-  );
+const InputOTP = /* @__PURE__ */ named(
+  "InputOTP",
+  ({
+    className,
+    containerClassName,
+    inputMode,
+    maxLength = DEFAULT_MAX_LENGTH,
+    onChange,
+    onComplete,
+    pattern,
+    ref: reference,
+    textAlign,
+    ...props
+  }: InputOTPProps) => {
+    const sdkPattern = React.useMemo<SdkPattern>(
+      () =>
+        pattern === undefined
+          ? ANY_CHARACTER
+          : typeof pattern === "string" && !PATTERN_KEYWORDS.has(pattern)
+            ? new RegExp(pattern)
+            : (pattern as SdkPattern),
+      [pattern],
+    );
 
-  // The ref targets the real <input>, as before; the sdk's root is a <div>.
-  const rootReference = React.useCallback(
-    (root: HTMLDivElement | null) => {
-      const input = root?.querySelector("input") ?? null;
-      if (typeof reference === "function") {
-        reference(input);
-      } else if (reference) {
-        reference.current = input;
-      }
-    },
-    [reference],
-  );
-
-  return (
-    <MaxLengthContext value={maxLength}>
-      <OTPInput
-        className={cn(
-          "flex items-center gap-2 has-[:disabled]:opacity-50 [&>input:disabled]:cursor-not-allowed",
-          containerClassName,
-          className,
-        )}
-        inputMode={
-          inputMode ?? (sdkPattern === pattern ? undefined : "numeric")
+    // The ref targets the real <input>, as before; the sdk's root is a <div>.
+    const rootReference = React.useCallback(
+      (root: HTMLDivElement | null) => {
+        const input = root?.querySelector("input") ?? null;
+        if (typeof reference === "function") {
+          reference(input);
+        } else if (reference) {
+          reference.current = input;
         }
-        maxLength={maxLength}
-        onValueChange={codeOnly(onChange)}
-        onValueCommit={codeOnly(onComplete)}
-        pattern={sdkPattern}
-        ref={rootReference}
-        textAlign={textAlign ? SDK_TEXT_ALIGN[textAlign] : undefined}
-        {...props}
-      />
-    </MaxLengthContext>
-  );
-};
-InputOTP.displayName = "InputOTP";
+      },
+      [reference],
+    );
 
-const InputOTPGroup = ({
-  className,
-  ref,
-  ...props
-}: NarrowPartProps<React.ComponentProps<typeof OTPInputGroup>>) => (
-  <OTPInputGroup
-    className={cn("flex items-center", className)}
-    ref={ref}
-    {...props}
-  />
+    return (
+      <MaxLengthContext value={maxLength}>
+        <OTPInput
+          className={cn(
+            "flex items-center gap-2 has-[:disabled]:opacity-50 [&>input:disabled]:cursor-not-allowed",
+            containerClassName,
+            className,
+          )}
+          inputMode={
+            inputMode ?? (sdkPattern === pattern ? undefined : "numeric")
+          }
+          maxLength={maxLength}
+          onValueChange={codeOnly(onChange)}
+          onValueCommit={codeOnly(onComplete)}
+          pattern={sdkPattern}
+          ref={rootReference}
+          textAlign={textAlign ? SDK_TEXT_ALIGN[textAlign] : undefined}
+          {...props}
+        />
+      </MaxLengthContext>
+    );
+  },
 );
-InputOTPGroup.displayName = "InputOTPGroup";
+
+const InputOTPGroup = /* @__PURE__ */ named(
+  "InputOTPGroup",
+  ({
+    className,
+    ref,
+    ...props
+  }: NarrowPartProps<React.ComponentProps<typeof OTPInputGroup>>) => (
+    <OTPInputGroup
+      className={cn("flex items-center", className)}
+      ref={ref}
+      {...props}
+    />
+  ),
+);
 
 const slotContent = ({ char, hasFakeCaret }: OTPInputSlotState) => (
   <>
@@ -145,41 +150,50 @@ const slotContent = ({ char, hasFakeCaret }: OTPInputSlotState) => (
   </>
 );
 
-const InputOTPSlot = ({
-  className,
-  index,
-  ref,
-  ...props
-}: NarrowPartProps<React.ComponentProps<typeof OTPInputSlot>>) => {
-  const maxLength = React.use(MaxLengthContext);
+const InputOTPSlot = /* @__PURE__ */ named(
+  "InputOTPSlot",
+  ({
+    className,
+    index,
+    ref,
+    ...props
+  }: NarrowPartProps<React.ComponentProps<typeof OTPInputSlot>>) => {
+    const maxLength = React.use(MaxLengthContext);
 
-  if (index >= maxLength) {
-    return null;
-  }
+    if (index >= maxLength) {
+      return null;
+    }
 
-  const slotClassName = ({ active }: OTPInputSlotState) =>
-    cn(
-      "relative flex size-10 items-center justify-center border-y border-r border-input text-sm transition-all first:rounded-l-md first:border-l last:rounded-r-md",
-      active && "z-10 ring-2 ring-ring ring-offset-background",
-      className,
+    const slotClassName = ({ active }: OTPInputSlotState) =>
+      cn(
+        "relative flex size-10 items-center justify-center border-y border-r border-input text-sm transition-all first:rounded-l-md first:border-l last:rounded-r-md",
+        active && "z-10 ring-2 ring-ring ring-offset-background",
+        className,
+      );
+
+    return (
+      <OTPInputSlot
+        className={slotClassName}
+        index={index}
+        ref={ref}
+        {...props}
+      >
+        {slotContent}
+      </OTPInputSlot>
     );
-
-  return (
-    <OTPInputSlot className={slotClassName} index={index} ref={ref} {...props}>
-      {slotContent}
-    </OTPInputSlot>
-  );
-};
-InputOTPSlot.displayName = "InputOTPSlot";
-
-const InputOTPSeparator = ({
-  ref,
-  ...props
-}: NarrowPartProps<React.ComponentProps<typeof OTPInputSeparator>>) => (
-  <OTPInputSeparator ref={ref} role="separator" {...props}>
-    <Dot />
-  </OTPInputSeparator>
+  },
 );
-InputOTPSeparator.displayName = "InputOTPSeparator";
+
+const InputOTPSeparator = /* @__PURE__ */ named(
+  "InputOTPSeparator",
+  ({
+    ref,
+    ...props
+  }: NarrowPartProps<React.ComponentProps<typeof OTPInputSeparator>>) => (
+    <OTPInputSeparator ref={ref} role="separator" {...props}>
+      <Dot />
+    </OTPInputSeparator>
+  ),
+);
 
 export { InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot };

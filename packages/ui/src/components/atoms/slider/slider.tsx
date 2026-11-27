@@ -12,6 +12,7 @@ import {
 import type * as React from "react";
 
 import { HIT_AREA_24 } from "../../../lib/hit-area";
+import { named } from "../../../lib/named";
 import { cn } from "../../../lib/utils";
 
 type SliderProps = Omit<
@@ -119,65 +120,67 @@ function Thumb({
  * `aria-describedby` name each focusable thumb (`role="slider"`), not the
  * non-interactive root.
  */
-const Slider = ({
-  "aria-describedby": ariaDescribedBy,
-  "aria-label": ariaLabel,
-  "aria-labelledby": ariaLabelledBy,
-  className,
-  defaultValue,
-  dir,
-  inverted,
-  min = 0,
-  onValueChange,
-  onValueCommit,
-  ref,
-  thumbLabels,
-  value,
-  ...props
-}: SliderProps) => {
-  const baseId = useId();
-  const values = value ?? defaultValue ?? [min];
-  const direction = inverted ? (dir === "rtl" ? "ltr" : "rtl") : dir;
+const Slider = /* @__PURE__ */ named(
+  "Slider",
+  ({
+    "aria-describedby": ariaDescribedBy,
+    "aria-label": ariaLabel,
+    "aria-labelledby": ariaLabelledBy,
+    className,
+    defaultValue,
+    dir,
+    inverted,
+    min = 0,
+    onValueChange,
+    onValueCommit,
+    ref,
+    thumbLabels,
+    value,
+    ...props
+  }: SliderProps) => {
+    const baseId = useId();
+    const values = value ?? defaultValue ?? [min];
+    const direction = inverted ? (dir === "rtl" ? "ltr" : "rtl") : dir;
 
-  return (
-    <SliderPrimitive
-      className={cn(
-        "relative flex w-full touch-none select-none items-center",
-        className,
-      )}
-      defaultValue={value === undefined ? values : undefined}
-      dir={direction}
-      min={min}
-      onValueChange={(next) => {
-        onValueChange?.(toList(next));
-      }}
-      onValueCommit={(next) => {
-        onValueCommit?.(toList(next));
-      }}
-      ref={ref}
-      value={value}
-      {...props}
-    >
-      <SliderControl className="relative flex w-full items-center">
-        <SliderTrack className="relative h-2 w-full grow overflow-hidden rounded-full bg-secondary forced-colors:border forced-colors:border-[color:ButtonText]">
-          <SliderIndicator className="absolute h-full bg-primary forced-colors:bg-[color:Highlight]" />
-        </SliderTrack>
-        {values.map((_, index) => (
-          <Thumb
-            ariaDescribedBy={ariaDescribedBy}
-            ariaLabel={ariaLabel}
-            ariaLabelledBy={ariaLabelledBy}
-            baseId={baseId}
-            count={values.length}
-            index={index}
-            key={index}
-            label={thumbLabels?.[index]}
-          />
-        ))}
-      </SliderControl>
-    </SliderPrimitive>
-  );
-};
-Slider.displayName = "Slider";
+    return (
+      <SliderPrimitive
+        className={cn(
+          "relative flex w-full touch-none select-none items-center",
+          className,
+        )}
+        defaultValue={value === undefined ? values : undefined}
+        dir={direction}
+        min={min}
+        onValueChange={(next) => {
+          onValueChange?.(toList(next));
+        }}
+        onValueCommit={(next) => {
+          onValueCommit?.(toList(next));
+        }}
+        ref={ref}
+        value={value}
+        {...props}
+      >
+        <SliderControl className="relative flex w-full items-center">
+          <SliderTrack className="relative h-2 w-full grow overflow-hidden rounded-full bg-secondary forced-colors:border forced-colors:border-[color:ButtonText]">
+            <SliderIndicator className="absolute h-full bg-primary forced-colors:bg-[color:Highlight]" />
+          </SliderTrack>
+          {values.map((_, index) => (
+            <Thumb
+              ariaDescribedBy={ariaDescribedBy}
+              ariaLabel={ariaLabel}
+              ariaLabelledBy={ariaLabelledBy}
+              baseId={baseId}
+              count={values.length}
+              index={index}
+              key={index}
+              label={thumbLabels?.[index]}
+            />
+          ))}
+        </SliderControl>
+      </SliderPrimitive>
+    );
+  },
+);
 
 export { Slider };

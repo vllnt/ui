@@ -12,6 +12,7 @@ import {
 
 import { Check, X } from "lucide-react";
 
+import { named } from "../../../lib/named";
 import { keyByOccurrence } from "../../../lib/occurrence-keys";
 import { useControllableState } from "../../../lib/use-controllable-state";
 import { cn } from "../../../lib/utils";
@@ -238,45 +239,49 @@ function PlanCta({ cta, highlighted }: PlanCtaProps): ReactNode {
  *
  * @public
  */
-export const PricingPlan = ({
-  ref,
-  ...props
-}: PricingPlanProps & { ref?: React.Ref<HTMLDivElement> }) => {
-  const {
-    badge,
-    className,
-    cta,
-    description,
-    features,
-    highlighted = false,
-    name,
-    period,
-    price,
-    ...rest
-  } = props;
-  return (
-    <div
-      className={cn(
-        "relative flex flex-col gap-6 rounded-2xl border bg-background p-6 shadow-sm transition-colors",
-        highlighted
-          ? "border-primary shadow-md ring-1 ring-primary/20"
-          : "border-border",
-        className,
-      )}
-      ref={ref}
-      {...rest}
-    >
-      {badge ? <PlanBadgePill badge={badge} highlighted={highlighted} /> : null}
-      <PlanHeader description={description} name={name} />
-      <PlanPrice period={period} price={price} />
-      {features && features.length > 0 ? (
-        <PlanFeatures features={features} />
-      ) : null}
-      {cta ? <PlanCta cta={cta} highlighted={highlighted} /> : null}
-    </div>
-  );
-};
-PricingPlan.displayName = "PricingPlan";
+export const PricingPlan = /* @__PURE__ */ named(
+  "PricingPlan",
+  ({
+    ref,
+    ...props
+  }: PricingPlanProps & { ref?: React.Ref<HTMLDivElement> }) => {
+    const {
+      badge,
+      className,
+      cta,
+      description,
+      features,
+      highlighted = false,
+      name,
+      period,
+      price,
+      ...rest
+    } = props;
+    return (
+      <div
+        className={cn(
+          "relative flex flex-col gap-6 rounded-2xl border bg-background p-6 shadow-sm transition-colors",
+          highlighted
+            ? "border-primary shadow-md ring-1 ring-primary/20"
+            : "border-border",
+          className,
+        )}
+        ref={ref}
+        {...rest}
+      >
+        {badge ? (
+          <PlanBadgePill badge={badge} highlighted={highlighted} />
+        ) : null}
+        <PlanHeader description={description} name={name} />
+        <PlanPrice period={period} price={price} />
+        {features && features.length > 0 ? (
+          <PlanFeatures features={features} />
+        ) : null}
+        {cta ? <PlanCta cta={cta} highlighted={highlighted} /> : null}
+      </div>
+    );
+  },
+);
 
 /**
  * Billing period for {@link PricingTable}'s built-in toggle.
@@ -431,40 +436,42 @@ function PeriodToggle({
  *
  * @public
  */
-export const PricingTable = ({
-  ref,
-  ...props
-}: PricingTableProps & { ref?: React.Ref<HTMLDivElement> }) => {
-  const {
-    children,
-    className,
-    defaultPeriod = "monthly",
-    onPeriodChange,
-    period: controlledPeriod,
-    periodLabels,
-    showPeriodToggle = false,
-    ...rest
-  } = props;
+export const PricingTable = /* @__PURE__ */ named(
+  "PricingTable",
+  ({
+    ref,
+    ...props
+  }: PricingTableProps & { ref?: React.Ref<HTMLDivElement> }) => {
+    const {
+      children,
+      className,
+      defaultPeriod = "monthly",
+      onPeriodChange,
+      period: controlledPeriod,
+      periodLabels,
+      showPeriodToggle = false,
+      ...rest
+    } = props;
 
-  const [period, handlePeriodChange] = useControllableState<PricingPeriod>({
-    defaultValue: defaultPeriod,
-    onChange: onPeriodChange,
-    value: controlledPeriod,
-  });
+    const [period, handlePeriodChange] = useControllableState<PricingPeriod>({
+      defaultValue: defaultPeriod,
+      onChange: onPeriodChange,
+      value: controlledPeriod,
+    });
 
-  return (
-    <div className={cn("flex flex-col gap-6", className)} ref={ref} {...rest}>
-      {showPeriodToggle ? (
-        <PeriodToggle
-          labels={periodLabels ?? {}}
-          onChange={handlePeriodChange}
-          period={period}
-        />
-      ) : null}
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {children}
+    return (
+      <div className={cn("flex flex-col gap-6", className)} ref={ref} {...rest}>
+        {showPeriodToggle ? (
+          <PeriodToggle
+            labels={periodLabels ?? {}}
+            onChange={handlePeriodChange}
+            period={period}
+          />
+        ) : null}
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+          {children}
+        </div>
       </div>
-    </div>
-  );
-};
-PricingTable.displayName = "PricingTable";
+    );
+  },
+);

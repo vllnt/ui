@@ -8,6 +8,7 @@ import {
   CollapsibleTrigger,
 } from "@ui-sdk/react/collapsible";
 
+import { named } from "../../../lib/named";
 import { useControllableState } from "../../../lib/use-controllable-state";
 import { cn } from "../../../lib/utils";
 
@@ -45,39 +46,45 @@ export type ExpandableCardsProps = React.ComponentPropsWithoutRef<"div"> & {
  * <ExpandableCards cards={items} />
  * ```
  */
-export const ExpandableCards = ({
-  cards,
-  className,
-  defaultExpandedId = null,
-  expandedId: expandedIdProperty,
-  onExpandedIdChange,
-  ref,
-  ...props
-}: ExpandableCardsProps & { ref?: React.Ref<HTMLDivElement> }) => {
-  const [expandedId, setExpandedId] = useControllableState<null | string>({
-    defaultValue: defaultExpandedId,
-    onChange: onExpandedIdChange,
-    value: expandedIdProperty,
-  });
+export const ExpandableCards = /* @__PURE__ */ named(
+  "ExpandableCards",
+  ({
+    cards,
+    className,
+    defaultExpandedId = null,
+    expandedId: expandedIdProperty,
+    onExpandedIdChange,
+    ref,
+    ...props
+  }: ExpandableCardsProps & { ref?: React.Ref<HTMLDivElement> }) => {
+    const [expandedId, setExpandedId] = useControllableState<null | string>({
+      defaultValue: defaultExpandedId,
+      onChange: onExpandedIdChange,
+      value: expandedIdProperty,
+    });
 
-  const toggle = (id: string): void => {
-    setExpandedId(expandedId === id ? null : id);
-  };
+    const toggle = (id: string): void => {
+      setExpandedId(expandedId === id ? null : id);
+    };
 
-  return (
-    <div className={cn("flex flex-col gap-3", className)} ref={ref} {...props}>
-      {cards.map((card) => (
-        <ExpandableCard
-          card={card}
-          expanded={expandedId === card.id}
-          key={card.id}
-          onToggle={toggle}
-        />
-      ))}
-    </div>
-  );
-};
-ExpandableCards.displayName = "ExpandableCards";
+    return (
+      <div
+        className={cn("flex flex-col gap-3", className)}
+        ref={ref}
+        {...props}
+      >
+        {cards.map((card) => (
+          <ExpandableCard
+            card={card}
+            expanded={expandedId === card.id}
+            key={card.id}
+            onToggle={toggle}
+          />
+        ))}
+      </div>
+    );
+  },
+);
 
 function ExpandableCard({
   card,

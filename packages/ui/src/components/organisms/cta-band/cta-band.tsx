@@ -1,5 +1,6 @@
 import * as React from "react";
 
+import { named } from "../../../lib/named";
 import { cn } from "../../../lib/utils";
 import { cva } from "../../../lib/variants";
 import { Heading, type HeadingLevel } from "../../atoms/heading/heading";
@@ -58,60 +59,61 @@ const ctaBandVariants = cva(
  *   title="Ship your next release faster"
  * />
  */
-export const CtaBand = ({
-  actions,
-  className,
-  description,
-  divider = false,
-  headingLevel = 2,
-  icon,
-  ref: reference,
-  title,
-  tone = "default",
-  ...props
-}: CtaBandProps & { ref?: React.Ref<HTMLElement> }) => (
-  <section
-    className={cn(ctaBandVariants({ tone }), className)}
-    data-slot="cta-band"
-    data-tone={tone}
-    ref={reference}
-    {...props}
-  >
-    <div className="flex min-w-0 flex-1 flex-col gap-3">
-      <div className="flex items-center gap-3">
-        {icon ? (
-          <span
-            aria-hidden="true"
-            className="inline-flex shrink-0 text-muted-foreground [&_svg]:size-6"
-            data-slot="cta-band-icon"
+export const CtaBand = /* @__PURE__ */ named(
+  "CtaBand",
+  ({
+    actions,
+    className,
+    description,
+    divider = false,
+    headingLevel = 2,
+    icon,
+    ref: reference,
+    title,
+    tone = "default",
+    ...props
+  }: CtaBandProps & { ref?: React.Ref<HTMLElement> }) => (
+    <section
+      className={cn(ctaBandVariants({ tone }), className)}
+      data-slot="cta-band"
+      data-tone={tone}
+      ref={reference}
+      {...props}
+    >
+      <div className="flex min-w-0 flex-1 flex-col gap-3">
+        <div className="flex items-center gap-3">
+          {icon ? (
+            <span
+              aria-hidden="true"
+              className="inline-flex shrink-0 text-muted-foreground [&_svg]:size-6"
+              data-slot="cta-band-icon"
+            >
+              {icon}
+            </span>
+          ) : null}
+          <Heading level={headingLevel} size={2}>
+            {title}
+          </Heading>
+        </div>
+        {divider ? <Separator data-slot="cta-band-divider" /> : null}
+        {description ? (
+          <Text
+            data-slot="cta-band-description"
+            size="lead"
+            tone={tone === "muted" ? "default" : "muted"}
           >
-            {icon}
-          </span>
+            {description}
+          </Text>
         ) : null}
-        <Heading level={headingLevel} size={2}>
-          {title}
-        </Heading>
       </div>
-      {divider ? <Separator data-slot="cta-band-divider" /> : null}
-      {description ? (
-        <Text
-          data-slot="cta-band-description"
-          size="lead"
-          tone={tone === "muted" ? "default" : "muted"}
+      {actions ? (
+        <div
+          className="flex shrink-0 flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center"
+          data-slot="cta-band-actions"
         >
-          {description}
-        </Text>
+          {actions}
+        </div>
       ) : null}
-    </div>
-    {actions ? (
-      <div
-        className="flex shrink-0 flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center"
-        data-slot="cta-band-actions"
-      >
-        {actions}
-      </div>
-    ) : null}
-  </section>
+    </section>
+  ),
 );
-
-CtaBand.displayName = "CtaBand";

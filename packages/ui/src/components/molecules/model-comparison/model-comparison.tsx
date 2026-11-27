@@ -14,6 +14,7 @@ import {
 
 import { Eye, EyeOff } from "lucide-react";
 
+import { named } from "../../../lib/named";
 import { cn } from "../../../lib/utils";
 import { Badge } from "../../atoms/badge/badge";
 import { Button } from "../../atoms/button/button";
@@ -166,68 +167,70 @@ function ComparisonHeader({
  *
  * @public
  */
-export const ModelComparison = ({
-  ref,
-  ...props
-}: ModelComparisonProps & { ref?: React.Ref<HTMLElement> }) => {
-  const {
-    blindDefault = false,
-    children,
-    className,
-    hideBlindToggle = false,
-    labels,
-    prompt,
-    ...rest
-  } = props;
-  const resolvedLabels = useMemo(
-    () => ({ ...DEFAULT_LABELS, ...labels }),
-    [labels],
-  );
-  const [blind, setBlind] = useState(blindDefault);
-  const columnIndexRef = useRef<Map<string, number>>(new Map());
+export const ModelComparison = /* @__PURE__ */ named(
+  "ModelComparison",
+  ({
+    ref,
+    ...props
+  }: ModelComparisonProps & { ref?: React.Ref<HTMLElement> }) => {
+    const {
+      blindDefault = false,
+      children,
+      className,
+      hideBlindToggle = false,
+      labels,
+      prompt,
+      ...rest
+    } = props;
+    const resolvedLabels = useMemo(
+      () => ({ ...DEFAULT_LABELS, ...labels }),
+      [labels],
+    );
+    const [blind, setBlind] = useState(blindDefault);
+    const columnIndexRef = useRef<Map<string, number>>(new Map());
 
-  const registerColumn = useCallback((id: string): number => {
-    const existing = columnIndexRef.current.get(id);
-    if (existing !== undefined) return existing;
-    const next = columnIndexRef.current.size;
-    columnIndexRef.current.set(id, next);
-    return next;
-  }, []);
+    const registerColumn = useCallback((id: string): number => {
+      const existing = columnIndexRef.current.get(id);
+      if (existing !== undefined) return existing;
+      const next = columnIndexRef.current.size;
+      columnIndexRef.current.set(id, next);
+      return next;
+    }, []);
 
-  const contextValue = useMemo<ModelComparisonContextValue>(
-    () => ({ blind, labels: resolvedLabels, registerColumn }),
-    [blind, registerColumn, resolvedLabels],
-  );
+    const contextValue = useMemo<ModelComparisonContextValue>(
+      () => ({ blind, labels: resolvedLabels, registerColumn }),
+      [blind, registerColumn, resolvedLabels],
+    );
 
-  const handleToggleBlind = useCallback(() => {
-    setBlind((value) => !value);
-  }, []);
+    const handleToggleBlind = useCallback(() => {
+      setBlind((value) => !value);
+    }, []);
 
-  return (
-    <ModelComparisonContext.Provider value={contextValue}>
-      <section
-        className={cn(
-          "flex flex-col gap-4 rounded-2xl border bg-background p-4",
-          className,
-        )}
-        ref={ref}
-        {...rest}
-      >
-        <ComparisonHeader
-          blind={blind}
-          hideBlindToggle={hideBlindToggle}
-          labels={resolvedLabels}
-          onToggleBlind={handleToggleBlind}
-          prompt={prompt}
-        />
-        <div className="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-3">
-          {children}
-        </div>
-      </section>
-    </ModelComparisonContext.Provider>
-  );
-};
-ModelComparison.displayName = "ModelComparison";
+    return (
+      <ModelComparisonContext.Provider value={contextValue}>
+        <section
+          className={cn(
+            "flex flex-col gap-4 rounded-2xl border bg-background p-4",
+            className,
+          )}
+          ref={ref}
+          {...rest}
+        >
+          <ComparisonHeader
+            blind={blind}
+            hideBlindToggle={hideBlindToggle}
+            labels={resolvedLabels}
+            onToggleBlind={handleToggleBlind}
+            prompt={prompt}
+          />
+          <div className="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-3">
+            {children}
+          </div>
+        </section>
+      </ModelComparisonContext.Provider>
+    );
+  },
+);
 
 /**
  * Props for {@link ModelComparisonColumn}.
@@ -249,43 +252,45 @@ export type ModelComparisonColumnProps = {
  *
  * @public
  */
-export const ModelComparisonColumn = ({
-  ref,
-  ...props
-}: ModelComparisonColumnProps & { ref?: React.Ref<HTMLElement> }) => {
-  const { badge, children, className, label, model, ...rest } = props;
-  const id = useId();
-  const { blind, registerColumn } = use(ModelComparisonContext);
-  const columnIndex = registerColumn(id);
-  const displayLabel = blind
-    ? blindLabelForIndex(columnIndex)
-    : (label ?? model);
+export const ModelComparisonColumn = /* @__PURE__ */ named(
+  "ModelComparisonColumn",
+  ({
+    ref,
+    ...props
+  }: ModelComparisonColumnProps & { ref?: React.Ref<HTMLElement> }) => {
+    const { badge, children, className, label, model, ...rest } = props;
+    const id = useId();
+    const { blind, registerColumn } = use(ModelComparisonContext);
+    const columnIndex = registerColumn(id);
+    const displayLabel = blind
+      ? blindLabelForIndex(columnIndex)
+      : (label ?? model);
 
-  return (
-    <article
-      aria-label={typeof displayLabel === "string" ? displayLabel : undefined}
-      className={cn(
-        "flex flex-col gap-3 rounded-xl border border-border bg-muted/30 p-3",
-        className,
-      )}
-      data-blind={blind ? "true" : "false"}
-      data-model={blind ? undefined : model}
-      ref={ref}
-      {...rest}
-    >
-      <header className="flex items-center justify-between gap-2">
-        <h4 className="text-sm font-semibold tracking-tight text-foreground">
-          {displayLabel}
-        </h4>
-        {badge ? <Badge variant="secondary">{badge}</Badge> : null}
-      </header>
-      <div className="flex flex-1 flex-col gap-2 text-sm text-foreground">
-        {children}
-      </div>
-    </article>
-  );
-};
-ModelComparisonColumn.displayName = "ModelComparisonColumn";
+    return (
+      <article
+        aria-label={typeof displayLabel === "string" ? displayLabel : undefined}
+        className={cn(
+          "flex flex-col gap-3 rounded-xl border border-border bg-muted/30 p-3",
+          className,
+        )}
+        data-blind={blind ? "true" : "false"}
+        data-model={blind ? undefined : model}
+        ref={ref}
+        {...rest}
+      >
+        <header className="flex items-center justify-between gap-2">
+          <h4 className="text-sm font-semibold tracking-tight text-foreground">
+            {displayLabel}
+          </h4>
+          {badge ? <Badge variant="secondary">{badge}</Badge> : null}
+        </header>
+        <div className="flex flex-1 flex-col gap-2 text-sm text-foreground">
+          {children}
+        </div>
+      </article>
+    );
+  },
+);
 
 /**
  * Props for {@link ModelComparisonMeta}.
@@ -307,49 +312,51 @@ export type ModelComparisonMetaProps = {
  *
  * @public
  */
-export const ModelComparisonMeta = ({
-  ref,
-  ...props
-}: ModelComparisonMetaProps & { ref?: React.Ref<HTMLDListElement> }) => {
-  const { className, cost, latency, tokens, ...rest } = props;
-  const { labels } = use(ModelComparisonContext);
+export const ModelComparisonMeta = /* @__PURE__ */ named(
+  "ModelComparisonMeta",
+  ({
+    ref,
+    ...props
+  }: ModelComparisonMetaProps & { ref?: React.Ref<HTMLDListElement> }) => {
+    const { className, cost, latency, tokens, ...rest } = props;
+    const { labels } = use(ModelComparisonContext);
 
-  const items: { caption: string; value: ReactNode }[] = [];
-  if (tokens !== undefined && tokens !== null) {
-    items.push({
-      caption: labels.tokens,
-      value: typeof tokens === "number" ? tokens.toLocaleString() : tokens,
-    });
-  }
-  if (latency !== undefined && latency !== null) {
-    items.push({ caption: labels.latency, value: latency });
-  }
-  if (cost !== undefined && cost !== null) {
-    items.push({ caption: labels.cost, value: cost });
-  }
-  if (items.length === 0) return null;
+    const items: { caption: string; value: ReactNode }[] = [];
+    if (tokens !== undefined && tokens !== null) {
+      items.push({
+        caption: labels.tokens,
+        value: typeof tokens === "number" ? tokens.toLocaleString() : tokens,
+      });
+    }
+    if (latency !== undefined && latency !== null) {
+      items.push({ caption: labels.latency, value: latency });
+    }
+    if (cost !== undefined && cost !== null) {
+      items.push({ caption: labels.cost, value: cost });
+    }
+    if (items.length === 0) return null;
 
-  return (
-    <dl
-      className={cn(
-        "mt-auto flex flex-wrap gap-x-3 gap-y-1 border-t border-border pt-2 text-xs",
-        className,
-      )}
-      ref={ref}
-      {...rest}
-    >
-      {items.map((item) => (
-        <div className="flex items-baseline gap-1" key={item.caption}>
-          <dt className="font-medium uppercase tracking-wide text-muted-foreground">
-            {item.caption}
-          </dt>
-          <dd className="text-foreground">{item.value}</dd>
-        </div>
-      ))}
-    </dl>
-  );
-};
-ModelComparisonMeta.displayName = "ModelComparisonMeta";
+    return (
+      <dl
+        className={cn(
+          "mt-auto flex flex-wrap gap-x-3 gap-y-1 border-t border-border pt-2 text-xs",
+          className,
+        )}
+        ref={ref}
+        {...rest}
+      >
+        {items.map((item) => (
+          <div className="flex items-baseline gap-1" key={item.caption}>
+            <dt className="font-medium uppercase tracking-wide text-muted-foreground">
+              {item.caption}
+            </dt>
+            <dd className="text-foreground">{item.value}</dd>
+          </div>
+        ))}
+      </dl>
+    );
+  },
+);
 
 /**
  * Vote payload shape passed to {@link ModelComparisonVoteProps.onVote}.
@@ -382,47 +389,59 @@ export type ModelComparisonVoteProps = {
  *
  * @public
  */
-export const ModelComparisonVote = ({
-  ref,
-  ...props
-}: ModelComparisonVoteProps & { ref?: React.Ref<HTMLDivElement> }) => {
-  const { buttonLabels, className, onVote, ...rest } = props;
-  const { labels: contextLabels } = use(ModelComparisonContext);
+export const ModelComparisonVote = /* @__PURE__ */ named(
+  "ModelComparisonVote",
+  ({
+    ref,
+    ...props
+  }: ModelComparisonVoteProps & { ref?: React.Ref<HTMLDivElement> }) => {
+    const { buttonLabels, className, onVote, ...rest } = props;
+    const { labels: contextLabels } = use(ModelComparisonContext);
 
-  const handleLeft = useCallback(() => {
-    onVote?.("left");
-  }, [onVote]);
-  const handleTie = useCallback(() => {
-    onVote?.("tie");
-  }, [onVote]);
-  const handleRight = useCallback(() => {
-    onVote?.("right");
-  }, [onVote]);
+    const handleLeft = useCallback(() => {
+      onVote?.("left");
+    }, [onVote]);
+    const handleTie = useCallback(() => {
+      onVote?.("tie");
+    }, [onVote]);
+    const handleRight = useCallback(() => {
+      onVote?.("right");
+    }, [onVote]);
 
-  return (
-    <div
-      className={cn(
-        "col-span-full flex flex-col items-center gap-2",
-        className,
-      )}
-      ref={ref}
-      {...rest}
-    >
-      <p className="text-sm font-medium text-foreground">
-        {contextLabels.voteHeading}
-      </p>
-      <div className="flex flex-wrap items-center justify-center gap-2">
-        <Button onClick={handleLeft} size="sm" type="button" variant="outline">
-          {buttonLabels?.left ?? "← Left"}
-        </Button>
-        <Button onClick={handleTie} size="sm" type="button" variant="ghost">
-          {buttonLabels?.tie ?? contextLabels.voteTie}
-        </Button>
-        <Button onClick={handleRight} size="sm" type="button" variant="outline">
-          {buttonLabels?.right ?? "Right →"}
-        </Button>
+    return (
+      <div
+        className={cn(
+          "col-span-full flex flex-col items-center gap-2",
+          className,
+        )}
+        ref={ref}
+        {...rest}
+      >
+        <p className="text-sm font-medium text-foreground">
+          {contextLabels.voteHeading}
+        </p>
+        <div className="flex flex-wrap items-center justify-center gap-2">
+          <Button
+            onClick={handleLeft}
+            size="sm"
+            type="button"
+            variant="outline"
+          >
+            {buttonLabels?.left ?? "← Left"}
+          </Button>
+          <Button onClick={handleTie} size="sm" type="button" variant="ghost">
+            {buttonLabels?.tie ?? contextLabels.voteTie}
+          </Button>
+          <Button
+            onClick={handleRight}
+            size="sm"
+            type="button"
+            variant="outline"
+          >
+            {buttonLabels?.right ?? "Right →"}
+          </Button>
+        </div>
       </div>
-    </div>
-  );
-};
-ModelComparisonVote.displayName = "ModelComparisonVote";
+    );
+  },
+);

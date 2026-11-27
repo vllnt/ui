@@ -1,5 +1,6 @@
 import type { ComponentPropsWithoutRef, ReactNode } from "react";
 
+import { named } from "../../../lib/named";
 import { cn } from "../../../lib/utils";
 import { cva, type VariantProps } from "../../../lib/variants";
 
@@ -111,41 +112,45 @@ export type EmptyStateProps = {
  *
  * @public
  */
-export const EmptyState = ({
-  children,
-  className,
-  description,
-  icon,
-  ref,
-  role: roleOverride,
-  size,
-  title,
-  ...rest
-}: EmptyStateProps & { ref?: React.Ref<HTMLDivElement> }) => {
-  return (
-    <div
-      className={cn(emptyStateVariants({ size }), className)}
-      ref={ref}
-      role={roleOverride ?? "status"}
-      {...rest}
-    >
-      {icon ? (
-        <span aria-hidden="true" className={cn(iconVariants({ size }))}>
-          {icon}
-        </span>
-      ) : null}
-      {title ? <h3 className={cn(titleVariants({ size }))}>{title}</h3> : null}
-      {description ? (
-        <p className={cn(descriptionVariants({ size }))}>{description}</p>
-      ) : null}
-      {children ? (
-        <div className="mt-2 flex flex-wrap items-center justify-center gap-2">
-          {children}
-        </div>
-      ) : null}
-    </div>
-  );
-};
-EmptyState.displayName = "EmptyState";
+export const EmptyState = /* @__PURE__ */ named(
+  "EmptyState",
+  ({
+    children,
+    className,
+    description,
+    icon,
+    ref,
+    role: roleOverride,
+    size,
+    title,
+    ...rest
+  }: EmptyStateProps & { ref?: React.Ref<HTMLDivElement> }) => {
+    return (
+      <div
+        className={cn(emptyStateVariants({ size }), className)}
+        ref={ref}
+        role={roleOverride ?? "status"}
+        {...rest}
+      >
+        {icon ? (
+          <span aria-hidden="true" className={cn(iconVariants({ size }))}>
+            {icon}
+          </span>
+        ) : null}
+        {title ? (
+          <h3 className={cn(titleVariants({ size }))}>{title}</h3>
+        ) : null}
+        {description ? (
+          <p className={cn(descriptionVariants({ size }))}>{description}</p>
+        ) : null}
+        {children ? (
+          <div className="mt-2 flex flex-wrap items-center justify-center gap-2">
+            {children}
+          </div>
+        ) : null}
+      </div>
+    );
+  },
+);
 
 export { emptyStateVariants };

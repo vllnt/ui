@@ -2,6 +2,7 @@
 
 import * as React from "react";
 
+import { named } from "../../../lib/named";
 import { cn } from "../../../lib/utils";
 
 /** Props for {@link TextReveal}. */
@@ -100,44 +101,46 @@ function wordColor(reveal: number): string {
  * <TextReveal>Scroll to read this line word by word</TextReveal>
  * ```
  */
-export const TextReveal = ({
-  children,
-  className,
-  ref,
-  ...props
-}: TextRevealProps & { ref?: React.Ref<HTMLDivElement> }) => {
-  const reduced = usePrefersReducedMotion();
-  const nodeRef = React.useRef<HTMLDivElement>(null);
-  const progress = useScrollProgress(nodeRef, !reduced);
-  const words = children.split(" ");
+export const TextReveal = /* @__PURE__ */ named(
+  "TextReveal",
+  ({
+    children,
+    className,
+    ref,
+    ...props
+  }: TextRevealProps & { ref?: React.Ref<HTMLDivElement> }) => {
+    const reduced = usePrefersReducedMotion();
+    const nodeRef = React.useRef<HTMLDivElement>(null);
+    const progress = useScrollProgress(nodeRef, !reduced);
+    const words = children.split(" ");
 
-  return (
-    <div
-      className={cn("flex flex-wrap gap-x-[0.25em]", className)}
-      ref={(node) => {
-        nodeRef.current = node;
-        if (typeof ref === "function") {
-          ref(node);
-        } else if (ref) {
-          ref.current = node;
-        }
-      }}
-      {...props}
-    >
-      <span className="sr-only">{children}</span>
-      {words.map((word, index) => (
-        <span
-          aria-hidden="true"
-          className="transition-colors duration-300"
-          key={`${word}-${index}`}
-          style={{
-            color: wordColor(wordReveal(progress, words.length, index)),
-          }}
-        >
-          {word}
-        </span>
-      ))}
-    </div>
-  );
-};
-TextReveal.displayName = "TextReveal";
+    return (
+      <div
+        className={cn("flex flex-wrap gap-x-[0.25em]", className)}
+        ref={(node) => {
+          nodeRef.current = node;
+          if (typeof ref === "function") {
+            ref(node);
+          } else if (ref) {
+            ref.current = node;
+          }
+        }}
+        {...props}
+      >
+        <span className="sr-only">{children}</span>
+        {words.map((word, index) => (
+          <span
+            aria-hidden="true"
+            className="transition-colors duration-300"
+            key={`${word}-${index}`}
+            style={{
+              color: wordColor(wordReveal(progress, words.length, index)),
+            }}
+          >
+            {word}
+          </span>
+        ))}
+      </div>
+    );
+  },
+);

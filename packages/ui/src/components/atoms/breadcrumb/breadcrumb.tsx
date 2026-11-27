@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type * as React from "react";
 
+import { named } from "../../../lib/named";
 import { cn } from "../../../lib/utils";
 import { cva } from "../../../lib/variants";
 
@@ -176,61 +177,65 @@ function getVisibleEntries(
  *
  * @public
  */
-const Breadcrumb = ({
-  className,
-  items,
-  labels,
-  linkComponent = Link,
-  overflow = "none",
-  ref,
-  separator = "chevron",
-  variant = "default",
-}: BreadcrumbProps & { ref?: React.Ref<HTMLElement> }): React.ReactElement => {
-  const lastIndex = items.length - 1;
+const Breadcrumb = /* @__PURE__ */ named(
+  "Breadcrumb",
+  ({
+    className,
+    items,
+    labels,
+    linkComponent = Link,
+    overflow = "none",
+    ref,
+    separator = "chevron",
+    variant = "default",
+  }: BreadcrumbProps & {
+    ref?: React.Ref<HTMLElement>;
+  }): React.ReactElement => {
+    const lastIndex = items.length - 1;
 
-  return (
-    <nav
-      aria-label={labels?.region ?? DEFAULT_LABELS.region}
-      className={cn("flex items-center space-x-1 text-sm", className)}
-      ref={ref}
-    >
-      <ol className="flex items-center space-x-1">
-        {getVisibleEntries(items, overflow).map((entry, position) => (
-          <li
-            className="flex items-center"
-            key={
-              entry
-                ? `${typeof entry.item.label === "string" ? entry.item.label : "breadcrumb"}-${entry.index.toString()}`
-                : "breadcrumb-more"
-            }
-          >
-            {position > 0 && (
-              <span className="mx-2">
-                <SeparatorIcon type={separator} />
-              </span>
-            )}
-
-            {entry ? (
-              <Crumb
-                isCurrent={entry.index === lastIndex}
-                item={entry.item}
-                linkComponent={linkComponent}
-                variant={variant}
-              />
-            ) : (
-              <span className="text-muted-foreground">
-                <span aria-hidden="true">…</span>
-                <span className="sr-only">
-                  {labels?.more ?? DEFAULT_LABELS.more}
+    return (
+      <nav
+        aria-label={labels?.region ?? DEFAULT_LABELS.region}
+        className={cn("flex items-center space-x-1 text-sm", className)}
+        ref={ref}
+      >
+        <ol className="flex items-center space-x-1">
+          {getVisibleEntries(items, overflow).map((entry, position) => (
+            <li
+              className="flex items-center"
+              key={
+                entry
+                  ? `${typeof entry.item.label === "string" ? entry.item.label : "breadcrumb"}-${entry.index.toString()}`
+                  : "breadcrumb-more"
+              }
+            >
+              {position > 0 && (
+                <span className="mx-2">
+                  <SeparatorIcon type={separator} />
                 </span>
-              </span>
-            )}
-          </li>
-        ))}
-      </ol>
-    </nav>
-  );
-};
-Breadcrumb.displayName = "Breadcrumb";
+              )}
+
+              {entry ? (
+                <Crumb
+                  isCurrent={entry.index === lastIndex}
+                  item={entry.item}
+                  linkComponent={linkComponent}
+                  variant={variant}
+                />
+              ) : (
+                <span className="text-muted-foreground">
+                  <span aria-hidden="true">…</span>
+                  <span className="sr-only">
+                    {labels?.more ?? DEFAULT_LABELS.more}
+                  </span>
+                </span>
+              )}
+            </li>
+          ))}
+        </ol>
+      </nav>
+    );
+  },
+);
 
 export { Breadcrumb };

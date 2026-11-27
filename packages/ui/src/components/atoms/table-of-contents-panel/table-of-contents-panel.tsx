@@ -5,6 +5,7 @@ import { memo } from "react";
 import type { ReactNode } from "react";
 
 import type { MaterialProps } from "../../../lib/material";
+import { named } from "../../../lib/named";
 import type { HeadingTag } from "../../../lib/types";
 import { type OpenAliases, openAliases } from "../../../lib/ui-sdk-dialog";
 import { cn } from "../../../lib/utils";
@@ -266,5 +267,7 @@ function TableOfContentsPanelImpl({
   );
 }
 
-export const TableOfContentsPanel = memo(TableOfContentsPanelImpl);
-TableOfContentsPanel.displayName = "TableOfContentsPanel";
+export const TableOfContentsPanel = /* @__PURE__ */ named(
+  "TableOfContentsPanel",
+  /* @__PURE__ */ memo(TableOfContentsPanelImpl),
+);

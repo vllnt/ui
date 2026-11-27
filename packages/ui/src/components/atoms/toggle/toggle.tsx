@@ -3,6 +3,7 @@
 import { Toggle as TogglePrimitive } from "@ui-sdk/react/toggle";
 import type * as React from "react";
 
+import { named } from "../../../lib/named";
 import {
   asChildProps,
   type DataAttributes,
@@ -46,29 +47,30 @@ type ToggleProps = Omit<
     ref?: React.Ref<HTMLButtonElement>;
   };
 
-const Toggle = ({
-  asChild,
-  children,
-  className,
-  ref,
-  size,
-  variant,
-  ...props
-}: ToggleProps) => {
-  const slot = asChildProps({ asChild, children });
+const Toggle = /* @__PURE__ */ named(
+  "Toggle",
+  ({
+    asChild,
+    children,
+    className,
+    ref,
+    size,
+    variant,
+    ...props
+  }: ToggleProps) => {
+    const slot = asChildProps({ asChild, children });
 
-  return (
-    <TogglePrimitive
-      className={cn(toggleVariants({ className, size, variant }))}
-      ref={ref}
-      render={withDataAttributes("button", pressedState, slot.render)}
-      {...props}
-    >
-      {slot.children}
-    </TogglePrimitive>
-  );
-};
-
-Toggle.displayName = "Toggle";
+    return (
+      <TogglePrimitive
+        className={cn(toggleVariants({ className, size, variant }))}
+        ref={ref}
+        render={withDataAttributes("button", pressedState, slot.render)}
+        {...props}
+      >
+        {slot.children}
+      </TogglePrimitive>
+    );
+  },
+);
 
 export { Toggle, toggleVariants };

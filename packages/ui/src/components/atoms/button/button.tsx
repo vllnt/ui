@@ -1,3 +1,4 @@
+import { named } from "../../../lib/named";
 import { Slot } from "../../../lib/ui-sdk";
 import { cn } from "../../../lib/utils";
 import { cva, type VariantProps } from "../../../lib/variants";
@@ -37,23 +38,25 @@ export type ButtonProps = {
 } & React.ButtonHTMLAttributes<HTMLButtonElement> &
   VariantProps<typeof buttonVariants>;
 
-const Button = ({
-  asChild = false,
-  className,
-  ref: reference,
-  size,
-  variant,
-  ...props
-}: ButtonProps & { ref?: React.Ref<HTMLButtonElement> }) => {
-  const Comp = asChild ? Slot : "button";
-  return (
-    <Comp
-      className={cn(buttonVariants({ className, size, variant }))}
-      ref={reference}
-      {...props}
-    />
-  );
-};
-Button.displayName = "Button";
+const Button = /* @__PURE__ */ named(
+  "Button",
+  ({
+    asChild = false,
+    className,
+    ref: reference,
+    size,
+    variant,
+    ...props
+  }: ButtonProps & { ref?: React.Ref<HTMLButtonElement> }) => {
+    const Comp = asChild ? Slot : "button";
+    return (
+      <Comp
+        className={cn(buttonVariants({ className, size, variant }))}
+        ref={reference}
+        {...props}
+      />
+    );
+  },
+);
 
 export { Button, buttonVariants };

@@ -19,6 +19,7 @@ import {
 } from "@ui-sdk/react/calendar";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
+import { named } from "../../../lib/named";
 import { cn } from "../../../lib/utils";
 import { buttonVariants } from "../../atoms/button/button";
 
@@ -376,69 +377,71 @@ function useInitialFocus(controller: CalendarController, enabled?: boolean) {
  * the `selected` it gets. Without a `mode` it displays the month and picks
  * nothing.
  */
-function Calendar({
-  className,
-  defaultMonth,
-  disabled,
-  fixedWeeks,
-  fromDate,
-  initialFocus,
-  locale,
-  mode,
-  month,
-  numberOfMonths = 1,
-  onMonthChange,
-  onSelect,
-  selected,
-  showOutsideDays = true,
-  toDate,
-  weekStartsOn,
-  ...props
-}: CalendarProps) {
-  const [controller] = React.useState(createCalendarController);
-  const months = Math.max(1, Math.floor(numberOfMonths) || 1);
-  useInitialFocus(controller, initialFocus);
+const Calendar = /* @__PURE__ */ named(
+  "Calendar",
+  function Calendar({
+    className,
+    defaultMonth,
+    disabled,
+    fixedWeeks,
+    fromDate,
+    initialFocus,
+    locale,
+    mode,
+    month,
+    numberOfMonths = 1,
+    onMonthChange,
+    onSelect,
+    selected,
+    showOutsideDays = true,
+    toDate,
+    weekStartsOn,
+    ...props
+  }: CalendarProps) {
+    const [controller] = React.useState(createCalendarController);
+    const months = Math.max(1, Math.floor(numberOfMonths) || 1);
+    useInitialFocus(controller, initialFocus);
 
-  const handleMonthChange = onMonthChange
-    ? (value: string) => {
-        onMonthChange(fromISODate(`${value}-01`));
-      }
-    : undefined;
+    const handleMonthChange = onMonthChange
+      ? (value: string) => {
+          onMonthChange(fromISODate(`${value}-01`));
+        }
+      : undefined;
 
-  return (
-    <CalendarRoot
-      allowUnavailable
-      className={cn(calendarLayout.root, className)}
-      controller={controller}
-      defaultMonth={toISOMonth(defaultMonth)}
-      disabled={disabled === true}
-      fixedWeeks={fixedWeeks}
-      locale={locale}
-      max={toISODate(toDate)}
-      min={toISODate(fromDate)}
-      month={toISOMonth(month)}
-      months={months}
-      onMonthChange={handleMonthChange}
-      showOutsideDays={showOutsideDays}
-      unavailable={toUnavailable(disabled)}
-      weekStartsOn={weekStartsOn}
-      {...selectionOptions({ mode, onSelect, selected } as Selection)}
-      {...props}
-    >
-      <div className={calendarLayout.months}>
-        <CalendarNavigation />
-        {Array.from({ length: months }, (_, offset) => (
-          <CalendarMonth
-            interactive={mode !== undefined}
-            key={offset}
-            offset={offset}
-            showOutsideDays={showOutsideDays}
-          />
-        ))}
-      </div>
-    </CalendarRoot>
-  );
-}
-Calendar.displayName = "Calendar";
+    return (
+      <CalendarRoot
+        allowUnavailable
+        className={cn(calendarLayout.root, className)}
+        controller={controller}
+        defaultMonth={toISOMonth(defaultMonth)}
+        disabled={disabled === true}
+        fixedWeeks={fixedWeeks}
+        locale={locale}
+        max={toISODate(toDate)}
+        min={toISODate(fromDate)}
+        month={toISOMonth(month)}
+        months={months}
+        onMonthChange={handleMonthChange}
+        showOutsideDays={showOutsideDays}
+        unavailable={toUnavailable(disabled)}
+        weekStartsOn={weekStartsOn}
+        {...selectionOptions({ mode, onSelect, selected } as Selection)}
+        {...props}
+      >
+        <div className={calendarLayout.months}>
+          <CalendarNavigation />
+          {Array.from({ length: months }, (_, offset) => (
+            <CalendarMonth
+              interactive={mode !== undefined}
+              key={offset}
+              offset={offset}
+              showOutsideDays={showOutsideDays}
+            />
+          ))}
+        </div>
+      </CalendarRoot>
+    );
+  },
+);
 
 export { Calendar };

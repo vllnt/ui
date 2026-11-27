@@ -11,6 +11,7 @@ import {
   useState,
 } from "react";
 
+import { named } from "../../../lib/named";
 import { useControllableState } from "../../../lib/use-controllable-state";
 import { cn } from "../../../lib/utils";
 
@@ -395,30 +396,7 @@ function TreeRows({
   );
 }
 
-/**
- * Hierarchical tree component for nested data (file systems, categories,
- * org charts). Pass {@link TreeNode} data via `nodes`. Supports controlled
- * and uncontrolled expand/select state, single or multi-select, and full
- * keyboard navigation (arrows expand/collapse and traverse, enter/space
- * activates).
- *
- * @example
- * ```tsx
- * <TreeView
- *   nodes={[
- *     { id: "src", label: "src/", nodes: [
- *       { id: "components", label: "components/" },
- *       { id: "utils", label: "utils/" },
- *     ]},
- *   ]}
- *   defaultExpanded={["src"]}
- *   onSelect={(ids) => console.info(ids)}
- * />
- * ```
- *
- * @public
- */
-export const TreeView = (props: TreeViewProps) => {
+function TreeViewRoot(props: TreeViewProps) {
   const {
     className,
     defaultExpanded,
@@ -492,5 +470,29 @@ export const TreeView = (props: TreeViewProps) => {
       />
     </ul>
   );
-};
-TreeView.displayName = "TreeView";
+}
+
+/**
+ * Hierarchical tree component for nested data (file systems, categories,
+ * org charts). Pass {@link TreeNode} data via `nodes`. Supports controlled
+ * and uncontrolled expand/select state, single or multi-select, and full
+ * keyboard navigation (arrows expand/collapse and traverse, enter/space
+ * activates).
+ *
+ * @example
+ * ```tsx
+ * <TreeView
+ *   nodes={[
+ *     { id: "src", label: "src/", nodes: [
+ *       { id: "components", label: "components/" },
+ *       { id: "utils", label: "utils/" },
+ *     ]},
+ *   ]}
+ *   defaultExpanded={["src"]}
+ *   onSelect={(ids) => console.info(ids)}
+ * />
+ * ```
+ *
+ * @public
+ */
+export const TreeView = /* @__PURE__ */ named("TreeView", TreeViewRoot);

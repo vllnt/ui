@@ -1,5 +1,6 @@
 import type { CSSProperties, ReactNode } from "react";
 
+import { named } from "../../../lib/named";
 import { cn } from "../../../lib/utils";
 
 import type { CanvasShellInsets } from "./canvas-shell-route-config";
@@ -325,29 +326,27 @@ function renderFloatingCanvasShell(
   );
 }
 
-const CanvasShell = ({
-  ref,
-  ...props
-}: CanvasShellProps & { ref?: React.Ref<HTMLElement> }) => {
-  const { bottomBar, chromeInset, contentPadding, leftBar, rightBar } = props;
-  const hasExplicitChromeInset = Object.prototype.hasOwnProperty.call(
-    props,
-    "chromeInset",
-  );
-  const usesFloatingChrome =
-    hasChromeContent(bottomBar) ||
-    hasChromeContent(leftBar) ||
-    hasChromeContent(rightBar) ||
-    contentPadding !== undefined ||
-    (hasExplicitChromeInset && chromeInset !== undefined);
+const CanvasShell = /* @__PURE__ */ named(
+  "CanvasShell",
+  ({ ref, ...props }: CanvasShellProps & { ref?: React.Ref<HTMLElement> }) => {
+    const { bottomBar, chromeInset, contentPadding, leftBar, rightBar } = props;
+    const hasExplicitChromeInset = Object.prototype.hasOwnProperty.call(
+      props,
+      "chromeInset",
+    );
+    const usesFloatingChrome =
+      hasChromeContent(bottomBar) ||
+      hasChromeContent(leftBar) ||
+      hasChromeContent(rightBar) ||
+      contentPadding !== undefined ||
+      (hasExplicitChromeInset && chromeInset !== undefined);
 
-  if (!usesFloatingChrome) {
-    return renderLegacyCanvasShell(props, ref);
-  }
+    if (!usesFloatingChrome) {
+      return renderLegacyCanvasShell(props, ref);
+    }
 
-  return renderFloatingCanvasShell(props, ref);
-};
-
-CanvasShell.displayName = "CanvasShell";
+    return renderFloatingCanvasShell(props, ref);
+  },
+);
 
 export { CanvasShell };

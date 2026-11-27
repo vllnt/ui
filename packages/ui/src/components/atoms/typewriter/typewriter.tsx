@@ -2,6 +2,7 @@
 
 import * as React from "react";
 
+import { named } from "../../../lib/named";
 import { cn } from "../../../lib/utils";
 
 /** Props for {@link Typewriter}. */
@@ -51,55 +52,57 @@ function usePrefersReducedMotion(): boolean {
  * <Typewriter text="Hello, world" />
  * ```
  */
-export const Typewriter = ({
-  className,
-  cursor = true,
-  ref,
-  speed = 60,
-  text,
-  ...props
-}: TypewriterProps & { ref?: React.Ref<HTMLSpanElement> }) => {
-  const reduced = usePrefersReducedMotion();
-  const [count, setCount] = React.useState(() => (reduced ? text.length : 0));
-  const [animationKey, setAnimationKey] = React.useState({ reduced, text });
+export const Typewriter = /* @__PURE__ */ named(
+  "Typewriter",
+  ({
+    className,
+    cursor = true,
+    ref,
+    speed = 60,
+    text,
+    ...props
+  }: TypewriterProps & { ref?: React.Ref<HTMLSpanElement> }) => {
+    const reduced = usePrefersReducedMotion();
+    const [count, setCount] = React.useState(() => (reduced ? text.length : 0));
+    const [animationKey, setAnimationKey] = React.useState({ reduced, text });
 
-  if (animationKey.reduced !== reduced || animationKey.text !== text) {
-    setAnimationKey({ reduced, text });
-    setCount(reduced ? text.length : 0);
-  }
-
-  React.useEffect(() => {
-    if (reduced || count >= text.length) {
-      return;
+    if (animationKey.reduced !== reduced || animationKey.text !== text) {
+      setAnimationKey({ reduced, text });
+      setCount(reduced ? text.length : 0);
     }
 
-    const timer = setTimeout(
-      () => {
-        setCount((current) => Math.min(current + 1, text.length));
-      },
-      Math.max(1, speed),
+    React.useEffect(() => {
+      if (reduced || count >= text.length) {
+        return;
+      }
+
+      const timer = setTimeout(
+        () => {
+          setCount((current) => Math.min(current + 1, text.length));
+        },
+        Math.max(1, speed),
+      );
+
+      return () => {
+        clearTimeout(timer);
+      };
+    }, [count, reduced, speed, text.length]);
+
+    const typing = count < text.length;
+
+    return (
+      <span className={cn(className)} ref={ref} {...props}>
+        <span className="sr-only">{text}</span>
+        <span aria-hidden="true">{text.slice(0, count)}</span>
+        {cursor && typing ? (
+          <span
+            aria-hidden="true"
+            className="ml-0.5 inline-block w-[1ch] [animation:vllnt-terminal-cursor-blink_1s_steps(1,end)_infinite] motion-reduce:animate-none"
+          >
+            |
+          </span>
+        ) : undefined}
+      </span>
     );
-
-    return () => {
-      clearTimeout(timer);
-    };
-  }, [count, reduced, speed, text.length]);
-
-  const typing = count < text.length;
-
-  return (
-    <span className={cn(className)} ref={ref} {...props}>
-      <span className="sr-only">{text}</span>
-      <span aria-hidden="true">{text.slice(0, count)}</span>
-      {cursor && typing ? (
-        <span
-          aria-hidden="true"
-          className="ml-0.5 inline-block w-[1ch] [animation:vllnt-terminal-cursor-blink_1s_steps(1,end)_infinite] motion-reduce:animate-none"
-        >
-          |
-        </span>
-      ) : undefined}
-    </span>
-  );
-};
-Typewriter.displayName = "Typewriter";
+  },
+);

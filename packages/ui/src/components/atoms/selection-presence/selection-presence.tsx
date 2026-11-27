@@ -2,6 +2,7 @@
 
 import type { ComponentPropsWithoutRef, ReactNode } from "react";
 
+import { named } from "../../../lib/named";
 import { cn } from "../../../lib/utils";
 
 /**
@@ -63,50 +64,52 @@ export type SelectionPresenceProps = {
  *
  * @public
  */
-export const SelectionPresence = ({
-  ref,
-  ...props
-}: SelectionPresenceProps & { ref?: React.Ref<HTMLDivElement> }) => {
-  const { className, color, height, labels, name, width, x, y, ...rest } =
-    props;
-  const resolvedLabels = { ...DEFAULT_LABELS, ...labels };
-  const accent = color ?? "var(--foreground)";
-  const ariaLabel =
-    typeof name === "string"
-      ? `${resolvedLabels.region}: ${name}`
-      : resolvedLabels.region;
-  return (
-    <div
-      aria-label={ariaLabel}
-      className={cn(
-        "pointer-events-none absolute z-20 rounded-md border-2 border-dashed",
-        className,
-      )}
-      data-selection-presence
-      ref={ref}
-      role="img"
-      style={{
-        backgroundColor: `color-mix(in srgb, ${accent} 10%, transparent)`,
-        borderColor: accent,
-        height,
-        left: x,
-        top: y,
-        width,
-      }}
-      {...rest}
-    >
-      {name === null || name === undefined ? null : (
-        <span
-          className="absolute -top-5 left-0 inline-flex items-center rounded-md px-1.5 py-0.5 text-[10px] font-medium text-white shadow-sm"
-          data-selection-presence-chip
-          style={{
-            backgroundColor: `color-mix(in oklab, ${accent} 55%, oklch(0 0 0))`,
-          }}
-        >
-          {name}
-        </span>
-      )}
-    </div>
-  );
-};
-SelectionPresence.displayName = "SelectionPresence";
+export const SelectionPresence = /* @__PURE__ */ named(
+  "SelectionPresence",
+  ({
+    ref,
+    ...props
+  }: SelectionPresenceProps & { ref?: React.Ref<HTMLDivElement> }) => {
+    const { className, color, height, labels, name, width, x, y, ...rest } =
+      props;
+    const resolvedLabels = { ...DEFAULT_LABELS, ...labels };
+    const accent = color ?? "var(--foreground)";
+    const ariaLabel =
+      typeof name === "string"
+        ? `${resolvedLabels.region}: ${name}`
+        : resolvedLabels.region;
+    return (
+      <div
+        aria-label={ariaLabel}
+        className={cn(
+          "pointer-events-none absolute z-20 rounded-md border-2 border-dashed",
+          className,
+        )}
+        data-selection-presence
+        ref={ref}
+        role="img"
+        style={{
+          backgroundColor: `color-mix(in srgb, ${accent} 10%, transparent)`,
+          borderColor: accent,
+          height,
+          left: x,
+          top: y,
+          width,
+        }}
+        {...rest}
+      >
+        {name === null || name === undefined ? null : (
+          <span
+            className="absolute -top-5 left-0 inline-flex items-center rounded-md px-1.5 py-0.5 text-[10px] font-medium text-white shadow-sm"
+            data-selection-presence-chip
+            style={{
+              backgroundColor: `color-mix(in oklab, ${accent} 55%, oklch(0 0 0))`,
+            }}
+          >
+            {name}
+          </span>
+        )}
+      </div>
+    );
+  },
+);

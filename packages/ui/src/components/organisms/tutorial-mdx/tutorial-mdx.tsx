@@ -5,6 +5,7 @@ import { lazy, memo, Suspense, use, useMemo } from "react";
 import * as runtime from "react/jsx-runtime";
 import type { Components } from "react-markdown";
 
+import { named } from "../../../lib/named";
 import { cn } from "../../../lib/utils";
 import {
   Accordion,
@@ -292,7 +293,9 @@ function TutorialMDXImpl({
   return <MarkdownOnly className={className} content={content} />;
 }
 
-export const TutorialMDX = memo(TutorialMDXImpl);
-TutorialMDX.displayName = "TutorialMDX";
+export const TutorialMDX = /* @__PURE__ */ named(
+  "TutorialMDX",
+  /* @__PURE__ */ memo(TutorialMDXImpl),
+);
 
 export { mdxComponents };

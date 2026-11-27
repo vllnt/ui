@@ -8,6 +8,7 @@ import {
 } from "react";
 
 import type { MaterialProps } from "../../../lib/material";
+import { named } from "../../../lib/named";
 import { moveRovingFocus } from "../../../lib/roving-focus";
 import { cn } from "../../../lib/utils";
 
@@ -113,69 +114,73 @@ export type FloatingToolbarProps = {
  *
  * @public
  */
-export const FloatingToolbar = ({
-  material = "glass",
-  ref,
-  ...props
-}: FloatingToolbarProps & { ref?: React.Ref<HTMLDivElement> }) => {
-  const { actions, className, labels, onKeyDown, x, y, ...rest } = props;
-  const [focusedId, setFocusedId] = useState<string | undefined>();
-  const resolvedLabels = { ...DEFAULT_LABELS, ...labels };
-  const tabStopId = resolveTabStopId(actions, focusedId);
-  const handleKeyDownToolbar = (event: KeyboardEvent<HTMLDivElement>): void => {
-    onKeyDown?.(event);
-    moveRovingFocus(event, ACTION_SELECTOR);
-  };
-  return (
-    <div
-      aria-label={resolvedLabels.region}
-      className={cn(
-        "vllnt-glass-floating absolute z-30 flex -translate-y-full items-center gap-1 rounded-md border p-1",
-        className,
-      )}
-      data-floating-toolbar
-      data-material={material}
-      ref={ref}
-      role="toolbar"
-      style={{ left: `${x.toString()}px`, top: `${y.toString()}px` }}
-      {...rest}
-      onKeyDown={handleKeyDownToolbar}
-    >
-      {actions.map((action) => {
-        const variant = action.variant ?? "ghost";
-        const handleActivateToolbarAction = (): void => {
-          action.onActivate();
-        };
-        const handleFocusToolbarAction = (): void => {
-          setFocusedId(action.id);
-        };
-        return (
-          <button
-            aria-label={action.ariaLabel ?? undefined}
-            className={cn(
-              "inline-flex h-7 items-center gap-1 rounded-md border px-2 text-xs font-medium transition-colors motion-reduce:transition-none focus:outline-none focus-visible:ring-2 focus-visible:ring-ring",
-              VARIANT_CLASSES[variant],
-              action.disabled ? "cursor-not-allowed opacity-50" : "",
-            )}
-            data-action-id={action.id}
-            data-variant={variant}
-            disabled={action.disabled}
-            key={action.id}
-            onClick={handleActivateToolbarAction}
-            onFocus={handleFocusToolbarAction}
-            tabIndex={action.id === tabStopId ? 0 : -1}
-            type="button"
-          >
-            {action.glyph ? (
-              <span aria-hidden="true" className="inline-flex size-3">
-                {action.glyph}
-              </span>
-            ) : null}
-            <span>{action.label}</span>
-          </button>
-        );
-      })}
-    </div>
-  );
-};
-FloatingToolbar.displayName = "FloatingToolbar";
+export const FloatingToolbar = /* @__PURE__ */ named(
+  "FloatingToolbar",
+  ({
+    material = "glass",
+    ref,
+    ...props
+  }: FloatingToolbarProps & { ref?: React.Ref<HTMLDivElement> }) => {
+    const { actions, className, labels, onKeyDown, x, y, ...rest } = props;
+    const [focusedId, setFocusedId] = useState<string | undefined>();
+    const resolvedLabels = { ...DEFAULT_LABELS, ...labels };
+    const tabStopId = resolveTabStopId(actions, focusedId);
+    const handleKeyDownToolbar = (
+      event: KeyboardEvent<HTMLDivElement>,
+    ): void => {
+      onKeyDown?.(event);
+      moveRovingFocus(event, ACTION_SELECTOR);
+    };
+    return (
+      <div
+        aria-label={resolvedLabels.region}
+        className={cn(
+          "vllnt-glass-floating absolute z-30 flex -translate-y-full items-center gap-1 rounded-md border p-1",
+          className,
+        )}
+        data-floating-toolbar
+        data-material={material}
+        ref={ref}
+        role="toolbar"
+        style={{ left: `${x.toString()}px`, top: `${y.toString()}px` }}
+        {...rest}
+        onKeyDown={handleKeyDownToolbar}
+      >
+        {actions.map((action) => {
+          const variant = action.variant ?? "ghost";
+          const handleActivateToolbarAction = (): void => {
+            action.onActivate();
+          };
+          const handleFocusToolbarAction = (): void => {
+            setFocusedId(action.id);
+          };
+          return (
+            <button
+              aria-label={action.ariaLabel ?? undefined}
+              className={cn(
+                "inline-flex h-7 items-center gap-1 rounded-md border px-2 text-xs font-medium transition-colors motion-reduce:transition-none focus:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+                VARIANT_CLASSES[variant],
+                action.disabled ? "cursor-not-allowed opacity-50" : "",
+              )}
+              data-action-id={action.id}
+              data-variant={variant}
+              disabled={action.disabled}
+              key={action.id}
+              onClick={handleActivateToolbarAction}
+              onFocus={handleFocusToolbarAction}
+              tabIndex={action.id === tabStopId ? 0 : -1}
+              type="button"
+            >
+              {action.glyph ? (
+                <span aria-hidden="true" className="inline-flex size-3">
+                  {action.glyph}
+                </span>
+              ) : null}
+              <span>{action.label}</span>
+            </button>
+          );
+        })}
+      </div>
+    );
+  },
+);

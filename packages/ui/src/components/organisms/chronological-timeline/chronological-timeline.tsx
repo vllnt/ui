@@ -14,6 +14,7 @@ import {
   useState,
 } from "react";
 
+import { named } from "../../../lib/named";
 import { cn } from "../../../lib/utils";
 
 /**
@@ -286,72 +287,74 @@ function EventCard({
  *
  * @public
  */
-export const ChronoEvent = ({
-  ref: forwardedRef,
-  ...props
-}: ChronoEventProps & { ref?: React.Ref<HTMLElement> }) => {
-  const {
-    children,
-    className,
-    date,
-    featured = false,
-    id,
-    media,
-    subtitle,
-    title,
-    ...rest
-  } = props;
-  const generatedId = useId();
-  const eventId = id ?? generatedId;
-  const ref = useRef<HTMLElement | null>(null);
-  const { registerEvent, setActiveId } = useChronoContext();
+export const ChronoEvent = /* @__PURE__ */ named(
+  "ChronoEvent",
+  ({
+    ref: forwardedRef,
+    ...props
+  }: ChronoEventProps & { ref?: React.Ref<HTMLElement> }) => {
+    const {
+      children,
+      className,
+      date,
+      featured = false,
+      id,
+      media,
+      subtitle,
+      title,
+      ...rest
+    } = props;
+    const generatedId = useId();
+    const eventId = id ?? generatedId;
+    const ref = useRef<HTMLElement | null>(null);
+    const { registerEvent, setActiveId } = useChronoContext();
 
-  const refCallback = useCallback(
-    (node: HTMLElement | null) => {
-      ref.current = node;
-      registerEvent(eventId, node);
-      if (typeof forwardedRef === "function") forwardedRef(node);
-      else if (forwardedRef) forwardedRef.current = node;
-    },
-    [eventId, forwardedRef, registerEvent],
-  );
+    const refCallback = useCallback(
+      (node: HTMLElement | null) => {
+        ref.current = node;
+        registerEvent(eventId, node);
+        if (typeof forwardedRef === "function") forwardedRef(node);
+        else if (forwardedRef) forwardedRef.current = node;
+      },
+      [eventId, forwardedRef, registerEvent],
+    );
 
-  const handleFocusEvent = useCallback(() => {
-    setActiveId(eventId);
-  }, [eventId, setActiveId]);
+    const handleFocusEvent = useCallback(() => {
+      setActiveId(eventId);
+    }, [eventId, setActiveId]);
 
-  return (
-    /* Passive focus tracking: the container observes focus bubbling from
+    return (
+      /* Passive focus tracking: the container observes focus bubbling from
          its interactive children to drive the scroll-spy active state. */
-    <article
-      aria-labelledby={`${eventId}-title`}
-      className={cn(
-        "group relative grid gap-4 py-6 md:grid-cols-[1fr_auto_1fr] md:gap-8",
-        className,
-      )}
-      data-event-id={eventId}
-      data-featured={featured ? "true" : undefined}
-      id={eventId}
-      onFocus={handleFocusEvent}
-      ref={refCallback}
-      {...rest}
-    >
-      <DateColumn date={date} />
-      <RailColumn featured={featured} />
-      <EventCard
-        date={date}
-        eventId={eventId}
-        featured={featured}
-        media={media}
-        subtitle={subtitle}
-        title={title}
+      <article
+        aria-labelledby={`${eventId}-title`}
+        className={cn(
+          "group relative grid gap-4 py-6 md:grid-cols-[1fr_auto_1fr] md:gap-8",
+          className,
+        )}
+        data-event-id={eventId}
+        data-featured={featured ? "true" : undefined}
+        id={eventId}
+        onFocus={handleFocusEvent}
+        ref={refCallback}
+        {...rest}
       >
-        {children}
-      </EventCard>
-    </article>
-  );
-};
-ChronoEvent.displayName = "ChronoEvent";
+        <DateColumn date={date} />
+        <RailColumn featured={featured} />
+        <EventCard
+          date={date}
+          eventId={eventId}
+          featured={featured}
+          media={media}
+          subtitle={subtitle}
+          title={title}
+        >
+          {children}
+        </EventCard>
+      </article>
+    );
+  },
+);
 
 type ProgressStripProps = {
   activeId?: string;
@@ -475,51 +478,56 @@ function EventList({ activeId, children }: EventListProps): ReactNode {
  *
  * @public
  */
-export const ChronologicalTimeline = ({
-  ref,
-  ...props
-}: ChronologicalTimelineProps & { ref?: React.Ref<HTMLElement> }) => {
-  const {
-    children,
-    className,
-    progressLabel = "Timeline progress",
-    title,
-    ...rest
-  } = props;
-  const titleId = useId();
-  const { activeId, ids, registerEvent, setActiveId } =
-    useChronoActiveTracker();
+export const ChronologicalTimeline = /* @__PURE__ */ named(
+  "ChronologicalTimeline",
+  ({
+    ref,
+    ...props
+  }: ChronologicalTimelineProps & { ref?: React.Ref<HTMLElement> }) => {
+    const {
+      children,
+      className,
+      progressLabel = "Timeline progress",
+      title,
+      ...rest
+    } = props;
+    const titleId = useId();
+    const { activeId, ids, registerEvent, setActiveId } =
+      useChronoActiveTracker();
 
-  const ctx = useMemo<ChronoCtx>(
-    () => ({ registerEvent, setActiveId, titleId }),
-    [registerEvent, setActiveId, titleId],
-  );
+    const ctx = useMemo<ChronoCtx>(
+      () => ({ registerEvent, setActiveId, titleId }),
+      [registerEvent, setActiveId, titleId],
+    );
 
-  return (
-    <ChronoContext.Provider value={ctx}>
-      <section
-        aria-labelledby={title ? titleId : undefined}
-        className={cn(
-          "relative mx-auto flex w-full max-w-4xl flex-col overflow-hidden rounded-2xl border bg-background text-foreground",
-          className,
-        )}
-        ref={ref}
-        {...rest}
-      >
-        <ProgressStrip activeId={activeId} ids={ids} label={progressLabel} />
-        {title ? (
-          <header className="p-6">
-            <h2 className="text-2xl font-semibold tracking-tight" id={titleId}>
-              {title}
-            </h2>
-          </header>
-        ) : null}
-        <EventList activeId={activeId}>{children}</EventList>
-      </section>
-    </ChronoContext.Provider>
-  );
-};
-ChronologicalTimeline.displayName = "ChronologicalTimeline";
+    return (
+      <ChronoContext.Provider value={ctx}>
+        <section
+          aria-labelledby={title ? titleId : undefined}
+          className={cn(
+            "relative mx-auto flex w-full max-w-4xl flex-col overflow-hidden rounded-2xl border bg-background text-foreground",
+            className,
+          )}
+          ref={ref}
+          {...rest}
+        >
+          <ProgressStrip activeId={activeId} ids={ids} label={progressLabel} />
+          {title ? (
+            <header className="p-6">
+              <h2
+                className="text-2xl font-semibold tracking-tight"
+                id={titleId}
+              >
+                {title}
+              </h2>
+            </header>
+          ) : null}
+          <EventList activeId={activeId}>{children}</EventList>
+        </section>
+      </ChronoContext.Provider>
+    );
+  },
+);
 
 function isReactElementWithEventId(
   child: unknown,

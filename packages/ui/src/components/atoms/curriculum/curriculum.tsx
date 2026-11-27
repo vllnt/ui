@@ -27,6 +27,7 @@ import {
 } from "lucide-react";
 import type { ReactNode } from "react";
 
+import { named } from "../../../lib/named";
 import { useControllableState } from "../../../lib/use-controllable-state";
 import { cn } from "../../../lib/utils";
 
@@ -445,9 +446,9 @@ type CurriculumComponent = ((props: CurriculumProps) => React.ReactNode) & {
   Module: typeof CurriculumModule;
 };
 
-const Curriculum = Object.assign(CurriculumRoot, {
+const Curriculum = /* @__PURE__ */ named("Curriculum", CurriculumRoot, () => ({
   Lesson: CurriculumLesson,
   Module: CurriculumModule,
-}) as CurriculumComponent;
+})) as CurriculumComponent;
 
 export { Curriculum, CurriculumLesson, CurriculumModule };

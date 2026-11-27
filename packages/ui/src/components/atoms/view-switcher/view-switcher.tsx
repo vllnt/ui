@@ -5,6 +5,7 @@ import { memo, Suspense } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import type { KeyboardEvent } from "react";
 
+import { named } from "../../../lib/named";
 import { moveRovingFocus } from "../../../lib/roving-focus";
 import { cn } from "../../../lib/utils";
 
@@ -136,15 +137,16 @@ function ViewSwitcherFallback({
   );
 }
 
-const ViewSwitcher = memo(function ViewSwitcher(props: ViewSwitcherProps) {
-  return (
-    <Suspense fallback={<ViewSwitcherFallback {...props} />}>
-      <ViewSwitcherInner {...props} />
-    </Suspense>
-  );
-});
-
-ViewSwitcher.displayName = "ViewSwitcher";
+const ViewSwitcher = /* @__PURE__ */ named(
+  "ViewSwitcher",
+  /* @__PURE__ */ memo(function ViewSwitcher(props: ViewSwitcherProps) {
+    return (
+      <Suspense fallback={<ViewSwitcherFallback {...props} />}>
+        <ViewSwitcherInner {...props} />
+      </Suspense>
+    );
+  }),
+);
 
 export { ViewSwitcher };
 export type { ViewOption, ViewSwitcherProps };

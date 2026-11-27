@@ -5,6 +5,7 @@ import { Children, memo } from "react";
 import type { ReactNode } from "react";
 
 import type { MaterialProps } from "../../../lib/material";
+import { named } from "../../../lib/named";
 import type { HeadingTag } from "../../../lib/types";
 import { type OpenAliases, openAliases } from "../../../lib/ui-sdk-dialog";
 import { cn } from "../../../lib/utils";
@@ -141,5 +142,7 @@ function KeyboardShortcutsHelpImpl({
   );
 }
 
-export const KeyboardShortcutsHelp = memo(KeyboardShortcutsHelpImpl);
-KeyboardShortcutsHelp.displayName = "KeyboardShortcutsHelp";
+export const KeyboardShortcutsHelp = /* @__PURE__ */ named(
+  "KeyboardShortcutsHelp",
+  /* @__PURE__ */ memo(KeyboardShortcutsHelpImpl),
+);

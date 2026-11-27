@@ -4,6 +4,7 @@ import * as React from "react";
 
 import type { ReactNode } from "react";
 
+import { named } from "../../../lib/named";
 import { cn } from "../../../lib/utils";
 import { Badge } from "../../atoms/badge/badge";
 import {
@@ -800,14 +801,18 @@ function ProgressTrackerBadge({
   );
 }
 
-const ProgressTracker = Object.assign(ProgressTrackerRoot, {
-  Badge: ProgressTrackerBadge,
-  Module: ProgressTrackerModule,
-  Modules: ProgressTrackerModules,
-  Overview: ProgressTrackerOverview,
-  Stat: ProgressTrackerStat,
-  Stats: ProgressTrackerStats,
-});
+const ProgressTracker = /* @__PURE__ */ named(
+  "ProgressTracker",
+  ProgressTrackerRoot,
+  () => ({
+    Badge: ProgressTrackerBadge,
+    Module: ProgressTrackerModule,
+    Modules: ProgressTrackerModules,
+    Overview: ProgressTrackerOverview,
+    Stat: ProgressTrackerStat,
+    Stats: ProgressTrackerStats,
+  }),
+);
 
 export {
   ProgressTracker,

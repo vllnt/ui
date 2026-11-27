@@ -3,6 +3,7 @@
 import type { ComponentPropsWithoutRef, ReactNode } from "react";
 
 import type { MaterialProps } from "../../../lib/material";
+import { named } from "../../../lib/named";
 import { cn } from "../../../lib/utils";
 
 /**
@@ -142,55 +143,57 @@ const Row = (props: { entry: MetricClusterEntry }): React.ReactElement => {
  *
  * @public
  */
-export const MetricCluster = ({
-  ref,
-  ...props
-}: MetricClusterProps & { ref?: React.Ref<HTMLDivElement> }) => {
-  const {
-    anchor = "top-right",
-    className,
-    labels,
-    material = "glass",
-    metrics,
-    title,
-    x,
-    y,
-    ...rest
-  } = props;
-  const resolvedLabels = { ...DEFAULT_LABELS, ...labels };
-  return (
-    <div
-      aria-label={resolvedLabels.region}
-      className={cn(
-        "vllnt-glass vllnt-glass-dense pointer-events-none absolute z-20 flex flex-col gap-1 rounded-md border p-2",
-        className,
-      )}
-      data-material={material}
-      data-metric-cluster
-      data-metric-cluster-anchor={anchor}
-      ref={ref}
-      role="status"
-      style={{
-        left: x,
-        top: y,
-        transform: ANCHOR_TRANSFORM[anchor],
-      }}
-      {...rest}
-    >
-      {title ? (
-        <header
-          className="text-[10px] font-medium uppercase tracking-wide text-muted-foreground"
-          data-metric-cluster-title
-        >
-          {title}
-        </header>
-      ) : null}
-      <ul className="space-y-0.5">
-        {metrics.map((entry) => (
-          <Row entry={entry} key={entry.id} />
-        ))}
-      </ul>
-    </div>
-  );
-};
-MetricCluster.displayName = "MetricCluster";
+export const MetricCluster = /* @__PURE__ */ named(
+  "MetricCluster",
+  ({
+    ref,
+    ...props
+  }: MetricClusterProps & { ref?: React.Ref<HTMLDivElement> }) => {
+    const {
+      anchor = "top-right",
+      className,
+      labels,
+      material = "glass",
+      metrics,
+      title,
+      x,
+      y,
+      ...rest
+    } = props;
+    const resolvedLabels = { ...DEFAULT_LABELS, ...labels };
+    return (
+      <div
+        aria-label={resolvedLabels.region}
+        className={cn(
+          "vllnt-glass vllnt-glass-dense pointer-events-none absolute z-20 flex flex-col gap-1 rounded-md border p-2",
+          className,
+        )}
+        data-material={material}
+        data-metric-cluster
+        data-metric-cluster-anchor={anchor}
+        ref={ref}
+        role="status"
+        style={{
+          left: x,
+          top: y,
+          transform: ANCHOR_TRANSFORM[anchor],
+        }}
+        {...rest}
+      >
+        {title ? (
+          <header
+            className="text-[10px] font-medium uppercase tracking-wide text-muted-foreground"
+            data-metric-cluster-title
+          >
+            {title}
+          </header>
+        ) : null}
+        <ul className="space-y-0.5">
+          {metrics.map((entry) => (
+            <Row entry={entry} key={entry.id} />
+          ))}
+        </ul>
+      </div>
+    );
+  },
+);

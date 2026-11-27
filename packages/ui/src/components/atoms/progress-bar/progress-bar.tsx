@@ -8,6 +8,7 @@ import {
   ProgressIndicator,
 } from "@ui-sdk/react/progress";
 
+import { named } from "../../../lib/named";
 import { withDataAttributes } from "../../../lib/ui-sdk";
 import { cn } from "../../../lib/utils";
 import { cva, type VariantProps } from "../../../lib/variants";
@@ -292,74 +293,77 @@ function ProgressBarTrack({
  * <ProgressBar label="Step" max={8} value={3} valueLabel="3 / 8" />
  * ```
  */
-const ProgressBar = ({
-  "aria-label": ariaLabel,
-  blocks,
-  className,
-  completedLabel,
-  currentLabel,
-  isComplete = false,
-  isLoading = false,
-  label,
-  max,
-  mode = "determinate",
-  ref,
-  showLabels = true,
-  showValue = false,
-  size,
-  tone,
-  value,
-  valueLabel,
-}: ProgressBarProps & { ref?: React.Ref<HTMLDivElement> }) => {
-  const labelId = React.useId();
-  const percent = max > 0 ? Math.round((value / max) * 100) : 0;
-  const isIndeterminate = mode === "indeterminate" && !isLoading && !isComplete;
-  const resolvedTone = tone ?? (isComplete ? "success" : "primary");
-  const labelledBy =
-    showLabels && !isLoading && ariaLabel === undefined ? labelId : undefined;
+const ProgressBar = /* @__PURE__ */ named(
+  "ProgressBar",
+  ({
+    "aria-label": ariaLabel,
+    blocks,
+    className,
+    completedLabel,
+    currentLabel,
+    isComplete = false,
+    isLoading = false,
+    label,
+    max,
+    mode = "determinate",
+    ref,
+    showLabels = true,
+    showValue = false,
+    size,
+    tone,
+    value,
+    valueLabel,
+  }: ProgressBarProps & { ref?: React.Ref<HTMLDivElement> }) => {
+    const labelId = React.useId();
+    const percent = max > 0 ? Math.round((value / max) * 100) : 0;
+    const isIndeterminate =
+      mode === "indeterminate" && !isLoading && !isComplete;
+    const resolvedTone = tone ?? (isComplete ? "success" : "primary");
+    const labelledBy =
+      showLabels && !isLoading && ariaLabel === undefined ? labelId : undefined;
 
-  return (
-    <div
-      className={cn(
-        "border rounded-lg p-4 transition-colors motion-reduce:transition-none",
-        !isLoading && isComplete
-          ? progressBarCompleteVariants({ tone: resolvedTone })
-          : "border-border bg-muted/30",
-        className,
-      )}
-      ref={ref}
-    >
-      {showLabels ? (
-        <ProgressBarHeader
-          completedLabel={completedLabel}
+    return (
+      <div
+        className={cn(
+          "border rounded-lg p-4 transition-colors motion-reduce:transition-none",
+          !isLoading && isComplete
+            ? progressBarCompleteVariants({ tone: resolvedTone })
+            : "border-border bg-muted/30",
+          className,
+        )}
+        ref={ref}
+      >
+        {showLabels ? (
+          <ProgressBarHeader
+            completedLabel={completedLabel}
+            isIndeterminate={isIndeterminate}
+            isLoading={isLoading}
+            label={
+              label ?? currentLabel ?? (isComplete ? "Complete" : "Progress")
+            }
+            labelId={labelId}
+            max={max}
+            percent={percent}
+            showValue={showValue}
+            value={value}
+            valueLabel={valueLabel}
+          />
+        ) : null}
+        <ProgressBarTrack
+          ariaLabel={ariaLabel}
+          blocks={blocks}
           isIndeterminate={isIndeterminate}
           isLoading={isLoading}
-          label={
-            label ?? currentLabel ?? (isComplete ? "Complete" : "Progress")
-          }
-          labelId={labelId}
+          labelledBy={labelledBy}
           max={max}
           percent={percent}
-          showValue={showValue}
+          size={size}
+          tone={resolvedTone}
           value={value}
-          valueLabel={valueLabel}
         />
-      ) : null}
-      <ProgressBarTrack
-        ariaLabel={ariaLabel}
-        blocks={blocks}
-        isIndeterminate={isIndeterminate}
-        isLoading={isLoading}
-        labelledBy={labelledBy}
-        max={max}
-        percent={percent}
-        size={size}
-        tone={resolvedTone}
-        value={value}
-      />
-    </div>
-  );
-};
-ProgressBar.displayName = "ProgressBar";
+      </div>
+    );
+  },
+);
 
 export { ProgressBar };

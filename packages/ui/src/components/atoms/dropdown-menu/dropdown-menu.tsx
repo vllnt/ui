@@ -4,6 +4,7 @@ import * as React from "react";
 
 import { MenuTrigger as MenuTriggerPart } from "@ui-sdk/react/menu";
 
+import { named } from "../../../lib/named";
 import type { AsChildProps, NarrowPartProps } from "../../../lib/ui-sdk";
 import {
   asChildProps,
@@ -60,34 +61,35 @@ type TriggerProps = AsChildProps &
     ref?: React.Ref<HTMLButtonElement>;
   };
 
-const DropdownMenuTrigger = ({ asChild, children, ...props }: TriggerProps) => {
-  const slot = asChildProps({ asChild, children });
+const DropdownMenuTrigger = /* @__PURE__ */ named(
+  "DropdownMenuTrigger",
+  ({ asChild, children, ...props }: TriggerProps) => {
+    const slot = asChildProps({ asChild, children });
 
-  return (
-    <MenuTriggerPart
-      render={withDataAttributes("button", openState, slot.render)}
-      {...props}
-    >
-      {slot.children}
-    </MenuTriggerPart>
-  );
-};
-DropdownMenuTrigger.displayName = "DropdownMenuTrigger";
-
-const DropdownMenuContent = ({
-  align = "center",
-  sideOffset = 4,
-  ...props
-}: MenuContentProps) => (
-  <Popup align={align} sideOffset={sideOffset} {...props} />
+    return (
+      <MenuTriggerPart
+        render={withDataAttributes("button", openState, slot.render)}
+        {...props}
+      >
+        {slot.children}
+      </MenuTriggerPart>
+    );
+  },
 );
-DropdownMenuContent.displayName = "DropdownMenuContent";
 
-const DropdownMenuSubContent = ({
-  sideOffset = 0,
-  ...props
-}: MenuContentProps) => <Popup sideOffset={sideOffset} {...props} />;
-DropdownMenuSubContent.displayName = "DropdownMenuSubContent";
+const DropdownMenuContent = /* @__PURE__ */ named(
+  "DropdownMenuContent",
+  ({ align = "center", sideOffset = 4, ...props }: MenuContentProps) => (
+    <Popup align={align} sideOffset={sideOffset} {...props} />
+  ),
+);
+
+const DropdownMenuSubContent = /* @__PURE__ */ named(
+  "DropdownMenuSubContent",
+  ({ sideOffset = 0, ...props }: MenuContentProps) => (
+    <Popup sideOffset={sideOffset} {...props} />
+  ),
+);
 
 export {
   DropdownMenu,

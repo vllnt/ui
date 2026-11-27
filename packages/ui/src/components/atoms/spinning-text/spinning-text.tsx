@@ -1,5 +1,6 @@
 import * as React from "react";
 
+import { named } from "../../../lib/named";
 import { cn } from "../../../lib/utils";
 
 /** Props for {@link SpinningText}. */
@@ -42,45 +43,47 @@ function characterStyle(
  * <SpinningText>vllnt design system</SpinningText>
  * ```
  */
-export const SpinningText = ({
-  children,
-  className,
-  duration = 20,
-  radius = 80,
-  ref,
-  reverse = false,
-  style,
-  ...props
-}: SpinningTextProps & { ref?: React.Ref<HTMLDivElement> }) => {
-  const characters = splitCharacters(children);
+export const SpinningText = /* @__PURE__ */ named(
+  "SpinningText",
+  ({
+    children,
+    className,
+    duration = 20,
+    radius = 80,
+    ref,
+    reverse = false,
+    style,
+    ...props
+  }: SpinningTextProps & { ref?: React.Ref<HTMLDivElement> }) => {
+    const characters = splitCharacters(children);
 
-  return (
-    <div
-      className={cn(
-        "relative animate-spin motion-reduce:animate-none",
-        className,
-      )}
-      ref={ref}
-      style={{
-        animationDirection: reverse ? "reverse" : "normal",
-        animationDuration: `${duration}s`,
-        height: radius * 2,
-        width: radius * 2,
-        ...style,
-      }}
-      {...props}
-    >
-      <span className="sr-only">{children}</span>
-      {characters.map((character, index) => (
-        <span
-          aria-hidden="true"
-          key={`${character}-${index.toString()}`}
-          style={characterStyle(index, characters.length, radius)}
-        >
-          {character}
-        </span>
-      ))}
-    </div>
-  );
-};
-SpinningText.displayName = "SpinningText";
+    return (
+      <div
+        className={cn(
+          "relative animate-spin motion-reduce:animate-none",
+          className,
+        )}
+        ref={ref}
+        style={{
+          animationDirection: reverse ? "reverse" : "normal",
+          animationDuration: `${duration}s`,
+          height: radius * 2,
+          width: radius * 2,
+          ...style,
+        }}
+        {...props}
+      >
+        <span className="sr-only">{children}</span>
+        {characters.map((character, index) => (
+          <span
+            aria-hidden="true"
+            key={`${character}-${index.toString()}`}
+            style={characterStyle(index, characters.length, radius)}
+          >
+            {character}
+          </span>
+        ))}
+      </div>
+    );
+  },
+);

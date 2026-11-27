@@ -8,6 +8,7 @@ import {
 
 import { Command } from "lucide-react";
 
+import { named } from "../../../lib/named";
 import { cn } from "../../../lib/utils";
 import { cva, type VariantProps } from "../../../lib/variants";
 
@@ -182,61 +183,63 @@ export type KbdProps = {
  *
  * @public
  */
-export const Kbd = ({
-  children,
-  className,
-  platform = "auto",
-  ref,
-  shortcut,
-  size,
-  variant,
-  ...rest
-}: KbdProps & { ref?: React.Ref<HTMLElement> }) => {
-  const detectedMac = useIsMac();
-  const isMac = platform === "auto" ? detectedMac : platform === "mac";
-  const keyClassName = cn(kbdVariants({ size, variant }), className);
+export const Kbd = /* @__PURE__ */ named(
+  "Kbd",
+  ({
+    children,
+    className,
+    platform = "auto",
+    ref,
+    shortcut,
+    size,
+    variant,
+    ...rest
+  }: KbdProps & { ref?: React.Ref<HTMLElement> }) => {
+    const detectedMac = useIsMac();
+    const isMac = platform === "auto" ? detectedMac : platform === "mac";
+    const keyClassName = cn(kbdVariants({ size, variant }), className);
 
-  if (children !== undefined) {
-    return (
-      <kbd className={keyClassName} ref={ref} {...rest}>
-        {withBrackets(children, variant)}
-      </kbd>
-    );
-  }
+    if (children !== undefined) {
+      return (
+        <kbd className={keyClassName} ref={ref} {...rest}>
+          {withBrackets(children, variant)}
+        </kbd>
+      );
+    }
 
-  if (shortcut) {
-    // Split on "+" and trim, instead of a whitespace-greedy regex that
-    // backtracks polynomially on long runs of spaces.
-    const tokens = shortcut
-      .split(SHORTCUT_SEPARATOR)
-      .map((token) => token.trim())
-      .filter(Boolean);
-    const keys = tokens.map((token) => ({
-      label: formatToken(token, isMac),
-    }));
-    return (
-      <span
-        aria-label={keys.map(({ label }) => describeLabel(label)).join(" + ")}
-        className="inline-flex items-center gap-1"
-        role="img"
-      >
-        {keys.map(({ label }, index) => (
-          <kbd
-            className={keyClassName}
-            // Keys are positional: a shortcut can repeat a label.
-            key={`${String(index)}-${label}`}
-            ref={index === 0 ? ref : undefined}
-            {...(index === 0 ? rest : {})}
-          >
-            {withBrackets(renderLabel(label), variant)}
-          </kbd>
-        ))}
-      </span>
-    );
-  }
+    if (shortcut) {
+      // Split on "+" and trim, instead of a whitespace-greedy regex that
+      // backtracks polynomially on long runs of spaces.
+      const tokens = shortcut
+        .split(SHORTCUT_SEPARATOR)
+        .map((token) => token.trim())
+        .filter(Boolean);
+      const keys = tokens.map((token) => ({
+        label: formatToken(token, isMac),
+      }));
+      return (
+        <span
+          aria-label={keys.map(({ label }) => describeLabel(label)).join(" + ")}
+          className="inline-flex items-center gap-1"
+          role="img"
+        >
+          {keys.map(({ label }, index) => (
+            <kbd
+              className={keyClassName}
+              // Keys are positional: a shortcut can repeat a label.
+              key={`${String(index)}-${label}`}
+              ref={index === 0 ? ref : undefined}
+              {...(index === 0 ? rest : {})}
+            >
+              {withBrackets(renderLabel(label), variant)}
+            </kbd>
+          ))}
+        </span>
+      );
+    }
 
-  return <kbd className={keyClassName} ref={ref} {...rest} />;
-};
-Kbd.displayName = "Kbd";
+    return <kbd className={keyClassName} ref={ref} {...rest} />;
+  },
+);
 
 export { kbdVariants };

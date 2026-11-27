@@ -4,6 +4,7 @@ import type {
   ReactNode,
 } from "react";
 
+import { named } from "../../../lib/named";
 import { cn } from "../../../lib/utils";
 import { cva, type VariantProps } from "../../../lib/variants";
 
@@ -146,54 +147,56 @@ function SiblingItem({ caption, link, side, variant }: ItemProps): ReactNode {
  *
  * @public
  */
-export const DocumentSiblingNav = ({
-  className,
-  labels,
-  next,
-  previous,
-  ref,
-  variant,
-  ...rest
-}: DocumentSiblingNavProps & { ref?: React.Ref<HTMLElement> }) => {
-  if (!previous && !next) return null;
+export const DocumentSiblingNav = /* @__PURE__ */ named(
+  "DocumentSiblingNav",
+  ({
+    className,
+    labels,
+    next,
+    previous,
+    ref,
+    variant,
+    ...rest
+  }: DocumentSiblingNavProps & { ref?: React.Ref<HTMLElement> }) => {
+    if (!previous && !next) return null;
 
-  const resolvedVariant: DocumentSiblingNavVariant = variant ?? "with-title";
-  const resolvedLabels = {
-    navigation: labels?.navigation ?? DEFAULT_LABELS.navigation,
-    next: labels?.next ?? DEFAULT_LABELS.next,
-    previous: labels?.previous ?? DEFAULT_LABELS.previous,
-  };
+    const resolvedVariant: DocumentSiblingNavVariant = variant ?? "with-title";
+    const resolvedLabels = {
+      navigation: labels?.navigation ?? DEFAULT_LABELS.navigation,
+      next: labels?.next ?? DEFAULT_LABELS.next,
+      previous: labels?.previous ?? DEFAULT_LABELS.previous,
+    };
 
-  return (
-    <nav
-      aria-label={resolvedLabels.navigation}
-      className={cn(navVariants({ variant: resolvedVariant }), className)}
-      ref={ref}
-      {...rest}
-    >
-      {previous ? (
-        <SiblingItem
-          caption={resolvedLabels.previous}
-          link={previous}
-          side="previous"
-          variant={resolvedVariant}
-        />
-      ) : (
-        <span aria-hidden="true" />
-      )}
-      {next ? (
-        <SiblingItem
-          caption={resolvedLabels.next}
-          link={next}
-          side="next"
-          variant={resolvedVariant}
-        />
-      ) : (
-        <span aria-hidden="true" />
-      )}
-    </nav>
-  );
-};
-DocumentSiblingNav.displayName = "DocumentSiblingNav";
+    return (
+      <nav
+        aria-label={resolvedLabels.navigation}
+        className={cn(navVariants({ variant: resolvedVariant }), className)}
+        ref={ref}
+        {...rest}
+      >
+        {previous ? (
+          <SiblingItem
+            caption={resolvedLabels.previous}
+            link={previous}
+            side="previous"
+            variant={resolvedVariant}
+          />
+        ) : (
+          <span aria-hidden="true" />
+        )}
+        {next ? (
+          <SiblingItem
+            caption={resolvedLabels.next}
+            link={next}
+            side="next"
+            variant={resolvedVariant}
+          />
+        ) : (
+          <span aria-hidden="true" />
+        )}
+      </nav>
+    );
+  },
+);
 
 export { navVariants as documentSiblingNavVariants };

@@ -4,6 +4,7 @@ import { useCallback, useEffect, useId, useState } from "react";
 
 import { X } from "lucide-react";
 
+import { named } from "../../../lib/named";
 import { cn } from "../../../lib/utils";
 import { cva, type VariantProps } from "../../../lib/variants";
 import { Button, type ButtonProps } from "../../atoms/button/button";
@@ -279,148 +280,150 @@ function BarBody({
  *
  * @public
  */
-const CookieConsent = ({
-  acceptText = "Accept",
-  actions = "accept-primary",
-  className,
-  declineText,
-  labels,
-  layout = "card",
-  message = "This site uses cookies to improve your experience.",
-  onAccept,
-  onDecline,
-  onOpenChange,
-  open = true,
-  position,
-  ref: reference,
-  settingsHref,
-  settingsText = "Learn more",
-  showCloseButton = false,
-  title,
-  ...props
-}: CookieConsentProps & {
-  ref?: React.Ref<HTMLDivElement>;
-}): React.ReactNode => {
-  const [isVisible, setIsVisible] = useState(false);
-  const [isAnimatingOut, setIsAnimatingOut] = useState(false);
-  const titleId = useId();
-
-  // Handle visibility with animation
-  useEffect(() => {
-    if (open) {
-      // Small delay for mount animation
-      const timer = setTimeout(() => {
-        setIsVisible(true);
-      }, 50);
-      return () => {
-        clearTimeout(timer);
-      };
-    }
-    const rafId = requestAnimationFrame(() => {
-      setIsVisible(false);
-    });
-    return () => {
-      cancelAnimationFrame(rafId);
-    };
-  }, [open]);
-
-  const handleClose = useCallback(() => {
-    setIsAnimatingOut(true);
-    setTimeout(() => {
-      setIsAnimatingOut(false);
-      onOpenChange?.(false);
-    }, 200);
-  }, [onOpenChange]);
-
-  const handleAccept = useCallback(() => {
-    onAccept?.();
-    handleClose();
-  }, [onAccept, handleClose]);
-
-  const handleDecline = useCallback(() => {
-    onDecline?.();
-    handleClose();
-  }, [onDecline, handleClose]);
-
-  if (!open && !isAnimatingOut) return null;
-
-  const isBar = layout === "bar";
-  const heading = title ? (
-    <h2
-      className={cn(
-        "text-sm font-medium text-foreground",
-        !isBar && "mb-2 sm:mb-1",
-      )}
-      id={titleId}
-    >
-      {title}
-    </h2>
-  ) : null;
-  const actionProps = {
-    acceptText,
-    actions,
+const CookieConsent = /* @__PURE__ */ named(
+  "CookieConsent",
+  ({
+    acceptText = "Accept",
+    actions = "accept-primary",
+    className,
     declineText,
-    onAccept: handleAccept,
-    onDecline: handleDecline,
+    labels,
+    layout = "card",
+    message = "This site uses cookies to improve your experience.",
+    onAccept,
+    onDecline,
+    onOpenChange,
+    open = true,
+    position,
+    ref: reference,
     settingsHref,
-    settingsText,
-  };
+    settingsText = "Learn more",
+    showCloseButton = false,
+    title,
+    ...props
+  }: CookieConsentProps & {
+    ref?: React.Ref<HTMLDivElement>;
+  }): React.ReactNode => {
+    const [isVisible, setIsVisible] = useState(false);
+    const [isAnimatingOut, setIsAnimatingOut] = useState(false);
+    const titleId = useId();
 
-  return (
-    <div
-      aria-label={
-        heading ? undefined : (labels?.region ?? DEFAULT_LABELS.region)
+    // Handle visibility with animation
+    useEffect(() => {
+      if (open) {
+        // Small delay for mount animation
+        const timer = setTimeout(() => {
+          setIsVisible(true);
+        }, 50);
+        return () => {
+          clearTimeout(timer);
+        };
       }
-      aria-labelledby={heading ? titleId : undefined}
-      aria-live="polite"
-      className={cn(
-        cookieConsentVariants({ layout, position }),
-        // Animation states
-        isVisible && !isAnimatingOut
-          ? "translate-y-0 opacity-100"
-          : "translate-y-4 opacity-0",
-        className,
-      )}
-      ref={reference}
-      // react-doctor-disable-next-line react-doctor/prefer-html-dialog -- a non-modal banner placed by utility classes; native <dialog> UA defaults (auto margin, fit-content size) would move it, and role plus aria-label already name it
-      role="dialog"
-      {...props}
-    >
-      {isBar ? (
-        <BarBody
-          actionProps={actionProps}
-          heading={heading}
-          message={message}
-          reserveClose={showCloseButton}
-        />
-      ) : (
-        <CardBody
-          actionProps={actionProps}
-          heading={heading}
-          message={message}
-        />
-      )}
+      const rafId = requestAnimationFrame(() => {
+        setIsVisible(false);
+      });
+      return () => {
+        cancelAnimationFrame(rafId);
+      };
+    }, [open]);
 
-      {showCloseButton ? (
-        // The button is the 24px hit area (WCAG 2.5.8); -m-px keeps the 22px
-        // circle drawn by the span where the button used to sit.
-        <button
-          aria-label={labels?.close ?? DEFAULT_LABELS.close}
-          className={cn(
-            "absolute -m-px grid size-6 place-items-center text-muted-foreground hover:text-foreground",
-            isBar ? "right-2 top-2" : "-right-2 -top-2",
-          )}
-          onClick={handleClose}
-          type="button"
-        >
-          <span className="rounded-full border bg-background p-1">
-            <X className="size-3" />
-          </span>
-        </button>
-      ) : null}
-    </div>
-  );
-};
-CookieConsent.displayName = "CookieConsent";
+    const handleClose = useCallback(() => {
+      setIsAnimatingOut(true);
+      setTimeout(() => {
+        setIsAnimatingOut(false);
+        onOpenChange?.(false);
+      }, 200);
+    }, [onOpenChange]);
+
+    const handleAccept = useCallback(() => {
+      onAccept?.();
+      handleClose();
+    }, [onAccept, handleClose]);
+
+    const handleDecline = useCallback(() => {
+      onDecline?.();
+      handleClose();
+    }, [onDecline, handleClose]);
+
+    if (!open && !isAnimatingOut) return null;
+
+    const isBar = layout === "bar";
+    const heading = title ? (
+      <h2
+        className={cn(
+          "text-sm font-medium text-foreground",
+          !isBar && "mb-2 sm:mb-1",
+        )}
+        id={titleId}
+      >
+        {title}
+      </h2>
+    ) : null;
+    const actionProps = {
+      acceptText,
+      actions,
+      declineText,
+      onAccept: handleAccept,
+      onDecline: handleDecline,
+      settingsHref,
+      settingsText,
+    };
+
+    return (
+      <div
+        aria-label={
+          heading ? undefined : (labels?.region ?? DEFAULT_LABELS.region)
+        }
+        aria-labelledby={heading ? titleId : undefined}
+        aria-live="polite"
+        className={cn(
+          cookieConsentVariants({ layout, position }),
+          // Animation states
+          isVisible && !isAnimatingOut
+            ? "translate-y-0 opacity-100"
+            : "translate-y-4 opacity-0",
+          className,
+        )}
+        ref={reference}
+        // react-doctor-disable-next-line react-doctor/prefer-html-dialog -- a non-modal banner placed by utility classes; native <dialog> UA defaults (auto margin, fit-content size) would move it, and role plus aria-label already name it
+        role="dialog"
+        {...props}
+      >
+        {isBar ? (
+          <BarBody
+            actionProps={actionProps}
+            heading={heading}
+            message={message}
+            reserveClose={showCloseButton}
+          />
+        ) : (
+          <CardBody
+            actionProps={actionProps}
+            heading={heading}
+            message={message}
+          />
+        )}
+
+        {showCloseButton ? (
+          // The button is the 24px hit area (WCAG 2.5.8); -m-px keeps the 22px
+          // circle drawn by the span where the button used to sit.
+          <button
+            aria-label={labels?.close ?? DEFAULT_LABELS.close}
+            className={cn(
+              "absolute -m-px grid size-6 place-items-center text-muted-foreground hover:text-foreground",
+              isBar ? "right-2 top-2" : "-right-2 -top-2",
+            )}
+            onClick={handleClose}
+            type="button"
+          >
+            <span className="rounded-full border bg-background p-1">
+              <X className="size-3" />
+            </span>
+          </button>
+        ) : null}
+      </div>
+    );
+  },
+);
 
 export { CookieConsent, cookieConsentVariants };

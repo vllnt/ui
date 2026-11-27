@@ -3,6 +3,7 @@ import * as React from "react";
 import { ArrowDownRight, ArrowUpRight } from "lucide-react";
 
 import { formatChange } from "../../../lib/format";
+import { named } from "../../../lib/named";
 import { keyByOccurrence } from "../../../lib/occurrence-keys";
 import type { HeadingTag } from "../../../lib/types";
 import { cn } from "../../../lib/utils";
@@ -97,48 +98,49 @@ function MarketTreemapTile({
   );
 }
 
-export const MarketTreemap = ({
-  as: Heading = "h2",
-  className,
-  items,
-  ref: reference,
-  ...props
-}: MarketTreemapProps & { ref?: React.Ref<HTMLDivElement> }) => {
-  if (items.length === 0) {
-    return null;
-  }
+export const MarketTreemap = /* @__PURE__ */ named(
+  "MarketTreemap",
+  ({
+    as: Heading = "h2",
+    className,
+    items,
+    ref: reference,
+    ...props
+  }: MarketTreemapProps & { ref?: React.Ref<HTMLDivElement> }) => {
+    if (items.length === 0) {
+      return null;
+    }
 
-  const maxValue = Math.max(...items.map((item) => item.value));
+    const maxValue = Math.max(...items.map((item) => item.value));
 
-  return (
-    <div
-      className={cn(
-        "rounded-2xl border border-border bg-card/80 p-4 shadow-sm",
-        className,
-      )}
-      ref={reference}
-      {...props}
-    >
-      <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
-        <div>
-          <p className="text-xs font-medium uppercase tracking-[0.28em] text-muted-foreground">
-            Sector heatmap
+    return (
+      <div
+        className={cn(
+          "rounded-2xl border border-border bg-card/80 p-4 shadow-sm",
+          className,
+        )}
+        ref={reference}
+        {...props}
+      >
+        <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <p className="text-xs font-medium uppercase tracking-[0.28em] text-muted-foreground">
+              Sector heatmap
+            </p>
+            <Heading className="text-lg font-semibold text-foreground">
+              Market treemap
+            </Heading>
+          </div>
+          <p className="text-sm text-muted-foreground">
+            Tile size maps market cap proxy; color reflects session change.
           </p>
-          <Heading className="text-lg font-semibold text-foreground">
-            Market treemap
-          </Heading>
         </div>
-        <p className="text-sm text-muted-foreground">
-          Tile size maps market cap proxy; color reflects session change.
-        </p>
+        <div className="grid auto-rows-[120px] grid-cols-1 gap-3 md:auto-rows-[120px] md:grid-cols-4">
+          {keyByOccurrence(items, (item) => item.label).map(({ item, key }) => (
+            <MarketTreemapTile item={item} key={key} maxValue={maxValue} />
+          ))}
+        </div>
       </div>
-      <div className="grid auto-rows-[120px] grid-cols-1 gap-3 md:auto-rows-[120px] md:grid-cols-4">
-        {keyByOccurrence(items, (item) => item.label).map(({ item, key }) => (
-          <MarketTreemapTile item={item} key={key} maxValue={maxValue} />
-        ))}
-      </div>
-    </div>
-  );
-};
-
-MarketTreemap.displayName = "MarketTreemap";
+    );
+  },
+);

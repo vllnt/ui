@@ -8,6 +8,7 @@ import {
 } from "@ui-sdk/react/menu";
 import { Menubar as MenubarRoot } from "@ui-sdk/react/menubar";
 
+import { named } from "../../../lib/named";
 import type { AsChildProps, NarrowPartProps } from "../../../lib/ui-sdk";
 import {
   asChildProps,
@@ -65,34 +66,36 @@ type MenubarProps = NarrowPartProps<
   value?: string;
 };
 
-const Menubar = ({
-  className,
-  defaultValue,
-  dir,
-  modal = false,
-  onValueChange,
-  value,
-  ...props
-}: MenubarProps) => {
-  const state = React.useMemo(
-    () => ({ defaultValue, onValueChange, value }),
-    [defaultValue, onValueChange, value],
-  );
+const Menubar = /* @__PURE__ */ named(
+  "Menubar",
+  ({
+    className,
+    defaultValue,
+    dir,
+    modal = false,
+    onValueChange,
+    value,
+    ...props
+  }: MenubarProps) => {
+    const state = React.useMemo(
+      () => ({ defaultValue, onValueChange, value }),
+      [defaultValue, onValueChange, value],
+    );
 
-  return (
-    <BarContext value={state}>
-      <MenubarRoot
-        className={cn(
-          "flex h-10 items-center space-x-1 rounded-md border bg-background p-1",
-          className,
-        )}
-        modal={modal}
-        {...props}
-      />
-    </BarContext>
-  );
-};
-Menubar.displayName = "Menubar";
+    return (
+      <BarContext value={state}>
+        <MenubarRoot
+          className={cn(
+            "flex h-10 items-center space-x-1 rounded-md border bg-background p-1",
+            className,
+          )}
+          modal={modal}
+          {...props}
+        />
+      </BarContext>
+    );
+  },
+);
 
 type MenubarMenuProps = Omit<
   React.ComponentProps<typeof MenuRoot>,
@@ -103,92 +106,91 @@ type MenubarMenuProps = Omit<
 };
 
 /** Holds the open state of one menu in the bar. Renders no element. */
-const MenubarMenu = ({ value, ...props }: MenubarMenuProps) => {
-  const generated = React.useId();
-  const id = value ?? generated;
-  const bar = React.use(BarContext);
-  const options = useMenuContentOptions((open, details) => {
-    if (open) {
-      bar.onValueChange?.(id);
-    } else if (details.reason !== "submenu-switch") {
-      // Another menu taking over reports itself when it opens.
-      bar.onValueChange?.("");
-    }
-  });
+const MenubarMenu = /* @__PURE__ */ named(
+  "MenubarMenu",
+  ({ value, ...props }: MenubarMenuProps) => {
+    const generated = React.useId();
+    const id = value ?? generated;
+    const bar = React.use(BarContext);
+    const options = useMenuContentOptions((open, details) => {
+      if (open) {
+        bar.onValueChange?.(id);
+      } else if (details.reason !== "submenu-switch") {
+        // Another menu taking over reports itself when it opens.
+        bar.onValueChange?.("");
+      }
+    });
 
-  return (
-    <MenuContentContext value={options.register}>
-      <MenuRoot
-        defaultOpen={
-          bar.defaultValue === undefined ? undefined : bar.defaultValue === id
-        }
-        loop={options.loop}
-        onOpenChange={options.handleOpenChange}
-        open={bar.value === undefined ? undefined : bar.value === id}
-        {...props}
-      />
-    </MenuContentContext>
-  );
-};
-MenubarMenu.displayName = "MenubarMenu";
+    return (
+      <MenuContentContext value={options.register}>
+        <MenuRoot
+          defaultOpen={
+            bar.defaultValue === undefined ? undefined : bar.defaultValue === id
+          }
+          loop={options.loop}
+          onOpenChange={options.handleOpenChange}
+          open={bar.value === undefined ? undefined : bar.value === id}
+          {...props}
+        />
+      </MenuContentContext>
+    );
+  },
+);
 
 type TriggerProps = AsChildProps &
   NarrowPartProps<React.ComponentProps<typeof MenuTriggerPart>> & {
     ref?: React.Ref<HTMLButtonElement>;
   };
 
-const MenubarTrigger = ({
-  asChild,
-  children,
-  className,
-  ...props
-}: TriggerProps) => {
-  const slot = asChildProps({ asChild, children });
+const MenubarTrigger = /* @__PURE__ */ named(
+  "MenubarTrigger",
+  ({ asChild, children, className, ...props }: TriggerProps) => {
+    const slot = asChildProps({ asChild, children });
 
-  return (
-    <MenuTriggerPart
-      className={cn(
-        "flex cursor-default select-none items-center rounded-sm px-3 py-1.5 text-sm font-medium outline-none focus:bg-accent focus:text-accent-foreground data-[state=open]:bg-accent data-[state=open]:text-accent-foreground",
-        className,
-      )}
-      render={withDataAttributes("button", openState, slot.render)}
+    return (
+      <MenuTriggerPart
+        className={cn(
+          "flex cursor-default select-none items-center rounded-sm px-3 py-1.5 text-sm font-medium outline-none focus:bg-accent focus:text-accent-foreground data-[state=open]:bg-accent data-[state=open]:text-accent-foreground",
+          className,
+        )}
+        render={withDataAttributes("button", openState, slot.render)}
+        {...props}
+      >
+        {slot.children}
+      </MenuTriggerPart>
+    );
+  },
+);
+
+const MenubarContent = /* @__PURE__ */ named(
+  "MenubarContent",
+  ({
+    align = "start",
+    alignOffset = -4,
+    className,
+    sideOffset = 8,
+    ...props
+  }: MenuContentProps) => (
+    <Popup
+      align={align}
+      alignOffset={alignOffset}
+      className={cn("min-w-[12rem]", className)}
+      sideOffset={sideOffset}
       {...props}
-    >
-      {slot.children}
-    </MenuTriggerPart>
-  );
-};
-MenubarTrigger.displayName = "MenubarTrigger";
-
-const MenubarContent = ({
-  align = "start",
-  alignOffset = -4,
-  className,
-  sideOffset = 8,
-  ...props
-}: MenuContentProps) => (
-  <Popup
-    align={align}
-    alignOffset={alignOffset}
-    className={cn("min-w-[12rem]", className)}
-    sideOffset={sideOffset}
-    {...props}
-  />
+    />
+  ),
 );
-MenubarContent.displayName = "MenubarContent";
 
-const MenubarSubContent = ({
-  className,
-  sideOffset = 0,
-  ...props
-}: MenuContentProps) => (
-  <Popup
-    className={cn("min-w-[8rem] data-[state=closed]:animate-out", className)}
-    sideOffset={sideOffset}
-    {...props}
-  />
+const MenubarSubContent = /* @__PURE__ */ named(
+  "MenubarSubContent",
+  ({ className, sideOffset = 0, ...props }: MenuContentProps) => (
+    <Popup
+      className={cn("min-w-[8rem] data-[state=closed]:animate-out", className)}
+      sideOffset={sideOffset}
+      {...props}
+    />
+  ),
 );
-MenubarSubContent.displayName = "MenubarSubContent";
 
 export {
   Menubar,

@@ -7,6 +7,7 @@ import {
   useId,
 } from "react";
 
+import { named } from "../../../lib/named";
 import { cn } from "../../../lib/utils";
 
 /**
@@ -227,69 +228,71 @@ const TickMark = (props: {
  *
  * @public
  */
-export const TimelineScrubber = ({
-  ref,
-  ...props
-}: TimelineScrubberProps & { ref?: React.Ref<HTMLDivElement> }) => {
-  const {
-    className,
-    end,
-    formatValue,
-    labels,
-    onValueChange,
-    start,
-    step = 1,
-    ticks,
-    tone = "primary",
-    value,
-    ...rest
-  } = props;
-  const resolvedLabels = { ...DEFAULT_LABELS, ...labels };
-  const inputId = useId();
-  const safeEnd = end <= start ? start + 1 : end;
-  const span = safeEnd - start;
-  const clamped = clamp(value, start, safeEnd);
-  const ratio = clamp((clamped - start) / span, 0, 1);
-  const handleScrubberValueChange = (
-    event: ChangeEvent<HTMLInputElement>,
-  ): void => {
-    onValueChange(clamp(Number(event.target.value), start, safeEnd));
-  };
-  return (
-    <div
-      aria-label={resolvedLabels.region}
-      className={cn(
-        "flex w-full flex-col gap-1 text-[11px] text-muted-foreground",
-        className,
-      )}
-      data-timeline-scrubber
-      data-timeline-tone={tone}
-      ref={ref}
-      role="group"
-      {...rest}
-    >
-      <Labels
-        clamped={clamped}
-        end={safeEnd}
-        formatValue={formatValue}
-        start={start}
-      />
-      <Track
-        ariaLabel={resolvedLabels.region}
-        inputId={inputId}
-        max={safeEnd}
-        min={start}
-        onChange={handleScrubberValueChange}
-        ratio={ratio}
-        scrubberId={inputId}
-        span={span}
-        start={start}
-        step={step}
-        ticks={ticks}
-        tone={tone}
-        value={clamped}
-      />
-    </div>
-  );
-};
-TimelineScrubber.displayName = "TimelineScrubber";
+export const TimelineScrubber = /* @__PURE__ */ named(
+  "TimelineScrubber",
+  ({
+    ref,
+    ...props
+  }: TimelineScrubberProps & { ref?: React.Ref<HTMLDivElement> }) => {
+    const {
+      className,
+      end,
+      formatValue,
+      labels,
+      onValueChange,
+      start,
+      step = 1,
+      ticks,
+      tone = "primary",
+      value,
+      ...rest
+    } = props;
+    const resolvedLabels = { ...DEFAULT_LABELS, ...labels };
+    const inputId = useId();
+    const safeEnd = end <= start ? start + 1 : end;
+    const span = safeEnd - start;
+    const clamped = clamp(value, start, safeEnd);
+    const ratio = clamp((clamped - start) / span, 0, 1);
+    const handleScrubberValueChange = (
+      event: ChangeEvent<HTMLInputElement>,
+    ): void => {
+      onValueChange(clamp(Number(event.target.value), start, safeEnd));
+    };
+    return (
+      <div
+        aria-label={resolvedLabels.region}
+        className={cn(
+          "flex w-full flex-col gap-1 text-[11px] text-muted-foreground",
+          className,
+        )}
+        data-timeline-scrubber
+        data-timeline-tone={tone}
+        ref={ref}
+        role="group"
+        {...rest}
+      >
+        <Labels
+          clamped={clamped}
+          end={safeEnd}
+          formatValue={formatValue}
+          start={start}
+        />
+        <Track
+          ariaLabel={resolvedLabels.region}
+          inputId={inputId}
+          max={safeEnd}
+          min={start}
+          onChange={handleScrubberValueChange}
+          ratio={ratio}
+          scrubberId={inputId}
+          span={span}
+          start={start}
+          step={step}
+          ticks={ticks}
+          tone={tone}
+          value={clamped}
+        />
+      </div>
+    );
+  },
+);

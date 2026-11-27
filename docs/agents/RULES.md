@@ -94,7 +94,7 @@ See [`BRANCHING.md`](./BRANCHING.md).
 
 One line each; the linked [`COMPONENTS.md`](./COMPONENTS.md) section holds the full pattern and examples.
 
-- **R9 — Ref-as-prop + `displayName`.** Every named export, compound subcomponents included, takes `ref` as a prop (React 19, no `forwardRef`), reads context with `use()`, and sets `displayName`. [Pattern](./COMPONENTS.md#the-ref-as-prop--displayname-contract). *Why:* PR #150 (compound parts missing the contract); PR #268 moved it to ref-as-prop.
+- **R9 — Ref-as-prop + `displayName`.** Every named export, compound subcomponents included, takes `ref` as a prop (React 19, no `forwardRef`), reads context with `use()`, and sets `displayName` through `/* @__PURE__ */ named("X", …)` (lint `named-display-name`). [Pattern](./COMPONENTS.md#the-ref-as-prop--displayname-contract). *Why:* PR #150 (compound parts missing the contract); PR #268 moved it to ref-as-prop.
 - **R10 — Semantic root.** A name that implies an HTML element (`Form`, `Nav`, `List`, `Article`, `Header`) renders that element, not `<div role="…">`. [Pattern](./COMPONENTS.md#semantic-root). *Why:* PR #145 (`Form` shipped as a `<div>`).
 - **R11 — No dangling ARIA references.** Emit `aria-describedby` / `aria-labelledby` ids only when the target renders. [Pattern](./COMPONENTS.md#aria-describedby--aria-labelledby-must-point-at-rendered-nodes). *Why:* PR #145 (`FormControl` pointed at unrendered nodes).
 - **R12 — Don't hijack events from descendants.** Containers check `event.target` before `preventDefault()` on wheel / key / pointer; defer first, hijack last. [Pattern](./COMPONENTS.md#event-handling--dont-hijack-what-isnt-yours). *Why:* PR #139 (`canvas-view` stole wheel and arrow/zoom keys).

@@ -9,6 +9,7 @@ import {
 } from "@ui-sdk/react/collapsible";
 import { Brain, ChevronDown } from "lucide-react";
 
+import { named } from "../../../lib/named";
 import { useControllableState } from "../../../lib/use-controllable-state";
 import { cn } from "../../../lib/utils";
 
@@ -103,48 +104,50 @@ function ReasoningContent({
  * @example
  * <Reasoning duration={4} steps={["Parse the request", "Check the cache"]} />
  */
-export const Reasoning = ({
-  children,
-  className,
-  duration,
-  isStreaming = false,
-  onOpenChange,
-  open,
-  ref,
-  steps,
-}: ReasoningProps & { ref?: React.Ref<HTMLDivElement> }) => {
-  const [isOpen, setIsOpen] = useControllableState({
-    defaultValue: isStreaming,
-    onChange: onOpenChange,
-    value: open,
-  });
-
-  useEffect(() => {
-    if (!isStreaming) return;
-    const frame = requestAnimationFrame(() => {
-      setIsOpen(true);
+export const Reasoning = /* @__PURE__ */ named(
+  "Reasoning",
+  ({
+    children,
+    className,
+    duration,
+    isStreaming = false,
+    onOpenChange,
+    open,
+    ref,
+    steps,
+  }: ReasoningProps & { ref?: React.Ref<HTMLDivElement> }) => {
+    const [isOpen, setIsOpen] = useControllableState({
+      defaultValue: isStreaming,
+      onChange: onOpenChange,
+      value: open,
     });
-    return () => {
-      cancelAnimationFrame(frame);
-    };
-  }, [isStreaming, setIsOpen]);
 
-  return (
-    <Collapsible
-      className={cn("rounded-lg border border-border bg-muted/30", className)}
-      onOpenChange={setIsOpen}
-      open={isOpen}
-      ref={ref}
-    >
-      <ReasoningTrigger
-        duration={duration}
-        isOpen={isOpen}
-        isStreaming={isStreaming}
-      />
-      <ReasoningContent isStreaming={isStreaming} steps={steps}>
-        {children}
-      </ReasoningContent>
-    </Collapsible>
-  );
-};
-Reasoning.displayName = "Reasoning";
+    useEffect(() => {
+      if (!isStreaming) return;
+      const frame = requestAnimationFrame(() => {
+        setIsOpen(true);
+      });
+      return () => {
+        cancelAnimationFrame(frame);
+      };
+    }, [isStreaming, setIsOpen]);
+
+    return (
+      <Collapsible
+        className={cn("rounded-lg border border-border bg-muted/30", className)}
+        onOpenChange={setIsOpen}
+        open={isOpen}
+        ref={ref}
+      >
+        <ReasoningTrigger
+          duration={duration}
+          isOpen={isOpen}
+          isStreaming={isStreaming}
+        />
+        <ReasoningContent isStreaming={isStreaming} steps={steps}>
+          {children}
+        </ReasoningContent>
+      </Collapsible>
+    );
+  },
+);

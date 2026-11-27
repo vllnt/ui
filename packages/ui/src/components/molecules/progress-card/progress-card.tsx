@@ -4,6 +4,7 @@ import { memo, useEffect, useState } from "react";
 
 import type { ReactNode } from "react";
 
+import { named } from "../../../lib/named";
 import { keyByOccurrence } from "../../../lib/occurrence-keys";
 import { useMounted } from "../../../lib/use-mounted";
 import { Badge } from "../../atoms/badge/badge";
@@ -146,5 +147,7 @@ function ContentCardImpl({
   );
 }
 
-export const ContentCard = memo(ContentCardImpl);
-ContentCard.displayName = "ContentCard";
+export const ContentCard = /* @__PURE__ */ named(
+  "ContentCard",
+  /* @__PURE__ */ memo(ContentCardImpl),
+);

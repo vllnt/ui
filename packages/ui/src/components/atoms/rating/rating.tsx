@@ -5,6 +5,7 @@ import { Star } from "lucide-react";
 import type { ComponentPropsWithoutRef, KeyboardEvent, Ref } from "react";
 
 import { HIT_AREA_24_RADIO_CHILD } from "../../../lib/hit-area";
+import { named } from "../../../lib/named";
 import { moveRovingFocus } from "../../../lib/roving-focus";
 import { useControllableState } from "../../../lib/use-controllable-state";
 import { cn } from "../../../lib/utils";
@@ -51,67 +52,72 @@ function getItemClassName(readOnly: boolean) {
     );
 }
 
-const Rating = ({
-  allowClear = false,
-  className,
-  defaultValue = 0,
-  label = "Rating",
-  max = 5,
-  onValueChange,
-  readOnly = false,
-  ref,
-  showValue = false,
-  size = "md",
-  value,
-  ...props
-}: RatingProps & { ref?: Ref<HTMLDivElement> }) => {
-  const [activeValue, setActiveValue] = useControllableState({
-    defaultValue,
-    onChange: onValueChange,
+const Rating = /* @__PURE__ */ named(
+  "Rating",
+  ({
+    allowClear = false,
+    className,
+    defaultValue = 0,
+    label = "Rating",
+    max = 5,
+    onValueChange,
+    readOnly = false,
+    ref,
+    showValue = false,
+    size = "md",
     value,
-  });
+    ...props
+  }: RatingProps & { ref?: Ref<HTMLDivElement> }) => {
+    const [activeValue, setActiveValue] = useControllableState({
+      defaultValue,
+      onChange: onValueChange,
+      value,
+    });
 
-  return (
-    <div
-      {...props}
-      className={cn("inline-flex flex-col gap-2", className)}
-      ref={ref}
-    >
-      <div className="inline-flex items-center gap-3">
-        <RatingPrimitive
-          aria-label={label}
-          className="inline-flex items-center gap-1"
-          deselectable={allowClear}
-          // ui-sdk swaps the radios of a locked score for one image. Disabling
-          // them instead keeps their roles and labels.
-          disabled={readOnly}
-          loop
-          max={max}
-          onKeyDown={handleEndKeys}
-          onValueChange={(next) => {
-            setActiveValue(next ?? 0);
-          }}
-          tabIndex={-1}
-          value={activeValue || null}
-        >
-          <RatingItem className={getItemClassName(readOnly)}>
-            {({ fill }) => (
-              <Star
-                className={cn(sizeClasses[size], fill === 1 && "fill-current")}
-                strokeWidth={1.75}
-              />
-            )}
-          </RatingItem>
-        </RatingPrimitive>
-        {showValue ? (
-          <span className="text-sm text-muted-foreground">
-            {activeValue}/{max}
-          </span>
-        ) : null}
+    return (
+      <div
+        {...props}
+        className={cn("inline-flex flex-col gap-2", className)}
+        ref={ref}
+      >
+        <div className="inline-flex items-center gap-3">
+          <RatingPrimitive
+            aria-label={label}
+            className="inline-flex items-center gap-1"
+            deselectable={allowClear}
+            // ui-sdk swaps the radios of a locked score for one image. Disabling
+            // them instead keeps their roles and labels.
+            disabled={readOnly}
+            loop
+            max={max}
+            onKeyDown={handleEndKeys}
+            onValueChange={(next) => {
+              setActiveValue(next ?? 0);
+            }}
+            tabIndex={-1}
+            value={activeValue || null}
+          >
+            <RatingItem className={getItemClassName(readOnly)}>
+              {({ fill }) => (
+                <Star
+                  className={cn(
+                    sizeClasses[size],
+                    fill === 1 && "fill-current",
+                  )}
+                  strokeWidth={1.75}
+                />
+              )}
+            </RatingItem>
+          </RatingPrimitive>
+          {showValue ? (
+            <span className="text-sm text-muted-foreground">
+              {activeValue}/{max}
+            </span>
+          ) : null}
+        </div>
       </div>
-    </div>
-  );
-};
-Rating.displayName = "Rating";
+    );
+  },
+);
 
 export { Rating };

@@ -2,6 +2,7 @@
 
 import type { ComponentPropsWithoutRef, ReactNode } from "react";
 
+import { named } from "../../../lib/named";
 import { cn } from "../../../lib/utils";
 
 /**
@@ -167,44 +168,52 @@ const Group = (props: {
  *
  * @public
  */
-export const RelationshipInspector = ({
-  ref,
-  ...props
-}: RelationshipInspectorProps & { ref?: React.Ref<HTMLElement> }) => {
-  const { className, edges, labels, title = "Relationships", ...rest } = props;
-  const resolvedLabels = { ...DEFAULT_LABELS, ...labels };
-  const inbound = edges.filter((edge) => edge.direction === "inbound");
-  const outbound = edges.filter((edge) => edge.direction === "outbound");
-  return (
-    <section
-      aria-label={resolvedLabels.region}
-      className={cn(
-        "flex w-full flex-col gap-2 rounded-lg border bg-background p-3 text-foreground",
-        className,
-      )}
-      data-relationship-inspector
-      ref={ref}
-      {...rest}
-    >
-      <header>
-        <h3 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-          {title}
-        </h3>
-      </header>
-      {edges.length === 0 ? (
-        <p
-          className="px-2 py-3 text-center text-xs text-muted-foreground"
-          data-relationship-state="empty"
-        >
-          {resolvedLabels.empty}
-        </p>
-      ) : (
-        <div className="space-y-2">
-          <Group edges={inbound} heading={resolvedLabels.inbound} />
-          <Group edges={outbound} heading={resolvedLabels.outbound} />
-        </div>
-      )}
-    </section>
-  );
-};
-RelationshipInspector.displayName = "RelationshipInspector";
+export const RelationshipInspector = /* @__PURE__ */ named(
+  "RelationshipInspector",
+  ({
+    ref,
+    ...props
+  }: RelationshipInspectorProps & { ref?: React.Ref<HTMLElement> }) => {
+    const {
+      className,
+      edges,
+      labels,
+      title = "Relationships",
+      ...rest
+    } = props;
+    const resolvedLabels = { ...DEFAULT_LABELS, ...labels };
+    const inbound = edges.filter((edge) => edge.direction === "inbound");
+    const outbound = edges.filter((edge) => edge.direction === "outbound");
+    return (
+      <section
+        aria-label={resolvedLabels.region}
+        className={cn(
+          "flex w-full flex-col gap-2 rounded-lg border bg-background p-3 text-foreground",
+          className,
+        )}
+        data-relationship-inspector
+        ref={ref}
+        {...rest}
+      >
+        <header>
+          <h3 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+            {title}
+          </h3>
+        </header>
+        {edges.length === 0 ? (
+          <p
+            className="px-2 py-3 text-center text-xs text-muted-foreground"
+            data-relationship-state="empty"
+          >
+            {resolvedLabels.empty}
+          </p>
+        ) : (
+          <div className="space-y-2">
+            <Group edges={inbound} heading={resolvedLabels.inbound} />
+            <Group edges={outbound} heading={resolvedLabels.outbound} />
+          </div>
+        )}
+      </section>
+    );
+  },
+);

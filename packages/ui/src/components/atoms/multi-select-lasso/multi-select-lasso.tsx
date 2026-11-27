@@ -2,6 +2,7 @@
 
 import type { ComponentPropsWithoutRef, ReactNode } from "react";
 
+import { named } from "../../../lib/named";
 import { cn } from "../../../lib/utils";
 
 /**
@@ -81,55 +82,57 @@ const normalizeRect = (rect: LassoRect): LassoRect => {
  *
  * @public
  */
-export const MultiSelectLasso = ({
-  ref,
-  ...props
-}: MultiSelectLassoProps & { ref?: React.Ref<HTMLDivElement> }) => {
-  const { className, count, hint, labels, rect, ...rest } = props;
-  if (!rect) {
-    return null;
-  }
-  const resolvedLabels = { ...DEFAULT_LABELS, ...labels };
-  const normalized = normalizeRect(rect);
-  if (normalized.width === 0 || normalized.height === 0) {
-    return null;
-  }
-  const noun = count === 1 ? resolvedLabels.singular : resolvedLabels.plural;
-  return (
-    <div
-      aria-hidden="true"
-      aria-label={resolvedLabels.region}
-      className={cn(
-        "pointer-events-none absolute z-30 rounded-md border-2 border-blue-500/70 bg-blue-500/10",
-        className,
-      )}
-      data-multi-select-lasso
-      ref={ref}
-      style={{
-        height: normalized.height,
-        left: normalized.x,
-        top: normalized.y,
-        width: normalized.width,
-      }}
-      {...rest}
-    >
-      {hint ? (
-        <span
-          className="absolute -top-7 left-0 rounded-md bg-foreground/90 px-2 py-0.5 text-[10px] font-medium uppercase tracking-wide text-background"
-          data-multi-select-hint
-        >
-          {hint}
-        </span>
-      ) : null}
-      {typeof count === "number" ? (
-        <span
-          className="absolute -bottom-7 right-0 rounded-full bg-foreground px-2 py-0.5 text-[10px] font-semibold text-background"
-          data-multi-select-count
-        >
-          {count} {noun}
-        </span>
-      ) : null}
-    </div>
-  );
-};
-MultiSelectLasso.displayName = "MultiSelectLasso";
+export const MultiSelectLasso = /* @__PURE__ */ named(
+  "MultiSelectLasso",
+  ({
+    ref,
+    ...props
+  }: MultiSelectLassoProps & { ref?: React.Ref<HTMLDivElement> }) => {
+    const { className, count, hint, labels, rect, ...rest } = props;
+    if (!rect) {
+      return null;
+    }
+    const resolvedLabels = { ...DEFAULT_LABELS, ...labels };
+    const normalized = normalizeRect(rect);
+    if (normalized.width === 0 || normalized.height === 0) {
+      return null;
+    }
+    const noun = count === 1 ? resolvedLabels.singular : resolvedLabels.plural;
+    return (
+      <div
+        aria-hidden="true"
+        aria-label={resolvedLabels.region}
+        className={cn(
+          "pointer-events-none absolute z-30 rounded-md border-2 border-blue-500/70 bg-blue-500/10",
+          className,
+        )}
+        data-multi-select-lasso
+        ref={ref}
+        style={{
+          height: normalized.height,
+          left: normalized.x,
+          top: normalized.y,
+          width: normalized.width,
+        }}
+        {...rest}
+      >
+        {hint ? (
+          <span
+            className="absolute -top-7 left-0 rounded-md bg-foreground/90 px-2 py-0.5 text-[10px] font-medium uppercase tracking-wide text-background"
+            data-multi-select-hint
+          >
+            {hint}
+          </span>
+        ) : null}
+        {typeof count === "number" ? (
+          <span
+            className="absolute -bottom-7 right-0 rounded-full bg-foreground px-2 py-0.5 text-[10px] font-semibold text-background"
+            data-multi-select-count
+          >
+            {count} {noun}
+          </span>
+        ) : null}
+      </div>
+    );
+  },
+);

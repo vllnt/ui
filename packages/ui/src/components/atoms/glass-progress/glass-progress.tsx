@@ -1,6 +1,7 @@
 import * as React from "react";
 
 import type { MaterialProps } from "../../../lib/material";
+import { named } from "../../../lib/named";
 import { cn } from "../../../lib/utils";
 
 /**
@@ -25,35 +26,37 @@ function clampPercent(value: number): number {
  * <GlassProgress value={60} />
  * ```
  */
-export const GlassProgress = ({
-  className,
-  material = "glass",
-  ref,
-  value,
-  ...props
-}: GlassProgressProps & { ref?: React.Ref<HTMLDivElement> }) => {
-  const clamped = clampPercent(value);
+export const GlassProgress = /* @__PURE__ */ named(
+  "GlassProgress",
+  ({
+    className,
+    material = "glass",
+    ref,
+    value,
+    ...props
+  }: GlassProgressProps & { ref?: React.Ref<HTMLDivElement> }) => {
+    const clamped = clampPercent(value);
 
-  return (
-    <div
-      aria-label={props["aria-labelledby"] ? undefined : "Progress"}
-      aria-valuemax={100}
-      aria-valuemin={0}
-      aria-valuenow={clamped}
-      className={cn(
-        "vllnt-glass relative h-2 w-full overflow-hidden rounded-full border",
-        className,
-      )}
-      data-material={material}
-      ref={ref}
-      role="progressbar"
-      {...props}
-    >
+    return (
       <div
-        className="h-full rounded-full bg-primary transition-[width]"
-        style={{ width: `${clamped}%` }}
-      />
-    </div>
-  );
-};
-GlassProgress.displayName = "GlassProgress";
+        aria-label={props["aria-labelledby"] ? undefined : "Progress"}
+        aria-valuemax={100}
+        aria-valuemin={0}
+        aria-valuenow={clamped}
+        className={cn(
+          "vllnt-glass relative h-2 w-full overflow-hidden rounded-full border",
+          className,
+        )}
+        data-material={material}
+        ref={ref}
+        role="progressbar"
+        {...props}
+      >
+        <div
+          className="h-full rounded-full bg-primary transition-[width]"
+          style={{ width: `${clamped}%` }}
+        />
+      </div>
+    );
+  },
+);

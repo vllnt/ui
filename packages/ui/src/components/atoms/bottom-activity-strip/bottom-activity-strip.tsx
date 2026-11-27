@@ -2,6 +2,7 @@
 
 import type { ComponentPropsWithoutRef, ReactNode } from "react";
 
+import { named } from "../../../lib/named";
 import { cn } from "../../../lib/utils";
 
 /**
@@ -151,39 +152,41 @@ const Chip = (props: { event: ActivityEvent }): React.ReactElement => {
  *
  * @public
  */
-export const BottomActivityStrip = ({
-  ref,
-  ...props
-}: BottomActivityStripProps & { ref?: React.Ref<HTMLElement> }) => {
-  const { className, events, labels, maxEvents, ...rest } = props;
-  const resolvedLabels = { ...DEFAULT_LABELS, ...labels };
-  const visible =
-    maxEvents === undefined || maxEvents >= events.length
-      ? events
-      : events.slice(0, maxEvents);
-  return (
-    <section
-      aria-label={resolvedLabels.region}
-      className={cn(
-        "flex w-full items-center gap-2 overflow-x-auto rounded-md border border-border bg-background/90 px-2 py-1 text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
-        className,
-      )}
-      data-bottom-activity-strip
-      ref={ref}
-      tabIndex={0}
-      {...rest}
-    >
-      {visible.length === 0 ? (
-        <span
-          className="px-2 text-[11px] text-muted-foreground"
-          data-strip-state="empty"
-        >
-          {resolvedLabels.empty}
-        </span>
-      ) : (
-        visible.map((event) => <Chip event={event} key={event.id} />)
-      )}
-    </section>
-  );
-};
-BottomActivityStrip.displayName = "BottomActivityStrip";
+export const BottomActivityStrip = /* @__PURE__ */ named(
+  "BottomActivityStrip",
+  ({
+    ref,
+    ...props
+  }: BottomActivityStripProps & { ref?: React.Ref<HTMLElement> }) => {
+    const { className, events, labels, maxEvents, ...rest } = props;
+    const resolvedLabels = { ...DEFAULT_LABELS, ...labels };
+    const visible =
+      maxEvents === undefined || maxEvents >= events.length
+        ? events
+        : events.slice(0, maxEvents);
+    return (
+      <section
+        aria-label={resolvedLabels.region}
+        className={cn(
+          "flex w-full items-center gap-2 overflow-x-auto rounded-md border border-border bg-background/90 px-2 py-1 text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+          className,
+        )}
+        data-bottom-activity-strip
+        ref={ref}
+        tabIndex={0}
+        {...rest}
+      >
+        {visible.length === 0 ? (
+          <span
+            className="px-2 text-[11px] text-muted-foreground"
+            data-strip-state="empty"
+          >
+            {resolvedLabels.empty}
+          </span>
+        ) : (
+          visible.map((event) => <Chip event={event} key={event.id} />)
+        )}
+      </section>
+    );
+  },
+);

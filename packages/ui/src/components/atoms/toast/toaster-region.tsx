@@ -20,6 +20,7 @@ import {
   XIcon,
 } from "lucide-react";
 
+import { named } from "../../../lib/named";
 import { cn } from "../../../lib/utils";
 
 import type { ToastAppearance, ToastExtras } from "./toast-api";
@@ -262,21 +263,21 @@ function IconBox({ className, icon, loading }: IconBoxProps) {
   );
 }
 
-type ButtonsProps = { named: Named; toast: ToastData<React.ReactNode> };
+type ButtonsProps = { slot: Named; toast: ToastData<React.ReactNode> };
 
-function Buttons({ named, toast }: ButtonsProps) {
+function Buttons({ slot, toast }: ButtonsProps) {
   return (
     <>
       {toast.cancel ? (
         <ToastClose
           action={toast.cancel.onCancel}
-          className={cn(CANCEL_CLASS, named("cancelButton"))}
+          className={cn(CANCEL_CLASS, slot("cancelButton"))}
         >
           {toast.cancel.label}
         </ToastClose>
       ) : null}
       {toast.action ? (
-        <ToastAction className={cn(ACTION_CLASS, named("actionButton"))} />
+        <ToastAction className={cn(ACTION_CLASS, slot("actionButton"))} />
       ) : null}
     </>
   );
@@ -290,15 +291,15 @@ function ToastView({
   toastOptions,
 }: ToastViewProps) {
   const extras = extrasOf(toast.data);
-  const named: Named = (name) =>
+  const slot: Named = (name) =>
     cn(toastOptions.classNames?.[name], extras.classNames?.[name]);
   const type = toast.type;
   const style = { ...toastOptions.style, ...extras.style };
   const classNames = [
     toastOptions.className,
     extras.className,
-    named("toast"),
-    named(type),
+    slot("toast"),
+    slot(type),
   ];
 
   if (extras.custom) {
@@ -323,23 +324,23 @@ function ToastView({
       {showClose ? (
         <ToastClose
           aria-label="Close toast"
-          className={cn(CLOSE_CLASS, named("closeButton"))}
+          className={cn(CLOSE_CLASS, slot("closeButton"))}
         >
           <XIcon size={12} strokeWidth={1.5} />
         </ToastClose>
       ) : null}
       {icon ? (
         <IconBox
-          className={named("icon")}
+          className={slot("icon")}
           icon={icon}
           loading={type === "loading" && extras.icon === undefined}
         />
       ) : null}
       <div
-        className={cn("flex min-w-0 flex-1 flex-col gap-0.5", named("content"))}
+        className={cn("flex min-w-0 flex-1 flex-col gap-0.5", slot("content"))}
       >
         <ToastTitle
-          className={cn("font-medium leading-normal", named("title"))}
+          className={cn("font-medium leading-normal", slot("title"))}
         />
         <ToastDescription
           className={cn(
@@ -347,69 +348,71 @@ function ToastView({
             richColors ? "text-inherit" : "text-[color:var(--description)]",
             toastOptions.descriptionClassName,
             extras.descriptionClassName,
-            named("description"),
+            slot("description"),
           )}
         />
       </div>
-      <Buttons named={named} toast={toast} />
+      <Buttons slot={slot} toast={toast} />
     </Toast>
   );
 }
 
-const ToasterRegion = ({
-  className,
-  closeButton,
-  containerAriaLabel = "Notifications",
-  expand,
-  icons,
-  offset,
-  position = "bottom-right",
-  richColors,
-  style,
-  theme = "light",
-  toastOptions = {},
-  visibleToasts = 3,
-  ...props
-}: Omit<ToasterProps, "duration">) => {
-  const resolvedTheme = useResolvedTheme(theme);
-  const { align, side } = placeOf(position);
-  const allIcons = { ...DEFAULT_ICONS, ...icons };
+const ToasterRegion = /* @__PURE__ */ named(
+  "ToasterRegion",
+  ({
+    className,
+    closeButton,
+    containerAriaLabel = "Notifications",
+    expand,
+    icons,
+    offset,
+    position = "bottom-right",
+    richColors,
+    style,
+    theme = "light",
+    toastOptions = {},
+    visibleToasts = 3,
+    ...props
+  }: Omit<ToasterProps, "duration">) => {
+    const resolvedTheme = useResolvedTheme(theme);
+    const { align, side } = placeOf(position);
+    const allIcons = { ...DEFAULT_ICONS, ...icons };
 
-  return (
-    <ToastRegion
-      align={align}
-      aria-label={containerAriaLabel}
-      className={cn(REGION_CLASS, className)}
-      expanded={expand}
-      maxVisible={visibleToasts}
-      shortcut="alt+t"
-      side={side}
-      style={{
-        ...BASE_VARIABLES,
-        ...PALETTES[resolvedTheme],
-        ...(offset === undefined
-          ? {}
-          : {
-              "--toaster-offset":
-                typeof offset === "number" ? `${offset}px` : offset,
-            }),
-        ...style,
-      }}
-      {...props}
-    >
-      {(toast) => (
-        <ToastView
-          closeButton={closeButton}
-          icons={allIcons}
-          richColors={richColors}
-          toast={toast}
-          toastOptions={toastOptions}
-        />
-      )}
-    </ToastRegion>
-  );
-};
-ToasterRegion.displayName = "ToasterRegion";
+    return (
+      <ToastRegion
+        align={align}
+        aria-label={containerAriaLabel}
+        className={cn(REGION_CLASS, className)}
+        expanded={expand}
+        maxVisible={visibleToasts}
+        shortcut="alt+t"
+        side={side}
+        style={{
+          ...BASE_VARIABLES,
+          ...PALETTES[resolvedTheme],
+          ...(offset === undefined
+            ? {}
+            : {
+                "--toaster-offset":
+                  typeof offset === "number" ? `${offset}px` : offset,
+              }),
+          ...style,
+        }}
+        {...props}
+      >
+        {(toast) => (
+          <ToastView
+            closeButton={closeButton}
+            icons={allIcons}
+            richColors={richColors}
+            toast={toast}
+            toastOptions={toastOptions}
+          />
+        )}
+      </ToastRegion>
+    );
+  },
+);
 
 export {
   type ToasterIcons,

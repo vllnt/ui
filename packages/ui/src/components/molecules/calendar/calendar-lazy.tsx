@@ -2,6 +2,8 @@
 
 import * as React from "react";
 
+import { named } from "../../../lib/named";
+
 import type { CalendarProps } from "./calendar";
 import { CalendarFallback } from "./calendar-fallback";
 
@@ -14,32 +16,34 @@ const LoadedCalendar = React.lazy(() =>
  * like a popover. Until it arrives, blank space of the same size holds its
  * place, so what holds it doesn't jump.
  */
-function LazyCalendar(props: CalendarProps) {
-  const {
-    defaultMonth,
-    fixedWeeks,
-    locale,
-    month,
-    numberOfMonths,
-    weekStartsOn,
-  } = props;
+const LazyCalendar = /* @__PURE__ */ named(
+  "LazyCalendar",
+  function LazyCalendar(props: CalendarProps) {
+    const {
+      defaultMonth,
+      fixedWeeks,
+      locale,
+      month,
+      numberOfMonths,
+      weekStartsOn,
+    } = props;
 
-  return (
-    <React.Suspense
-      fallback={
-        <CalendarFallback
-          fixedWeeks={fixedWeeks}
-          locale={locale}
-          month={month ?? defaultMonth}
-          numberOfMonths={numberOfMonths}
-          weekStartsOn={weekStartsOn}
-        />
-      }
-    >
-      <LoadedCalendar {...props} />
-    </React.Suspense>
-  );
-}
-LazyCalendar.displayName = "LazyCalendar";
+    return (
+      <React.Suspense
+        fallback={
+          <CalendarFallback
+            fixedWeeks={fixedWeeks}
+            locale={locale}
+            month={month ?? defaultMonth}
+            numberOfMonths={numberOfMonths}
+            weekStartsOn={weekStartsOn}
+          />
+        }
+      >
+        <LoadedCalendar {...props} />
+      </React.Suspense>
+    );
+  },
+);
 
 export { LazyCalendar };

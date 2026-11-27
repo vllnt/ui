@@ -2,6 +2,7 @@
 
 import * as React from "react";
 
+import { named } from "../../../lib/named";
 import { cn } from "../../../lib/utils";
 import { cva } from "../../../lib/variants";
 import { Badge } from "../../atoms/badge/badge";
@@ -214,67 +215,71 @@ function ApprovalRequestFooter({
  * />
  * ```
  */
-export const ApprovalRequest = ({
-  action,
-  className,
-  detail,
-  labels,
-  onApprove,
-  onDeny,
-  placement = "inline",
-  ref: reference,
-  remember,
-  risk = "low",
-  status = "pending",
-  title,
-  ...props
-}: ApprovalRequestProps & { ref?: React.Ref<HTMLFieldSetElement> }) => {
-  const titleId = React.useId();
-  const isPending = status === "pending";
+export const ApprovalRequest = /* @__PURE__ */ named(
+  "ApprovalRequest",
+  ({
+    action,
+    className,
+    detail,
+    labels,
+    onApprove,
+    onDeny,
+    placement = "inline",
+    ref: reference,
+    remember,
+    risk = "low",
+    status = "pending",
+    title,
+    ...props
+  }: ApprovalRequestProps & { ref?: React.Ref<HTMLFieldSetElement> }) => {
+    const titleId = React.useId();
+    const isPending = status === "pending";
 
-  return (
-    <fieldset
-      aria-labelledby={titleId}
-      className={cn(surfaceVariants({ placement }), className)}
-      ref={reference}
-      {...props}
-    >
-      <div className="flex flex-wrap items-center gap-2">
-        <Badge className={riskVariants({ risk })} variant="outline">
-          {resolveLabel(labels?.risk?.[risk], DEFAULT_RISK_LABELS[risk])}
-        </Badge>
-        <Badge
-          className={statusVariants({ status })}
-          role="status"
-          variant="outline"
-        >
-          {resolveLabel(
-            labels?.status?.[status],
-            DEFAULT_STATUS_LABELS[status],
-          )}
-        </Badge>
-      </div>
-      <p className="text-base font-semibold leading-snug" id={titleId}>
-        {title}
-      </p>
-      {detail ? <p className="text-muted-foreground">{detail}</p> : null}
-      <code className="block whitespace-pre-wrap break-words rounded-md border bg-muted px-3 py-2 font-mono text-sm text-foreground">
-        {action}
-      </code>
-      {isPending ? (
-        <>
-          <hr className="border-border" />
-          {remember ? <RememberRow {...remember} /> : null}
-          <ApprovalRequestFooter
-            approveLabel={resolveLabel(labels?.approve, DEFAULT_APPROVE_LABEL)}
-            denyLabel={resolveLabel(labels?.deny, DEFAULT_DENY_LABEL)}
-            onApprove={onApprove}
-            onDeny={onDeny}
-          />
-        </>
-      ) : null}
-    </fieldset>
-  );
-};
-
-ApprovalRequest.displayName = "ApprovalRequest";
+    return (
+      <fieldset
+        aria-labelledby={titleId}
+        className={cn(surfaceVariants({ placement }), className)}
+        ref={reference}
+        {...props}
+      >
+        <div className="flex flex-wrap items-center gap-2">
+          <Badge className={riskVariants({ risk })} variant="outline">
+            {resolveLabel(labels?.risk?.[risk], DEFAULT_RISK_LABELS[risk])}
+          </Badge>
+          <Badge
+            className={statusVariants({ status })}
+            role="status"
+            variant="outline"
+          >
+            {resolveLabel(
+              labels?.status?.[status],
+              DEFAULT_STATUS_LABELS[status],
+            )}
+          </Badge>
+        </div>
+        <p className="text-base font-semibold leading-snug" id={titleId}>
+          {title}
+        </p>
+        {detail ? <p className="text-muted-foreground">{detail}</p> : null}
+        <code className="block whitespace-pre-wrap break-words rounded-md border bg-muted px-3 py-2 font-mono text-sm text-foreground">
+          {action}
+        </code>
+        {isPending ? (
+          <>
+            <hr className="border-border" />
+            {remember ? <RememberRow {...remember} /> : null}
+            <ApprovalRequestFooter
+              approveLabel={resolveLabel(
+                labels?.approve,
+                DEFAULT_APPROVE_LABEL,
+              )}
+              denyLabel={resolveLabel(labels?.deny, DEFAULT_DENY_LABEL)}
+              onApprove={onApprove}
+              onDeny={onDeny}
+            />
+          </>
+        ) : null}
+      </fieldset>
+    );
+  },
+);

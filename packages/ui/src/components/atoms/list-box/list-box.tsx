@@ -6,6 +6,7 @@ import { Listbox, ListboxItem } from "@ui-sdk/react/listbox";
 import { mergeProps, renderElement } from "@ui-sdk/react/primitive";
 import { Check } from "lucide-react";
 
+import { named } from "../../../lib/named";
 import { reselectProps } from "../../../lib/reselect";
 import { cn } from "../../../lib/utils";
 
@@ -54,58 +55,60 @@ export type ListBoxProps = Omit<
   value?: string[];
 };
 
-const ListBox = ({
-  children,
-  className,
-  defaultValue = [],
-  disabled = false,
-  label,
-  onValueChange,
-  ref,
-  selectionMode = "single",
-  value,
-  ...props
-}: ListBoxProps & { ref?: React.Ref<HTMLDivElement> }) => {
-  const multiple = selectionMode === "multiple";
-  // A press on the selected option still reports the value, as before ui-sdk.
-  const reselect = React.useMemo(
-    () =>
-      multiple
-        ? undefined
-        : (item: string) => {
-            onValueChange?.([item]);
-          },
-    [multiple, onValueChange],
-  );
+const ListBox = /* @__PURE__ */ named(
+  "ListBox",
+  ({
+    children,
+    className,
+    defaultValue = [],
+    disabled = false,
+    label,
+    onValueChange,
+    ref,
+    selectionMode = "single",
+    value,
+    ...props
+  }: ListBoxProps & { ref?: React.Ref<HTMLDivElement> }) => {
+    const multiple = selectionMode === "multiple";
+    // A press on the selected option still reports the value, as before ui-sdk.
+    const reselect = React.useMemo(
+      () =>
+        multiple
+          ? undefined
+          : (item: string) => {
+              onValueChange?.([item]);
+            },
+      [multiple, onValueChange],
+    );
 
-  return (
-    <ReselectContext value={reselect}>
-      <Listbox<string, boolean>
-        {...props}
-        // Keys move focus and Enter, Space or a press selects, as before.
-        activation="manual"
-        aria-label={label}
-        className={cn(
-          "flex flex-col gap-0.5 rounded-md border border-input bg-background p-1",
-          className,
-        )}
-        defaultValue={toPrimitiveValue(defaultValue, multiple)}
-        disabled={disabled}
-        loop={false}
-        multiple={multiple}
-        onValueChange={(next) => {
-          onValueChange?.(toValues(next));
-        }}
-        ref={ref}
-        tabIndex={-1}
-        value={toPrimitiveValue(value, multiple)}
-      >
-        {children}
-      </Listbox>
-    </ReselectContext>
-  );
-};
-ListBox.displayName = "ListBox";
+    return (
+      <ReselectContext value={reselect}>
+        <Listbox<string, boolean>
+          {...props}
+          // Keys move focus and Enter, Space or a press selects, as before.
+          activation="manual"
+          aria-label={label}
+          className={cn(
+            "flex flex-col gap-0.5 rounded-md border border-input bg-background p-1",
+            className,
+          )}
+          defaultValue={toPrimitiveValue(defaultValue, multiple)}
+          disabled={disabled}
+          loop={false}
+          multiple={multiple}
+          onValueChange={(next) => {
+            onValueChange?.(toValues(next));
+          }}
+          ref={ref}
+          tabIndex={-1}
+          value={toPrimitiveValue(value, multiple)}
+        >
+          {children}
+        </Listbox>
+      </ReselectContext>
+    );
+  },
+);
 
 /** Classes of an option, which change with its selected and disabled state. */
 function getItemClassName(className: string | undefined) {
@@ -129,60 +132,62 @@ export type ListBoxItemProps = Omit<
   value: string;
 };
 
-const ListBoxItem = ({
-  children,
-  className,
-  disabled = false,
-  ref,
-  value,
-  ...props
-}: ListBoxItemProps & { ref?: React.Ref<HTMLDivElement> }) => {
-  const reselect = React.use(ReselectContext);
-  const onReselect = reselect
-    ? () => {
-        reselect(value);
-      }
-    : undefined;
-  const renderItem = (
-    elementProps: Record<string, unknown>,
-    state: { disabled: boolean; selected: boolean },
-  ) =>
-    renderElement(
-      "div",
-      state.selected && !state.disabled
-        ? mergeProps(
-            elementProps,
-            reselectProps(onReselect, { keyboard: true }),
-          )
-        : elementProps,
-      undefined,
-      state,
-    );
+const ListBoxItem = /* @__PURE__ */ named(
+  "ListBoxItem",
+  ({
+    children,
+    className,
+    disabled = false,
+    ref,
+    value,
+    ...props
+  }: ListBoxItemProps & { ref?: React.Ref<HTMLDivElement> }) => {
+    const reselect = React.use(ReselectContext);
+    const onReselect = reselect
+      ? () => {
+          reselect(value);
+        }
+      : undefined;
+    const renderItem = (
+      elementProps: Record<string, unknown>,
+      state: { disabled: boolean; selected: boolean },
+    ) =>
+      renderElement(
+        "div",
+        state.selected && !state.disabled
+          ? mergeProps(
+              elementProps,
+              reselectProps(onReselect, { keyboard: true }),
+            )
+          : elementProps,
+        undefined,
+        state,
+      );
 
-  return (
-    <ListboxItem
-      {...props}
-      className={getItemClassName(className)}
-      data-value={value}
-      disabled={disabled}
-      ref={ref}
-      render={renderItem}
-      value={value}
-    >
-      {({ selected }) => (
-        <>
-          <Check
-            className={cn(
-              "size-4 shrink-0",
-              selected ? "opacity-100" : "opacity-0",
-            )}
-          />
-          <span className="flex-1">{children}</span>
-        </>
-      )}
-    </ListboxItem>
-  );
-};
-ListBoxItem.displayName = "ListBoxItem";
+    return (
+      <ListboxItem
+        {...props}
+        className={getItemClassName(className)}
+        data-value={value}
+        disabled={disabled}
+        ref={ref}
+        render={renderItem}
+        value={value}
+      >
+        {({ selected }) => (
+          <>
+            <Check
+              className={cn(
+                "size-4 shrink-0",
+                selected ? "opacity-100" : "opacity-0",
+              )}
+            />
+            <span className="flex-1">{children}</span>
+          </>
+        )}
+      </ListboxItem>
+    );
+  },
+);
 
 export { ListBox, ListBoxItem };

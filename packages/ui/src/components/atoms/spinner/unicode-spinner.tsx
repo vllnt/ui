@@ -2,6 +2,7 @@
 
 import * as React from "react";
 
+import { named } from "../../../lib/named";
 import { cn } from "../../../lib/utils";
 
 export const UNICODE_SPINNER_PRESETS = {
@@ -663,68 +664,69 @@ export type UnicodeSpinnerProps = Omit<
   size?: keyof typeof UNICODE_SPINNER_SIZE_CLASSES;
 };
 
-export const UnicodeSpinner = ({
-  animation = "braille",
-  className,
-  interval,
-  label,
-  paused = false,
-  ref,
-  size = "md",
-  ...props
-}: UnicodeSpinnerProps & { ref?: React.Ref<HTMLSpanElement> }) => {
-  const preset = UNICODE_SPINNER_PRESETS[animation];
-  const resolvedInterval = interval ?? preset.interval;
-  const [frameIndex, setFrameIndex] = React.useState(0);
-  const [previousAnimation, setPreviousAnimation] = React.useState(
-    () => animation,
-  );
+export const UnicodeSpinner = /* @__PURE__ */ named(
+  "UnicodeSpinner",
+  ({
+    animation = "braille",
+    className,
+    interval,
+    label,
+    paused = false,
+    ref,
+    size = "md",
+    ...props
+  }: UnicodeSpinnerProps & { ref?: React.Ref<HTMLSpanElement> }) => {
+    const preset = UNICODE_SPINNER_PRESETS[animation];
+    const resolvedInterval = interval ?? preset.interval;
+    const [frameIndex, setFrameIndex] = React.useState(0);
+    const [previousAnimation, setPreviousAnimation] = React.useState(
+      () => animation,
+    );
 
-  if (previousAnimation !== animation) {
-    setPreviousAnimation(animation);
-    setFrameIndex(0);
-  }
-
-  React.useEffect(() => {
-    if (paused) {
-      return;
+    if (previousAnimation !== animation) {
+      setPreviousAnimation(animation);
+      setFrameIndex(0);
     }
 
-    const timer = window.setInterval(() => {
-      setFrameIndex((current) => (current + 1) % preset.frames.length);
-    }, resolvedInterval);
+    React.useEffect(() => {
+      if (paused) {
+        return;
+      }
 
-    return () => {
-      window.clearInterval(timer);
-    };
-  }, [paused, preset.frames.length, resolvedInterval]);
+      const timer = window.setInterval(() => {
+        setFrameIndex((current) => (current + 1) % preset.frames.length);
+      }, resolvedInterval);
 
-  const frame = preset.frames[frameIndex] ?? preset.frames[0] ?? "⠋";
-  const accessibleLabel = label ? `Loading ${label}` : "Loading";
+      return () => {
+        window.clearInterval(timer);
+      };
+    }, [paused, preset.frames.length, resolvedInterval]);
 
-  return (
-    <span
-      className={cn(
-        "inline-flex items-center gap-2 font-mono leading-none text-foreground",
-        UNICODE_SPINNER_SIZE_CLASSES[size],
-        className,
-      )}
-      ref={ref}
-      role="status"
-      {...props}
-    >
+    const frame = preset.frames[frameIndex] ?? preset.frames[0] ?? "⠋";
+    const accessibleLabel = label ? `Loading ${label}` : "Loading";
+
+    return (
       <span
-        aria-hidden="true"
-        className="inline-block min-w-[1em] whitespace-pre"
+        className={cn(
+          "inline-flex items-center gap-2 font-mono leading-none text-foreground",
+          UNICODE_SPINNER_SIZE_CLASSES[size],
+          className,
+        )}
+        ref={ref}
+        role="status"
+        {...props}
       >
-        {frame}
+        <span
+          aria-hidden="true"
+          className="inline-block min-w-[1em] whitespace-pre"
+        >
+          {frame}
+        </span>
+        {label ? (
+          <span className="text-sm font-medium text-foreground">{label}</span>
+        ) : null}
+        <span className="sr-only">{accessibleLabel}</span>
       </span>
-      {label ? (
-        <span className="text-sm font-medium text-foreground">{label}</span>
-      ) : null}
-      <span className="sr-only">{accessibleLabel}</span>
-    </span>
-  );
-};
-
-UnicodeSpinner.displayName = "UnicodeSpinner";
+    );
+  },
+);

@@ -14,6 +14,7 @@ import {
 } from "@ui-sdk/react/navigation-menu";
 import { ChevronDown } from "lucide-react";
 
+import { named } from "../../../lib/named";
 import type { AsChildProps, NarrowPartProps } from "../../../lib/ui-sdk";
 import {
   asChildProps,
@@ -114,97 +115,93 @@ function useRootState(
   return { handleValueChange, state };
 }
 
-const NavigationMenu = ({
-  children,
-  className,
-  defaultValue,
-  delayDuration = 200,
-  dir,
-  onValueChange,
-  ref,
-  skipDelayDuration,
-  value,
-  ...props
-}: RootProps) => {
-  const [anchor, anchorRef] = useElementRef<HTMLElement>(ref);
-  const { handleValueChange, state } = useRootState(anchor, onValueChange);
+const NavigationMenu = /* @__PURE__ */ named(
+  "NavigationMenu",
+  ({
+    children,
+    className,
+    defaultValue,
+    delayDuration = 200,
+    dir,
+    onValueChange,
+    ref,
+    skipDelayDuration,
+    value,
+    ...props
+  }: RootProps) => {
+    const [anchor, anchorRef] = useElementRef<HTMLElement>(ref);
+    const { handleValueChange, state } = useRootState(anchor, onValueChange);
 
-  return (
-    <RootContext value={state}>
-      <NavigationMenuRoot
-        aria-label="Main"
-        className={cn(
-          "relative z-10 flex max-w-max flex-1 items-center justify-center",
-          className,
-        )}
-        closeDelay={150}
-        defaultValue={toValue(defaultValue)}
-        delay={delayDuration}
-        onValueChange={handleValueChange}
-        ref={anchorRef}
-        value={toValue(value)}
-        {...props}
-      >
-        {children}
-        <NavigationMenuViewport />
-      </NavigationMenuRoot>
-    </RootContext>
-  );
-};
-NavigationMenu.displayName = "NavigationMenu";
+    return (
+      <RootContext value={state}>
+        <NavigationMenuRoot
+          aria-label="Main"
+          className={cn(
+            "relative z-10 flex max-w-max flex-1 items-center justify-center",
+            className,
+          )}
+          closeDelay={150}
+          defaultValue={toValue(defaultValue)}
+          delay={delayDuration}
+          onValueChange={handleValueChange}
+          ref={anchorRef}
+          value={toValue(value)}
+          {...props}
+        >
+          {children}
+          <NavigationMenuViewport />
+        </NavigationMenuRoot>
+      </RootContext>
+    );
+  },
+);
 
 type ListProps = AsChildProps &
   NarrowPartProps<React.ComponentProps<typeof NavigationMenuListPart>> & {
     ref?: React.Ref<HTMLUListElement>;
   };
 
-const NavigationMenuList = ({
-  asChild,
-  children,
-  className,
-  ...props
-}: ListProps) => {
-  const slot = asChildProps({ asChild, children });
+const NavigationMenuList = /* @__PURE__ */ named(
+  "NavigationMenuList",
+  ({ asChild, children, className, ...props }: ListProps) => {
+    const slot = asChildProps({ asChild, children });
 
-  return (
-    <NavigationMenuListPart
-      className={cn(
-        "group flex flex-1 list-none items-center justify-center space-x-1",
-        className,
-      )}
-      render={slot.render}
-      {...props}
-    >
-      {slot.children}
-    </NavigationMenuListPart>
-  );
-};
-NavigationMenuList.displayName = "NavigationMenuList";
+    return (
+      <NavigationMenuListPart
+        className={cn(
+          "group flex flex-1 list-none items-center justify-center space-x-1",
+          className,
+        )}
+        render={slot.render}
+        {...props}
+      >
+        {slot.children}
+      </NavigationMenuListPart>
+    );
+  },
+);
 
 type ItemProps = AsChildProps &
   NarrowPartProps<React.ComponentProps<typeof NavigationMenuItemPart>> & {
     ref?: React.Ref<HTMLLIElement>;
   };
 
-const NavigationMenuItem = ({
-  asChild,
-  children,
-  className,
-  ...props
-}: ItemProps) => {
-  const slot = asChildProps({ asChild, children });
+const NavigationMenuItem = /* @__PURE__ */ named(
+  "NavigationMenuItem",
+  ({ asChild, children, className, ...props }: ItemProps) => {
+    const slot = asChildProps({ asChild, children });
 
-  return (
-    <NavigationMenuItemPart
-      className={className}
-      render={slot.render}
-      {...props}
-    >
-      {slot.children}
-    </NavigationMenuItemPart>
-  );
-};
-NavigationMenuItem.displayName = "NavigationMenuItem";
+    return (
+      <NavigationMenuItemPart
+        className={className}
+        render={slot.render}
+        {...props}
+      >
+        {slot.children}
+      </NavigationMenuItemPart>
+    );
+  },
+);
 
 const navigationMenuTriggerStyle = cva(
   "group inline-flex h-10 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50 data-[state=open]:bg-accent/50",
@@ -215,29 +212,26 @@ type TriggerProps = AsChildProps &
     ref?: React.Ref<HTMLButtonElement>;
   };
 
-const NavigationMenuTrigger = ({
-  asChild,
-  children,
-  className,
-  ...props
-}: TriggerProps) => {
-  const slot = asChildProps({ asChild, children });
+const NavigationMenuTrigger = /* @__PURE__ */ named(
+  "NavigationMenuTrigger",
+  ({ asChild, children, className, ...props }: TriggerProps) => {
+    const slot = asChildProps({ asChild, children });
 
-  return (
-    <NavigationMenuTriggerPart
-      className={cn(navigationMenuTriggerStyle(), "group", className)}
-      render={withDataAttributes("button", openState, slot.render)}
-      {...props}
-    >
-      {slot.children}{" "}
-      <ChevronDown
-        aria-hidden="true"
-        className="relative top-[1px] ml-1 size-3 transition duration-200 group-data-[state=open]:rotate-180"
-      />
-    </NavigationMenuTriggerPart>
-  );
-};
-NavigationMenuTrigger.displayName = "NavigationMenuTrigger";
+    return (
+      <NavigationMenuTriggerPart
+        className={cn(navigationMenuTriggerStyle(), "group", className)}
+        render={withDataAttributes("button", openState, slot.render)}
+        {...props}
+      >
+        {slot.children}{" "}
+        <ChevronDown
+          aria-hidden="true"
+          className="relative top-[1px] ml-1 size-3 transition duration-200 group-data-[state=open]:rotate-180"
+        />
+      </NavigationMenuTriggerPart>
+    );
+  },
+);
 
 const contentState = (state: { open: boolean }): DataAttributes =>
   openState(state);
@@ -255,58 +249,60 @@ type ContentProps = AsChildProps &
     ref?: React.Ref<HTMLDivElement>;
   };
 
-const NavigationMenuContent = ({
-  asChild,
-  children,
-  className,
-  forceMount,
-  onEscapeKeyDown,
-  onFocusOutside,
-  onInteractOutside,
-  onPointerDownOutside,
-  ref,
-  ...props
-}: ContentProps) => {
-  const slot = asChildProps({ asChild, children });
-  const root = React.use(RootContext);
-  const [element, elementRef] = useElementRef(ref);
-  React.useEffect(
-    () =>
-      root?.register({
-        dismiss: {
-          onEscapeKeyDown,
-          onFocusOutside,
-          onInteractOutside,
-          onPointerDownOutside,
-        },
+const NavigationMenuContent = /* @__PURE__ */ named(
+  "NavigationMenuContent",
+  ({
+    asChild,
+    children,
+    className,
+    forceMount,
+    onEscapeKeyDown,
+    onFocusOutside,
+    onInteractOutside,
+    onPointerDownOutside,
+    ref,
+    ...props
+  }: ContentProps) => {
+    const slot = asChildProps({ asChild, children });
+    const root = React.use(RootContext);
+    const [element, elementRef] = useElementRef(ref);
+    React.useEffect(
+      () =>
+        root?.register({
+          dismiss: {
+            onEscapeKeyDown,
+            onFocusOutside,
+            onInteractOutside,
+            onPointerDownOutside,
+          },
+          element,
+        }),
+      [
         element,
-      }),
-    [
-      element,
-      onEscapeKeyDown,
-      onFocusOutside,
-      onInteractOutside,
-      onPointerDownOutside,
-      root,
-    ],
-  );
+        onEscapeKeyDown,
+        onFocusOutside,
+        onInteractOutside,
+        onPointerDownOutside,
+        root,
+      ],
+    );
 
-  return (
-    <NavigationMenuContentPart
-      className={cn(
-        "left-0 top-0 w-full data-[motion^=from-]:animate-in data-[motion^=to-]:animate-out data-[motion^=from-]:fade-in data-[motion^=to-]:fade-out data-[motion=from-end]:slide-in-from-right-52 data-[motion=from-start]:slide-in-from-left-52 data-[motion=to-end]:slide-out-to-right-52 data-[motion=to-start]:slide-out-to-left-52 md:absolute md:w-auto",
-        className,
-      )}
-      keepMounted={forceMount}
-      ref={elementRef}
-      render={withDataAttributes("div", contentState, slot.render)}
-      {...props}
-    >
-      {slot.children}
-    </NavigationMenuContentPart>
-  );
-};
-NavigationMenuContent.displayName = "NavigationMenuContent";
+    return (
+      <NavigationMenuContentPart
+        className={cn(
+          "left-0 top-0 w-full data-[motion^=from-]:animate-in data-[motion^=to-]:animate-out data-[motion^=from-]:fade-in data-[motion^=to-]:fade-out data-[motion=from-end]:slide-in-from-right-52 data-[motion=from-start]:slide-in-from-left-52 data-[motion=to-end]:slide-out-to-right-52 data-[motion=to-start]:slide-out-to-left-52 md:absolute md:w-auto",
+          className,
+        )}
+        keepMounted={forceMount}
+        ref={elementRef}
+        render={withDataAttributes("div", contentState, slot.render)}
+        {...props}
+      >
+        {slot.children}
+      </NavigationMenuContentPart>
+    );
+  },
+);
 
 type LinkProps = AsChildProps &
   Omit<
@@ -320,42 +316,37 @@ type LinkProps = AsChildProps &
     ref?: React.Ref<HTMLAnchorElement>;
   };
 
-const NavigationMenuLink = ({
-  active,
-  asChild,
-  children,
-  onClick,
-  onSelect,
-  ...props
-}: LinkProps) => {
-  const slot = asChildProps({ asChild, children });
-  const root = React.use(RootContext);
-  const handleClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
-    onClick?.(event);
-    const selection = new Event("navigationMenu.linkSelect", {
-      bubbles: true,
-      cancelable: true,
-    });
-    onSelect?.(selection);
-    root?.markLink(selection.defaultPrevented);
-  };
+const NavigationMenuLink = /* @__PURE__ */ named(
+  "NavigationMenuLink",
+  ({ active, asChild, children, onClick, onSelect, ...props }: LinkProps) => {
+    const slot = asChildProps({ asChild, children });
+    const root = React.use(RootContext);
+    const handleClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
+      onClick?.(event);
+      const selection = new Event("navigationMenu.linkSelect", {
+        bubbles: true,
+        cancelable: true,
+      });
+      onSelect?.(selection);
+      root?.markLink(selection.defaultPrevented);
+    };
 
-  return (
-    <NavigationMenuLinkPart
-      current={active}
-      onClick={handleClick}
-      render={withDataAttributes(
-        "a",
-        () => ({ "data-active": active ? "" : undefined }),
-        slot.render,
-      )}
-      {...props}
-    >
-      {slot.children}
-    </NavigationMenuLinkPart>
-  );
-};
-NavigationMenuLink.displayName = "NavigationMenuLink";
+    return (
+      <NavigationMenuLinkPart
+        current={active}
+        onClick={handleClick}
+        render={withDataAttributes(
+          "a",
+          () => ({ "data-active": active ? "" : undefined }),
+          slot.render,
+        )}
+        {...props}
+      >
+        {slot.children}
+      </NavigationMenuLinkPart>
+    );
+  },
+);
 
 type ViewportProps = AsChildProps &
   NarrowPartProps<React.ComponentProps<typeof NavigationMenuViewportPart>> & {
@@ -364,39 +355,41 @@ type ViewportProps = AsChildProps &
     ref?: React.Ref<HTMLDivElement>;
   };
 
-const NavigationMenuViewport = ({
-  align = "start",
-  asChild,
-  children,
-  className,
-  collisionPadding = 0,
-  forceMount: _forceMount,
-  side = "bottom",
-  sideOffset = 6,
-  ...props
-}: ViewportProps) => {
-  const slot = asChildProps({ asChild, children });
-  const root = React.use(RootContext);
+const NavigationMenuViewport = /* @__PURE__ */ named(
+  "NavigationMenuViewport",
+  ({
+    align = "start",
+    asChild,
+    children,
+    className,
+    collisionPadding = 0,
+    forceMount: _forceMount,
+    side = "bottom",
+    sideOffset = 6,
+    ...props
+  }: ViewportProps) => {
+    const slot = asChildProps({ asChild, children });
+    const root = React.use(RootContext);
 
-  return (
-    <NavigationMenuViewportPart
-      align={align}
-      anchor={root?.anchor}
-      className={cn(
-        "origin-top-center h-[var(--radix-navigation-menu-viewport-height)] w-full overflow-hidden p-0 rounded-md border bg-popover text-popover-foreground shadow-lg [--radix-navigation-menu-viewport-height:calc(var(--viewport-height)_-_2px)] [--radix-navigation-menu-viewport-width:calc(var(--viewport-width)_-_2px)] data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-90 md:w-[var(--radix-navigation-menu-viewport-width)]",
-        className,
-      )}
-      collisionPadding={collisionPadding}
-      render={withDataAttributes("div", openState, slot.render)}
-      side={side}
-      sideOffset={sideOffset}
-      {...props}
-    >
-      {slot.children}
-    </NavigationMenuViewportPart>
-  );
-};
-NavigationMenuViewport.displayName = "NavigationMenuViewport";
+    return (
+      <NavigationMenuViewportPart
+        align={align}
+        anchor={root?.anchor}
+        className={cn(
+          "origin-top-center h-[var(--radix-navigation-menu-viewport-height)] w-full overflow-hidden p-0 rounded-md border bg-popover text-popover-foreground shadow-lg [--radix-navigation-menu-viewport-height:calc(var(--viewport-height)_-_2px)] [--radix-navigation-menu-viewport-width:calc(var(--viewport-width)_-_2px)] data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-90 md:w-[var(--radix-navigation-menu-viewport-width)]",
+          className,
+        )}
+        collisionPadding={collisionPadding}
+        render={withDataAttributes("div", openState, slot.render)}
+        side={side}
+        sideOffset={sideOffset}
+        {...props}
+      >
+        {slot.children}
+      </NavigationMenuViewportPart>
+    );
+  },
+);
 
 const indicatorState = (state: { open: boolean }): DataAttributes => ({
   "data-state": state.open ? "visible" : "hidden",
@@ -409,29 +402,31 @@ type IndicatorProps = AsChildProps &
     ref?: React.Ref<HTMLDivElement>;
   };
 
-const NavigationMenuIndicator = ({
-  asChild,
-  children,
-  className,
-  forceMount: _forceMount,
-  ...props
-}: IndicatorProps) => {
-  const slot = asChildProps({ asChild, children });
+const NavigationMenuIndicator = /* @__PURE__ */ named(
+  "NavigationMenuIndicator",
+  ({
+    asChild,
+    children,
+    className,
+    forceMount: _forceMount,
+    ...props
+  }: IndicatorProps) => {
+    const slot = asChildProps({ asChild, children });
 
-  return (
-    <NavigationMenuIndicatorPart
-      className={cn(
-        "absolute left-[var(--active-item-left)] top-full z-[1] flex h-1.5 w-[var(--active-item-width)] items-end justify-center overflow-hidden data-[state=hidden]:opacity-0 data-[state=visible]:animate-in data-[state=hidden]:animate-out data-[state=hidden]:fade-out data-[state=visible]:fade-in",
-        className,
-      )}
-      render={withDataAttributes("div", indicatorState, slot.render)}
-      {...props}
-    >
-      <div className="relative top-[60%] size-2 rotate-45 rounded-tl-sm bg-border shadow-md" />
-    </NavigationMenuIndicatorPart>
-  );
-};
-NavigationMenuIndicator.displayName = "NavigationMenuIndicator";
+    return (
+      <NavigationMenuIndicatorPart
+        className={cn(
+          "absolute left-[var(--active-item-left)] top-full z-[1] flex h-1.5 w-[var(--active-item-width)] items-end justify-center overflow-hidden data-[state=hidden]:opacity-0 data-[state=visible]:animate-in data-[state=hidden]:animate-out data-[state=hidden]:fade-out data-[state=visible]:fade-in",
+          className,
+        )}
+        render={withDataAttributes("div", indicatorState, slot.render)}
+        {...props}
+      >
+        <div className="relative top-[60%] size-2 rotate-45 rounded-tl-sm bg-border shadow-md" />
+      </NavigationMenuIndicatorPart>
+    );
+  },
+);
 
 export {
   NavigationMenu,

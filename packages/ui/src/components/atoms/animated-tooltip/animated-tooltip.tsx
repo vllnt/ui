@@ -2,6 +2,7 @@
 
 import * as React from "react";
 
+import { named } from "../../../lib/named";
 import { useEscapeKey } from "../../../lib/use-escape-key";
 import { cn } from "../../../lib/utils";
 
@@ -50,46 +51,48 @@ function Tooltip({
  * <AnimatedTooltip content="Copied!"><button>Copy</button></AnimatedTooltip>
  * ```
  */
-export const AnimatedTooltip = ({
-  children,
-  className,
-  content,
-  ref,
-  side = "top",
-  ...props
-}: AnimatedTooltipProps & { ref?: React.Ref<HTMLDivElement> }) => {
-  const [open, setOpen] = React.useState(false);
-  const close = React.useCallback(() => {
-    setOpen(false);
-  }, []);
-  useEscapeKey(close, {
-    capture: true,
-    enabled: open,
-    preventDefault: true,
-    stopPropagation: true,
-  });
+export const AnimatedTooltip = /* @__PURE__ */ named(
+  "AnimatedTooltip",
+  ({
+    children,
+    className,
+    content,
+    ref,
+    side = "top",
+    ...props
+  }: AnimatedTooltipProps & { ref?: React.Ref<HTMLDivElement> }) => {
+    const [open, setOpen] = React.useState(false);
+    const close = React.useCallback(() => {
+      setOpen(false);
+    }, []);
+    useEscapeKey(close, {
+      capture: true,
+      enabled: open,
+      preventDefault: true,
+      stopPropagation: true,
+    });
 
-  return (
-    <div
-      className={cn("relative inline-flex", className)}
-      onBlur={() => {
-        setOpen(false);
-      }}
-      onFocus={() => {
-        setOpen(true);
-      }}
-      onPointerEnter={() => {
-        setOpen(true);
-      }}
-      onPointerLeave={() => {
-        setOpen(false);
-      }}
-      ref={ref}
-      {...props}
-    >
-      {children}
-      {open ? <Tooltip content={content} side={side} /> : undefined}
-    </div>
-  );
-};
-AnimatedTooltip.displayName = "AnimatedTooltip";
+    return (
+      <div
+        className={cn("relative inline-flex", className)}
+        onBlur={() => {
+          setOpen(false);
+        }}
+        onFocus={() => {
+          setOpen(true);
+        }}
+        onPointerEnter={() => {
+          setOpen(true);
+        }}
+        onPointerLeave={() => {
+          setOpen(false);
+        }}
+        ref={ref}
+        {...props}
+      >
+        {children}
+        {open ? <Tooltip content={content} side={side} /> : undefined}
+      </div>
+    );
+  },
+);

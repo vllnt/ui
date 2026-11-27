@@ -12,6 +12,7 @@ import {
 import { Check, Copy } from "lucide-react";
 import type { SyntaxHighlighterProps } from "react-syntax-highlighter";
 
+import { named } from "../../../lib/named";
 import { cn } from "../../../lib/utils";
 import { Button } from "../../atoms/button/button";
 import { useCopyToClipboard } from "../../molecules/copy-button/use-copy-to-clipboard";
@@ -218,170 +219,172 @@ function findScrollableParent(
  *
  * @public
  */
-export function CodeBlock({
-  children,
-  className,
-  language = "typescript",
-  ref,
-  showLanguage = false,
-  showLineNumbers = false,
-  title,
-  wrap = false,
-}: CodeBlockProps & { ref?: Ref<HTMLDivElement> }) {
-  const { copied, copy } = useCopyToClipboard();
-  // The Prism light build and its fixed language set are dynamic-imported on
-  // mount (loadHighlighter), by deep path rather than the package root (which
-  // also pulls highlight.js and every theme), so the @vllnt/ui barrel's static
-  // graph never reaches them. Token colours come from CSS variables
-  // (CODE_THEME). Null until the chunk loads, and it stays null (plain text)
-  // if the chunk fails to load.
-  const [highlighter, setHighlighter] = useState<LoadedHighlighter | null>(
-    null,
-  );
-  const code = extractTextFromChildren(children);
+export const CodeBlock = /* @__PURE__ */ named(
+  "CodeBlock",
+  function CodeBlock({
+    children,
+    className,
+    language = "typescript",
+    ref,
+    showLanguage = false,
+    showLineNumbers = false,
+    title,
+    wrap = false,
+  }: CodeBlockProps & { ref?: Ref<HTMLDivElement> }) {
+    const { copied, copy } = useCopyToClipboard();
+    // The Prism light build and its fixed language set are dynamic-imported on
+    // mount (loadHighlighter), by deep path rather than the package root (which
+    // also pulls highlight.js and every theme), so the @vllnt/ui barrel's static
+    // graph never reaches them. Token colours come from CSS variables
+    // (CODE_THEME). Null until the chunk loads, and it stays null (plain text)
+    // if the chunk fails to load.
+    const [highlighter, setHighlighter] = useState<LoadedHighlighter | null>(
+      null,
+    );
+    const code = extractTextFromChildren(children);
 
-  const scrollRef = useRef<HTMLDivElement>(null);
+    const scrollRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    let active = true;
-    void loadHighlighter()
-      .then((SyntaxHighlighter) => {
-        if (!active) return;
-        setHighlighter({ SyntaxHighlighter });
-      })
-      .catch(keepPlainText);
-    return () => {
-      active = false;
+    useEffect(() => {
+      let active = true;
+      void loadHighlighter()
+        .then((SyntaxHighlighter) => {
+          if (!active) return;
+          setHighlighter({ SyntaxHighlighter });
+        })
+        .catch(keepPlainText);
+      return () => {
+        active = false;
+      };
+    }, []);
+
+    useEffect(() => {
+      const element = scrollRef.current;
+      if (!element) return;
+
+      const onWheel = (event: WheelEvent) => {
+        if (Math.abs(event.deltaY) <= Math.abs(event.deltaX)) return;
+        const scrollable = findScrollableParent(element);
+        if (scrollable) {
+          scrollable.scrollTop += event.deltaY;
+          event.preventDefault();
+        }
+      };
+
+      element.addEventListener("wheel", onWheel, { passive: false });
+      return () => {
+        element.removeEventListener("wheel", onWheel);
+      };
+    }, []);
+
+    const handleCopy = () => {
+      void copy(code);
     };
-  }, []);
 
-  useEffect(() => {
-    const element = scrollRef.current;
-    if (!element) return;
+    const SyntaxHighlighter = highlighter?.SyntaxHighlighter;
+    const hasHeader = Boolean(title);
 
-    const onWheel = (event: WheelEvent) => {
-      if (Math.abs(event.deltaY) <= Math.abs(event.deltaX)) return;
-      const scrollable = findScrollableParent(element);
-      if (scrollable) {
-        scrollable.scrollTop += event.deltaY;
-        event.preventDefault();
-      }
-    };
-
-    element.addEventListener("wheel", onWheel, { passive: false });
-    return () => {
-      element.removeEventListener("wheel", onWheel);
-    };
-  }, []);
-
-  const handleCopy = () => {
-    void copy(code);
-  };
-
-  const SyntaxHighlighter = highlighter?.SyntaxHighlighter;
-  const hasHeader = Boolean(title);
-
-  const languageLabel = (
-    <span className="mr-2 text-xs font-mono text-muted-foreground uppercase tracking-wider">
-      {language}
-    </span>
-  );
-
-  const Icon = copied ? Check : Copy;
-
-  const copyControl = (
-    <>
-      <span
-        aria-live="polite"
-        className={cn(
-          "text-xs text-muted-foreground",
-          copied && "rounded-sm bg-background px-1",
-        )}
-        role="status"
-      >
-        {copied ? "Copied" : null}
+    const languageLabel = (
+      <span className="mr-2 text-xs font-mono text-muted-foreground uppercase tracking-wider">
+        {language}
       </span>
-      <Button
-        aria-label="Copy code"
-        className="size-8"
-        onClick={handleCopy}
-        size="icon"
-        variant="ghost"
-      >
-        <Icon className="size-3" />
-      </Button>
-    </>
-  );
+    );
 
-  return (
-    <div
-      className={cn(
-        "relative w-full overflow-hidden rounded-md border bg-background text-foreground",
-        className,
-      )}
-      ref={ref}
-    >
-      {hasHeader ? (
-        <div className="flex items-center justify-between gap-2 border-b bg-muted/50 py-1 pl-4 pr-2">
-          <span className="min-w-0 truncate font-mono text-xs">{title}</span>
-          <div className="flex shrink-0 items-center">
-            {languageLabel}
-            {copyControl}
-          </div>
-        </div>
-      ) : null}
+    const Icon = copied ? Check : Copy;
+
+    const copyControl = (
+      <>
+        <span
+          aria-live="polite"
+          className={cn(
+            "text-xs text-muted-foreground",
+            copied && "rounded-sm bg-background px-1",
+          )}
+          role="status"
+        >
+          {copied ? "Copied" : null}
+        </span>
+        <Button
+          aria-label="Copy code"
+          className="size-8"
+          onClick={handleCopy}
+          size="icon"
+          variant="ghost"
+        >
+          <Icon className="size-3" />
+        </Button>
+      </>
+    );
+
+    return (
       <div
-        aria-label={`${language} code`}
-        className="relative overflow-x-auto overflow-y-hidden touch-pan-y focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-        ref={scrollRef}
-        role="region"
-        tabIndex={0}
+        className={cn(
+          "relative w-full overflow-hidden rounded-md border bg-background text-foreground",
+          className,
+        )}
+        ref={ref}
       >
-        {SyntaxHighlighter ? (
-          <SyntaxHighlighter
-            codeTagProps={{
-              className: cn(
-                "font-mono text-sm [&_.linenumber]:!not-italic",
-                wrap && WRAP_CLASS,
-              ),
-              style: {
-                background: "transparent",
-                display: "block",
-                whiteSpace: wrap ? "pre-wrap" : "pre",
-              },
-            }}
-            customStyle={{
-              background: "oklch(var(--background))",
-              fontSize: "0.875rem",
-              margin: 0,
-              minWidth: "fit-content",
-              overflowY: "hidden",
-              padding: "1rem",
-            }}
-            language={language}
-            showLineNumbers={showLineNumbers}
-            style={CODE_THEME}
-          >
-            {code}
-          </SyntaxHighlighter>
-        ) : (
-          <pre
-            className={cn(
-              "m-0 min-w-fit overflow-y-hidden p-4 font-mono text-sm",
-              wrap && WRAP_CLASS,
-            )}
-          >
-            <code className="block bg-transparent">{code}</code>
-          </pre>
-        )}
-        {hasHeader ? null : (
-          <div className="absolute right-2 top-2 flex items-center">
-            {showLanguage ? languageLabel : null}
-            {copyControl}
+        {hasHeader ? (
+          <div className="flex items-center justify-between gap-2 border-b bg-muted/50 py-1 pl-4 pr-2">
+            <span className="min-w-0 truncate font-mono text-xs">{title}</span>
+            <div className="flex shrink-0 items-center">
+              {languageLabel}
+              {copyControl}
+            </div>
           </div>
-        )}
+        ) : null}
+        <div
+          aria-label={`${language} code`}
+          className="relative overflow-x-auto overflow-y-hidden touch-pan-y focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          ref={scrollRef}
+          role="region"
+          tabIndex={0}
+        >
+          {SyntaxHighlighter ? (
+            <SyntaxHighlighter
+              codeTagProps={{
+                className: cn(
+                  "font-mono text-sm [&_.linenumber]:!not-italic",
+                  wrap && WRAP_CLASS,
+                ),
+                style: {
+                  background: "transparent",
+                  display: "block",
+                  whiteSpace: wrap ? "pre-wrap" : "pre",
+                },
+              }}
+              customStyle={{
+                background: "oklch(var(--background))",
+                fontSize: "0.875rem",
+                margin: 0,
+                minWidth: "fit-content",
+                overflowY: "hidden",
+                padding: "1rem",
+              }}
+              language={language}
+              showLineNumbers={showLineNumbers}
+              style={CODE_THEME}
+            >
+              {code}
+            </SyntaxHighlighter>
+          ) : (
+            <pre
+              className={cn(
+                "m-0 min-w-fit overflow-y-hidden p-4 font-mono text-sm",
+                wrap && WRAP_CLASS,
+              )}
+            >
+              <code className="block bg-transparent">{code}</code>
+            </pre>
+          )}
+          {hasHeader ? null : (
+            <div className="absolute right-2 top-2 flex items-center">
+              {showLanguage ? languageLabel : null}
+              {copyControl}
+            </div>
+          )}
+        </div>
       </div>
-    </div>
-  );
-}
-CodeBlock.displayName = "CodeBlock";
+    );
+  },
+);

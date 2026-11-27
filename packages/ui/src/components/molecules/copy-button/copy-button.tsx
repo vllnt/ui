@@ -10,6 +10,7 @@ import {
 
 import { Check, Copy } from "lucide-react";
 
+import { named } from "../../../lib/named";
 import { cn } from "../../../lib/utils";
 import { Button } from "../../atoms/button/button";
 import {
@@ -80,53 +81,71 @@ type TriggerProps = Omit<
   onClickHandler: (event: ReactMouseEvent<HTMLButtonElement>) => void;
 };
 
-const ButtonTrigger = ({
-  accessibleLabel,
-  className,
-  copied,
-  copiedText,
-  iconClassName,
-  label = "Copy",
-  onClick,
-  onClickHandler,
-  ref,
-  value: _value,
-  variant = "icon",
-  ...rest
-}: TriggerProps & { ref?: React.Ref<HTMLButtonElement> }) => {
-  // `onClick` here is the tooltip trigger's own handler: pressing the button
-  // closes the tooltip until the pointer leaves, so it must still run.
-  const handleClick = (event: ReactMouseEvent<HTMLButtonElement>) => {
-    onClickHandler(event);
-    onClick?.(event);
-  };
+const ButtonTrigger = /* @__PURE__ */ named(
+  "CopyButton.Trigger",
+  ({
+    accessibleLabel,
+    className,
+    copied,
+    copiedText,
+    iconClassName,
+    label = "Copy",
+    onClick,
+    onClickHandler,
+    ref,
+    value: _value,
+    variant = "icon",
+    ...rest
+  }: TriggerProps & { ref?: React.Ref<HTMLButtonElement> }) => {
+    // `onClick` here is the tooltip trigger's own handler: pressing the button
+    // closes the tooltip until the pointer leaves, so it must still run.
+    const handleClick = (event: ReactMouseEvent<HTMLButtonElement>) => {
+      onClickHandler(event);
+      onClick?.(event);
+    };
 
-  if (variant === "button") {
+    if (variant === "button") {
+      return (
+        <Button
+          aria-label={accessibleLabel}
+          className={cn(className)}
+          onClick={handleClick}
+          ref={ref}
+          size="sm"
+          type="button"
+          variant="outline"
+          {...rest}
+        >
+          <CopyIcon className={iconClassName} copied={copied} size="sm" />
+          <span>{copied ? copiedText : label}</span>
+        </Button>
+      );
+    }
+
+    if (variant === "inline") {
+      return (
+        <Button
+          aria-label={accessibleLabel}
+          className={cn(
+            "size-6 align-middle text-muted-foreground hover:text-foreground",
+            className,
+          )}
+          onClick={handleClick}
+          ref={ref}
+          size="icon"
+          type="button"
+          variant="ghost"
+          {...rest}
+        >
+          <CopyIcon className={iconClassName} copied={copied} size="xs" />
+        </Button>
+      );
+    }
+
     return (
       <Button
         aria-label={accessibleLabel}
-        className={cn(className)}
-        onClick={handleClick}
-        ref={ref}
-        size="sm"
-        type="button"
-        variant="outline"
-        {...rest}
-      >
-        <CopyIcon className={iconClassName} copied={copied} size="sm" />
-        <span>{copied ? copiedText : label}</span>
-      </Button>
-    );
-  }
-
-  if (variant === "inline") {
-    return (
-      <Button
-        aria-label={accessibleLabel}
-        className={cn(
-          "size-6 align-middle text-muted-foreground hover:text-foreground",
-          className,
-        )}
+        className={cn("size-8", className)}
         onClick={handleClick}
         ref={ref}
         size="icon"
@@ -134,27 +153,11 @@ const ButtonTrigger = ({
         variant="ghost"
         {...rest}
       >
-        <CopyIcon className={iconClassName} copied={copied} size="xs" />
+        <CopyIcon className={iconClassName} copied={copied} size="sm" />
       </Button>
     );
-  }
-
-  return (
-    <Button
-      aria-label={accessibleLabel}
-      className={cn("size-8", className)}
-      onClick={handleClick}
-      ref={ref}
-      size="icon"
-      type="button"
-      variant="ghost"
-      {...rest}
-    >
-      <CopyIcon className={iconClassName} copied={copied} size="sm" />
-    </Button>
-  );
-};
-ButtonTrigger.displayName = "CopyButton.Trigger";
+  },
+);
 
 /**
  * Click-to-copy button with confirmation feedback.
@@ -173,67 +176,69 @@ ButtonTrigger.displayName = "CopyButton.Trigger";
  *
  * @public
  */
-export const CopyButton = ({
-  "aria-label": ariaLabelOverride,
-  copiedLabel = "Copied!",
-  label = "Copy",
-  onClick,
-  ref,
-  showTooltip = true,
-  timeout,
-  value,
-  ...rest
-}: CopyButtonProps & { ref?: React.Ref<HTMLButtonElement> }) => {
-  const { copied, copy } = useCopyToClipboard({ timeout });
+export const CopyButton = /* @__PURE__ */ named(
+  "CopyButton",
+  ({
+    "aria-label": ariaLabelOverride,
+    copiedLabel = "Copied!",
+    label = "Copy",
+    onClick,
+    ref,
+    showTooltip = true,
+    timeout,
+    value,
+    ...rest
+  }: CopyButtonProps & { ref?: React.Ref<HTMLButtonElement> }) => {
+    const { copied, copy } = useCopyToClipboard({ timeout });
 
-  const handleClick = useCallback(
-    (event: ReactMouseEvent<HTMLButtonElement>) => {
-      onClick?.(event);
-      if (event.defaultPrevented) return;
-      void copy(value);
-    },
-    [copy, onClick, value],
-  );
-
-  const accessibleLabel = ariaLabelOverride ?? (copied ? copiedLabel : label);
-  const tooltipText = copied ? copiedLabel : label;
-
-  const trigger: ReactElement = (
-    <ButtonTrigger
-      {...rest}
-      accessibleLabel={accessibleLabel}
-      copied={copied}
-      copiedText={copiedLabel}
-      label={label}
-      onClickHandler={handleClick}
-      ref={ref}
-      value={value}
-    />
-  );
-
-  const liveRegion = (
-    <span aria-live="polite" className="sr-only" role="status">
-      {copied ? copiedLabel : ""}
-    </span>
-  );
-
-  if (!showTooltip) {
-    return (
-      <>
-        {trigger}
-        {liveRegion}
-      </>
+    const handleClick = useCallback(
+      (event: ReactMouseEvent<HTMLButtonElement>) => {
+        onClick?.(event);
+        if (event.defaultPrevented) return;
+        void copy(value);
+      },
+      [copy, onClick, value],
     );
-  }
 
-  return (
-    <TooltipProvider delayDuration={200}>
-      <Tooltip>
-        <TooltipTrigger asChild>{trigger}</TooltipTrigger>
-        <TooltipContent>{tooltipText}</TooltipContent>
-      </Tooltip>
-      {liveRegion}
-    </TooltipProvider>
-  );
-};
-CopyButton.displayName = "CopyButton";
+    const accessibleLabel = ariaLabelOverride ?? (copied ? copiedLabel : label);
+    const tooltipText = copied ? copiedLabel : label;
+
+    const trigger: ReactElement = (
+      <ButtonTrigger
+        {...rest}
+        accessibleLabel={accessibleLabel}
+        copied={copied}
+        copiedText={copiedLabel}
+        label={label}
+        onClickHandler={handleClick}
+        ref={ref}
+        value={value}
+      />
+    );
+
+    const liveRegion = (
+      <span aria-live="polite" className="sr-only" role="status">
+        {copied ? copiedLabel : ""}
+      </span>
+    );
+
+    if (!showTooltip) {
+      return (
+        <>
+          {trigger}
+          {liveRegion}
+        </>
+      );
+    }
+
+    return (
+      <TooltipProvider delayDuration={200}>
+        <Tooltip>
+          <TooltipTrigger asChild>{trigger}</TooltipTrigger>
+          <TooltipContent>{tooltipText}</TooltipContent>
+        </Tooltip>
+        {liveRegion}
+      </TooltipProvider>
+    );
+  },
+);

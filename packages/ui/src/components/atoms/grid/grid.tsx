@@ -1,3 +1,4 @@
+import { named } from "../../../lib/named";
 import { cn } from "../../../lib/utils";
 
 /** Number of columns the grid resolves to at a given breakpoint. */
@@ -103,30 +104,32 @@ export type GridProps = {
  *   <Card />
  * </Grid>
  */
-const Grid = ({
-  className,
-  cols = 1,
-  gap = 4,
-  lgCols,
-  mdCols,
-  ref,
-  smCols,
-  ...props
-}: GridProps & { ref?: React.Ref<HTMLDivElement> }) => (
-  <div
-    className={cn(
-      "grid",
-      colsClasses[cols],
-      smCols !== undefined && smColsClasses[smCols],
-      mdCols !== undefined && mdColsClasses[mdCols],
-      lgCols !== undefined && lgColsClasses[lgCols],
-      gapClasses[gap],
-      className,
-    )}
-    ref={ref}
-    {...props}
-  />
+const Grid = /* @__PURE__ */ named(
+  "Grid",
+  ({
+    className,
+    cols = 1,
+    gap = 4,
+    lgCols,
+    mdCols,
+    ref,
+    smCols,
+    ...props
+  }: GridProps & { ref?: React.Ref<HTMLDivElement> }) => (
+    <div
+      className={cn(
+        "grid",
+        colsClasses[cols],
+        smCols !== undefined && smColsClasses[smCols],
+        mdCols !== undefined && mdColsClasses[mdCols],
+        lgCols !== undefined && lgColsClasses[lgCols],
+        gapClasses[gap],
+        className,
+      )}
+      ref={ref}
+      {...props}
+    />
+  ),
 );
-Grid.displayName = "Grid";
 
 export { Grid };

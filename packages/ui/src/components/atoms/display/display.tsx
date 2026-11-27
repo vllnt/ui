@@ -1,5 +1,6 @@
 import { createElement } from "react";
 
+import { named } from "../../../lib/named";
 import { cn } from "../../../lib/utils";
 
 /** HTML element the {@link Display} primitive renders as. */
@@ -31,23 +32,19 @@ const displayBase =
  * @example
  * <Display as="h1" animated>Ship faster</Display>
  */
-const Display = ({
-  animated = false,
-  as = "div",
-  className,
-  ref,
-  ...props
-}: DisplayProps) =>
-  createElement(as, {
-    className: cn(
-      displayBase,
-      animated &&
-        "motion-safe:animate-[vllnt-animated-text-reveal_0.6s_ease-out_both]",
-      className,
-    ),
-    ref,
-    ...props,
-  });
-Display.displayName = "Display";
+const Display = /* @__PURE__ */ named(
+  "Display",
+  ({ animated = false, as = "div", className, ref, ...props }: DisplayProps) =>
+    createElement(as, {
+      className: cn(
+        displayBase,
+        animated &&
+          "motion-safe:animate-[vllnt-animated-text-reveal_0.6s_ease-out_both]",
+        className,
+      ),
+      ref,
+      ...props,
+    }),
+);
 
 export { Display };

@@ -17,6 +17,7 @@ import {
   useState,
 } from "react";
 
+import { named } from "../../../lib/named";
 import { cn } from "../../../lib/utils";
 
 const VIEWBOX = 400;
@@ -156,42 +157,41 @@ export type GlobeMarkerProps = {
  *
  * @public
  */
-export const GlobeMarker = ({
-  ref,
-  ...props
-}: GlobeMarkerProps & { ref?: React.Ref<SVGGElement> }) => {
-  const { color = "red", id, label, lat, lng, ...rest } = props;
-  const { rotationLat, rotationLng } = useGlobeContext();
-  const projected = project({ lat, lng }, rotationLng, rotationLat);
-  if (!projected.visible) return null;
-  const palette = PALETTE[color];
-  return (
-    <g
-      data-marker-id={id}
-      data-marker-visible="true"
-      ref={ref}
-      transform={`translate(${projected.x.toString()}, ${projected.y.toString()})`}
-      {...rest}
-    >
-      <circle
-        className={cn("stroke-background", palette.fill)}
-        r="5"
-        strokeWidth="1.5"
-      />
-      {label ? (
-        <text
-          className="select-none fill-foreground text-[10px] font-semibold"
-          dominantBaseline="middle"
-          textAnchor="middle"
-          y="-10"
-        >
-          {label}
-        </text>
-      ) : null}
-    </g>
-  );
-};
-GlobeMarker.displayName = "GlobeMarker";
+export const GlobeMarker = /* @__PURE__ */ named(
+  "GlobeMarker",
+  ({ ref, ...props }: GlobeMarkerProps & { ref?: React.Ref<SVGGElement> }) => {
+    const { color = "red", id, label, lat, lng, ...rest } = props;
+    const { rotationLat, rotationLng } = useGlobeContext();
+    const projected = project({ lat, lng }, rotationLng, rotationLat);
+    if (!projected.visible) return null;
+    const palette = PALETTE[color];
+    return (
+      <g
+        data-marker-id={id}
+        data-marker-visible="true"
+        ref={ref}
+        transform={`translate(${projected.x.toString()}, ${projected.y.toString()})`}
+        {...rest}
+      >
+        <circle
+          className={cn("stroke-background", palette.fill)}
+          r="5"
+          strokeWidth="1.5"
+        />
+        {label ? (
+          <text
+            className="select-none fill-foreground text-[10px] font-semibold"
+            dominantBaseline="middle"
+            textAnchor="middle"
+            y="-10"
+          >
+            {label}
+          </text>
+        ) : null}
+      </g>
+    );
+  },
+);
 
 /**
  * Props for {@link GlobeArc}.
@@ -246,29 +246,28 @@ function buildArc(arguments_: {
  *
  * @public
  */
-export const GlobeArc = ({
-  ref,
-  ...props
-}: GlobeArcProps & { ref?: React.Ref<SVGPathElement> }) => {
-  const { color = "cyan", from, id, strokeWidth = 2, to, ...rest } = props;
-  const { rotationLat, rotationLng } = useGlobeContext();
-  const path = buildArc({ from, rotationLat, rotationLng, to });
-  if (!path) return null;
-  const palette = PALETTE[color];
-  return (
-    <path
-      className={cn("fill-none", palette.stroke)}
-      d={path}
-      data-arc-id={id}
-      ref={ref}
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      strokeWidth={strokeWidth}
-      {...rest}
-    />
-  );
-};
-GlobeArc.displayName = "GlobeArc";
+export const GlobeArc = /* @__PURE__ */ named(
+  "GlobeArc",
+  ({ ref, ...props }: GlobeArcProps & { ref?: React.Ref<SVGPathElement> }) => {
+    const { color = "cyan", from, id, strokeWidth = 2, to, ...rest } = props;
+    const { rotationLat, rotationLng } = useGlobeContext();
+    const path = buildArc({ from, rotationLat, rotationLng, to });
+    if (!path) return null;
+    const palette = PALETTE[color];
+    return (
+      <path
+        className={cn("fill-none", palette.stroke)}
+        d={path}
+        data-arc-id={id}
+        ref={ref}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={strokeWidth}
+        {...rest}
+      />
+    );
+  },
+);
 
 type GraticuleProps = {
   rotationLat: number;
@@ -580,76 +579,75 @@ function DataSummary({ children, titleId }: DataSummaryProps): ReactNode {
  *
  * @public
  */
-export const Globe3D = ({
-  ref,
-  ...props
-}: Globe3DProps & { ref?: React.Ref<HTMLElement> }) => {
-  const {
-    autoRotate = true,
-    children,
-    className,
-    initialPosition = { lat: 20, lng: 0 },
-    labels,
-    rotationSpeed = 8,
-    ...rest
-  } = props;
-  const titleId = useId();
-  const resolvedLabels = useMemo(
-    () => ({ ...DEFAULT_LABELS, ...labels }),
-    [labels],
-  );
-  const {
-    isDragging,
-    rotationLat,
-    rotationLng,
-    setIsDragging,
-    setRotationLat,
-    setRotationLng,
-  } = useGlobeRotation(initialPosition);
+export const Globe3D = /* @__PURE__ */ named(
+  "Globe3D",
+  ({ ref, ...props }: Globe3DProps & { ref?: React.Ref<HTMLElement> }) => {
+    const {
+      autoRotate = true,
+      children,
+      className,
+      initialPosition = { lat: 20, lng: 0 },
+      labels,
+      rotationSpeed = 8,
+      ...rest
+    } = props;
+    const titleId = useId();
+    const resolvedLabels = useMemo(
+      () => ({ ...DEFAULT_LABELS, ...labels }),
+      [labels],
+    );
+    const {
+      isDragging,
+      rotationLat,
+      rotationLng,
+      setIsDragging,
+      setRotationLat,
+      setRotationLng,
+    } = useGlobeRotation(initialPosition);
 
-  useAutoRotation({ autoRotate, isDragging, rotationSpeed, setRotationLng });
+    useAutoRotation({ autoRotate, isDragging, rotationSpeed, setRotationLng });
 
-  const handlers = useDragRotation({
-    rotationLat,
-    rotationLng,
-    setIsDragging,
-    setRotationLat,
-    setRotationLng: (next) => {
-      setRotationLng(next);
-    },
-  });
+    const handlers = useDragRotation({
+      rotationLat,
+      rotationLng,
+      setIsDragging,
+      setRotationLat,
+      setRotationLng: (next) => {
+        setRotationLng(next);
+      },
+    });
 
-  const ctx = useMemo<Ctx>(
-    () => ({ rotationLat, rotationLng }),
-    [rotationLat, rotationLng],
-  );
+    const ctx = useMemo<Ctx>(
+      () => ({ rotationLat, rotationLng }),
+      [rotationLat, rotationLng],
+    );
 
-  return (
-    <GlobeContext.Provider value={ctx}>
-      <section
-        aria-labelledby={titleId}
-        className={cn(
-          "relative aspect-square w-full max-w-md overflow-hidden rounded-2xl border bg-background text-foreground",
-          className,
-        )}
-        ref={ref}
-        {...rest}
-      >
-        <span className="sr-only" id={titleId}>
-          {resolvedLabels.region}
-        </span>
-        <div
-          className="block h-full w-full cursor-grab active:cursor-grabbing"
-          data-globe-stage
-          {...handlers}
+    return (
+      <GlobeContext.Provider value={ctx}>
+        <section
+          aria-labelledby={titleId}
+          className={cn(
+            "relative aspect-square w-full max-w-md overflow-hidden rounded-2xl border bg-background text-foreground",
+            className,
+          )}
+          ref={ref}
+          {...rest}
         >
-          <Sphere rotationLat={rotationLat} rotationLng={rotationLng}>
-            {children}
-          </Sphere>
-        </div>
-        <DataSummary titleId={`${titleId}-summary`}>{children}</DataSummary>
-      </section>
-    </GlobeContext.Provider>
-  );
-};
-Globe3D.displayName = "Globe3D";
+          <span className="sr-only" id={titleId}>
+            {resolvedLabels.region}
+          </span>
+          <div
+            className="block h-full w-full cursor-grab active:cursor-grabbing"
+            data-globe-stage
+            {...handlers}
+          >
+            <Sphere rotationLat={rotationLat} rotationLng={rotationLng}>
+              {children}
+            </Sphere>
+          </div>
+          <DataSummary titleId={`${titleId}-summary`}>{children}</DataSummary>
+        </section>
+      </GlobeContext.Provider>
+    );
+  },
+);

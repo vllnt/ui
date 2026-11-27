@@ -2,6 +2,7 @@
 
 import type { ComponentPropsWithoutRef, ReactNode } from "react";
 
+import { named } from "../../../lib/named";
 import { statusDotVariants, type StatusTone } from "../../../lib/status-dot";
 import { cn } from "../../../lib/utils";
 
@@ -151,45 +152,47 @@ const Row = (props: { policy: PolicyEntry }): React.ReactElement => {
  *
  * @public
  */
-export const PolicyDeliveryPanel = ({
-  ref,
-  ...props
-}: PolicyDeliveryPanelProps & { ref?: React.Ref<HTMLElement> }) => {
-  const { className, labels, policies, title = "Policies", ...rest } = props;
-  const resolvedLabels = { ...DEFAULT_LABELS, ...labels };
-  return (
-    <section
-      aria-label={resolvedLabels.region}
-      className={cn(
-        "flex w-full flex-col gap-2 rounded-lg border bg-background p-3 text-foreground",
-        className,
-      )}
-      data-policy-delivery-panel
-      ref={ref}
-      {...rest}
-    >
-      <header>
-        <h3 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-          {title}
-        </h3>
-      </header>
-      {policies.length === 0 ? (
-        <p
-          className="px-2 py-3 text-center text-xs text-muted-foreground"
-          data-policy-state="empty"
-        >
-          {resolvedLabels.empty}
-        </p>
-      ) : (
-        <ul className="space-y-0.5">
-          {policies.map((policy) => (
-            <li key={policy.id}>
-              <Row policy={policy} />
-            </li>
-          ))}
-        </ul>
-      )}
-    </section>
-  );
-};
-PolicyDeliveryPanel.displayName = "PolicyDeliveryPanel";
+export const PolicyDeliveryPanel = /* @__PURE__ */ named(
+  "PolicyDeliveryPanel",
+  ({
+    ref,
+    ...props
+  }: PolicyDeliveryPanelProps & { ref?: React.Ref<HTMLElement> }) => {
+    const { className, labels, policies, title = "Policies", ...rest } = props;
+    const resolvedLabels = { ...DEFAULT_LABELS, ...labels };
+    return (
+      <section
+        aria-label={resolvedLabels.region}
+        className={cn(
+          "flex w-full flex-col gap-2 rounded-lg border bg-background p-3 text-foreground",
+          className,
+        )}
+        data-policy-delivery-panel
+        ref={ref}
+        {...rest}
+      >
+        <header>
+          <h3 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+            {title}
+          </h3>
+        </header>
+        {policies.length === 0 ? (
+          <p
+            className="px-2 py-3 text-center text-xs text-muted-foreground"
+            data-policy-state="empty"
+          >
+            {resolvedLabels.empty}
+          </p>
+        ) : (
+          <ul className="space-y-0.5">
+            {policies.map((policy) => (
+              <li key={policy.id}>
+                <Row policy={policy} />
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
+    );
+  },
+);

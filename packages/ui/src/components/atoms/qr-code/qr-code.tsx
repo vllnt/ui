@@ -1,3 +1,4 @@
+import { named } from "../../../lib/named";
 import { encodeQrMatrix } from "../../../lib/qr-encoder";
 import { cn } from "../../../lib/utils";
 
@@ -82,38 +83,40 @@ function encodeQrCode(
  * <QrCode value="https://vllnt.com" />
  * <QrCode value="WIFI:S:home;T:WPA;P:secret;;" level="H" size={200} />
  */
-const QrCode = ({
-  className,
-  level = "M",
-  margin = 4,
-  ref,
-  size = 160,
-  title = "QR code",
-  value,
-  ...props
-}: QrCodeProps & { ref?: React.Ref<SVGSVGElement> }) => {
-  const { count, path } = value
-    ? encodeQrCode(value, level, margin)
-    : { count: 0, path: "" };
-  const dimension = count + margin * 2;
+const QrCode = /* @__PURE__ */ named(
+  "QrCode",
+  ({
+    className,
+    level = "M",
+    margin = 4,
+    ref,
+    size = 160,
+    title = "QR code",
+    value,
+    ...props
+  }: QrCodeProps & { ref?: React.Ref<SVGSVGElement> }) => {
+    const { count, path } = value
+      ? encodeQrCode(value, level, margin)
+      : { count: 0, path: "" };
+    const dimension = count + margin * 2;
 
-  return (
-    <svg
-      aria-label={title}
-      className={cn("text-foreground", className)}
-      height={size}
-      ref={ref}
-      role="img"
-      shapeRendering="crispEdges"
-      viewBox={`0 0 ${dimension} ${dimension}`}
-      width={size}
-      xmlns="http://www.w3.org/2000/svg"
-      {...props}
-    >
-      <path d={path} fill="currentColor" />
-    </svg>
-  );
-};
-QrCode.displayName = "QrCode";
+    return (
+      <svg
+        aria-label={title}
+        className={cn("text-foreground", className)}
+        height={size}
+        ref={ref}
+        role="img"
+        shapeRendering="crispEdges"
+        viewBox={`0 0 ${dimension} ${dimension}`}
+        width={size}
+        xmlns="http://www.w3.org/2000/svg"
+        {...props}
+      >
+        <path d={path} fill="currentColor" />
+      </svg>
+    );
+  },
+);
 
 export { QrCode };

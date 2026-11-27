@@ -2,6 +2,7 @@
 
 import * as React from "react";
 
+import { named } from "../../../lib/named";
 import { cn } from "../../../lib/utils";
 
 /** Props for {@link Sparkles}. */
@@ -40,38 +41,40 @@ function createSparkles(count: number): Sparkle[] {
  * </Sparkles>
  * ```
  */
-export const Sparkles = ({
-  children,
-  className,
-  count = 20,
-  ref,
-  ...props
-}: SparklesProps & { ref?: React.Ref<HTMLDivElement> }) => {
-  const [sparkles] = React.useState(() => createSparkles(count));
+export const Sparkles = /* @__PURE__ */ named(
+  "Sparkles",
+  ({
+    children,
+    className,
+    count = 20,
+    ref,
+    ...props
+  }: SparklesProps & { ref?: React.Ref<HTMLDivElement> }) => {
+    const [sparkles] = React.useState(() => createSparkles(count));
 
-  return (
-    <div className={cn("relative", className)} ref={ref} {...props}>
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 overflow-hidden"
-      >
-        {sparkles.map((sparkle, index) => (
-          <span
-            className="absolute rotate-45 rounded-[1px] bg-foreground [animation-name:vllnt-sparkle] [animation-iteration-count:infinite] [animation-timing-function:linear] motion-reduce:animate-none"
-            key={index}
-            style={{
-              animationDelay: `${sparkle.delay}s`,
-              animationDuration: `${sparkle.duration}s`,
-              height: `${sparkle.size}px`,
-              left: `${sparkle.left}%`,
-              top: `${sparkle.top}%`,
-              width: `${sparkle.size}px`,
-            }}
-          />
-        ))}
+    return (
+      <div className={cn("relative", className)} ref={ref} {...props}>
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 overflow-hidden"
+        >
+          {sparkles.map((sparkle, index) => (
+            <span
+              className="absolute rotate-45 rounded-[1px] bg-foreground [animation-name:vllnt-sparkle] [animation-iteration-count:infinite] [animation-timing-function:linear] motion-reduce:animate-none"
+              key={index}
+              style={{
+                animationDelay: `${sparkle.delay}s`,
+                animationDuration: `${sparkle.duration}s`,
+                height: `${sparkle.size}px`,
+                left: `${sparkle.left}%`,
+                top: `${sparkle.top}%`,
+                width: `${sparkle.size}px`,
+              }}
+            />
+          ))}
+        </div>
+        {children ? <div className="relative">{children}</div> : null}
       </div>
-      {children ? <div className="relative">{children}</div> : null}
-    </div>
-  );
-};
-Sparkles.displayName = "Sparkles";
+    );
+  },
+);

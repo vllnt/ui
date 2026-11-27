@@ -2,6 +2,15 @@ import { react } from '@vllnt/eslint-config'
 
 import a12Allowlist from './eslint-rules/a12-allowlist.js'
 import a12StatusTextColour from './eslint-rules/a12-status-text-colour.js'
+import namedDisplayName from './eslint-rules/named-display-name.js'
+
+// One plugin object: flat config rejects two different objects under one name.
+const vllnt = {
+  rules: {
+    'a12-no-status-text-colour': a12StatusTextColour,
+    'named-display-name': namedDisplayName,
+  },
+}
 
 export default [
   {
@@ -96,8 +105,17 @@ export default [
     // never on words. See eslint-rules/a12-status-text-colour.js.
     files: ['src/components/**/*.tsx'],
     ignores: ['**/*.test.tsx', '**/*.visual.tsx'],
-    plugins: { vllnt: { rules: { 'a12-no-status-text-colour': a12StatusTextColour } } },
+    plugins: { vllnt },
     rules: { 'vllnt/a12-no-status-text-colour': 'error' },
+  },
+  {
+    // A component gets its displayName from `named`, as a pure annotated call,
+    // so a bundler can drop it when nothing imports it. See
+    // eslint-rules/named-display-name.js and lib/named.ts.
+    files: ['src/**/*.{ts,tsx}'],
+    ignores: ['**/*.test.{ts,tsx}', 'src/**/__tests__/**', 'src/lib/ui-sdk.tsx', 'src/test-setup.ts'],
+    plugins: { vllnt },
+    rules: { 'vllnt/named-display-name': 'error' },
   },
   // Files that predate A12 (list only shrinks); flat config rejects an empty `files`.
   ...(a12Allowlist.length > 0

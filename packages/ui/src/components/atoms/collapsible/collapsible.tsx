@@ -7,6 +7,7 @@ import {
 } from "@ui-sdk/react/collapsible";
 import type * as React from "react";
 
+import { named } from "../../../lib/named";
 import {
   asChildProps,
   openState,
@@ -21,68 +22,70 @@ type PartProps<Part extends React.ElementType> = Omit<
   asChild?: boolean;
 };
 
-const Collapsible = ({
-  asChild,
-  children,
-  ...props
-}: PartProps<typeof CollapsiblePrimitive>) => {
-  const slot = asChildProps({ asChild, children });
+const Collapsible = /* @__PURE__ */ named(
+  "Collapsible",
+  ({ asChild, children, ...props }: PartProps<typeof CollapsiblePrimitive>) => {
+    const slot = asChildProps({ asChild, children });
 
-  return (
-    <CollapsiblePrimitive
-      render={withDataAttributes("div", openState, slot.render)}
-      {...props}
-    >
-      {slot.children}
-    </CollapsiblePrimitive>
-  );
-};
-Collapsible.displayName = "Collapsible";
+    return (
+      <CollapsiblePrimitive
+        render={withDataAttributes("div", openState, slot.render)}
+        {...props}
+      >
+        {slot.children}
+      </CollapsiblePrimitive>
+    );
+  },
+);
 
-const CollapsibleTrigger = ({
-  asChild,
-  children,
-  ...props
-}: PartProps<typeof CollapsibleTriggerPrimitive>) => {
-  const slot = asChildProps({ asChild, children });
+const CollapsibleTrigger = /* @__PURE__ */ named(
+  "CollapsibleTrigger",
+  ({
+    asChild,
+    children,
+    ...props
+  }: PartProps<typeof CollapsibleTriggerPrimitive>) => {
+    const slot = asChildProps({ asChild, children });
 
-  return (
-    <CollapsibleTriggerPrimitive
-      render={withDataAttributes("button", openState, slot.render)}
-      {...props}
-    >
-      {slot.children}
-    </CollapsibleTriggerPrimitive>
-  );
-};
-CollapsibleTrigger.displayName = "CollapsibleTrigger";
+    return (
+      <CollapsibleTriggerPrimitive
+        render={withDataAttributes("button", openState, slot.render)}
+        {...props}
+      >
+        {slot.children}
+      </CollapsibleTriggerPrimitive>
+    );
+  },
+);
 
-const CollapsibleContent = ({
-  asChild,
-  children,
-  className,
-  forceMount,
-  ...props
-}: PartProps<typeof CollapsiblePanel> & {
-  /** Keeps the content in the page, hidden, while the collapsible stays closed. */
-  forceMount?: true;
-}) => {
-  const slot = asChildProps({ asChild, children });
+const CollapsibleContent = /* @__PURE__ */ named(
+  "CollapsibleContent",
+  ({
+    asChild,
+    children,
+    className,
+    forceMount,
+    ...props
+  }: PartProps<typeof CollapsiblePanel> & {
+    /** Keeps the content in the page, hidden, while the collapsible stays closed. */
+    forceMount?: true;
+  }) => {
+    const slot = asChildProps({ asChild, children });
 
-  return (
-    <CollapsiblePanel
-      className={cn(
-        "[--radix-collapsible-content-height:var(--collapsible-panel-height)] [--radix-collapsible-content-width:var(--collapsible-panel-width)]",
-        className,
-      )}
-      keepMounted={forceMount}
-      render={withDataAttributes("div", openState, slot.render)}
-      {...props}
-    >
-      {slot.children}
-    </CollapsiblePanel>
-  );
-};
-CollapsibleContent.displayName = "CollapsibleContent";
+    return (
+      <CollapsiblePanel
+        className={cn(
+          "[--radix-collapsible-content-height:var(--collapsible-panel-height)] [--radix-collapsible-content-width:var(--collapsible-panel-width)]",
+          className,
+        )}
+        keepMounted={forceMount}
+        render={withDataAttributes("div", openState, slot.render)}
+        {...props}
+      >
+        {slot.children}
+      </CollapsiblePanel>
+    );
+  },
+);
 
 export { Collapsible, CollapsibleContent, CollapsibleTrigger };

@@ -2,6 +2,7 @@
 
 import { LoaderCircle, SendHorizontal } from "lucide-react";
 
+import { named } from "../../../lib/named";
 import { cn } from "../../../lib/utils";
 import { cva } from "../../../lib/variants";
 import { Button } from "../../atoms/button/button";
@@ -87,64 +88,67 @@ export type AIChatInputProps = React.ComponentPropsWithoutRef<"form"> & {
   value?: string;
 };
 
-const AIChatInput = ({
-  className,
-  disabled = false,
-  helperText,
-  inputLabel = "Chat message",
-  isSubmitting = false,
-  onSubmit,
-  onValueChange,
-  ref,
-  status,
-  submitLabel = "Send",
-  textareaProps,
-  toolbar,
-  value,
-  ...props
-}: AIChatInputProps & { ref?: React.Ref<HTMLFormElement> }) => {
-  const currentValue = value ?? "";
-  const maxLength = textareaProps?.maxLength;
-  const isSubmitDisabled =
-    disabled || isSubmitting || currentValue.trim().length === 0;
+const AIChatInput = /* @__PURE__ */ named(
+  "AIChatInput",
+  ({
+    className,
+    disabled = false,
+    helperText,
+    inputLabel = "Chat message",
+    isSubmitting = false,
+    onSubmit,
+    onValueChange,
+    ref,
+    status,
+    submitLabel = "Send",
+    textareaProps,
+    toolbar,
+    value,
+    ...props
+  }: AIChatInputProps & { ref?: React.Ref<HTMLFormElement> }) => {
+    const currentValue = value ?? "";
+    const maxLength = textareaProps?.maxLength;
+    const isSubmitDisabled =
+      disabled || isSubmitting || currentValue.trim().length === 0;
 
-  return (
-    <form
-      className={cn(formShellVariants(), "w-full p-3", className)}
-      onSubmit={onSubmit}
-      ref={ref}
-      {...props}
-    >
-      <div className="space-y-3">
-        <Textarea
-          aria-label={inputLabel}
-          className="min-h-[120px] resize-none rounded-xl border-0 bg-transparent p-1 shadow-none focus-visible:ring-0 focus-visible:ring-offset-0"
-          disabled={disabled}
-          onChange={(event) => {
-            textareaProps?.onChange?.(event);
-            onValueChange?.(event.target.value);
-          }}
-          placeholder="Ask a follow-up question, paste context, or describe what you need..."
-          value={value}
-          {...textareaProps}
-        />
+    return (
+      <form
+        className={cn(formShellVariants(), "w-full p-3", className)}
+        onSubmit={onSubmit}
+        ref={ref}
+        {...props}
+      >
+        <div className="space-y-3">
+          <Textarea
+            aria-label={inputLabel}
+            className="min-h-[120px] resize-none rounded-xl border-0 bg-transparent p-1 shadow-none focus-visible:ring-0 focus-visible:ring-offset-0"
+            disabled={disabled}
+            onChange={(event) => {
+              textareaProps?.onChange?.(event);
+              onValueChange?.(event.target.value);
+            }}
+            placeholder="Ask a follow-up question, paste context, or describe what you need..."
+            value={value}
+            {...textareaProps}
+          />
 
-        {toolbar ? <div className="flex flex-wrap gap-2">{toolbar}</div> : null}
+          {toolbar ? (
+            <div className="flex flex-wrap gap-2">{toolbar}</div>
+          ) : null}
 
-        <AIChatInputFooter
-          currentLength={currentValue.length}
-          helperText={helperText}
-          isSubmitDisabled={isSubmitDisabled}
-          isSubmitting={isSubmitting}
-          maxLength={maxLength}
-          status={status}
-          submitLabel={submitLabel}
-        />
-      </div>
-    </form>
-  );
-};
-
-AIChatInput.displayName = "AIChatInput";
+          <AIChatInputFooter
+            currentLength={currentValue.length}
+            helperText={helperText}
+            isSubmitDisabled={isSubmitDisabled}
+            isSubmitting={isSubmitting}
+            maxLength={maxLength}
+            status={status}
+            submitLabel={submitLabel}
+          />
+        </div>
+      </form>
+    );
+  },
+);
 
 export { AIChatInput };

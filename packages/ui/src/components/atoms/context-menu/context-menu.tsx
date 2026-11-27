@@ -4,6 +4,7 @@ import * as React from "react";
 
 import { MenuContextTrigger as MenuContextTriggerPart } from "@ui-sdk/react/menu";
 
+import { named } from "../../../lib/named";
 import type { AsChildProps, NarrowPartProps } from "../../../lib/ui-sdk";
 import {
   asChildProps,
@@ -46,42 +47,47 @@ type TriggerProps = AsChildProps &
  * region focusable (`tabIndex={0}`) with a visible focus style, or offer the
  * same actions through another control (WAI-ARIA APG menu pattern).
  */
-const ContextMenuTrigger = ({ asChild, children, ...props }: TriggerProps) => {
-  const slot = asChildProps({ asChild, children });
+const ContextMenuTrigger = /* @__PURE__ */ named(
+  "ContextMenuTrigger",
+  ({ asChild, children, ...props }: TriggerProps) => {
+    const slot = asChildProps({ asChild, children });
 
-  return (
-    <MenuContextTriggerPart
-      render={withDataAttributes("span", openState, slot.render)}
-      {...props}
-    >
-      {slot.children}
-    </MenuContextTriggerPart>
-  );
-};
-ContextMenuTrigger.displayName = "ContextMenuTrigger";
-
-const ContextMenuContent = ({
-  align = "start",
-  className,
-  side = "right",
-  sideOffset = 2,
-  ...props
-}: MenuContentProps) => (
-  <Popup
-    align={align}
-    className={cn("animate-in fade-in-80", className)}
-    side={side}
-    sideOffset={sideOffset}
-    {...props}
-  />
+    return (
+      <MenuContextTriggerPart
+        render={withDataAttributes("span", openState, slot.render)}
+        {...props}
+      >
+        {slot.children}
+      </MenuContextTriggerPart>
+    );
+  },
 );
-ContextMenuContent.displayName = "ContextMenuContent";
 
-const ContextMenuSubContent = ({
-  sideOffset = 0,
-  ...props
-}: MenuContentProps) => <Popup sideOffset={sideOffset} {...props} />;
-ContextMenuSubContent.displayName = "ContextMenuSubContent";
+const ContextMenuContent = /* @__PURE__ */ named(
+  "ContextMenuContent",
+  ({
+    align = "start",
+    className,
+    side = "right",
+    sideOffset = 2,
+    ...props
+  }: MenuContentProps) => (
+    <Popup
+      align={align}
+      className={cn("animate-in fade-in-80", className)}
+      side={side}
+      sideOffset={sideOffset}
+      {...props}
+    />
+  ),
+);
+
+const ContextMenuSubContent = /* @__PURE__ */ named(
+  "ContextMenuSubContent",
+  ({ sideOffset = 0, ...props }: MenuContentProps) => (
+    <Popup sideOffset={sideOffset} {...props} />
+  ),
+);
 
 export {
   ContextMenu,

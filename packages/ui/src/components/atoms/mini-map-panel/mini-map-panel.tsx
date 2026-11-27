@@ -1,3 +1,4 @@
+import { named } from "../../../lib/named";
 import { cn } from "../../../lib/utils";
 
 export type MiniMapMarker = {
@@ -23,77 +24,78 @@ export type MiniMapPanelProps = React.ComponentPropsWithoutRef<"div"> & {
   };
 };
 
-const MiniMapPanel = ({
-  className,
-  markers = [],
-  ref,
-  title = "Overview",
-  viewport,
-  world,
-  ...props
-}: MiniMapPanelProps & { ref?: React.Ref<HTMLDivElement> }) => {
-  const viewportWidth = Math.max(
-    (viewport.width / viewport.zoom / world.width) * 100,
-    8,
-  );
-  const viewportHeight = Math.max(
-    (viewport.height / viewport.zoom / world.height) * 100,
-    8,
-  );
-  const viewportLeft = Math.min(
-    Math.max((viewport.x / world.width) * 100, 0),
-    100 - viewportWidth,
-  );
-  const viewportTop = Math.min(
-    Math.max((viewport.y / world.height) * 100, 0),
-    100 - viewportHeight,
-  );
+const MiniMapPanel = /* @__PURE__ */ named(
+  "MiniMapPanel",
+  ({
+    className,
+    markers = [],
+    ref,
+    title = "Overview",
+    viewport,
+    world,
+    ...props
+  }: MiniMapPanelProps & { ref?: React.Ref<HTMLDivElement> }) => {
+    const viewportWidth = Math.max(
+      (viewport.width / viewport.zoom / world.width) * 100,
+      8,
+    );
+    const viewportHeight = Math.max(
+      (viewport.height / viewport.zoom / world.height) * 100,
+      8,
+    );
+    const viewportLeft = Math.min(
+      Math.max((viewport.x / world.width) * 100, 0),
+      100 - viewportWidth,
+    );
+    const viewportTop = Math.min(
+      Math.max((viewport.y / world.height) * 100, 0),
+      100 - viewportHeight,
+    );
 
-  return (
-    <div
-      className={cn(
-        "w-52 rounded-sm border border-border bg-background p-3 font-mono",
-        className,
-      )}
-      ref={ref}
-      {...props}
-    >
-      <div className="mb-3 flex items-center justify-between">
-        <div>
-          <div className="text-xs font-medium uppercase tracking-[0.24em] text-muted-foreground">
-            {title}
-          </div>
-          <div className="mt-1 text-xs text-muted-foreground">
-            Zoom {Math.round(viewport.zoom * 100)}%
+    return (
+      <div
+        className={cn(
+          "w-52 rounded-sm border border-border bg-background p-3 font-mono",
+          className,
+        )}
+        ref={ref}
+        {...props}
+      >
+        <div className="mb-3 flex items-center justify-between">
+          <div>
+            <div className="text-xs font-medium uppercase tracking-[0.24em] text-muted-foreground">
+              {title}
+            </div>
+            <div className="mt-1 text-xs text-muted-foreground">
+              Zoom {Math.round(viewport.zoom * 100)}%
+            </div>
           </div>
         </div>
-      </div>
-      <div className="relative aspect-[4/3] overflow-hidden rounded-sm border border-border bg-background">
-        {markers.map((marker) => (
+        <div className="relative aspect-[4/3] overflow-hidden rounded-sm border border-border bg-background">
+          {markers.map((marker) => (
+            <div
+              className="absolute size-1.5 -translate-x-1/2 -translate-y-1/2 bg-foreground"
+              key={marker.id}
+              style={{
+                left: `${(marker.x / world.width) * 100}%`,
+                top: `${(marker.y / world.height) * 100}%`,
+              }}
+              title={marker.label}
+            />
+          ))}
           <div
-            className="absolute size-1.5 -translate-x-1/2 -translate-y-1/2 bg-foreground"
-            key={marker.id}
+            className="absolute border border-foreground/80 bg-transparent"
             style={{
-              left: `${(marker.x / world.width) * 100}%`,
-              top: `${(marker.y / world.height) * 100}%`,
+              height: `${viewportHeight}%`,
+              left: `${viewportLeft}%`,
+              top: `${viewportTop}%`,
+              width: `${viewportWidth}%`,
             }}
-            title={marker.label}
           />
-        ))}
-        <div
-          className="absolute border border-foreground/80 bg-transparent"
-          style={{
-            height: `${viewportHeight}%`,
-            left: `${viewportLeft}%`,
-            top: `${viewportTop}%`,
-            width: `${viewportWidth}%`,
-          }}
-        />
+        </div>
       </div>
-    </div>
-  );
-};
-
-MiniMapPanel.displayName = "MiniMapPanel";
+    );
+  },
+);
 
 export { MiniMapPanel };

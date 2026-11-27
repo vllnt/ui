@@ -1,3 +1,4 @@
+import { named } from "../../../lib/named";
 import { cn } from "../../../lib/utils";
 
 /** Heading level 1–6. Drives both the semantic element and the scale step. */
@@ -49,23 +50,19 @@ const headingBase =
  * @example
  * <Heading level={2} size={1}>An h2 sized like an h1</Heading>
  */
-const Heading = ({
-  className,
-  level = 2,
-  ref,
-  size,
-  ...props
-}: HeadingProps) => {
-  const Tag = headingTag[level];
+const Heading = /* @__PURE__ */ named(
+  "Heading",
+  ({ className, level = 2, ref, size, ...props }: HeadingProps) => {
+    const Tag = headingTag[level];
 
-  return (
-    <Tag
-      className={cn(headingBase, headingSize[size ?? level], className)}
-      ref={ref}
-      {...props}
-    />
-  );
-};
-Heading.displayName = "Heading";
+    return (
+      <Tag
+        className={cn(headingBase, headingSize[size ?? level], className)}
+        ref={ref}
+        {...props}
+      />
+    );
+  },
+);
 
 export { Heading };

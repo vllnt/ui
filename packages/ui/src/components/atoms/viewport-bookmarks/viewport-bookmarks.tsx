@@ -2,6 +2,7 @@
 
 import type { ComponentPropsWithoutRef, ReactNode } from "react";
 
+import { named } from "../../../lib/named";
 import { cn } from "../../../lib/utils";
 
 /**
@@ -144,55 +145,57 @@ const RowBody = (props: { bookmark: ViewportBookmark }): React.ReactElement => {
  *
  * @public
  */
-export const ViewportBookmarks = ({
-  ref,
-  ...props
-}: ViewportBookmarksProps & { ref?: React.Ref<HTMLElement> }) => {
-  const {
-    activeId,
-    bookmarks,
-    className,
-    labels,
-    onSelect,
-    title = "Saved views",
-    ...rest
-  } = props;
-  const resolvedLabels = { ...DEFAULT_LABELS, ...labels };
-  return (
-    <section
-      aria-label={resolvedLabels.region}
-      className={cn(
-        "flex w-full flex-col gap-1 rounded-lg border border-border bg-background p-2 text-foreground",
-        className,
-      )}
-      data-viewport-bookmarks
-      ref={ref}
-      {...rest}
-    >
-      <header className="px-2 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">
-        {title}
-      </header>
-      {bookmarks.length === 0 ? (
-        <p
-          className="px-2 py-3 text-center text-[11px] text-muted-foreground"
-          data-viewport-bookmarks-state="empty"
-        >
-          {resolvedLabels.empty}
-        </p>
-      ) : (
-        <ul className="space-y-0.5">
-          {bookmarks.map((bookmark) => (
-            <li key={bookmark.id}>
-              <Row
-                active={activeId === bookmark.id}
-                bookmark={bookmark}
-                onSelect={onSelect}
-              />
-            </li>
-          ))}
-        </ul>
-      )}
-    </section>
-  );
-};
-ViewportBookmarks.displayName = "ViewportBookmarks";
+export const ViewportBookmarks = /* @__PURE__ */ named(
+  "ViewportBookmarks",
+  ({
+    ref,
+    ...props
+  }: ViewportBookmarksProps & { ref?: React.Ref<HTMLElement> }) => {
+    const {
+      activeId,
+      bookmarks,
+      className,
+      labels,
+      onSelect,
+      title = "Saved views",
+      ...rest
+    } = props;
+    const resolvedLabels = { ...DEFAULT_LABELS, ...labels };
+    return (
+      <section
+        aria-label={resolvedLabels.region}
+        className={cn(
+          "flex w-full flex-col gap-1 rounded-lg border border-border bg-background p-2 text-foreground",
+          className,
+        )}
+        data-viewport-bookmarks
+        ref={ref}
+        {...rest}
+      >
+        <header className="px-2 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">
+          {title}
+        </header>
+        {bookmarks.length === 0 ? (
+          <p
+            className="px-2 py-3 text-center text-[11px] text-muted-foreground"
+            data-viewport-bookmarks-state="empty"
+          >
+            {resolvedLabels.empty}
+          </p>
+        ) : (
+          <ul className="space-y-0.5">
+            {bookmarks.map((bookmark) => (
+              <li key={bookmark.id}>
+                <Row
+                  active={activeId === bookmark.id}
+                  bookmark={bookmark}
+                  onSelect={onSelect}
+                />
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
+    );
+  },
+);

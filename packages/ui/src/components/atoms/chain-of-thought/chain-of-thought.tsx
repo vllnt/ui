@@ -2,6 +2,7 @@ import { Children } from "react";
 
 import { Check, LoaderCircle, X } from "lucide-react";
 
+import { named } from "../../../lib/named";
 import { cn } from "../../../lib/utils";
 import { cva, type VariantProps } from "../../../lib/variants";
 
@@ -119,21 +120,23 @@ function ChainOfThoughtItem({
  *   ]}
  * />
  */
-export const ChainOfThought = ({
-  className,
-  ref,
-  steps,
-}: ChainOfThoughtProps & { ref?: React.Ref<HTMLOListElement> }) => (
-  <ol className={cn("flex flex-col", className)} ref={ref}>
-    {Children.toArray(
-      steps.map((step, index) => (
-        <ChainOfThoughtItem
-          index={index}
-          isLast={index === steps.length - 1}
-          step={step}
-        />
-      )),
-    )}
-  </ol>
+export const ChainOfThought = /* @__PURE__ */ named(
+  "ChainOfThought",
+  ({
+    className,
+    ref,
+    steps,
+  }: ChainOfThoughtProps & { ref?: React.Ref<HTMLOListElement> }) => (
+    <ol className={cn("flex flex-col", className)} ref={ref}>
+      {Children.toArray(
+        steps.map((step, index) => (
+          <ChainOfThoughtItem
+            index={index}
+            isLast={index === steps.length - 1}
+            step={step}
+          />
+        )),
+      )}
+    </ol>
+  ),
 );
-ChainOfThought.displayName = "ChainOfThought";

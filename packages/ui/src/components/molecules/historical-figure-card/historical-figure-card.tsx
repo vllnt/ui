@@ -9,6 +9,7 @@ import {
 } from "@ui-sdk/react/collapsible";
 import { ChevronDown, User } from "lucide-react";
 
+import { named } from "../../../lib/named";
 import { keyByOccurrence } from "../../../lib/occurrence-keys";
 import { cn } from "../../../lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "../../atoms/avatar/avatar";
@@ -443,81 +444,83 @@ function FigureLifeBlock({
   );
 }
 
-export const HistoricalFigureCard = ({
-  ref,
-  ...props
-}: HistoricalFigureCardProps & { ref?: React.Ref<HTMLElement> }) => {
-  const {
-    biography,
-    birth,
-    className,
-    connections,
-    death,
-    era,
-    fields,
-    labels,
-    name,
-    portrait,
-    profileHref,
-    quote,
-    title,
-    works,
-    ...rest
-  } = props;
+export const HistoricalFigureCard = /* @__PURE__ */ named(
+  "HistoricalFigureCard",
+  ({
+    ref,
+    ...props
+  }: HistoricalFigureCardProps & { ref?: React.Ref<HTMLElement> }) => {
+    const {
+      biography,
+      birth,
+      className,
+      connections,
+      death,
+      era,
+      fields,
+      labels,
+      name,
+      portrait,
+      profileHref,
+      quote,
+      title,
+      works,
+      ...rest
+    } = props;
 
-  const resolvedLabels = resolveLabels(labels);
+    const resolvedLabels = resolveLabels(labels);
 
-  return (
-    <article
-      className={cn(
-        "flex flex-col gap-4 rounded-2xl border bg-background p-5 text-foreground shadow-sm",
-        className,
-      )}
-      ref={ref}
-      {...rest}
-    >
-      <FigureHeader era={era} name={name} portrait={portrait} title={title} />
+    return (
+      <article
+        className={cn(
+          "flex flex-col gap-4 rounded-2xl border bg-background p-5 text-foreground shadow-sm",
+          className,
+        )}
+        ref={ref}
+        {...rest}
+      >
+        <FigureHeader era={era} name={name} portrait={portrait} title={title} />
 
-      <FigureLifeBlock
-        birth={birth}
-        death={death}
-        lifespanLabel={resolvedLabels.lifespan}
-      />
-
-      {fields && fields.length > 0 ? (
-        <FigureChips heading={resolvedLabels.fields} items={fields} />
-      ) : null}
-
-      {works && works.length > 0 ? (
-        <FigureWorksList heading={resolvedLabels.works} items={works} />
-      ) : null}
-
-      {quote ? <FigureQuote quote={quote} /> : null}
-
-      {connections && connections.length > 0 ? (
-        <FigureConnections
-          heading={resolvedLabels.connections}
-          items={connections}
+        <FigureLifeBlock
+          birth={birth}
+          death={death}
+          lifespanLabel={resolvedLabels.lifespan}
         />
-      ) : null}
 
-      {biography ? (
-        <FigureBio
-          biography={biography}
-          collapseLabel={resolvedLabels.collapseBio}
-          expandLabel={resolvedLabels.expandBio}
-        />
-      ) : null}
+        {fields && fields.length > 0 ? (
+          <FigureChips heading={resolvedLabels.fields} items={fields} />
+        ) : null}
 
-      {profileHref ? (
-        <a
-          className="text-sm font-medium text-primary underline-offset-4 hover:underline"
-          href={profileHref}
-        >
-          View full profile →
-        </a>
-      ) : null}
-    </article>
-  );
-};
-HistoricalFigureCard.displayName = "HistoricalFigureCard";
+        {works && works.length > 0 ? (
+          <FigureWorksList heading={resolvedLabels.works} items={works} />
+        ) : null}
+
+        {quote ? <FigureQuote quote={quote} /> : null}
+
+        {connections && connections.length > 0 ? (
+          <FigureConnections
+            heading={resolvedLabels.connections}
+            items={connections}
+          />
+        ) : null}
+
+        {biography ? (
+          <FigureBio
+            biography={biography}
+            collapseLabel={resolvedLabels.collapseBio}
+            expandLabel={resolvedLabels.expandBio}
+          />
+        ) : null}
+
+        {profileHref ? (
+          <a
+            className="text-sm font-medium text-primary underline-offset-4 hover:underline"
+            href={profileHref}
+          >
+            View full profile →
+          </a>
+        ) : null}
+      </article>
+    );
+  },
+);

@@ -2,6 +2,7 @@
 
 import type { ComponentPropsWithoutRef, ReactNode } from "react";
 
+import { named } from "../../../lib/named";
 import { cn } from "../../../lib/utils";
 
 /**
@@ -135,32 +136,34 @@ const Body = (props: {
  *
  * @public
  */
-export const PropertySection = ({
-  ref,
-  ...props
-}: PropertySectionProps & { ref?: React.Ref<HTMLElement> }) => {
-  const {
-    className,
-    collapsible = false,
-    entries,
-    labels,
-    title,
-    ...rest
-  } = props;
-  const resolvedLabels = { ...DEFAULT_LABELS, ...labels };
-  return (
-    <section
-      aria-label={resolvedLabels.region}
-      className={cn(
-        "rounded-lg border bg-background text-foreground",
-        className,
-      )}
-      data-property-section
-      ref={ref}
-      {...rest}
-    >
-      <Body collapsible={collapsible} entries={entries} title={title} />
-    </section>
-  );
-};
-PropertySection.displayName = "PropertySection";
+export const PropertySection = /* @__PURE__ */ named(
+  "PropertySection",
+  ({
+    ref,
+    ...props
+  }: PropertySectionProps & { ref?: React.Ref<HTMLElement> }) => {
+    const {
+      className,
+      collapsible = false,
+      entries,
+      labels,
+      title,
+      ...rest
+    } = props;
+    const resolvedLabels = { ...DEFAULT_LABELS, ...labels };
+    return (
+      <section
+        aria-label={resolvedLabels.region}
+        className={cn(
+          "rounded-lg border bg-background text-foreground",
+          className,
+        )}
+        data-property-section
+        ref={ref}
+        {...rest}
+      >
+        <Body collapsible={collapsible} entries={entries} title={title} />
+      </section>
+    );
+  },
+);

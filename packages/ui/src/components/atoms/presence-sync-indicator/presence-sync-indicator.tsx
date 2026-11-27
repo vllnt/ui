@@ -2,6 +2,7 @@
 
 import type { ComponentPropsWithoutRef, ReactNode } from "react";
 
+import { named } from "../../../lib/named";
 import { cn } from "../../../lib/utils";
 
 /**
@@ -86,41 +87,43 @@ export type PresenceSyncIndicatorProps = {
  *
  * @public
  */
-export const PresenceSyncIndicator = ({
-  ref,
-  ...props
-}: PresenceSyncIndicatorProps & { ref?: React.Ref<HTMLDivElement> }) => {
-  const { className, label, labels, state, status, ...rest } = props;
-  const resolvedLabels = { ...DEFAULT_LABELS, ...labels };
-  const text = label ?? STATE_LABEL[state];
-  return (
-    <div
-      aria-label={`${resolvedLabels.region}: ${STATE_LABEL[state]}`}
-      className={cn(
-        "inline-flex items-center gap-1.5 rounded-full border border-border bg-background px-2 py-1 text-[11px] shadow-sm",
-        className,
-      )}
-      data-presence-state={state}
-      data-presence-sync
-      ref={ref}
-      role="status"
-      {...rest}
-    >
-      <span
-        aria-hidden="true"
-        className={cn("size-1.5 rounded-full", STATE_DOT[state])}
-        data-presence-sync-dot
-      />
-      <span className={cn("font-medium", STATE_TEXT[state])}>{text}</span>
-      {status ? (
+export const PresenceSyncIndicator = /* @__PURE__ */ named(
+  "PresenceSyncIndicator",
+  ({
+    ref,
+    ...props
+  }: PresenceSyncIndicatorProps & { ref?: React.Ref<HTMLDivElement> }) => {
+    const { className, label, labels, state, status, ...rest } = props;
+    const resolvedLabels = { ...DEFAULT_LABELS, ...labels };
+    const text = label ?? STATE_LABEL[state];
+    return (
+      <div
+        aria-label={`${resolvedLabels.region}: ${STATE_LABEL[state]}`}
+        className={cn(
+          "inline-flex items-center gap-1.5 rounded-full border border-border bg-background px-2 py-1 text-[11px] shadow-sm",
+          className,
+        )}
+        data-presence-state={state}
+        data-presence-sync
+        ref={ref}
+        role="status"
+        {...rest}
+      >
         <span
-          className="text-[10px] text-muted-foreground"
-          data-presence-sync-status
-        >
-          {status}
-        </span>
-      ) : null}
-    </div>
-  );
-};
-PresenceSyncIndicator.displayName = "PresenceSyncIndicator";
+          aria-hidden="true"
+          className={cn("size-1.5 rounded-full", STATE_DOT[state])}
+          data-presence-sync-dot
+        />
+        <span className={cn("font-medium", STATE_TEXT[state])}>{text}</span>
+        {status ? (
+          <span
+            className="text-[10px] text-muted-foreground"
+            data-presence-sync-status
+          >
+            {status}
+          </span>
+        ) : null}
+      </div>
+    );
+  },
+);

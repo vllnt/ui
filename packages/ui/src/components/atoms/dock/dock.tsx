@@ -3,6 +3,7 @@
 import * as React from "react";
 
 import type { MaterialProps } from "../../../lib/material";
+import { named } from "../../../lib/named";
 import { cn } from "../../../lib/utils";
 
 /** Props for {@link Dock}. `material="solid"` opts out of glass. */
@@ -154,38 +155,40 @@ function useDockMagnifier(): {
  * </Dock>
  * ```
  */
-export const Dock = ({
-  children,
-  className,
-  material = "glass",
-  ref,
-  ...props
-}: DockProps & { ref?: React.Ref<HTMLDivElement> }) => {
-  const { magnifier, trackPointer } = useDockMagnifier();
+export const Dock = /* @__PURE__ */ named(
+  "Dock",
+  ({
+    children,
+    className,
+    material = "glass",
+    ref,
+    ...props
+  }: DockProps & { ref?: React.Ref<HTMLDivElement> }) => {
+    const { magnifier, trackPointer } = useDockMagnifier();
 
-  return (
-    <DockMagnifierContext.Provider value={magnifier}>
-      <div
-        className={cn(
-          "vllnt-glass-floating flex items-end gap-2 rounded-2xl border p-2",
-          className,
-        )}
-        data-material={material}
-        onPointerLeave={() => {
-          trackPointer(null);
-        }}
-        onPointerMove={(event) => {
-          trackPointer(event.clientX);
-        }}
-        ref={ref}
-        {...props}
-      >
-        {children}
-      </div>
-    </DockMagnifierContext.Provider>
-  );
-};
-Dock.displayName = "Dock";
+    return (
+      <DockMagnifierContext.Provider value={magnifier}>
+        <div
+          className={cn(
+            "vllnt-glass-floating flex items-end gap-2 rounded-2xl border p-2",
+            className,
+          )}
+          data-material={material}
+          onPointerLeave={() => {
+            trackPointer(null);
+          }}
+          onPointerMove={(event) => {
+            trackPointer(event.clientX);
+          }}
+          ref={ref}
+          {...props}
+        >
+          {children}
+        </div>
+      </DockMagnifierContext.Provider>
+    );
+  },
+);
 
 /**
  * Single dock entry that scales up as the pointer moves toward its center.
@@ -197,45 +200,47 @@ Dock.displayName = "Dock";
  * <DockIcon>Home</DockIcon>
  * ```
  */
-export const DockIcon = ({
-  children,
-  className,
-  ref,
-  style,
-  ...props
-}: DockIconProps & { ref?: React.Ref<HTMLDivElement> }) => {
-  const magnifier = React.use(DockMagnifierContext);
-  const reference = React.useRef<HTMLDivElement>(null);
-  const hasCustomTransform = style?.transform !== undefined;
+export const DockIcon = /* @__PURE__ */ named(
+  "DockIcon",
+  ({
+    children,
+    className,
+    ref,
+    style,
+    ...props
+  }: DockIconProps & { ref?: React.Ref<HTMLDivElement> }) => {
+    const magnifier = React.use(DockMagnifierContext);
+    const reference = React.useRef<HTMLDivElement>(null);
+    const hasCustomTransform = style?.transform !== undefined;
 
-  React.useEffect(() => {
-    const icon = reference.current;
-    if (!magnifier || !icon || hasCustomTransform) {
-      return;
-    }
-    return magnifier.register(icon);
-  }, [hasCustomTransform, magnifier]);
+    React.useEffect(() => {
+      const icon = reference.current;
+      if (!magnifier || !icon || hasCustomTransform) {
+        return;
+      }
+      return magnifier.register(icon);
+    }, [hasCustomTransform, magnifier]);
 
-  const setReferences = React.useCallback(
-    (node: HTMLDivElement | null): void => {
-      reference.current = node;
-      assignRef(ref, node);
-    },
-    [ref],
-  );
+    const setReferences = React.useCallback(
+      (node: HTMLDivElement | null): void => {
+        reference.current = node;
+        assignRef(ref, node);
+      },
+      [ref],
+    );
 
-  return (
-    <div
-      className={cn(
-        "flex aspect-square w-12 items-center justify-center rounded-xl bg-accent text-accent-foreground transition-transform",
-        className,
-      )}
-      ref={setReferences}
-      style={{ transform: "scale(1)", ...style }}
-      {...props}
-    >
-      {children}
-    </div>
-  );
-};
-DockIcon.displayName = "DockIcon";
+    return (
+      <div
+        className={cn(
+          "flex aspect-square w-12 items-center justify-center rounded-xl bg-accent text-accent-foreground transition-transform",
+          className,
+        )}
+        ref={setReferences}
+        style={{ transform: "scale(1)", ...style }}
+        {...props}
+      >
+        {children}
+      </div>
+    );
+  },
+);

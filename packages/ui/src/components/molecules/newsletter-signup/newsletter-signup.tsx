@@ -12,6 +12,7 @@ import {
 
 import { CheckCircle2, Loader2, XCircle } from "lucide-react";
 
+import { named } from "../../../lib/named";
 import { cn } from "../../../lib/utils";
 import { Button } from "../../atoms/button/button";
 import { Input } from "../../atoms/input/input";
@@ -320,55 +321,57 @@ function useNewsletterSignupController(
   };
 }
 
-export const NewsletterSignup = ({
-  ref,
-  ...props
-}: NewsletterSignupProps & { ref?: React.Ref<HTMLFormElement> }) => {
-  const {
-    autoComplete = "email",
-    className,
-    labels,
-    onStatusChange,
-    onSubmit,
-    validate,
-    variant = "inline",
-    ...rest
-  } = props;
-  const resolvedLabels = { ...DEFAULT_LABELS, ...labels };
-  const inputId = useId();
-  const errorId = useId();
-  const controller = useNewsletterSignupController({
-    labels: resolvedLabels,
-    onStatusChange,
-    onSubmit,
-    validate,
-  });
+export const NewsletterSignup = /* @__PURE__ */ named(
+  "NewsletterSignup",
+  ({
+    ref,
+    ...props
+  }: NewsletterSignupProps & { ref?: React.Ref<HTMLFormElement> }) => {
+    const {
+      autoComplete = "email",
+      className,
+      labels,
+      onStatusChange,
+      onSubmit,
+      validate,
+      variant = "inline",
+      ...rest
+    } = props;
+    const resolvedLabels = { ...DEFAULT_LABELS, ...labels };
+    const inputId = useId();
+    const errorId = useId();
+    const controller = useNewsletterSignupController({
+      labels: resolvedLabels,
+      onStatusChange,
+      onSubmit,
+      validate,
+    });
 
-  if (controller.status === "sent") {
+    if (controller.status === "sent") {
+      return (
+        <SuccessPanel className={className} message={resolvedLabels.success} />
+      );
+    }
+
     return (
-      <SuccessPanel className={className} message={resolvedLabels.success} />
+      <FormBody
+        autoComplete={autoComplete}
+        className={className}
+        errorId={errorId}
+        formRef={ref}
+        inputId={inputId}
+        inputRef={controller.inputRef}
+        labels={resolvedLabels}
+        message={controller.errorMessage}
+        onChange={controller.handleChange}
+        onSubmit={controller.handleSubmit}
+        rest={rest}
+        stacked={variant === "stacked"}
+        status={controller.status}
+      />
     );
-  }
-
-  return (
-    <FormBody
-      autoComplete={autoComplete}
-      className={className}
-      errorId={errorId}
-      formRef={ref}
-      inputId={inputId}
-      inputRef={controller.inputRef}
-      labels={resolvedLabels}
-      message={controller.errorMessage}
-      onChange={controller.handleChange}
-      onSubmit={controller.handleSubmit}
-      rest={rest}
-      stacked={variant === "stacked"}
-      status={controller.status}
-    />
-  );
-};
-NewsletterSignup.displayName = "NewsletterSignup";
+  },
+);
 
 type FormBodyProps = {
   autoComplete: string;

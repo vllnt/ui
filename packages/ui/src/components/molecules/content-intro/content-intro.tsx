@@ -5,6 +5,7 @@ import { memo, useEffect, useRef } from "react";
 import type { ReactNode } from "react";
 
 import type { Material } from "../../../lib/material";
+import { named } from "../../../lib/named";
 import type { HeadingTag } from "../../../lib/types";
 import { cn } from "../../../lib/utils";
 import { Button } from "../../atoms/button/button";
@@ -302,5 +303,7 @@ function ContentIntroImpl({
   );
 }
 
-export const ContentIntro = memo(ContentIntroImpl);
-ContentIntro.displayName = "ContentIntro";
+export const ContentIntro = /* @__PURE__ */ named(
+  "ContentIntro",
+  /* @__PURE__ */ memo(ContentIntroImpl),
+);

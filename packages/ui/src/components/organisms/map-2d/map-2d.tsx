@@ -14,6 +14,7 @@ import {
 } from "react";
 
 import type { MaterialProps } from "../../../lib/material";
+import { named } from "../../../lib/named";
 import { cn } from "../../../lib/utils";
 
 const MIN_ZOOM = 1;
@@ -160,28 +161,30 @@ function useMapState(arguments_: {
  *
  * @public
  */
-export const MapControls = ({
-  children,
-  className,
-  material = "glass",
-  ref,
-  ...rest
-}: MaterialProps &
-  ComponentPropsWithoutRef<"div"> & { ref?: React.Ref<HTMLDivElement> }) => (
-  <div
-    aria-label="Map controls"
-    className={cn(
-      "vllnt-glass absolute right-3 top-3 z-20 flex flex-col gap-1 rounded-md border p-1",
-      className,
-    )}
-    data-material={material}
-    ref={ref}
-    {...rest}
-  >
-    {children}
-  </div>
+export const MapControls = /* @__PURE__ */ named(
+  "MapControls",
+  ({
+    children,
+    className,
+    material = "glass",
+    ref,
+    ...rest
+  }: MaterialProps &
+    ComponentPropsWithoutRef<"div"> & { ref?: React.Ref<HTMLDivElement> }) => (
+    <div
+      aria-label="Map controls"
+      className={cn(
+        "vllnt-glass absolute right-3 top-3 z-20 flex flex-col gap-1 rounded-md border p-1",
+        className,
+      )}
+      data-material={material}
+      ref={ref}
+      {...rest}
+    >
+      {children}
+    </div>
+  ),
 );
-MapControls.displayName = "MapControls";
 
 type ControlButtonProps = {
   ariaLabel: string;
@@ -189,79 +192,85 @@ type ControlButtonProps = {
   onActivate: () => void;
 } & Omit<ComponentPropsWithoutRef<"button">, "aria-label" | "onClick" | "type">;
 
-const ControlButton = ({
-  ariaLabel,
-  className,
-  glyph,
-  onActivate,
-  ref,
-  ...rest
-}: ControlButtonProps & { ref?: React.Ref<HTMLButtonElement> }) => (
-  <button
-    aria-label={ariaLabel}
-    className={cn(
-      "inline-flex size-7 items-center justify-center rounded text-sm font-semibold hover:bg-accent focus:outline-none focus-visible:ring-2 focus-visible:ring-ring",
-      className,
-    )}
-    onClick={onActivate}
-    ref={ref}
-    type="button"
-    {...rest}
-  >
-    {glyph}
-  </button>
+const ControlButton = /* @__PURE__ */ named(
+  "ControlButton",
+  ({
+    ariaLabel,
+    className,
+    glyph,
+    onActivate,
+    ref,
+    ...rest
+  }: ControlButtonProps & { ref?: React.Ref<HTMLButtonElement> }) => (
+    <button
+      aria-label={ariaLabel}
+      className={cn(
+        "inline-flex size-7 items-center justify-center rounded text-sm font-semibold hover:bg-accent focus:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+        className,
+      )}
+      onClick={onActivate}
+      ref={ref}
+      type="button"
+      {...rest}
+    >
+      {glyph}
+    </button>
+  ),
 );
-ControlButton.displayName = "ControlButton";
 
 /**
  * Zoom-in button. Multiplies the zoom factor up to a max.
  *
  * @public
  */
-export const MapZoomIn = ({
-  ref,
-  ...rest
-}: Omit<
-  ComponentPropsWithoutRef<"button">,
-  "aria-label" | "onClick" | "type"
-> & { ref?: React.Ref<HTMLButtonElement> }) => {
-  const { labels, zoomIn } = useMapContext();
-  return (
-    <ControlButton
-      ariaLabel={labels.zoomIn}
-      glyph="+"
-      onActivate={zoomIn}
-      ref={ref}
-      {...rest}
-    />
-  );
-};
-MapZoomIn.displayName = "MapZoomIn";
+export const MapZoomIn = /* @__PURE__ */ named(
+  "MapZoomIn",
+  ({
+    ref,
+    ...rest
+  }: Omit<
+    ComponentPropsWithoutRef<"button">,
+    "aria-label" | "onClick" | "type"
+  > & { ref?: React.Ref<HTMLButtonElement> }) => {
+    const { labels, zoomIn } = useMapContext();
+    return (
+      <ControlButton
+        ariaLabel={labels.zoomIn}
+        glyph="+"
+        onActivate={zoomIn}
+        ref={ref}
+        {...rest}
+      />
+    );
+  },
+);
 
 /**
  * Zoom-out button.
  *
  * @public
  */
-export const MapZoomOut = ({
-  ref,
-  ...rest
-}: Omit<
-  ComponentPropsWithoutRef<"button">,
-  "aria-label" | "onClick" | "type"
-> & { ref?: React.Ref<HTMLButtonElement> }) => {
-  const { labels, zoomOut } = useMapContext();
-  return (
-    <ControlButton
-      ariaLabel={labels.zoomOut}
-      glyph="−"
-      onActivate={zoomOut}
-      ref={ref}
-      {...rest}
-    />
-  );
-};
-MapZoomOut.displayName = "MapZoomOut";
+export const MapZoomOut = /* @__PURE__ */ named(
+  "MapZoomOut",
+  ({
+    ref,
+    ...rest
+  }: Omit<
+    ComponentPropsWithoutRef<"button">,
+    "aria-label" | "onClick" | "type"
+  > & { ref?: React.Ref<HTMLButtonElement> }) => {
+    const { labels, zoomOut } = useMapContext();
+    return (
+      <ControlButton
+        ariaLabel={labels.zoomOut}
+        glyph="−"
+        onActivate={zoomOut}
+        ref={ref}
+        {...rest}
+      />
+    );
+  },
+);
 
 /**
  * Props for {@link MapMarker}.
@@ -285,17 +294,19 @@ export type MapMarkerProps = {
  *
  * @public
  */
-export const MapMarkerIcon = ({
-  children,
-  className,
-  ref,
-  ...rest
-}: ComponentPropsWithoutRef<"g"> & { ref?: React.Ref<SVGGElement> }) => (
-  <g className={cn("text-primary", className)} ref={ref} {...rest}>
-    {children}
-  </g>
+export const MapMarkerIcon = /* @__PURE__ */ named(
+  "MapMarkerIcon",
+  ({
+    children,
+    className,
+    ref,
+    ...rest
+  }: ComponentPropsWithoutRef<"g"> & { ref?: React.Ref<SVGGElement> }) => (
+    <g className={cn("text-primary", className)} ref={ref} {...rest}>
+      {children}
+    </g>
+  ),
 );
-MapMarkerIcon.displayName = "MapMarkerIcon";
 
 type MarkerVisualProps = {
   children?: ReactNode;
@@ -322,56 +333,58 @@ function MarkerVisual({ children }: MarkerVisualProps): ReactNode {
  *
  * @public
  */
-export const MapMarker = ({
-  ref,
-  ...props
-}: MapMarkerProps & { ref?: React.Ref<HTMLButtonElement> }) => {
-  const { children, className, onSelect, popup, position, title, ...rest } =
-    props;
-  const { project } = useMapContext();
-  const point = project(position);
-  const markerId = useId();
-  const popupId = `${markerId}-popup`;
-  const labelText =
-    title ??
-    (typeof popup === "string" ? popup : `Marker at ${position.join(", ")}`);
+export const MapMarker = /* @__PURE__ */ named(
+  "MapMarker",
+  ({
+    ref,
+    ...props
+  }: MapMarkerProps & { ref?: React.Ref<HTMLButtonElement> }) => {
+    const { children, className, onSelect, popup, position, title, ...rest } =
+      props;
+    const { project } = useMapContext();
+    const point = project(position);
+    const markerId = useId();
+    const popupId = `${markerId}-popup`;
+    const labelText =
+      title ??
+      (typeof popup === "string" ? popup : `Marker at ${position.join(", ")}`);
 
-  return (
-    <foreignObject height="48" width="48" x={point.x - 24} y={point.y - 24}>
-      <button
-        aria-describedby={popup ? popupId : undefined}
-        aria-label={labelText}
-        className={cn(
-          "group relative inline-flex h-full w-full cursor-pointer items-center justify-center bg-transparent p-0 outline-none focus:outline-none focus-visible:ring-2 focus-visible:ring-ring",
-          className,
-        )}
-        data-marker-id={markerId}
-        onClick={onSelect}
-        ref={ref}
-        type="button"
-        {...rest}
-      >
-        <svg
-          aria-hidden="true"
-          className="pointer-events-none size-6 overflow-visible"
-          viewBox="-10 -10 20 20"
+    return (
+      <foreignObject height="48" width="48" x={point.x - 24} y={point.y - 24}>
+        <button
+          aria-describedby={popup ? popupId : undefined}
+          aria-label={labelText}
+          className={cn(
+            "group relative inline-flex h-full w-full cursor-pointer items-center justify-center bg-transparent p-0 outline-none focus:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+            className,
+          )}
+          data-marker-id={markerId}
+          onClick={onSelect}
+          ref={ref}
+          type="button"
+          {...rest}
         >
-          <MarkerVisual>{children}</MarkerVisual>
-        </svg>
-        {popup ? (
-          <span
-            className="pointer-events-none absolute bottom-full left-1/2 z-10 mb-1 hidden min-w-32 max-w-xs -translate-x-1/2 rounded-md border bg-popover px-2 py-1 text-center text-xs text-popover-foreground shadow-md group-hover:block group-focus-visible:block"
-            id={popupId}
-            role="tooltip"
+          <svg
+            aria-hidden="true"
+            className="pointer-events-none size-6 overflow-visible"
+            viewBox="-10 -10 20 20"
           >
-            {popup}
-          </span>
-        ) : null}
-      </button>
-    </foreignObject>
-  );
-};
-MapMarker.displayName = "MapMarker";
+            <MarkerVisual>{children}</MarkerVisual>
+          </svg>
+          {popup ? (
+            <span
+              className="pointer-events-none absolute bottom-full left-1/2 z-10 mb-1 hidden min-w-32 max-w-xs -translate-x-1/2 rounded-md border bg-popover px-2 py-1 text-center text-xs text-popover-foreground shadow-md group-hover:block group-focus-visible:block"
+              id={popupId}
+              role="tooltip"
+            >
+              {popup}
+            </span>
+          ) : null}
+        </button>
+      </foreignObject>
+    );
+  },
+);
 
 /**
  * Props for {@link MapPopup}.
@@ -389,29 +402,33 @@ export type MapPopupProps = {
  *
  * @public
  */
-export const MapPopup = ({
-  ref,
-  ...props
-}: MapPopupProps & { ref?: React.Ref<HTMLDivElement> }) => {
-  const { children, className, position, ...rest } = props;
-  const { project } = useMapContext();
-  const point = project(position);
-  return (
-    <foreignObject height="200" width="320" x={point.x - 160} y={point.y - 220}>
-      <div
-        className={cn(
-          "pointer-events-auto inline-block max-w-xs -translate-y-2 rounded-md border bg-popover px-3 py-2 text-sm text-popover-foreground shadow-md",
-          className,
-        )}
-        ref={ref}
-        {...rest}
+export const MapPopup = /* @__PURE__ */ named(
+  "MapPopup",
+  ({ ref, ...props }: MapPopupProps & { ref?: React.Ref<HTMLDivElement> }) => {
+    const { children, className, position, ...rest } = props;
+    const { project } = useMapContext();
+    const point = project(position);
+    return (
+      <foreignObject
+        height="200"
+        width="320"
+        x={point.x - 160}
+        y={point.y - 220}
       >
-        {children}
-      </div>
-    </foreignObject>
-  );
-};
-MapPopup.displayName = "MapPopup";
+        <div
+          className={cn(
+            "pointer-events-auto inline-block max-w-xs -translate-y-2 rounded-md border bg-popover px-3 py-2 text-sm text-popover-foreground shadow-md",
+            className,
+          )}
+          ref={ref}
+          {...rest}
+        >
+          {children}
+        </div>
+      </foreignObject>
+    );
+  },
+);
 
 /**
  * GeoJSON polygon-style payload accepted by {@link MapLayer}.
@@ -449,48 +466,47 @@ export type MapLayerProps = {
  *
  * @public
  */
-export const MapLayer = ({
-  ref,
-  ...props
-}: MapLayerProps & { ref?: React.Ref<SVGGElement> }) => {
-  const {
-    className,
-    data,
-    fill = "rgba(59, 130, 246, 0.15)",
-    stroke = "currentColor",
-    strokeWidth = 2,
-    ...rest
-  } = props;
-  const { project } = useMapContext();
-  return (
-    <g
-      className={cn("text-blue-500/70", className)}
-      data-layer="polygon"
-      ref={ref}
-      {...rest}
-    >
-      {data.map((shape) => {
-        const points = shape.coordinates
-          .map((coord) => {
-            const projected = project(coord);
-            return `${projected.x.toString()},${projected.y.toString()}`;
-          })
-          .join(" ");
-        return (
-          <polygon
-            data-shape-id={shape.id}
-            fill={fill}
-            key={shape.id}
-            points={points}
-            stroke={stroke}
-            strokeWidth={strokeWidth}
-          />
-        );
-      })}
-    </g>
-  );
-};
-MapLayer.displayName = "MapLayer";
+export const MapLayer = /* @__PURE__ */ named(
+  "MapLayer",
+  ({ ref, ...props }: MapLayerProps & { ref?: React.Ref<SVGGElement> }) => {
+    const {
+      className,
+      data,
+      fill = "rgba(59, 130, 246, 0.15)",
+      stroke = "currentColor",
+      strokeWidth = 2,
+      ...rest
+    } = props;
+    const { project } = useMapContext();
+    return (
+      <g
+        className={cn("text-blue-500/70", className)}
+        data-layer="polygon"
+        ref={ref}
+        {...rest}
+      >
+        {data.map((shape) => {
+          const points = shape.coordinates
+            .map((coord) => {
+              const projected = project(coord);
+              return `${projected.x.toString()},${projected.y.toString()}`;
+            })
+            .join(" ");
+          return (
+            <polygon
+              data-shape-id={shape.id}
+              fill={fill}
+              key={shape.id}
+              points={points}
+              stroke={stroke}
+              strokeWidth={strokeWidth}
+            />
+          );
+        })}
+      </g>
+    );
+  },
+);
 
 type StageProps = {
   backdrop?: string;
@@ -693,48 +709,47 @@ function bucketChildren(children: ReactNode): ChildBuckets {
  *
  * @public
  */
-export const Map2D = ({
-  ref,
-  ...props
-}: Map2DProps & { ref?: React.Ref<HTMLElement> }) => {
-  const {
-    backdrop,
-    backdropAlt,
-    center = [0, 20],
-    children,
-    className,
-    labels,
-    zoom: initialZoom = 1,
-    ...rest
-  } = props;
+export const Map2D = /* @__PURE__ */ named(
+  "Map2D",
+  ({ ref, ...props }: Map2DProps & { ref?: React.Ref<HTMLElement> }) => {
+    const {
+      backdrop,
+      backdropAlt,
+      center = [0, 20],
+      children,
+      className,
+      labels,
+      zoom: initialZoom = 1,
+      ...rest
+    } = props;
 
-  const resolvedLabels = useMemo(
-    () => ({ ...DEFAULT_LABELS, ...labels }),
-    [labels],
-  );
+    const resolvedLabels = useMemo(
+      () => ({ ...DEFAULT_LABELS, ...labels }),
+      [labels],
+    );
 
-  const ctx = useMapState({ center, initialZoom, resolvedLabels });
-  const buckets = useMemo(() => bucketChildren(children), [children]);
+    const ctx = useMapState({ center, initialZoom, resolvedLabels });
+    const buckets = useMemo(() => bucketChildren(children), [children]);
 
-  return (
-    <MapContext.Provider value={ctx}>
-      <section
-        aria-label={resolvedLabels.region}
-        className={cn(
-          "relative aspect-[2/1] w-full overflow-hidden rounded-2xl border bg-background text-foreground",
-          className,
-        )}
-        ref={ref}
-        {...rest}
-      >
-        <Stage backdrop={backdrop} backdropAlt={backdropAlt}>
-          {buckets.layers}
-          {buckets.markers}
-          {buckets.popups}
-        </Stage>
-        {buckets.controls}
-      </section>
-    </MapContext.Provider>
-  );
-};
-Map2D.displayName = "Map2D";
+    return (
+      <MapContext.Provider value={ctx}>
+        <section
+          aria-label={resolvedLabels.region}
+          className={cn(
+            "relative aspect-[2/1] w-full overflow-hidden rounded-2xl border bg-background text-foreground",
+            className,
+          )}
+          ref={ref}
+          {...rest}
+        >
+          <Stage backdrop={backdrop} backdropAlt={backdropAlt}>
+            {buckets.layers}
+            {buckets.markers}
+            {buckets.popups}
+          </Stage>
+          {buckets.controls}
+        </section>
+      </MapContext.Provider>
+    );
+  },
+);

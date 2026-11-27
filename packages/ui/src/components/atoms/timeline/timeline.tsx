@@ -8,6 +8,7 @@ import {
   useMemo,
 } from "react";
 
+import { named } from "../../../lib/named";
 import { cn } from "../../../lib/utils";
 import { cva, type VariantProps } from "../../../lib/variants";
 
@@ -177,33 +178,35 @@ export type TimelineProps = {
  *
  * @public
  */
-export const Timeline = ({
-  children,
-  className,
-  labels,
-  orientation,
-  ref,
-  ...rest
-}: TimelineProps & { ref?: React.Ref<HTMLOListElement> }) => {
-  const resolvedOrientation: TimelineOrientation = orientation ?? "vertical";
-  const contextValue = useMemo<TimelineContextValue>(
-    () => ({ labels: labels ?? {}, orientation: resolvedOrientation }),
-    [labels, resolvedOrientation],
-  );
-  return (
-    <TimelineContext.Provider value={contextValue}>
-      <ol
-        className={cn(timelineVariants({ orientation }), className)}
-        data-orientation={resolvedOrientation}
-        ref={ref}
-        {...rest}
-      >
-        {children}
-      </ol>
-    </TimelineContext.Provider>
-  );
-};
-Timeline.displayName = "Timeline";
+export const Timeline = /* @__PURE__ */ named(
+  "Timeline",
+  ({
+    children,
+    className,
+    labels,
+    orientation,
+    ref,
+    ...rest
+  }: TimelineProps & { ref?: React.Ref<HTMLOListElement> }) => {
+    const resolvedOrientation: TimelineOrientation = orientation ?? "vertical";
+    const contextValue = useMemo<TimelineContextValue>(
+      () => ({ labels: labels ?? {}, orientation: resolvedOrientation }),
+      [labels, resolvedOrientation],
+    );
+    return (
+      <TimelineContext.Provider value={contextValue}>
+        <ol
+          className={cn(timelineVariants({ orientation }), className)}
+          data-orientation={resolvedOrientation}
+          ref={ref}
+          {...rest}
+        >
+          {children}
+        </ol>
+      </TimelineContext.Provider>
+    );
+  },
+);
 
 /**
  * Props for {@link TimelineItem}.
@@ -355,53 +358,57 @@ function ItemBody({
  *
  * @public
  */
-export const TimelineItem = ({
-  ref,
-  ...props
-}: TimelineItemProps & { ref?: React.Ref<HTMLLIElement> }) => {
-  const {
-    children,
-    className,
-    color,
-    date,
-    description,
-    icon,
-    isLast = false,
-    labels,
-    status = "upcoming",
-    title,
-    ...rest
-  } = props;
-  const { labels: groupLabels, orientation } = use(TimelineContext);
-  const statusLabel =
-    labels?.[status] ?? groupLabels[status] ?? DEFAULT_LABELS[status];
-  return (
-    <li
-      className={cn(
-        "relative",
-        orientation === "horizontal"
-          ? "flex flex-1 flex-col items-center gap-2 px-3 pt-1"
-          : "flex items-start gap-3 pb-6 last:pb-0",
-        className,
-      )}
-      data-status={status}
-      ref={ref}
-      {...rest}
-    >
-      {isLast ? null : <Connector orientation={orientation} status={status} />}
-      <Marker color={color} icon={icon} status={status} />
-      <ItemBody
-        date={date}
-        description={description}
-        orientation={orientation}
-        statusLabel={statusLabel}
-        title={title}
+export const TimelineItem = /* @__PURE__ */ named(
+  "TimelineItem",
+  ({
+    ref,
+    ...props
+  }: TimelineItemProps & { ref?: React.Ref<HTMLLIElement> }) => {
+    const {
+      children,
+      className,
+      color,
+      date,
+      description,
+      icon,
+      isLast = false,
+      labels,
+      status = "upcoming",
+      title,
+      ...rest
+    } = props;
+    const { labels: groupLabels, orientation } = use(TimelineContext);
+    const statusLabel =
+      labels?.[status] ?? groupLabels[status] ?? DEFAULT_LABELS[status];
+    return (
+      <li
+        className={cn(
+          "relative",
+          orientation === "horizontal"
+            ? "flex flex-1 flex-col items-center gap-2 px-3 pt-1"
+            : "flex items-start gap-3 pb-6 last:pb-0",
+          className,
+        )}
+        data-status={status}
+        ref={ref}
+        {...rest}
       >
-        {children}
-      </ItemBody>
-    </li>
-  );
-};
-TimelineItem.displayName = "TimelineItem";
+        {isLast ? null : (
+          <Connector orientation={orientation} status={status} />
+        )}
+        <Marker color={color} icon={icon} status={status} />
+        <ItemBody
+          date={date}
+          description={description}
+          orientation={orientation}
+          statusLabel={statusLabel}
+          title={title}
+        >
+          {children}
+        </ItemBody>
+      </li>
+    );
+  },
+);
 
 export { timelineVariants };

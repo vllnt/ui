@@ -2,6 +2,7 @@
 
 import * as React from "react";
 
+import { named } from "../../../lib/named";
 import { moveRovingFocus } from "../../../lib/roving-focus";
 import { useControllableState } from "../../../lib/use-controllable-state";
 import { cn } from "../../../lib/utils";
@@ -37,6 +38,23 @@ function indicatorPosition(button: HTMLButtonElement | null): IndicatorStyle {
   }
 
   return { left: button.offsetLeft, width: button.offsetWidth };
+}
+
+/** Where the pill sits: under the active tab's button, measured after each change. */
+function useIndicator(
+  buttons: React.RefObject<Map<string, HTMLButtonElement>>,
+  active: string | undefined,
+): IndicatorStyle {
+  const [indicator, setIndicator] = React.useState<IndicatorStyle>({
+    left: 0,
+    width: 0,
+  });
+
+  React.useLayoutEffect(() => {
+    setIndicator(indicatorPosition(buttons.current.get(active ?? "") ?? null));
+  }, [active, buttons]);
+
+  return indicator;
 }
 
 function TabButton({
@@ -82,76 +100,73 @@ function TabButton({
  * <AnimatedTabs tabs={[{ value: "a", label: "A" }, { value: "b", label: "B" }]} />
  * ```
  */
-export const AnimatedTabs = ({
-  className,
-  defaultValue,
-  onKeyDown,
-  onValueChange,
-  ref,
-  tabs,
-  value,
-  ...props
-}: AnimatedTabsProps & { ref?: React.Ref<HTMLDivElement> }) => {
-  const [active, setActive] = useControllableState<string | undefined>({
-    defaultValue: defaultValue ?? tabs[0]?.value,
-    onChange: (next) => {
-      if (next !== undefined) onValueChange?.(next);
-    },
+export const AnimatedTabs = /* @__PURE__ */ named(
+  "AnimatedTabs",
+  ({
+    className,
+    defaultValue,
+    onKeyDown,
+    onValueChange,
+    ref,
+    tabs,
     value,
-  });
-  const [indicator, setIndicator] = React.useState<IndicatorStyle>({
-    left: 0,
-    width: 0,
-  });
-  const buttons = React.useRef(new Map<string, HTMLButtonElement>());
+    ...props
+  }: AnimatedTabsProps & { ref?: React.Ref<HTMLDivElement> }) => {
+    const [active, setActive] = useControllableState<string | undefined>({
+      defaultValue: defaultValue ?? tabs[0]?.value,
+      onChange: (next) => {
+        if (next !== undefined) onValueChange?.(next);
+      },
+      value,
+    });
+    const buttons = React.useRef(new Map<string, HTMLButtonElement>());
+    const indicator = useIndicator(buttons, active);
 
-  React.useLayoutEffect(() => {
-    setIndicator(indicatorPosition(buttons.current.get(active ?? "") ?? null));
-  }, [active]);
+    const hasActiveTab = tabs.some((tab) => tab.value === active);
 
-  const hasActiveTab = tabs.some((tab) => tab.value === active);
+    const handleKeyDown = (
+      event: React.KeyboardEvent<HTMLDivElement>,
+    ): void => {
+      onKeyDown?.(event);
+      moveRovingFocus(event, '[role="tab"]', { activate: true });
+    };
 
-  const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>): void => {
-    onKeyDown?.(event);
-    moveRovingFocus(event, '[role="tab"]', { activate: true });
-  };
-
-  return (
-    <div
-      className={cn(
-        "relative inline-flex items-center gap-1 rounded-lg border border-border bg-muted p-1",
-        className,
-      )}
-      onKeyDown={handleKeyDown}
-      ref={ref}
-      role="tablist"
-      tabIndex={-1}
-      {...props}
-    >
-      <span
-        aria-hidden="true"
-        className="absolute top-1 z-0 h-[calc(100%-0.5rem)] rounded-md bg-primary transition-[left,width] duration-300 ease-out motion-reduce:transition-none"
-        style={{ left: indicator.left, width: indicator.width }}
-      />
-      {tabs.map((tab, index) => (
-        <TabButton
-          active={tab.value === active}
-          key={tab.value}
-          label={tab.label}
-          onSelect={() => {
-            setActive(tab.value);
-          }}
-          reference={(node) => {
-            if (node === null) {
-              buttons.current.delete(tab.value);
-            } else {
-              buttons.current.set(tab.value, node);
-            }
-          }}
-          tabStop={tab.value === active || (!hasActiveTab && index === 0)}
+    return (
+      <div
+        className={cn(
+          "relative inline-flex items-center gap-1 rounded-lg border border-border bg-muted p-1",
+          className,
+        )}
+        onKeyDown={handleKeyDown}
+        ref={ref}
+        role="tablist"
+        tabIndex={-1}
+        {...props}
+      >
+        <span
+          aria-hidden="true"
+          className="absolute top-1 z-0 h-[calc(100%-0.5rem)] rounded-md bg-primary transition-[left,width] duration-300 ease-out motion-reduce:transition-none"
+          style={{ left: indicator.left, width: indicator.width }}
         />
-      ))}
-    </div>
-  );
-};
-AnimatedTabs.displayName = "AnimatedTabs";
+        {tabs.map((tab, index) => (
+          <TabButton
+            active={tab.value === active}
+            key={tab.value}
+            label={tab.label}
+            onSelect={() => {
+              setActive(tab.value);
+            }}
+            reference={(node) => {
+              if (node === null) {
+                buttons.current.delete(tab.value);
+              } else {
+                buttons.current.set(tab.value, node);
+              }
+            }}
+            tabStop={tab.value === active || (!hasActiveTab && index === 0)}
+          />
+        ))}
+      </div>
+    );
+  },
+);

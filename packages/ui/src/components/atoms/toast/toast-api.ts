@@ -280,16 +280,16 @@ function dismiss(id?: ToastId): ToastId | undefined {
   return id;
 }
 
-const toast = Object.assign(typed("default"), {
+const toast = /* @__PURE__ */ Object.assign(/* @__PURE__ */ typed("default"), {
   custom,
   dismiss,
-  error: typed("error"),
-  info: typed("info"),
-  loading: typed("loading"),
-  message: typed("default"),
+  error: /* @__PURE__ */ typed("error"),
+  info: /* @__PURE__ */ typed("info"),
+  loading: /* @__PURE__ */ typed("loading"),
+  message: /* @__PURE__ */ typed("default"),
   promise,
-  success: typed("success"),
-  warning: typed("warning"),
+  success: /* @__PURE__ */ typed("success"),
+  warning: /* @__PURE__ */ typed("warning"),
 });
 
 export {

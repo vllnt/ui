@@ -2,6 +2,7 @@
 
 import * as React from "react";
 
+import { named } from "../../../lib/named";
 import { cn } from "../../../lib/utils";
 
 /** Per-segment entrance animation. */
@@ -141,44 +142,46 @@ function Segment({
  * <TextAnimate animation="slide-up">Welcome aboard</TextAnimate>
  * ```
  */
-export const TextAnimate = ({
-  animation = "fade",
-  by = "word",
-  children,
-  className,
-  delay = 60,
-  ref,
-  startOnView = true,
-  ...props
-}: TextAnimateProps & { ref?: React.Ref<HTMLDivElement> }) => {
-  const reduced = usePrefersReducedMotion();
-  const [nodeRef, inView] = useInView(startOnView);
-  const segments = splitText(children, by);
-  const visible = reduced || inView;
+export const TextAnimate = /* @__PURE__ */ named(
+  "TextAnimate",
+  ({
+    animation = "fade",
+    by = "word",
+    children,
+    className,
+    delay = 60,
+    ref,
+    startOnView = true,
+    ...props
+  }: TextAnimateProps & { ref?: React.Ref<HTMLDivElement> }) => {
+    const reduced = usePrefersReducedMotion();
+    const [nodeRef, inView] = useInView(startOnView);
+    const segments = splitText(children, by);
+    const visible = reduced || inView;
 
-  return (
-    <div
-      className={cn(className)}
-      ref={(node) => {
-        nodeRef.current = node;
-        assignRef(ref, node);
-      }}
-      {...props}
-    >
-      <span aria-hidden="true">
-        {segments.map((value, index) => (
-          <Segment
-            animation={reduced ? "fade" : animation}
-            delay={reduced ? 0 : delay}
-            index={index}
-            inView={visible}
-            key={`${value}-${index}`}
-            value={value}
-          />
-        ))}
-      </span>
-      <span className="sr-only">{children}</span>
-    </div>
-  );
-};
-TextAnimate.displayName = "TextAnimate";
+    return (
+      <div
+        className={cn(className)}
+        ref={(node) => {
+          nodeRef.current = node;
+          assignRef(ref, node);
+        }}
+        {...props}
+      >
+        <span aria-hidden="true">
+          {segments.map((value, index) => (
+            <Segment
+              animation={reduced ? "fade" : animation}
+              delay={reduced ? 0 : delay}
+              index={index}
+              inView={visible}
+              key={`${value}-${index}`}
+              value={value}
+            />
+          ))}
+        </span>
+        <span className="sr-only">{children}</span>
+      </div>
+    );
+  },
+);

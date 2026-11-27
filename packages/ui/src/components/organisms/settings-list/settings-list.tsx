@@ -4,6 +4,7 @@ import * as React from "react";
 
 import { ChevronRight } from "lucide-react";
 
+import { named } from "../../../lib/named";
 import { cn } from "../../../lib/utils";
 import { cva, type VariantProps } from "../../../lib/variants";
 import { itemVariants } from "../../atoms/item/item";
@@ -123,48 +124,49 @@ function SettingsListRowShell({
  *   <SettingsListItem label="Notifications" control={<Switch />} />
  * </SettingsList>
  */
-export const SettingsList = ({
-  children,
-  className,
-  description,
-  ref: reference,
-  title,
-  variant,
-  ...props
-}: SettingsListProps & { ref?: React.Ref<HTMLElement> }) => {
-  const baseId = React.useId();
-  const titleId = `${baseId}-title`;
-  const descriptionId = `${baseId}-description`;
+export const SettingsList = /* @__PURE__ */ named(
+  "SettingsList",
+  ({
+    children,
+    className,
+    description,
+    ref: reference,
+    title,
+    variant,
+    ...props
+  }: SettingsListProps & { ref?: React.Ref<HTMLElement> }) => {
+    const baseId = React.useId();
+    const titleId = `${baseId}-title`;
+    const descriptionId = `${baseId}-description`;
 
-  return (
-    <section
-      aria-describedby={description ? descriptionId : undefined}
-      aria-labelledby={title ? titleId : undefined}
-      className={cn(settingsListVariants({ variant }), className)}
-      data-slot="settings-list"
-      ref={reference}
-      {...props}
-    >
-      {title || description ? (
-        <header className="flex flex-col gap-1 border-b px-4 py-3">
-          {title ? (
-            <h2 className="text-sm font-semibold" id={titleId}>
-              {title}
-            </h2>
-          ) : null}
-          {description ? (
-            <p className="text-sm text-muted-foreground" id={descriptionId}>
-              {description}
-            </p>
-          ) : null}
-        </header>
-      ) : null}
-      <ul className="divide-y divide-border">{children}</ul>
-    </section>
-  );
-};
-
-SettingsList.displayName = "SettingsList";
+    return (
+      <section
+        aria-describedby={description ? descriptionId : undefined}
+        aria-labelledby={title ? titleId : undefined}
+        className={cn(settingsListVariants({ variant }), className)}
+        data-slot="settings-list"
+        ref={reference}
+        {...props}
+      >
+        {title || description ? (
+          <header className="flex flex-col gap-1 border-b px-4 py-3">
+            {title ? (
+              <h2 className="text-sm font-semibold" id={titleId}>
+                {title}
+              </h2>
+            ) : null}
+            {description ? (
+              <p className="text-sm text-muted-foreground" id={descriptionId}>
+                {description}
+              </p>
+            ) : null}
+          </header>
+        ) : null}
+        <ul className="divide-y divide-border">{children}</ul>
+      </section>
+    );
+  },
+);
 
 /**
  * One row of a `SettingsList`: label, optional description, leading icon or
@@ -175,70 +177,71 @@ SettingsList.displayName = "SettingsList";
  * @example
  * <SettingsListItem label="Language" meta="English" href="/language" />
  */
-export const SettingsListItem = ({
-  chevron,
-  className,
-  control,
-  description,
-  href,
-  label,
-  leading,
-  meta,
-  onClick,
-  ref: reference,
-  ...props
-}: SettingsListItemProps & { ref?: React.Ref<HTMLLIElement> }) => {
-  const baseId = React.useId();
-  const labelId = `${baseId}-label`;
-  const descriptionId = `${baseId}-description`;
-  const isInteractive = href !== undefined || onClick !== undefined;
-  const showChevron = isInteractive && chevron !== false;
+export const SettingsListItem = /* @__PURE__ */ named(
+  "SettingsListItem",
+  ({
+    chevron,
+    className,
+    control,
+    description,
+    href,
+    label,
+    leading,
+    meta,
+    onClick,
+    ref: reference,
+    ...props
+  }: SettingsListItemProps & { ref?: React.Ref<HTMLLIElement> }) => {
+    const baseId = React.useId();
+    const labelId = `${baseId}-label`;
+    const descriptionId = `${baseId}-description`;
+    const isInteractive = href !== undefined || onClick !== undefined;
+    const showChevron = isInteractive && chevron !== false;
 
-  return (
-    <li
-      className={className}
-      data-slot="settings-list-item"
-      ref={reference}
-      {...props}
-    >
-      <SettingsListRowShell href={href} onClick={onClick}>
-        {leading ? (
-          <span className="flex shrink-0 items-center justify-center [&_svg]:size-5">
-            {leading}
-          </span>
-        ) : null}
-        <span className="flex min-w-0 flex-1 flex-col gap-0.5">
-          <span className="font-medium" id={labelId}>
-            {label}
-          </span>
-          {description ? (
-            <span className="text-muted-foreground" id={descriptionId}>
-              {description}
+    return (
+      <li
+        className={className}
+        data-slot="settings-list-item"
+        ref={reference}
+        {...props}
+      >
+        <SettingsListRowShell href={href} onClick={onClick}>
+          {leading ? (
+            <span className="flex shrink-0 items-center justify-center [&_svg]:size-5">
+              {leading}
             </span>
           ) : null}
-        </span>
-        {meta ? (
-          <span className="max-w-32 shrink-0 text-right text-muted-foreground">
-            {meta}
+          <span className="flex min-w-0 flex-1 flex-col gap-0.5">
+            <span className="font-medium" id={labelId}>
+              {label}
+            </span>
+            {description ? (
+              <span className="text-muted-foreground" id={descriptionId}>
+                {description}
+              </span>
+            ) : null}
           </span>
-        ) : null}
-        {control === undefined
-          ? null
-          : React.cloneElement(control, {
-              "aria-describedby":
-                control.props["aria-describedby"] ??
-                (description ? descriptionId : undefined),
-              "aria-labelledby": control.props["aria-labelledby"] ?? labelId,
-            })}
-        {showChevron ? (
-          <ChevronRight
-            aria-hidden="true"
-            className="size-4 shrink-0 text-muted-foreground"
-          />
-        ) : null}
-      </SettingsListRowShell>
-    </li>
-  );
-};
-
-SettingsListItem.displayName = "SettingsListItem";
+          {meta ? (
+            <span className="max-w-32 shrink-0 text-right text-muted-foreground">
+              {meta}
+            </span>
+          ) : null}
+          {control === undefined
+            ? null
+            : React.cloneElement(control, {
+                "aria-describedby":
+                  control.props["aria-describedby"] ??
+                  (description ? descriptionId : undefined),
+                "aria-labelledby": control.props["aria-labelledby"] ?? labelId,
+              })}
+          {showChevron ? (
+            <ChevronRight
+              aria-hidden="true"
+              className="size-4 shrink-0 text-muted-foreground"
+            />
+          ) : null}
+        </SettingsListRowShell>
+      </li>
+    );
+  },
+);

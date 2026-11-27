@@ -11,6 +11,7 @@ import {
 
 import { Bot, MessageSquarePlus, X } from "lucide-react";
 
+import { named } from "../../../lib/named";
 import { useControllableState } from "../../../lib/use-controllable-state";
 import { useEscapeKey } from "../../../lib/use-escape-key";
 import { cn } from "../../../lib/utils";
@@ -210,43 +211,42 @@ export type AISidebarProps = {
  *
  * @public
  */
-export const AISidebar = ({
-  ref,
-  ...props
-}: AISidebarProps & { ref?: React.Ref<HTMLElement> }) => {
-  const { children, className, closeOnEscape = true, ...rest } = props;
-  const { close, labels, openState, position, width } = useAISidebar();
-  useEscapeKey(close, {
-    enabled: closeOnEscape && openState,
-    target: "document",
-  });
+export const AISidebar = /* @__PURE__ */ named(
+  "AISidebar",
+  ({ ref, ...props }: AISidebarProps & { ref?: React.Ref<HTMLElement> }) => {
+    const { children, className, closeOnEscape = true, ...rest } = props;
+    const { close, labels, openState, position, width } = useAISidebar();
+    useEscapeKey(close, {
+      enabled: closeOnEscape && openState,
+      target: "document",
+    });
 
-  return (
-    <aside
-      aria-hidden={!openState}
-      aria-label={labels.defaultTitle}
-      className={cn(
-        "fixed top-0 z-40 flex h-full flex-col border-border bg-background shadow-lg transition-transform duration-200 ease-out",
-        position === "right" ? "right-0 border-l" : "left-0 border-r",
-        openState
-          ? "translate-x-0"
-          : position === "right"
-            ? "translate-x-full"
-            : "-translate-x-full",
-        "max-w-full",
-        className,
-      )}
-      data-state={openState ? "open" : "closed"}
-      inert={!openState}
-      ref={ref}
-      style={{ width: `${width.toString()}px` }}
-      {...rest}
-    >
-      {children}
-    </aside>
-  );
-};
-AISidebar.displayName = "AISidebar";
+    return (
+      <aside
+        aria-hidden={!openState}
+        aria-label={labels.defaultTitle}
+        className={cn(
+          "fixed top-0 z-40 flex h-full flex-col border-border bg-background shadow-lg transition-transform duration-200 ease-out",
+          position === "right" ? "right-0 border-l" : "left-0 border-r",
+          openState
+            ? "translate-x-0"
+            : position === "right"
+              ? "translate-x-full"
+              : "-translate-x-full",
+          "max-w-full",
+          className,
+        )}
+        data-state={openState ? "open" : "closed"}
+        inert={!openState}
+        ref={ref}
+        style={{ width: `${width.toString()}px` }}
+        {...rest}
+      >
+        {children}
+      </aside>
+    );
+  },
+);
 
 /**
  * Header slot for an {@link AISidebar}. Use to host the title, model
@@ -254,24 +254,26 @@ AISidebar.displayName = "AISidebar";
  *
  * @public
  */
-export const AISidebarHeader = ({
-  children,
-  className,
-  ref,
-  ...rest
-}: ComponentPropsWithoutRef<"header"> & { ref?: React.Ref<HTMLElement> }) => (
-  <header
-    className={cn(
-      "flex items-center gap-2 border-b border-border px-4 py-3",
-      className,
-    )}
-    ref={ref}
-    {...rest}
-  >
-    {children}
-  </header>
+export const AISidebarHeader = /* @__PURE__ */ named(
+  "AISidebarHeader",
+  ({
+    children,
+    className,
+    ref,
+    ...rest
+  }: ComponentPropsWithoutRef<"header"> & { ref?: React.Ref<HTMLElement> }) => (
+    <header
+      className={cn(
+        "flex items-center gap-2 border-b border-border px-4 py-3",
+        className,
+      )}
+      ref={ref}
+      {...rest}
+    >
+      {children}
+    </header>
+  ),
 );
-AISidebarHeader.displayName = "AISidebarHeader";
 
 /**
  * Title slot for {@link AISidebarHeader}. Defaults to the localized title
@@ -279,111 +281,125 @@ AISidebarHeader.displayName = "AISidebarHeader";
  *
  * @public
  */
-export const AISidebarTitle = ({
-  children,
-  className,
-  ref,
-  ...rest
-}: ComponentPropsWithoutRef<"h2"> & {
-  ref?: React.Ref<HTMLHeadingElement>;
-}) => {
-  const { labels } = useAISidebar();
-  return (
-    <h2
-      className={cn(
-        "flex flex-1 items-center gap-2 text-sm font-semibold tracking-tight text-foreground",
-        className,
-      )}
-      ref={ref}
-      {...rest}
-    >
-      <Bot aria-hidden="true" className="size-4 text-muted-foreground" />
-      {children ?? labels.defaultTitle}
-    </h2>
-  );
-};
-AISidebarTitle.displayName = "AISidebarTitle";
+export const AISidebarTitle = /* @__PURE__ */ named(
+  "AISidebarTitle",
+  ({
+    children,
+    className,
+    ref,
+    ...rest
+  }: ComponentPropsWithoutRef<"h2"> & {
+    ref?: React.Ref<HTMLHeadingElement>;
+  }) => {
+    const { labels } = useAISidebar();
+    return (
+      <h2
+        className={cn(
+          "flex flex-1 items-center gap-2 text-sm font-semibold tracking-tight text-foreground",
+          className,
+        )}
+        ref={ref}
+        {...rest}
+      >
+        <Bot aria-hidden="true" className="size-4 text-muted-foreground" />
+        {children ?? labels.defaultTitle}
+      </h2>
+    );
+  },
+);
 
 /**
  * Close-button slot for {@link AISidebarHeader}.
  *
  * @public
  */
-export const AISidebarClose = ({
-  className,
-  onClick,
-  ref,
-  ...rest
-}: Omit<ComponentPropsWithoutRef<"button">, "type"> & {
-  ref?: React.Ref<HTMLButtonElement>;
-}) => {
-  const { close, labels } = useAISidebar();
-  const handleCloseSidebar = useCallback(
-    (event: React.MouseEvent<HTMLButtonElement>) => {
-      onClick?.(event);
-      if (event.defaultPrevented) return;
-      close();
-    },
-    [close, onClick],
-  );
-  return (
-    <Button
-      aria-label={labels.close}
-      className={cn("size-8", className)}
-      onClick={handleCloseSidebar}
-      ref={ref}
-      size="icon"
-      type="button"
-      variant="ghost"
-      {...rest}
-    >
-      <X aria-hidden="true" className="size-4" />
-    </Button>
-  );
-};
-AISidebarClose.displayName = "AISidebarClose";
+export const AISidebarClose = /* @__PURE__ */ named(
+  "AISidebarClose",
+  ({
+    className,
+    onClick,
+    ref,
+    ...rest
+  }: Omit<ComponentPropsWithoutRef<"button">, "type"> & {
+    ref?: React.Ref<HTMLButtonElement>;
+  }) => {
+    const { close, labels } = useAISidebar();
+    const handleCloseSidebar = useCallback(
+      (event: React.MouseEvent<HTMLButtonElement>) => {
+        onClick?.(event);
+        if (event.defaultPrevented) return;
+        close();
+      },
+      [close, onClick],
+    );
+    return (
+      <Button
+        aria-label={labels.close}
+        className={cn("size-8", className)}
+        onClick={handleCloseSidebar}
+        ref={ref}
+        size="icon"
+        type="button"
+        variant="ghost"
+        {...rest}
+      >
+        <X aria-hidden="true" className="size-4" />
+      </Button>
+    );
+  },
+);
 
 /**
  * Scrollable middle section of {@link AISidebar}.
  *
  * @public
  */
-export const AISidebarContent = ({
-  children,
-  className,
-  ref,
-  ...rest
-}: ComponentPropsWithoutRef<"div"> & { ref?: React.Ref<HTMLDivElement> }) => (
-  <div
-    className={cn("flex flex-1 flex-col gap-2 overflow-y-auto p-4", className)}
-    ref={ref}
-    {...rest}
-  >
-    {children}
-  </div>
+export const AISidebarContent = /* @__PURE__ */ named(
+  "AISidebarContent",
+  ({
+    children,
+    className,
+    ref,
+    ...rest
+  }: ComponentPropsWithoutRef<"div"> & { ref?: React.Ref<HTMLDivElement> }) => (
+    <div
+      className={cn(
+        "flex flex-1 flex-col gap-2 overflow-y-auto p-4",
+        className,
+      )}
+      ref={ref}
+      {...rest}
+    >
+      {children}
+    </div>
+  ),
 );
-AISidebarContent.displayName = "AISidebarContent";
 
 /**
  * Bottom slot of {@link AISidebar}, typically the chat composer.
  *
  * @public
  */
-export const AISidebarFooter = ({
-  children,
-  className,
-  ref,
-  ...rest
-}: ComponentPropsWithoutRef<"footer"> & { ref?: React.Ref<HTMLElement> }) => (
-  <footer
-    className={cn("border-t border-border bg-background px-4 py-3", className)}
-    ref={ref}
-    {...rest}
-  >
-    {children}
-  </footer>
+export const AISidebarFooter = /* @__PURE__ */ named(
+  "AISidebarFooter",
+  ({
+    children,
+    className,
+    ref,
+    ...rest
+  }: ComponentPropsWithoutRef<"footer"> & { ref?: React.Ref<HTMLElement> }) => (
+    <footer
+      className={cn(
+        "border-t border-border bg-background px-4 py-3",
+        className,
+      )}
+      ref={ref}
+      {...rest}
+    >
+      {children}
+    </footer>
+  ),
 );
-AISidebarFooter.displayName = "AISidebarFooter";
 
 /**
  * Props for {@link AISidebarTrigger}.
@@ -402,37 +418,41 @@ export type AISidebarTriggerProps = Omit<
  *
  * @public
  */
-export const AISidebarTrigger = ({
-  children,
-  className,
-  onClick,
-  ref,
-  ...rest
-}: AISidebarTriggerProps & { ref?: React.Ref<HTMLButtonElement> }) => {
-  const { labels, openState, toggle } = useAISidebar();
-  const handleToggleSidebar = useCallback(
-    (event: React.MouseEvent<HTMLButtonElement>) => {
-      onClick?.(event);
-      if (event.defaultPrevented) return;
-      toggle();
-    },
-    [onClick, toggle],
-  );
-  return (
-    <Button
-      aria-expanded={openState}
-      aria-label={children ? undefined : labels.open}
-      className={cn(className)}
-      data-state={openState ? "open" : "closed"}
-      onClick={handleToggleSidebar}
-      ref={ref}
-      size={children ? "sm" : "icon"}
-      type="button"
-      variant="outline"
-      {...rest}
-    >
-      {children ?? <MessageSquarePlus aria-hidden="true" className="size-4" />}
-    </Button>
-  );
-};
-AISidebarTrigger.displayName = "AISidebarTrigger";
+export const AISidebarTrigger = /* @__PURE__ */ named(
+  "AISidebarTrigger",
+  ({
+    children,
+    className,
+    onClick,
+    ref,
+    ...rest
+  }: AISidebarTriggerProps & { ref?: React.Ref<HTMLButtonElement> }) => {
+    const { labels, openState, toggle } = useAISidebar();
+    const handleToggleSidebar = useCallback(
+      (event: React.MouseEvent<HTMLButtonElement>) => {
+        onClick?.(event);
+        if (event.defaultPrevented) return;
+        toggle();
+      },
+      [onClick, toggle],
+    );
+    return (
+      <Button
+        aria-expanded={openState}
+        aria-label={children ? undefined : labels.open}
+        className={cn(className)}
+        data-state={openState ? "open" : "closed"}
+        onClick={handleToggleSidebar}
+        ref={ref}
+        size={children ? "sm" : "icon"}
+        type="button"
+        variant="outline"
+        {...rest}
+      >
+        {children ?? (
+          <MessageSquarePlus aria-hidden="true" className="size-4" />
+        )}
+      </Button>
+    );
+  },
+);
