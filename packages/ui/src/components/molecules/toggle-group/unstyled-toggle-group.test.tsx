@@ -142,6 +142,10 @@ describe("UnstyledToggleGroup", () => {
       "aria-disabled",
       "true",
     );
+    // `disabled:` classes never match; `data-[disabled]:` styles the item.
+    expect(screen.getByRole("radio", { name: "B" })).toHaveAttribute(
+      "data-disabled",
+    );
   });
 
   it("passes className through as given and forwards refs", () => {

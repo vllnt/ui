@@ -6,7 +6,7 @@ import {
 } from "./unstyled-toggle-group";
 
 const itemClasses =
-  "rounded-sm px-3 py-1 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:opacity-50 data-[state=on]:bg-accent data-[state=on]:text-accent-foreground";
+  "rounded-sm px-3 py-1 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring data-[disabled]:opacity-50 data-[state=on]:bg-accent data-[state=on]:text-accent-foreground";
 
 const meta = {
   args: {

@@ -25,9 +25,13 @@ Radix-facing DOM is kept (`data-state` values, `--radix-*` CSS variables,
 Known differences that remain:
 
 - `ToggleGroup` and `UnstyledToggleGroup`: a disabled item stays focusable
-  with the arrow keys (it reports `aria-disabled` instead of `disabled`), the
-  root has no `tabindex`, and the arrow keys follow `orientation`: Left and
+  with the arrow keys (it reports `aria-disabled` instead of `disabled`, so
+  style it with `data-[disabled]:`, not `disabled:`), the root has no `tabindex`, and the arrow keys follow `orientation`: Left and
   Right in a horizontal group (the default), Up and Down in a vertical one.
+- `DropdownMenu`, `ContextMenu` and `Menubar`: an open menu leaves pointer
+  events on the rest of the page, so a trigger under the pointer keeps its
+  hover colour while its menu is open. Radix turned pointer events off outside
+  the menu.
 - `Slider`: the thumb is a native range input, so it exposes its value through
   the input instead of `aria-valuenow`.
 - `NavigationMenu`: the open viewport is drawn by a fixed-position layer, so
