@@ -1,3 +1,4 @@
+import { named } from "../../../lib/named";
 import { cn } from "../../../lib/utils";
 
 /** Props for the {@link Separator} component. */
@@ -41,24 +42,26 @@ const LINE_CLASSES = {
  * <Separator variant="dashed" />
  * <Separator decorative={false} orientation="vertical" />
  */
-const Separator = ({
-  className,
-  decorative = true,
-  orientation = "horizontal",
-  ref,
-  variant = "solid",
-  ...props
-}: SeparatorProps) => (
-  <div
-    className={cn("shrink-0", LINE_CLASSES[variant][orientation], className)}
-    data-orientation={orientation}
-    ref={ref}
-    {...(decorative
-      ? { "aria-hidden": true }
-      : { "aria-orientation": orientation, role: "separator" })}
-    {...props}
-  />
+const Separator = /* @__PURE__ */ named(
+  "Separator",
+  ({
+    className,
+    decorative = true,
+    orientation = "horizontal",
+    ref,
+    variant = "solid",
+    ...props
+  }: SeparatorProps) => (
+    <div
+      className={cn("shrink-0", LINE_CLASSES[variant][orientation], className)}
+      data-orientation={orientation}
+      ref={ref}
+      {...(decorative
+        ? { "aria-hidden": true }
+        : { "aria-orientation": orientation, role: "separator" })}
+      {...props}
+    />
+  ),
 );
-Separator.displayName = "Separator";
 
 export { Separator };

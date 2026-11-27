@@ -4,6 +4,7 @@ import * as React from "react";
 
 import { Pause, Play } from "lucide-react";
 
+import { named } from "../../../lib/named";
 import { cn } from "../../../lib/utils";
 
 export type MarqueeSpeed = "fast" | "normal" | "slow";
@@ -153,72 +154,73 @@ function MarqueeTrack({
  * `prefers-reduced-motion`, pauses while focus is inside it, and offers a
  * pause / play button (WCAG 2.2.2 Pause, Stop, Hide).
  */
-export const Marquee = ({
-  children,
-  className,
-  duration,
-  fade = true,
-  gap = "1rem",
-  labels,
-  pauseControl = true,
-  pauseOnHover = false,
-  ref,
-  repeat = 1,
-  reverse = false,
-  speed = "normal",
-  style,
-  vertical = false,
-  ...props
-}: MarqueeProps & { ref?: React.Ref<HTMLDivElement> }) => {
-  const [paused, setPaused] = React.useState(false);
-  const resolvedGap = getGapValue(gap);
-  const resolvedDuration = getDuration(duration, speed);
-  const trackItems = getTrackItems(children, repeat);
+export const Marquee = /* @__PURE__ */ named(
+  "Marquee",
+  ({
+    children,
+    className,
+    duration,
+    fade = true,
+    gap = "1rem",
+    labels,
+    pauseControl = true,
+    pauseOnHover = false,
+    ref,
+    repeat = 1,
+    reverse = false,
+    speed = "normal",
+    style,
+    vertical = false,
+    ...props
+  }: MarqueeProps & { ref?: React.Ref<HTMLDivElement> }) => {
+    const [paused, setPaused] = React.useState(false);
+    const resolvedGap = getGapValue(gap);
+    const resolvedDuration = getDuration(duration, speed);
+    const trackItems = getTrackItems(children, repeat);
 
-  const animationStyle: React.CSSProperties = {
-    animationDirection: reverse ? "reverse" : "normal",
-    animationDuration: `${resolvedDuration.toString()}s`,
-  };
-  const maskImage = getMaskImage(vertical);
+    const animationStyle: React.CSSProperties = {
+      animationDirection: reverse ? "reverse" : "normal",
+      animationDuration: `${resolvedDuration.toString()}s`,
+    };
+    const maskImage = getMaskImage(vertical);
 
-  return (
-    <div
-      className={cn(
-        "group relative overflow-hidden",
-        vertical ? "flex h-full flex-col" : "flex w-full flex-row",
-        className,
-      )}
-      ref={ref}
-      style={style}
-      {...props}
-    >
-      {pauseControl ? (
-        <PauseToggle
-          labels={{ pause: "Pause", play: "Play", ...labels }}
-          onToggle={() => {
-            setPaused((value) => !value);
-          }}
-          paused={paused}
-        />
-      ) : null}
+    return (
       <div
         className={cn(
-          "flex min-h-0 min-w-0 flex-1 overflow-hidden",
-          vertical ? "flex-col" : "flex-row",
+          "group relative overflow-hidden",
+          vertical ? "flex h-full flex-col" : "flex w-full flex-row",
+          className,
         )}
-        style={fade ? { maskImage, WebkitMaskImage: maskImage } : undefined}
+        ref={ref}
+        style={style}
+        {...props}
       >
-        <MarqueeTrack
-          gap={resolvedGap}
-          items={trackItems}
-          paused={paused}
-          pauseOnHover={pauseOnHover}
-          style={animationStyle}
-          vertical={vertical}
-        />
+        {pauseControl ? (
+          <PauseToggle
+            labels={{ pause: "Pause", play: "Play", ...labels }}
+            onToggle={() => {
+              setPaused((value) => !value);
+            }}
+            paused={paused}
+          />
+        ) : null}
+        <div
+          className={cn(
+            "flex min-h-0 min-w-0 flex-1 overflow-hidden",
+            vertical ? "flex-col" : "flex-row",
+          )}
+          style={fade ? { maskImage, WebkitMaskImage: maskImage } : undefined}
+        >
+          <MarqueeTrack
+            gap={resolvedGap}
+            items={trackItems}
+            paused={paused}
+            pauseOnHover={pauseOnHover}
+            style={animationStyle}
+            vertical={vertical}
+          />
+        </div>
       </div>
-    </div>
-  );
-};
-
-Marquee.displayName = "Marquee";
+    );
+  },
+);

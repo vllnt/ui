@@ -1,16 +1,18 @@
 "use client";
 
 import {
+  type KeyboardEvent as ReactKeyboardEvent,
   useCallback,
-  useEffect,
   useId,
   useMemo,
-  useRef,
   useState,
 } from "react";
 
+import { useAsyncOptions } from "@ui-sdk/react/async-options";
+import { useShortcut } from "@ui-sdk/react/shortcuts";
 import { Search } from "lucide-react";
 
+import { moveRovingFocus } from "../../../lib/roving-focus";
 import { cn } from "../../../lib/utils";
 import { Button } from "../../atoms/button/button";
 import { Kbd } from "../../atoms/kbd/kbd";
@@ -34,35 +36,25 @@ export type SearchItem = {
 
 type SearchScope = "components" | "docs" | "everything";
 
-function useKeyboardShortcut(callback: () => void) {
-  useEffect(() => {
-    const down = (event: KeyboardEvent) => {
-      if (
-        (event.key === "k" || event.key === "K") &&
-        (event.metaKey || event.ctrlKey)
-      ) {
-        const target = event.target as HTMLElement | null;
-        if (
-          target &&
-          (target.tagName === "INPUT" ||
-            target.tagName === "TEXTAREA" ||
-            target.isContentEditable)
-        ) {
-          return;
-        }
+function focusIsInTextField() {
+  const element = document.activeElement;
 
-        event.preventDefault();
-        event.stopPropagation();
-        event.stopImmediatePropagation();
-        callback();
-      }
-    };
+  return (
+    element instanceof HTMLElement &&
+    (element.tagName === "INPUT" ||
+      element.tagName === "TEXTAREA" ||
+      element.isContentEditable)
+  );
+}
 
-    window.addEventListener("keydown", down, { capture: true, passive: false });
-    return () => {
-      window.removeEventListener("keydown", down, { capture: true });
-    };
-  }, [callback]);
+/**
+ * Cmd+K and Ctrl+K toggle the search on every platform, except while focus is
+ * in a text field. ui-sdk pauses a page shortcut while a modal is open.
+ */
+function useSearchShortcut(enabled: boolean, toggle: () => void) {
+  const options = { when: () => !focusIsInTextField() };
+  useShortcut(enabled ? "meta+k" : null, toggle, options);
+  useShortcut(enabled ? "ctrl+k" : null, toggle, options);
 }
 
 export type SearchDialogProps = {
@@ -125,6 +117,12 @@ function HighlightedText({ query, text }: { query: string; text: string }) {
   );
 }
 
+// Arrow keys, Home and End move between the tabs and select the one they land
+// on (WAI-ARIA APG tabs, automatic activation).
+function handleTabsKeyDown(event: ReactKeyboardEvent<HTMLDivElement>): void {
+  moveRovingFocus(event, '[role="tab"]', { activate: true });
+}
+
 function ScopeTabs({
   getTabId,
   labels,
@@ -144,7 +142,9 @@ function ScopeTabs({
     <div
       aria-label="Search scope"
       className="grid grid-cols-3 gap-1 border-b p-1"
+      onKeyDown={handleTabsKeyDown}
       role="tablist"
+      tabIndex={-1}
     >
       {scopes.map((nextScope) => (
         <button
@@ -160,6 +160,7 @@ function ScopeTabs({
             onScopeChange(nextScope);
           }}
           role="tab"
+          tabIndex={scope === nextScope ? 0 : -1}
           type="button"
         >
           {labels[nextScope]}
@@ -372,13 +373,8 @@ function SearchDialogList({
   sortedItems: SearchItem[];
   trimmedQuery: string;
 }) {
-  return (
-    <CommandList
-      aria-labelledby={activeTabId}
-      className="max-h-[420px]"
-      id={panelId}
-      role={activeTabId === undefined ? undefined : "tabpanel"}
-    >
+  const list = (
+    <CommandList aria-labelledby={activeTabId} className="max-h-[420px]">
       <CommandEmpty>{currentEmptyText}</CommandEmpty>
       {showComponents ? (
         <ComponentResultsGroup
@@ -404,6 +400,15 @@ function SearchDialogList({
       ) : null}
     </CommandList>
   );
+
+  // The listbox keeps its own role, so the tabs' panel is a wrapper around it.
+  return panelId === undefined ? (
+    list
+  ) : (
+    <div aria-labelledby={activeTabId} id={panelId} role="tabpanel">
+      {list}
+    </div>
+  );
 }
 
 type DocumentationSearchOptions = {
@@ -415,54 +420,33 @@ function useDocumentationSearch({
   docsSearch,
   minDocsSearchLength,
 }: DocumentationSearchOptions) {
-  const [documentationItems, setDocumentationItems] = useState<SearchItem[]>(
-    [],
-  );
-  const [documentationLoading, setDocumentationLoading] = useState(false);
-  const activeDocumentationRequest = useRef(0);
   const documentationSearchLength = minDocsSearchLength ?? 2;
+  const [searching, setSearching] = useState(false);
+  // A failed search shows no results, as an empty one does.
+  const { items, setQuery, status } = useAsyncOptions<SearchItem>(
+    (query) => docsSearch?.(query).catch(() => []) ?? Promise.resolve([]),
+    { debounce: 0 },
+  );
 
   const runDocumentationSearch = useCallback(
     (nextQuery: string, nextScope: SearchScope) => {
       const nextTrimmedQuery = nextQuery.trim();
-      const nextRequest = activeDocumentationRequest.current + 1;
-      activeDocumentationRequest.current = nextRequest;
+      const active =
+        docsSearch !== undefined &&
+        nextScope !== "components" &&
+        nextTrimmedQuery.length >= documentationSearchLength;
 
-      if (
-        !docsSearch ||
-        nextScope === "components" ||
-        nextTrimmedQuery.length < documentationSearchLength
-      ) {
-        setDocumentationItems([]);
-        setDocumentationLoading(false);
-        return;
+      setSearching(active);
+      if (active) {
+        setQuery(nextTrimmedQuery);
       }
-
-      setDocumentationLoading(true);
-
-      docsSearch(nextTrimmedQuery)
-        .then((results) => {
-          if (activeDocumentationRequest.current === nextRequest) {
-            setDocumentationItems(results);
-          }
-        })
-        .catch(() => {
-          if (activeDocumentationRequest.current === nextRequest) {
-            setDocumentationItems([]);
-          }
-        })
-        .finally(() => {
-          if (activeDocumentationRequest.current === nextRequest) {
-            setDocumentationLoading(false);
-          }
-        });
     },
-    [docsSearch, documentationSearchLength],
+    [docsSearch, documentationSearchLength, setQuery],
   );
 
   return {
-    documentationItems,
-    documentationLoading,
+    documentationItems: searching ? items : [],
+    documentationLoading: searching && status === "loading",
     documentationSearchLength,
     hasDocumentationSearch: docsSearch !== undefined,
     runDocumentationSearch,
@@ -487,12 +471,10 @@ function useSearchDialogHandlers({
   const [scope, setScope] = useState<SearchScope>("components");
 
   const toggleOpen = useCallback(() => {
-    if (enableKeyboardShortcut ?? true) {
-      setOpen((previous) => !previous);
-    }
-  }, [enableKeyboardShortcut]);
+    setOpen((previous) => !previous);
+  }, []);
 
-  useKeyboardShortcut(toggleOpen);
+  useSearchShortcut(enableKeyboardShortcut ?? true, toggleOpen);
 
   const handleQueryChange = useCallback(
     (nextQuery: string) => {

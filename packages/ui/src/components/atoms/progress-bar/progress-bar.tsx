@@ -2,9 +2,16 @@
 
 import * as React from "react";
 
-import { cva, type VariantProps } from "class-variance-authority";
+import { renderElement } from "@ui-sdk/react/primitive";
+import {
+  Progress as ProgressPrimitive,
+  ProgressIndicator,
+} from "@ui-sdk/react/progress";
 
+import { named } from "../../../lib/named";
+import { withDataAttributes } from "../../../lib/ui-sdk";
 import { cn } from "../../../lib/utils";
+import { cva, type VariantProps } from "../../../lib/variants";
 
 const progressBarTrackVariants = cva(
   "overflow-hidden rounded-full bg-secondary",
@@ -199,6 +206,22 @@ type ProgressBarTrackProps = Pick<
   tone: ProgressBarTone;
 };
 
+type FillProps = { style?: React.CSSProperties } & Record<string, unknown>;
+
+/**
+ * Renders the fill with the rounded percentage the header reads, where ui-sdk
+ * writes the exact one.
+ */
+function renderFill(percent: number) {
+  return (props: FillProps, state: object) =>
+    renderElement(
+      "div",
+      { ...props, style: { ...props.style, width: `${percent}%` } },
+      undefined,
+      state,
+    );
+}
+
 function ProgressBarTrack({
   ariaLabel,
   blocks,
@@ -216,17 +239,21 @@ function ProgressBarTrack({
   const filledBlocks = isValueKnown ? countFilledBlocks(value, max) : 0;
 
   return (
-    <div
+    <ProgressPrimitive
       aria-label={labelledBy ? undefined : (ariaLabel ?? "Progress")}
-      aria-labelledby={labelledBy}
-      aria-valuemax={max}
-      aria-valuemin={0}
-      aria-valuenow={isValueKnown ? value : undefined}
       className={cn(
         progressBarTrackVariants({ size }),
         showBlocks && "flex gap-0.5 bg-transparent",
       )}
-      role="progressbar"
+      max={max}
+      min={0}
+      // Names the bar from the header label (or `aria-label`) and reports the
+      // plain value, where ui-sdk would link a label part and read a percent.
+      render={withDataAttributes("div", () => ({
+        "aria-labelledby": labelledBy,
+        "aria-valuetext": undefined,
+      }))}
+      value={isValueKnown ? value : null}
     >
       {showBlocks ? (
         BLOCKS.map((block) => (
@@ -241,7 +268,7 @@ function ProgressBarTrack({
           />
         ))
       ) : (
-        <div
+        <ProgressIndicator
           className={cn(
             progressBarFillVariants({ tone }),
             isIndeterminate
@@ -249,10 +276,10 @@ function ProgressBarTrack({
               : "transition-all duration-300 motion-reduce:transition-none",
             isLoading && "w-0",
           )}
-          style={isValueKnown ? { width: `${percent}%` } : undefined}
+          render={isValueKnown ? renderFill(percent) : undefined}
         />
       )}
-    </div>
+    </ProgressPrimitive>
   );
 }
 
@@ -266,74 +293,77 @@ function ProgressBarTrack({
  * <ProgressBar label="Step" max={8} value={3} valueLabel="3 / 8" />
  * ```
  */
-const ProgressBar = ({
-  "aria-label": ariaLabel,
-  blocks,
-  className,
-  completedLabel,
-  currentLabel,
-  isComplete = false,
-  isLoading = false,
-  label,
-  max,
-  mode = "determinate",
-  ref,
-  showLabels = true,
-  showValue = false,
-  size,
-  tone,
-  value,
-  valueLabel,
-}: ProgressBarProps & { ref?: React.Ref<HTMLDivElement> }) => {
-  const labelId = React.useId();
-  const percent = max > 0 ? Math.round((value / max) * 100) : 0;
-  const isIndeterminate = mode === "indeterminate" && !isLoading && !isComplete;
-  const resolvedTone = tone ?? (isComplete ? "success" : "primary");
-  const labelledBy =
-    showLabels && !isLoading && ariaLabel === undefined ? labelId : undefined;
+const ProgressBar = /* @__PURE__ */ named(
+  "ProgressBar",
+  ({
+    "aria-label": ariaLabel,
+    blocks,
+    className,
+    completedLabel,
+    currentLabel,
+    isComplete = false,
+    isLoading = false,
+    label,
+    max,
+    mode = "determinate",
+    ref,
+    showLabels = true,
+    showValue = false,
+    size,
+    tone,
+    value,
+    valueLabel,
+  }: ProgressBarProps & { ref?: React.Ref<HTMLDivElement> }) => {
+    const labelId = React.useId();
+    const percent = max > 0 ? Math.round((value / max) * 100) : 0;
+    const isIndeterminate =
+      mode === "indeterminate" && !isLoading && !isComplete;
+    const resolvedTone = tone ?? (isComplete ? "success" : "primary");
+    const labelledBy =
+      showLabels && !isLoading && ariaLabel === undefined ? labelId : undefined;
 
-  return (
-    <div
-      className={cn(
-        "border rounded-lg p-4 transition-colors motion-reduce:transition-none",
-        !isLoading && isComplete
-          ? progressBarCompleteVariants({ tone: resolvedTone })
-          : "border-border bg-muted/30",
-        className,
-      )}
-      ref={ref}
-    >
-      {showLabels ? (
-        <ProgressBarHeader
-          completedLabel={completedLabel}
+    return (
+      <div
+        className={cn(
+          "border rounded-lg p-4 transition-colors motion-reduce:transition-none",
+          !isLoading && isComplete
+            ? progressBarCompleteVariants({ tone: resolvedTone })
+            : "border-border bg-muted/30",
+          className,
+        )}
+        ref={ref}
+      >
+        {showLabels ? (
+          <ProgressBarHeader
+            completedLabel={completedLabel}
+            isIndeterminate={isIndeterminate}
+            isLoading={isLoading}
+            label={
+              label ?? currentLabel ?? (isComplete ? "Complete" : "Progress")
+            }
+            labelId={labelId}
+            max={max}
+            percent={percent}
+            showValue={showValue}
+            value={value}
+            valueLabel={valueLabel}
+          />
+        ) : null}
+        <ProgressBarTrack
+          ariaLabel={ariaLabel}
+          blocks={blocks}
           isIndeterminate={isIndeterminate}
           isLoading={isLoading}
-          label={
-            label ?? currentLabel ?? (isComplete ? "Complete" : "Progress")
-          }
-          labelId={labelId}
+          labelledBy={labelledBy}
           max={max}
           percent={percent}
-          showValue={showValue}
+          size={size}
+          tone={resolvedTone}
           value={value}
-          valueLabel={valueLabel}
         />
-      ) : null}
-      <ProgressBarTrack
-        ariaLabel={ariaLabel}
-        blocks={blocks}
-        isIndeterminate={isIndeterminate}
-        isLoading={isLoading}
-        labelledBy={labelledBy}
-        max={max}
-        percent={percent}
-        size={size}
-        tone={resolvedTone}
-        value={value}
-      />
-    </div>
-  );
-};
-ProgressBar.displayName = "ProgressBar";
+      </div>
+    );
+  },
+);
 
 export { ProgressBar };

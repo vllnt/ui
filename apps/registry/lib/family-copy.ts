@@ -88,7 +88,7 @@ const FAMILY_COPY: readonly FamilyCopy[] = [
       },
     ],
     intro:
-      "Overlay components layer content above the page — dialogs, sheets, drawers, popovers, tooltips, and toasts. Focus management and dismissal are handled for you, built on accessible Radix primitives.",
+      "Overlay components layer content above the page — dialogs, sheets, drawers, popovers, tooltips, and toasts. Focus management and dismissal are handled for you, built on accessible ui-sdk behaviors.",
   },
   {
     category: "navigation",

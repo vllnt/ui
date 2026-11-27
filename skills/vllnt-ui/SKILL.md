@@ -21,8 +21,8 @@ allowed-tools:
 # VLLNT UI — usage + design system
 
 `@vllnt/ui` (brand name **VLLNT UI**, always two words) is a React component
-library: 200+ accessible components built on **Radix UI** primitives,
-**Tailwind CSS**, and **CVA** (class-variance-authority). Shipped on public npm
+library: 200+ accessible components built on **ui-sdk** (Vercel) behaviors,
+**Tailwind CSS**, and **CVA** (`cva` variants). Shipped on public npm
 and as a shadcn-compatible registry at `https://ui.vllnt.com/r`.
 
 - Docs: https://ui.vllnt.com · Storybook: https://storybook.vllnt.com
@@ -85,7 +85,8 @@ Peer ranges: `react >=19.0.0`, `react-dom >=19.0.0`, `tailwindcss ^3.4.0`,
 `next-themes >=0.4.0`, `next >=15.0.0` (optional).
 
 **1. Tailwind preset** — pulls in theme colors, animations,
-class-based dark mode (`darkMode: ["class"]`) and `tailwindcss-animate`:
+class-based dark mode (`darkMode: ["class"]`) and the `tailwindcss-animate`
+utilities (built in, no extra package):
 
 ```ts
 // tailwind.config.ts
@@ -141,12 +142,12 @@ directory name and exports the same names as the root.
 | `@vllnt/ui/themes/presets.css` | Built-in color presets, applied via `data-theme` |
 | `@vllnt/ui/themes/products.css` | Product themes `maia` and `paas` (generated), applied via `data-theme` |
 
-`cn()` merges Tailwind classes via `clsx` + `tailwind-merge` — use it to combine
+`cn()` joins class values and merges Tailwind classes via `tailwind-merge` — use it to combine
 a component's `className` with conditional classes (last class wins on conflict).
-`cx()` joins classes with `clsx` alone and keeps every class. `UnstyledButton` and
+`cx()` joins classes without `tailwind-merge` and keeps every class. `UnstyledButton` and
 `PlainSeparator` use it, so they add no `tailwind-merge` of their own.
 `UnstyledToggleGroup` and `UnstyledToggleGroupItem` (`@vllnt/ui/toggle-group`)
-are `ToggleGroup` with no classes, `tailwind-merge` or `class-variance-authority`.
+are `ToggleGroup` with no classes, `tailwind-merge` or variant helpers.
 Import them from a `"use client"` module: a server-component import of
 `@vllnt/ui/toggle-group` also brings `ToggleGroup`.
 
@@ -204,7 +205,7 @@ Ops/Status, Billing & Plans, Animation, Content, Tutorial/Educational, App Shell
 ### Variant API pattern
 
 Components expose variants via CVA props plus an escape-hatch `className`.
-`asChild` (Radix `Slot`) renders the child element instead of the default tag.
+`asChild` renders the child element instead of the default tag (a ui-sdk `render` element under the hood).
 
 ```tsx
 // Button: variant ∈ default|destructive|outline|secondary|ghost|link
@@ -286,7 +287,7 @@ Only when editing inside this repo (not for app consumers).
   `.stories.tsx`), where `{level}` is the Atomic Design level — `atoms`,
   `molecules`, `organisms` or `templates`; a component imports only lower
   levels (organisms may import organisms). Validate with `pnpm check:atomic`.
-  Define variants with `cva`, expose `VariantProps`, merge with `cn`, forward
+  Define variants with `cva` from `lib/variants`, expose `VariantProps`, merge with `cn`, forward
   refs, support `asChild` where a wrapper element makes sense.
 - **Tokens, not literals** — the design rules above are enforced in review.
 - **Don't hand-edit generated files** (`apps/registry/lib/component-metadata.json`,

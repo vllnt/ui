@@ -2,6 +2,7 @@
 
 import * as React from "react";
 
+import { named } from "../../../lib/named";
 import { cn } from "../../../lib/utils";
 
 /** Props for {@link ScrambleText}. */
@@ -65,44 +66,46 @@ const defaultPool = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
  * <ScrambleText text="DECRYPTED" />
  * ```
  */
-export const ScrambleText = ({
-  className,
-  duration = 1200,
-  ref,
-  scrambleCharacters = defaultPool,
-  text,
-  ...props
-}: ScrambleTextProps & { ref?: React.Ref<HTMLSpanElement> }) => {
-  const reduced = usePrefersReducedMotion();
-  const [display, setDisplay] = React.useState(text);
+export const ScrambleText = /* @__PURE__ */ named(
+  "ScrambleText",
+  ({
+    className,
+    duration = 1200,
+    ref,
+    scrambleCharacters = defaultPool,
+    text,
+    ...props
+  }: ScrambleTextProps & { ref?: React.Ref<HTMLSpanElement> }) => {
+    const reduced = usePrefersReducedMotion();
+    const [display, setDisplay] = React.useState(text);
 
-  React.useEffect(() => {
-    if (reduced) {
-      setDisplay(text);
-      return;
-    }
-
-    const steps = Math.max(text.length, 1);
-    const tick = duration / steps;
-    let revealed = 0;
-    const timer = setInterval(() => {
-      revealed += 1;
-      setDisplay(scramble(text, revealed, scrambleCharacters));
-      if (revealed >= text.length) {
-        clearInterval(timer);
+    React.useEffect(() => {
+      if (reduced) {
+        setDisplay(text);
+        return;
       }
-    }, tick);
 
-    return () => {
-      clearInterval(timer);
-    };
-  }, [duration, reduced, scrambleCharacters, text]);
+      const steps = Math.max(text.length, 1);
+      const tick = duration / steps;
+      let revealed = 0;
+      const timer = setInterval(() => {
+        revealed += 1;
+        setDisplay(scramble(text, revealed, scrambleCharacters));
+        if (revealed >= text.length) {
+          clearInterval(timer);
+        }
+      }, tick);
 
-  return (
-    <span className={cn("font-mono", className)} ref={ref} {...props}>
-      <span className="sr-only">{text}</span>
-      <span aria-hidden="true">{display}</span>
-    </span>
-  );
-};
-ScrambleText.displayName = "ScrambleText";
+      return () => {
+        clearInterval(timer);
+      };
+    }, [duration, reduced, scrambleCharacters, text]);
+
+    return (
+      <span className={cn("font-mono", className)} ref={ref} {...props}>
+        <span className="sr-only">{text}</span>
+        <span aria-hidden="true">{display}</span>
+      </span>
+    );
+  },
+);

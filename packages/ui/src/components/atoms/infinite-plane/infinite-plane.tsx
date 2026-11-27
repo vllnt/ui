@@ -2,6 +2,7 @@
 
 import type { ComponentPropsWithoutRef, ReactNode } from "react";
 
+import { named } from "../../../lib/named";
 import { cn } from "../../../lib/utils";
 
 /**
@@ -103,38 +104,40 @@ const buildBackground = (input: {
  *
  * @public
  */
-export const InfinitePlane = ({
-  ref,
-  ...props
-}: InfinitePlaneProps & { ref?: React.Ref<HTMLDivElement> }) => {
-  const {
-    children,
-    className,
-    labels,
-    pattern = "dot",
-    spacing = 32,
-    translate = { x: 0, y: 0 },
-    zoom = 1,
-    ...rest
-  } = props;
-  const resolvedLabels = { ...DEFAULT_LABELS, ...labels };
-  const background = buildBackground({ pattern, spacing, translate, zoom });
-  return (
-    <div
-      aria-label={resolvedLabels.region}
-      className={cn(
-        "relative h-full w-full overflow-hidden bg-background",
-        className,
-      )}
-      data-infinite-plane
-      data-infinite-plane-pattern={pattern}
-      ref={ref}
-      role="region"
-      style={background}
-      {...rest}
-    >
-      {children}
-    </div>
-  );
-};
-InfinitePlane.displayName = "InfinitePlane";
+export const InfinitePlane = /* @__PURE__ */ named(
+  "InfinitePlane",
+  ({
+    ref,
+    ...props
+  }: InfinitePlaneProps & { ref?: React.Ref<HTMLDivElement> }) => {
+    const {
+      children,
+      className,
+      labels,
+      pattern = "dot",
+      spacing = 32,
+      translate = { x: 0, y: 0 },
+      zoom = 1,
+      ...rest
+    } = props;
+    const resolvedLabels = { ...DEFAULT_LABELS, ...labels };
+    const background = buildBackground({ pattern, spacing, translate, zoom });
+    return (
+      <div
+        aria-label={resolvedLabels.region}
+        className={cn(
+          "relative h-full w-full overflow-hidden bg-background",
+          className,
+        )}
+        data-infinite-plane
+        data-infinite-plane-pattern={pattern}
+        ref={ref}
+        role="region"
+        style={background}
+        {...rest}
+      >
+        {children}
+      </div>
+    );
+  },
+);

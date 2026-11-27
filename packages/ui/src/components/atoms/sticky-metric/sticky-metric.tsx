@@ -3,6 +3,7 @@
 import type { ComponentPropsWithoutRef, ReactNode } from "react";
 
 import type { MaterialProps } from "../../../lib/material";
+import { named } from "../../../lib/named";
 import { cn } from "../../../lib/utils";
 
 /**
@@ -109,60 +110,62 @@ export type StickyMetricProps = {
  *
  * @public
  */
-export const StickyMetric = ({
-  ref,
-  ...props
-}: StickyMetricProps & { ref?: React.Ref<HTMLDivElement> }) => {
-  const {
-    anchor = "top-right",
-    className,
-    detail,
-    label,
-    labels,
-    material = "glass",
-    tone = "neutral",
-    value,
-    x,
-    y,
-    ...rest
-  } = props;
-  const resolvedLabels = { ...DEFAULT_LABELS, ...labels };
-  return (
-    <div
-      aria-label={resolvedLabels.region}
-      className={cn(
-        "vllnt-glass vllnt-glass-dense pointer-events-none absolute z-20 inline-flex items-center gap-1.5 rounded-full border px-2 py-1 text-[11px]",
-        className,
-      )}
-      data-material={material}
-      data-sticky-anchor={anchor}
-      data-sticky-metric
-      data-sticky-tone={tone}
-      ref={ref}
-      role="status"
-      style={{
-        left: x,
-        top: y,
-        transform: ANCHOR_OFFSET[anchor].transform,
-      }}
-      {...rest}
-    >
-      <span
-        aria-hidden="true"
-        className={cn("size-1.5 rounded-full", TONE_DOT[tone])}
-        data-sticky-metric-dot
-      />
-      <span className="font-medium text-muted-foreground">{label}</span>
-      <span className="font-semibold text-foreground">{value}</span>
-      {detail ? (
+export const StickyMetric = /* @__PURE__ */ named(
+  "StickyMetric",
+  ({
+    ref,
+    ...props
+  }: StickyMetricProps & { ref?: React.Ref<HTMLDivElement> }) => {
+    const {
+      anchor = "top-right",
+      className,
+      detail,
+      label,
+      labels,
+      material = "glass",
+      tone = "neutral",
+      value,
+      x,
+      y,
+      ...rest
+    } = props;
+    const resolvedLabels = { ...DEFAULT_LABELS, ...labels };
+    return (
+      <div
+        aria-label={resolvedLabels.region}
+        className={cn(
+          "vllnt-glass vllnt-glass-dense pointer-events-none absolute z-20 inline-flex items-center gap-1.5 rounded-full border px-2 py-1 text-[11px]",
+          className,
+        )}
+        data-material={material}
+        data-sticky-anchor={anchor}
+        data-sticky-metric
+        data-sticky-tone={tone}
+        ref={ref}
+        role="status"
+        style={{
+          left: x,
+          top: y,
+          transform: ANCHOR_OFFSET[anchor].transform,
+        }}
+        {...rest}
+      >
         <span
-          className="text-[10px] text-muted-foreground"
-          data-sticky-metric-detail
-        >
-          {detail}
-        </span>
-      ) : null}
-    </div>
-  );
-};
-StickyMetric.displayName = "StickyMetric";
+          aria-hidden="true"
+          className={cn("size-1.5 rounded-full", TONE_DOT[tone])}
+          data-sticky-metric-dot
+        />
+        <span className="font-medium text-muted-foreground">{label}</span>
+        <span className="font-semibold text-foreground">{value}</span>
+        {detail ? (
+          <span
+            className="text-[10px] text-muted-foreground"
+            data-sticky-metric-detail
+          >
+            {detail}
+          </span>
+        ) : null}
+      </div>
+    );
+  },
+);

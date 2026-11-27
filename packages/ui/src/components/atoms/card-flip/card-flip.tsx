@@ -2,6 +2,7 @@
 
 import * as React from "react";
 
+import { named } from "../../../lib/named";
 import { cn } from "../../../lib/utils";
 
 /** Props for {@link CardFlip}. */
@@ -53,49 +54,61 @@ function Inner({
  * <CardFlip front={<p>Front</p>} back={<p>Back</p>} />
  * ```
  */
-export const CardFlip = ({
-  back,
-  className,
-  flipOnHover = true,
-  front,
-  ref,
-  ...props
-}: CardFlipProps & { ref?: React.Ref<HTMLDivElement> }) => {
-  const [flipped, setFlipped] = React.useState(false);
-  const base = cn(
-    "relative min-h-40 [perspective:1000px]",
-    flipOnHover && "group",
+export const CardFlip = /* @__PURE__ */ named(
+  "CardFlip",
+  ({
+    back,
     className,
-  );
+    flipOnHover = true,
+    front,
+    ref,
+    ...props
+  }: CardFlipProps & { ref?: React.Ref<HTMLDivElement> }) => {
+    const [flipped, setFlipped] = React.useState(false);
+    const base = cn(
+      "relative min-h-40 [perspective:1000px]",
+      flipOnHover && "group",
+      className,
+    );
 
-  if (flipOnHover) {
+    if (flipOnHover) {
+      return (
+        <div className={base} ref={ref} {...props}>
+          <Inner
+            back={back}
+            flipOnHover={true}
+            flipped={flipped}
+            front={front}
+          />
+        </div>
+      );
+    }
+
     return (
-      <div className={base} ref={ref} {...props}>
-        <Inner back={back} flipOnHover={true} flipped={flipped} front={front} />
+      <div
+        className={base}
+        onClick={() => {
+          setFlipped((current) => !current);
+        }}
+        onKeyDown={(event) => {
+          if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            setFlipped((current) => !current);
+          }
+        }}
+        ref={ref}
+        // react-doctor-disable-next-line react-doctor/prefer-tag-over-role -- the faces are block-level and may hold interactive content, which a native <button> cannot contain; the div props and ref are public API
+        role="button"
+        tabIndex={0}
+        {...props}
+      >
+        <Inner
+          back={back}
+          flipOnHover={false}
+          flipped={flipped}
+          front={front}
+        />
       </div>
     );
-  }
-
-  return (
-    <div
-      className={base}
-      onClick={() => {
-        setFlipped((current) => !current);
-      }}
-      onKeyDown={(event) => {
-        if (event.key === "Enter" || event.key === " ") {
-          event.preventDefault();
-          setFlipped((current) => !current);
-        }
-      }}
-      ref={ref}
-      // react-doctor-disable-next-line react-doctor/prefer-tag-over-role -- the faces are block-level and may hold interactive content, which a native <button> cannot contain; the div props and ref are public API
-      role="button"
-      tabIndex={0}
-      {...props}
-    >
-      <Inner back={back} flipOnHover={false} flipped={flipped} front={front} />
-    </div>
-  );
-};
-CardFlip.displayName = "CardFlip";
+  },
+);

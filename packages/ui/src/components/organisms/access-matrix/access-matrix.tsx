@@ -2,10 +2,11 @@
 
 import * as React from "react";
 
-import { cva } from "class-variance-authority";
 import { Check, CornerDownRight, type LucideIcon, X } from "lucide-react";
 
+import { named } from "../../../lib/named";
 import { cn } from "../../../lib/utils";
+import { cva } from "../../../lib/variants";
 import { Button } from "../../atoms/button/button";
 import {
   Table,
@@ -360,62 +361,63 @@ function AccessMatrixHeader({
  * cells become buttons that ask for the opposite state; inherited cells never
  * change. The host picks the mode and owns the value.
  */
-export const AccessMatrix = ({
-  className,
-  labels,
-  mode = "grid",
-  onChange,
-  permissions,
-  ref: reference,
-  subjects,
-  title,
-  value,
-  ...props
-}: AccessMatrixProps & {
-  ref?: React.Ref<HTMLElement>;
-}): React.JSX.Element => {
-  const titleId = React.useId();
-  const resolvedLabels = resolveLabels(labels);
-  const hasEntries = subjects.length > 0 && permissions.length > 0;
-  const hasInherited = subjects.some((subject) =>
-    permissions.some(
-      (permission) =>
-        getState(value, subject.id, permission.id) === "inherited",
-    ),
-  );
-  const bodyProps: AccessMatrixBodyProps = {
-    labelledBy: title ? titleId : undefined,
-    labels: resolvedLabels,
+export const AccessMatrix = /* @__PURE__ */ named(
+  "AccessMatrix",
+  ({
+    className,
+    labels,
+    mode = "grid",
     onChange,
     permissions,
+    ref: reference,
     subjects,
+    title,
     value,
-  };
+    ...props
+  }: AccessMatrixProps & {
+    ref?: React.Ref<HTMLElement>;
+  }): React.JSX.Element => {
+    const titleId = React.useId();
+    const resolvedLabels = resolveLabels(labels);
+    const hasEntries = subjects.length > 0 && permissions.length > 0;
+    const hasInherited = subjects.some((subject) =>
+      permissions.some(
+        (permission) =>
+          getState(value, subject.id, permission.id) === "inherited",
+      ),
+    );
+    const bodyProps: AccessMatrixBodyProps = {
+      labelledBy: title ? titleId : undefined,
+      labels: resolvedLabels,
+      onChange,
+      permissions,
+      subjects,
+      value,
+    };
 
-  return (
-    <section
-      className={cn(
-        "w-full rounded-lg border bg-card text-card-foreground shadow-sm",
-        className,
-      )}
-      ref={reference}
-      {...props}
-    >
-      <AccessMatrixHeader
-        inheritedLabel={resolvedLabels.inherited}
-        showInherited={hasInherited}
-        title={title}
-        titleId={titleId}
-      />
-      {hasEntries ? (
-        mode === "list" ? (
-          <AccessMatrixList {...bodyProps} />
-        ) : (
-          <AccessMatrixGrid {...bodyProps} />
-        )
-      ) : null}
-    </section>
-  );
-};
-
-AccessMatrix.displayName = "AccessMatrix";
+    return (
+      <section
+        className={cn(
+          "w-full rounded-lg border bg-card text-card-foreground shadow-sm",
+          className,
+        )}
+        ref={reference}
+        {...props}
+      >
+        <AccessMatrixHeader
+          inheritedLabel={resolvedLabels.inherited}
+          showInherited={hasInherited}
+          title={title}
+          titleId={titleId}
+        />
+        {hasEntries ? (
+          mode === "list" ? (
+            <AccessMatrixList {...bodyProps} />
+          ) : (
+            <AccessMatrixGrid {...bodyProps} />
+          )
+        ) : null}
+      </section>
+    );
+  },
+);

@@ -5,6 +5,7 @@ import { memo } from "react";
 import { Check, ChevronRight, RotateCcw } from "lucide-react";
 import type { ReactNode } from "react";
 
+import { named } from "../../../lib/named";
 import type { HeadingTag } from "../../../lib/types";
 import { Button } from "../../atoms/button/button";
 import { ShareSection } from "../../atoms/share-section/share-section";
@@ -333,5 +334,7 @@ function TutorialCompleteImpl({
   );
 }
 
-export const TutorialComplete = memo(TutorialCompleteImpl);
-TutorialComplete.displayName = "TutorialComplete";
+export const TutorialComplete = /* @__PURE__ */ named(
+  "TutorialComplete",
+  /* @__PURE__ */ memo(TutorialCompleteImpl),
+);

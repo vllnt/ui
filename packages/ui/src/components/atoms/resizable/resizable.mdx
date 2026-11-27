@@ -5,7 +5,7 @@ import * as Stories from './resizable.stories'
 
 # Resizable
 
-Resizable panel layout with draggable handles.
+Resizable panel layout with draggable handles, built on ui-sdk. Handles are separators: drag them, or focus one and use the arrow keys.
 
 <Primary />
 
@@ -24,7 +24,11 @@ import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@vllnt/ui'
 ## Usage
 
 ```tsx
-<Resizable>Resizable content</Resizable>
+<ResizablePanelGroup direction="horizontal">
+  <ResizablePanel defaultSize={30} minSize={20}>Sidebar</ResizablePanel>
+  <ResizableHandle withHandle />
+  <ResizablePanel defaultSize={70}>Content</ResizablePanel>
+</ResizablePanelGroup>
 ```
 
 <Canvas of={Stories.Default} sourceState="shown" />
@@ -33,3 +37,9 @@ import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@vllnt/ui'
 
 <Controls />
 
+## Notes
+
+- `direction` is `"horizontal"` or `"vertical"`. `orientation` does the same. Vertical groups now stack their panels.
+- Sizes are percentages, or a length like `"240px"`. `defaultSize`, `minSize`, `maxSize` and `collapsible` set them per panel.
+- Handles have the name "Resize". Pass `aria-label` to name them for your layout.
+- From react-resizable-panels: imperative panel refs and the per-panel `onResize`, `onCollapse` and `onExpand` callbacks are gone. Use the group's `onLayoutChange`, which reports the sizes as a `number[]`, or pass a `controller` from `createResizableController()` from `@ui-sdk/react/resizable` to read and set them.

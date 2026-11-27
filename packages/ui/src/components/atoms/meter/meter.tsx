@@ -1,6 +1,11 @@
-import { cva, type VariantProps } from "class-variance-authority";
+"use client";
 
+import { Meter as MeterPrimitive, MeterIndicator } from "@ui-sdk/react/meter";
+
+import { named } from "../../../lib/named";
+import { withDataAttributes } from "../../../lib/ui-sdk";
 import { cn } from "../../../lib/utils";
+import { cva, type VariantProps } from "../../../lib/variants";
 
 const meterFillVariants = cva("h-full transition-all", {
   defaultVariants: {
@@ -43,63 +48,63 @@ export type MeterProps = {
  * @example
  * <Meter label="Disk usage" value={72} valueText="72% used" />
  */
-const Meter = ({
-  className,
-  label,
-  max = 100,
-  min = 0,
-  ref,
-  segments,
-  value,
-  valueText,
-  variant,
-  ...props
-}: MeterProps & { ref?: React.Ref<HTMLDivElement> }) => {
-  const safeMax = max > min ? max : min + 1;
-  const current = clamp(value, min, safeMax);
-  const ratio = (current - min) / (safeMax - min);
-  const percentage = ratio * 100;
-  const segmentCount = segments !== undefined && segments > 0 ? segments : 0;
-  const filledSegments = Math.round(ratio * segmentCount);
+const Meter = /* @__PURE__ */ named(
+  "Meter",
+  ({
+    className,
+    label,
+    max = 100,
+    min = 0,
+    ref,
+    segments,
+    value,
+    valueText,
+    variant,
+    ...props
+  }: MeterProps & { ref?: React.Ref<HTMLDivElement> }) => {
+    const safeMax = max > min ? max : min + 1;
+    const segmentCount = segments !== undefined && segments > 0 ? segments : 0;
+    const ratio = (clamp(value, min, safeMax) - min) / (safeMax - min);
+    const filledSegments = Math.round(ratio * segmentCount);
 
-  return (
-    <div
-      aria-label={label}
-      aria-valuemax={safeMax}
-      aria-valuemin={min}
-      aria-valuenow={current}
-      aria-valuetext={valueText}
-      className={cn(
-        "h-2 w-full overflow-hidden rounded-full bg-secondary",
-        segmentCount > 0 && "flex gap-0.5 bg-transparent",
-        className,
-      )}
-      ref={ref}
-      // react-doctor-disable-next-line react-doctor/prefer-tag-over-role -- a native <meter> cannot render the segment blocks (its children are fallback content); the div props and ref are public API
-      role="meter"
-      {...props}
-    >
-      {segmentCount > 0 ? (
-        Array.from({ length: segmentCount }, (_cell, index) => (
-          <div
-            className={cn(
-              "h-full flex-1 rounded-full",
-              index < filledSegments
-                ? meterFillVariants({ variant })
-                : "bg-secondary",
-            )}
-            key={`meter-segment-${index}`}
-          />
-        ))
-      ) : (
-        <div
-          className={meterFillVariants({ variant })}
-          style={{ width: `${percentage}%` }}
-        />
-      )}
-    </div>
-  );
-};
-Meter.displayName = "Meter";
+    return (
+      <MeterPrimitive
+        aria-label={label}
+        className={cn(
+          "h-2 w-full overflow-hidden rounded-full bg-secondary",
+          segmentCount > 0 && "flex gap-0.5 bg-transparent",
+          className,
+        )}
+        max={safeMax}
+        min={min}
+        ref={ref}
+        // Drops the default link to a label part and the percent value text:
+        // `label` names the meter and `valueText` describes its value.
+        render={withDataAttributes("div", () => ({
+          "aria-labelledby": undefined,
+          "aria-valuetext": valueText,
+        }))}
+        value={value}
+        {...props}
+      >
+        {segmentCount > 0 ? (
+          Array.from({ length: segmentCount }, (_cell, index) => (
+            <div
+              className={cn(
+                "h-full flex-1 rounded-full",
+                index < filledSegments
+                  ? meterFillVariants({ variant })
+                  : "bg-secondary",
+              )}
+              key={`meter-segment-${index}`}
+            />
+          ))
+        ) : (
+          <MeterIndicator className={meterFillVariants({ variant })} />
+        )}
+      </MeterPrimitive>
+    );
+  },
+);
 
 export { Meter, meterFillVariants };

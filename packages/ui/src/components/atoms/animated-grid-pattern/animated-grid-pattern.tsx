@@ -2,6 +2,7 @@
 
 import * as React from "react";
 
+import { named } from "../../../lib/named";
 import { cn } from "../../../lib/utils";
 
 /** Props for {@link AnimatedGridPattern}. */
@@ -64,47 +65,54 @@ function GridSquare({
  * <AnimatedGridPattern squares={32} />
  * ```
  */
-export const AnimatedGridPattern = ({
-  className,
-  height = 40,
-  ref,
-  squares = 24,
-  width = 40,
-  ...props
-}: AnimatedGridPatternProps & { ref?: React.Ref<SVGSVGElement> }) => {
-  const [cells] = React.useState(() => createSquares(squares));
-  const patternId = React.useId();
+export const AnimatedGridPattern = /* @__PURE__ */ named(
+  "AnimatedGridPattern",
+  ({
+    className,
+    height = 40,
+    ref,
+    squares = 24,
+    width = 40,
+    ...props
+  }: AnimatedGridPatternProps & { ref?: React.Ref<SVGSVGElement> }) => {
+    const [cells] = React.useState(() => createSquares(squares));
+    const patternId = React.useId();
 
-  return (
-    <svg
-      aria-hidden="true"
-      className={cn(
-        "pointer-events-none absolute inset-0 h-full w-full text-border",
-        className,
-      )}
-      ref={ref}
-      {...props}
-    >
-      <defs>
-        <pattern
-          height={height}
-          id={patternId}
-          patternUnits="userSpaceOnUse"
-          width={width}
-        >
-          <path
-            d={`M ${String(width)} 0 L 0 0 0 ${String(height)}`}
-            fill="none"
-            stroke="currentColor"
-            strokeWidth={1}
+    return (
+      <svg
+        aria-hidden="true"
+        className={cn(
+          "pointer-events-none absolute inset-0 h-full w-full text-border",
+          className,
+        )}
+        ref={ref}
+        {...props}
+      >
+        <defs>
+          <pattern
+            height={height}
+            id={patternId}
+            patternUnits="userSpaceOnUse"
+            width={width}
+          >
+            <path
+              d={`M ${String(width)} 0 L 0 0 0 ${String(height)}`}
+              fill="none"
+              stroke="currentColor"
+              strokeWidth={1}
+            />
+          </pattern>
+        </defs>
+        <rect fill={`url(#${patternId})`} height="100%" width="100%" />
+        {cells.map((square, index) => (
+          <GridSquare
+            height={height}
+            key={index}
+            square={square}
+            width={width}
           />
-        </pattern>
-      </defs>
-      <rect fill={`url(#${patternId})`} height="100%" width="100%" />
-      {cells.map((square, index) => (
-        <GridSquare height={height} key={index} square={square} width={width} />
-      ))}
-    </svg>
-  );
-};
-AnimatedGridPattern.displayName = "AnimatedGridPattern";
+        ))}
+      </svg>
+    );
+  },
+);

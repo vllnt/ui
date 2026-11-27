@@ -21,7 +21,7 @@ vllnt/ui/
 
 | Package | Purpose | Release policy |
 |---------|---------|----------------|
-| `@vllnt/ui` | React DOM components using Radix UI, Tailwind CSS, and CVA | Public `latest` + canary |
+| `@vllnt/ui` | React DOM components using ui-sdk, Tailwind CSS, and CVA | Public `latest` + canary |
 | `@vllnt/ui-core` | Framework-free tokens, native theme values, and portable option contracts | Experimental canary only |
 | `@vllnt/ui-native` | React Native components using native primitives and `StyleSheet` | Experimental canary only |
 | `@vllnt/ui-registry` | Docs, shadcn feed, search, and MCP | Private; deployed |
@@ -29,7 +29,7 @@ vllnt/ui/
 
 `@vllnt/ui` does not depend on the experimental packages. Its exports, CSS entry points, DOM behavior, and stable release path remain unchanged. The native renderer depends on `@vllnt/ui-core`, never on the web renderer. The registry is the first private consumer of core metadata.
 
-External contributor tooling still comes from `@vllnt/eslint-config` and `@vllnt/typescript`. The web renderer uses React 19, Radix UI, Tailwind CSS, and CVA; the native renderer uses React 19 and React Native primitives. `tsup` builds libraries, Next.js builds the registry, and Expo/Metro validates the native integration.
+External contributor tooling still comes from `@vllnt/eslint-config` and `@vllnt/typescript`. The web renderer uses React 19, ui-sdk (`@ui-sdk/react` + `@ui-sdk/core`), Tailwind CSS, and CVA; the native renderer uses React 19 and React Native primitives. `tsup` builds libraries, Next.js builds the registry, and Expo/Metro validates the native integration.
 
 ## Shared foundations
 
@@ -52,7 +52,7 @@ CI runs the read-only drift check. A token change is incomplete when generated w
 
 ### Web
 
-`@vllnt/ui` targets React 19. Components render semantic DOM and Radix primitives, use Tailwind/CVA recipes, and accept refs as normal React 19 props. Existing package and CSS subpaths remain the supported contract.
+`@vllnt/ui` targets React 19. Components render semantic DOM and ui-sdk parts, use Tailwind/CVA recipes, and accept refs as normal React 19 props. Existing package and CSS subpaths remain the supported contract.
 
 Web components remain self-contained under `packages/ui/src/components/{level}/{name}` with implementation, unit test, visual fixture, and MDX documentation files as applicable (no per-folder `index.ts`); `src/components/index.ts` re-exports each component file and the root `src/index.ts` remains the public barrel. `{level}` is the component's Atomic Design level — `atoms`, `molecules`, `organisms` or `templates` — and a component only imports lower levels (organisms may also import organisms; see [COMPONENTS.md](./agents/COMPONENTS.md#atomic-design-levels)). The level is internal: exports, `/r/{name}.json` and Storybook IDs do not depend on it. `pnpm check:atomic` enforces the levels and `pnpm check:circular` runs Madge against this graph.
 

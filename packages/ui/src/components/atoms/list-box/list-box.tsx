@@ -2,128 +2,49 @@
 
 import * as React from "react";
 
+import { Listbox, ListboxItem } from "@ui-sdk/react/listbox";
+import { mergeProps, renderElement } from "@ui-sdk/react/primitive";
 import { Check } from "lucide-react";
 
-import { moveRovingFocus } from "../../../lib/roving-focus";
+import { named } from "../../../lib/named";
+import { reselectProps } from "../../../lib/reselect";
 import { cn } from "../../../lib/utils";
 
 /** Selection behaviour for a ListBox. */
 export type ListBoxSelectionMode = "multiple" | "single";
 
-type ListBoxContextValue = {
-  disabled: boolean;
-  select: (value: string) => void;
-  selectedValues: string[];
-  setTabStop: (value: string) => void;
-  tabStop?: string;
-};
-
-const ListBoxContext = React.createContext<ListBoxContextValue | null>(null);
-
-function useListBoxContext(): ListBoxContextValue {
-  const context = React.use(ListBoxContext);
-  if (!context) {
-    throw new Error("ListBoxItem must be used within a ListBox");
-  }
-  return context;
+/** The kit's value is always a list; ui-sdk's single mode holds one value or `null`. */
+function toPrimitiveValue(
+  values: string[] | undefined,
+  multiple: boolean,
+): null | string | string[] | undefined {
+  if (values === undefined) return undefined;
+  return multiple ? values : (values[0] ?? null);
 }
 
-type ListBoxSelectionOptions = {
-  defaultValue: string[];
-  onValueChange?: (value: string[]) => void;
-  selectionMode: ListBoxSelectionMode;
-  value?: string[];
-};
-
-function nextSelection(
-  current: string[],
-  item: string,
-  selectionMode: ListBoxSelectionMode,
-): string[] {
-  if (selectionMode === "single") {
-    return [item];
-  }
-
-  return current.includes(item)
-    ? current.filter((entry) => entry !== item)
-    : [...current, item];
-}
-
-function useListBoxSelection({
-  defaultValue,
-  onValueChange,
-  selectionMode,
-  value,
-}: ListBoxSelectionOptions) {
-  const [internalValue, setInternalValue] = React.useState(defaultValue);
-  const selectedValues = value ?? internalValue;
-
-  const select = (item: string) => {
-    const next = nextSelection(selectedValues, item, selectionMode);
-    if (value === undefined) {
-      setInternalValue(next);
-    }
-
-    onValueChange?.(next);
-  };
-
-  return { select, selectedValues };
-}
-
-const OPTION_SELECTOR = '[role="option"]';
-
-function enabledOptionValues(root: HTMLElement): string[] {
-  return [...root.querySelectorAll<HTMLElement>(OPTION_SELECTOR)]
-    .filter((option) => option.getAttribute("aria-disabled") !== "true")
-    .map((option) => option.dataset.value ?? "");
+function toValues(next: null | string | string[]): string[] {
+  if (Array.isArray(next)) return next;
+  return next === null ? [] : [next];
 }
 
 /**
- * Keeps a single option in the tab order (roving tabindex): the option the
- * user last focused while focus is inside the list, otherwise the first
- * selected enabled option, otherwise the first enabled option.
+ * Reports a press on the selected option of a single-select list, which
+ * ui-sdk ignores. Left `undefined` in a multi-select list: there a press
+ * deselects.
  */
-function useRovingTabStop(selectedValues: string[], children: React.ReactNode) {
-  const rootRef = React.useRef<HTMLDivElement | null>(null);
-  const [tabStop, setTabStop] = React.useState<string | undefined>();
-
-  React.useLayoutEffect(() => {
-    const root = rootRef.current;
-    if (!root) return;
-    const values = enabledOptionValues(root);
-    const focusInside = root.contains(document.activeElement);
-    if (focusInside && tabStop !== undefined && values.includes(tabStop)) {
-      return;
-    }
-    const selected = new Set(selectedValues);
-    const preferred = values.find((entry) => selected.has(entry)) ?? values[0];
-    if (preferred !== tabStop) setTabStop(preferred);
-  }, [children, selectedValues, tabStop]);
-
-  return { rootRef, setTabStop, tabStop };
-}
-
-function assignRef<T>(ref: React.Ref<T> | undefined, node: null | T): void {
-  if (typeof ref === "function") {
-    ref(node);
-  } else if (ref) {
-    ref.current = node;
-  }
-}
-
-function handleListKeyDown(event: React.KeyboardEvent<HTMLDivElement>): void {
-  moveRovingFocus(event, OPTION_SELECTOR, {
-    loop: false,
-    orientation: "vertical",
-  });
-}
+const ReselectContext = React.createContext<
+  ((value: string) => void) | undefined
+>(undefined);
 
 /**
  * Accessible single- or multi-select list of options (WAI-ARIA APG listbox):
  * one tab stop, ArrowUp / ArrowDown / Home / End move focus between enabled
  * options, Enter or Space toggles selection.
  */
-export type ListBoxProps = {
+export type ListBoxProps = Omit<
+  React.ComponentPropsWithoutRef<"div">,
+  "defaultValue" | "onChange" | "value"
+> & {
   children: React.ReactNode;
   className?: string;
   defaultValue?: string[];
@@ -134,122 +55,139 @@ export type ListBoxProps = {
   value?: string[];
 };
 
-const ListBox = ({
-  children,
-  className,
-  defaultValue = [],
-  disabled = false,
-  label,
-  onValueChange,
-  ref,
-  selectionMode = "single",
-  value,
-}: ListBoxProps & { ref?: React.Ref<HTMLDivElement> }) => {
-  const { select, selectedValues } = useListBoxSelection({
-    defaultValue,
-    onValueChange,
-    selectionMode,
-    value,
-  });
-  const { rootRef, setTabStop, tabStop } = useRovingTabStop(
-    selectedValues,
+const ListBox = /* @__PURE__ */ named(
+  "ListBox",
+  ({
     children,
-  );
-  const context = React.useMemo<ListBoxContextValue>(
-    () => ({ disabled, select, selectedValues, setTabStop, tabStop }),
-    [disabled, select, selectedValues, setTabStop, tabStop],
-  );
-  const setReferences = React.useCallback(
-    (node: HTMLDivElement | null) => {
-      rootRef.current = node;
-      assignRef(ref, node);
-    },
-    [ref, rootRef],
-  );
+    className,
+    defaultValue = [],
+    disabled = false,
+    label,
+    onValueChange,
+    ref,
+    selectionMode = "single",
+    value,
+    ...props
+  }: ListBoxProps & { ref?: React.Ref<HTMLDivElement> }) => {
+    const multiple = selectionMode === "multiple";
+    // A press on the selected option still reports the value, as before ui-sdk.
+    const reselect = React.useMemo(
+      () =>
+        multiple
+          ? undefined
+          : (item: string) => {
+              onValueChange?.([item]);
+            },
+      [multiple, onValueChange],
+    );
 
-  return (
-    <ListBoxContext.Provider value={context}>
-      <div
-        aria-label={label}
-        aria-multiselectable={selectionMode === "multiple"}
-        className={cn(
-          "flex flex-col gap-0.5 rounded-md border border-input bg-background p-1",
-          className,
-        )}
-        onKeyDown={handleListKeyDown}
-        ref={setReferences}
-        role="listbox"
-        tabIndex={-1}
-      >
-        {children}
-      </div>
-    </ListBoxContext.Provider>
-  );
-};
-ListBox.displayName = "ListBox";
+    return (
+      <ReselectContext value={reselect}>
+        <Listbox<string, boolean>
+          {...props}
+          // Keys move focus and Enter, Space or a press selects, as before.
+          activation="manual"
+          aria-label={label}
+          className={cn(
+            "flex flex-col gap-0.5 rounded-md border border-input bg-background p-1",
+            className,
+          )}
+          defaultValue={toPrimitiveValue(defaultValue, multiple)}
+          disabled={disabled}
+          loop={false}
+          multiple={multiple}
+          onValueChange={(next) => {
+            onValueChange?.(toValues(next));
+          }}
+          ref={ref}
+          tabIndex={-1}
+          value={toPrimitiveValue(value, multiple)}
+        >
+          {children}
+        </Listbox>
+      </ReselectContext>
+    );
+  },
+);
+
+/** Classes of an option, which change with its selected and disabled state. */
+function getItemClassName(className: string | undefined) {
+  return ({ disabled, selected }: { disabled: boolean; selected: boolean }) =>
+    cn(
+      "flex cursor-pointer items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-none focus-visible:ring-2 focus-visible:ring-ring",
+      selected && "bg-accent text-accent-foreground",
+      disabled && "pointer-events-none opacity-50",
+      className,
+    );
+}
 
 /** Single option within a ListBox. */
-export type ListBoxItemProps = {
+export type ListBoxItemProps = Omit<
+  React.ComponentPropsWithoutRef<"div">,
+  "value"
+> & {
   children: React.ReactNode;
   className?: string;
   disabled?: boolean;
   value: string;
 };
 
-const ListBoxItem = ({
-  children,
-  className,
-  disabled = false,
-  ref,
-  value,
-}: ListBoxItemProps & { ref?: React.Ref<HTMLDivElement> }) => {
-  const group = useListBoxContext();
-  const selected = group.selectedValues.includes(value);
-  const isDisabled = disabled || group.disabled;
+const ListBoxItem = /* @__PURE__ */ named(
+  "ListBoxItem",
+  ({
+    children,
+    className,
+    disabled = false,
+    ref,
+    value,
+    ...props
+  }: ListBoxItemProps & { ref?: React.Ref<HTMLDivElement> }) => {
+    const reselect = React.use(ReselectContext);
+    const onReselect = reselect
+      ? () => {
+          reselect(value);
+        }
+      : undefined;
+    const renderItem = (
+      elementProps: Record<string, unknown>,
+      state: { disabled: boolean; selected: boolean },
+    ) =>
+      renderElement(
+        "div",
+        state.selected && !state.disabled
+          ? mergeProps(
+              elementProps,
+              reselectProps(onReselect, { keyboard: true }),
+            )
+          : elementProps,
+        undefined,
+        state,
+      );
 
-  const activate = () => {
-    if (!isDisabled) {
-      group.select(value);
-    }
-  };
-
-  const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
-    if (event.key === "Enter" || event.key === " ") {
-      event.preventDefault();
-      activate();
-    }
-  };
-
-  return (
-    <div
-      aria-disabled={isDisabled || undefined}
-      aria-selected={selected}
-      className={cn(
-        "flex cursor-pointer items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-none focus-visible:ring-2 focus-visible:ring-ring",
-        selected && "bg-accent text-accent-foreground",
-        isDisabled && "pointer-events-none opacity-50",
-        className,
-      )}
-      data-value={value}
-      onClick={activate}
-      onFocus={() => {
-        group.setTabStop(value);
-      }}
-      onKeyDown={handleKeyDown}
-      ref={ref}
-      role="option"
-      tabIndex={!isDisabled && group.tabStop === value ? 0 : -1}
-    >
-      <Check
-        className={cn(
-          "size-4 shrink-0",
-          selected ? "opacity-100" : "opacity-0",
+    return (
+      <ListboxItem
+        {...props}
+        className={getItemClassName(className)}
+        data-value={value}
+        disabled={disabled}
+        ref={ref}
+        render={renderItem}
+        value={value}
+      >
+        {({ selected }) => (
+          <>
+            <Check
+              className={cn(
+                "size-4 shrink-0",
+                selected ? "opacity-100" : "opacity-0",
+              )}
+            />
+            <span className="flex-1">{children}</span>
+          </>
         )}
-      />
-      <span className="flex-1">{children}</span>
-    </div>
-  );
-};
-ListBoxItem.displayName = "ListBoxItem";
+      </ListboxItem>
+    );
+  },
+);
 
 export { ListBox, ListBoxItem };

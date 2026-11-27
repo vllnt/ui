@@ -1,8 +1,8 @@
 import * as React from "react";
 
-import { cva, type VariantProps } from "class-variance-authority";
-
+import { named } from "../../../lib/named";
 import { cn } from "../../../lib/utils";
+import { cva, type VariantProps } from "../../../lib/variants";
 
 const buttonGroupVariants = cva(
   "isolate inline-flex w-fit [&>*:focus-visible]:z-10 [&>*:focus-within]:z-10",
@@ -33,20 +33,22 @@ const buttonGroupVariants = cva(
 export type ButtonGroupProps = React.ComponentPropsWithoutRef<"div"> &
   VariantProps<typeof buttonGroupVariants>;
 
-const ButtonGroup = ({
-  className,
-  orientation,
-  ref,
-  ...props
-}: ButtonGroupProps & { ref?: React.Ref<HTMLDivElement> }) => (
-  <div
-    className={cn(buttonGroupVariants({ orientation }), className)}
-    data-slot="button-group"
-    ref={ref}
-    role="group"
-    {...props}
-  />
+const ButtonGroup = /* @__PURE__ */ named(
+  "ButtonGroup",
+  ({
+    className,
+    orientation,
+    ref,
+    ...props
+  }: ButtonGroupProps & { ref?: React.Ref<HTMLDivElement> }) => (
+    <div
+      className={cn(buttonGroupVariants({ orientation }), className)}
+      data-slot="button-group"
+      ref={ref}
+      role="group"
+      {...props}
+    />
+  ),
 );
-ButtonGroup.displayName = "ButtonGroup";
 
 export { ButtonGroup, buttonGroupVariants };

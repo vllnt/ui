@@ -9,11 +9,12 @@ import {
   useSyncExternalStore,
 } from "react";
 
-import { Slot } from "@radix-ui/react-slot";
-import { cva, type VariantProps } from "class-variance-authority";
 import { X } from "lucide-react";
 
+import { named } from "../../../lib/named";
+import { Slot } from "../../../lib/ui-sdk";
 import { cn } from "../../../lib/utils";
+import { cva, type VariantProps } from "../../../lib/variants";
 
 const bannerVariants = cva(
   "flex w-full items-start gap-3 border-b px-4 py-3 text-sm transition-all motion-safe:animate-in motion-safe:slide-in-from-top-1",
@@ -138,70 +139,73 @@ export type BannerProps = {
  *
  * @public
  */
-export const Banner = ({
-  children,
-  className,
-  dismissible = false,
-  dismissLabel = "Dismiss",
-  icon,
-  id,
-  onDismiss,
-  persistDismissal = false,
-  ref,
-  role: roleOverride,
-  variant,
-  ...rest
-}: BannerProps & { ref?: React.Ref<HTMLDivElement> }) => {
-  const storageKey =
-    persistDismissal && id ? `${STORAGE_PREFIX}${id}` : undefined;
-  const persistedDismissed = usePersistedDismissed(storageKey);
-  const [locallyDismissed, setLocallyDismissed] = useState(false);
+export const Banner = /* @__PURE__ */ named(
+  "Banner",
+  ({
+    children,
+    className,
+    dismissible = false,
+    dismissLabel = "Dismiss",
+    icon,
+    id,
+    onDismiss,
+    persistDismissal = false,
+    ref,
+    role: roleOverride,
+    variant,
+    ...rest
+  }: BannerProps & { ref?: React.Ref<HTMLDivElement> }) => {
+    const storageKey =
+      persistDismissal && id ? `${STORAGE_PREFIX}${id}` : undefined;
+    const persistedDismissed = usePersistedDismissed(storageKey);
+    const [locallyDismissed, setLocallyDismissed] = useState(false);
 
-  const handleDismiss = useCallback(() => {
-    setLocallyDismissed(true);
-    if (storageKey) safeStorageSet(storageKey, "1");
-    onDismiss?.();
-  }, [onDismiss, storageKey]);
+    const handleDismiss = useCallback(() => {
+      setLocallyDismissed(true);
+      if (storageKey) safeStorageSet(storageKey, "1");
+      onDismiss?.();
+    }, [onDismiss, storageKey]);
 
-  if (locallyDismissed || persistedDismissed) return null;
+    if (locallyDismissed || persistedDismissed) return null;
 
-  const resolvedVariant: BannerVariant = variant ?? "info";
-  const role =
-    roleOverride ?? (URGENT_VARIANTS.has(resolvedVariant) ? "alert" : "status");
+    const resolvedVariant: BannerVariant = variant ?? "info";
+    const role =
+      roleOverride ??
+      (URGENT_VARIANTS.has(resolvedVariant) ? "alert" : "status");
 
-  return (
-    <div
-      className={cn(bannerVariants({ variant }), className)}
-      id={id}
-      ref={ref}
-      role={role}
-      {...rest}
-    >
-      {icon ? (
-        <span
-          aria-hidden="true"
-          className="mt-0.5 flex size-4 shrink-0 items-center justify-center [&>svg]:h-4 [&>svg]:w-4"
-        >
-          {icon}
-        </span>
-      ) : null}
-      <div className="flex min-w-0 flex-1 flex-wrap items-center gap-x-3 gap-y-1">
-        {children}
+    return (
+      <div
+        className={cn(bannerVariants({ variant }), className)}
+        id={id}
+        ref={ref}
+        role={role}
+        {...rest}
+      >
+        {icon ? (
+          <span
+            aria-hidden="true"
+            className="mt-0.5 flex size-4 shrink-0 items-center justify-center [&>svg]:h-4 [&>svg]:w-4"
+          >
+            {icon}
+          </span>
+        ) : null}
+        <div className="flex min-w-0 flex-1 flex-wrap items-center gap-x-3 gap-y-1">
+          {children}
+        </div>
+        {dismissible ? (
+          <button
+            aria-label={dismissLabel}
+            className="ml-auto inline-flex size-6 shrink-0 items-center justify-center rounded-md opacity-70 transition-colors hover:bg-foreground/10 hover:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+            onClick={handleDismiss}
+            type="button"
+          >
+            <X aria-hidden="true" className="size-4" />
+          </button>
+        ) : null}
       </div>
-      {dismissible ? (
-        <button
-          aria-label={dismissLabel}
-          className="ml-auto inline-flex size-6 shrink-0 items-center justify-center rounded-md opacity-70 transition-colors hover:bg-foreground/10 hover:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-          onClick={handleDismiss}
-          type="button"
-        >
-          <X aria-hidden="true" className="size-4" />
-        </button>
-      ) : null}
-    </div>
-  );
-};
-Banner.displayName = "Banner";
+    );
+  },
+);
 
 /**
  * Props for {@link BannerAction}.
@@ -220,32 +224,34 @@ export type BannerActionProps = {
  *
  * @public
  */
-export const BannerAction = ({
-  asChild = false,
-  children,
-  className,
-  ref,
-  type,
-  ...rest
-}: BannerActionProps & { ref?: React.Ref<HTMLButtonElement> }) => {
-  const Comp = asChild ? Slot : "button";
-  const buttonProps: ButtonHTMLAttributes<HTMLButtonElement> = asChild
-    ? rest
-    : { type: type ?? "button", ...rest };
+export const BannerAction = /* @__PURE__ */ named(
+  "BannerAction",
+  ({
+    asChild = false,
+    children,
+    className,
+    ref,
+    type,
+    ...rest
+  }: BannerActionProps & { ref?: React.Ref<HTMLButtonElement> }) => {
+    const Comp = asChild ? Slot : "button";
+    const buttonProps: ButtonHTMLAttributes<HTMLButtonElement> = asChild
+      ? rest
+      : { type: type ?? "button", ...rest };
 
-  return (
-    <Comp
-      className={cn(
-        "inline-flex h-7 items-center justify-center rounded-md border border-foreground/20 bg-transparent px-3 text-xs font-medium underline-offset-4 transition-colors hover:bg-foreground/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
-        className,
-      )}
-      ref={ref}
-      {...buttonProps}
-    >
-      {children}
-    </Comp>
-  );
-};
-BannerAction.displayName = "BannerAction";
+    return (
+      <Comp
+        className={cn(
+          "inline-flex h-7 items-center justify-center rounded-md border border-foreground/20 bg-transparent px-3 text-xs font-medium underline-offset-4 transition-colors hover:bg-foreground/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+          className,
+        )}
+        ref={ref}
+        {...buttonProps}
+      >
+        {children}
+      </Comp>
+    );
+  },
+);
 
 export { bannerVariants };

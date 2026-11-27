@@ -1,9 +1,9 @@
 import * as React from "react";
 
-import { cva, type VariantProps } from "class-variance-authority";
-
+import { named } from "../../../lib/named";
 import { keyByOccurrence } from "../../../lib/occurrence-keys";
 import { cn } from "../../../lib/utils";
+import { cva, type VariantProps } from "../../../lib/variants";
 import { Avatar, AvatarFallback, AvatarImage } from "../../atoms/avatar/avatar";
 
 const avatarGroupVariants = cva("flex items-center", {
@@ -64,46 +64,47 @@ export type AvatarGroupProps = React.HTMLAttributes<HTMLDivElement> &
     overflowLabel?: (hiddenCount: number) => string;
   };
 
-const AvatarGroup = ({
-  className,
-  items,
-  max,
-  overflowLabel,
-  ref: reference,
-  size,
-  ...props
-}: AvatarGroupProps & { ref?: React.Ref<HTMLDivElement> }) => {
-  const visibleItems = max === undefined ? items : items.slice(0, max);
-  const hiddenCount = max === undefined ? 0 : Math.max(items.length - max, 0);
+const AvatarGroup = /* @__PURE__ */ named(
+  "AvatarGroup",
+  ({
+    className,
+    items,
+    max,
+    overflowLabel,
+    ref: reference,
+    size,
+    ...props
+  }: AvatarGroupProps & { ref?: React.Ref<HTMLDivElement> }) => {
+    const visibleItems = max === undefined ? items : items.slice(0, max);
+    const hiddenCount = max === undefined ? 0 : Math.max(items.length - max, 0);
 
-  return (
-    <div
-      className={cn(avatarGroupVariants({ size }), className)}
-      ref={reference}
-      {...props}
-    >
-      {keyByOccurrence(
-        visibleItems,
-        (item) => `${item.src ?? ""}|${item.alt}|${item.fallback}`,
-      ).map(({ item, key }, index) => (
-        <Avatar
-          className={avatarItemVariants({ size })}
-          key={key}
-          style={{ zIndex: visibleItems.length - index }}
-        >
-          {item.src ? <AvatarImage alt={item.alt} src={item.src} /> : null}
-          <AvatarFallback>{item.fallback}</AvatarFallback>
-        </Avatar>
-      ))}
-      {hiddenCount > 0 ? (
-        <span className={overflowBadgeVariants({ size })}>
-          {overflowLabel ? overflowLabel(hiddenCount) : `+${hiddenCount}`}
-        </span>
-      ) : null}
-    </div>
-  );
-};
-
-AvatarGroup.displayName = "AvatarGroup";
+    return (
+      <div
+        className={cn(avatarGroupVariants({ size }), className)}
+        ref={reference}
+        {...props}
+      >
+        {keyByOccurrence(
+          visibleItems,
+          (item) => `${item.src ?? ""}|${item.alt}|${item.fallback}`,
+        ).map(({ item, key }, index) => (
+          <Avatar
+            className={avatarItemVariants({ size })}
+            key={key}
+            style={{ zIndex: visibleItems.length - index }}
+          >
+            {item.src ? <AvatarImage alt={item.alt} src={item.src} /> : null}
+            <AvatarFallback>{item.fallback}</AvatarFallback>
+          </Avatar>
+        ))}
+        {hiddenCount > 0 ? (
+          <span className={overflowBadgeVariants({ size })}>
+            {overflowLabel ? overflowLabel(hiddenCount) : `+${hiddenCount}`}
+          </span>
+        ) : null}
+      </div>
+    );
+  },
+);
 
 export { AvatarGroup, avatarGroupVariants, avatarItemVariants };

@@ -2,8 +2,6 @@
 
 import * as React from "react";
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Slot } from "@radix-ui/react-slot";
 import {
   Controller,
   type ControllerProps,
@@ -18,6 +16,9 @@ import {
   type UseFormReturn,
 } from "react-hook-form";
 
+import { named } from "../../../lib/named";
+import { createSchemaResolver } from "../../../lib/schema-resolver";
+import { Slot } from "../../../lib/ui-sdk";
 import { cn } from "../../../lib/utils";
 import { Label } from "../../atoms/label/label";
 
@@ -56,11 +57,14 @@ type BaseFormProps<TFieldValues extends FieldValues> = Omit<
   required?: boolean;
 };
 
+/** A Zod 4 schema; other Standard Schema libraries also work at runtime. */
+type FormSchema = { _zod: { input: FieldValues; output: unknown } };
+
 type ManagedFormProps<TFieldValues extends FieldValues> = {
   defaultValues?: DefaultValues<TFieldValues>;
   form?: undefined;
   resolver?: Resolver<TFieldValues>;
-  schema?: Parameters<typeof zodResolver>[0];
+  schema?: FormSchema;
   values?: TFieldValues;
 };
 
@@ -352,32 +356,15 @@ function FormMarkup<TFieldValues extends FieldValues>({
   );
 }
 
-function FormInner<TFieldValues extends FieldValues = FieldValues>({
-  children,
-  className,
-  controlId,
-  defaultValues,
-  descriptionId,
-  disabled = false,
-  form: providedForm,
-  invalid = false,
-  messageId,
-  onError,
-  onSubmit,
-  onValidSubmit,
-  ref,
-  required = false,
-  resolver,
-  schema,
-  values,
-  ...props
-}: FormProps<TFieldValues> & { ref?: React.Ref<HTMLFormElement> }) {
+const FormInner = /* @__PURE__ */ named("Form", function FormInner<
+  TFieldValues extends FieldValues = FieldValues,
+>({ children, className, controlId, defaultValues, descriptionId, disabled = false, form: providedForm, invalid = false, messageId, onError, onSubmit, onValidSubmit, ref, required = false, resolver, schema, values, ...props }: FormProps<TFieldValues> & { ref?: React.Ref<HTMLFormElement> }) {
   const internalForm = useForm<TFieldValues>({
     defaultValues,
     resolver:
       schema === undefined
         ? resolver
-        : (zodResolver(schema) as Resolver<TFieldValues>),
+        : createSchemaResolver<TFieldValues>(schema),
     values,
   });
   const form: FormInstance<TFieldValues> = providedForm ?? internalForm;
@@ -415,9 +402,8 @@ function FormInner<TFieldValues extends FieldValues = FieldValues>({
       {children}
     </FormMarkup>
   );
-}
+});
 
-FormInner.displayName = "Form";
 const Form = FormInner;
 
 function FormField<
@@ -482,99 +468,103 @@ function useFormField() {
   };
 }
 
-const FormItem = ({
-  children,
-  className,
-  disabled: itemDisabled,
-  invalid: itemInvalid,
-  ref,
-  required: itemRequired,
-  ...props
-}: React.ComponentPropsWithoutRef<"div"> & {
-  disabled?: boolean;
-  invalid?: boolean;
-  ref?: React.Ref<HTMLDivElement>;
-  required?: boolean;
-}) => {
-  const {
-    controlId: controlIdBase,
-    descriptionId: descriptionIdBase,
-    disabled,
-    invalid,
-    messageId: messageIdBase,
-    required,
-  } = useFormRootContext("FormItem");
-  const generatedId = React.useId();
-  const hasDescription = hasRenderedFormChild(children, "FormDescription");
-  const hasMessage = hasRenderedFormChild(children, "FormMessage");
-  const hasMessageSlot = hasFormChild(children, "FormMessage");
+const FormItem = /* @__PURE__ */ named(
+  "FormItem",
+  ({
+    children,
+    className,
+    disabled: itemDisabled,
+    invalid: itemInvalid,
+    ref,
+    required: itemRequired,
+    ...props
+  }: React.ComponentPropsWithoutRef<"div"> & {
+    disabled?: boolean;
+    invalid?: boolean;
+    ref?: React.Ref<HTMLDivElement>;
+    required?: boolean;
+  }) => {
+    const {
+      controlId: controlIdBase,
+      descriptionId: descriptionIdBase,
+      disabled,
+      invalid,
+      messageId: messageIdBase,
+      required,
+    } = useFormRootContext("FormItem");
+    const generatedId = React.useId();
+    const hasDescription = hasRenderedFormChild(children, "FormDescription");
+    const hasMessage = hasRenderedFormChild(children, "FormMessage");
+    const hasMessageSlot = hasFormChild(children, "FormMessage");
 
-  const effectiveDisabled = itemDisabled ?? disabled;
-  const effectiveInvalid = itemInvalid ?? invalid;
-  const effectiveRequired = itemRequired ?? required;
+    const effectiveDisabled = itemDisabled ?? disabled;
+    const effectiveInvalid = itemInvalid ?? invalid;
+    const effectiveRequired = itemRequired ?? required;
 
-  const value = React.useMemo<FormItemContextValue>(
-    () => ({
-      controlId: resolveItemId(controlIdBase, generatedId, "control"),
-      descriptionId: resolveItemId(
+    const value = React.useMemo<FormItemContextValue>(
+      () => ({
+        controlId: resolveItemId(controlIdBase, generatedId, "control"),
+        descriptionId: resolveItemId(
+          descriptionIdBase,
+          generatedId,
+          "description",
+        ),
+        disabled: effectiveDisabled,
+        hasDescription,
+        hasMessage,
+        hasMessageSlot,
+        id: generatedId,
+        invalid: effectiveInvalid,
+        messageId: resolveItemId(messageIdBase, generatedId, "message"),
+        required: effectiveRequired,
+      }),
+      [
+        controlIdBase,
         descriptionIdBase,
+        effectiveDisabled,
+        effectiveInvalid,
+        effectiveRequired,
         generatedId,
-        "description",
-      ),
-      disabled: effectiveDisabled,
-      hasDescription,
-      hasMessage,
-      hasMessageSlot,
-      id: generatedId,
-      invalid: effectiveInvalid,
-      messageId: resolveItemId(messageIdBase, generatedId, "message"),
-      required: effectiveRequired,
-    }),
-    [
-      controlIdBase,
-      descriptionIdBase,
-      effectiveDisabled,
-      effectiveInvalid,
-      effectiveRequired,
-      generatedId,
-      hasDescription,
-      hasMessage,
-      hasMessageSlot,
-      messageIdBase,
-    ],
-  );
+        hasDescription,
+        hasMessage,
+        hasMessageSlot,
+        messageIdBase,
+      ],
+    );
 
-  return (
-    <FormItemContext.Provider value={value}>
-      <div className={cn("space-y-2", className)} ref={ref} {...props}>
-        {children}
-      </div>
-    </FormItemContext.Provider>
-  );
-};
-FormItem.displayName = "FormItem";
+    return (
+      <FormItemContext.Provider value={value}>
+        <div className={cn("space-y-2", className)} ref={ref} {...props}>
+          {children}
+        </div>
+      </FormItemContext.Provider>
+    );
+  },
+);
 
-const FormLabel = ({
-  className,
-  htmlFor,
-  ref,
-  ...props
-}: React.ComponentPropsWithoutRef<typeof Label> & {
-  ref?: React.Ref<React.ComponentRef<typeof Label>>;
-}) => {
-  const { formItemId, invalid } = useFormField();
+const FormLabel = /* @__PURE__ */ named(
+  "FormLabel",
+  ({
+    className,
+    htmlFor,
+    ref,
+    ...props
+  }: React.ComponentPropsWithoutRef<typeof Label> & {
+    ref?: React.Ref<React.ComponentRef<typeof Label>>;
+  }) => {
+    const { formItemId, invalid } = useFormField();
 
-  return (
-    <Label
-      className={cn(invalid && "text-destructive", className)}
-      data-invalid={invalid ? "true" : undefined}
-      htmlFor={htmlFor ?? formItemId}
-      ref={ref}
-      {...props}
-    />
-  );
-};
-FormLabel.displayName = "FormLabel";
+    return (
+      <Label
+        className={cn(invalid && "text-destructive", className)}
+        data-invalid={invalid ? "true" : undefined}
+        htmlFor={htmlFor ?? formItemId}
+        ref={ref}
+        {...props}
+      />
+    );
+  },
+);
 
 type FormControlProps = React.ComponentPropsWithoutRef<typeof Slot> & {
   disabled?: boolean;
@@ -626,91 +616,100 @@ function getControlStateProps(
   };
 }
 
-const FormControl = ({
-  disabled: controlDisabled,
-  id: _id,
-  ref,
-  required: controlRequired,
-  ...props
-}: FormControlProps & { ref?: React.Ref<HTMLElement> }) => {
-  const field = useFormField();
-  const { formState } = useFormContext();
-  const describedBy = composeIds(
-    props["aria-describedby"],
-    field.hasDescription ? field.formDescriptionId : undefined,
-    getMessageDescriptionId(field),
-  );
+const FormControl = /* @__PURE__ */ named(
+  "FormControl",
+  ({
+    disabled: controlDisabled,
+    id: _id,
+    ref,
+    required: controlRequired,
+    ...props
+  }: FormControlProps & { ref?: React.Ref<HTMLElement> }) => {
+    const field = useFormField();
+    const { formState } = useFormContext();
+    const describedBy = composeIds(
+      props["aria-describedby"],
+      field.hasDescription ? field.formDescriptionId : undefined,
+      getMessageDescriptionId(field),
+    );
 
-  return (
-    <Slot
-      {...props}
-      {...getControlStateProps(props, {
-        disabled: controlDisabled ?? (field.disabled || formState.isSubmitting),
-        invalid: field.invalid,
-        required: controlRequired ?? field.required,
-      })}
-      aria-describedby={describedBy}
-      id={field.formItemId}
-      ref={ref}
-    />
-  );
-};
-FormControl.displayName = "FormControl";
+    return (
+      <Slot
+        {...props}
+        {...getControlStateProps(props, {
+          disabled:
+            controlDisabled ?? (field.disabled || formState.isSubmitting),
+          invalid: field.invalid,
+          required: controlRequired ?? field.required,
+        })}
+        aria-describedby={describedBy}
+        id={field.formItemId}
+        ref={ref}
+      />
+    );
+  },
+);
 
-const FormDescription = ({
-  className,
-  id: _id,
-  ref,
-  ...props
-}: React.ComponentPropsWithoutRef<"p"> & {
-  ref?: React.Ref<HTMLParagraphElement>;
-}) => {
-  const { formDescriptionId } = useFormField();
+const FormDescription = /* @__PURE__ */ named(
+  "FormDescription",
+  ({
+    className,
+    id: _id,
+    ref,
+    ...props
+  }: React.ComponentPropsWithoutRef<"p"> & {
+    ref?: React.Ref<HTMLParagraphElement>;
+  }) => {
+    const { formDescriptionId } = useFormField();
 
-  return (
-    <p
-      {...props}
-      className={cn("text-sm text-muted-foreground", className)}
-      id={formDescriptionId}
-      ref={ref}
-    />
-  );
-};
-FormDescription.displayName = "FormDescription";
+    return (
+      <p
+        {...props}
+        className={cn("text-sm text-muted-foreground", className)}
+        id={formDescriptionId}
+        ref={ref}
+      />
+    );
+  },
+);
 
-const FormMessage = ({
-  children,
-  className,
-  id: _id,
-  ref,
-  ...props
-}: React.ComponentPropsWithoutRef<"p"> & {
-  ref?: React.Ref<HTMLParagraphElement>;
-}) => {
-  const { error, formMessageId, invalid } = useFormField();
-  const body = error?.message ?? children;
+const FormMessage = /* @__PURE__ */ named(
+  "FormMessage",
+  ({
+    children,
+    className,
+    id: _id,
+    ref,
+    ...props
+  }: React.ComponentPropsWithoutRef<"p"> & {
+    ref?: React.Ref<HTMLParagraphElement>;
+  }) => {
+    const { error, formMessageId, invalid } = useFormField();
+    const body = error?.message ?? children;
 
-  if (!hasVisibleContent(body)) {
-    return null;
-  }
+    if (!hasVisibleContent(body)) {
+      return null;
+    }
 
-  return (
-    <p
-      {...props}
-      className={cn(
-        "text-sm font-medium",
-        invalid || error !== undefined ? "text-destructive" : "text-foreground",
-        className,
-      )}
-      id={formMessageId}
-      ref={ref}
-      role={invalid || error !== undefined ? "alert" : undefined}
-    >
-      {body}
-    </p>
-  );
-};
-FormMessage.displayName = "FormMessage";
+    return (
+      <p
+        {...props}
+        className={cn(
+          "text-sm font-medium",
+          invalid || error !== undefined
+            ? "text-destructive"
+            : "text-foreground",
+          className,
+        )}
+        id={formMessageId}
+        ref={ref}
+        role={invalid || error !== undefined ? "alert" : undefined}
+      >
+        {body}
+      </p>
+    );
+  },
+);
 
 export {
   Form,

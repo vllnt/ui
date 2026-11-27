@@ -4,7 +4,9 @@ import * as React from "react";
 
 import { FileUp, UploadCloud, X } from "lucide-react";
 
+import { named } from "../../../lib/named";
 import { keyByOccurrence } from "../../../lib/occurrence-keys";
+import { useControllableState } from "../../../lib/use-controllable-state";
 import { cn } from "../../../lib/utils";
 import { Button } from "../../atoms/button/button";
 
@@ -30,22 +32,11 @@ function useFileUploadState(
   multiple: boolean,
   onFilesChange?: (files: File[]) => void,
 ) {
-  const [internalFiles, setInternalFiles] = React.useState<File[]>(
-    controlledFiles ?? [],
-  );
-
-  const resolvedFiles = controlledFiles ?? internalFiles;
-
-  const updateFiles = React.useCallback(
-    (nextFiles: File[]) => {
-      if (controlledFiles === undefined) {
-        setInternalFiles(nextFiles);
-      }
-
-      onFilesChange?.(nextFiles);
-    },
-    [controlledFiles, onFilesChange],
-  );
+  const [resolvedFiles, updateFiles] = useControllableState<File[]>({
+    defaultValue: [],
+    onChange: onFilesChange,
+    value: controlledFiles,
+  });
 
   const addFiles = React.useCallback(
     (incomingFiles: File[] | FileList) => {
@@ -221,61 +212,63 @@ function FileUploadList({
   );
 }
 
-function FileUploadComponent({
-  accept,
-  browseLabel = "Choose files",
-  className,
-  disabled,
-  dropzoneText = "Drag and drop files here, or click to browse.",
-  files,
-  helperText = "Supports one or more files.",
-  multiple = true,
-  onFilesChange,
-  ref: reference,
-  ...props
-}: FileUploadProps & { ref?: React.Ref<HTMLInputElement> }) {
-  const [isDragging, setIsDragging] = React.useState(false);
-  const { addFiles, removeFile, resolvedFiles } = useFileUploadState(
+const FileUploadComponent = /* @__PURE__ */ named(
+  "FileUpload",
+  function FileUploadComponent({
+    accept,
+    browseLabel = "Choose files",
+    className,
+    disabled,
+    dropzoneText = "Drag and drop files here, or click to browse.",
     files,
-    multiple,
+    helperText = "Supports one or more files.",
+    multiple = true,
     onFilesChange,
-  );
+    ref: reference,
+    ...props
+  }: FileUploadProps & { ref?: React.Ref<HTMLInputElement> }) {
+    const [isDragging, setIsDragging] = React.useState(false);
+    const { addFiles, removeFile, resolvedFiles } = useFileUploadState(
+      files,
+      multiple,
+      onFilesChange,
+    );
 
-  return (
-    <div className={cn("space-y-3", className)}>
-      <FileUploadDropzone
-        browseLabel={browseLabel}
-        disabled={disabled}
-        dropzoneText={dropzoneText}
-        helperText={helperText}
-        isDragging={isDragging}
-        onDragStateChange={setIsDragging}
-        onFilesDrop={addFiles}
-      >
-        <input
-          {...props}
-          accept={accept}
-          aria-label={browseLabel}
-          className="sr-only"
+    return (
+      <div className={cn("space-y-3", className)}>
+        <FileUploadDropzone
+          browseLabel={browseLabel}
           disabled={disabled}
-          multiple={multiple}
-          onChange={(event) => {
-            if (event.target.files) {
-              addFiles(event.target.files);
-            }
-          }}
-          ref={(node) => {
-            assignInputReference(reference, node);
-          }}
-          type="file"
-        />
-      </FileUploadDropzone>
-      <FileUploadList files={resolvedFiles} onRemove={removeFile} />
-    </div>
-  );
-}
+          dropzoneText={dropzoneText}
+          helperText={helperText}
+          isDragging={isDragging}
+          onDragStateChange={setIsDragging}
+          onFilesDrop={addFiles}
+        >
+          <input
+            {...props}
+            accept={accept}
+            aria-label={browseLabel}
+            className="sr-only"
+            disabled={disabled}
+            multiple={multiple}
+            onChange={(event) => {
+              if (event.target.files) {
+                addFiles(event.target.files);
+              }
+            }}
+            ref={(node) => {
+              assignInputReference(reference, node);
+            }}
+            type="file"
+          />
+        </FileUploadDropzone>
+        <FileUploadList files={resolvedFiles} onRemove={removeFile} />
+      </div>
+    );
+  },
+);
 
-FileUploadComponent.displayName = "FileUpload";
 const FileUpload = FileUploadComponent;
 
 export { FileUpload };

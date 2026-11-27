@@ -83,7 +83,7 @@ Family `molecule / Sheet` (40 mains).
 | `Placement` | `bottom`, `left`, `right`, `top` | `side` |
 | `Placement` | `depth-stacked` | Not built |
 | `Detent` | `full`, `large`, `medium`, `small` | Not built (no detent prop) |
-| `Modality` | `modal` | Built (Radix `Dialog` default) |
+| `Modality` | `modal` | Built (`Dialog` default) |
 | `Modality` | `non-modal` | Not built: `Sheet` passes `modal={false}` through, but `SheetContent` always renders the scrim |
 
 | Top layer | Code |
@@ -91,3 +91,12 @@ Family `molecule / Sheet` (40 mains).
 | `Panel` | `SheetContent` |
 | `Scrim` | `SheetOverlay` |
 
+
+## Options
+
+- `overlay`: `"scrim"` (default) dims the page, `"none"` draws no veil. The panel stays modal either way.
+- `closeButton`: pass `false` to drop the corner close button when the content has its own `SheetClose`.
+- `labels.close`: accessible name of the corner close button.
+- `SheetOverlay` takes `material` to draw a glass or solid scrim instead of the plain dim.
+- `onEscapeKeyDown`, `onPointerDownOutside`, `onInteractOutside`, `onFocusOutside`: call `event.preventDefault()` to keep the sheet open.
+- `forceMount`: keeps the panel in the page while closed.

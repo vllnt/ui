@@ -1,8 +1,8 @@
 import { createElement } from "react";
 
-import { cva, type VariantProps } from "class-variance-authority";
-
+import { named } from "../../../lib/named";
 import { cn } from "../../../lib/utils";
+import { cva, type VariantProps } from "../../../lib/variants";
 
 /**
  * Body-text scale for the {@link Text} primitive. Exposed so consumers can
@@ -81,25 +81,27 @@ export type TextProps = React.HTMLAttributes<HTMLElement> &
  *   <Text as="dd" size="small" weight="medium">Paris</Text>
  * </dl>
  */
-const Text = ({
-  as = "p",
-  className,
-  family,
-  measure,
-  ref,
-  size,
-  tone,
-  weight,
-  ...props
-}: TextProps) =>
-  createElement(as, {
-    className: cn(
-      textVariants({ family, measure, size, tone, weight }),
-      className,
-    ),
+const Text = /* @__PURE__ */ named(
+  "Text",
+  ({
+    as = "p",
+    className,
+    family,
+    measure,
     ref,
-    ...props,
-  });
-Text.displayName = "Text";
+    size,
+    tone,
+    weight,
+    ...props
+  }: TextProps) =>
+    createElement(as, {
+      className: cn(
+        textVariants({ family, measure, size, tone, weight }),
+        className,
+      ),
+      ref,
+      ...props,
+    }),
+);
 
 export { Text };

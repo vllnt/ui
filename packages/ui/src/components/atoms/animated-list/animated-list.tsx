@@ -1,5 +1,6 @@
 import * as React from "react";
 
+import { named } from "../../../lib/named";
 import { cn } from "../../../lib/utils";
 
 /** Props for {@link AnimatedList}. */
@@ -21,29 +22,35 @@ export type AnimatedListProps = React.ComponentPropsWithoutRef<"div"> & {
  * </AnimatedList>
  * ```
  */
-export const AnimatedList = ({
-  children,
-  className,
-  delay = 100,
-  ref,
-  ...props
-}: AnimatedListProps & { ref?: React.Ref<HTMLDivElement> }) => {
-  const items = React.Children.toArray(children);
+export const AnimatedList = /* @__PURE__ */ named(
+  "AnimatedList",
+  ({
+    children,
+    className,
+    delay = 100,
+    ref,
+    ...props
+  }: AnimatedListProps & { ref?: React.Ref<HTMLDivElement> }) => {
+    const items = React.Children.toArray(children);
 
-  return (
-    <div className={cn("flex flex-col gap-2", className)} ref={ref} {...props}>
-      {React.Children.map(items, (child, index) => (
-        <span
-          className="block animate-in fade-in-0 slide-in-from-bottom-2 motion-reduce:animate-none"
-          style={{
-            animationDelay: `${index * delay}ms`,
-            animationFillMode: "both",
-          }}
-        >
-          {child}
-        </span>
-      ))}
-    </div>
-  );
-};
-AnimatedList.displayName = "AnimatedList";
+    return (
+      <div
+        className={cn("flex flex-col gap-2", className)}
+        ref={ref}
+        {...props}
+      >
+        {React.Children.map(items, (child, index) => (
+          <span
+            className="block animate-in fade-in-0 slide-in-from-bottom-2 motion-reduce:animate-none"
+            style={{
+              animationDelay: `${index * delay}ms`,
+              animationFillMode: "both",
+            }}
+          >
+            {child}
+          </span>
+        ))}
+      </div>
+    );
+  },
+);

@@ -44,3 +44,9 @@ import {
 
 <Controls />
 
+
+## Options
+
+- `overlay`: `"scrim"` (default) dims the page, `"none"` draws no veil. The panel stays modal either way.
+- `onEscapeKeyDown`, `onPointerDownOutside`, `onInteractOutside`, `onFocusOutside`: call `event.preventDefault()` to keep the drawer open.
+- `forceMount`: keeps the panel in the page while closed.

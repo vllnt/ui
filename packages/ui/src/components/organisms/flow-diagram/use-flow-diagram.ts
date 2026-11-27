@@ -8,9 +8,6 @@ import {
   useReactFlow,
 } from "@xyflow/react";
 
-import { useBodyScrollLock } from "../../../lib/use-body-scroll-lock";
-import { useEscapeKey } from "../../../lib/use-escape-key";
-
 import type {
   CopyStatus,
   UseFlowDiagramOptions,
@@ -65,12 +62,6 @@ function useFullscreenState(allowFullscreen: boolean) {
   const closeFullscreen = useCallback(() => {
     setIsFullscreen(false);
   }, []);
-
-  useEscapeKey(closeFullscreen, {
-    enabled: isFullscreen,
-    target: "document",
-  });
-  useBodyScrollLock(isFullscreen);
 
   return { closeFullscreen, isFullscreen, toggleFullscreen };
 }

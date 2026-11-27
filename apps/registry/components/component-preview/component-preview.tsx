@@ -1781,7 +1781,7 @@ function HoverCardPreview() {
         <div className="space-y-1">
           <h4 className="text-sm font-semibold">VLLNT UI</h4>
           <p className="text-sm text-muted-foreground">
-            A component library built with Radix UI and Tailwind CSS.
+            A component library built with ui-sdk and Tailwind CSS.
           </p>
         </div>
       </HoverCardContent>
@@ -2115,7 +2115,7 @@ function CollapsiblePreview() {
 
 function CarouselPreview() {
   return (
-    <Carousel className="w-full max-w-xs">
+    <Carousel aria-label="Numbered slides" className="w-full max-w-xs">
       <CarouselContent>
         {Array.from({ length: 3 }).map((_, index) => (
           <CarouselItem key={index}>

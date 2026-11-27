@@ -2,6 +2,7 @@
 
 import * as React from "react";
 
+import { named } from "../../../lib/named";
 import { cn } from "../../../lib/utils";
 
 /** Country option rendered in the dialing-code selector. */
@@ -32,49 +33,51 @@ export type PhoneInputProps = Omit<
   onCountryChange?: (code: string) => void;
 };
 
-const PhoneInput = ({
-  className,
-  countries = defaultCountries,
-  defaultCountry,
-  onCountryChange,
-  ref,
-  ...props
-}: PhoneInputProps & { ref?: React.Ref<HTMLInputElement> }) => {
-  const [country, setCountry] = React.useState(
-    defaultCountry ?? countries[0]?.code ?? "",
-  );
+const PhoneInput = /* @__PURE__ */ named(
+  "PhoneInput",
+  ({
+    className,
+    countries = defaultCountries,
+    defaultCountry,
+    onCountryChange,
+    ref,
+    ...props
+  }: PhoneInputProps & { ref?: React.Ref<HTMLInputElement> }) => {
+    const [country, setCountry] = React.useState(
+      defaultCountry ?? countries[0]?.code ?? "",
+    );
 
-  return (
-    <div
-      className={cn(
-        "flex h-10 w-full items-center rounded-md border border-input bg-background text-sm ring-offset-background focus-within:outline-none focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2",
-        className,
-      )}
-    >
-      <select
-        aria-label="Country dialing code"
-        className="h-full rounded-l-md border-0 border-r border-input bg-transparent py-2 pl-3 pr-2 text-sm focus-visible:outline-none disabled:cursor-not-allowed"
-        onChange={(event) => {
-          setCountry(event.target.value);
-          onCountryChange?.(event.target.value);
-        }}
-        value={country}
+    return (
+      <div
+        className={cn(
+          "flex h-10 w-full items-center rounded-md border border-input bg-background text-sm ring-offset-background focus-within:outline-none focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2",
+          className,
+        )}
       >
-        {countries.map((item) => (
-          <option key={item.code} value={item.code}>
-            {item.dialCode}
-          </option>
-        ))}
-      </select>
-      <input
-        {...props}
-        className="h-full w-full flex-1 rounded-r-md bg-transparent px-3 py-2 placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed"
-        ref={ref}
-        type="tel"
-      />
-    </div>
-  );
-};
-PhoneInput.displayName = "PhoneInput";
+        <select
+          aria-label="Country dialing code"
+          className="h-full rounded-l-md border-0 border-r border-input bg-transparent py-2 pl-3 pr-2 text-sm focus-visible:outline-none disabled:cursor-not-allowed"
+          onChange={(event) => {
+            setCountry(event.target.value);
+            onCountryChange?.(event.target.value);
+          }}
+          value={country}
+        >
+          {countries.map((item) => (
+            <option key={item.code} value={item.code}>
+              {item.dialCode}
+            </option>
+          ))}
+        </select>
+        <input
+          {...props}
+          className="h-full w-full flex-1 rounded-r-md bg-transparent px-3 py-2 placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed"
+          ref={ref}
+          type="tel"
+        />
+      </div>
+    );
+  },
+);
 
 export { PhoneInput };

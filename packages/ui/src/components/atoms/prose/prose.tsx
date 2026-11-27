@@ -1,3 +1,4 @@
+import { named } from "../../../lib/named";
 import { cn } from "../../../lib/utils";
 
 /** Props for {@link Prose}. */
@@ -31,9 +32,11 @@ const proseStyles = cn(
  * @example
  * <Prose>{parsedMarkdown}</Prose>
  */
-const Prose = ({ className, ref, ...props }: ProseProps) => (
-  <div className={cn(proseStyles, className)} ref={ref} {...props} />
+const Prose = /* @__PURE__ */ named(
+  "Prose",
+  ({ className, ref, ...props }: ProseProps) => (
+    <div className={cn(proseStyles, className)} ref={ref} {...props} />
+  ),
 );
-Prose.displayName = "Prose";
 
 export { Prose };

@@ -8,6 +8,7 @@ import {
 } from "react";
 
 import type { MaterialProps } from "../../../lib/material";
+import { named } from "../../../lib/named";
 import { cn } from "../../../lib/utils";
 
 const VIEWBOX_WIDTH = 1000;
@@ -453,66 +454,65 @@ function Stage(props: StageProps): ReactNode {
  *
  * @public
  */
-export const RouteMap = ({
-  ref,
-  ...props
-}: RouteMapProps & { ref?: React.Ref<HTMLElement> }) => {
-  const {
-    animated = false,
-    animationDurationSeconds = 4,
-    backdrop,
-    backdropAlt,
-    children,
-    className,
-    color = "red",
-    labels,
-    lineStyle = "solid",
-    material = "glass",
-    showProgressIndicator = false,
-    waypoints,
-    ...rest
-  } = props;
-  const titleId = useId();
-  const pathId = useId();
-  const resolvedLabels = useMemo(
-    () => ({ ...DEFAULT_LABELS, ...labels }),
-    [labels],
-  );
-  const projected = useMemo(() => projectWaypoints(waypoints), [waypoints]);
-  const pathDefinition = useMemo(() => pathFor(projected), [projected]);
-  const totalLength = useMemo(() => pathLength(projected), [projected]);
+export const RouteMap = /* @__PURE__ */ named(
+  "RouteMap",
+  ({ ref, ...props }: RouteMapProps & { ref?: React.Ref<HTMLElement> }) => {
+    const {
+      animated = false,
+      animationDurationSeconds = 4,
+      backdrop,
+      backdropAlt,
+      children,
+      className,
+      color = "red",
+      labels,
+      lineStyle = "solid",
+      material = "glass",
+      showProgressIndicator = false,
+      waypoints,
+      ...rest
+    } = props;
+    const titleId = useId();
+    const pathId = useId();
+    const resolvedLabels = useMemo(
+      () => ({ ...DEFAULT_LABELS, ...labels }),
+      [labels],
+    );
+    const projected = useMemo(() => projectWaypoints(waypoints), [waypoints]);
+    const pathDefinition = useMemo(() => pathFor(projected), [projected]);
+    const totalLength = useMemo(() => pathLength(projected), [projected]);
 
-  return (
-    <section
-      aria-label={resolvedLabels.region}
-      className={cn(
-        "relative aspect-[2/1] w-full overflow-hidden rounded-2xl border bg-background text-foreground",
-        className,
-      )}
-      data-material={material}
-      ref={ref}
-      {...rest}
-    >
-      <Stage
-        animated={animated}
-        animationDurationSeconds={animationDurationSeconds}
-        backdrop={backdrop}
-        backdropAlt={backdropAlt}
-        color={color}
-        lineStyle={lineStyle}
-        pathDefinition={pathDefinition}
-        pathId={pathId}
-        showProgressIndicator={showProgressIndicator}
-        totalLength={totalLength}
-        waypoints={projected}
-      />
-      {children ? (
-        <div className="vllnt-glass vllnt-glass-dense absolute bottom-3 left-3 z-10 max-w-xs rounded-md border px-3 py-2 text-xs text-foreground">
-          {children}
-        </div>
-      ) : null}
-      <DataSummary titleId={titleId} waypoints={waypoints} />
-    </section>
-  );
-};
-RouteMap.displayName = "RouteMap";
+    return (
+      <section
+        aria-label={resolvedLabels.region}
+        className={cn(
+          "relative aspect-[2/1] w-full overflow-hidden rounded-2xl border bg-background text-foreground",
+          className,
+        )}
+        data-material={material}
+        ref={ref}
+        {...rest}
+      >
+        <Stage
+          animated={animated}
+          animationDurationSeconds={animationDurationSeconds}
+          backdrop={backdrop}
+          backdropAlt={backdropAlt}
+          color={color}
+          lineStyle={lineStyle}
+          pathDefinition={pathDefinition}
+          pathId={pathId}
+          showProgressIndicator={showProgressIndicator}
+          totalLength={totalLength}
+          waypoints={projected}
+        />
+        {children ? (
+          <div className="vllnt-glass vllnt-glass-dense absolute bottom-3 left-3 z-10 max-w-xs rounded-md border px-3 py-2 text-xs text-foreground">
+            {children}
+          </div>
+        ) : null}
+        <DataSummary titleId={titleId} waypoints={waypoints} />
+      </section>
+    );
+  },
+);

@@ -4,6 +4,7 @@ import { type ReactNode, useMemo } from "react";
 
 import { ArrowDownRight, ArrowUpRight } from "lucide-react";
 
+import { named } from "../../../lib/named";
 import { cn } from "../../../lib/utils";
 import { Badge } from "../../atoms/badge/badge";
 import {
@@ -182,55 +183,58 @@ function getSortedItems(items: UsageBreakdownItem[], maxItems?: number) {
     : rankedItems;
 }
 
-const UsageBreakdown = ({
-  className,
-  description,
-  emptyMessage = "No usage data available.",
-  items,
-  maxItems,
-  ref,
-  title = "Usage breakdown",
-  ...props
-}: UsageBreakdownProps & { ref?: React.Ref<HTMLDivElement> }) => {
-  const sortedItems = useMemo(
-    () => getSortedItems(items, maxItems),
-    [items, maxItems],
-  );
-  const totalValue = useMemo(
-    () => sortedItems.reduce((sum, item) => sum + item.value, 0),
-    [sortedItems],
-  );
-  const maxValue = sortedItems[0]?.value ?? 0;
+const UsageBreakdown = /* @__PURE__ */ named(
+  "UsageBreakdown",
+  ({
+    className,
+    description,
+    emptyMessage = "No usage data available.",
+    items,
+    maxItems,
+    ref,
+    title = "Usage breakdown",
+    ...props
+  }: UsageBreakdownProps & { ref?: React.Ref<HTMLDivElement> }) => {
+    const sortedItems = useMemo(
+      () => getSortedItems(items, maxItems),
+      [items, maxItems],
+    );
+    const totalValue = useMemo(
+      () => sortedItems.reduce((sum, item) => sum + item.value, 0),
+      [sortedItems],
+    );
+    const maxValue = sortedItems[0]?.value ?? 0;
 
-  return (
-    <Card className={cn("w-full", className)} ref={ref} {...props}>
-      <CardHeader>
-        <CardTitle>{title}</CardTitle>
-        {description ? <CardDescription>{description}</CardDescription> : null}
-      </CardHeader>
-      <CardContent>
-        {sortedItems.length === 0 ? (
-          <div className="rounded-lg border border-dashed px-4 py-8 text-center text-sm text-muted-foreground">
-            {emptyMessage}
-          </div>
-        ) : (
-          <ol className="space-y-3">
-            {sortedItems.map((item, index) => (
-              <UsageBreakdownRow
-                item={item}
-                key={item.id}
-                maxValue={maxValue}
-                rank={index + 1}
-                totalValue={totalValue}
-              />
-            ))}
-          </ol>
-        )}
-      </CardContent>
-    </Card>
-  );
-};
-
-UsageBreakdown.displayName = "UsageBreakdown";
+    return (
+      <Card className={cn("w-full", className)} ref={ref} {...props}>
+        <CardHeader>
+          <CardTitle>{title}</CardTitle>
+          {description ? (
+            <CardDescription>{description}</CardDescription>
+          ) : null}
+        </CardHeader>
+        <CardContent>
+          {sortedItems.length === 0 ? (
+            <div className="rounded-lg border border-dashed px-4 py-8 text-center text-sm text-muted-foreground">
+              {emptyMessage}
+            </div>
+          ) : (
+            <ol className="space-y-3">
+              {sortedItems.map((item, index) => (
+                <UsageBreakdownRow
+                  item={item}
+                  key={item.id}
+                  maxValue={maxValue}
+                  rank={index + 1}
+                  totalValue={totalValue}
+                />
+              ))}
+            </ol>
+          )}
+        </CardContent>
+      </Card>
+    );
+  },
+);
 
 export { UsageBreakdown };

@@ -2,6 +2,7 @@
 
 import type { ComponentPropsWithoutRef, ReactNode } from "react";
 
+import { named } from "../../../lib/named";
 import { cn } from "../../../lib/utils";
 
 /**
@@ -127,48 +128,50 @@ const Avatar = (props: { user: PresenceUser }): React.ReactElement => {
  *
  * @public
  */
-export const PresenceStack = ({
-  ref,
-  ...props
-}: PresenceStackProps & { ref?: React.Ref<HTMLDivElement> }) => {
-  const {
-    className,
-    labels,
-    max = 5,
-    onOverflowActivate,
-    users,
-    ...rest
-  } = props;
-  const resolvedLabels = { ...DEFAULT_LABELS, ...labels };
-  const visible = max >= users.length ? users : users.slice(0, max);
-  const hidden = users.length - visible.length;
-  const handleOverflow = (): void => {
-    onOverflowActivate?.();
-  };
-  return (
-    <div
-      aria-label={resolvedLabels.region}
-      className={cn("inline-flex items-center pl-2", className)}
-      data-presence-stack
-      ref={ref}
-      role="group"
-      {...rest}
-    >
-      {visible.map((user) => (
-        <Avatar key={user.id} user={user} />
-      ))}
-      {hidden > 0
-        ? renderOverflow({
-            count: hidden,
-            handleClick: handleOverflow,
-            handlerProvided: Boolean(onOverflowActivate),
-            labels: resolvedLabels,
-          })
-        : null}
-    </div>
-  );
-};
-PresenceStack.displayName = "PresenceStack";
+export const PresenceStack = /* @__PURE__ */ named(
+  "PresenceStack",
+  ({
+    ref,
+    ...props
+  }: PresenceStackProps & { ref?: React.Ref<HTMLDivElement> }) => {
+    const {
+      className,
+      labels,
+      max = 5,
+      onOverflowActivate,
+      users,
+      ...rest
+    } = props;
+    const resolvedLabels = { ...DEFAULT_LABELS, ...labels };
+    const visible = max >= users.length ? users : users.slice(0, max);
+    const hidden = users.length - visible.length;
+    const handleOverflow = (): void => {
+      onOverflowActivate?.();
+    };
+    return (
+      <div
+        aria-label={resolvedLabels.region}
+        className={cn("inline-flex items-center pl-2", className)}
+        data-presence-stack
+        ref={ref}
+        role="group"
+        {...rest}
+      >
+        {visible.map((user) => (
+          <Avatar key={user.id} user={user} />
+        ))}
+        {hidden > 0
+          ? renderOverflow({
+              count: hidden,
+              handleClick: handleOverflow,
+              handlerProvided: Boolean(onOverflowActivate),
+              labels: resolvedLabels,
+            })
+          : null}
+      </div>
+    );
+  },
+);
 
 const renderOverflow = (input: {
   count: number;

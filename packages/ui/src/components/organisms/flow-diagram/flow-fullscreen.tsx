@@ -1,56 +1,52 @@
 "use client";
 
-import { memo, useRef } from "react";
+import { memo } from "react";
 
+import { Dialog, DialogClose, DialogContent } from "@ui-sdk/react/dialog";
 import { X } from "lucide-react";
-import { createPortal } from "react-dom";
 
-import { useEscapeKey } from "../../../lib/use-escape-key";
-import { useFocusContainment } from "../../../lib/use-focus-containment";
+import { openAliases } from "../../../lib/ui-sdk-dialog";
 import { cn } from "../../../lib/utils";
 
 import type { FlowFullscreenProps } from "./types";
 
+/**
+ * The diagram fills the screen in the browser top layer. ui-sdk's modal dialog
+ * traps focus, locks page scroll, closes on Escape and gives focus back to the
+ * element that opened it. It paints no material and no veil: the panel is the
+ * page background.
+ */
 export const FlowFullscreen = memo(function FlowFullscreen({
   children,
   isOpen,
   onClose,
+  onOpenChange,
+  open,
 }: FlowFullscreenProps) {
-  const dialogRef = useRef<HTMLDialogElement>(null);
-  useFocusContainment(dialogRef, isOpen);
-  useEscapeKey(onClose, { enabled: isOpen, target: "document" });
+  const state = openAliases({ isOpen, onClose, onOpenChange, open });
 
-  if (!isOpen) return null;
-
-  // Render portal on client side
-  if (typeof document === "undefined") return null;
-
-  return createPortal(
-    <dialog
-      aria-label="Flow diagram fullscreen view"
-      aria-modal="true"
-      className={cn(
-        "fixed inset-0 z-[9999] m-0 flex size-full max-w-none flex-col bg-background text-foreground",
-        "animate-in fade-in duration-200",
-      )}
-      open
-      ref={dialogRef}
-    >
-      {/* Header with close button */}
-      <div className="flex h-12 items-center justify-end border-b border-border px-4">
-        <button
-          aria-label="Close fullscreen"
-          className="flex size-8 items-center justify-center rounded hover:bg-secondary transition-colors"
-          onClick={onClose}
-          title="Close fullscreen (Esc)"
-          type="button"
-        >
-          <X className="size-5" />
-        </button>
-      </div>
-      {/* Content */}
-      <div className="flex-1 overflow-hidden">{children}</div>
-    </dialog>,
-    document.body,
+  return (
+    <Dialog onOpenChange={state.handleOpenChange} open={state.open}>
+      <DialogContent
+        aria-label="Flow diagram fullscreen view"
+        className={cn(
+          "fixed inset-0 z-[9999] m-0 flex size-full max-h-none max-w-none flex-col border-0 bg-background p-0 text-foreground",
+          "animate-in fade-in duration-200",
+        )}
+      >
+        {/* Header with close button */}
+        <div className="flex h-12 items-center justify-end border-b border-border px-4">
+          <DialogClose
+            aria-label="Close fullscreen"
+            className="flex size-8 items-center justify-center rounded hover:bg-secondary transition-colors"
+            title="Close fullscreen (Esc)"
+          >
+            <X className="size-5" />
+          </DialogClose>
+        </div>
+        {/* Content */}
+        <div className="flex-1 overflow-hidden">{children}</div>
+      </DialogContent>
+    </Dialog>
   );
 });

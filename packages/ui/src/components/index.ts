@@ -143,7 +143,7 @@ export {
   type SegmentedControlProps,
   segmentedControlVariants,
 } from "./atoms/segmented-control/segmented-control";
-export { toast } from "./atoms/toast/sonner-toast";
+export { toast } from "./atoms/toast/toast-api";
 export {
   Toast,
   ToastAction,
@@ -644,12 +644,15 @@ export {
 } from "./atoms/collapsible/collapsible";
 export {
   Carousel,
-  type CarouselApi,
   CarouselContent,
   CarouselItem,
   CarouselNext,
   CarouselPrevious,
 } from "./molecules/carousel/carousel";
+export {
+  type CarouselApi,
+  createCarouselApi,
+} from "./molecules/carousel/carousel-api";
 
 // New shadcn primitives - Utilities
 export {
@@ -661,7 +664,13 @@ export {
   type ActivityHeatmapItem,
   type ActivityHeatmapProps,
 } from "./organisms/activity-heatmap/activity-heatmap";
-export { Calendar, type CalendarProps } from "./molecules/calendar/calendar";
+export {
+  Calendar,
+  type CalendarProps,
+  type DateRange,
+} from "./molecules/calendar/calendar";
+export { calendarLayout } from "./molecules/calendar/calendar-layout";
+export { LazyCalendar } from "./molecules/calendar/calendar-lazy";
 export {
   type ChoroplethColorScale,
   ChoroplethLegend,
@@ -1449,6 +1458,7 @@ export {
   FlowControls,
   type FlowControlsProps,
   FlowDiagram,
+  FlowDiagramContent,
   type FlowDiagramEdge,
   type FlowDiagramNode,
   type FlowDiagramProps,
@@ -1942,6 +1952,9 @@ export { PullQuote, type PullQuoteProps } from "./atoms/pull-quote/pull-quote";
 export type { BreadcrumbProps } from "./atoms/breadcrumb/breadcrumb";
 export type { CommandDialogProps } from "./molecules/command/command";
 export type { SheetContentProps } from "./atoms/sheet/sheet";
+export type { DialogContentProps, DialogLabels } from "./atoms/dialog/dialog";
+export type { DrawerContentProps } from "./atoms/drawer/drawer";
+export type { AlertDialogContentProps } from "./molecules/alert-dialog/alert-dialog";
 export type { CarouselProps } from "./molecules/carousel/carousel";
 export type { CodeBlockProps } from "./organisms/code-block/code-block";
 export type { MDXContentProps } from "./organisms/mdx-content/mdx-content";

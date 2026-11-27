@@ -1,6 +1,6 @@
-import { cva } from "class-variance-authority";
-
+import { named } from "../../../lib/named";
 import { cn } from "../../../lib/utils";
+import { cva } from "../../../lib/variants";
 
 const pullQuoteVariants = cva(
   "flex flex-col font-[family-name:var(--font-sans)] text-foreground",
@@ -83,30 +83,32 @@ export type PullQuoteProps = Omit<
  *   The engine weaves algebraic patterns.
  * </PullQuote>
  */
-const PullQuote = ({
-  children,
-  cite,
-  className,
-  ref,
-  size = "md",
-  ...props
-}: PullQuoteProps): React.ReactElement => (
-  <figure
-    className={cn(pullQuoteVariants({ size }), className)}
-    ref={ref}
-    {...props}
-  >
-    <span aria-hidden="true" className={pullQuoteRuleVariants({ size })} />
-    <blockquote className={pullQuoteBodyVariants({ size })}>
-      {children}
-    </blockquote>
-    {cite ? (
-      <figcaption className={pullQuoteCiteVariants({ size })}>
-        {cite}
-      </figcaption>
-    ) : null}
-  </figure>
+const PullQuote = /* @__PURE__ */ named(
+  "PullQuote",
+  ({
+    children,
+    cite,
+    className,
+    ref,
+    size = "md",
+    ...props
+  }: PullQuoteProps): React.ReactElement => (
+    <figure
+      className={cn(pullQuoteVariants({ size }), className)}
+      ref={ref}
+      {...props}
+    >
+      <span aria-hidden="true" className={pullQuoteRuleVariants({ size })} />
+      <blockquote className={pullQuoteBodyVariants({ size })}>
+        {children}
+      </blockquote>
+      {cite ? (
+        <figcaption className={pullQuoteCiteVariants({ size })}>
+          {cite}
+        </figcaption>
+      ) : null}
+    </figure>
+  ),
 );
-PullQuote.displayName = "PullQuote";
 
 export { PullQuote };

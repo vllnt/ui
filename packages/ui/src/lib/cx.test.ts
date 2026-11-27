@@ -102,6 +102,7 @@ describe("cx", () => {
       ),
     ).toEqual([]);
     expect(imports).not.toContain(join(source, "lib/utils.ts"));
+    expect(imports).not.toContain(join(source, "lib/variants.ts"));
   });
 
   it("detects tailwind-merge where a component uses cn (control)", () => {
@@ -110,11 +111,11 @@ describe("cx", () => {
     ).toContain("tailwind-merge");
   });
 
-  it("detects class-variance-authority in ToggleGroup (control)", () => {
+  it("detects the variant helpers in ToggleGroup (control)", () => {
     const imports = runtimeImports(
       join(source, "components/molecules/toggle-group/toggle-group.tsx"),
     );
-    expect(imports).toContain("class-variance-authority");
+    expect(imports).toContain(join(source, "lib/variants.ts"));
     expect(imports).toContain("tailwind-merge");
   });
 });

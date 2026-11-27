@@ -2,6 +2,7 @@
 
 import * as React from "react";
 
+import { named } from "../../../lib/named";
 import { cn } from "../../../lib/utils";
 
 /** Slide-in origin for the reveal. */
@@ -86,44 +87,46 @@ const hiddenTransforms: Record<RevealDirection, string> = {
  * <RevealText direction="up">Headline</RevealText>
  * ```
  */
-export const RevealText = ({
-  children,
-  className,
-  delay = 0,
-  direction = "up",
-  ref,
-  ...props
-}: RevealTextProps & { ref?: React.Ref<HTMLDivElement> }) => {
-  const reduced = usePrefersReducedMotion();
-  const nodeRef = React.useRef<HTMLDivElement>(null);
-  const inView = useInView(nodeRef);
-  const visible = reduced || inView;
+export const RevealText = /* @__PURE__ */ named(
+  "RevealText",
+  ({
+    children,
+    className,
+    delay = 0,
+    direction = "up",
+    ref,
+    ...props
+  }: RevealTextProps & { ref?: React.Ref<HTMLDivElement> }) => {
+    const reduced = usePrefersReducedMotion();
+    const nodeRef = React.useRef<HTMLDivElement>(null);
+    const inView = useInView(nodeRef);
+    const visible = reduced || inView;
 
-  return (
-    <div
-      className={cn("overflow-hidden", className)}
-      ref={(node) => {
-        nodeRef.current = node;
-        if (typeof ref === "function") {
-          ref(node);
-        } else if (ref) {
-          ref.current = node;
-        }
-      }}
-      {...props}
-    >
+    return (
       <div
-        className={cn(
-          "transition-[transform,opacity] duration-700 ease-out motion-reduce:transition-none",
-          visible
-            ? "translate-x-0 translate-y-0 opacity-100"
-            : cn("opacity-0", hiddenTransforms[direction]),
-        )}
-        style={{ transitionDelay: `${delay}ms` }}
+        className={cn("overflow-hidden", className)}
+        ref={(node) => {
+          nodeRef.current = node;
+          if (typeof ref === "function") {
+            ref(node);
+          } else if (ref) {
+            ref.current = node;
+          }
+        }}
+        {...props}
       >
-        {children}
+        <div
+          className={cn(
+            "transition-[transform,opacity] duration-700 ease-out motion-reduce:transition-none",
+            visible
+              ? "translate-x-0 translate-y-0 opacity-100"
+              : cn("opacity-0", hiddenTransforms[direction]),
+          )}
+          style={{ transitionDelay: `${delay}ms` }}
+        >
+          {children}
+        </div>
       </div>
-    </div>
-  );
-};
-RevealText.displayName = "RevealText";
+    );
+  },
+);

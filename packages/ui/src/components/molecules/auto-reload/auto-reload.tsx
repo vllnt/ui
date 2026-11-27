@@ -7,9 +7,10 @@ import {
   useCallback,
   useId,
   useMemo,
-  useState,
 } from "react";
 
+import { named } from "../../../lib/named";
+import { useControllableState } from "../../../lib/use-controllable-state";
 import { cn } from "../../../lib/utils";
 import { Button } from "../../atoms/button/button";
 import { Input } from "../../atoms/input/input";
@@ -347,47 +348,29 @@ function useAutoReloadController(options: ControllerOptions): ControllerState {
     reloadAmountCents: controlledReload,
     thresholdCents: controlledThreshold,
   } = options;
-  const [uncontrolledEnabled, setUncontrolledEnabled] =
-    useState(defaultEnabled);
-  const [uncontrolledThreshold, setUncontrolledThreshold] = useState(
-    defaultThresholdCents,
-  );
-  const [uncontrolledReloadAmount, setUncontrolledReloadAmount] = useState(
-    defaultReloadAmountCents,
-  );
-  const enabled = controlledEnabled ?? uncontrolledEnabled;
-
-  const handleToggle = useCallback(
-    (next: boolean) => {
-      if (controlledEnabled === undefined) setUncontrolledEnabled(next);
-      onToggle?.(next);
-    },
-    [controlledEnabled, onToggle],
-  );
-
-  const setReloadAmount = useCallback(
-    (next: number) => {
-      if (controlledReload === undefined) setUncontrolledReloadAmount(next);
-      onReloadAmountChange?.(next);
-    },
-    [controlledReload, onReloadAmountChange],
-  );
-
-  const setThreshold = useCallback(
-    (next: number) => {
-      if (controlledThreshold === undefined) setUncontrolledThreshold(next);
-      onThresholdChange?.(next);
-    },
-    [controlledThreshold, onThresholdChange],
-  );
+  const [enabled, handleToggle] = useControllableState({
+    defaultValue: defaultEnabled,
+    onChange: onToggle,
+    value: controlledEnabled,
+  });
+  const [reloadAmount, setReloadAmount] = useControllableState({
+    defaultValue: defaultReloadAmountCents,
+    onChange: onReloadAmountChange,
+    value: controlledReload,
+  });
+  const [threshold, setThreshold] = useControllableState({
+    defaultValue: defaultThresholdCents,
+    onChange: onThresholdChange,
+    value: controlledThreshold,
+  });
 
   return {
     enabled,
     handleToggle,
-    reloadAmount: controlledReload ?? uncontrolledReloadAmount,
+    reloadAmount,
     setReloadAmount,
     setThreshold,
-    threshold: controlledThreshold ?? uncontrolledThreshold,
+    threshold,
   };
 }
 
@@ -429,25 +412,27 @@ type DisabledBannerProps = {
   message: ReactNode;
 } & ComponentPropsWithoutRef<"div">;
 
-const DisabledBanner = ({
-  className,
-  message,
-  ref,
-  ...rest
-}: DisabledBannerProps & { ref?: React.Ref<HTMLDivElement> }) => (
-  <div
-    aria-disabled="true"
-    className={cn(
-      "flex items-start gap-3 rounded-2xl border border-dashed border-border bg-muted/30 p-4 text-sm text-muted-foreground",
-      className,
-    )}
-    ref={ref}
-    {...rest}
-  >
-    {message}
-  </div>
+const DisabledBanner = /* @__PURE__ */ named(
+  "AutoReload.DisabledBanner",
+  ({
+    className,
+    message,
+    ref,
+    ...rest
+  }: DisabledBannerProps & { ref?: React.Ref<HTMLDivElement> }) => (
+    <div
+      aria-disabled="true"
+      className={cn(
+        "flex items-start gap-3 rounded-2xl border border-dashed border-border bg-muted/30 p-4 text-sm text-muted-foreground",
+        className,
+      )}
+      ref={ref}
+      {...rest}
+    >
+      {message}
+    </div>
+  ),
 );
-DisabledBanner.displayName = "AutoReload.DisabledBanner";
 
 type ActivePanelProps = {
   className?: string;
@@ -464,62 +449,64 @@ type ActivePanelProps = {
   toggleId: string;
 } & ComponentPropsWithoutRef<"div">;
 
-const ActivePanel = ({
-  ref,
-  ...props
-}: ActivePanelProps & { ref?: React.Ref<HTMLDivElement> }) => {
-  const {
-    className,
-    controller,
-    currencyDisplay,
-    isSaving,
-    labels,
-    maxAmountCents,
-    minAmountCents,
-    onSave,
-    reloadAmountId,
-    stepCents,
-    thresholdId,
-    toggleId,
-    ...rest
-  } = props;
-  return (
-    <div
-      className={cn(
-        "flex flex-col gap-4 rounded-2xl border bg-background p-4",
-        className,
-      )}
-      ref={ref}
-      {...rest}
-    >
-      <ToggleHeader
-        enabled={controller.enabled}
-        heading={labels.heading}
-        helper={labels.helper}
-        id={toggleId}
-        onCheckedChange={controller.handleToggle}
-      />
-      {controller.enabled ? (
-        <ReloadFormFields
-          currencyDisplay={currencyDisplay}
-          isSaving={isSaving}
-          labels={labels}
-          maxAmountCents={maxAmountCents}
-          minAmountCents={minAmountCents}
-          onSave={onSave}
-          reloadAmount={controller.reloadAmount}
-          reloadAmountId={reloadAmountId}
-          setReloadAmount={controller.setReloadAmount}
-          setThreshold={controller.setThreshold}
-          stepCents={stepCents}
-          threshold={controller.threshold}
-          thresholdId={thresholdId}
+const ActivePanel = /* @__PURE__ */ named(
+  "AutoReload.ActivePanel",
+  ({
+    ref,
+    ...props
+  }: ActivePanelProps & { ref?: React.Ref<HTMLDivElement> }) => {
+    const {
+      className,
+      controller,
+      currencyDisplay,
+      isSaving,
+      labels,
+      maxAmountCents,
+      minAmountCents,
+      onSave,
+      reloadAmountId,
+      stepCents,
+      thresholdId,
+      toggleId,
+      ...rest
+    } = props;
+    return (
+      <div
+        className={cn(
+          "flex flex-col gap-4 rounded-2xl border bg-background p-4",
+          className,
+        )}
+        ref={ref}
+        {...rest}
+      >
+        <ToggleHeader
+          enabled={controller.enabled}
+          heading={labels.heading}
+          helper={labels.helper}
+          id={toggleId}
+          onCheckedChange={controller.handleToggle}
         />
-      ) : null}
-    </div>
-  );
-};
-ActivePanel.displayName = "AutoReload.ActivePanel";
+        {controller.enabled ? (
+          <ReloadFormFields
+            currencyDisplay={currencyDisplay}
+            isSaving={isSaving}
+            labels={labels}
+            maxAmountCents={maxAmountCents}
+            minAmountCents={minAmountCents}
+            onSave={onSave}
+            reloadAmount={controller.reloadAmount}
+            reloadAmountId={reloadAmountId}
+            setReloadAmount={controller.setReloadAmount}
+            setThreshold={controller.setThreshold}
+            stepCents={stepCents}
+            threshold={controller.threshold}
+            thresholdId={thresholdId}
+          />
+        ) : null}
+      </div>
+    );
+  },
+);
 
 type AutoReloadInternalState = {
   controller: ControllerState;
@@ -586,45 +573,47 @@ function useAutoReloadInternals(
   };
 }
 
-export const AutoReload = ({
-  ref,
-  ...props
-}: AutoReloadProps & { ref?: React.Ref<HTMLDivElement> }) => {
-  const {
-    className,
-    disabled = false,
-    disabledMessage,
-    isSaving = false,
-    maxAmountCents,
-    minAmountCents = 100,
-    stepCents = DEFAULT_STEP_CENTS,
-  } = props;
-  const internals = useAutoReloadInternals(props);
-  if (disabled) {
+export const AutoReload = /* @__PURE__ */ named(
+  "AutoReload",
+  ({
+    ref,
+    ...props
+  }: AutoReloadProps & { ref?: React.Ref<HTMLDivElement> }) => {
+    const {
+      className,
+      disabled = false,
+      disabledMessage,
+      isSaving = false,
+      maxAmountCents,
+      minAmountCents = 100,
+      stepCents = DEFAULT_STEP_CENTS,
+    } = props;
+    const internals = useAutoReloadInternals(props);
+    if (disabled) {
+      return (
+        <DisabledBanner
+          className={className}
+          message={disabledMessage ?? internals.resolvedLabels.disabledFallback}
+          ref={ref}
+        />
+      );
+    }
     return (
-      <DisabledBanner
+      <ActivePanel
         className={className}
-        message={disabledMessage ?? internals.resolvedLabels.disabledFallback}
+        controller={internals.controller}
+        currencyDisplay={internals.currencyDisplay}
+        isSaving={isSaving}
+        labels={internals.resolvedLabels}
+        maxAmountCents={maxAmountCents}
+        minAmountCents={minAmountCents}
+        onSave={internals.handleSave}
         ref={ref}
+        reloadAmountId={internals.reloadAmountId}
+        stepCents={stepCents}
+        thresholdId={internals.thresholdId}
+        toggleId={internals.toggleId}
       />
     );
-  }
-  return (
-    <ActivePanel
-      className={className}
-      controller={internals.controller}
-      currencyDisplay={internals.currencyDisplay}
-      isSaving={isSaving}
-      labels={internals.resolvedLabels}
-      maxAmountCents={maxAmountCents}
-      minAmountCents={minAmountCents}
-      onSave={internals.handleSave}
-      ref={ref}
-      reloadAmountId={internals.reloadAmountId}
-      stepCents={stepCents}
-      thresholdId={internals.thresholdId}
-      toggleId={internals.toggleId}
-    />
-  );
-};
-AutoReload.displayName = "AutoReload";
+  },
+);

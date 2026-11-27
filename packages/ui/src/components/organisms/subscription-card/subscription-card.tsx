@@ -1,5 +1,6 @@
 import * as React from "react";
 
+import { named } from "../../../lib/named";
 import { cn } from "../../../lib/utils";
 import { Badge, type BadgeProps } from "../../atoms/badge/badge";
 import { Button } from "../../atoms/button/button";
@@ -151,68 +152,69 @@ function SubscriptionActions({
   );
 }
 
-export const SubscriptionCard = ({
-  className,
-  note,
-  plan,
-  priceLabel,
-  primaryActionLabel,
-  ref: reference,
-  renewalLabel,
-  seatsLabel,
-  secondaryActionLabel,
-  status,
-  usageLabel,
-  ...props
-}: SubscriptionCardProps & {
-  ref?: React.Ref<React.ComponentRef<typeof Card>>;
-}) => {
-  return (
-    <Card
-      className={cn(
-        "w-full max-w-md border-border/70 bg-card shadow-sm",
-        className,
-      )}
-      ref={reference}
-      {...props}
-    >
-      <CardHeader className="space-y-4 pb-4">
-        <div className="flex items-start justify-between gap-3">
-          <div className="space-y-1">
-            <CardTitle className="text-lg">Subscription</CardTitle>
-            <CardDescription>
-              Billing overview for the current workspace plan.
-            </CardDescription>
+export const SubscriptionCard = /* @__PURE__ */ named(
+  "SubscriptionCard",
+  ({
+    className,
+    note,
+    plan,
+    priceLabel,
+    primaryActionLabel,
+    ref: reference,
+    renewalLabel,
+    seatsLabel,
+    secondaryActionLabel,
+    status,
+    usageLabel,
+    ...props
+  }: SubscriptionCardProps & {
+    ref?: React.Ref<React.ComponentRef<typeof Card>>;
+  }) => {
+    return (
+      <Card
+        className={cn(
+          "w-full max-w-md border-border/70 bg-card shadow-sm",
+          className,
+        )}
+        ref={reference}
+        {...props}
+      >
+        <CardHeader className="space-y-4 pb-4">
+          <div className="flex items-start justify-between gap-3">
+            <div className="space-y-1">
+              <CardTitle className="text-lg">Subscription</CardTitle>
+              <CardDescription>
+                Billing overview for the current workspace plan.
+              </CardDescription>
+            </div>
+            <Badge
+              className="shrink-0 whitespace-nowrap py-1 font-medium hover:bg-secondary"
+              dot
+              tone={getStatusTone(status)}
+            >
+              {getStatusLabel(status)}
+            </Badge>
           </div>
-          <Badge
-            className="shrink-0 whitespace-nowrap py-1 font-medium hover:bg-secondary"
-            dot
-            tone={getStatusTone(status)}
-          >
-            {getStatusLabel(status)}
-          </Badge>
-        </div>
-        <div className="flex items-center justify-between gap-3 rounded-lg border border-border/70 bg-muted/30 px-4 py-3">
-          <div>
-            <p className="text-sm font-medium">Current plan</p>
-            <p className="text-xs text-muted-foreground">{renewalLabel}</p>
+          <div className="flex items-center justify-between gap-3 rounded-lg border border-border/70 bg-muted/30 px-4 py-3">
+            <div>
+              <p className="text-sm font-medium">Current plan</p>
+              <p className="text-xs text-muted-foreground">{renewalLabel}</p>
+            </div>
+            <PlanBadge state={getPlanState(status)} tier={plan} />
           </div>
-          <PlanBadge state={getPlanState(status)} tier={plan} />
-        </div>
-      </CardHeader>
-      <SubscriptionDetails
-        note={note}
-        priceLabel={priceLabel}
-        renewalLabel={renewalLabel}
-        seatsLabel={seatsLabel}
-        usageLabel={usageLabel}
-      />
-      <SubscriptionActions
-        primaryActionLabel={primaryActionLabel}
-        secondaryActionLabel={secondaryActionLabel}
-      />
-    </Card>
-  );
-};
-
-SubscriptionCard.displayName = "SubscriptionCard";
+        </CardHeader>
+        <SubscriptionDetails
+          note={note}
+          priceLabel={priceLabel}
+          renewalLabel={renewalLabel}
+          seatsLabel={seatsLabel}
+          usageLabel={usageLabel}
+        />
+        <SubscriptionActions
+          primaryActionLabel={primaryActionLabel}
+          secondaryActionLabel={secondaryActionLabel}
+        />
+      </Card>
+    );
+  },
+);

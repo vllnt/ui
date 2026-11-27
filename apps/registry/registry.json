@@ -16,7 +16,8 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.3.0"
+        "@vllnt/ui@^0.3.0",
+        "class-variance-authority"
       ],
       "category": "data",
       "version": "0.3.0",
@@ -187,7 +188,8 @@
       "registryDependencies": [],
       "dependencies": [
         "@vllnt/ui@^0.3.0",
-        "lucide-react"
+        "lucide-react",
+        "class-variance-authority"
       ],
       "category": "ai",
       "version": "0.3.0",
@@ -369,7 +371,8 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.3.0"
+        "@vllnt/ui@^0.3.0",
+        "class-variance-authority"
       ],
       "category": "data",
       "version": "0.3.0",
@@ -687,7 +690,8 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.3.0"
+        "@vllnt/ui@^0.3.0",
+        "class-variance-authority"
       ],
       "category": "ai",
       "version": "0.3.0",
@@ -784,7 +788,8 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.3.0"
+        "@vllnt/ui@^0.3.0",
+        "class-variance-authority"
       ],
       "category": "core",
       "version": "0.3.0",
@@ -815,7 +820,8 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.3.0"
+        "@vllnt/ui@^0.3.0",
+        "class-variance-authority"
       ],
       "category": "data",
       "version": "0.3.0",
@@ -846,7 +852,8 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.3.0"
+        "@vllnt/ui@^0.3.0",
+        "class-variance-authority"
       ],
       "category": "core",
       "version": "0.3.0",
@@ -879,8 +886,7 @@
       "dependencies": [
         "@vllnt/ui@^0.3.0",
         "lucide-react",
-        "class-variance-authority",
-        "@radix-ui/react-slot"
+        "class-variance-authority"
       ],
       "category": "core",
       "version": "0.3.0",
@@ -1083,7 +1089,8 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.3.0"
+        "@vllnt/ui@^0.3.0",
+        "class-variance-authority"
       ],
       "category": "navigation",
       "version": "0.3.0",
@@ -1114,7 +1121,8 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.3.0"
+        "@vllnt/ui@^0.3.0",
+        "class-variance-authority"
       ],
       "category": "core",
       "version": "0.3.0",
@@ -1214,7 +1222,8 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.3.0"
+        "@vllnt/ui@^0.3.0",
+        "class-variance-authority"
       ],
       "category": "form",
       "version": "0.3.0",
@@ -1489,7 +1498,8 @@
       "registryDependencies": [],
       "dependencies": [
         "@vllnt/ui@^0.3.0",
-        "lucide-react"
+        "lucide-react",
+        "class-variance-authority"
       ],
       "category": "ai",
       "version": "0.3.0",
@@ -2241,7 +2251,8 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.3.0"
+        "@vllnt/ui@^0.3.0",
+        "class-variance-authority"
       ],
       "category": "core",
       "version": "0.3.0",
@@ -2357,7 +2368,8 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.3.0"
+        "@vllnt/ui@^0.3.0",
+        "class-variance-authority"
       ],
       "category": "content",
       "version": "0.3.0",
@@ -2423,7 +2435,8 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.3.0"
+        "@vllnt/ui@^0.3.0",
+        "class-variance-authority"
       ],
       "category": "data",
       "version": "0.3.0",
@@ -2970,7 +2983,8 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.3.0"
+        "@vllnt/ui@^0.3.0",
+        "class-variance-authority"
       ],
       "category": "form",
       "version": "0.3.0",
@@ -3784,7 +3798,8 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.3.0"
+        "@vllnt/ui@^0.3.0",
+        "class-variance-authority"
       ],
       "category": "form",
       "version": "0.3.0",
@@ -3877,7 +3892,8 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.3.0"
+        "@vllnt/ui@^0.3.0",
+        "class-variance-authority"
       ],
       "category": "form",
       "version": "0.3.0",
@@ -4030,7 +4046,8 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.3.0"
+        "@vllnt/ui@^0.3.0",
+        "class-variance-authority"
       ],
       "category": "core",
       "version": "0.3.0",
@@ -4150,7 +4167,8 @@
       "registryDependencies": [],
       "dependencies": [
         "@vllnt/ui@^0.3.0",
-        "lucide-react"
+        "lucide-react",
+        "class-variance-authority"
       ],
       "category": "core",
       "version": "0.3.0",
@@ -4506,7 +4524,8 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.3.0"
+        "@vllnt/ui@^0.3.0",
+        "class-variance-authority"
       ],
       "category": "core",
       "version": "0.3.0",
@@ -4772,7 +4791,8 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.3.0"
+        "@vllnt/ui@^0.3.0",
+        "class-variance-authority"
       ],
       "category": "navigation",
       "version": "0.3.0",
@@ -4976,7 +4996,8 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.3.0"
+        "@vllnt/ui@^0.3.0",
+        "class-variance-authority"
       ],
       "category": "billing",
       "version": "0.3.0",
@@ -5476,7 +5497,8 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.3.0"
+        "@vllnt/ui@^0.3.0",
+        "class-variance-authority"
       ],
       "category": "data",
       "version": "0.3.0",
@@ -5693,7 +5715,8 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.3.0"
+        "@vllnt/ui@^0.3.0",
+        "class-variance-authority"
       ],
       "category": "content",
       "version": "0.3.0",
@@ -5715,8 +5738,7 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.3.0",
-        "qrcode"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "core",
       "version": "0.3.0",
@@ -6216,7 +6238,8 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.3.0"
+        "@vllnt/ui@^0.3.0",
+        "class-variance-authority"
       ],
       "category": "overlay",
       "version": "0.3.0",
@@ -6384,7 +6407,8 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.3.0"
+        "@vllnt/ui@^0.3.0",
+        "class-variance-authority"
       ],
       "category": "form",
       "version": "0.3.0",
@@ -6521,7 +6545,8 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.3.0"
+        "@vllnt/ui@^0.3.0",
+        "class-variance-authority"
       ],
       "category": "form",
       "version": "0.3.0",
@@ -6543,7 +6568,8 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.3.0"
+        "@vllnt/ui@^0.3.0",
+        "class-variance-authority"
       ],
       "category": "data",
       "version": "0.3.0",
@@ -6605,7 +6631,8 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.3.0"
+        "@vllnt/ui@^0.3.0",
+        "class-variance-authority"
       ],
       "category": "overlay",
       "version": "0.3.0",
@@ -6658,7 +6685,8 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.3.0"
+        "@vllnt/ui@^0.3.0",
+        "class-variance-authority"
       ],
       "category": "overlay",
       "version": "0.3.0",
@@ -7123,7 +7151,8 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.3.0"
+        "@vllnt/ui@^0.3.0",
+        "class-variance-authority"
       ],
       "category": "data",
       "version": "0.3.0",
@@ -7207,7 +7236,8 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.3.0"
+        "@vllnt/ui@^0.3.0",
+        "class-variance-authority"
       ],
       "category": "data",
       "version": "0.3.0",
@@ -7503,7 +7533,8 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.3.0"
+        "@vllnt/ui@^0.3.0",
+        "class-variance-authority"
       ],
       "category": "navigation",
       "version": "0.3.0",
@@ -8172,7 +8203,8 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.3.0"
+        "@vllnt/ui@^0.3.0",
+        "class-variance-authority"
       ],
       "category": "overlay",
       "version": "0.3.0",
@@ -8203,7 +8235,8 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.3.0"
+        "@vllnt/ui@^0.3.0",
+        "class-variance-authority"
       ],
       "category": "core",
       "version": "0.3.0",
@@ -8234,7 +8267,8 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.3.0"
+        "@vllnt/ui@^0.3.0",
+        "class-variance-authority"
       ],
       "category": "core",
       "version": "0.3.0",
@@ -8632,7 +8666,8 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.3.0"
+        "@vllnt/ui@^0.3.0",
+        "class-variance-authority"
       ],
       "category": "core",
       "version": "0.3.0",

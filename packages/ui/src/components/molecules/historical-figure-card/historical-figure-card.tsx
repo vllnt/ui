@@ -1,15 +1,15 @@
 "use client";
 
-import {
-  Children,
-  type ComponentPropsWithoutRef,
-  type ReactNode,
-  useCallback,
-  useState,
-} from "react";
+import { Children, type ComponentPropsWithoutRef, type ReactNode } from "react";
 
+import {
+  Collapsible,
+  CollapsiblePanel,
+  CollapsibleTrigger,
+} from "@ui-sdk/react/collapsible";
 import { ChevronDown, User } from "lucide-react";
 
+import { named } from "../../../lib/named";
 import { keyByOccurrence } from "../../../lib/occurrence-keys";
 import { cn } from "../../../lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "../../atoms/avatar/avatar";
@@ -335,34 +335,26 @@ function FigureBio({
   collapseLabel,
   expandLabel,
 }: FigureBioProps): ReactNode {
-  const [open, setOpen] = useState(false);
-  const handleToggle = useCallback(() => {
-    setOpen((value) => !value);
-  }, []);
-
   return (
-    <div className="flex flex-col gap-2">
-      <button
-        aria-expanded={open}
-        className="inline-flex w-fit items-center gap-1 text-sm font-medium text-primary underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-        onClick={handleToggle}
-        type="button"
-      >
-        {open ? collapseLabel : expandLabel}
-        <ChevronDown
-          aria-hidden="true"
-          className={cn(
-            "size-4 transition-transform",
-            open ? "rotate-180" : "rotate-0",
-          )}
-        />
-      </button>
-      {open ? (
-        <div className="text-sm leading-relaxed text-foreground">
-          {biography}
-        </div>
-      ) : null}
-    </div>
+    <Collapsible className="flex flex-col gap-2">
+      <CollapsibleTrigger className="inline-flex w-fit items-center gap-1 text-sm font-medium text-primary underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
+        {({ open }) => (
+          <>
+            {open ? collapseLabel : expandLabel}
+            <ChevronDown
+              aria-hidden="true"
+              className={cn(
+                "size-4 transition-transform",
+                open ? "rotate-180" : "rotate-0",
+              )}
+            />
+          </>
+        )}
+      </CollapsibleTrigger>
+      <CollapsiblePanel className="text-sm leading-relaxed text-foreground">
+        {biography}
+      </CollapsiblePanel>
+    </Collapsible>
   );
 }
 
@@ -452,81 +444,83 @@ function FigureLifeBlock({
   );
 }
 
-export const HistoricalFigureCard = ({
-  ref,
-  ...props
-}: HistoricalFigureCardProps & { ref?: React.Ref<HTMLElement> }) => {
-  const {
-    biography,
-    birth,
-    className,
-    connections,
-    death,
-    era,
-    fields,
-    labels,
-    name,
-    portrait,
-    profileHref,
-    quote,
-    title,
-    works,
-    ...rest
-  } = props;
+export const HistoricalFigureCard = /* @__PURE__ */ named(
+  "HistoricalFigureCard",
+  ({
+    ref,
+    ...props
+  }: HistoricalFigureCardProps & { ref?: React.Ref<HTMLElement> }) => {
+    const {
+      biography,
+      birth,
+      className,
+      connections,
+      death,
+      era,
+      fields,
+      labels,
+      name,
+      portrait,
+      profileHref,
+      quote,
+      title,
+      works,
+      ...rest
+    } = props;
 
-  const resolvedLabels = resolveLabels(labels);
+    const resolvedLabels = resolveLabels(labels);
 
-  return (
-    <article
-      className={cn(
-        "flex flex-col gap-4 rounded-2xl border bg-background p-5 text-foreground shadow-sm",
-        className,
-      )}
-      ref={ref}
-      {...rest}
-    >
-      <FigureHeader era={era} name={name} portrait={portrait} title={title} />
+    return (
+      <article
+        className={cn(
+          "flex flex-col gap-4 rounded-2xl border bg-background p-5 text-foreground shadow-sm",
+          className,
+        )}
+        ref={ref}
+        {...rest}
+      >
+        <FigureHeader era={era} name={name} portrait={portrait} title={title} />
 
-      <FigureLifeBlock
-        birth={birth}
-        death={death}
-        lifespanLabel={resolvedLabels.lifespan}
-      />
-
-      {fields && fields.length > 0 ? (
-        <FigureChips heading={resolvedLabels.fields} items={fields} />
-      ) : null}
-
-      {works && works.length > 0 ? (
-        <FigureWorksList heading={resolvedLabels.works} items={works} />
-      ) : null}
-
-      {quote ? <FigureQuote quote={quote} /> : null}
-
-      {connections && connections.length > 0 ? (
-        <FigureConnections
-          heading={resolvedLabels.connections}
-          items={connections}
+        <FigureLifeBlock
+          birth={birth}
+          death={death}
+          lifespanLabel={resolvedLabels.lifespan}
         />
-      ) : null}
 
-      {biography ? (
-        <FigureBio
-          biography={biography}
-          collapseLabel={resolvedLabels.collapseBio}
-          expandLabel={resolvedLabels.expandBio}
-        />
-      ) : null}
+        {fields && fields.length > 0 ? (
+          <FigureChips heading={resolvedLabels.fields} items={fields} />
+        ) : null}
 
-      {profileHref ? (
-        <a
-          className="text-sm font-medium text-primary underline-offset-4 hover:underline"
-          href={profileHref}
-        >
-          View full profile →
-        </a>
-      ) : null}
-    </article>
-  );
-};
-HistoricalFigureCard.displayName = "HistoricalFigureCard";
+        {works && works.length > 0 ? (
+          <FigureWorksList heading={resolvedLabels.works} items={works} />
+        ) : null}
+
+        {quote ? <FigureQuote quote={quote} /> : null}
+
+        {connections && connections.length > 0 ? (
+          <FigureConnections
+            heading={resolvedLabels.connections}
+            items={connections}
+          />
+        ) : null}
+
+        {biography ? (
+          <FigureBio
+            biography={biography}
+            collapseLabel={resolvedLabels.collapseBio}
+            expandLabel={resolvedLabels.expandBio}
+          />
+        ) : null}
+
+        {profileHref ? (
+          <a
+            className="text-sm font-medium text-primary underline-offset-4 hover:underline"
+            href={profileHref}
+          >
+            View full profile →
+          </a>
+        ) : null}
+      </article>
+    );
+  },
+);

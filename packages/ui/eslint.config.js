@@ -2,19 +2,28 @@ import { react } from '@vllnt/eslint-config'
 
 import a12Allowlist from './eslint-rules/a12-allowlist.js'
 import a12StatusTextColour from './eslint-rules/a12-status-text-colour.js'
+import namedDisplayName from './eslint-rules/named-display-name.js'
+
+// One plugin object: flat config rejects two different objects under one name.
+const vllnt = {
+  rules: {
+    'a12-no-status-text-colour': a12StatusTextColour,
+    'named-display-name': namedDisplayName,
+  },
+}
 
 export default [
   {
     // Build-tool configs outside the typed component surface are not linted
     // (postcss.config.mjs, tailwind.config.ts, tsup/playwright configs).
-    ignores: ['node_modules/**', 'dist/**', 'storybook-static/**', '.storybook/**', 'eslint.config.js', 'eslint-rules/**', 'scripts/**', 'playwright-ct.config.ts', 'playwright/**', 'postcss.config.mjs', 'tailwind.config.ts', 'tsup.config.ts', 'src/**/*.visual.tsx', 'src/**/*.stories.tsx', 'src/**/*.stories.ts'],
+    ignores: ['node_modules/**', 'dist/**', 'storybook-static/**', 'storybook-base/**', '.visual-diff/**', '.storybook/**', 'eslint.config.js', 'eslint-rules/**', 'scripts/**', 'playwright-ct.config.ts', 'playwright/**', 'postcss.config.mjs', 'tailwind.config.ts', 'tsup.config.ts', 'src/**/*.visual.tsx', 'src/**/*.stories.tsx', 'src/**/*.stories.ts'],
   },
   ...react,
   {
     // `__tests__` holds shared test helpers; tsup and check:atomic key on that
     // exact name, so the folder keeps it.
     files: ['src/**/__tests__/**'],
-    rules: { 'unicorn/filename-case': 'off' },
+    rules: { 'unicorn/filename-case': 'off', 'unicorn/no-null': 'off' },
   },
   {
     linterOptions: {
@@ -64,12 +73,49 @@ export default [
     },
   },
   {
+    // cva, cx and VariantProps come from lib/variants, so the package ships
+    // without class-variance-authority and clsx. They stay devDependencies as
+    // the oracle of the variants tests, which are the only files to import them.
+    files: ['src/**/*.{ts,tsx}'],
+    ignores: [
+      'src/lib/__tests__/variant-props.ts',
+      'src/lib/variants-definitions.test.ts',
+      'src/lib/variants.test.ts',
+    ],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          paths: [
+            {
+              name: 'class-variance-authority',
+              message: 'Import cva and VariantProps from lib/variants.',
+            },
+            {
+              name: 'clsx',
+              message: 'Use cn from lib/utils, or cx from lib/variants.',
+            },
+          ],
+        },
+      ],
+    },
+  },
+  {
     // A12 (signature v1.3): status colour goes on a glyph, a dot or a border,
     // never on words. See eslint-rules/a12-status-text-colour.js.
     files: ['src/components/**/*.tsx'],
     ignores: ['**/*.test.tsx', '**/*.visual.tsx'],
-    plugins: { vllnt: { rules: { 'a12-no-status-text-colour': a12StatusTextColour } } },
+    plugins: { vllnt },
     rules: { 'vllnt/a12-no-status-text-colour': 'error' },
+  },
+  {
+    // A component gets its displayName from `named`, as a pure annotated call,
+    // so a bundler can drop it when nothing imports it. See
+    // eslint-rules/named-display-name.js and lib/named.ts.
+    files: ['src/**/*.{ts,tsx}'],
+    ignores: ['**/*.test.{ts,tsx}', 'src/**/__tests__/**', 'src/lib/ui-sdk.tsx', 'src/test-setup.ts'],
+    plugins: { vllnt },
+    rules: { 'vllnt/named-display-name': 'error' },
   },
   // Files that predate A12 (list only shrinks); flat config rejects an empty `files`.
   ...(a12Allowlist.length > 0
@@ -129,7 +175,11 @@ export default [
   {
     // Tailwind theme keys (`DEFAULT`, `2xl`, `accordion-down`, `0%`) and the
     // Vite `@` path alias are dictated by the tools, not by our naming style.
-    files: ['src/tailwind-preset.ts', 'vitest.config.ts'],
+    files: [
+      'src/tailwind-animate.ts',
+      'src/tailwind-preset.ts',
+      'vitest.config.ts',
+    ],
     rules: {
       '@typescript-eslint/naming-convention': 'off',
     },

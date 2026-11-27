@@ -3,6 +3,7 @@
 import type { ComponentPropsWithoutRef, ReactNode } from "react";
 
 import type { MaterialProps } from "../../../lib/material";
+import { named } from "../../../lib/named";
 import { cn } from "../../../lib/utils";
 
 /**
@@ -130,55 +131,54 @@ const ActionButton = (props: {
  *
  * @public
  */
-export const CommandDock = ({
-  ref,
-  ...props
-}: CommandDockProps & { ref?: React.Ref<HTMLElement> }) => {
-  const {
-    actions,
-    className,
-    labels,
-    material = "glass",
-    onOpenPalette,
-    ...rest
-  } = props;
-  const resolvedLabels = { ...DEFAULT_LABELS, ...labels };
-  const handlePalette = (): void => {
-    onOpenPalette?.();
-  };
-  return (
-    <nav
-      aria-label={resolvedLabels.region}
-      className={cn(
-        "vllnt-glass-floating vllnt-glass-dense inline-flex items-center gap-1 rounded-2xl border p-1.5",
-        className,
-      )}
-      data-command-dock
-      data-material={material}
-      ref={ref}
-      {...rest}
-    >
-      {actions.map((action) => (
-        <ActionButton action={action} key={action.id} />
-      ))}
-      {onOpenPalette ? (
-        <>
-          <span aria-hidden="true" className="mx-1 h-8 w-px bg-border" />
-          <button
-            aria-label={resolvedLabels.paletteTrigger}
-            className="flex size-12 items-center justify-center rounded-md border border-transparent text-base text-muted-foreground transition-colors hover:border-border hover:bg-secondary/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-            data-command-palette-trigger
-            onClick={handlePalette}
-            type="button"
-          >
-            <span aria-hidden="true">⌘</span>
-          </button>
-        </>
-      ) : null}
-    </nav>
-  );
-};
-CommandDock.displayName = "CommandDock";
+export const CommandDock = /* @__PURE__ */ named(
+  "CommandDock",
+  ({ ref, ...props }: CommandDockProps & { ref?: React.Ref<HTMLElement> }) => {
+    const {
+      actions,
+      className,
+      labels,
+      material = "glass",
+      onOpenPalette,
+      ...rest
+    } = props;
+    const resolvedLabels = { ...DEFAULT_LABELS, ...labels };
+    const handlePalette = (): void => {
+      onOpenPalette?.();
+    };
+    return (
+      <nav
+        aria-label={resolvedLabels.region}
+        className={cn(
+          "vllnt-glass-floating vllnt-glass-dense inline-flex items-center gap-1 rounded-2xl border p-1.5",
+          className,
+        )}
+        data-command-dock
+        data-material={material}
+        ref={ref}
+        {...rest}
+      >
+        {actions.map((action) => (
+          <ActionButton action={action} key={action.id} />
+        ))}
+        {onOpenPalette ? (
+          <>
+            <span aria-hidden="true" className="mx-1 h-8 w-px bg-border" />
+            <button
+              aria-label={resolvedLabels.paletteTrigger}
+              className="flex size-12 items-center justify-center rounded-md border border-transparent text-base text-muted-foreground transition-colors hover:border-border hover:bg-secondary/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              data-command-palette-trigger
+              onClick={handlePalette}
+              type="button"
+            >
+              <span aria-hidden="true">⌘</span>
+            </button>
+          </>
+        ) : null}
+      </nav>
+    );
+  },
+);
 
 /**
  * @deprecated Use CommandDock. The release after next removes JarvisDock (see vllnt/ui#682).

@@ -95,6 +95,20 @@ describe("HistoricalFigureCard", () => {
     ).toBeInTheDocument();
   });
 
+  it("exposes the bio toggle state and points it at the biography", () => {
+    render(
+      <HistoricalFigureCard biography="Long biography text" name={NAME} />,
+    );
+    const toggle = screen.getByRole("button", { name: "Read biography" });
+    expect(toggle).toHaveAttribute("aria-expanded", "false");
+    fireEvent.click(toggle);
+    expect(toggle).toHaveAttribute("aria-expanded", "true");
+    const panelId = toggle.getAttribute("aria-controls") ?? "";
+    expect(document.querySelector(`[id="${panelId}"]`)).toHaveTextContent(
+      "Long biography text",
+    );
+  });
+
   it("keys connections with element names and relations without duplicates", () => {
     const errors = vi.spyOn(console, "error").mockImplementation(() => null);
     render(

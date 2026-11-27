@@ -1,9 +1,11 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 
 import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 
+import { named } from "../../../lib/named";
+import { useControllableState } from "../../../lib/use-controllable-state";
 import { cn } from "../../../lib/utils";
 import { Avatar, AvatarFallback } from "../../atoms/avatar/avatar";
 import { Badge } from "../../atoms/badge/badge";
@@ -294,60 +296,55 @@ function ActivityLogBody({
   );
 }
 
-const ActivityLog = ({
-  className,
-  defaultPage = 1,
-  description,
-  emptyMessage = "No activity recorded yet.",
-  items,
-  onPageChange,
-  page,
-  pageSize = 5,
-  ref,
-  title = "Activity log",
-  ...props
-}: ActivityLogProps & { ref?: React.Ref<HTMLDivElement> }) => {
-  const totalPages = Math.max(1, Math.ceil(items.length / pageSize));
-  const [uncontrolledPage, setUncontrolledPage] = useState(defaultPage);
-  const currentPage = Math.min(
-    Math.max(page ?? uncontrolledPage, 1),
-    totalPages,
-  );
-  const pageNumbers = useMemo(
-    () => buildPageNumbers(currentPage, totalPages),
-    [currentPage, totalPages],
-  );
+const ActivityLog = /* @__PURE__ */ named(
+  "ActivityLog",
+  ({
+    className,
+    defaultPage = 1,
+    description,
+    emptyMessage = "No activity recorded yet.",
+    items,
+    onPageChange,
+    page,
+    pageSize = 5,
+    ref,
+    title = "Activity log",
+    ...props
+  }: ActivityLogProps & { ref?: React.Ref<HTMLDivElement> }) => {
+    const totalPages = Math.max(1, Math.ceil(items.length / pageSize));
+    const [requestedPage, handlePageChange] = useControllableState({
+      defaultValue: defaultPage,
+      onChange: onPageChange,
+      value: page,
+    });
+    const currentPage = Math.min(Math.max(requestedPage, 1), totalPages);
+    const pageNumbers = useMemo(
+      () => buildPageNumbers(currentPage, totalPages),
+      [currentPage, totalPages],
+    );
 
-  function handlePageChange(nextPage: number) {
-    if (page === undefined) {
-      setUncontrolledPage(nextPage);
-    }
-    onPageChange?.(nextPage);
-  }
-
-  return (
-    <Card className={cn("w-full", className)} ref={ref} {...props}>
-      <ActivityLogHeader
-        currentPage={currentPage}
-        description={description}
-        title={title}
-        totalPages={totalPages}
-      />
-      <CardContent className="space-y-4">
-        <ActivityLogBody
+    return (
+      <Card className={cn("w-full", className)} ref={ref} {...props}>
+        <ActivityLogHeader
           currentPage={currentPage}
-          emptyMessage={emptyMessage}
-          items={items}
-          onPageChange={handlePageChange}
-          pageNumbers={pageNumbers}
-          pageSize={pageSize}
+          description={description}
+          title={title}
           totalPages={totalPages}
         />
-      </CardContent>
-    </Card>
-  );
-};
-
-ActivityLog.displayName = "ActivityLog";
+        <CardContent className="space-y-4">
+          <ActivityLogBody
+            currentPage={currentPage}
+            emptyMessage={emptyMessage}
+            items={items}
+            onPageChange={handlePageChange}
+            pageNumbers={pageNumbers}
+            pageSize={pageSize}
+            totalPages={totalPages}
+          />
+        </CardContent>
+      </Card>
+    );
+  },
+);
 
 export { ActivityLog };

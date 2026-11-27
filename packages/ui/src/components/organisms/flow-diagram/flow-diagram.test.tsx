@@ -40,6 +40,7 @@ const flowRuntime = vi.hoisted(() => {
       ),
     ),
     fitView: vi.fn(() => Promise.resolve()),
+    flowLibraryLoads: 0,
     getNodesBounds: vi.fn(() => ({ height: 80, width: 120, x: 0, y: 0 })),
     getViewport: vi.fn(() => ({ x: 0, y: 0, zoom: 1 })),
     getViewportForBounds: vi.fn(() => ({ x: 10, y: 20, zoom: 1.25 })),
@@ -58,49 +59,52 @@ vi.mock("html-to-image", () => {
   return { toPng: flowRuntime.toPng };
 });
 
-vi.mock("@xyflow/react", () => ({
-  Background: () => <div data-testid="flow-background" />,
-  BackgroundVariant: { Dots: "dots" },
-  getNodesBounds: flowRuntime.getNodesBounds,
-  getViewportForBounds: flowRuntime.getViewportForBounds,
-  ReactFlow: ({
-    children,
-    className,
-    colorMode,
-    edges,
-    nodes,
-    onNodeClick,
-  }: MockReactFlowProps) => {
-    const firstNode = nodes[0];
-    const handleNodeClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-      if (firstNode) onNodeClick?.(event, firstNode);
-    };
+vi.mock("@xyflow/react", () => {
+  flowRuntime.flowLibraryLoads += 1;
+  return {
+    Background: () => <div data-testid="flow-background" />,
+    BackgroundVariant: { Dots: "dots" },
+    getNodesBounds: flowRuntime.getNodesBounds,
+    getViewportForBounds: flowRuntime.getViewportForBounds,
+    ReactFlow: ({
+      children,
+      className,
+      colorMode,
+      edges,
+      nodes,
+      onNodeClick,
+    }: MockReactFlowProps) => {
+      const firstNode = nodes[0];
+      const handleNodeClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+        if (firstNode) onNodeClick?.(event, firstNode);
+      };
 
-    return (
-      <div
-        className={`react-flow__viewport ${className ?? ""}`}
-        data-color-mode={colorMode}
-        data-edge-count={edges.length}
-        data-node-count={nodes.length}
-        data-testid="react-flow"
-      >
-        <button onClick={handleNodeClick} type="button">
-          Mock first node
-        </button>
-        {children}
-      </div>
-    );
-  },
-  ReactFlowProvider: ({ children }: { children: React.ReactNode }) => (
-    <div data-testid="react-flow-provider">{children}</div>
-  ),
-  useReactFlow: () => ({
-    fitView: flowRuntime.fitView,
-    getNodes: () => flowRuntime.currentNodes,
-    getViewport: flowRuntime.getViewport,
-    zoomTo: flowRuntime.zoomTo,
-  }),
-}));
+      return (
+        <div
+          className={`react-flow__viewport ${className ?? ""}`}
+          data-color-mode={colorMode}
+          data-edge-count={edges.length}
+          data-node-count={nodes.length}
+          data-testid="react-flow"
+        >
+          <button onClick={handleNodeClick} type="button">
+            Mock first node
+          </button>
+          {children}
+        </div>
+      );
+    },
+    ReactFlowProvider: ({ children }: { children: React.ReactNode }) => (
+      <div data-testid="react-flow-provider">{children}</div>
+    ),
+    useReactFlow: () => ({
+      fitView: flowRuntime.fitView,
+      getNodes: () => flowRuntime.currentNodes,
+      getViewport: flowRuntime.getViewport,
+      zoomTo: flowRuntime.zoomTo,
+    }),
+  };
+});
 
 class TestClipboardItem {
   readonly items: Record<string, Blob>;
@@ -126,6 +130,16 @@ const nodes: FlowDiagramNode[] = [
 const edges: FlowDiagramEdge[] = [
   { id: "start-end", source: "start", target: "end" },
 ];
+
+// The first import transforms the canvas modules, which is slow on a busy host.
+const CANVAS_LOAD_TIMEOUT = { timeout: 10_000 };
+
+/** Renders a diagram and waits for its on-demand canvas. */
+async function renderDiagram(ui: React.ReactElement) {
+  const result = render(ui);
+  await screen.findByTestId("react-flow", {}, CANVAS_LOAD_TIMEOUT);
+  return result;
+}
 
 describe("FlowDiagram", () => {
   beforeEach(() => {
@@ -160,8 +174,27 @@ describe("FlowDiagram", () => {
     document.body.style.overflow = "";
   });
 
+  it("loads @xyflow/react on demand and holds the diagram's place meanwhile", async () => {
+    expect(flowRuntime.flowLibraryLoads).toBe(0);
+    render(
+      <FlowDiagram edges={edges} height={320} nodes={nodes} title="Pipeline" />,
+    );
+
+    const placeholder = screen.getByRole("status");
+    expect(placeholder).toHaveTextContent("Pipeline");
+    expect(placeholder).toHaveTextContent("Loading diagram...");
+    expect(placeholder.lastElementChild).toHaveStyle({ height: "320px" });
+    expect(screen.queryByTestId("react-flow")).not.toBeInTheDocument();
+
+    expect(
+      await screen.findByTestId("react-flow", {}, CANVAS_LOAD_TIMEOUT),
+    ).toBeInTheDocument();
+    expect(screen.queryByRole("status")).not.toBeInTheDocument();
+    expect(flowRuntime.flowLibraryLoads).toBe(1);
+  });
+
   it("loads html-to-image only when the diagram is copied", async () => {
-    render(<FlowDiagram allowCopy edges={edges} nodes={nodes} />);
+    await renderDiagram(<FlowDiagram allowCopy edges={edges} nodes={nodes} />);
     expect(flowRuntime.imageLibraryLoads).toBe(0);
 
     fireEvent.click(screen.getByLabelText("Copy as image"));
@@ -172,8 +205,8 @@ describe("FlowDiagram", () => {
     expect(flowRuntime.imageLibraryLoads).toBe(1);
   });
 
-  it("renders title, canvas sizing, controls, and graph data", () => {
-    render(
+  it("renders title, canvas sizing, controls, and graph data", async () => {
+    await renderDiagram(
       <FlowDiagram
         allowCopy
         allowFullscreen
@@ -195,8 +228,8 @@ describe("FlowDiagram", () => {
     expect(screen.getByLabelText("Fullscreen")).toBeInTheDocument();
   });
 
-  it("hides controls when showControls is false", () => {
-    render(
+  it("hides controls when showControls is false", async () => {
+    await renderDiagram(
       <FlowDiagram
         edges={edges}
         nodes={nodes}
@@ -208,9 +241,9 @@ describe("FlowDiagram", () => {
     expect(screen.queryByLabelText("Zoom in")).not.toBeInTheDocument();
   });
 
-  it("warns for invalid flow data", () => {
+  it("warns for invalid flow data", async () => {
     const warn = vi.spyOn(console, "warn").mockImplementation(() => null);
-    render(
+    await renderDiagram(
       <FlowDiagram
         edges={[{ id: "missing", source: "start", target: "missing" }]}
         nodes={[{ data: { label: "Start" }, id: "start" }]}
@@ -227,10 +260,10 @@ describe("FlowDiagram", () => {
     );
   });
 
-  it("wires zoom, fit view, and node click handlers", () => {
+  it("wires zoom, fit view, and node click handlers", async () => {
     const onNodeClick = vi.fn();
 
-    render(
+    await renderDiagram(
       <FlowDiagram edges={edges} nodes={nodes} onNodeClick={onNodeClick} />,
     );
 
@@ -246,26 +279,34 @@ describe("FlowDiagram", () => {
     expect(onNodeClick).toHaveBeenCalledWith(nodes[0]);
   });
 
-  it("opens fullscreen mode and closes it from the portal control", () => {
-    render(<FlowDiagram allowFullscreen edges={edges} nodes={nodes} />);
+  it("opens fullscreen mode and closes it from the portal control", async () => {
+    await renderDiagram(
+      <FlowDiagram allowFullscreen edges={edges} nodes={nodes} />,
+    );
 
     fireEvent.click(screen.getByLabelText("Fullscreen"));
 
     expect(
-      screen.getByRole("dialog", { name: "Flow diagram fullscreen view" }),
+      await screen.findByRole("dialog", {
+        name: "Flow diagram fullscreen view",
+      }),
     ).toBeInTheDocument();
-    expect(document.body.style.overflow).toBe("hidden");
+    await waitFor(() => {
+      expect(document.documentElement.style.overflow).toBe("hidden");
+    });
 
     fireEvent.click(screen.getByLabelText("Close fullscreen"));
 
-    expect(
-      screen.queryByRole("dialog", { name: "Flow diagram fullscreen view" }),
-    ).not.toBeInTheDocument();
-    expect(document.body.style.overflow).toBe("");
+    await waitFor(() => {
+      expect(
+        screen.queryByRole("dialog", { name: "Flow diagram fullscreen view" }),
+      ).not.toBeInTheDocument();
+    });
+    expect(document.documentElement.style.overflow).not.toBe("hidden");
   });
 
   it("copies the rendered flow image to the clipboard", async () => {
-    render(<FlowDiagram allowCopy edges={edges} nodes={nodes} />);
+    await renderDiagram(<FlowDiagram allowCopy edges={edges} nodes={nodes} />);
 
     fireEvent.click(screen.getByLabelText("Copy as image"));
 
@@ -298,7 +339,7 @@ describe("FlowDiagram", () => {
       configurable: true,
       value: undefined,
     });
-    render(<FlowDiagram allowCopy edges={edges} nodes={nodes} />);
+    await renderDiagram(<FlowDiagram allowCopy edges={edges} nodes={nodes} />);
 
     fireEvent.click(screen.getByLabelText("Copy as image"));
 
@@ -314,7 +355,7 @@ describe("FlowDiagram", () => {
       }),
     );
     const setTimer = vi.spyOn(globalThis, "setTimeout");
-    const { unmount } = render(
+    const { unmount } = await renderDiagram(
       <FlowDiagram allowCopy edges={edges} nodes={nodes} />,
     );
 
@@ -335,7 +376,7 @@ describe("FlowDiagram", () => {
   it("clears the copy-status reset timer on unmount", async () => {
     const setTimer = vi.spyOn(globalThis, "setTimeout");
     const clearTimer = vi.spyOn(globalThis, "clearTimeout");
-    const { unmount } = render(
+    const { unmount } = await renderDiagram(
       <FlowDiagram allowCopy edges={edges} nodes={nodes} />,
     );
 
@@ -355,8 +396,8 @@ describe("FlowDiagram", () => {
 });
 
 describe("FlowDiagram node colours", () => {
-  it("drives node colours from the card tokens in both colour modes", () => {
-    render(<FlowDiagram edges={[]} nodes={[]} />);
+  it("drives node colours from the card tokens in both colour modes", async () => {
+    await renderDiagram(<FlowDiagram edges={[]} nodes={[]} />);
     expect(screen.getByTestId("react-flow")).toHaveClass(
       "[--xy-node-background-color:oklch(var(--card))]",
       "[--xy-node-color:oklch(var(--card-foreground))]",

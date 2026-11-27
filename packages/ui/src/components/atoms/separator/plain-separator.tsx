@@ -1,4 +1,5 @@
 import { cx } from "../../../lib/cx";
+import { named } from "../../../lib/named";
 
 import type { SeparatorProps } from "./separator";
 
@@ -27,24 +28,26 @@ export type PlainSeparatorProps = SeparatorProps;
  * @example
  * <PlainSeparator className="my-4" />
  */
-const PlainSeparator = ({
-  className,
-  decorative = true,
-  orientation = "horizontal",
-  ref,
-  variant = "solid",
-  ...props
-}: PlainSeparatorProps) => (
-  <div
-    className={cx("shrink-0", LINE_CLASSES[variant][orientation], className)}
-    data-orientation={orientation}
-    ref={ref}
-    {...(decorative
-      ? { "aria-hidden": true }
-      : { "aria-orientation": orientation, role: "separator" })}
-    {...props}
-  />
+const PlainSeparator = /* @__PURE__ */ named(
+  "PlainSeparator",
+  ({
+    className,
+    decorative = true,
+    orientation = "horizontal",
+    ref,
+    variant = "solid",
+    ...props
+  }: PlainSeparatorProps) => (
+    <div
+      className={cx("shrink-0", LINE_CLASSES[variant][orientation], className)}
+      data-orientation={orientation}
+      ref={ref}
+      {...(decorative
+        ? { "aria-hidden": true }
+        : { "aria-orientation": orientation, role: "separator" })}
+      {...props}
+    />
+  ),
 );
-PlainSeparator.displayName = "PlainSeparator";
 
 export { PlainSeparator };

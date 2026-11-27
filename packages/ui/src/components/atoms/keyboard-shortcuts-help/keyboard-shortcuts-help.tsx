@@ -1,15 +1,49 @@
 "use client";
 
-import { Children, memo, useEffect, useRef } from "react";
+import { Children, memo } from "react";
 
+import {
+  Dialog as DialogRoot,
+  DialogBackdrop,
+  DialogClose as DialogClosePart,
+  DialogContent as DialogContentPart,
+} from "@ui-sdk/react/dialog";
 import type { ReactNode } from "react";
 
-import type { MaterialProps } from "../../../lib/material";
+import type { Material, MaterialProps } from "../../../lib/material";
+import { named } from "../../../lib/named";
 import type { HeadingTag } from "../../../lib/types";
-import { useBodyScrollLock } from "../../../lib/use-body-scroll-lock";
-import { useEscapeKey } from "../../../lib/use-escape-key";
-import { useFocusContainment } from "../../../lib/use-focus-containment";
+import {
+  dialogClose,
+  dialogOverlay,
+  dialogRoot,
+  type OpenAliases,
+  openAliases,
+  type OverlayLook,
+  useDialogPopup,
+} from "../../../lib/ui-sdk-dialog";
 import { cn } from "../../../lib/utils";
+
+// An atom imports no other component, so this is a ui-sdk dialog of its own:
+// the same panel and veil classes as `DialogContent`, with the sizing this help needs.
+const ShortcutsRoot = /* @__PURE__ */ dialogRoot(
+  "KeyboardShortcutsHelpRoot",
+  DialogRoot,
+);
+const ShortcutsClose = /* @__PURE__ */ dialogClose(
+  "KeyboardShortcutsHelpClose",
+  DialogClosePart,
+);
+const VEIL_LOOK: OverlayLook = {
+  veil: "fixed inset-0 z-50 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
+};
+const ShortcutsVeil = /* @__PURE__ */ dialogOverlay(
+  "KeyboardShortcutsHelpVeil",
+  DialogBackdrop,
+  VEIL_LOOK,
+);
+const PANEL =
+  "fixed left-[50%] top-[50%] z-50 vllnt-glass-floating vllnt-glass-dense block w-[calc(100%-2rem)] max-w-sm translate-x-[-50%] translate-y-[-50%] rounded-lg border p-6 duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%]";
 
 export type KeyboardShortcut = {
   description: string;
@@ -22,11 +56,10 @@ export type KeyboardShortcutsHelpProps = {
   className?: string;
   closeIcon?: ReactNode;
   footer?: ReactNode;
-  isOpen: boolean;
-  onClose: () => void;
   shortcuts: readonly KeyboardShortcut[];
   title?: string;
-} & MaterialProps;
+} & MaterialProps &
+  OpenAliases;
 
 function DefaultCloseIcon(): React.ReactNode {
   return (
@@ -77,17 +110,13 @@ function ShortcutsList({
 
 type ShortcutsHeaderProps = {
   as: HeadingTag;
-  closeButtonRef: React.Ref<HTMLButtonElement>;
   closeIcon?: ReactNode;
-  onClose: () => void;
   title: string;
 };
 
 function ShortcutsHeader({
   as: Heading,
-  closeButtonRef,
   closeIcon,
-  onClose,
   title,
 }: ShortcutsHeaderProps): React.ReactNode {
   return (
@@ -95,16 +124,43 @@ function ShortcutsHeader({
       <Heading className="text-lg font-semibold" id="shortcuts-title">
         {title}
       </Heading>
-      <button
+      <ShortcutsClose
         aria-label="Close shortcuts help"
         className="flex size-8 items-center justify-center rounded-md hover:bg-secondary"
-        onClick={onClose}
-        ref={closeButtonRef}
-        type="button"
       >
         {closeIcon ?? <DefaultCloseIcon />}
-      </button>
+      </ShortcutsClose>
     </div>
+  );
+}
+
+type ShortcutsPanelProps = {
+  children: ReactNode;
+  className?: string;
+  material: Material;
+};
+
+function ShortcutsPanel({
+  children,
+  className,
+  material,
+}: ShortcutsPanelProps): React.ReactNode {
+  const { openFocus, panelReference, render } = useDialogPopup({ names: {} });
+
+  return (
+    <>
+      <ShortcutsVeil material={material} />
+      <DialogContentPart
+        aria-labelledby="shortcuts-title"
+        className={cn(PANEL, className)}
+        data-material={material}
+        initialFocus={openFocus}
+        ref={panelReference}
+        render={render}
+      >
+        {children}
+      </DialogContentPart>
+    </>
   );
 }
 
@@ -116,58 +172,17 @@ function KeyboardShortcutsHelpImpl({
   isOpen,
   material = "glass",
   onClose,
+  onOpenChange,
+  open,
   shortcuts,
   title = "Keyboard Shortcuts",
 }: KeyboardShortcutsHelpProps): React.ReactNode {
-  const closeButtonRef = useRef<HTMLButtonElement>(null);
-  const dialogRef = useRef<HTMLDivElement>(null);
-
-  // Declared before the focus effect so the opener gets recorded first.
-  useFocusContainment(dialogRef, isOpen);
-
-  // Move focus to the close button when the modal opens.
-  useEffect(() => {
-    if (isOpen) {
-      closeButtonRef.current?.focus();
-    }
-  }, [isOpen]);
-
-  useEscapeKey(onClose, { enabled: isOpen, preventDefault: true });
-  useBodyScrollLock(isOpen);
-
-  if (!isOpen) return null;
+  const state = openAliases({ isOpen, onClose, onOpenChange, open });
 
   return (
-    <div
-      aria-labelledby="shortcuts-title"
-      aria-modal="true"
-      className="fixed inset-0 z-50 flex items-center justify-center"
-      data-material={material}
-      ref={dialogRef}
-      // react-doctor-disable-next-line react-doctor/prefer-html-dialog -- useFocusContainment traps Tab, useEscapeKey closes and useBodyScrollLock locks scroll; a native <dialog> top layer would also sit above portalled popovers and toasts
-      role="dialog"
-    >
-      {/* Backdrop */}
-      <div
-        aria-hidden="true"
-        className="vllnt-glass-scrim absolute inset-0"
-        onClick={onClose}
-      />
-
-      {/* Modal */}
-      <div
-        className={cn(
-          "vllnt-glass-floating vllnt-glass-dense relative z-10 w-full max-w-sm rounded-lg border p-6 mx-4",
-          className,
-        )}
-      >
-        <ShortcutsHeader
-          as={Heading}
-          closeButtonRef={closeButtonRef}
-          closeIcon={closeIcon}
-          onClose={onClose}
-          title={title}
-        />
+    <ShortcutsRoot onOpenChange={state.handleOpenChange} open={state.open}>
+      <ShortcutsPanel className={className} material={material}>
+        <ShortcutsHeader as={Heading} closeIcon={closeIcon} title={title} />
 
         {/* Shortcuts List */}
         <ShortcutsList shortcuts={shortcuts} />
@@ -178,10 +193,12 @@ function KeyboardShortcutsHelpImpl({
             {footer}
           </div>
         ) : null}
-      </div>
-    </div>
+      </ShortcutsPanel>
+    </ShortcutsRoot>
   );
 }
 
-export const KeyboardShortcutsHelp = memo(KeyboardShortcutsHelpImpl);
-KeyboardShortcutsHelp.displayName = "KeyboardShortcutsHelp";
+export const KeyboardShortcutsHelp = /* @__PURE__ */ named(
+  "KeyboardShortcutsHelp",
+  /* @__PURE__ */ memo(KeyboardShortcutsHelpImpl),
+);

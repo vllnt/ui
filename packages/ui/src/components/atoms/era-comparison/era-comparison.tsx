@@ -10,6 +10,7 @@ import {
   useMemo,
 } from "react";
 
+import { named } from "../../../lib/named";
 import { cn } from "../../../lib/utils";
 
 function assignRef<T>(ref: Ref<T> | undefined, node: null | T): void {
@@ -115,24 +116,26 @@ export type EraComparisonProps = ComponentPropsWithoutRef<"section">;
  *
  * @public
  */
-export const EraComparison = ({
-  children,
-  className,
-  ref,
-  ...rest
-}: EraComparisonProps & { ref?: React.Ref<HTMLElement> }) => (
-  <section
-    className={cn(
-      "grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3",
-      className,
-    )}
-    ref={ref}
-    {...rest}
-  >
-    {children}
-  </section>
+export const EraComparison = /* @__PURE__ */ named(
+  "EraComparison",
+  ({
+    children,
+    className,
+    ref,
+    ...rest
+  }: EraComparisonProps & { ref?: React.Ref<HTMLElement> }) => (
+    <section
+      className={cn(
+        "grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3",
+        className,
+      )}
+      ref={ref}
+      {...rest}
+    >
+      {children}
+    </section>
+  ),
 );
-EraComparison.displayName = "EraComparison";
 
 /**
  * Props for {@link EraColumn}.
@@ -199,46 +202,45 @@ function ColumnHeader({
  *
  * @public
  */
-export const EraColumn = ({
-  ref,
-  ...props
-}: EraColumnProps & { ref?: React.Ref<HTMLElement> }) => {
-  const {
-    children,
-    className,
-    color = "neutral",
-    name,
-    period,
-    region,
-    ...rest
-  } = props;
-  const contextValue = useMemo<EraColumnContextValue>(
-    () => ({ color }),
-    [color],
-  );
-  return (
-    <EraColumnContext.Provider value={contextValue}>
-      <article
-        className={cn(
-          "flex flex-col gap-3 rounded-2xl border border-border bg-background p-4 shadow-sm",
-          className,
-        )}
-        data-color={color}
-        ref={ref}
-        {...rest}
-      >
-        <ColumnHeader
-          color={color}
-          name={name}
-          period={period}
-          region={region}
-        />
-        <div className="flex flex-col gap-3">{children}</div>
-      </article>
-    </EraColumnContext.Provider>
-  );
-};
-EraColumn.displayName = "EraColumn";
+export const EraColumn = /* @__PURE__ */ named(
+  "EraColumn",
+  ({ ref, ...props }: EraColumnProps & { ref?: React.Ref<HTMLElement> }) => {
+    const {
+      children,
+      className,
+      color = "neutral",
+      name,
+      period,
+      region,
+      ...rest
+    } = props;
+    const contextValue = useMemo<EraColumnContextValue>(
+      () => ({ color }),
+      [color],
+    );
+    return (
+      <EraColumnContext.Provider value={contextValue}>
+        <article
+          className={cn(
+            "flex flex-col gap-3 rounded-2xl border border-border bg-background p-4 shadow-sm",
+            className,
+          )}
+          data-color={color}
+          ref={ref}
+          {...rest}
+        >
+          <ColumnHeader
+            color={color}
+            name={name}
+            period={period}
+            region={region}
+          />
+          <div className="flex flex-col gap-3">{children}</div>
+        </article>
+      </EraColumnContext.Provider>
+    );
+  },
+);
 
 /**
  * Props for {@link EraDomain}.
@@ -256,26 +258,28 @@ export type EraDomainProps = {
  *
  * @public
  */
-export const EraDomain = ({
-  children,
-  className,
-  name,
-  ref,
-  ...rest
-}: EraDomainProps & { ref?: React.Ref<HTMLElement> }) => (
-  <section
-    className={cn("flex flex-col gap-2", className)}
-    data-domain={typeof name === "string" ? name : undefined}
-    ref={ref}
-    {...rest}
-  >
-    <h4 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-      {name}
-    </h4>
-    {children}
-  </section>
+export const EraDomain = /* @__PURE__ */ named(
+  "EraDomain",
+  ({
+    children,
+    className,
+    name,
+    ref,
+    ...rest
+  }: EraDomainProps & { ref?: React.Ref<HTMLElement> }) => (
+    <section
+      className={cn("flex flex-col gap-2", className)}
+      data-domain={typeof name === "string" ? name : undefined}
+      ref={ref}
+      {...rest}
+    >
+      <h4 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+        {name}
+      </h4>
+      {children}
+    </section>
+  ),
 );
-EraDomain.displayName = "EraDomain";
 
 /**
  * Props for {@link EraHighlight}.
@@ -290,25 +294,27 @@ export type EraHighlightProps = ComponentPropsWithoutRef<"p">;
  *
  * @public
  */
-export const EraHighlight = ({
-  children,
-  className,
-  ref,
-  ...rest
-}: EraHighlightProps & { ref?: React.Ref<HTMLParagraphElement> }) => {
-  const color = useEraColumnColor();
-  const palette = ERA_PALETTE[color];
-  return (
-    <p
-      className={cn("rounded-md px-2 py-1 text-sm", palette.chip, className)}
-      ref={ref}
-      {...rest}
-    >
-      {children}
-    </p>
-  );
-};
-EraHighlight.displayName = "EraHighlight";
+export const EraHighlight = /* @__PURE__ */ named(
+  "EraHighlight",
+  ({
+    children,
+    className,
+    ref,
+    ...rest
+  }: EraHighlightProps & { ref?: React.Ref<HTMLParagraphElement> }) => {
+    const color = useEraColumnColor();
+    const palette = ERA_PALETTE[color];
+    return (
+      <p
+        className={cn("rounded-md px-2 py-1 text-sm", palette.chip, className)}
+        ref={ref}
+        {...rest}
+      >
+        {children}
+      </p>
+    );
+  },
+);
 
 type AnchorPassthroughProps = Omit<
   AnchorHTMLAttributes<HTMLAnchorElement>,
@@ -335,44 +341,46 @@ export type EraFigureProps = {
  *
  * @public
  */
-export const EraFigure = ({
-  ref,
-  ...props
-}: EraFigureProps & {
-  ref?: React.Ref<HTMLAnchorElement | HTMLSpanElement>;
-}) => {
-  const { anchorProps, className, href, name, ...rest } = props;
-  const color = useEraColumnColor();
-  const palette = ERA_PALETTE[color];
-  const baseClass = cn(
-    "inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium",
-    palette.chip,
-    className,
-  );
-  if (href) {
+export const EraFigure = /* @__PURE__ */ named(
+  "EraFigure",
+  ({
+    ref,
+    ...props
+  }: EraFigureProps & {
+    ref?: React.Ref<HTMLAnchorElement | HTMLSpanElement>;
+  }) => {
+    const { anchorProps, className, href, name, ...rest } = props;
+    const color = useEraColumnColor();
+    const palette = ERA_PALETTE[color];
+    const baseClass = cn(
+      "inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium",
+      palette.chip,
+      className,
+    );
+    if (href) {
+      return (
+        <a
+          className={cn(baseClass, "underline-offset-4 hover:underline")}
+          href={href}
+          ref={(node) => {
+            assignRef(ref, node);
+          }}
+          {...anchorProps}
+        >
+          {name}
+        </a>
+      );
+    }
     return (
-      <a
-        className={cn(baseClass, "underline-offset-4 hover:underline")}
-        href={href}
+      <span
+        className={baseClass}
         ref={(node) => {
           assignRef(ref, node);
         }}
-        {...anchorProps}
+        {...rest}
       >
         {name}
-      </a>
+      </span>
     );
-  }
-  return (
-    <span
-      className={baseClass}
-      ref={(node) => {
-        assignRef(ref, node);
-      }}
-      {...rest}
-    >
-      {name}
-    </span>
-  );
-};
-EraFigure.displayName = "EraFigure";
+  },
+);

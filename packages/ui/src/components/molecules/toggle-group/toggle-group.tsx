@@ -2,75 +2,72 @@
 
 import { createContext, use, useMemo } from "react";
 
-import * as ToggleGroupPrimitive from "@radix-ui/react-toggle-group";
-import type { VariantProps } from "class-variance-authority";
+import type * as React from "react";
 
+import { named } from "../../../lib/named";
 import { cn } from "../../../lib/utils";
+import type { VariantProps } from "../../../lib/variants";
 import { toggleVariants } from "../../atoms/toggle/toggle";
 
-const ToggleGroupContext = createContext<VariantProps<typeof toggleVariants>>({
+import {
+  UnstyledToggleGroup,
+  UnstyledToggleGroupItem,
+  type UnstyledToggleGroupItemProps,
+  type UnstyledToggleGroupProps,
+} from "./unstyled-toggle-group";
+
+type ToggleGroupContextValue = VariantProps<typeof toggleVariants>;
+
+const ToggleGroupContext = createContext<ToggleGroupContextValue>({
   size: "default",
   variant: "default",
 });
 
-const ToggleGroup = ({
-  children,
-  className,
-  ref,
-  size,
-  variant,
-  ...props
-}: React.ComponentPropsWithoutRef<typeof ToggleGroupPrimitive.Root> &
-  VariantProps<typeof toggleVariants> & {
-    ref?: React.Ref<React.ComponentRef<typeof ToggleGroupPrimitive.Root>>;
-  }) => {
-  const contextValue = useMemo(() => ({ size, variant }), [size, variant]);
+type ToggleGroupProps = UnstyledToggleGroupProps &
+  VariantProps<typeof toggleVariants>;
 
-  return (
-    <ToggleGroupPrimitive.Root
-      className={cn("flex items-center justify-center gap-1", className)}
-      ref={ref}
-      {...props}
-    >
-      <ToggleGroupContext.Provider value={contextValue}>
-        {children}
-      </ToggleGroupContext.Provider>
-    </ToggleGroupPrimitive.Root>
-  );
-};
+/**
+ * Toggles that share one value. A `single` group presses one at a time: it
+ * reads as a radio group and its value is a string. The other `type` presses
+ * any number: it reads as a toolbar and its value is a list.
+ */
+const ToggleGroup = /* @__PURE__ */ named(
+  "ToggleGroup",
+  ({ children, className, size, variant, ...props }: ToggleGroupProps) => {
+    const contextValue = useMemo(() => ({ size, variant }), [size, variant]);
+    return (
+      <UnstyledToggleGroup
+        className={cn("flex items-center justify-center gap-1", className)}
+        {...props}
+      >
+        <ToggleGroupContext.Provider value={contextValue}>
+          {children}
+        </ToggleGroupContext.Provider>
+      </UnstyledToggleGroup>
+    );
+  },
+);
 
-ToggleGroup.displayName = ToggleGroupPrimitive.Root.displayName;
+type ToggleGroupItemProps = UnstyledToggleGroupItemProps &
+  VariantProps<typeof toggleVariants>;
 
-const ToggleGroupItem = ({
-  children,
-  className,
-  ref,
-  size,
-  variant,
-  ...props
-}: React.ComponentPropsWithoutRef<typeof ToggleGroupPrimitive.Item> &
-  VariantProps<typeof toggleVariants> & {
-    ref?: React.Ref<React.ComponentRef<typeof ToggleGroupPrimitive.Item>>;
-  }) => {
-  const context = use(ToggleGroupContext);
-
-  return (
-    <ToggleGroupPrimitive.Item
-      className={cn(
-        toggleVariants({
-          size: context.size ?? size,
-          variant: context.variant ?? variant,
-        }),
-        className,
-      )}
-      ref={ref}
-      {...props}
-    >
-      {children}
-    </ToggleGroupPrimitive.Item>
-  );
-};
-
-ToggleGroupItem.displayName = ToggleGroupPrimitive.Item.displayName;
+const ToggleGroupItem = /* @__PURE__ */ named(
+  "ToggleGroupItem",
+  ({ className, size, variant, ...props }: ToggleGroupItemProps) => {
+    const context = use(ToggleGroupContext);
+    return (
+      <UnstyledToggleGroupItem
+        className={cn(
+          toggleVariants({
+            size: context.size ?? size,
+            variant: context.variant ?? variant,
+          }),
+          className,
+        )}
+        {...props}
+      />
+    );
+  },
+);
 
 export { ToggleGroup, ToggleGroupItem };

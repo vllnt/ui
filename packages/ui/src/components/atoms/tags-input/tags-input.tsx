@@ -4,6 +4,8 @@ import * as React from "react";
 
 import { X } from "lucide-react";
 
+import { named } from "../../../lib/named";
+import { useControllableState } from "../../../lib/use-controllable-state";
 import { cn } from "../../../lib/utils";
 
 function normalizeTag(tag: string) {
@@ -55,26 +57,21 @@ function useTagsInputState({
   onValueChange,
   value,
 }: TagsInputStateOptions) {
-  const [uncontrolledValue, setUncontrolledValue] = React.useState(() =>
-    getNormalizedTags(defaultValue),
-  );
-  const isControlled = value !== undefined;
+  const [currentTags, setTags] = useControllableState({
+    defaultValue,
+    onChange: onValueChange,
+    value,
+  });
   const tags = React.useMemo(
-    () => getNormalizedTags(value ?? uncontrolledValue),
-    [uncontrolledValue, value],
+    () => getNormalizedTags(currentTags),
+    [currentTags],
   );
 
   const updateTags = React.useCallback(
     (nextTags: string[]) => {
-      const normalizedTags = getNormalizedTags(nextTags);
-
-      if (!isControlled) {
-        setUncontrolledValue(normalizedTags);
-      }
-
-      onValueChange?.(normalizedTags);
+      setTags(getNormalizedTags(nextTags));
     },
-    [isControlled, onValueChange],
+    [setTags],
   );
 
   return { tags, updateTags };
@@ -175,62 +172,64 @@ export type TagsInputProps = Omit<
   value?: string[];
 };
 
-const TagsInput = ({
-  className,
-  defaultValue = [],
-  disabled = false,
-  onBlur,
-  onKeyDown,
-  onValueChange,
-  placeholder = "Add a tag",
-  ref,
-  value,
-  ...props
-}: TagsInputProps & { ref?: React.Ref<HTMLInputElement> }) => {
-  const [inputValue, setInputValue] = React.useState("");
-  const { tags, updateTags } = useTagsInputState({
-    defaultValue,
-    onValueChange,
-    value,
-  });
-  const { handleKeyDown, removeTag } = useTagsInputHandlers({
-    disabled,
-    inputValue,
+const TagsInput = /* @__PURE__ */ named(
+  "TagsInput",
+  ({
+    className,
+    defaultValue = [],
+    disabled = false,
+    onBlur,
     onKeyDown,
-    setInputValue,
-    tags,
-    updateTags,
-  });
+    onValueChange,
+    placeholder = "Add a tag",
+    ref,
+    value,
+    ...props
+  }: TagsInputProps & { ref?: React.Ref<HTMLInputElement> }) => {
+    const [inputValue, setInputValue] = React.useState("");
+    const { tags, updateTags } = useTagsInputState({
+      defaultValue,
+      onValueChange,
+      value,
+    });
+    const { handleKeyDown, removeTag } = useTagsInputHandlers({
+      disabled,
+      inputValue,
+      onKeyDown,
+      setInputValue,
+      tags,
+      updateTags,
+    });
 
-  return (
-    <div
-      aria-disabled={disabled || undefined}
-      className={cn(
-        "flex min-h-10 w-full flex-wrap items-center gap-2 rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background transition-colors focus-within:outline-none focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2",
-        disabled && "cursor-not-allowed opacity-50",
-        className,
-      )}
-      data-disabled={disabled ? "true" : undefined}
-      role="group"
-    >
-      <TagList disabled={disabled} onRemove={removeTag} tags={tags} />
-      <input
-        {...props}
-        className="min-w-[8rem] flex-1 border-0 bg-transparent p-0 text-sm placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed"
-        disabled={disabled}
-        onBlur={onBlur}
-        onChange={(event) => {
-          setInputValue(event.target.value);
-        }}
-        onKeyDown={handleKeyDown}
-        placeholder={placeholder}
-        ref={ref}
-        type="text"
-        value={inputValue}
-      />
-    </div>
-  );
-};
-TagsInput.displayName = "TagsInput";
+    return (
+      <div
+        aria-disabled={disabled || undefined}
+        className={cn(
+          "flex min-h-10 w-full flex-wrap items-center gap-2 rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background transition-colors focus-within:outline-none focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2",
+          disabled && "cursor-not-allowed opacity-50",
+          className,
+        )}
+        data-disabled={disabled ? "true" : undefined}
+        role="group"
+      >
+        <TagList disabled={disabled} onRemove={removeTag} tags={tags} />
+        <input
+          {...props}
+          className="min-w-[8rem] flex-1 border-0 bg-transparent p-0 text-sm placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed"
+          disabled={disabled}
+          onBlur={onBlur}
+          onChange={(event) => {
+            setInputValue(event.target.value);
+          }}
+          onKeyDown={handleKeyDown}
+          placeholder={placeholder}
+          ref={ref}
+          type="text"
+          value={inputValue}
+        />
+      </div>
+    );
+  },
+);
 
 export { TagsInput };

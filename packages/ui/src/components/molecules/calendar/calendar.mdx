@@ -5,7 +5,7 @@ import * as Stories from './calendar.stories'
 
 # Calendar
 
-Date picker calendar for selecting dates.
+Month grid for picking dates, built on ui-sdk's calendar. Pick one date, several dates, or a range. Without a `mode` it only displays the month.
 
 <Primary />
 
@@ -24,12 +24,49 @@ import { Calendar } from '@vllnt/ui'
 ## Usage
 
 ```tsx
-<Calendar>Calendar content</Calendar>
+const [date, setDate] = useState<Date | undefined>()
+
+<Calendar mode="single" selected={date} onSelect={setDate} />
+```
+
+`mode` is `"single"`, `"multiple"` or `"range"`. `selected` and `onSelect` work with `Date` objects (a `Date`, a `Date[]`, or `{ from, to }`). The calendar shows the `selected` it gets and does not keep a selection of its own.
+
+```tsx
+<Calendar
+  mode="range"
+  numberOfMonths={2}
+  selected={range}
+  onSelect={setRange}
+  fromDate={new Date(2026, 0, 1)}
+  disabled={(date) => date.getDay() === 0}
+/>
 ```
 
 <Canvas of={Stories.Default} sourceState="shown" />
 
+## Keyboard
+
+The calendar follows the WAI-ARIA date grid pattern. It has one tab stop: the selected day, else today.
+
+| Key | Action |
+| --- | --- |
+| Arrow keys | Move by a day (left, right) or a week (up, down) |
+| Home, End | First and last day of the week |
+| Page Up, Page Down | Previous and next month |
+| Shift + Page Up, Page Down | Previous and next year |
+| Enter, Space | Pick the focused day |
+| Escape | Clear a range that has only a start |
+
+Days are `gridcell`s. A day's name starts with its number, like "12, Thursday, November 12, 2026". Today has `aria-current="date"`. Days you disable stay focusable and have `aria-disabled`.
+
+## Moving from react-day-picker
+
+- `labels`, `classNames`, `components` and `formatters` are gone. Style the day with the `data-selected`, `data-today`, `data-outside`, `data-range-start`, `data-range-middle` and `data-range-end` attributes.
+- `locale` is a language tag such as `"fr"`, not a date-fns locale. New: `weekStartsOn` and `fixedWeeks`.
+- Days are gridcells, not buttons. Find them with `getByRole("gridcell", { name })`.
+- In range mode, a press after a full range starts a new range. react-day-picker moved the nearest edge.
+- `initialFocus` focuses the day that holds the tab stop. It replaces `focusCalendarDay`, which is no longer exported.
+
 ## API Reference
 
 <Controls />
-

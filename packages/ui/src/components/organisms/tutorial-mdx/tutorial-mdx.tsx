@@ -3,8 +3,9 @@
 import { lazy, memo, Suspense, use, useMemo } from "react";
 
 import * as runtime from "react/jsx-runtime";
-import ReactMarkdown, { type Components } from "react-markdown";
+import type { Components } from "react-markdown";
 
+import { named } from "../../../lib/named";
 import { cn } from "../../../lib/utils";
 import {
   Accordion,
@@ -34,32 +35,11 @@ import {
 import { VideoEmbed } from "../../atoms/video-embed/video-embed";
 import { Exercise } from "../../molecules/exercise/exercise";
 import { CodePlayground, FileTree } from "../code-playground/code-playground";
+import { FlowDiagram } from "../flow-diagram/flow-diagram";
 import { SimpleTerminal, Terminal } from "../terminal/terminal";
 
-// Lazy load FlowDiagram to avoid loading @xyflow/react (~185KB) on every page
-const LazyFlowDiagram = lazy(() =>
-  import("../flow-diagram").then((module_) => ({
-    default: module_.FlowDiagram,
-  })),
-);
-
-// Wrapper component with Suspense fallback for FlowDiagram
-function FlowDiagramWithSuspense(
-  props: React.ComponentProps<typeof LazyFlowDiagram>,
-) {
-  return (
-    <Suspense
-      fallback={
-        <div
-          aria-label="Loading diagram..."
-          className="h-96 bg-secondary animate-pulse rounded-lg motion-reduce:animate-none"
-        />
-      }
-    >
-      <LazyFlowDiagram {...props} />
-    </Suspense>
-  );
-}
+// Plain-markdown tutorials need the parser; MDX tutorials never load it.
+const ReactMarkdown = lazy(() => import("react-markdown"));
 
 // MDX component map - all available components for tutorials
 const mdxComponents = {
@@ -77,7 +57,7 @@ const mdxComponents = {
   FAQ,
   FAQItem,
   FileTree,
-  FlowDiagram: FlowDiagramWithSuspense,
+  FlowDiagram,
   Glossary,
   KeyConcept,
   LearningObjectives,
@@ -264,7 +244,21 @@ function MDXWithSuspense({ className, content }: TutorialMDXProps) {
 function MarkdownOnly({ className, content }: TutorialMDXProps) {
   return (
     <div className={className}>
-      <ReactMarkdown components={markdownComponents}>{content}</ReactMarkdown>
+      <Suspense fallback={<MarkdownLoadingFallback content={content} />}>
+        <ReactMarkdown components={markdownComponents}>{content}</ReactMarkdown>
+      </Suspense>
+    </div>
+  );
+}
+
+// Shows the source text at the final text size, so the swap shifts the page less.
+function MarkdownLoadingFallback({ content }: { content: string }) {
+  return (
+    <div
+      aria-hidden="true"
+      className="whitespace-pre-wrap text-sm leading-relaxed text-muted-foreground"
+    >
+      {content}
     </div>
   );
 }
@@ -299,7 +293,9 @@ function TutorialMDXImpl({
   return <MarkdownOnly className={className} content={content} />;
 }
 
-export const TutorialMDX = memo(TutorialMDXImpl);
-TutorialMDX.displayName = "TutorialMDX";
+export const TutorialMDX = /* @__PURE__ */ named(
+  "TutorialMDX",
+  /* @__PURE__ */ memo(TutorialMDXImpl),
+);
 
 export { mdxComponents };

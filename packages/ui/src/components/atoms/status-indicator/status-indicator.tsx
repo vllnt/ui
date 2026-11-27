@@ -1,8 +1,8 @@
 import * as React from "react";
 
-import { cva, type VariantProps } from "class-variance-authority";
-
+import { named } from "../../../lib/named";
 import { cn } from "../../../lib/utils";
+import { cva, type VariantProps } from "../../../lib/variants";
 
 const statusIndicatorVariants = cva(
   "inline-flex items-center justify-center gap-2 rounded-full border font-medium transition-colors",
@@ -183,55 +183,56 @@ export type StatusIndicatorProps = React.HTMLAttributes<HTMLSpanElement> &
  * <StatusIndicator tone="success">Operational</StatusIndicator>
  * <StatusIndicator icon={<CircleAlert />} tone="warning">Degraded</StatusIndicator>
  */
-const StatusIndicator = ({
-  children,
-  className,
-  icon,
-  label,
-  pulse = false,
-  ref: reference,
-  showDot = true,
-  size,
-  tone,
-  variant,
-  ...props
-}: StatusIndicatorProps & { ref?: React.Ref<HTMLSpanElement> }) => {
-  const content = children ?? label;
-  const pulseClass = pulse
-    ? "animate-pulse motion-reduce:animate-none"
-    : undefined;
+const StatusIndicator = /* @__PURE__ */ named(
+  "StatusIndicator",
+  ({
+    children,
+    className,
+    icon,
+    label,
+    pulse = false,
+    ref: reference,
+    showDot = true,
+    size,
+    tone,
+    variant,
+    ...props
+  }: StatusIndicatorProps & { ref?: React.Ref<HTMLSpanElement> }) => {
+    const content = children ?? label;
+    const pulseClass = pulse
+      ? "animate-pulse motion-reduce:animate-none"
+      : undefined;
 
-  return (
-    <span
-      className={cn(
-        statusIndicatorVariants({
-          size,
-          tone: icon ? "neutral" : tone,
-          variant,
-        }),
-        className,
-      )}
-      ref={reference}
-      {...props}
-    >
-      {icon ? (
-        <span
-          aria-hidden="true"
-          className={cn(iconVariants({ size, tone }), pulseClass)}
-        >
-          {icon}
-        </span>
-      ) : showDot ? (
-        <span
-          aria-hidden="true"
-          className={cn(dotVariants({ size, tone }), pulseClass)}
-        />
-      ) : null}
-      {content}
-    </span>
-  );
-};
-
-StatusIndicator.displayName = "StatusIndicator";
+    return (
+      <span
+        className={cn(
+          statusIndicatorVariants({
+            size,
+            tone: icon ? "neutral" : tone,
+            variant,
+          }),
+          className,
+        )}
+        ref={reference}
+        {...props}
+      >
+        {icon ? (
+          <span
+            aria-hidden="true"
+            className={cn(iconVariants({ size, tone }), pulseClass)}
+          >
+            {icon}
+          </span>
+        ) : showDot ? (
+          <span
+            aria-hidden="true"
+            className={cn(dotVariants({ size, tone }), pulseClass)}
+          />
+        ) : null}
+        {content}
+      </span>
+    );
+  },
+);
 
 export { dotVariants, StatusIndicator, statusIndicatorVariants };

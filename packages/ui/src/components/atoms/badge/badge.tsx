@@ -1,7 +1,6 @@
-import { cva, type VariantProps } from "class-variance-authority";
-
 import { isStatusTone, statusDotVariants } from "../../../lib/status-dot";
 import { cn } from "../../../lib/utils";
+import { cva, type VariantProps } from "../../../lib/variants";
 
 const badgeVariants = cva(
   "inline-flex items-center rounded-full border font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",

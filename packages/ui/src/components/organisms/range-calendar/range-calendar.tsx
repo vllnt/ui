@@ -1,10 +1,7 @@
 "use client";
 
-import { useState } from "react";
-
-import type { DateRange } from "react-day-picker";
-
-import { Calendar } from "../../molecules/calendar/calendar";
+import { useControllableState } from "../../../lib/use-controllable-state";
+import { Calendar, type DateRange } from "../../molecules/calendar/calendar";
 
 /** Calendar that selects a start and end date as a range. */
 export type RangeCalendarProps = {
@@ -22,18 +19,11 @@ function RangeCalendar({
   onValueChange,
   value,
 }: RangeCalendarProps) {
-  const [internalValue, setInternalValue] = useState<DateRange | undefined>(
+  const [selected, handleSelect] = useControllableState<DateRange | undefined>({
     defaultValue,
-  );
-  const selected = value ?? internalValue;
-
-  const handleSelect = (range: DateRange | undefined) => {
-    if (value === undefined) {
-      setInternalValue(range);
-    }
-
-    onValueChange?.(range);
-  };
+    onChange: onValueChange,
+    value,
+  });
 
   return (
     <Calendar

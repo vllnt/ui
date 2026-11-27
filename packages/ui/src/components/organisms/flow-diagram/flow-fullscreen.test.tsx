@@ -1,7 +1,7 @@
 import { useState } from "react";
 
-import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { FlowFullscreen } from "./flow-fullscreen";
 
@@ -30,15 +30,30 @@ function Harness() {
 }
 
 describe("FlowFullscreen focus management", () => {
-  it("keeps Tab inside the dialog and returns focus to the opener", () => {
+  // jsdom has no layout: report one client rect so ui-sdk sees the controls as visible.
+  beforeEach(() => {
+    vi.spyOn(Element.prototype, "getClientRects").mockReturnValue(
+      Object.assign([new DOMRect(0, 0, 1, 1)], { item: () => null }),
+    );
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  it("keeps Tab inside the dialog and returns focus to the opener", async () => {
     render(<Harness />);
     const opener = screen.getByRole("button", { name: "opener" });
     opener.focus();
     fireEvent.click(opener);
 
-    const close = screen.getByRole("button", { name: "Close fullscreen" });
+    const close = await screen.findByRole("button", {
+      name: "Close fullscreen",
+    });
     const inner = screen.getByRole("button", { name: "inner" });
-    expect(close).toHaveFocus();
+    await waitFor(() => {
+      expect(close).toHaveFocus();
+    });
 
     inner.focus();
     fireEvent.keyDown(inner, { key: "Tab" });
@@ -47,6 +62,19 @@ describe("FlowFullscreen focus management", () => {
     expect(inner).toHaveFocus();
 
     fireEvent.click(close);
-    expect(opener).toHaveFocus();
+    await waitFor(() => {
+      expect(opener).toHaveFocus();
+    });
+  });
+
+  it("closes on Escape", async () => {
+    render(<Harness />);
+    fireEvent.click(screen.getByRole("button", { name: "opener" }));
+
+    fireEvent.keyDown(await screen.findByRole("dialog"), { key: "Escape" });
+
+    await waitFor(() => {
+      expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+    });
   });
 });

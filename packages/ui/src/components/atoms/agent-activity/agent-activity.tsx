@@ -5,12 +5,14 @@ import {
   createContext,
   type ReactNode,
   use,
-  useCallback,
-  useId,
   useMemo,
-  useState,
 } from "react";
 
+import {
+  Collapsible,
+  CollapsiblePanel,
+  CollapsibleTrigger,
+} from "@ui-sdk/react/collapsible";
 import {
   AlertTriangle,
   CheckCircle2,
@@ -20,6 +22,7 @@ import {
   MinusCircle,
 } from "lucide-react";
 
+import { named } from "../../../lib/named";
 import { cn } from "../../../lib/utils";
 
 /**
@@ -163,54 +166,56 @@ const ACTIVITY_LIVE_REGION_ROLE: Record<AgentActivityStatus, "log" | "status"> =
  *
  * @public
  */
-export const AgentActivity = ({
-  ref,
-  ...props
-}: AgentActivityProps & { ref?: React.Ref<HTMLElement> }) => {
-  const {
-    children,
-    className,
-    elapsed,
-    labels,
-    status = "idle",
-    ...rest
-  } = props;
-  const resolvedLabels = useMemo(
-    () => ({ ...DEFAULT_LABELS, ...labels }),
-    [labels],
-  );
-  return (
-    <AgentActivityLabelsContext.Provider value={resolvedLabels}>
-      <section
-        aria-live={status === "running" ? "polite" : "off"}
-        className={cn(
-          "flex flex-col gap-3 rounded-2xl border bg-background p-4",
-          className,
-        )}
-        data-status={status}
-        ref={ref}
-        role={ACTIVITY_LIVE_REGION_ROLE[status]}
-        {...rest}
-      >
-        <header className="flex items-center justify-between gap-3">
-          <h3 className="text-sm font-semibold tracking-tight text-foreground">
-            {resolvedLabels.activity}
-          </h3>
-          {elapsed ? (
-            <span
-              aria-label={resolvedLabels.elapsed}
-              className="text-xs font-mono text-muted-foreground"
-            >
-              {elapsed}
-            </span>
-          ) : null}
-        </header>
-        <ol className="flex flex-col gap-2">{children}</ol>
-      </section>
-    </AgentActivityLabelsContext.Provider>
-  );
-};
-AgentActivity.displayName = "AgentActivity";
+export const AgentActivity = /* @__PURE__ */ named(
+  "AgentActivity",
+  ({
+    ref,
+    ...props
+  }: AgentActivityProps & { ref?: React.Ref<HTMLElement> }) => {
+    const {
+      children,
+      className,
+      elapsed,
+      labels,
+      status = "idle",
+      ...rest
+    } = props;
+    const resolvedLabels = useMemo(
+      () => ({ ...DEFAULT_LABELS, ...labels }),
+      [labels],
+    );
+    return (
+      <AgentActivityLabelsContext.Provider value={resolvedLabels}>
+        <section
+          aria-live={status === "running" ? "polite" : "off"}
+          className={cn(
+            "flex flex-col gap-3 rounded-2xl border bg-background p-4",
+            className,
+          )}
+          data-status={status}
+          ref={ref}
+          role={ACTIVITY_LIVE_REGION_ROLE[status]}
+          {...rest}
+        >
+          <header className="flex items-center justify-between gap-3">
+            <h3 className="text-sm font-semibold tracking-tight text-foreground">
+              {resolvedLabels.activity}
+            </h3>
+            {elapsed ? (
+              <span
+                aria-label={resolvedLabels.elapsed}
+                className="text-xs font-mono text-muted-foreground"
+              >
+                {elapsed}
+              </span>
+            ) : null}
+          </header>
+          <ol className="flex flex-col gap-2">{children}</ol>
+        </section>
+      </AgentActivityLabelsContext.Provider>
+    );
+  },
+);
 
 /**
  * Props for {@link AgentStep}.
@@ -222,6 +227,10 @@ export type AgentStepProps = {
   defaultOpen?: boolean;
   /** Optional icon shown to the left of the title. */
   icon?: ReactNode;
+  /** Called with the next state when a press toggles the details. */
+  onOpenChange?: (open: boolean) => void;
+  /** Controls whether the details are open. Pair it with `onOpenChange`. */
+  open?: boolean;
   /** Step status. */
   status: AgentStepStatus;
 } & ComponentPropsWithoutRef<"li">;
@@ -274,24 +283,20 @@ function splitChildren(children: ReactNode): ContentSplit {
  * @public
  */
 type StepRowProps = {
-  detailsId: string;
   hasDetails: boolean;
   header: ReactNode;
   icon: ReactNode;
   iconClass: string;
   labels: Required<AgentActivityLabels>;
-  onToggle: () => void;
   open: boolean;
 };
 
 function StepRow({
-  detailsId,
   hasDetails,
   header,
   icon,
   iconClass,
   labels,
-  onToggle,
   open,
 }: StepRowProps): ReactNode {
   return (
@@ -307,13 +312,9 @@ function StepRow({
       </span>
       <div className="flex min-w-0 flex-1 flex-col gap-1">{header}</div>
       {hasDetails ? (
-        <button
-          aria-controls={detailsId}
-          aria-expanded={open}
+        <CollapsibleTrigger
           aria-label={open ? labels.collapse : labels.expand}
           className="ml-auto inline-flex size-6 shrink-0 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-foreground/10 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-          onClick={onToggle}
-          type="button"
         >
           <ChevronDown
             aria-hidden="true"
@@ -322,75 +323,81 @@ function StepRow({
               open ? "rotate-180" : "rotate-0",
             )}
           />
-        </button>
+        </CollapsibleTrigger>
       ) : null}
     </div>
   );
 }
 
-export const AgentStep = ({
-  ref,
-  ...props
-}: AgentStepProps & { ref?: React.Ref<HTMLLIElement> }) => {
-  const {
-    children,
-    className,
-    defaultOpen = true,
-    icon,
-    status,
-    ...rest
-  } = props;
-  const split = useMemo(() => splitChildren(children), [children]);
-  const palette = STATUS_CLASSES[status];
-  const hasDetails = split.body.length > 0;
-  const [open, setOpen] = useState(defaultOpen);
-  const detailsId = useId();
-  const labels = use(AgentActivityLabelsContext);
+export const AgentStep = /* @__PURE__ */ named(
+  "AgentStep",
+  ({ ref, ...props }: AgentStepProps & { ref?: React.Ref<HTMLLIElement> }) => {
+    const {
+      children,
+      className,
+      defaultOpen = true,
+      icon,
+      onOpenChange,
+      open: openProperty,
+      status,
+      ...rest
+    } = props;
+    const split = useMemo(() => splitChildren(children), [children]);
+    const palette = STATUS_CLASSES[status];
+    const hasDetails = split.body.length > 0;
+    const labels = use(AgentActivityLabelsContext);
 
-  const handleToggle = useCallback(() => {
-    setOpen((value) => !value);
-  }, []);
+    const contextValue = useMemo<StepContextValue>(
+      () => ({ status }),
+      [status],
+    );
+    const resolvedIcon = icon ?? DEFAULT_STATUS_ICON[status];
 
-  const contextValue = useMemo<StepContextValue>(() => ({ status }), [status]);
-  const resolvedIcon = icon ?? DEFAULT_STATUS_ICON[status];
-
-  return (
-    <li
-      className={cn(
-        "rounded-xl border ring-1",
-        palette.rowClass,
-        palette.ringClass,
-        className,
-      )}
-      data-status={status}
-      ref={ref}
-      {...rest}
-    >
-      <StepContext.Provider value={contextValue}>
-        <StepRow
-          detailsId={detailsId}
-          hasDetails={hasDetails}
-          header={split.header}
-          icon={resolvedIcon}
-          iconClass={palette.iconClass}
-          labels={labels}
-          onToggle={handleToggle}
-          open={open}
-        />
-        {hasDetails ? (
-          <div
-            className="border-t border-border/60 px-3 py-2 text-xs"
-            hidden={!open}
-            id={detailsId}
+    return (
+      <li
+        className={cn(
+          "rounded-xl border ring-1",
+          palette.rowClass,
+          palette.ringClass,
+          className,
+        )}
+        data-status={status}
+        ref={ref}
+        {...rest}
+      >
+        <StepContext.Provider value={contextValue}>
+          <Collapsible
+            className="contents"
+            defaultOpen={defaultOpen}
+            onOpenChange={onOpenChange}
+            open={openProperty}
           >
-            <div className="flex flex-col gap-2 pl-8">{split.body}</div>
-          </div>
-        ) : null}
-      </StepContext.Provider>
-    </li>
-  );
-};
-AgentStep.displayName = "AgentStep";
+            {({ open }) => (
+              <>
+                <StepRow
+                  hasDetails={hasDetails}
+                  header={split.header}
+                  icon={resolvedIcon}
+                  iconClass={palette.iconClass}
+                  labels={labels}
+                  open={open}
+                />
+                {hasDetails ? (
+                  <CollapsiblePanel
+                    className="border-t border-border/60 px-3 py-2 text-xs"
+                    keepMounted
+                  >
+                    <div className="flex flex-col gap-2 pl-8">{split.body}</div>
+                  </CollapsiblePanel>
+                ) : null}
+              </>
+            )}
+          </Collapsible>
+        </StepContext.Provider>
+      </li>
+    );
+  },
+);
 
 /**
  * Props for {@link AgentStepTitle}.
@@ -404,21 +411,23 @@ export type AgentStepTitleProps = ComponentPropsWithoutRef<"p">;
  *
  * @public
  */
-export const AgentStepTitle = ({
-  className,
-  ref,
-  ...rest
-}: AgentStepTitleProps & { ref?: React.Ref<HTMLParagraphElement> }) => (
-  <p
-    className={cn(
-      "text-sm font-medium leading-tight text-foreground",
-      className,
-    )}
-    ref={ref}
-    {...rest}
-  />
+export const AgentStepTitle = /* @__PURE__ */ named(
+  "AgentStepTitle",
+  ({
+    className,
+    ref,
+    ...rest
+  }: AgentStepTitleProps & { ref?: React.Ref<HTMLParagraphElement> }) => (
+    <p
+      className={cn(
+        "text-sm font-medium leading-tight text-foreground",
+        className,
+      )}
+      ref={ref}
+      {...rest}
+    />
+  ),
 );
-AgentStepTitle.displayName = "AgentStepTitle";
 
 /**
  * Props for {@link AgentStepDuration}.
@@ -432,18 +441,20 @@ export type AgentStepDurationProps = ComponentPropsWithoutRef<"span">;
  *
  * @public
  */
-export const AgentStepDuration = ({
-  className,
-  ref,
-  ...rest
-}: AgentStepDurationProps & { ref?: React.Ref<HTMLSpanElement> }) => (
-  <span
-    className={cn("font-mono text-xs text-muted-foreground", className)}
-    ref={ref}
-    {...rest}
-  />
+export const AgentStepDuration = /* @__PURE__ */ named(
+  "AgentStepDuration",
+  ({
+    className,
+    ref,
+    ...rest
+  }: AgentStepDurationProps & { ref?: React.Ref<HTMLSpanElement> }) => (
+    <span
+      className={cn("font-mono text-xs text-muted-foreground", className)}
+      ref={ref}
+      {...rest}
+    />
+  ),
 );
-AgentStepDuration.displayName = "AgentStepDuration";
 
 /**
  * Props for {@link AgentStepProgress}.
@@ -462,33 +473,35 @@ export type AgentStepProgressProps = {
  *
  * @public
  */
-export const AgentStepProgress = ({
-  className,
-  label = "Step progress",
-  ref,
-  value,
-  ...rest
-}: AgentStepProgressProps & { ref?: React.Ref<HTMLDivElement> }) => {
-  const clamped = Math.max(0, Math.min(100, value));
-  return (
-    <div
-      aria-label={label}
-      aria-valuemax={100}
-      aria-valuemin={0}
-      aria-valuenow={clamped}
-      className={cn("h-1.5 w-full rounded-full bg-secondary", className)}
-      ref={ref}
-      role="progressbar"
-      {...rest}
-    >
-      <span
-        className="block h-full rounded-full bg-primary transition-[width]"
-        style={{ width: `${clamped.toString()}%` }}
-      />
-    </div>
-  );
-};
-AgentStepProgress.displayName = "AgentStepProgress";
+export const AgentStepProgress = /* @__PURE__ */ named(
+  "AgentStepProgress",
+  ({
+    className,
+    label = "Step progress",
+    ref,
+    value,
+    ...rest
+  }: AgentStepProgressProps & { ref?: React.Ref<HTMLDivElement> }) => {
+    const clamped = Math.max(0, Math.min(100, value));
+    return (
+      <div
+        aria-label={label}
+        aria-valuemax={100}
+        aria-valuemin={0}
+        aria-valuenow={clamped}
+        className={cn("h-1.5 w-full rounded-full bg-secondary", className)}
+        ref={ref}
+        role="progressbar"
+        {...rest}
+      >
+        <span
+          className="block h-full rounded-full bg-primary transition-[width]"
+          style={{ width: `${clamped.toString()}%` }}
+        />
+      </div>
+    );
+  },
+);
 
 /**
  * Props for {@link AgentStepDetail}.
@@ -503,18 +516,20 @@ export type AgentStepDetailProps = ComponentPropsWithoutRef<"div">;
  *
  * @public
  */
-export const AgentStepDetail = ({
-  className,
-  ref,
-  ...rest
-}: AgentStepDetailProps & { ref?: React.Ref<HTMLDivElement> }) => (
-  <div
-    className={cn("text-xs text-muted-foreground", className)}
-    ref={ref}
-    {...rest}
-  />
+export const AgentStepDetail = /* @__PURE__ */ named(
+  "AgentStepDetail",
+  ({
+    className,
+    ref,
+    ...rest
+  }: AgentStepDetailProps & { ref?: React.Ref<HTMLDivElement> }) => (
+    <div
+      className={cn("text-xs text-muted-foreground", className)}
+      ref={ref}
+      {...rest}
+    />
+  ),
 );
-AgentStepDetail.displayName = "AgentStepDetail";
 
 /**
  * Hook for reading the current step's status from inside a custom child.

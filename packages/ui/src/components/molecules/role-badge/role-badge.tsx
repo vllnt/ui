@@ -1,5 +1,6 @@
 import * as React from "react";
 
+import { named } from "../../../lib/named";
 import { cn } from "../../../lib/utils";
 import { badgeVariants } from "../../atoms/badge/badge";
 
@@ -39,27 +40,28 @@ function getRoleClasses(accountRole: RoleBadgeRole): string {
   }
 }
 
-export const RoleBadge = ({
-  accountRole,
-  className,
-  label,
-  ref: reference,
-  ...props
-}: RoleBadgeProps & { ref?: React.Ref<HTMLSpanElement> }) => {
-  return (
-    <span
-      className={cn(
-        badgeVariants({ variant: "outline" }),
-        "rounded-full px-2.5 py-1 text-[11px] font-medium shadow-none",
-        getRoleClasses(accountRole),
-        className,
-      )}
-      ref={reference}
-      {...props}
-    >
-      {label ?? getRoleLabel(accountRole)}
-    </span>
-  );
-};
-
-RoleBadge.displayName = "RoleBadge";
+export const RoleBadge = /* @__PURE__ */ named(
+  "RoleBadge",
+  ({
+    accountRole,
+    className,
+    label,
+    ref: reference,
+    ...props
+  }: RoleBadgeProps & { ref?: React.Ref<HTMLSpanElement> }) => {
+    return (
+      <span
+        className={cn(
+          badgeVariants({ variant: "outline" }),
+          "rounded-full px-2.5 py-1 text-[11px] font-medium shadow-none",
+          getRoleClasses(accountRole),
+          className,
+        )}
+        ref={reference}
+        {...props}
+      >
+        {label ?? getRoleLabel(accountRole)}
+      </span>
+    );
+  },
+);

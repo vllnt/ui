@@ -4,6 +4,13 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { MDXContent } from "./mdx-content";
 
+const compiler = vi.hoisted(() => ({ loads: 0 }));
+
+vi.mock("@mdx-js/mdx", async (importOriginal) => {
+  compiler.loads += 1;
+  return importOriginal();
+});
+
 function Note({ children }: { children: React.ReactNode }) {
   return <aside>{children}</aside>;
 }
@@ -11,6 +18,32 @@ function Note({ children }: { children: React.ReactNode }) {
 describe("MDXContent", () => {
   afterEach(() => {
     vi.restoreAllMocks();
+  });
+
+  it("does not load the MDX compiler for plain markdown", async () => {
+    render(await MDXContent({ content: "## Plain\n\nNo components here." }));
+
+    expect(screen.getByRole("heading", { name: "Plain" })).toBeInTheDocument();
+    expect(compiler.loads).toBe(0);
+  });
+
+  it("loads the MDX compiler once for content with components", async () => {
+    render(
+      await MDXContent({
+        components: { Note },
+        content: "<Note>Compiled content</Note>",
+      }),
+    );
+    render(
+      await MDXContent({
+        components: { Note },
+        content: "<Note>Compiled again</Note>",
+      }),
+    );
+
+    expect(screen.getByText("Compiled content")).toBeInTheDocument();
+    expect(screen.getByText("Compiled again")).toBeInTheDocument();
+    expect(compiler.loads).toBe(1);
   });
 
   it("renders GFM pipe tables as accessible tables", async () => {

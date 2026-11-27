@@ -98,11 +98,11 @@ export const COMPONENT_SEO: readonly ComponentSeo[] = [
   },
   {
     description:
-      "Add a date picker calendar in React for selecting single dates or ranges. Built on react-day-picker with keyboard navigation. Install via the shadcn CLI.",
+      "Add a date picker calendar in React for selecting single dates or ranges. Built on ui-sdk with keyboard navigation. Install via the shadcn CLI.",
     faqs: [
       {
         answer:
-          "Calendar is a date picker calendar component for React built on react-day-picker. It renders a month grid for selecting dates and supports single, multiple, and range selection.",
+          "Calendar is a date picker calendar component for React built on ui-sdk. It renders a month grid for selecting dates and supports single, multiple, and range selection.",
         question: "What is Calendar?",
       },
       {
@@ -112,8 +112,8 @@ export const COMPONENT_SEO: readonly ComponentSeo[] = [
       },
       {
         answer:
-          "Yes. Calendar wraps react-day-picker's DayPicker and forwards all of its props, so you can set the selection mode, disabled dates, and other options while keeping the VLLNT UI styling.",
-        question: "Is Calendar built on react-day-picker?",
+          "Yes. Calendar wraps ui-sdk's calendar and keeps the familiar props (mode, selected, onSelect, disabled, fromDate, toDate, numberOfMonths), so you can set the selection mode, disabled dates, and other options while keeping the VLLNT UI styling.",
+        question: "Is Calendar built on ui-sdk?",
       },
     ],
     related: [
@@ -125,7 +125,7 @@ export const COMPONENT_SEO: readonly ComponentSeo[] = [
     slug: "calendar",
     title: "Calendar — date picker calendar in React | VLLNT UI",
     whatItIs:
-      "Calendar is a date picker calendar for React, built on react-day-picker. It renders a month grid for selecting dates and forwards every DayPicker prop, so you can switch between single, multiple, and range selection modes. Styling matches the rest of the system, with outside days shown by default and custom chevron navigation. Use it inline or inside a popover to build date pickers, booking flows, and scheduling interfaces.",
+      "Calendar is a date picker calendar for React, built on ui-sdk. It renders a month grid for selecting dates, so you can switch between single, multiple, and range selection modes. Styling matches the rest of the system, with outside days shown by default and custom chevron navigation. Use it inline or inside a popover to build date pickers, booking flows, and scheduling interfaces.",
   },
   {
     description:
@@ -186,11 +186,11 @@ export const COMPONENT_SEO: readonly ComponentSeo[] = [
   },
   {
     description:
-      "Build swipeable galleries, testimonials, or sliders with Carousel, a React component built on Embla with buttons and keyboard nav. Install via the shadcn CLI.",
+      "Build swipeable galleries, testimonials, or sliders with Carousel, a React component built on ui-sdk with buttons and keyboard nav. Install via the shadcn CLI.",
     faqs: [
       {
         answer:
-          "Carousel is a React slider component from VLLNT UI built on Embla Carousel. It scrolls through slides horizontally or vertically with previous and next buttons, keyboard navigation, and drag or touch swiping.",
+          "Carousel is a React slider component from VLLNT UI built on the ui-sdk carousel. It scrolls through slides horizontally or vertically with previous and next buttons, keyboard navigation, and drag or touch swiping.",
         question: "What is Carousel?",
       },
       {
@@ -200,15 +200,15 @@ export const COMPONENT_SEO: readonly ComponentSeo[] = [
       },
       {
         answer:
-          "Yes. Set the orientation prop to vertical for a stacked layout, and pass Embla plugins such as autoplay plus opts and setApi to configure and control the underlying Embla instance.",
-        question: "Does Carousel support vertical scrolling and plugins?",
+          "Yes. Set the orientation prop to vertical for a stacked layout, and use opts and setApi to configure the carousel and control it from your code. Embla plugins are not supported.",
+        question: "Does Carousel support vertical scrolling?",
       },
     ],
     related: ["slideshow", "animated-list", "bento-grid"],
     slug: "carousel",
     title: "Carousel — swipeable content slider in React | VLLNT UI",
     whatItIs:
-      "Carousel is a scrollable slider built on Embla Carousel. Compose it from Carousel, CarouselContent, and CarouselItem, then add CarouselPrevious and CarouselNext buttons that disable automatically at the first and last slide. It supports horizontal or vertical orientation, arrow-key navigation, drag and touch swiping, and Embla plugins through the opts, plugins, and setApi props. Use it for image galleries, testimonials, onboarding steps, or product showcases.",
+      "Carousel is a scrollable slider built on the ui-sdk carousel. Compose it from Carousel, CarouselContent, and CarouselItem, then add CarouselPrevious and CarouselNext buttons that mark themselves aria-disabled at the first and last slide. It supports horizontal or vertical orientation, arrow-key navigation, drag and touch swiping, and the opts and setApi props. Use it for image galleries, testimonials, onboarding steps, or product showcases.",
   },
   {
     description:
@@ -252,7 +252,7 @@ export const COMPONENT_SEO: readonly ComponentSeo[] = [
       },
       {
         answer:
-          "Use the CommandDialog export, which renders the same palette inside a Radix dialog. Toggle its open prop from a keyboard shortcut to get a centered ⌘K overlay.",
+          "Use the CommandDialog export, which renders the same palette inside a ui-sdk dialog. Toggle its open prop from a keyboard shortcut to get a centered ⌘K overlay.",
         question: "How do I make Command open as a ⌘K modal?",
       },
     ],
@@ -260,7 +260,7 @@ export const COMPONENT_SEO: readonly ComponentSeo[] = [
     slug: "command",
     title: "Command — command palette with search in React | VLLNT UI",
     whatItIs:
-      "Command is a command palette built on the cmdk library. It combines a search input, grouped result lists, items, shortcuts, and an empty state, filtering entries as the user types and moving the highlight with arrow keys. Use it for a searchable action menu or a ⌘K launcher that jumps between pages, runs commands, or finds records. CommandDialog wraps the same palette in a Radix dialog so it opens as a centered modal overlay.",
+      "Command is a command palette built on the ui-sdk command component. It combines a search input, grouped result lists, items, shortcuts, and an empty state, filtering entries as the user types and moving the highlight with arrow keys. Use it for a searchable action menu or a ⌘K launcher that jumps between pages, runs commands, or finds records. CommandDialog wraps the same palette in a Radix dialog so it opens as a centered modal overlay.",
   },
   {
     description:
@@ -290,11 +290,11 @@ export const COMPONENT_SEO: readonly ComponentSeo[] = [
   },
   {
     description:
-      "Add an accessible dropdown menu in React with items, checkboxes, radio groups, and submenus. Built on Radix UI keyboard nav. Install via the shadcn CLI.",
+      "Add an accessible dropdown menu in React with items, checkboxes, radio groups, and submenus. Built on ui-sdk keyboard nav. Install via the shadcn CLI.",
     faqs: [
       {
         answer:
-          "Dropdown Menu is an accessible menu component for React that opens from a trigger button. Built on Radix UI, it supports items, checkbox items, radio groups, submenus, labels, separators, and shortcuts.",
+          "Dropdown Menu is an accessible menu component for React that opens from a trigger button. Built on ui-sdk, it supports items, checkbox items, radio groups, submenus, labels, separators, and shortcuts.",
         question: "What is Dropdown Menu?",
       },
       {
@@ -304,7 +304,7 @@ export const COMPONENT_SEO: readonly ComponentSeo[] = [
       },
       {
         answer:
-          "Yes. It is built on Radix UI's dropdown-menu primitive, which handles keyboard navigation, typeahead, focus management, and ARIA roles, including nested submenus and checkbox and radio items.",
+          "Yes. It is built on the ui-sdk menu, which handles keyboard navigation, typeahead, focus management, and ARIA roles, including nested submenus and checkbox and radio items.",
         question: "Is Dropdown Menu keyboard accessible?",
       },
     ],
@@ -312,7 +312,7 @@ export const COMPONENT_SEO: readonly ComponentSeo[] = [
     slug: "dropdown-menu",
     title: "Dropdown Menu — accessible menu with submenus in React | VLLNT UI",
     whatItIs:
-      "Dropdown Menu is an accessible menu triggered by a button, built on Radix UI's dropdown-menu primitive. It supports plain items, checkbox items, radio groups, nested submenus, labels, separators, and keyboard shortcuts, with optional inset spacing for alignment. Use it for action menus, account switchers, and command surfaces where users pick an option. Radix provides keyboard navigation, typeahead, focus management, and correct ARIA roles out of the box.",
+      "Dropdown Menu is an accessible menu triggered by a button, built on the ui-sdk menu. It supports plain items, checkbox items, radio groups, nested submenus, labels, separators, and keyboard shortcuts, with optional inset spacing for alignment. Use it for action menus, account switchers, and command surfaces where users pick an option. Radix provides keyboard navigation, typeahead, focus management, and correct ARIA roles out of the box.",
   },
   {
     description:
@@ -395,11 +395,11 @@ export const COMPONENT_SEO: readonly ComponentSeo[] = [
   },
   {
     description:
-      "Show a rich preview card when users hover a link or name in React. Accessible Radix Hover Card with configurable align and offset. Install via the shadcn CLI.",
+      "Show a rich preview card when users hover a link or name in React. Accessible ui-sdk Hover Card with configurable align and offset. Install via the shadcn CLI.",
     faqs: [
       {
         answer:
-          "Hover Card is a React component, built on Radix UI's Hover Card primitive, that shows a floating card of rich content when a pointer hovers its trigger.",
+          "Hover Card is a React component, built on the ui-sdk hover card, that shows a floating card of rich content when a pointer hovers its trigger.",
         question: "What is Hover Card?",
       },
       {
@@ -417,7 +417,7 @@ export const COMPONENT_SEO: readonly ComponentSeo[] = [
     slug: "hover-card",
     title: "Hover Card — rich hover preview popover in React | VLLNT UI",
     whatItIs:
-      "Hover Card is a popover built on Radix UI's Hover Card primitive that reveals extra content when a pointer hovers a trigger. Compose it from HoverCard, HoverCardTrigger, and HoverCardContent, which renders a bordered card with configurable align and side offset. Use it to preview linked content — a user profile, a repository, or a footnote — without a click or navigation. Unlike a tooltip, it holds rich layout and media and opens on hover or focus of its trigger.",
+      "Hover Card is a popover built on the ui-sdk hover card that reveals extra content when a pointer hovers a trigger. Compose it from HoverCard, HoverCardTrigger, and HoverCardContent, which renders a bordered card with configurable align and side offset. Use it to preview linked content — a user profile, a repository, or a footnote — without a click or navigation. Unlike a tooltip, it holds rich layout and media and opens on hover or focus of its trigger.",
   },
   {
     description:
@@ -552,11 +552,11 @@ export const COMPONENT_SEO: readonly ComponentSeo[] = [
   },
   {
     description:
-      "Switch between views, modes, or filters with Segmented Control, a React single-select toggle built on Radix with size variants. Install via the shadcn CLI.",
+      "Switch between views, modes, or filters with Segmented Control, a React single-select toggle built on ui-sdk with size variants. Install via the shadcn CLI.",
     faqs: [
       {
         answer:
-          "Segmented Control is a React single-select component from VLLNT UI, built on Radix Toggle Group. It groups related options into one control so users pick exactly one, ideal for toggling views, modes, or filters.",
+          "Segmented Control is a React single-select component from VLLNT UI, built on the ui-sdk segmented control. It groups related options into one control so users pick exactly one, ideal for toggling views, modes, or filters.",
         question: "What is Segmented Control?",
       },
       {
@@ -575,15 +575,15 @@ export const COMPONENT_SEO: readonly ComponentSeo[] = [
     title:
       "Segmented Control — single-choice mode switcher in React | VLLNT UI",
     whatItIs:
-      "Segmented Control is a single-choice selector that lets users switch between a small set of options, such as modes, views, or filters. Built on Radix Toggle Group, it renders a SegmentedControl with SegmentedControlItem children, exposes value, defaultValue, and onValueChange for controlled or uncontrolled use, and supports sm, default, and lg sizes. The active segment is highlighted, individual items can be disabled, and keyboard focus is handled for you.",
+      "Segmented Control is a single-choice selector that lets users switch between a small set of options, such as modes, views, or filters. Built on the ui-sdk segmented control, it renders a SegmentedControl with SegmentedControlItem children, exposes value, defaultValue, and onValueChange for controlled or uncontrolled use, and supports sm, default, and lg sizes. The active segment is highlighted, individual items can be disabled, and keyboard focus is handled for you.",
   },
   {
     description:
-      "Let users pick one option from a dropdown in React forms. Accessible Radix Select with keyboard typeahead, groups, and scrolling. Install via the shadcn CLI.",
+      "Let users pick one option from a dropdown in React forms. Accessible ui-sdk Select with keyboard typeahead, groups, and scrolling. Install via the shadcn CLI.",
     faqs: [
       {
         answer:
-          "Select is an accessible dropdown input for React, built on Radix UI's Select primitive. It lets users choose one value from a list and is composed of Select, SelectTrigger, SelectContent, and SelectItem parts.",
+          "Select is an accessible dropdown input for React, built on the ui-sdk select. It lets users choose one value from a list and is composed of Select, SelectTrigger, SelectContent, and SelectItem parts.",
         question: "What is Select?",
       },
       {
@@ -593,7 +593,7 @@ export const COMPONENT_SEO: readonly ComponentSeo[] = [
       },
       {
         answer:
-          "Yes. Because it wraps Radix UI's Select primitive, it supports full keyboard navigation, typeahead to jump to options, and correct listbox ARIA roles out of the box.",
+          "Yes. Because it wraps the ui-sdk select, it supports full keyboard navigation, typeahead to jump to options, and correct listbox ARIA roles out of the box.",
         question: "Is Select keyboard accessible?",
       },
     ],
@@ -601,15 +601,15 @@ export const COMPONENT_SEO: readonly ComponentSeo[] = [
     slug: "select",
     title: "Select — accessible dropdown select input in React | VLLNT UI",
     whatItIs:
-      "Select is a dropdown input built on Radix UI's Select primitive for choosing a single value from a list. Click the trigger to open a portal-rendered menu with keyboard navigation, typeahead, grouped options, labels, separators, and scroll buttons for long lists. Use it in forms when the option set is known and you want a styled, accessible alternative to the native select element. It is composed from Select, SelectTrigger, SelectContent, and SelectItem parts.",
+      "Select is a dropdown input built on the ui-sdk select for choosing a single value from a list. Click the trigger to open a top-layer menu with keyboard navigation, typeahead, grouped options, labels, separators, and scroll buttons for long lists. Use it in forms when the option set is known and you want a styled, accessible alternative to the native select element. It is composed from Select, SelectTrigger, SelectContent, and SelectItem parts.",
   },
   {
     description:
-      "Slide a panel in from any screen edge for navigation, forms, or details in React. Built on Radix Dialog with four side options. Install via the shadcn CLI.",
+      "Slide a panel in from any screen edge for navigation, forms, or details in React. Built on the ui-sdk dialog with four side options. Install via the shadcn CLI.",
     faqs: [
       {
         answer:
-          "Sheet is a slide-over panel component for React that animates in from a screen edge. It is built on Radix UI Dialog and includes trigger, content, header, footer, title, description, and close parts.",
+          "Sheet is a slide-over panel component for React that animates in from a screen edge. It is built on the ui-sdk dialog and includes trigger, content, header, footer, title, description, and close parts.",
         question: "What is Sheet?",
       },
       {
@@ -619,7 +619,7 @@ export const COMPONENT_SEO: readonly ComponentSeo[] = [
       },
       {
         answer:
-          "The side prop accepts top, right (the default), bottom, or left, so the panel slides in from whichever edge you choose. Built on Radix Dialog, it also traps focus and closes on Escape.",
+          "The side prop accepts top, right (the default), bottom, or left, so the panel slides in from whichever edge you choose. Built on the ui-sdk dialog, it also traps focus and closes on Escape.",
         question: "Which sides can a Sheet open from?",
       },
     ],
@@ -627,7 +627,7 @@ export const COMPONENT_SEO: readonly ComponentSeo[] = [
     slug: "sheet",
     title: "Sheet — slide-over panel from the screen edge in React | VLLNT UI",
     whatItIs:
-      "Sheet is a slide-over panel that enters from the edge of the screen, built on Radix UI's Dialog primitive. A side variant positions it on the top, right, bottom, or left, and it ships with trigger, content, header, footer, title, description, and close parts. Use it for navigation drawers, filters, quick forms, or detail views that shouldn't take over the whole page. Radix handles focus trapping, escape-to-close, and ARIA.",
+      "Sheet is a slide-over panel that enters from the edge of the screen, built on the ui-sdk dialog. A side variant positions it on the top, right, bottom, or left, and it ships with trigger, content, header, footer, title, description, and close parts. Use it for navigation drawers, filters, quick forms, or detail views that shouldn't take over the whole page. Radix handles focus trapping, escape-to-close, and ARIA.",
   },
   {
     description:
@@ -683,11 +683,11 @@ export const COMPONENT_SEO: readonly ComponentSeo[] = [
   },
   {
     description:
-      "Two-state toggle button for React UIs: bold, italic, or grid vs list view. Accessible Radix primitive with variants and sizes. Install via the shadcn CLI.",
+      "Two-state toggle button for React UIs: bold, italic, or grid vs list view. Accessible ui-sdk toggle with variants and sizes. Install via the shadcn CLI.",
     faqs: [
       {
         answer:
-          "Toggle is a two-state button component for React, built on Radix UI's Toggle primitive. It switches a single option on or off and reflects the pressed state via data-[state=on] styling.",
+          "Toggle is a two-state button component for React, built on the ui-sdk toggle. It switches a single option on or off and reflects the pressed state via data-[state=on] styling.",
         question: "What is Toggle?",
       },
       {
@@ -705,7 +705,7 @@ export const COMPONENT_SEO: readonly ComponentSeo[] = [
     slug: "toggle",
     title: "Toggle — accessible two-state toggle button in React | VLLNT UI",
     whatItIs:
-      "Toggle is a two-state button built on Radix UI's Toggle primitive. It flips between on and off, exposing the pressed state through data-[state=on] styling so you can theme it with Tailwind. Reach for it when a single control switches one option on or off — bold text, grid versus list view, or mute audio. It ships with default and outline variants plus small, default, and large sizes. For a set of related toggles, use Toggle Group instead.",
+      "Toggle is a two-state button built on the ui-sdk toggle. It flips between on and off, exposing the pressed state through data-[state=on] styling so you can theme it with Tailwind. Reach for it when a single control switches one option on or off — bold text, grid versus list view, or mute audio. It ships with default and outline variants plus small, default, and large sizes. For a set of related toggles, use Toggle Group instead.",
   },
   {
     description:

@@ -2,21 +2,27 @@
 
 import * as React from "react";
 
-import { Slot } from "@radix-ui/react-slot";
-import { cva, type VariantProps } from "class-variance-authority";
+import {
+  Field as FieldPrimitive,
+  FieldControl as FieldControlPrimitive,
+  FieldDescription as FieldDescriptionPrimitive,
+  FieldError as FieldErrorPrimitive,
+  FieldLabel as FieldLabelPrimitive,
+} from "@ui-sdk/react/field";
 
+import { named } from "../../../lib/named";
+import { Slot } from "../../../lib/ui-sdk";
 import { cn } from "../../../lib/utils";
+import { cva, type VariantProps } from "../../../lib/variants";
 import { Label } from "../../atoms/label/label";
 
 type FieldContextValue = {
-  descriptionId: string;
-  errorId: string;
-  id: string;
   invalid: boolean;
 };
 
 const FieldContext = React.createContext<FieldContextValue | null>(null);
 
+/** ui-sdk's parts also work outside a Field; ours keep requiring one. */
 function useFieldContext(): FieldContextValue {
   const context = React.use(FieldContext);
   if (!context) {
@@ -44,135 +50,138 @@ export type FieldProps = {
   invalid?: boolean;
 } & VariantProps<typeof fieldVariants>;
 
-const Field = ({
-  children,
-  className,
-  invalid = false,
-  orientation,
-  ref,
-}: FieldProps & { ref?: React.Ref<HTMLDivElement> }) => {
-  const id = React.useId();
-  const value = React.useMemo<FieldContextValue>(
-    () => ({
-      descriptionId: `${id}-description`,
-      errorId: `${id}-error`,
-      id: `${id}-control`,
-      invalid,
-    }),
-    [id, invalid],
-  );
+// `invalid` is always passed on, so the browser's own validation never shows
+// an error the caller did not ask for.
+const Field = /* @__PURE__ */ named(
+  "Field",
+  ({
+    children,
+    className,
+    invalid = false,
+    orientation,
+    ref,
+  }: FieldProps & { ref?: React.Ref<HTMLDivElement> }) => {
+    const value = React.useMemo<FieldContextValue>(
+      () => ({ invalid }),
+      [invalid],
+    );
 
-  return (
-    <FieldContext.Provider value={value}>
-      <div
-        className={cn(fieldVariants({ orientation }), className)}
-        data-slot="field"
-        ref={ref}
-      >
-        {children}
-      </div>
-    </FieldContext.Provider>
-  );
-};
-Field.displayName = "Field";
+    return (
+      <FieldContext.Provider value={value}>
+        <FieldPrimitive
+          className={cn(fieldVariants({ orientation }), className)}
+          invalid={invalid}
+          ref={ref}
+        >
+          {children}
+        </FieldPrimitive>
+      </FieldContext.Provider>
+    );
+  },
+);
 
 /** Label wired to the field control through htmlFor. */
 export type FieldLabelProps = React.ComponentPropsWithoutRef<typeof Label>;
 
-const FieldLabel = ({
-  className,
-  ref,
-  ...props
-}: FieldLabelProps & { ref?: React.Ref<React.ComponentRef<typeof Label>> }) => {
-  const { id, invalid } = useFieldContext();
+const FieldLabel = /* @__PURE__ */ named(
+  "FieldLabel",
+  ({
+    className,
+    ref,
+    ...props
+  }: FieldLabelProps & {
+    ref?: React.Ref<React.ComponentRef<typeof Label>>;
+  }) => {
+    const { invalid } = useFieldContext();
 
-  return (
-    <Label
-      className={cn(invalid && "text-destructive", className)}
-      htmlFor={id}
-      ref={ref}
-      {...props}
-    />
-  );
-};
-FieldLabel.displayName = "FieldLabel";
+    return (
+      <FieldLabelPrimitive
+        render={
+          <Label
+            className={cn(invalid && "text-destructive", className)}
+            ref={ref}
+            {...props}
+          />
+        }
+      />
+    );
+  },
+);
 
 /** Wraps the control and injects id plus aria wiring from the Field. */
 export type FieldControlProps = {
   children: React.ReactNode;
 };
 
-const FieldControl = ({
-  children,
-  ref,
-}: FieldControlProps & { ref?: React.Ref<HTMLElement> }) => {
-  const { descriptionId, errorId, id, invalid } = useFieldContext();
-  const describedBy =
-    [descriptionId, invalid ? errorId : null].filter(Boolean).join(" ") ||
-    undefined;
+const FieldControl = /* @__PURE__ */ named(
+  "FieldControl",
+  ({ children, ref }: FieldControlProps & { ref?: React.Ref<HTMLElement> }) => {
+    useFieldContext();
 
-  return (
-    <Slot
-      aria-describedby={describedBy}
-      aria-invalid={invalid || undefined}
-      id={id}
-      ref={ref}
-    >
-      {children}
-    </Slot>
-  );
-};
-FieldControl.displayName = "FieldControl";
+    return <FieldControlPrimitive render={<Slot ref={ref}>{children}</Slot>} />;
+  },
+);
 
 /** Helper text describing the field, announced to assistive tech. */
 export type FieldDescriptionProps = React.ComponentPropsWithoutRef<"p">;
 
-const FieldDescription = ({
-  className,
-  ref,
-  ...props
-}: FieldDescriptionProps & { ref?: React.Ref<HTMLParagraphElement> }) => {
-  const { descriptionId } = useFieldContext();
+const FieldDescription = /* @__PURE__ */ named(
+  "FieldDescription",
+  ({
+    className,
+    ref,
+    ...props
+  }: FieldDescriptionProps & { ref?: React.Ref<HTMLParagraphElement> }) => {
+    useFieldContext();
 
-  return (
-    <p
-      className={cn("text-sm text-muted-foreground", className)}
-      id={descriptionId}
-      ref={ref}
-      {...props}
-    />
-  );
-};
-FieldDescription.displayName = "FieldDescription";
+    return (
+      <FieldDescriptionPrimitive
+        render={
+          <p
+            className={cn("text-sm text-muted-foreground", className)}
+            ref={ref}
+            {...props}
+          />
+        }
+      />
+    );
+  },
+);
 
 /** Validation message that renders when children are present. */
 export type FieldErrorProps = React.ComponentPropsWithoutRef<"p">;
 
-const FieldError = ({
-  children,
-  className,
-  ref,
-  ...props
-}: FieldErrorProps & { ref?: React.Ref<HTMLParagraphElement> }) => {
-  const { errorId } = useFieldContext();
+const FieldError = /* @__PURE__ */ named(
+  "FieldError",
+  ({
+    children,
+    className,
+    ref,
+    ...props
+  }: FieldErrorProps & { ref?: React.Ref<HTMLParagraphElement> }) => {
+    useFieldContext();
 
-  if (!children) {
-    return null;
-  }
+    if (!children) {
+      return null;
+    }
 
-  return (
-    <p
-      className={cn("text-sm font-medium text-destructive", className)}
-      id={errorId}
-      ref={ref}
-      role="alert"
-      {...props}
-    >
-      {children}
-    </p>
-  );
-};
-FieldError.displayName = "FieldError";
+    return (
+      <FieldErrorPrimitive
+        match
+        render={
+          <p
+            className={cn("text-sm font-medium text-destructive", className)}
+            ref={ref}
+            role="alert"
+            {...props}
+          />
+        }
+      >
+        {children}
+      </FieldErrorPrimitive>
+    );
+  },
+);
 
 export {
   Field,

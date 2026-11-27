@@ -16,6 +16,7 @@ import {
   useState,
 } from "react";
 
+import { named } from "../../../lib/named";
 import { cn } from "../../../lib/utils";
 
 const VIEWBOX_WIDTH = 1000;
@@ -189,67 +190,69 @@ function ChapterHeader({ subtitle, title }: ChapterHeaderProps): ReactNode {
  *
  * @public
  */
-export const StoryMapChapter = ({
-  ref: forwardedRef,
-  ...props
-}: StoryMapChapterProps & { ref?: React.Ref<HTMLElement> }) => {
-  const {
-    center,
-    children,
-    className,
-    color = "red",
-    id,
-    media,
-    subtitle,
-    title,
-    zoom = 2,
-    ...rest
-  } = props;
-  const generatedId = useId();
-  const chapterId = id ?? generatedId;
-  const localRef = useRef<HTMLElement | null>(null);
-  const { registerChapter, registerMarker, unregisterMarker } =
-    useStoryMapContext();
+export const StoryMapChapter = /* @__PURE__ */ named(
+  "StoryMapChapter",
+  ({
+    ref: forwardedRef,
+    ...props
+  }: StoryMapChapterProps & { ref?: React.Ref<HTMLElement> }) => {
+    const {
+      center,
+      children,
+      className,
+      color = "red",
+      id,
+      media,
+      subtitle,
+      title,
+      zoom = 2,
+      ...rest
+    } = props;
+    const generatedId = useId();
+    const chapterId = id ?? generatedId;
+    const localRef = useRef<HTMLElement | null>(null);
+    const { registerChapter, registerMarker, unregisterMarker } =
+      useStoryMapContext();
 
-  useEffect(() => {
-    registerMarker({ center, color, id: chapterId, zoom });
-    return () => {
-      unregisterMarker(chapterId);
-    };
-  }, [center, chapterId, color, registerMarker, unregisterMarker, zoom]);
+    useEffect(() => {
+      registerMarker({ center, color, id: chapterId, zoom });
+      return () => {
+        unregisterMarker(chapterId);
+      };
+    }, [center, chapterId, color, registerMarker, unregisterMarker, zoom]);
 
-  const refCallback = useCallback(
-    (node: HTMLElement | null) => {
-      localRef.current = node;
-      registerChapter(chapterId, node);
-      if (typeof forwardedRef === "function") forwardedRef(node);
-      else if (forwardedRef) forwardedRef.current = node;
-    },
-    [chapterId, forwardedRef, registerChapter],
-  );
+    const refCallback = useCallback(
+      (node: HTMLElement | null) => {
+        localRef.current = node;
+        registerChapter(chapterId, node);
+        if (typeof forwardedRef === "function") forwardedRef(node);
+        else if (forwardedRef) forwardedRef.current = node;
+      },
+      [chapterId, forwardedRef, registerChapter],
+    );
 
-  return (
-    <article
-      className={cn(
-        "flex min-h-screen flex-col justify-center gap-3 py-12",
-        className,
-      )}
-      data-chapter-id={chapterId}
-      id={chapterId}
-      ref={refCallback}
-      {...rest}
-    >
-      <ChapterHeader subtitle={subtitle} title={title} />
-      {media ? <ChapterMedia media={media} /> : null}
-      {children ? (
-        <div className="space-y-2 text-sm leading-relaxed text-foreground [&_blockquote]:my-3 [&_blockquote]:border-l-2 [&_blockquote]:border-primary [&_blockquote]:pl-3 [&_blockquote]:italic [&_blockquote]:text-muted-foreground">
-          {children}
-        </div>
-      ) : null}
-    </article>
-  );
-};
-StoryMapChapter.displayName = "StoryMapChapter";
+    return (
+      <article
+        className={cn(
+          "flex min-h-screen flex-col justify-center gap-3 py-12",
+          className,
+        )}
+        data-chapter-id={chapterId}
+        id={chapterId}
+        ref={refCallback}
+        {...rest}
+      >
+        <ChapterHeader subtitle={subtitle} title={title} />
+        {media ? <ChapterMedia media={media} /> : null}
+        {children ? (
+          <div className="space-y-2 text-sm leading-relaxed text-foreground [&_blockquote]:my-3 [&_blockquote]:border-l-2 [&_blockquote]:border-primary [&_blockquote]:pl-3 [&_blockquote]:italic [&_blockquote]:text-muted-foreground">
+            {children}
+          </div>
+        ) : null}
+      </article>
+    );
+  },
+);
 
 type Marker = RegisterArguments;
 
@@ -557,59 +560,65 @@ const Shell = function Shell({
  *
  * @public
  */
-export const StoryMap = ({
-  ref,
-  ...props
-}: StoryMapProps & { ref?: React.Ref<HTMLElement> }) => {
-  const { backdrop, backdropAlt, children, className, labels, ...rest } = props;
-  const titleId = useId();
-  const resolvedLabels = useMemo(
-    () => ({ ...DEFAULT_LABELS, ...labels }),
-    [labels],
-  );
+export const StoryMap = /* @__PURE__ */ named(
+  "StoryMap",
+  ({ ref, ...props }: StoryMapProps & { ref?: React.Ref<HTMLElement> }) => {
+    const { backdrop, backdropAlt, children, className, labels, ...rest } =
+      props;
+    const titleId = useId();
+    const resolvedLabels = useMemo(
+      () => ({ ...DEFAULT_LABELS, ...labels }),
+      [labels],
+    );
 
-  const {
-    activeId,
-    markerEntries,
-    registerChapter,
-    registerMarker,
-    setActiveId,
-    unregisterMarker,
-  } = useChapterRegistry();
-
-  const ctx = useMemo<Ctx>(
-    () => ({
+    const {
       activeId,
+      markerEntries,
       registerChapter,
       registerMarker,
       setActiveId,
       unregisterMarker,
-    }),
-    [activeId, registerChapter, registerMarker, setActiveId, unregisterMarker],
-  );
+    } = useChapterRegistry();
 
-  const orderedIds = useMemo(
-    () => chapterIdsFromChildren(children),
-    [children],
-  );
+    const ctx = useMemo<Ctx>(
+      () => ({
+        activeId,
+        registerChapter,
+        registerMarker,
+        setActiveId,
+        unregisterMarker,
+      }),
+      [
+        activeId,
+        registerChapter,
+        registerMarker,
+        setActiveId,
+        unregisterMarker,
+      ],
+    );
 
-  return (
-    <StoryMapContext.Provider value={ctx}>
-      <Shell
-        activeId={activeId}
-        backdrop={backdrop}
-        backdropAlt={backdropAlt}
-        className={className}
-        labels={resolvedLabels}
-        markers={markerEntries}
-        orderedIds={orderedIds}
-        ref={ref}
-        titleId={titleId}
-        {...rest}
-      >
-        {children}
-      </Shell>
-    </StoryMapContext.Provider>
-  );
-};
-StoryMap.displayName = "StoryMap";
+    const orderedIds = useMemo(
+      () => chapterIdsFromChildren(children),
+      [children],
+    );
+
+    return (
+      <StoryMapContext.Provider value={ctx}>
+        <Shell
+          activeId={activeId}
+          backdrop={backdrop}
+          backdropAlt={backdropAlt}
+          className={className}
+          labels={resolvedLabels}
+          markers={markerEntries}
+          orderedIds={orderedIds}
+          ref={ref}
+          titleId={titleId}
+          {...rest}
+        >
+          {children}
+        </Shell>
+      </StoryMapContext.Provider>
+    );
+  },
+);

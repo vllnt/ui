@@ -13,14 +13,20 @@
  *     as a single npm peer dep — `import { Dialog, cn } from "@vllnt/ui"` etc.
  *
  * Rewrites applied to each component source (at any `../` depth):
+ *   - `from "../../../lib/variants"`              → `from "class-variance-authority"`,
+ *     added to the item's `dependencies`: the package ships its own `cva`, an
+ *     installed file uses the real one, and `variants.test.ts` proves they agree
+ *   - `import { named } from "../../../lib/named"` → dropped, and the helper
+ *     (`lib/named.ts`) is appended to the shim as a local function: `named` is
+ *     internal, so the installed file carries its own copy
  *   - `from "../../../lib/utils"`                 → `from "@vllnt/ui"`
  *   - `from "../../../lib/use-X"`                 → `from "@vllnt/ui"`
  *   - `from "../<sibling>/<sibling>"`             → `from "@vllnt/ui"`
  *   - `from "../../<level>/<sibling>/<sibling>"`  → `from "@vllnt/ui"`
  *   - `from "../<sibling>"`                       → `from "@vllnt/ui"`
- *   - `import("../<sibling>")` (same sibling paths) → `import("@vllnt/ui")`, only
- *     for the components in ALLOWED_DYNAMIC_RELATIVE_IMPORTS; any other relative
- *     `import()` throws (a lazy chunk must import a package specifier)
+ *   - `import("../<sibling>")` and `import("./<helper>")` → `import("@vllnt/ui")`,
+ *     only for the components in ALLOWED_DYNAMIC_RELATIVE_IMPORTS; any other
+ *     relative `import()` throws (a lazy chunk must import a package specifier)
  *   - `import { A } from "./<helper>"`            → `from "@vllnt/ui"` when every
  *     binding is a public export
  *
@@ -68,12 +74,15 @@ const componentsRoot = join(repoRoot, "packages/ui/src/components");
 const shimsRoot = join(repoRoot, "apps/registry/registry/default");
 
 const PACKAGE_NAME = "@vllnt/ui";
+const VARIANTS_PACKAGE = "class-variance-authority";
+const NAMED_IMPORT_PATTERN =
+  /^import\s*\{\s*named\s*\}\s*from\s*["'](?:\.\.\/)+lib\/named["'];?[ \t]*\r?\n/m;
 
 // Dynamic relative imports the rewrite resolves correctly, by component: the
-// target is a sibling whose public export is read by name (FlowDiagram). Any
-// other relative `import()` fails the build, see lib/dynamic-relative-imports.
+// target is a module whose public export is read by name (FlowDiagramContent).
+// Any other relative `import()` fails the build, see lib/dynamic-relative-imports.
 const ALLOWED_DYNAMIC_RELATIVE_IMPORTS = new Map<string, ReadonlySet<string>>([
-  ["tutorial-mdx", new Set(["../flow-diagram"])],
+  ["flow-diagram", new Set(["./flow-diagram-content"])],
 ]);
 
 const RESERVED_REGISTRY_NAMES = new Set([
@@ -173,6 +182,8 @@ const DYNAMIC_SIBLING_IMPORT_PATTERN = new RegExp(
   `import\\(\\s*["']${SIBLING_PATH}["']\\s*\\)`,
   "g",
 );
+const DYNAMIC_SAME_FOLDER_IMPORT_PATTERN =
+  /import\(\s*["']\.\/[a-z][a-z0-9-]*["']\s*\)/g;
 
 const packageEntry = join(repoRoot, "packages/ui/src/index.ts");
 
@@ -197,10 +208,36 @@ const rewriteSameFolderImports = (source: string): string =>
     },
   );
 
+/**
+ * The text of `lib/named.ts` as a local declaration: without its doc comment
+ * and its `export` keywords. One source for the package and for every shim.
+ */
+const namedDefinition = readFileSync(
+  join(repoRoot, "packages/ui/src/lib/named.ts"),
+  "utf8",
+)
+  .replace(/^\/\*\*[\s\S]*?\*\/\s*/, "")
+  .replace(/^export function/gm, "function")
+  .trimEnd();
+
+const inlineNamed = (code: string): string => {
+  if (!NAMED_IMPORT_PATTERN.test(code)) {
+    return code;
+  }
+  if (/\b(?:function|const|let|var)\s+named\b/.test(code)) {
+    throw new Error("A component source declares `named` next to importing it");
+  }
+  return `${code.replace(NAMED_IMPORT_PATTERN, "").trimEnd()}\n\n${namedDefinition}\n`;
+};
+
 const rewriteImports = (source: string): string => {
   // Collect import lines that target lib utilities or sibling components
   // and replace each with a single deduped `import ... from "@vllnt/ui"` block.
-  let code = source;
+  // `lib/variants` goes first: the public barrel does not export `cva`.
+  let code = inlineNamed(source).replace(
+    /from\s+["'](?:\.\.\/)+lib\/variants["']/g,
+    `from "${VARIANTS_PACKAGE}"`,
+  );
 
   // `../../../lib/<module>` → `@vllnt/ui`. Matches any single-segment kebab-case
   // lib module (utils, types, theme-presets, use-*, …) at any depth. The rewrite
@@ -215,8 +252,12 @@ const rewriteImports = (source: string): string => {
   // → `@vllnt/ui`
   code = code.replace(SIBLING_IMPORT_PATTERN, `from "${PACKAGE_NAME}"`);
 
-  // Dynamic `import("<sibling path>")` → `import("@vllnt/ui")`
+  // Dynamic `import("<sibling path>")` and `import("./<helper>")` → `import("@vllnt/ui")`
   code = code.replace(DYNAMIC_SIBLING_IMPORT_PATTERN, `import("${PACKAGE_NAME}")`);
+  code = code.replace(
+    DYNAMIC_SAME_FOLDER_IMPORT_PATTERN,
+    `import("${PACKAGE_NAME}")`,
+  );
 
   return rewriteSameFolderImports(code);
 };
@@ -287,11 +328,19 @@ for (const item of registry.items) {
   // No transitive registry pulls — @vllnt/ui covers all internals
   item.registryDependencies = [];
 
-  // Ensure @vllnt/ui is in npm dependencies (preserve any other declared deps)
+  // Ensure @vllnt/ui is in npm dependencies (preserve any other declared deps),
+  // and the variants package when the installed file imports it.
   const otherDeps = (item.dependencies ?? []).filter(
     (dep) => !dep.startsWith(`${PACKAGE_NAME}@`) && dep !== PACKAGE_NAME,
   );
-  item.dependencies = [PACKAGE_DEP, ...otherDeps];
+  const needsVariants =
+    code.includes(`from "${VARIANTS_PACKAGE}"`) &&
+    !otherDeps.includes(VARIANTS_PACKAGE);
+  item.dependencies = [
+    PACKAGE_DEP,
+    ...otherDeps,
+    ...(needsVariants ? [VARIANTS_PACKAGE] : []),
+  ];
 
   // Stamp version + stability per the registry item schema (see #253).
   // Defaults to the published @vllnt/ui version + "stable"; per-component

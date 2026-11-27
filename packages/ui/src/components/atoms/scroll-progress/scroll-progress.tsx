@@ -2,6 +2,7 @@
 
 import * as React from "react";
 
+import { named } from "../../../lib/named";
 import { cn } from "../../../lib/utils";
 
 /**
@@ -29,51 +30,53 @@ function computeProgress(): number {
  * <ScrollProgress />
  * ```
  */
-export const ScrollProgress = ({
-  className,
-  ref,
-  style,
-  ...props
-}: ScrollProgressProps & { ref?: React.Ref<HTMLDivElement> }) => {
-  const [progress, setProgress] = React.useState(0);
+export const ScrollProgress = /* @__PURE__ */ named(
+  "ScrollProgress",
+  ({
+    className,
+    ref,
+    style,
+    ...props
+  }: ScrollProgressProps & { ref?: React.Ref<HTMLDivElement> }) => {
+    const [progress, setProgress] = React.useState(0);
 
-  React.useEffect(() => {
-    let frame: null | number = null;
-    const update = (): void => {
-      frame = null;
-      setProgress(computeProgress());
-    };
-    const onScroll = (): void => {
-      frame ??= requestAnimationFrame(update);
-    };
+    React.useEffect(() => {
+      let frame: null | number = null;
+      const update = (): void => {
+        frame = null;
+        setProgress(computeProgress());
+      };
+      const onScroll = (): void => {
+        frame ??= requestAnimationFrame(update);
+      };
 
-    update();
-    window.addEventListener("scroll", onScroll, { passive: true });
+      update();
+      window.addEventListener("scroll", onScroll, { passive: true });
 
-    return () => {
-      window.removeEventListener("scroll", onScroll);
-      if (frame !== null) {
-        cancelAnimationFrame(frame);
-      }
-    };
-  }, []);
+      return () => {
+        window.removeEventListener("scroll", onScroll);
+        if (frame !== null) {
+          cancelAnimationFrame(frame);
+        }
+      };
+    }, []);
 
-  return (
-    <div
-      aria-label={props["aria-labelledby"] ? undefined : "Reading progress"}
-      aria-valuemax={100}
-      aria-valuemin={0}
-      aria-valuenow={Math.round(progress)}
-      className={cn(
-        "fixed inset-x-0 top-0 z-50 h-1 origin-left bg-primary",
-        className,
-      )}
-      ref={ref}
-      // react-doctor-disable-next-line react-doctor/prefer-tag-over-role -- the public props and ref use div types, and a native <progress> would change both
-      role="progressbar"
-      style={{ width: `${progress}%`, ...style }}
-      {...props}
-    />
-  );
-};
-ScrollProgress.displayName = "ScrollProgress";
+    return (
+      <div
+        aria-label={props["aria-labelledby"] ? undefined : "Reading progress"}
+        aria-valuemax={100}
+        aria-valuemin={0}
+        aria-valuenow={Math.round(progress)}
+        className={cn(
+          "fixed inset-x-0 top-0 z-50 h-1 origin-left bg-primary",
+          className,
+        )}
+        ref={ref}
+        // react-doctor-disable-next-line react-doctor/prefer-tag-over-role -- the public props and ref use div types, and a native <progress> would change both
+        role="progressbar"
+        style={{ width: `${progress}%`, ...style }}
+        {...props}
+      />
+    );
+  },
+);

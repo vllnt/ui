@@ -61,3 +61,7 @@ type KeyboardShortcut = {
 | `description` | `string` | Yes | - |
 | `keys` | `readonly string[]` | Yes | Array of `readonly string` |
 
+
+## Open state
+
+Pass `open` and `onOpenChange`, or the older `isOpen` and `onClose`; they work together, and `open` wins. The help renders on the ui-sdk dialog: it traps focus, locks page scroll, closes on Escape and returns focus to the element that opened it.

@@ -2,9 +2,9 @@
 
 import * as React from "react";
 
-import { cva, type VariantProps } from "class-variance-authority";
-
+import { named } from "../../../lib/named";
 import { cn } from "../../../lib/utils";
+import { cva, type VariantProps } from "../../../lib/variants";
 
 export type ToastProps = {
   variant?: "default" | "destructive";
@@ -33,94 +33,104 @@ const toastVariants = cva(
  * (polite) by default and `role="alert"` (assertive) for the destructive
  * variant. Pass `role` / `aria-live` to override.
  */
-const Toast = ({
-  className,
-  ref: reference,
-  variant,
-  ...props
-}: ToastProps &
-  VariantProps<typeof toastVariants> & {
-    ref?: React.Ref<HTMLDivElement>;
-  }) => {
-  const isDestructive = variant === "destructive";
-  return (
-    <div
-      aria-atomic="true"
-      aria-live={isDestructive ? "assertive" : "polite"}
-      className={cn(toastVariants({ variant }), className)}
+const Toast = /* @__PURE__ */ named(
+  "Toast",
+  ({
+    className,
+    ref: reference,
+    variant,
+    ...props
+  }: ToastProps &
+    VariantProps<typeof toastVariants> & {
+      ref?: React.Ref<HTMLDivElement>;
+    }) => {
+    const isDestructive = variant === "destructive";
+    return (
+      <div
+        aria-atomic="true"
+        aria-live={isDestructive ? "assertive" : "polite"}
+        className={cn(toastVariants({ variant }), className)}
+        ref={reference}
+        role={isDestructive ? "alert" : "status"}
+        {...props}
+      />
+    );
+  },
+);
+
+const ToastAction = /* @__PURE__ */ named(
+  "ToastAction",
+  ({
+    altText,
+    className,
+    ref: reference,
+    ...props
+  }: React.ComponentPropsWithoutRef<"button"> & {
+    altText?: string;
+    ref?: React.Ref<HTMLButtonElement>;
+  }) => (
+    <button
+      className={cn(
+        "inline-flex h-8 shrink-0 items-center justify-center rounded-md border bg-transparent px-3 text-sm font-medium ring-offset-background transition-colors hover:bg-secondary focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 group-[.destructive]:border-muted/40 group-[.destructive]:hover:border-destructive/30 group-[.destructive]:hover:bg-destructive group-[.destructive]:hover:text-destructive-foreground group-[.destructive]:focus:ring-destructive",
+        className,
+      )}
       ref={reference}
-      role={isDestructive ? "alert" : "status"}
+      type="button"
       {...props}
     />
-  );
-};
-Toast.displayName = "Toast";
-
-const ToastAction = ({
-  altText,
-  className,
-  ref: reference,
-  ...props
-}: React.ComponentPropsWithoutRef<"button"> & {
-  altText?: string;
-  ref?: React.Ref<HTMLButtonElement>;
-}) => (
-  <button
-    className={cn(
-      "inline-flex h-8 shrink-0 items-center justify-center rounded-md border bg-transparent px-3 text-sm font-medium ring-offset-background transition-colors hover:bg-secondary focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 group-[.destructive]:border-muted/40 group-[.destructive]:hover:border-destructive/30 group-[.destructive]:hover:bg-destructive group-[.destructive]:hover:text-destructive-foreground group-[.destructive]:focus:ring-destructive",
-      className,
-    )}
-    ref={reference}
-    type="button"
-    {...props}
-  />
+  ),
 );
-ToastAction.displayName = "ToastAction";
 
-const ToastClose = ({
-  className,
-  ref: reference,
-  ...props
-}: React.ComponentPropsWithoutRef<"button"> & {
-  ref?: React.Ref<HTMLButtonElement>;
-}) => (
-  <button
-    className={cn(
-      "absolute right-2 top-2 rounded-md p-1 text-foreground/50 opacity-0 transition-opacity hover:text-foreground focus:opacity-100 focus:outline-none focus:ring-2 group-hover:opacity-100 group-[.destructive]:text-destructive-foreground/80 group-[.destructive]:hover:text-destructive-foreground group-[.destructive]:focus:ring-destructive-foreground group-[.destructive]:focus:ring-offset-destructive",
-      className,
-    )}
-    data-toast-close="true"
-    ref={reference}
-    type="button"
-    {...props}
-  >
-    <span className="sr-only">Close</span>✕
-  </button>
+const ToastClose = /* @__PURE__ */ named(
+  "ToastClose",
+  ({
+    className,
+    ref: reference,
+    ...props
+  }: React.ComponentPropsWithoutRef<"button"> & {
+    ref?: React.Ref<HTMLButtonElement>;
+  }) => (
+    <button
+      className={cn(
+        "absolute right-2 top-2 rounded-md p-1 text-foreground/50 opacity-0 transition-opacity hover:text-foreground focus:opacity-100 focus:outline-none focus:ring-2 group-hover:opacity-100 group-[.destructive]:text-destructive-foreground/80 group-[.destructive]:hover:text-destructive-foreground group-[.destructive]:focus:ring-destructive-foreground group-[.destructive]:focus:ring-offset-destructive",
+        className,
+      )}
+      data-toast-close="true"
+      ref={reference}
+      type="button"
+      {...props}
+    >
+      <span className="sr-only">Close</span>✕
+    </button>
+  ),
 );
-ToastClose.displayName = "ToastClose";
 
-const ToastTitle = ({
-  className,
-  ref: reference,
-  ...props
-}: React.HTMLAttributes<HTMLDivElement> & {
-  ref?: React.Ref<HTMLDivElement>;
-}) => (
-  <div
-    className={cn("text-sm font-semibold", className)}
-    ref={reference}
-    {...props}
-  />
+const ToastTitle = /* @__PURE__ */ named(
+  "ToastTitle",
+  ({
+    className,
+    ref: reference,
+    ...props
+  }: React.HTMLAttributes<HTMLDivElement> & {
+    ref?: React.Ref<HTMLDivElement>;
+  }) => (
+    <div
+      className={cn("text-sm font-semibold", className)}
+      ref={reference}
+      {...props}
+    />
+  ),
 );
-ToastTitle.displayName = "ToastTitle";
 
-const ToastDescription = ({
-  className,
-  ref: reference,
-  ...props
-}: React.HTMLAttributes<HTMLDivElement> & {
-  ref?: React.Ref<HTMLDivElement>;
-}) => <div className={cn("text-sm", className)} ref={reference} {...props} />;
-ToastDescription.displayName = "ToastDescription";
+const ToastDescription = /* @__PURE__ */ named(
+  "ToastDescription",
+  ({
+    className,
+    ref: reference,
+    ...props
+  }: React.HTMLAttributes<HTMLDivElement> & {
+    ref?: React.Ref<HTMLDivElement>;
+  }) => <div className={cn("text-sm", className)} ref={reference} {...props} />,
+);
 
 export { Toast, ToastAction, ToastClose, ToastDescription, ToastTitle };

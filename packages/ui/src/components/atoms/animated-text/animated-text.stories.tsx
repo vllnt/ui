@@ -81,6 +81,9 @@ export const DecipherTerminalBoxes: Story = {
 };
 
 export const DecipherBlockNoise: Story = {
+  // Random glyphs on a timer never land the same way twice; the other
+  // decipher stories cover the component in the visual diff.
+  tags: ["visual-skip"],
   args: {
     direction: "random",
     randomCharactersPreset: "blocks",

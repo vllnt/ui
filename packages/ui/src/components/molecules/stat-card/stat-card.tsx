@@ -1,9 +1,10 @@
 import * as React from "react";
 
-import { cva, type VariantProps } from "class-variance-authority";
 import { ArrowDownRight, ArrowRight, ArrowUpRight } from "lucide-react";
 
+import { named } from "../../../lib/named";
 import { cn } from "../../../lib/utils";
+import { cva, type VariantProps } from "../../../lib/variants";
 import {
   Card,
   CardContent,
@@ -80,61 +81,62 @@ function TrendIcon({ trend }: { trend: StatCardTrend }) {
   return <ArrowRight className="size-3.5" />;
 }
 
-const StatCard = ({
-  change,
-  className,
-  description,
-  icon,
-  label,
-  meta,
-  ref: reference,
-  tone,
-  trend = "neutral",
-  value,
-  ...props
-}: StatCardProps & { ref?: React.Ref<HTMLDivElement> }) => (
-  <Card
-    className={cn(statCardVariants({ tone }), className)}
-    ref={reference}
-    {...props}
-  >
-    <div className={accentVariants({ tone })} />
-    <CardHeader className="flex flex-row items-start justify-between gap-4 gap-y-0 pb-3">
-      <div className="space-y-1">
-        <CardDescription className="text-xs font-medium uppercase tracking-[0.14em]">
-          {label}
-        </CardDescription>
-        <div className="text-3xl font-semibold tracking-tight">{value}</div>
-      </div>
-      {icon ? (
-        <div className="rounded-lg border bg-muted/50 p-2 text-muted-foreground">
-          {icon}
+const StatCard = /* @__PURE__ */ named(
+  "StatCard",
+  ({
+    change,
+    className,
+    description,
+    icon,
+    label,
+    meta,
+    ref: reference,
+    tone,
+    trend = "neutral",
+    value,
+    ...props
+  }: StatCardProps & { ref?: React.Ref<HTMLDivElement> }) => (
+    <Card
+      className={cn(statCardVariants({ tone }), className)}
+      ref={reference}
+      {...props}
+    >
+      <div className={accentVariants({ tone })} />
+      <CardHeader className="flex flex-row items-start justify-between gap-4 gap-y-0 pb-3">
+        <div className="space-y-1">
+          <CardDescription className="text-xs font-medium uppercase tracking-[0.14em]">
+            {label}
+          </CardDescription>
+          <div className="text-3xl font-semibold tracking-tight">{value}</div>
         </div>
-      ) : null}
-    </CardHeader>
-    {description || change || meta ? (
-      <CardContent className="space-y-3">
-        {description ? (
-          <p className="text-sm text-muted-foreground">{description}</p>
-        ) : null}
-        {change || meta ? (
-          <div className="flex flex-wrap items-center justify-between gap-3">
-            {change ? (
-              <div className={changeVariants({ trend })}>
-                <TrendIcon trend={trend} />
-                <span>{change}</span>
-              </div>
-            ) : null}
-            {meta ? (
-              <div className="text-xs text-muted-foreground">{meta}</div>
-            ) : null}
+        {icon ? (
+          <div className="rounded-lg border bg-muted/50 p-2 text-muted-foreground">
+            {icon}
           </div>
         ) : null}
-      </CardContent>
-    ) : null}
-  </Card>
+      </CardHeader>
+      {description || change || meta ? (
+        <CardContent className="space-y-3">
+          {description ? (
+            <p className="text-sm text-muted-foreground">{description}</p>
+          ) : null}
+          {change || meta ? (
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              {change ? (
+                <div className={changeVariants({ trend })}>
+                  <TrendIcon trend={trend} />
+                  <span>{change}</span>
+                </div>
+              ) : null}
+              {meta ? (
+                <div className="text-xs text-muted-foreground">{meta}</div>
+              ) : null}
+            </div>
+          ) : null}
+        </CardContent>
+      ) : null}
+    </Card>
+  ),
 );
-
-StatCard.displayName = "StatCard";
 
 export { StatCard, statCardVariants };

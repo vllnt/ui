@@ -1,13 +1,15 @@
 "use client";
 
-import { memo, useRef } from "react";
+import { memo, useEffect, useId, useRef } from "react";
 
-import * as DialogPrimitive from "@radix-ui/react-dialog";
-import type { KeyboardEvent, ReactNode } from "react";
+import type { ReactNode, RefObject } from "react";
 
 import type { MaterialProps } from "../../../lib/material";
+import { named } from "../../../lib/named";
 import type { HeadingTag } from "../../../lib/types";
-import { useReturnFocus } from "../../../lib/use-return-focus";
+import { useBodyScrollLock } from "../../../lib/use-body-scroll-lock";
+import { useEscapeKey } from "../../../lib/use-escape-key";
+import { useFocusContainment } from "../../../lib/use-focus-containment";
 import { cn } from "../../../lib/utils";
 import { Button } from "../../atoms/button/button";
 
@@ -42,20 +44,25 @@ export type CompletionDialogProps = {
   title: string;
 } & MaterialProps;
 
-type DialogBodyProps = Omit<
-  CompletionDialogProps,
-  "isOpen" | "material" | "modal" | "onClose"
->;
+type DialogBodyProps = Omit<CompletionDialogProps, "isOpen" | "material"> & {
+  confirmButtonRef: RefObject<HTMLButtonElement | null>;
+  dialogRef: RefObject<HTMLDivElement | null>;
+};
 
-type DialogCloseButtonProps = Pick<DialogBodyProps, "closeIcon">;
+type DialogCloseButtonProps = Pick<DialogBodyProps, "closeIcon" | "onClose">;
 
 function DialogCloseButton({
   closeIcon,
+  onClose,
 }: DialogCloseButtonProps): React.ReactNode {
   return (
-    <DialogPrimitive.Close
+    <button
       aria-label="Close"
       className="absolute right-3 top-3 inline-flex min-h-6 min-w-6 items-center justify-center rounded-sm p-1 opacity-70 hover:opacity-100 transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+      onClick={() => {
+        onClose();
+      }}
+      type="button"
     >
       {closeIcon ?? (
         <svg
@@ -73,7 +80,7 @@ function DialogCloseButton({
           />
         </svg>
       )}
-    </DialogPrimitive.Close>
+    </button>
   );
 }
 
@@ -87,15 +94,39 @@ function matchesShortcut(event: KeyboardEvent, shortcut: string): boolean {
   );
 }
 
+const TEXT_ENTRY =
+  'input, textarea, select, [contenteditable]:not([contenteditable="false"]), [role="textbox"], [role="searchbox"], [role="combobox"]';
+const NON_TEXT_INPUTS = new Set([
+  "button",
+  "checkbox",
+  "color",
+  "file",
+  "image",
+  "radio",
+  "range",
+  "reset",
+  "submit",
+]);
+
+/** Whether a letter typed here is text, not a shortcut (WCAG 2.1.4). */
+function isTextEntry(target: Node): boolean {
+  const field = target instanceof Element ? target.closest(TEXT_ENTRY) : null;
+  return (
+    field !== null &&
+    !(field instanceof HTMLInputElement && NON_TEXT_INPUTS.has(field.type))
+  );
+}
+
 type DialogActionsProps = Pick<
   DialogBodyProps,
   | "cancelLabel"
   | "cancelShortcut"
+  | "confirmButtonRef"
   | "confirmLabel"
   | "confirmShortcut"
   | "onCancel"
   | "onConfirm"
-> & { confirmButtonRef: React.Ref<HTMLButtonElement> };
+>;
 
 function DialogActions({
   cancelLabel,
@@ -132,64 +163,136 @@ function DialogActions({
   );
 }
 
-function DialogBody({
+type DialogShortcutsOptions = Pick<DialogBodyProps, "onCancel" | "onConfirm"> &
+  Required<Pick<DialogBodyProps, "cancelShortcut" | "confirmShortcut">>;
+
+/**
+ * Runs the single-key shortcuts for keys pressed inside the dialog; a key
+ * pressed elsewhere on the page, or while typing in a field, does nothing, and
+ * so does a key held with Alt, Ctrl or Meta. It listens on the document in the
+ * bubble phase, after React has run the handlers inside the dialog, so one of
+ * them can claim a key with `preventDefault()`.
+ */
+function useDialogShortcuts(
+  dialogRef: RefObject<HTMLElement | null>,
+  {
+    cancelShortcut,
+    confirmShortcut,
+    onCancel,
+    onConfirm,
+  }: DialogShortcutsOptions,
+): void {
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent): void => {
+      if (
+        event.defaultPrevented ||
+        !(event.target instanceof Node) ||
+        !dialogRef.current?.contains(event.target) ||
+        isTextEntry(event.target)
+      ) {
+        return;
+      }
+      if (matchesShortcut(event, confirmShortcut)) {
+        event.preventDefault();
+        onConfirm();
+      } else if (matchesShortcut(event, cancelShortcut)) {
+        event.preventDefault();
+        onCancel();
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [cancelShortcut, confirmShortcut, dialogRef, onCancel, onConfirm]);
+}
+
+type DialogHeadingProps = Pick<
+  DialogBodyProps,
+  "as" | "description" | "title"
+> & {
+  descriptionId: string;
+  titleId: string;
+};
+
+function DialogHeading({
   as: Heading = "h2",
+  description,
+  descriptionId,
+  title,
+  titleId,
+}: DialogHeadingProps): React.ReactNode {
+  return (
+    <div className="mb-4">
+      <Heading className="text-lg font-semibold" id={titleId}>
+        {title}
+      </Heading>
+      {description ? (
+        <div
+          className="text-sm text-muted-foreground mt-1.5"
+          id={descriptionId}
+        >
+          {description}
+        </div>
+      ) : null}
+    </div>
+  );
+}
+
+function DialogBody({
+  as,
   cancelLabel = "Skip",
   cancelShortcut = "S",
   className,
   closeIcon,
+  confirmButtonRef,
   confirmLabel = "Done",
   confirmShortcut = "D",
   description,
+  dialogRef,
+  modal,
   onCancel,
+  onClose,
   onConfirm,
   title,
 }: DialogBodyProps): React.ReactNode {
-  const confirmButtonRef = useRef<HTMLButtonElement>(null);
-  const {
-    onCloseAutoFocus: handleCloseAutoFocus,
-    onOpenAutoFocus: handleOpenAutoFocus,
-  } = useReturnFocus((event) => {
-    event.preventDefault();
-    confirmButtonRef.current?.focus();
+  const id = useId();
+  const descriptionId = `${id}-description`;
+  const titleId = `${id}-title`;
+
+  useDialogShortcuts(dialogRef, {
+    cancelShortcut,
+    confirmShortcut,
+    onCancel,
+    onConfirm,
   });
 
-  const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>): void => {
-    if (event.defaultPrevented) return;
-    if (matchesShortcut(event, confirmShortcut)) {
-      event.preventDefault();
-      onConfirm();
-    } else if (matchesShortcut(event, cancelShortcut)) {
-      event.preventDefault();
-      onCancel();
-    }
-  };
-
   return (
-    <DialogPrimitive.Content
-      {...(description ? {} : { "aria-describedby": undefined })}
+    <div
+      aria-describedby={description ? descriptionId : undefined}
+      aria-labelledby={titleId}
+      aria-modal={modal ? true : undefined}
       className={cn(
         "vllnt-glass-floating vllnt-glass-dense relative z-10 w-full max-w-md mx-4 p-6 border rounded-lg",
         "animate-in fade-in-0 zoom-in-95 duration-200",
         className,
       )}
-      onCloseAutoFocus={handleCloseAutoFocus}
-      onKeyDown={handleKeyDown}
-      onOpenAutoFocus={handleOpenAutoFocus}
+      data-state="open"
+      id={id}
+      ref={dialogRef}
+      // react-doctor-disable-next-line react-doctor/prefer-html-dialog -- a native <dialog> renders in the top layer and would cover the viewport, not its positioned container; useDialogBehavior supplies the focus trap, Escape, scroll lock and inert page
+      role="dialog"
+      tabIndex={-1}
     >
-      <DialogCloseButton closeIcon={closeIcon} />
-      <div className="mb-4">
-        <DialogPrimitive.Title asChild>
-          <Heading className="text-lg font-semibold">{title}</Heading>
-        </DialogPrimitive.Title>
-        {description ? (
-          <DialogPrimitive.Description asChild>
-            <div className="text-sm text-muted-foreground mt-1.5">
-              {description}
-            </div>
-          </DialogPrimitive.Description>
-        ) : null}
-      </div>
+      <DialogCloseButton closeIcon={closeIcon} onClose={onClose} />
+      <DialogHeading
+        as={as}
+        description={description}
+        descriptionId={descriptionId}
+        title={title}
+        titleId={titleId}
+      />
       <DialogActions
         cancelLabel={cancelLabel}
         cancelShortcut={cancelShortcut}
@@ -199,22 +302,182 @@ function DialogBody({
         onCancel={onCancel}
         onConfirm={onConfirm}
       />
-    </DialogPrimitive.Content>
+    </div>
   );
 }
 
+/** Every sibling of `branch` and of its ancestors, up to `<body>`. */
+function siblingsAround(branch: Element | null): Element[] {
+  const parent = branch?.parentElement;
+  if (!branch || !parent) return [];
+
+  return [
+    ...[...parent.children].filter((child) => child !== branch),
+    ...(parent === document.body ? [] : siblingsAround(parent)),
+  ];
+}
+
 /**
- * Modal confirmation overlay that covers its positioned container. Built on
- * the Radix dialog primitive (WAI-ARIA APG modal dialog): focus moves to the
- * confirm button, Tab cycles inside the dialog, Escape and the backdrop close
- * it, and focus returns to the element that opened it. The single-key
- * shortcuts act while focus sits inside the dialog and nowhere else.
+ * Makes the rest of the page inert while `active`: the siblings of the dialog's
+ * ancestors, up to `<body>`, take the `inert` attribute and drop it on close.
+ * Live regions stay reachable so announcements keep working, and an element
+ * that was inert before the dialog opened stays inert.
  */
+function useInertPage(
+  dialogRef: RefObject<HTMLElement | null>,
+  active: boolean,
+): void {
+  useEffect(() => {
+    const dialog = dialogRef.current;
+    if (!active || !dialog) return;
+
+    const page = siblingsAround(dialog.parentElement).filter(
+      (element) =>
+        !element.hasAttribute("inert") && !element.matches("[aria-live]"),
+    );
+    page.forEach((element) => {
+      element.setAttribute("inert", "");
+    });
+
+    return () => {
+      page.forEach((element) => {
+        element.removeAttribute("inert");
+      });
+    };
+  }, [active, dialogRef]);
+}
+
+/**
+ * Radix's scroll lock set `position: relative` on `<body>`, so a dialog with
+ * no positioned ancestor covered the page body. This keeps that, so the
+ * dialog covers the same area as before.
+ */
+function useRelativeBody(active: boolean): void {
+  useEffect(() => {
+    const { body } = document;
+    if (!active || body.style.position === "relative") return;
+
+    const previous = body.style.position;
+    body.style.position = "relative";
+    return () => {
+      body.style.position = previous;
+    };
+  }, [active]);
+}
+
+/**
+ * Calls `onDismiss` when a press that began outside the dialog ends outside it
+ * too, so a text selection dragged out of the dialog keeps it open. With
+ * `onFocusOutside` it also calls `onDismiss` when focus moves outside the
+ * dialog. A modal dialog traps focus, so that case is for a non-modal dialog.
+ */
+function useDismissOutside(
+  dialogRef: RefObject<HTMLElement | null>,
+  onDismiss: () => void,
+  { enabled, onFocusOutside }: { enabled: boolean; onFocusOutside: boolean },
+): void {
+  useEffect(() => {
+    if (!enabled) return;
+
+    let pressStartedOutside = false;
+    const isOutside = (event: Event): boolean =>
+      event.target instanceof Node &&
+      dialogRef.current?.contains(event.target) === false;
+    const handlePointerDown = (event: Event): void => {
+      pressStartedOutside = isOutside(event);
+    };
+    const handleClick = (event: Event): void => {
+      const dismiss = pressStartedOutside && isOutside(event);
+      pressStartedOutside = false;
+      if (dismiss) onDismiss();
+    };
+    const handleFocusIn = (event: Event): void => {
+      if (isOutside(event)) onDismiss();
+    };
+
+    document.addEventListener("pointerdown", handlePointerDown, true);
+    document.addEventListener("click", handleClick, true);
+    if (onFocusOutside) document.addEventListener("focusin", handleFocusIn);
+    return () => {
+      document.removeEventListener("pointerdown", handlePointerDown, true);
+      document.removeEventListener("click", handleClick, true);
+      document.removeEventListener("focusin", handleFocusIn);
+    };
+  }, [dialogRef, enabled, onDismiss, onFocusOutside]);
+}
+
+type DialogBehaviorOptions = {
+  confirmButtonRef: RefObject<HTMLButtonElement | null>;
+  dialogRef: RefObject<HTMLDivElement | null>;
+  isOpen: boolean;
+  modal: boolean;
+  onClose: () => void;
+};
+
+/**
+ * What the WAI-ARIA APG dialog pattern asks of an open dialog. Call order
+ * matters: React cleans effects up in the order they run. The page turns inert
+ * before focus moves in, and turns interactive again before focus returns to
+ * the opener, because an inert element cannot take focus.
+ */
+function useDialogBehavior({
+  confirmButtonRef,
+  dialogRef,
+  isOpen,
+  modal,
+  onClose,
+}: DialogBehaviorOptions): void {
+  useEscapeKey(onClose, {
+    capture: true,
+    enabled: isOpen,
+    preventDefault: true,
+    target: "document",
+  });
+  useDismissOutside(dialogRef, onClose, {
+    enabled: isOpen,
+    onFocusOutside: !modal,
+  });
+  useBodyScrollLock(isOpen && modal);
+  useRelativeBody(isOpen && modal);
+  useInertPage(dialogRef, isOpen && modal);
+  // A modal dialog cycles Tab inside and returns focus to the opener on close.
+  useFocusContainment(dialogRef, isOpen && modal);
+
+  // Focus moves to the confirm button on open. A non-modal dialog has no
+  // containment, so it hands focus back itself, unless the user moved on.
+  useEffect(() => {
+    if (!isOpen) return;
+    const opener = document.activeElement;
+    confirmButtonRef.current?.focus();
+    if (modal) return;
+
+    return () => {
+      const focused = document.activeElement;
+      if (
+        opener instanceof HTMLElement &&
+        opener.isConnected &&
+        (!focused || focused === document.body)
+      ) {
+        opener.focus();
+      }
+    };
+  }, [confirmButtonRef, isOpen, modal]);
+}
+
 const BACKDROP_CLASS = cn(
   "vllnt-glass-scrim absolute inset-0",
   "animate-in fade-in-0 duration-200",
 );
 
+/**
+ * Modal confirmation overlay that covers its positioned container. Renders in
+ * place, built on the kit's own overlay hooks (WAI-ARIA APG modal dialog):
+ * focus moves to the confirm button, Tab cycles inside the dialog, Escape and
+ * a press on the backdrop close it, and focus returns to the element that
+ * opened it. A modal dialog also locks body scroll and makes the rest of the
+ * page inert. The single-key shortcuts act while focus sits inside the dialog
+ * and nowhere else.
+ */
 function CompletionDialogImpl({
   isOpen,
   material = "glass",
@@ -222,30 +485,35 @@ function CompletionDialogImpl({
   onClose,
   ...props
 }: CompletionDialogProps): React.ReactNode {
+  const confirmButtonRef = useRef<HTMLButtonElement>(null);
+  const dialogRef = useRef<HTMLDivElement>(null);
+
+  useDialogBehavior({ confirmButtonRef, dialogRef, isOpen, modal, onClose });
+
+  if (!isOpen) return null;
+
   return (
-    <DialogPrimitive.Root
-      modal={modal}
-      onOpenChange={(open) => {
-        if (!open) onClose();
-      }}
-      open={isOpen}
+    <div
+      className="absolute inset-0 z-[100] flex items-center justify-center"
+      data-material={material}
     >
-      {isOpen ? (
-        <div
-          className="absolute inset-0 z-[100] flex items-center justify-center"
-          data-material={material}
-        >
-          {modal ? (
-            <DialogPrimitive.Overlay className={BACKDROP_CLASS} />
-          ) : (
-            <div aria-hidden="true" className={BACKDROP_CLASS} />
-          )}
-          <DialogBody {...props} />
-        </div>
-      ) : null}
-    </DialogPrimitive.Root>
+      {modal ? (
+        <div className={BACKDROP_CLASS} data-state="open" />
+      ) : (
+        <div aria-hidden="true" className={BACKDROP_CLASS} />
+      )}
+      <DialogBody
+        {...props}
+        confirmButtonRef={confirmButtonRef}
+        dialogRef={dialogRef}
+        modal={modal}
+        onClose={onClose}
+      />
+    </div>
   );
 }
 
-export const CompletionDialog = memo(CompletionDialogImpl);
-CompletionDialog.displayName = "CompletionDialog";
+export const CompletionDialog = /* @__PURE__ */ named(
+  "CompletionDialog",
+  /* @__PURE__ */ memo(CompletionDialogImpl),
+);

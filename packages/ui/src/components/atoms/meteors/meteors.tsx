@@ -2,6 +2,7 @@
 
 import * as React from "react";
 
+import { named } from "../../../lib/named";
 import { cn } from "../../../lib/utils";
 
 /** Props for {@link Meteors}. */
@@ -50,40 +51,42 @@ function meteorStyle(meteor: Meteor): MeteorStyle {
  * <Meteors count={20} />
  * ```
  */
-export const Meteors = ({
-  className,
-  count = 12,
-  ref,
-  ...props
-}: MeteorsProps & { ref?: React.Ref<HTMLDivElement> }) => {
-  const [meteors] = React.useState(() => createMeteors(count));
+export const Meteors = /* @__PURE__ */ named(
+  "Meteors",
+  ({
+    className,
+    count = 12,
+    ref,
+    ...props
+  }: MeteorsProps & { ref?: React.Ref<HTMLDivElement> }) => {
+    const [meteors] = React.useState(() => createMeteors(count));
 
-  return (
-    <div
-      aria-hidden="true"
-      className={cn(
-        "pointer-events-none absolute inset-0 overflow-hidden",
-        className,
-      )}
-      ref={ref}
-      {...props}
-    >
-      {meteors.map((meteor, index) => (
-        <span
-          className="absolute h-0.5 w-0.5 rounded-full bg-muted-foreground [animation-name:vllnt-meteor] [animation-iteration-count:infinite] [animation-timing-function:linear] motion-reduce:animate-none"
-          key={index}
-          style={meteorStyle(meteor)}
-        >
+    return (
+      <div
+        aria-hidden="true"
+        className={cn(
+          "pointer-events-none absolute inset-0 overflow-hidden",
+          className,
+        )}
+        ref={ref}
+        {...props}
+      >
+        {meteors.map((meteor, index) => (
           <span
-            className="absolute right-0 top-1/2 h-px w-12 -translate-y-1/2"
-            style={{
-              background:
-                "linear-gradient(90deg, oklch(var(--muted-foreground)), transparent)",
-            }}
-          />
-        </span>
-      ))}
-    </div>
-  );
-};
-Meteors.displayName = "Meteors";
+            className="absolute h-0.5 w-0.5 rounded-full bg-muted-foreground [animation-name:vllnt-meteor] [animation-iteration-count:infinite] [animation-timing-function:linear] motion-reduce:animate-none"
+            key={index}
+            style={meteorStyle(meteor)}
+          >
+            <span
+              className="absolute right-0 top-1/2 h-px w-12 -translate-y-1/2"
+              style={{
+                background:
+                  "linear-gradient(90deg, oklch(var(--muted-foreground)), transparent)",
+              }}
+            />
+          </span>
+        ))}
+      </div>
+    );
+  },
+);

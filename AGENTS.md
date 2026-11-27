@@ -61,7 +61,7 @@ When a change would break one of these rules, say so in the PR body and link the
 
 ## Repository at a glance
 
-- **Project:** `@vllnt/ui` — accessible React component library (Radix primitives + Tailwind + CVA).
+- **Project:** `@vllnt/ui` — accessible React component library (ui-sdk behaviors + Tailwind + CVA).
 - **Language:** TypeScript (strict mode via `@vllnt/typescript`).
 - **Package manager:** pnpm. Lockfile: `pnpm-lock.yaml`. Never use `npm` / `yarn` / `bun`.
 - **Monorepo tool:** Turborepo (`turbo.json`).
@@ -87,7 +87,8 @@ External shared configs (separate npm packages): `@vllnt/eslint-config`, `@vllnt
 | `pnpm build` | Build every package |
 | `pnpm lint` / `pnpm lint:fix` | Lint workspace |
 | `pnpm test:once` | Vitest single-run workspace-wide |
-| `pnpm -F @vllnt/ui test:visual` | Playwright CT visual snapshots |
+| `pnpm -F @vllnt/ui test:visual` | Playwright CT visual snapshots (a render smoke test: CI rewrites the snapshots) |
+| `pnpm -F @vllnt/ui visual:diff --base <storybook-static> --head <storybook-static>` | Screenshot every story of two Storybook builds (light and dark) and list each shot whose pixels changed; exit 1 on any change. CI runs it on every PR against the base branch ([PR playbook](./docs/agents/PR_PLAYBOOK.md#4-ui-evidence-r4)) |
 | `pnpm -F @vllnt/ui test:coverage` | Vitest with coverage |
 | `pnpm -F @vllnt/ui size` | Fail when a representative export's bundle exceeds its budget in `packages/ui/scripts/size-budget.json` (run after build; CI gate) |
 | `pnpm -F @vllnt/ui check:dist-imports` | Fail when a deep dependency import in `packages/ui/dist` (e.g. `react-syntax-highlighter/dist/esm/prism.js`) does not resolve under Node ESM (run after build; CI gate) |

@@ -1,5 +1,6 @@
 import * as React from "react";
 
+import { named } from "../../../lib/named";
 import { cn } from "../../../lib/utils";
 import { Badge, type BadgeProps } from "../../atoms/badge/badge";
 
@@ -53,34 +54,35 @@ function getPlanTone(
   }
 }
 
-export const PlanBadge = ({
-  className,
-  label,
-  ref: reference,
-  state = "current",
-  tier,
-  ...props
-}: PlanBadgeProps & { ref?: React.Ref<HTMLSpanElement> }) => {
-  return (
-    <Badge
-      className={cn(
-        "py-1 text-[11px] font-medium tracking-[0.02em] shadow-none hover:bg-secondary",
-        className,
-      )}
-      dot
-      ref={reference}
-      tone={getPlanTone(tier, state)}
-      {...props}
-    >
-      <span>{label ?? getPlanLabel(tier)}</span>
-      {state === "trial" ? (
-        <span className="text-current/80">Trial</span>
-      ) : null}
-      {state === "legacy" ? (
-        <span className="text-current/80">Legacy</span>
-      ) : null}
-    </Badge>
-  );
-};
-
-PlanBadge.displayName = "PlanBadge";
+export const PlanBadge = /* @__PURE__ */ named(
+  "PlanBadge",
+  ({
+    className,
+    label,
+    ref: reference,
+    state = "current",
+    tier,
+    ...props
+  }: PlanBadgeProps & { ref?: React.Ref<HTMLSpanElement> }) => {
+    return (
+      <Badge
+        className={cn(
+          "py-1 text-[11px] font-medium tracking-[0.02em] shadow-none hover:bg-secondary",
+          className,
+        )}
+        dot
+        ref={reference}
+        tone={getPlanTone(tier, state)}
+        {...props}
+      >
+        <span>{label ?? getPlanLabel(tier)}</span>
+        {state === "trial" ? (
+          <span className="text-current/80">Trial</span>
+        ) : null}
+        {state === "legacy" ? (
+          <span className="text-current/80">Legacy</span>
+        ) : null}
+      </Badge>
+    );
+  },
+);

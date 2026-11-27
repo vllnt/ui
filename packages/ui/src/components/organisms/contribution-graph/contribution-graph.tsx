@@ -1,5 +1,6 @@
 import * as React from "react";
 
+import { named } from "../../../lib/named";
 import { cn } from "../../../lib/utils";
 
 /**
@@ -126,61 +127,62 @@ function cellOpacity(level: number, levels: number): number {
  *
  * @public
  */
-export const ContributionGraph = ({
-  cellGap = DEFAULT_CELL_GAP,
-  cellSize = DEFAULT_CELL_SIZE,
-  className,
-  color = "currentColor",
-  data,
-  levels = DEFAULT_LEVELS,
-  ref,
-  weeks,
-  ...props
-}: ContributionGraphProps & { ref?: React.Ref<HTMLDivElement> }) => {
-  const ringLevels = Math.max(1, levels);
-  const columns = buildWeeks(data, ringLevels, weeks);
-  if (columns.length === 0) return null;
+export const ContributionGraph = /* @__PURE__ */ named(
+  "ContributionGraph",
+  ({
+    cellGap = DEFAULT_CELL_GAP,
+    cellSize = DEFAULT_CELL_SIZE,
+    className,
+    color = "currentColor",
+    data,
+    levels = DEFAULT_LEVELS,
+    ref,
+    weeks,
+    ...props
+  }: ContributionGraphProps & { ref?: React.Ref<HTMLDivElement> }) => {
+    const ringLevels = Math.max(1, levels);
+    const columns = buildWeeks(data, ringLevels, weeks);
+    if (columns.length === 0) return null;
 
-  const step = cellSize + cellGap;
-  const width = columns.length * step - cellGap;
-  const height = DAYS_PER_WEEK * step - cellGap;
+    const step = cellSize + cellGap;
+    const width = columns.length * step - cellGap;
+    const height = DAYS_PER_WEEK * step - cellGap;
 
-  return (
-    <div
-      className={cn(
-        "rounded-2xl border border-border bg-background/40 p-3",
-        className,
-      )}
-      ref={ref}
-      {...props}
-    >
-      <svg
-        aria-label="Contribution graph"
-        className="h-full w-full"
-        height={height}
-        role="img"
-        viewBox={`0 0 ${width} ${height}`}
-        width={width}
-      >
-        {columns.map((column, weekIndex) =>
-          column.map((cell, dayIndex) => (
-            <rect
-              fill={color}
-              fillOpacity={cellOpacity(cell.level, ringLevels)}
-              height={cellSize}
-              key={cell.date}
-              rx={2}
-              width={cellSize}
-              x={weekIndex * step}
-              y={dayIndex * step}
-            >
-              <title>{`${cell.date}: ${cell.count.toLocaleString()}`}</title>
-            </rect>
-          )),
+    return (
+      <div
+        className={cn(
+          "rounded-2xl border border-border bg-background/40 p-3",
+          className,
         )}
-      </svg>
-    </div>
-  );
-};
-
-ContributionGraph.displayName = "ContributionGraph";
+        ref={ref}
+        {...props}
+      >
+        <svg
+          aria-label="Contribution graph"
+          className="h-full w-full"
+          height={height}
+          role="img"
+          viewBox={`0 0 ${width} ${height}`}
+          width={width}
+        >
+          {columns.map((column, weekIndex) =>
+            column.map((cell, dayIndex) => (
+              <rect
+                fill={color}
+                fillOpacity={cellOpacity(cell.level, ringLevels)}
+                height={cellSize}
+                key={cell.date}
+                rx={2}
+                width={cellSize}
+                x={weekIndex * step}
+                y={dayIndex * step}
+              >
+                <title>{`${cell.date}: ${cell.count.toLocaleString()}`}</title>
+              </rect>
+            )),
+          )}
+        </svg>
+      </div>
+    );
+  },
+);

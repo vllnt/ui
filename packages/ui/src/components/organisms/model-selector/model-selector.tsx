@@ -4,6 +4,7 @@ import { type ReactNode, useEffect, useMemo, useRef, useState } from "react";
 
 import { ArrowUpDown, Filter } from "lucide-react";
 
+import { useControllableState } from "../../../lib/use-controllable-state";
 import { cn } from "../../../lib/utils";
 import { Badge } from "../../atoms/badge/badge";
 import { Button } from "../../atoms/button/button";
@@ -44,13 +45,16 @@ export type ModelInfo = {
 };
 
 export type ModelSelectorProps = {
+  /** Model selected at first. Ignored once `selectedModelId` has a value. */
+  defaultSelectedModelId?: string;
   /** Accessible name of the searchable model list. Defaults to `"Models"`. */
   listLabel?: string;
   models: ModelInfo[];
   onOpenChange: (open: boolean) => void;
-  onSelectModel: (modelId: string) => void;
+  onSelectModel?: (modelId: string) => void;
   open: boolean;
-  selectedModelId: string;
+  /** Selected model. Leave it out to let the selector keep the selection. */
+  selectedModelId?: string;
 };
 
 type SortOption = "name" | "price-high" | "price-low" | "provider";
@@ -219,6 +223,7 @@ type ModelSelectorState = {
   modelSearchQuery: string;
   providerFilter: string;
   providers: string[];
+  selectedModelId: string;
   setModelSearchQuery: (value: string) => void;
   setProviderFilter: (value: string) => void;
   setSortBy: (value: SortOption) => void;
@@ -226,11 +231,17 @@ type ModelSelectorState = {
 };
 
 function useModelSelectorState({
+  defaultSelectedModelId = "",
   models,
   onOpenChange,
   onSelectModel,
-  selectedModelId,
+  selectedModelId: selectedModelIdProperty,
 }: ModelSelectorProps): ModelSelectorState {
+  const [selectedModelId, selectModel] = useControllableState({
+    defaultValue: defaultSelectedModelId,
+    onChange: onSelectModel,
+    value: selectedModelIdProperty,
+  });
   const [modelSearchQuery, setModelSearchQuery] = useState("");
   const [sortBy, setSortBy] = useState<SortOption>("name");
   const [providerFilter, setProviderFilter] = useState<string>("all");
@@ -266,7 +277,7 @@ function useModelSelectorState({
     handleModelSelect({
       handleClose,
       id,
-      onSelectModel,
+      onSelectModel: selectModel,
       releaseGuardLater,
       selectionGuardReference,
     });
@@ -278,6 +289,7 @@ function useModelSelectorState({
     modelSearchQuery,
     providerFilter,
     providers,
+    selectedModelId,
     setModelSearchQuery,
     setProviderFilter,
     setSortBy,
@@ -513,6 +525,7 @@ export function ModelSelector(props: ModelSelectorProps) {
     modelSearchQuery,
     providerFilter,
     providers,
+    selectedModelId,
     setModelSearchQuery,
     setProviderFilter,
     setSortBy,
@@ -541,7 +554,7 @@ export function ModelSelector(props: ModelSelectorProps) {
           <ModelList
             models={filteredAndSortedModels}
             onSelect={handleSelect}
-            selectedModelId={props.selectedModelId}
+            selectedModelId={selectedModelId}
           />
         </ModelSelectorBody>
       </DialogContent>

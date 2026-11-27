@@ -1,15 +1,50 @@
 "use client";
 
-import { memo, useEffect, useRef } from "react";
+import { memo } from "react";
 
+import {
+  Dialog as DialogRoot,
+  DialogBackdrop,
+  DialogClose as DialogClosePart,
+  DialogContent as DialogContentPart,
+} from "@ui-sdk/react/dialog";
 import type { ReactNode } from "react";
 
-import type { MaterialProps } from "../../../lib/material";
+import type { Material, MaterialProps } from "../../../lib/material";
+import { named } from "../../../lib/named";
 import type { HeadingTag } from "../../../lib/types";
-import { useBodyScrollLock } from "../../../lib/use-body-scroll-lock";
-import { useEscapeKey } from "../../../lib/use-escape-key";
-import { useFocusContainment } from "../../../lib/use-focus-containment";
+import {
+  dialogClose,
+  dialogOverlay,
+  dialogRoot,
+  type OpenAliases,
+  openAliases,
+  type OverlayLook,
+  useDialogPopup,
+} from "../../../lib/ui-sdk-dialog";
 import { cn } from "../../../lib/utils";
+
+// An atom imports no other component, so this is a ui-sdk dialog of its own:
+// the same side panel and veil classes as `SheetContent`, on the right edge.
+const TocRoot = /* @__PURE__ */ dialogRoot(
+  "TableOfContentsPanelRoot",
+  DialogRoot,
+);
+const TocClose = /* @__PURE__ */ dialogClose(
+  "TableOfContentsPanelClose",
+  DialogClosePart,
+);
+const VEIL_LOOK: OverlayLook = {
+  veil: "fixed inset-0 z-50 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
+};
+const TocVeil = /* @__PURE__ */ dialogOverlay(
+  "TableOfContentsPanelVeil",
+  DialogBackdrop,
+  VEIL_LOOK,
+);
+// The plain glass shadow replaces the floating shadow of `vllnt-glass-floating`.
+const SIDE_PANEL =
+  "vllnt-glass-floating vllnt-glass-dense fixed inset-y-0 right-0 z-50 h-full w-full max-w-md border-l transition ease-in-out data-[state=closed]:duration-300 data-[state=open]:duration-500 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:slide-out-to-right data-[state=open]:slide-in-from-right [--vllnt-glass-shadow:var(--shadow-glass)]";
 
 export type TOCSection = {
   id: string;
@@ -24,8 +59,6 @@ export type TableOfContentsPanelProps = {
   completedSections: Set<string>;
   completionCount: number;
   currentSectionIndex: number;
-  isOpen: boolean;
-  onClose: () => void;
   onReset?: () => void;
   onSelectSection: (index: number) => void;
   progressLabel?: string;
@@ -33,58 +66,18 @@ export type TableOfContentsPanelProps = {
   sections: TOCSection[];
   title?: string;
   totalSections: number;
-} & MaterialProps;
-
-function useTocPanelBehavior(
-  isOpen: boolean,
-  onClose: () => void,
-): {
-  closeButtonRef: React.RefObject<HTMLButtonElement | null>;
-  panelRef: React.RefObject<HTMLDivElement | null>;
-} {
-  const panelRef = useRef<HTMLDivElement>(null);
-  const closeButtonRef = useRef<HTMLButtonElement>(null);
-
-  // Declared before the focus effect so the opener gets recorded first.
-  useFocusContainment(panelRef, isOpen);
-
-  // Move focus to the close button when the panel opens.
-  useEffect(() => {
-    if (isOpen) {
-      closeButtonRef.current?.focus();
-    }
-  }, [isOpen]);
-
-  useEscapeKey(onClose, { enabled: isOpen, preventDefault: true });
-  useBodyScrollLock(isOpen);
-
-  return { closeButtonRef, panelRef };
-}
-
-function TocBackdrop({ onClose }: { onClose: () => void }): React.ReactNode {
-  return (
-    <div
-      aria-hidden="true"
-      className="vllnt-glass-scrim absolute inset-0"
-      data-testid="toc-backdrop"
-      onClick={onClose}
-    />
-  );
-}
+} & MaterialProps &
+  OpenAliases;
 
 type TocHeaderProps = {
-  closeButtonRef: React.RefObject<HTMLButtonElement | null>;
   closeIcon: ReactNode;
   Heading: HeadingTag;
-  onClose: () => void;
   title: string;
 };
 
 function TocHeader({
-  closeButtonRef,
   closeIcon,
   Heading,
-  onClose,
   title,
 }: TocHeaderProps): React.ReactNode {
   return (
@@ -92,12 +85,9 @@ function TocHeader({
       <Heading className="text-lg font-semibold" id="toc-title">
         {title}
       </Heading>
-      <button
+      <TocClose
         aria-label="Close table of contents"
         className="flex size-8 items-center justify-center rounded-md hover:bg-secondary"
-        onClick={onClose}
-        ref={closeButtonRef}
-        type="button"
       >
         {closeIcon ?? (
           <svg
@@ -115,8 +105,38 @@ function TocHeader({
             />
           </svg>
         )}
-      </button>
+      </TocClose>
     </div>
+  );
+}
+
+type TocPanelProps = {
+  children: ReactNode;
+  className?: string;
+  material: Material;
+};
+
+function TocPanel({
+  children,
+  className,
+  material,
+}: TocPanelProps): React.ReactNode {
+  const { openFocus, panelReference, render } = useDialogPopup({ names: {} });
+
+  return (
+    <>
+      <TocVeil data-testid="toc-backdrop" material={material} />
+      <DialogContentPart
+        aria-labelledby="toc-title"
+        className={cn(SIDE_PANEL, className)}
+        data-material={material}
+        initialFocus={openFocus}
+        ref={panelReference}
+        render={render}
+      >
+        {children}
+      </DialogContentPart>
+    </>
   );
 }
 
@@ -173,12 +193,8 @@ function TocProgress({
 
 type TocSectionListProps = Pick<
   TableOfContentsPanelProps,
-  | "completedSections"
-  | "currentSectionIndex"
-  | "onClose"
-  | "onSelectSection"
-  | "sections"
->;
+  "completedSections" | "currentSectionIndex" | "onSelectSection" | "sections"
+> & { onClose: () => void };
 
 function TocSectionList({
   completedSections,
@@ -258,47 +274,24 @@ function TableOfContentsPanelImpl({
   isOpen,
   material = "glass",
   onClose,
+  onOpenChange,
   onReset,
   onSelectSection,
+  open,
   progressLabel = "Progress",
   resetLabel = "Reset Progress",
   sections,
   title = "Table of Contents",
   totalSections,
 }: TableOfContentsPanelProps): React.ReactNode {
-  const { closeButtonRef, panelRef } = useTocPanelBehavior(isOpen, onClose);
-
-  if (!isOpen) return null;
+  const state = openAliases({ isOpen, onClose, onOpenChange, open });
 
   return (
-    <div
-      aria-labelledby="toc-title"
-      aria-modal="true"
-      className="fixed inset-0 z-50"
-      data-material={material}
-      // react-doctor-disable-next-line react-doctor/prefer-html-dialog -- useFocusContainment traps Tab, useEscapeKey closes and useBodyScrollLock locks scroll; a native <dialog> top layer would also sit above portalled popovers and toasts
-      role="dialog"
-    >
-      {/* Backdrop */}
-      <TocBackdrop onClose={onClose} />
-
-      {/* Panel */}
-      <div
-        className={cn(
-          "vllnt-glass vllnt-glass-dense absolute right-0 top-0 h-full w-full max-w-md border-l",
-          className,
-        )}
-        ref={panelRef}
-      >
+    <TocRoot onOpenChange={state.handleOpenChange} open={state.open}>
+      <TocPanel className={className} material={material}>
         <div className="flex h-full flex-col">
           {/* Header */}
-          <TocHeader
-            closeButtonRef={closeButtonRef}
-            closeIcon={closeIcon}
-            Heading={Heading}
-            onClose={onClose}
-            title={title}
-          />
+          <TocHeader closeIcon={closeIcon} Heading={Heading} title={title} />
 
           {/* Progress */}
           <TocProgress
@@ -311,7 +304,9 @@ function TableOfContentsPanelImpl({
           <TocSectionList
             completedSections={completedSections}
             currentSectionIndex={currentSectionIndex}
-            onClose={onClose}
+            onClose={() => {
+              state.handleOpenChange(false);
+            }}
             onSelectSection={onSelectSection}
             sections={sections}
           />
@@ -321,10 +316,12 @@ function TableOfContentsPanelImpl({
             <TocFooter onReset={onReset} resetLabel={resetLabel} />
           ) : null}
         </div>
-      </div>
-    </div>
+      </TocPanel>
+    </TocRoot>
   );
 }
 
-export const TableOfContentsPanel = memo(TableOfContentsPanelImpl);
-TableOfContentsPanel.displayName = "TableOfContentsPanel";
+export const TableOfContentsPanel = /* @__PURE__ */ named(
+  "TableOfContentsPanel",
+  /* @__PURE__ */ memo(TableOfContentsPanelImpl),
+);

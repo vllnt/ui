@@ -2,6 +2,7 @@
 
 import { type ComponentPropsWithoutRef, type ReactNode, useMemo } from "react";
 
+import { named } from "../../../lib/named";
 import { cn } from "../../../lib/utils";
 
 const DEFAULT_TICK_COUNT = 8;
@@ -497,60 +498,62 @@ function Legend({ categories }: LegendProps): ReactNode {
  *
  * @public
  */
-export const HistoricTimeline = ({
-  ref,
-  ...props
-}: HistoricTimelineProps & { ref?: React.Ref<HTMLElement> }) => {
-  const {
-    categories = [],
-    className,
-    endYear,
-    eras = [],
-    events = [],
-    labels,
-    periods = [],
-    startYear,
-    tickCount = DEFAULT_TICK_COUNT,
-    ...rest
-  } = props;
-  const resolvedLabels = useMemo(
-    () => ({ ...DEFAULT_LABELS, ...labels }),
-    [labels],
-  );
-  const ticks = useMemo(
-    () => buildTicks(startYear, endYear, tickCount),
-    [endYear, startYear, tickCount],
-  );
+export const HistoricTimeline = /* @__PURE__ */ named(
+  "HistoricTimeline",
+  ({
+    ref,
+    ...props
+  }: HistoricTimelineProps & { ref?: React.Ref<HTMLElement> }) => {
+    const {
+      categories = [],
+      className,
+      endYear,
+      eras = [],
+      events = [],
+      labels,
+      periods = [],
+      startYear,
+      tickCount = DEFAULT_TICK_COUNT,
+      ...rest
+    } = props;
+    const resolvedLabels = useMemo(
+      () => ({ ...DEFAULT_LABELS, ...labels }),
+      [labels],
+    );
+    const ticks = useMemo(
+      () => buildTicks(startYear, endYear, tickCount),
+      [endYear, startYear, tickCount],
+    );
 
-  return (
-    <section
-      aria-label={resolvedLabels.region}
-      className={cn(
-        "flex w-full flex-col overflow-hidden rounded-2xl border bg-background text-foreground",
-        className,
-      )}
-      ref={ref}
-      {...rest}
-    >
-      <Axis ticks={ticks} />
-      <EraLabels endYear={endYear} eras={eras} startYear={startYear} />
-      <PeriodLane
-        categories={categories}
-        endYear={endYear}
-        periods={periods}
-        startYear={startYear}
-      />
-      <div className="relative">
-        <EraBands endYear={endYear} eras={eras} startYear={startYear} />
-        <EventLane
+    return (
+      <section
+        aria-label={resolvedLabels.region}
+        className={cn(
+          "flex w-full flex-col overflow-hidden rounded-2xl border bg-background text-foreground",
+          className,
+        )}
+        ref={ref}
+        {...rest}
+      >
+        <Axis ticks={ticks} />
+        <EraLabels endYear={endYear} eras={eras} startYear={startYear} />
+        <PeriodLane
           categories={categories}
           endYear={endYear}
-          events={events}
+          periods={periods}
           startYear={startYear}
         />
-      </div>
-      <Legend categories={categories} />
-    </section>
-  );
-};
-HistoricTimeline.displayName = "HistoricTimeline";
+        <div className="relative">
+          <EraBands endYear={endYear} eras={eras} startYear={startYear} />
+          <EventLane
+            categories={categories}
+            endYear={endYear}
+            events={events}
+            startYear={startYear}
+          />
+        </div>
+        <Legend categories={categories} />
+      </section>
+    );
+  },
+);

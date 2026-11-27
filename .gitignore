@@ -35,6 +35,10 @@ packages/ui/.snapshots/
 
 # Storybook
 storybook-static/
+storybook-base/
+
+# Visual diff output (scripts/visual-diff/run.mjs)
+.visual-diff/
 
 # Generated
 public/r/

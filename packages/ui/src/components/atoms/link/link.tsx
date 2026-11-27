@@ -1,8 +1,9 @@
-import { Slot } from "@radix-ui/react-slot";
-import { cva, type VariantProps } from "class-variance-authority";
 import { ExternalLink } from "lucide-react";
 
+import { named } from "../../../lib/named";
+import { Slot } from "../../../lib/ui-sdk";
 import { cn } from "../../../lib/utils";
+import { cva, type VariantProps } from "../../../lib/variants";
 
 const linkVariants = cva(
   "inline-flex items-center gap-1 rounded-sm underline-offset-4 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
@@ -57,42 +58,44 @@ export type LinkProps = {
  * <Link href="https://example.com" external>Visit example</Link>
  * <Link href="#main" variant="skip">Skip to content</Link>
  */
-const Link = ({
-  asChild = false,
-  children,
-  className,
-  external = false,
-  ref,
-  rel,
-  showExternalIcon = true,
-  size,
-  target,
-  variant,
-  ...props
-}: LinkProps & { ref?: React.Ref<HTMLAnchorElement> }) => {
-  const Comp = asChild ? Slot : "a";
+const Link = /* @__PURE__ */ named(
+  "Link",
+  ({
+    asChild = false,
+    children,
+    className,
+    external = false,
+    ref,
+    rel,
+    showExternalIcon = true,
+    size,
+    target,
+    variant,
+    ...props
+  }: LinkProps & { ref?: React.Ref<HTMLAnchorElement> }) => {
+    const Comp = asChild ? Slot : "a";
 
-  return (
-    <Comp
-      className={cn(linkVariants({ size, variant }), className)}
-      ref={ref}
-      rel={external ? (rel ?? "noreferrer noopener") : rel}
-      target={external ? (target ?? "_blank") : target}
-      {...props}
-    >
-      {asChild ? (
-        children
-      ) : (
-        <>
-          {children}
-          {external && showExternalIcon ? (
-            <ExternalLink aria-hidden="true" className="size-3.5 shrink-0" />
-          ) : null}
-        </>
-      )}
-    </Comp>
-  );
-};
-Link.displayName = "Link";
+    return (
+      <Comp
+        className={cn(linkVariants({ size, variant }), className)}
+        ref={ref}
+        rel={external ? (rel ?? "noreferrer noopener") : rel}
+        target={external ? (target ?? "_blank") : target}
+        {...props}
+      >
+        {asChild ? (
+          children
+        ) : (
+          <>
+            {children}
+            {external && showExternalIcon ? (
+              <ExternalLink aria-hidden="true" className="size-3.5 shrink-0" />
+            ) : null}
+          </>
+        )}
+      </Comp>
+    );
+  },
+);
 
 export { Link, linkVariants };

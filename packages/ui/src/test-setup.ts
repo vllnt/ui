@@ -45,3 +45,38 @@ globalThis.ResizeObserver = MockResizeObserver;
 HTMLElement.prototype.scrollIntoView = function scrollIntoView() {
   return;
 };
+
+// ui-sdk opens popovers, menus, selects and dialogs in the browser top layer.
+// jsdom has no Popover API and its UA sheet hides every `[popover]`, so an open
+// popup would be invisible to queries. Show open ones (closed parts keep
+// `hidden`), and give ui-sdk the Web Animations entry point it reads on close.
+const popoverStyle = document.createElement("style");
+popoverStyle.textContent = "[popover]:not([hidden]) { display: block; }";
+document.head.append(popoverStyle);
+
+if (!("getAnimations" in Element.prototype)) {
+  Object.defineProperty(Element.prototype, "getAnimations", {
+    configurable: true,
+    value: () => [],
+  });
+}
+
+// ui-sdk's sheet and drawer run their slide through the Web Animations API,
+// which jsdom lacks: a stand-in animation that finishes on the next microtask.
+if (!("animate" in Element.prototype)) {
+  Object.defineProperty(Element.prototype, "animate", {
+    configurable: true,
+    value: () => {
+      const animation = {
+        cancel: () => {
+          animation.onfinish = null;
+        },
+        finished: Promise.resolve(),
+        onfinish: null as (() => void) | null,
+      };
+      queueMicrotask(() => animation.onfinish?.());
+      return animation;
+    },
+    writable: true,
+  });
+}

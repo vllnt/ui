@@ -4,6 +4,7 @@ import { memo, useCallback, useTransition } from "react";
 
 import type { TransitionStartFunction } from "react";
 
+import { named } from "../../../lib/named";
 import { keyByOccurrence } from "../../../lib/occurrence-keys";
 import { cn } from "../../../lib/utils";
 import { Badge } from "../../atoms/badge/badge";
@@ -383,5 +384,7 @@ function FilterBarImpl({
   );
 }
 
-export const FilterBar = memo(FilterBarImpl);
-FilterBar.displayName = "FilterBar";
+export const FilterBar = /* @__PURE__ */ named(
+  "FilterBar",
+  /* @__PURE__ */ memo(FilterBarImpl),
+);

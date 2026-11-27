@@ -2,6 +2,7 @@
 
 import * as React from "react";
 
+import { named } from "../../../lib/named";
 import { cn } from "../../../lib/utils";
 
 /** Props for {@link Cursor}. */
@@ -71,59 +72,64 @@ function usePointerFollower(
  * <Cursor size={32} />
  * ```
  */
-export const Cursor = ({
-  className,
-  ref,
-  size = 24,
-  style,
-  ...props
-}: CursorProps & { ref?: React.Ref<HTMLDivElement> }) => {
-  const follower = React.useRef<HTMLDivElement | null>(null);
-  const visible = usePointerFollower(follower, style?.transform === undefined);
+export const Cursor = /* @__PURE__ */ named(
+  "Cursor",
+  ({
+    className,
+    ref,
+    size = 24,
+    style,
+    ...props
+  }: CursorProps & { ref?: React.Ref<HTMLDivElement> }) => {
+    const follower = React.useRef<HTMLDivElement | null>(null);
+    const visible = usePointerFollower(
+      follower,
+      style?.transform === undefined,
+    );
 
-  const setReferences = React.useCallback(
-    (node: HTMLDivElement | null): (() => void) => {
-      follower.current = node;
-      if (typeof ref === "function") {
-        const cleanup = ref(node);
+    const setReferences = React.useCallback(
+      (node: HTMLDivElement | null): (() => void) => {
+        follower.current = node;
+        if (typeof ref === "function") {
+          const cleanup = ref(node);
+          return () => {
+            follower.current = null;
+            if (typeof cleanup === "function") {
+              cleanup();
+            } else {
+              ref(null);
+            }
+          };
+        }
+        if (ref) {
+          ref.current = node;
+        }
         return () => {
           follower.current = null;
-          if (typeof cleanup === "function") {
-            cleanup();
-          } else {
-            ref(null);
+          if (ref) {
+            ref.current = null;
           }
         };
-      }
-      if (ref) {
-        ref.current = node;
-      }
-      return () => {
-        follower.current = null;
-        if (ref) {
-          ref.current = null;
-        }
-      };
-    },
-    [ref],
-  );
+      },
+      [ref],
+    );
 
-  return (
-    <div
-      aria-hidden="true"
-      className={cn(
-        "pointer-events-none fixed left-0 top-0 z-50 -translate-x-1/2 -translate-y-1/2 rounded-full border border-foreground bg-foreground/20 backdrop-invert transition-transform duration-100 ease-out motion-reduce:transition-none",
-        visible ? "opacity-100" : "opacity-0",
-        className,
-      )}
-      ref={setReferences}
-      style={{
-        height: `${size}px`,
-        width: `${size}px`,
-        ...style,
-      }}
-      {...props}
-    />
-  );
-};
-Cursor.displayName = "Cursor";
+    return (
+      <div
+        aria-hidden="true"
+        className={cn(
+          "pointer-events-none fixed left-0 top-0 z-50 -translate-x-1/2 -translate-y-1/2 rounded-full border border-foreground bg-foreground/20 backdrop-invert transition-transform duration-100 ease-out motion-reduce:transition-none",
+          visible ? "opacity-100" : "opacity-0",
+          className,
+        )}
+        ref={setReferences}
+        style={{
+          height: `${size}px`,
+          width: `${size}px`,
+          ...style,
+        }}
+        {...props}
+      />
+    );
+  },
+);

@@ -183,3 +183,156 @@ jobs:
             packages/ui/playwright-report
             packages/ui/test-results
           retention-days: 7
+
+  # Visual diff: every story of the PR's Storybook against the base branch's,
+  # screenshotted on the same runner, so any pixel change shows up. It fails
+  # until someone has looked at the changes and added the approval label.
+  build-base-storybook:
+    name: Build Base Storybook
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          ref: ${{ github.event.pull_request.base.sha }}
+
+      - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .node-version
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Build base Storybook
+        working-directory: packages/ui
+        run: pnpm build-storybook --output-dir storybook-base
+
+      - name: Upload base Storybook artifact
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: storybook-base
+          path: packages/ui/storybook-base
+          retention-days: 7
+
+  visual-diff-shard:
+    name: Visual Diff (${{ matrix.shard }}/8)
+    needs: [build-storybook, build-base-storybook]
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2, 3, 4, 5, 6, 7, 8]
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .node-version
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Install Playwright browsers
+        run: pnpm -F @vllnt/ui exec playwright install --with-deps chromium
+
+      - name: Download Storybook artifact
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: storybook-static
+          path: packages/ui/storybook-static
+
+      - name: Download base Storybook artifact
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: storybook-base
+          path: packages/ui/storybook-base
+
+      # Components the PR touches also get open, hover, focus and phone shots.
+      - name: List changed component directories
+        id: changed
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: |
+          git fetch --no-tags --depth=1 origin "$BASE_SHA"
+          dirs=$(git diff --name-only "$BASE_SHA" HEAD -- packages/ui/src/components \
+            | awk -F/ 'NF > 6 { print $6 }' | sort -u | paste -sd, -)
+          echo "dirs=$dirs" >> "$GITHUB_OUTPUT"
+
+      - name: Compare screenshots with the base build
+        working-directory: packages/ui
+        env:
+          DEEP: ${{ steps.changed.outputs.dirs }}
+          SHARD: ${{ matrix.shard }}
+        run: |
+          status=0
+          node scripts/visual-diff/run.mjs --base storybook-base --head storybook-static \
+            --shard "$SHARD/8" --workers 4 --deep "$DEEP" --out .visual-diff || status=$?
+          # 1 means some shots changed: the Visual Diff job below decides.
+          test "$status" -le 1
+
+      - name: Upload visual diff
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: visual-diff-${{ matrix.shard }}
+          path: |
+            packages/ui/.visual-diff/summary.*
+            packages/ui/.visual-diff/html
+          include-hidden-files: true
+          retention-days: 14
+
+  visual-diff:
+    name: Visual Diff
+    needs: visual-diff-shard
+    if: always() && github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          sparse-checkout: packages/ui/scripts/visual-diff
+
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .node-version
+
+      - name: Download shard summaries
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          pattern: visual-diff-*
+          path: shards
+
+      # The label is read when the job runs, so after adding it, re-run this
+      # job alone: the shards' screenshots are kept.
+      - name: Pass when there is no change or the change is approved
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR: ${{ github.event.pull_request.number }}
+          REPO: ${{ github.repository }}
+          SHARDS: ${{ needs.visual-diff-shard.result }}
+        run: |
+          if [ "$SHARDS" != "success" ]; then
+            echo "::error::A visual diff shard did not finish ($SHARDS)."
+            exit 1
+          fi
+          status=0
+          node packages/ui/scripts/visual-diff/run.mjs --merge shards/visual-diff-* || status=$?
+          if [ "$status" -eq 0 ]; then exit 0; fi
+          if [ "$status" -ne 1 ]; then exit "$status"; fi
+          if gh api "repos/$REPO/issues/$PR/labels" --jq '.[].name' | grep -qx 'visual-change-approved'; then
+            echo "::notice::Visual changes approved with the visual-change-approved label."
+            exit 0
+          fi
+          echo "::error::Shots differ from the base build. Check each one in the visual-diff-* artifacts. If every change is intended, add the visual-change-approved label and re-run this job."
+          exit 1

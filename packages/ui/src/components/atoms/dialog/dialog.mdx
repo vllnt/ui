@@ -44,3 +44,11 @@ import {
 
 <Controls />
 
+
+## Options
+
+- `overlay`: `"scrim"` (default) dims the page, `"none"` draws no veil. The panel stays modal either way.
+- `closeButton`: pass `false` to drop the corner close button when the content has its own `DialogClose`.
+- `labels.close`: accessible name of the corner close button.
+- `onEscapeKeyDown`, `onPointerDownOutside`, `onInteractOutside`, `onFocusOutside`: call `event.preventDefault()` to keep the dialog open.
+- `forceMount`: keeps the panel in the page while closed.

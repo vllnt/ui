@@ -2,6 +2,7 @@
 
 import * as React from "react";
 
+import { named } from "../../../lib/named";
 import { cn } from "../../../lib/utils";
 
 /** Single testimonial entry. */
@@ -33,77 +34,79 @@ export type AnimatedTestimonialsProps =
  * <AnimatedTestimonials testimonials={items} autoplay />
  * ```
  */
-export const AnimatedTestimonials = ({
-  autoplay = false,
-  className,
-  ref,
-  testimonials,
-  ...props
-}: AnimatedTestimonialsProps & { ref?: React.Ref<HTMLDivElement> }) => {
-  const [activeIndex, setActiveIndex] = React.useState(0);
-  const count = testimonials.length;
+export const AnimatedTestimonials = /* @__PURE__ */ named(
+  "AnimatedTestimonials",
+  ({
+    autoplay = false,
+    className,
+    ref,
+    testimonials,
+    ...props
+  }: AnimatedTestimonialsProps & { ref?: React.Ref<HTMLDivElement> }) => {
+    const [activeIndex, setActiveIndex] = React.useState(0);
+    const count = testimonials.length;
 
-  const goTo = React.useCallback(
-    (step: number): void => {
-      setActiveIndex((current) => (current + step + count) % count);
-    },
-    [count],
-  );
+    const goTo = React.useCallback(
+      (step: number): void => {
+        setActiveIndex((current) => (current + step + count) % count);
+      },
+      [count],
+    );
 
-  React.useEffect(() => {
-    if (!autoplay || count <= 1) {
-      return;
+    React.useEffect(() => {
+      if (!autoplay || count <= 1) {
+        return;
+      }
+
+      const timer = setInterval(() => {
+        goTo(1);
+      }, 5000);
+
+      return () => {
+        clearInterval(timer);
+      };
+    }, [autoplay, count, goTo]);
+
+    const active = testimonials[activeIndex];
+
+    if (active === undefined) {
+      return null;
     }
 
-    const timer = setInterval(() => {
-      goTo(1);
-    }, 5000);
-
-    return () => {
-      clearInterval(timer);
-    };
-  }, [autoplay, count, goTo]);
-
-  const active = testimonials[activeIndex];
-
-  if (active === undefined) {
-    return null;
-  }
-
-  return (
-    <div
-      className={cn(
-        "flex flex-col gap-4 rounded-xl border bg-card p-6 text-card-foreground shadow-sm",
-        className,
-      )}
-      ref={ref}
-      {...props}
-    >
-      <TestimonialCard index={activeIndex} testimonial={active} />
-      <div className="flex items-center justify-between">
-        <button
-          className="rounded-md border px-3 py-1 text-sm transition-colors hover:bg-accent hover:text-accent-foreground"
-          onClick={() => {
-            goTo(-1);
-          }}
-          type="button"
-        >
-          Previous
-        </button>
-        <button
-          className="rounded-md border px-3 py-1 text-sm transition-colors hover:bg-accent hover:text-accent-foreground"
-          onClick={() => {
-            goTo(1);
-          }}
-          type="button"
-        >
-          Next
-        </button>
+    return (
+      <div
+        className={cn(
+          "flex flex-col gap-4 rounded-xl border bg-card p-6 text-card-foreground shadow-sm",
+          className,
+        )}
+        ref={ref}
+        {...props}
+      >
+        <TestimonialCard index={activeIndex} testimonial={active} />
+        <div className="flex items-center justify-between">
+          <button
+            className="rounded-md border px-3 py-1 text-sm transition-colors hover:bg-accent hover:text-accent-foreground"
+            onClick={() => {
+              goTo(-1);
+            }}
+            type="button"
+          >
+            Previous
+          </button>
+          <button
+            className="rounded-md border px-3 py-1 text-sm transition-colors hover:bg-accent hover:text-accent-foreground"
+            onClick={() => {
+              goTo(1);
+            }}
+            type="button"
+          >
+            Next
+          </button>
+        </div>
       </div>
-    </div>
-  );
-};
-AnimatedTestimonials.displayName = "AnimatedTestimonials";
+    );
+  },
+);
 
 function TestimonialCard({
   index,

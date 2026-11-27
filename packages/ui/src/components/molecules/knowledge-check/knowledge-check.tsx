@@ -12,6 +12,7 @@ import {
 
 import { CheckCircle2, RotateCcw, XCircle } from "lucide-react";
 
+import { named } from "../../../lib/named";
 import { cn } from "../../../lib/utils";
 import { Button } from "../../atoms/button/button";
 import { Input } from "../../atoms/input/input";
@@ -729,56 +730,65 @@ function PaneActions({
  *
  * @public
  */
-export const KnowledgeCheck = ({
-  ref,
-  ...props
-}: KnowledgeCheckProps & { ref?: React.Ref<HTMLElement> }) => {
-  const { className, labels, onAnswer, onComplete, questions, title, ...rest } =
-    props;
-  const resolvedLabels = useMemo(
-    () => ({ ...DEFAULT_LABELS, ...labels }),
-    [labels],
-  );
-  const groupName = useId();
-  const inputId = useId();
-  const questionTextId = useId();
-  const controller = useKnowledgeCheckController({
-    onAnswer,
-    onComplete,
-    questions,
-  });
+export const KnowledgeCheck = /* @__PURE__ */ named(
+  "KnowledgeCheck",
+  ({
+    ref,
+    ...props
+  }: KnowledgeCheckProps & { ref?: React.Ref<HTMLElement> }) => {
+    const {
+      className,
+      labels,
+      onAnswer,
+      onComplete,
+      questions,
+      title,
+      ...rest
+    } = props;
+    const resolvedLabels = useMemo(
+      () => ({ ...DEFAULT_LABELS, ...labels }),
+      [labels],
+    );
+    const groupName = useId();
+    const inputId = useId();
+    const questionTextId = useId();
+    const controller = useKnowledgeCheckController({
+      onAnswer,
+      onComplete,
+      questions,
+    });
 
-  return (
-    <section
-      className={cn(
-        "flex flex-col gap-4 rounded-2xl border bg-background p-4",
-        className,
-      )}
-      ref={ref}
-      {...rest}
-    >
-      {title ? (
-        <h3 className="text-base font-semibold tracking-tight text-foreground">
-          {title}
-        </h3>
-      ) : null}
-      {controller.isComplete && controller.score ? (
-        <ScoreSummary
-          labels={resolvedLabels}
-          onRetry={controller.handleReset}
-          score={controller.score}
-        />
-      ) : (
-        <QuestionPane
-          controller={controller}
-          groupName={groupName}
-          inputId={inputId}
-          labels={resolvedLabels}
-          questions={questions}
-          questionTextId={questionTextId}
-        />
-      )}
-    </section>
-  );
-};
-KnowledgeCheck.displayName = "KnowledgeCheck";
+    return (
+      <section
+        className={cn(
+          "flex flex-col gap-4 rounded-2xl border bg-background p-4",
+          className,
+        )}
+        ref={ref}
+        {...rest}
+      >
+        {title ? (
+          <h3 className="text-base font-semibold tracking-tight text-foreground">
+            {title}
+          </h3>
+        ) : null}
+        {controller.isComplete && controller.score ? (
+          <ScoreSummary
+            labels={resolvedLabels}
+            onRetry={controller.handleReset}
+            score={controller.score}
+          />
+        ) : (
+          <QuestionPane
+            controller={controller}
+            groupName={groupName}
+            inputId={inputId}
+            labels={resolvedLabels}
+            questions={questions}
+            questionTextId={questionTextId}
+          />
+        )}
+      </section>
+    );
+  },
+);

@@ -8,12 +8,23 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Added
 
+- **ui-sdk compat helpers** - the helpers the components are written with are
+  public, for apps and agents that build their own parts the same way: `Slot`,
+  `asChildProps`, `withDataAttributes`, `openState`, `checkedState`,
+  `openAutoFocus`, `closeAutoFocus`, `useElementRef`, the dismissal helpers
+  (`DismissContext`, `useDismissRoot`, `useRegisterDismissHandlers`,
+  `runDismissHandlers`, `callPreventDefault`) and `createMenuParts`, with their
+  types (`AsChildProps`, `NarrowPartProps`, `DataAttributes`, `DismissDetails`,
+  `DismissHandlers`, `FocusOutsideEvent`, `PointerDownOutsideEvent`,
+  `MenuContentProps`, `MenuLook`).
+- **`commandScore` and `createCommandRanker`** - cmdk's scoring (MIT, ported from
+  cmdk 1.1.1) and the ranker `Command` uses to order its results, so search
+  results keep cmdk's ranking.
 - **Docs in the package** - the tarball now ships `llms.txt`, one Markdown page per
   component in `docs/components/` (import, props, variants) and the `vllnt-ui` agent
   skill in `skills/vllnt-ui/SKILL.md`, so agents read the docs of the installed
   version from `node_modules/@vllnt/ui/`. They are written at pack time; the build
   and the JavaScript bundles do not change.
-
 - **`Separator` `variant`** - `variant="dashed"` draws a dashed 1 px border over a
   transparent fill, in both orientations. The default stays `solid`.
 - **`Link` `size`, `foreground` and `skip`** - `size="sm" | "default" | "lg"`
@@ -22,6 +33,32 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
   primary; `variant="skip"` is a skip-to-content link, hidden until focused,
   then shown at the top left, 44 px high, above other content.
 - **`Button` size `icon-lg`** - a 44 px square icon button (`size-11`).
+- **More ui-sdk helpers are public** - the dialog part builders (`dialogRoot`,
+  `dialogTrigger`, `dialogClose`, `dialogPortal`, `dialogOverlay`, `dialogBox`,
+  `dialogTitle`, `dialogDescription`, `useDialogPopup`, `openAliases`),
+  `useControllableState`, `useLazyElementRef`, `assignRef`, `reselectProps`,
+  `HIT_AREA_24` / `HIT_AREA_24_RADIO_CHILD`, and their types, so apps and
+  agents can build parts the same way the kit does.
+- **In-house replacements, exported** - `encodeQrMatrix` (QR codes, matches the
+  `qrcode` package module for module), `createSchemaResolver` (react-hook-form
+  resolver for any Standard Schema, such as Zod 4), `createCarouselApi`,
+  `LazyCalendar`, `calendarLayout`, `FlowDiagramContent`.
+- **New props, all optional** - `Accordion` `as` (heading level);
+  `CommandDialog` `title`; `Slider` `thumbLabels`; `Calendar` `fixedWeeks`,
+  `locale`, `weekStartsOn`, `initialFocus` (and the `DateRange` type);
+  `Sheet` and `Drawer` `material`, `overlay`, `labels`, `closeButton`;
+  `Popover`, `HoverCard` and `Tooltip` `onEscapeKeyDown`,
+  `onPointerDownOutside`, `onInteractOutside`, `forceMount`; `open` /
+  `onOpenChange` next to `isOpen` / `onClose` on `KeyboardShortcutsHelp`,
+  `TableOfContentsPanel`, `FlowFullscreen` and `ShareDialog`; `open` /
+  `onOpenChange` on the disclosure components (`FAQ`, `ExpandableCards`,
+  `TLDRSection`, `Reasoning`, `ThinkingBlock`, `AgentActivity`, `Curriculum`,
+  `HistoricalFigureCard`); `defaultValue`, `defaultOpen`, `open`,
+  `onOpenChange` and `disabled` on `Combobox`, and the open-state props on
+  `MultiSelect`, `ScopeSelector` and `ModelSelector`; a controlled `value` on
+  `AnimatedTabs`; `ref`, `orientation` and trigger `disabled` on `Tabs`.
+- **`data-slot`** on the parts of `Card`, `Alert`, `Panel`, `DataList` and
+  `Table`, like the ui-sdk parts.
 - **`Button` `variant="unstyled"`** - keeps the button's behaviour (`asChild`,
   `disabled`, ref, every native attribute) and adds no classes of its own: the
   element's class list is only the caller's `className`, and `size` has no
@@ -33,7 +70,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
   transparent one with a 1 px input-colour border (`glass-input` inside glass).
   The defaults stay `filled` and full width.
 - **`cx`, `UnstyledButton` and `PlainSeparator`: no `tailwind-merge`** - `cx`
-  (root and `@vllnt/ui/utils`) joins class values with `clsx` and keeps every
+  (root and `@vllnt/ui/utils`) joins class values like `clsx` and keeps every
   class. `UnstyledButton` (`@vllnt/ui/button`) is a native `<button>` with no
   classes of its own and `type="button"` by default. `PlainSeparator`
   (`@vllnt/ui/separator`) renders the same markup as `Separator`, but a
@@ -41,13 +78,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
   them. None of the three imports `tailwind-merge`, so a bundle that uses only
   them carries none of its code. `cn`, `Button` and `Separator` stay the same.
 - **`UnstyledToggleGroup` and `UnstyledToggleGroupItem`** - `ToggleGroup`
-  without styles, from `@vllnt/ui/toggle-group`: the same Radix behaviour (roving
-  focus, arrow keys, Home and End, radio items when `type="single"`, pressed
+  without styles, from `@vllnt/ui/toggle-group`: the same behaviour (one tab
+  stop, arrow keys, Home and End, radio items when `type="single"`, pressed
   buttons otherwise) and no classes of their own; `className` reaches the element
-  as given. Neither imports `tailwind-merge` nor `class-variance-authority`: about
-  9 KB gzip against 16 KB for `ToggleGroup`. Import them from a `"use client"`
-  module; a server-component import of the subpath also brings `ToggleGroup`.
-  `ToggleGroup` stays the same.
+  as given. Neither imports `tailwind-merge` nor the variant helpers, and
+  `ToggleGroup` is now the styled layer over them. Import them from a
+  `"use client"` module; a server-component import of the subpath also brings
+  `ToggleGroup`. `ToggleGroup` stays the same.
 - **`Text` `dt`, `dd`, `li` and `measure`** - `as` takes `dt`, `dd` and `li`;
   `measure="prose" | "narrow"` caps the width with `size.measure-prose` (720 px,
   new) or `size.measure-narrow` (480 px).
@@ -73,6 +110,58 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Changed
 
+- **Fewer dependencies, smaller bundles** - `@vllnt/ui` installs 12 runtime
+  packages instead of 23. Calendar, date pickers, resizable panels, toasts,
+  one-time-code input, carousel, the disclosure components and the hand-built
+  modals now run on ui-sdk; class variants, class joining, the animation
+  plugin, QR encoding and the schema resolver are small in-house helpers.
+  Heavy parts load on demand: the MDX compiler, `react-markdown`,
+  `@xyflow/react`, the toast region and the date pickers' calendar. Every
+  `displayName` is set through a pure `named()` call, so bundlers drop the
+  parts an app does not import. Minified sizes (`scripts/check-size.mjs`):
+  every export 2,318 KB → 1,848 KB (gzip 708 → 575 KB), `Dialog` 112 → 82 KB,
+  `DataTable` 230 → 125 KB, `MDXContent` 627 → 276 KB, `FlowDiagram` 224 →
+  23 KB, `TutorialMDX` 252 → 136 KB, `Button` 23 → 19 KB, and importing
+  `DialogHeader` alone 109 → 17 KB. Budgets are tightened to match.
+- **Breaking: dates, resizable, toast, carousel, one-time code, `cn`** -
+  `Calendar`, `RangeCalendar`, `DatePicker`, `DateRangePicker`, the
+  `Resizable` parts, `toast`/`Toaster`, `Carousel` and `InputOTP` move off
+  `react-day-picker`, `react-resizable-panels`, `sonner`, `embla-carousel-react`
+  and `input-otp`. Common props keep working; the rest is listed in
+  `MIGRATION.md`. `cn` merges only the class groups the library uses.
+  `DataTable`'s filter is a native `<select>`.
+- **Toolbar** - one tab stop, arrow keys move between items (APG toolbar).
+- **`Dialog`, `Sheet`, `Drawer`, `AlertDialog`** share one set of part
+  builders, and `KeyboardShortcutsHelp`, `TableOfContentsPanel`,
+  `FlowFullscreen` and `ShareDialog` render through them instead of their own
+  focus and scroll-lock code.
+- **Built on ui-sdk** - the interactive components now sit on Vercel's ui-sdk
+  (`@ui-sdk/react` and `@ui-sdk/core`, pinned to `0.1.0-beta.7`) instead of Radix,
+  cmdk and vaul: Accordion, AlertDialog, Avatar, Checkbox, Collapsible, Command,
+  ContextMenu, Dialog, Drawer, DropdownMenu, Field, HoverCard,
+  Label, ListBox, Menubar, Meter, NavigationMenu, Popover, ProgressBar,
+  RadioGroup, Rating, ScrollArea, SegmentedControl, Select, Sheet, Slider, Switch,
+  Tabs, Toggle, ToggleGroup, Tooltip, and everything built from them. `asChild`
+  on Button, Link, Banner, Form and the other non-primitive parts uses the kit's
+  own `Slot`. `CompletionDialog` stays in place inside its container, built on
+  the kit's own focus, Escape and scroll-lock hooks, since a ui-sdk dialog
+  always covers the viewport. Exports, props and class names are unchanged,
+  and the Radix-facing DOM is kept for apps that style it: `data-state` with the
+  Radix values, the `--radix-*` CSS variables (aliased to ui-sdk's), and
+  `data-radix-scroll-area-viewport`. `asChild`, `onOpenAutoFocus`,
+  `onCloseAutoFocus`, `onEscapeKeyDown`, `onPointerDownOutside`,
+  `onInteractOutside`, `forceMount` and `delayDuration` keep working.
+- **Popups render in the browser top layer** - popovers, menus, selects, tooltips,
+  dialogs, sheets and drawers render in place in the top layer rather than in a
+  portal at the end of `<body>`. The `*Portal` exports stay and render their
+  children. A modal makes the rest of the page `inert` and locks scrolling with
+  `overflow: hidden` on `<html>`; there is no `data-scroll-locked` attribute.
+- **Focus on open moves one frame later** - a popup opened by a press moves focus
+  into itself on the next animation frame, so tests that check focus right after
+  a click wait for it (`waitFor`).
+- **Parts carry ui-sdk attributes too** - `data-slot`, `data-open` /
+  `data-closed`, `data-checked`, `data-selected`, `data-side`,
+  `data-starting-style` and `data-ending-style` appear next to the Radix ones.
 - **`Separator` renders on the server** - it is a plain element with no
   `"use client"` and no Radix dependency. A decorative separator (the default) is
   `aria-hidden`; `decorative={false}` gives `role="separator"` with
@@ -82,8 +171,47 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
   the command key on Mac and `Ctrl` elsewhere, as the shortcut handler accepts
   either.
 
+### Removed
+
+- **Third-party packages replaced** - `react-day-picker`,
+  `react-resizable-panels`, `sonner`, `input-otp`, `embla-carousel-react`,
+  `tailwindcss-animate`, `@hookform/resolvers`, `class-variance-authority` and
+  `clsx` are no longer dependencies; `qrcode` and `zod` are dev dependencies
+  only (tests). `focusCalendarDay` is removed (use `Calendar` `initialFocus`).
+- **Radix, cmdk and vaul** - `@radix-ui/react-alert-dialog`, `-avatar`,
+  `-checkbox`, `-collapsible`, `-context-menu`, `-dialog`, `-dropdown-menu`,
+  `-hover-card`, `-label`, `-menubar`, `-navigation-menu`, `-popover`,
+  `-radio-group`, `-scroll-area`, `-select`, `-slider`, `-slot`, `-switch`,
+  `-toggle`, `-toggle-group` and `-tooltip`, `cmdk` and `vaul` are no longer
+  dependencies (62 packages fewer in the lockfile).
+
 ### Fixed
 
+- **Accessibility** - `AlertDialog` focuses Cancel first even when Action
+  comes first; `CompletionDialog`'s one-key shortcuts ignore typing in fields
+  and modified keys; `Combobox` announces its label and chosen value and marks
+  the chosen option; `Accordion` triggers sit in headings; animations and
+  transitions respect `prefers-reduced-motion`; `Switch`, `Slider`, `Toggle`,
+  `ToggleGroup` and `SegmentedControl` stay visible in forced-colors mode;
+  `SearchDialog` scope tabs use arrow keys and a named tab panel; menu glyphs
+  are hidden from screen readers; `Sheet` no longer opens with focus on Close;
+  range `Slider` thumbs are named Minimum and Maximum; `Checkbox`, `Radio`,
+  `Switch`, `Slider` thumbs and `Rating` stars get 24 px hit areas without
+  moving; `HoverCard` content describes its trigger while open; `FAQ` answers
+  are no longer clipped at 24 rem and closed answers leave the tab order.
+- **Toast surface** - toasts take the popover background, border and text
+  colours; they were transparent because the colour tokens reached them as
+  bare channel values.
+- **Toast contrast** - a toast's description now follows the page's mode, like
+  the popover background it sits on, so a `theme` that differs from the page
+  no longer puts light-mode grey on a dark toast (2:1). The light `richColors`
+  text colours are a little darker, so each reaches 4.5:1 on its background
+  (sonner's reached 3.1 to 4.4).
+- **`NativeSelect` text rendering** - the chevron sits over the select in a
+  grid cell instead of an absolutely positioned wrapper. In Chrome, that
+  wrapper joined a focused text field's caret layer, and the text after it
+  (for example a whole `DataTable` while its search field had focus) lost
+  subpixel antialiasing. It looks the same otherwise.
 - **`Kbd` `shortcut`** - each key cap has an explicit React key, so a
   multi-key shortcut no longer logs the "unique key prop" warning in
   development.

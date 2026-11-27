@@ -1,5 +1,6 @@
 import * as React from "react";
 
+import { named } from "../../../lib/named";
 import { cn } from "../../../lib/utils";
 import { Badge, type BadgeProps } from "../../atoms/badge/badge";
 
@@ -40,32 +41,33 @@ function getStatusTone(status: CreditBadgeStatus): BadgeProps["tone"] {
   }
 }
 
-export const CreditBadge = ({
-  amount,
-  className,
-  label,
-  ref: reference,
-  status,
-  ...props
-}: CreditBadgeProps & { ref?: React.Ref<HTMLSpanElement> }) => {
-  return (
-    <Badge
-      className={cn(
-        "py-1 text-[11px] font-medium shadow-none hover:bg-secondary",
-        className,
-      )}
-      dot
-      ref={reference}
-      tone={getStatusTone(status)}
-      {...props}
-    >
-      <span>
-        {amount
-          ? `${amount} • ${label ?? getStatusLabel(status)}`
-          : (label ?? getStatusLabel(status))}
-      </span>
-    </Badge>
-  );
-};
-
-CreditBadge.displayName = "CreditBadge";
+export const CreditBadge = /* @__PURE__ */ named(
+  "CreditBadge",
+  ({
+    amount,
+    className,
+    label,
+    ref: reference,
+    status,
+    ...props
+  }: CreditBadgeProps & { ref?: React.Ref<HTMLSpanElement> }) => {
+    return (
+      <Badge
+        className={cn(
+          "py-1 text-[11px] font-medium shadow-none hover:bg-secondary",
+          className,
+        )}
+        dot
+        ref={reference}
+        tone={getStatusTone(status)}
+        {...props}
+      >
+        <span>
+          {amount
+            ? `${amount} • ${label ?? getStatusLabel(status)}`
+            : (label ?? getStatusLabel(status))}
+        </span>
+      </Badge>
+    );
+  },
+);

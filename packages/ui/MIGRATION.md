@@ -1,3 +1,129 @@
+# Unreleased: from Radix to ui-sdk
+
+The next release builds the interactive components on Vercel's ui-sdk instead
+of Radix, cmdk and vaul. Exports, props and class names stay the same, and the
+Radix-facing DOM is kept (`data-state` values, `--radix-*` CSS variables,
+`data-radix-scroll-area-viewport`), so most apps change nothing. Check these:
+
+1. **Selectors on portals.** Popups render in place, in the browser top layer,
+   not at the end of `<body>`. CSS or tests that look for popup content as a
+   direct child of `body`, or for `[data-radix-popper-content-wrapper]`, find it
+   next to its trigger instead. `*Portal` exports still exist and render their
+   children.
+2. **Scroll lock and the rest of the page.** A modal sets `overflow: hidden` on
+   `<html>` and marks everything outside it `inert`. Selectors on
+   `body[data-scroll-locked]` or on `aria-hidden` siblings no longer match.
+3. **Focus timing in tests.** Focus enters a popup one animation frame after
+   the press that opens it. Wrap focus assertions in `waitFor`.
+4. **Your own Radix imports.** `@vllnt/ui` no longer installs any
+   `@radix-ui/*` package, `cmdk` or `vaul`. If your app imports them directly,
+   add them to your own `package.json`.
+5. **Building your own parts.** Use the exported helpers (`Slot`,
+   `asChildProps`, `withDataAttributes`, `openState`, `createMenuParts`, …) the
+   same way the kit's components do; see `src/lib/ui-sdk.tsx`.
+
+Known differences that remain:
+
+- `ToggleGroup` and `UnstyledToggleGroup`: a disabled item stays focusable
+  with the arrow keys (it reports `aria-disabled` instead of `disabled`, so
+  style it with `data-[disabled]:`, not `disabled:`), the root has no `tabindex`, and the arrow keys follow `orientation`: Left and
+  Right in a horizontal group (the default), Up and Down in a vertical one.
+- `DropdownMenu`, `ContextMenu` and `Menubar`: an open menu leaves pointer
+  events on the rest of the page, so a trigger under the pointer keeps its
+  hover colour while its menu is open. Radix turned pointer events off outside
+  the menu.
+- `Slider`: the thumb is a native range input, so it exposes its value through
+  the input instead of `aria-valuenow`.
+- `NavigationMenu`: the open viewport is drawn by a fixed-position layer, so
+  text in it can antialias differently (greyscale instead of subpixel).
+- `Rating` with `readOnly`: its radios carry `aria-disabled` and are left out of
+  the tab order, instead of the `disabled` attribute.
+- `Meter` is a client component.
+- Radix-only props that ui-sdk has no counterpart for are accepted and ignored:
+  `avoidCollisions`, `sticky`, `dir`, `skipDelayDuration`, and vaul's drawer
+  options.
+- A press outside a popup dismisses it on pointer up, not pointer down.
+- `Tooltip`: pressing the trigger closes the tooltip on click, not pointer
+  down, so a custom `TooltipTrigger asChild` child must pass `onClick` on to
+  its element. A closed tooltip stays in the page, hidden, so it can name its
+  trigger: test for a visible tooltip, not for none in the DOM.
+- `CompletionDialog` sets `aria-modal="true"` when modal, closes on a click
+  outside (a press that starts inside and ends outside keeps it open), and in
+  non-modal mode hands focus back to the opener only when nothing else took it.
+- `Command` ranks results with cmdk's score, but groups keep their written
+  order, items outside a group stay where they are, and clearing the search
+  restores the written order (cmdk left the last sort in place).
+- `onEscapeKeyDown`, `onPointerDownOutside`, `onFocusOutside` and
+  `onInteractOutside` get the DOM event (with `detail.originalEvent` on the
+  outside ones, as in Radix), and `onFocusOutside` is now accepted on `Dialog`,
+  `Sheet` and `Drawer` content too.
+
+## Packages no longer installed
+
+`@vllnt/ui` now installs 12 runtime packages instead of 23. These are gone:
+`react-day-picker`, `react-resizable-panels`, `sonner`, `input-otp`,
+`embla-carousel-react`, `tailwindcss-animate`, `@hookform/resolvers`,
+`class-variance-authority`, `clsx`, `qrcode` and `zod`. Their jobs now go to
+ui-sdk or to small helpers in the package. If your app imports any of them
+directly, add it to your own `package.json`. In particular, `Form` validates
+any Zod 4 schema you pass, but your app now installs `zod` itself.
+
+## Breaking changes
+
+- **`Calendar`, `RangeCalendar`, `DatePicker`, `DateRangePicker`** are built
+  on ui-sdk's calendar instead of `react-day-picker`. These still work: `mode`,
+  `selected`, `onSelect`, `defaultMonth`, `month`, `onMonthChange`, `disabled`
+  (dates or a function), `fromDate`/`toDate`, `numberOfMonths`,
+  `showOutsideDays` and `initialFocus`. Values stay `Date` objects.
+  - `CalendarProps` is no longer `react-day-picker`'s props. `classNames`,
+    `components`, `formatters` and `labels` are gone. `locale` is a language tag
+    string such as `"fr-FR"`.
+  - `focusCalendarDay` is gone; use `initialFocus`.
+  - Days are grid cells, not buttons. A disabled day stays focusable and is
+    marked `aria-disabled`.
+  - With a selection and no `defaultMonth`, the calendar opens on the selected
+    month (it used to open on today).
+  - Pressing a day after a complete range starts a new range. Escape clears a
+    range in progress.
+  - The pickers load the calendar on first open and show a same-size
+    placeholder meanwhile.
+- **`ResizablePanelGroup`, `ResizablePanel`, `ResizableHandle`** are built on
+  ui-sdk's resizable instead of `react-resizable-panels`. These still work:
+  `direction`, `defaultSize`, `minSize`, `maxSize`, `collapsible`, `onResize`
+  and `withHandle`.
+  - `onResize`, `onCollapse` and `onExpand` are per panel.
+  - The imperative panel refs are gone.
+  - `onLayoutChange` receives `number[]`.
+- **`toast` and `Toaster`** run on ui-sdk's toast instead of `sonner`. The
+  calls stay the same: `toast()`, `.success`, `.error`, `.info`, `.warning`,
+  `.loading`, `.promise`, `.custom` and `.dismiss`. The differences are
+  listed in the "Differences from sonner" table in `toast.mdx`. In short:
+  - `getHistory`, `getToasts`, `unstyled`, `invert`, `gap`,
+    `swipeDirections`, `mobileOffset`, `dir`, `toasterId` and per-toast
+    `position` are gone.
+  - `toast.promise` returns `{ id, unwrap }`.
+  - Left and right positions are logical (start/end), so they flip in RTL.
+  - The hotkey is fixed at Alt+T.
+  - `[data-sonner-*]` selectors no longer match.
+  - The stack also expands on keyboard focus.
+- **`Carousel`** runs on ui-sdk's carousel instead of Embla.
+  - `CarouselApi` is a small object with `scrollPrev`, `scrollNext`,
+    `scrollTo`, `canScrollPrev`, `canScrollNext`, `selectedScrollSnap`,
+    `scrollSnapList`, `on` and `off` (`select`, `reInit`).
+  - `plugins` and other Embla options are ignored.
+  - Item spacing uses logical classes (`pe-*`/`-me-*` instead of
+    `pl-*`/`-ml-*`).
+  - Previous and Next stay focusable and use `aria-disabled` at the ends.
+  - The viewport is focusable, and the arrow keys act on it.
+- **`InputOTP`** runs on ui-sdk's one-time-code input instead of `input-otp`,
+  as a single labelled field. Its parts and props stay the same.
+- **`cn`** merges conflicting classes from the groups the library itself uses
+  (spacing, sizing, colours, borders, typography, layout and so on). Classes
+  from other groups, such as `columns-*`, now stay side by side instead of
+  replacing each other. If you relied on that, merge them with your own
+  `twMerge`.
+- **`DataTable`**'s filter uses a native `<select>`, styled like our inputs.
+
 # Migrating from 0.3.0 to 0.4.0
 
 `@vllnt/ui` 0.4.0 keeps the 0.3.0 API: every one of the 1,343 exports of 0.3.0

@@ -7,9 +7,14 @@ import {
   use,
   useCallback,
   useMemo,
-  useState,
 } from "react";
 
+import {
+  Collapsible,
+  CollapsiblePanel,
+  CollapsibleTrigger,
+} from "@ui-sdk/react/collapsible";
+import { renderElement } from "@ui-sdk/react/primitive";
 import {
   BookOpen,
   CheckCircle2,
@@ -22,13 +27,15 @@ import {
 } from "lucide-react";
 import type { ReactNode } from "react";
 
+import { named } from "../../../lib/named";
+import { useControllableState } from "../../../lib/use-controllable-state";
 import { cn } from "../../../lib/utils";
 
 export type LessonStatus = "available" | "completed" | "in-progress" | "locked";
 export type LessonDifficulty = "advanced" | "beginner" | "intermediate";
 
 type CurriculumContextValue = {
-  expandedModules: Set<string>;
+  expandedModules: ReadonlySet<string>;
   toggleModule: (id: string) => void;
 };
 
@@ -184,11 +191,9 @@ type ModuleTriggerProps = {
   completed: number;
   description?: string;
   estimatedHours?: number;
-  id: string;
   isExpanded: boolean;
   progressPct: number;
   title: string;
-  toggle: () => void;
   total: number;
 };
 
@@ -196,24 +201,18 @@ function ModuleTrigger({
   completed,
   description,
   estimatedHours,
-  id,
   isExpanded,
   progressPct,
   title,
-  toggle,
   total,
 }: ModuleTriggerProps): React.ReactNode {
   return (
-    <button
-      aria-controls={`module-content-${id}`}
-      aria-expanded={isExpanded}
+    <CollapsibleTrigger
       className={cn(
         "w-full flex items-start justify-between gap-3 rounded-md px-6 py-4 text-left transition-colors",
         "hover:bg-secondary/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
         isExpanded && "bg-secondary/30",
       )}
-      onClick={toggle}
-      type="button"
     >
       <div className="flex min-w-0 flex-col gap-1">
         <span className="text-sm font-medium">{title}</span>
@@ -242,7 +241,7 @@ function ModuleTrigger({
           )}
         />
       </div>
-    </button>
+    </CollapsibleTrigger>
   );
 }
 
@@ -250,6 +249,10 @@ export type CurriculumProps = {
   children: ReactNode;
   className?: string;
   defaultExpandedModules?: string[];
+  /** Ids of the open modules. Pair it with `onExpandedModulesChange`. */
+  expandedModules?: string[];
+  /** Called with the ids of the open modules after a module opens or closes. */
+  onExpandedModulesChange?: (ids: string[]) => void;
   title: string;
   totalHours?: number;
 };
@@ -258,24 +261,28 @@ function CurriculumRoot({
   children,
   className,
   defaultExpandedModules,
+  expandedModules: expandedModulesProperty,
+  onExpandedModulesChange,
   title,
   totalHours,
 }: CurriculumProps): React.ReactNode {
-  const [expandedModules, setExpandedModules] = useState<Set<string>>(
-    () => new Set(defaultExpandedModules ?? []),
-  );
+  const [expandedIds, setExpandedIds] = useControllableState<string[]>({
+    defaultValue: defaultExpandedModules ?? [],
+    onChange: onExpandedModulesChange,
+    value: expandedModulesProperty,
+  });
+  const expandedModules = useMemo(() => new Set(expandedIds), [expandedIds]);
 
-  const toggleModule = useCallback((id: string) => {
-    setExpandedModules((previous) => {
-      const next = new Set(previous);
-      if (next.has(id)) {
-        next.delete(id);
-      } else {
-        next.add(id);
-      }
-      return next;
-    });
-  }, []);
+  const toggleModule = useCallback(
+    (id: string) => {
+      setExpandedIds(
+        expandedModules.has(id)
+          ? expandedIds.filter((expandedId) => expandedId !== id)
+          : [...expandedIds, id],
+      );
+    },
+    [expandedIds, expandedModules, setExpandedIds],
+  );
 
   const contextValue = useMemo(
     () => ({ expandedModules, toggleModule }),
@@ -319,6 +326,11 @@ export type CurriculumModuleProps = {
   title: string;
 };
 
+/** Keeps the module a `section`, like the markup before the collapsible. */
+function renderSection(props: Record<string, unknown>, state: object) {
+  return renderElement("section", props, undefined, state);
+}
+
 function CurriculumModule({
   children,
   className,
@@ -336,32 +348,30 @@ function CurriculumModule({
   const progressPct = total > 0 ? Math.round((completed / total) * 100) : 0;
 
   return (
-    <section className={className}>
+    <Collapsible
+      className={className}
+      onOpenChange={() => {
+        toggleModule(id);
+      }}
+      open={isExpanded}
+      render={renderSection}
+    >
       <ModuleTrigger
         completed={completed}
         description={description}
         estimatedHours={estimatedHours}
-        id={id}
         isExpanded={isExpanded}
         progressPct={progressPct}
         title={title}
-        toggle={() => {
-          toggleModule(id);
-        }}
         total={total}
       />
-      <div
-        aria-hidden={!isExpanded}
-        className={cn(
-          "overflow-hidden transition-all duration-200",
-          isExpanded ? "max-h-[9999px] opacity-100" : "max-h-0 opacity-0",
-        )}
-        hidden={!isExpanded}
-        id={`module-content-${id}`}
+      <CollapsiblePanel
+        className="h-[var(--collapsible-panel-height)] overflow-hidden transition-[height,opacity] duration-200 data-[ending-style]:h-0 data-[starting-style]:h-0 data-[ending-style]:opacity-0 data-[starting-style]:opacity-0"
+        keepMounted
       >
         <div className="divide-y divide-border/50 pb-2">{children}</div>
-      </div>
-    </section>
+      </CollapsiblePanel>
+    </Collapsible>
   );
 }
 
@@ -436,9 +446,9 @@ type CurriculumComponent = ((props: CurriculumProps) => React.ReactNode) & {
   Module: typeof CurriculumModule;
 };
 
-const Curriculum = Object.assign(CurriculumRoot, {
+const Curriculum = /* @__PURE__ */ named("Curriculum", CurriculumRoot, () => ({
   Lesson: CurriculumLesson,
   Module: CurriculumModule,
-}) as CurriculumComponent;
+})) as CurriculumComponent;
 
 export { Curriculum, CurriculumLesson, CurriculumModule };

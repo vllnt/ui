@@ -2,6 +2,7 @@
 
 import type { ComponentPropsWithoutRef, ReactNode } from "react";
 
+import { named } from "../../../lib/named";
 import { cn } from "../../../lib/utils";
 
 /**
@@ -63,61 +64,70 @@ export type SelectionHaloProps = {
  *
  * @public
  */
-export const SelectionHalo = ({
-  ref,
-  ...props
-}: SelectionHaloProps & { ref?: React.Ref<HTMLDivElement> }) => {
-  const { bounds, className, label, labels, pulsing = false, ...rest } = props;
-  const resolvedLabels = { ...DEFAULT_LABELS, ...labels };
-  return (
-    <div
-      aria-label={resolvedLabels.region}
-      className={cn(
-        "pointer-events-none absolute z-20 rounded-md",
-        pulsing ? "" : "ring-2 ring-primary",
-        className,
-      )}
-      data-pulsing={pulsing ? "true" : undefined}
-      data-selection-halo
-      ref={ref}
-      role="group"
-      style={{
-        height: `${bounds.height.toString()}px`,
-        left: `${bounds.x.toString()}px`,
-        top: `${bounds.y.toString()}px`,
-        width: `${bounds.width.toString()}px`,
-      }}
-      {...rest}
-    >
-      {pulsing ? (
-        <span
-          aria-hidden="true"
-          className="absolute inset-0 rounded-md ring-2 ring-primary animate-pulse motion-reduce:animate-none"
-        />
-      ) : null}
-      {(["nw", "ne", "se", "sw"] as const).map((corner) => (
-        <span
-          aria-hidden="true"
-          className={cn(
-            "absolute size-2 rounded-sm border-2 border-primary bg-background",
-            corner === "nw" && "-left-1 -top-1",
-            corner === "ne" && "-right-1 -top-1",
-            corner === "se" && "-bottom-1 -right-1",
-            corner === "sw" && "-bottom-1 -left-1",
-          )}
-          data-handle-corner={corner}
-          key={corner}
-        />
-      ))}
-      {label ? (
-        <span
-          className="absolute -top-6 left-0 inline-flex items-center rounded-md bg-primary px-1.5 py-0.5 text-[10px] font-semibold text-primary-foreground shadow-sm"
-          data-selection-label
-        >
-          {label}
-        </span>
-      ) : null}
-    </div>
-  );
-};
-SelectionHalo.displayName = "SelectionHalo";
+export const SelectionHalo = /* @__PURE__ */ named(
+  "SelectionHalo",
+  ({
+    ref,
+    ...props
+  }: SelectionHaloProps & { ref?: React.Ref<HTMLDivElement> }) => {
+    const {
+      bounds,
+      className,
+      label,
+      labels,
+      pulsing = false,
+      ...rest
+    } = props;
+    const resolvedLabels = { ...DEFAULT_LABELS, ...labels };
+    return (
+      <div
+        aria-label={resolvedLabels.region}
+        className={cn(
+          "pointer-events-none absolute z-20 rounded-md",
+          pulsing ? "" : "ring-2 ring-primary",
+          className,
+        )}
+        data-pulsing={pulsing ? "true" : undefined}
+        data-selection-halo
+        ref={ref}
+        role="group"
+        style={{
+          height: `${bounds.height.toString()}px`,
+          left: `${bounds.x.toString()}px`,
+          top: `${bounds.y.toString()}px`,
+          width: `${bounds.width.toString()}px`,
+        }}
+        {...rest}
+      >
+        {pulsing ? (
+          <span
+            aria-hidden="true"
+            className="absolute inset-0 rounded-md ring-2 ring-primary animate-pulse motion-reduce:animate-none"
+          />
+        ) : null}
+        {(["nw", "ne", "se", "sw"] as const).map((corner) => (
+          <span
+            aria-hidden="true"
+            className={cn(
+              "absolute size-2 rounded-sm border-2 border-primary bg-background",
+              corner === "nw" && "-left-1 -top-1",
+              corner === "ne" && "-right-1 -top-1",
+              corner === "se" && "-bottom-1 -right-1",
+              corner === "sw" && "-bottom-1 -left-1",
+            )}
+            data-handle-corner={corner}
+            key={corner}
+          />
+        ))}
+        {label ? (
+          <span
+            className="absolute -top-6 left-0 inline-flex items-center rounded-md bg-primary px-1.5 py-0.5 text-[10px] font-semibold text-primary-foreground shadow-sm"
+            data-selection-label
+          >
+            {label}
+          </span>
+        ) : null}
+      </div>
+    );
+  },
+);

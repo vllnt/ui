@@ -1,3 +1,4 @@
+import { named } from "../../../lib/named";
 import { cn } from "../../../lib/utils";
 
 /** Props shared by the panel container and its `div`-based slots. */
@@ -22,99 +23,121 @@ export type PanelDescriptionProps = React.HTMLAttributes<HTMLParagraphElement>;
  *   <PanelFooter>...</PanelFooter>
  * </Panel>
  */
-const Panel = ({
-  className,
-  ref,
-  ...props
-}: PanelProps & { ref?: React.Ref<HTMLDivElement> }) => (
-  <div
-    className={cn(
-      "rounded-lg border border-border bg-card text-card-foreground shadow-sm",
-      className,
-    )}
-    ref={ref}
-    {...props}
-  />
+const Panel = /* @__PURE__ */ named(
+  "Panel",
+  ({
+    className,
+    ref,
+    ...props
+  }: PanelProps & { ref?: React.Ref<HTMLDivElement> }) => (
+    <div
+      className={cn(
+        "rounded-lg border border-border bg-card text-card-foreground shadow-sm",
+        className,
+      )}
+      data-slot="panel"
+      ref={ref}
+      {...props}
+    />
+  ),
 );
-Panel.displayName = "Panel";
 
 /** Header region, divided from the body by a bottom border. */
-const PanelHeader = ({
-  className,
-  ref,
-  ...props
-}: PanelProps & { ref?: React.Ref<HTMLDivElement> }) => (
-  <div
-    className={cn(
-      "flex flex-col gap-1.5 border-b border-border px-4 py-3",
-      className,
-    )}
-    ref={ref}
-    {...props}
-  />
+const PanelHeader = /* @__PURE__ */ named(
+  "PanelHeader",
+  ({
+    className,
+    ref,
+    ...props
+  }: PanelProps & { ref?: React.Ref<HTMLDivElement> }) => (
+    <div
+      className={cn(
+        "flex flex-col gap-1.5 border-b border-border px-4 py-3",
+        className,
+      )}
+      data-slot="panel-header"
+      ref={ref}
+      {...props}
+    />
+  ),
 );
-PanelHeader.displayName = "PanelHeader";
 
 /** Accessible heading for the panel. */
-const PanelTitle = ({
-  children,
-  className,
-  ref,
-  ...props
-}: PanelTitleProps & { ref?: React.Ref<HTMLHeadingElement> }) => (
-  <h3
-    className={cn(
-      "text-sm font-semibold leading-none tracking-tight",
-      className,
-    )}
-    ref={ref}
-    {...props}
-  >
-    {children}
-  </h3>
+const PanelTitle = /* @__PURE__ */ named(
+  "PanelTitle",
+  ({
+    children,
+    className,
+    ref,
+    ...props
+  }: PanelTitleProps & { ref?: React.Ref<HTMLHeadingElement> }) => (
+    <h3
+      className={cn(
+        "text-sm font-semibold leading-none tracking-tight",
+        className,
+      )}
+      data-slot="panel-title"
+      ref={ref}
+      {...props}
+    >
+      {children}
+    </h3>
+  ),
 );
-PanelTitle.displayName = "PanelTitle";
 
 /** Secondary descriptive text under the title. */
-const PanelDescription = ({
-  className,
-  ref,
-  ...props
-}: PanelDescriptionProps & { ref?: React.Ref<HTMLParagraphElement> }) => (
-  <p
-    className={cn("text-sm text-muted-foreground", className)}
-    ref={ref}
-    {...props}
-  />
+const PanelDescription = /* @__PURE__ */ named(
+  "PanelDescription",
+  ({
+    className,
+    ref,
+    ...props
+  }: PanelDescriptionProps & { ref?: React.Ref<HTMLParagraphElement> }) => (
+    <p
+      className={cn("text-sm text-muted-foreground", className)}
+      data-slot="panel-description"
+      ref={ref}
+      {...props}
+    />
+  ),
 );
-PanelDescription.displayName = "PanelDescription";
 
 /** Main content region of the panel. */
-const PanelBody = ({
-  className,
-  ref,
-  ...props
-}: PanelProps & { ref?: React.Ref<HTMLDivElement> }) => (
-  <div className={cn("px-4 py-3", className)} ref={ref} {...props} />
+const PanelBody = /* @__PURE__ */ named(
+  "PanelBody",
+  ({
+    className,
+    ref,
+    ...props
+  }: PanelProps & { ref?: React.Ref<HTMLDivElement> }) => (
+    <div
+      className={cn("px-4 py-3", className)}
+      data-slot="panel-body"
+      ref={ref}
+      {...props}
+    />
+  ),
 );
-PanelBody.displayName = "PanelBody";
 
 /** Footer region, divided from the body by a top border. */
-const PanelFooter = ({
-  className,
-  ref,
-  ...props
-}: PanelProps & { ref?: React.Ref<HTMLDivElement> }) => (
-  <div
-    className={cn(
-      "flex items-center border-t border-border px-4 py-3",
-      className,
-    )}
-    ref={ref}
-    {...props}
-  />
+const PanelFooter = /* @__PURE__ */ named(
+  "PanelFooter",
+  ({
+    className,
+    ref,
+    ...props
+  }: PanelProps & { ref?: React.Ref<HTMLDivElement> }) => (
+    <div
+      className={cn(
+        "flex items-center border-t border-border px-4 py-3",
+        className,
+      )}
+      data-slot="panel-footer"
+      ref={ref}
+      {...props}
+    />
+  ),
 );
-PanelFooter.displayName = "PanelFooter";
 
 export {
   Panel,

@@ -2,6 +2,7 @@
 
 import type { ComponentPropsWithoutRef, ReactNode } from "react";
 
+import { named } from "../../../lib/named";
 import { cn } from "../../../lib/utils";
 
 /**
@@ -145,43 +146,45 @@ const Tile = (props: { metric: RuntimeMetric }): React.ReactElement => {
  *
  * @public
  */
-export const RuntimeOverviewPanel = ({
-  ref,
-  ...props
-}: RuntimeOverviewPanelProps & { ref?: React.Ref<HTMLElement> }) => {
-  const { className, labels, metrics, title = "Runtime", ...rest } = props;
-  const resolvedLabels = { ...DEFAULT_LABELS, ...labels };
-  return (
-    <section
-      aria-label={resolvedLabels.region}
-      className={cn(
-        "flex w-full flex-col gap-2 rounded-2xl border bg-background p-3 text-foreground",
-        className,
-      )}
-      data-runtime-overview-panel
-      ref={ref}
-      {...rest}
-    >
-      <header>
-        <h3 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-          {title}
-        </h3>
-      </header>
-      {metrics.length === 0 ? (
-        <p
-          className="px-2 py-3 text-center text-xs text-muted-foreground"
-          data-runtime-state="empty"
-        >
-          {resolvedLabels.empty}
-        </p>
-      ) : (
-        <ul className="grid grid-cols-2 gap-1.5" data-runtime-grid>
-          {metrics.map((metric) => (
-            <Tile key={metric.id} metric={metric} />
-          ))}
-        </ul>
-      )}
-    </section>
-  );
-};
-RuntimeOverviewPanel.displayName = "RuntimeOverviewPanel";
+export const RuntimeOverviewPanel = /* @__PURE__ */ named(
+  "RuntimeOverviewPanel",
+  ({
+    ref,
+    ...props
+  }: RuntimeOverviewPanelProps & { ref?: React.Ref<HTMLElement> }) => {
+    const { className, labels, metrics, title = "Runtime", ...rest } = props;
+    const resolvedLabels = { ...DEFAULT_LABELS, ...labels };
+    return (
+      <section
+        aria-label={resolvedLabels.region}
+        className={cn(
+          "flex w-full flex-col gap-2 rounded-2xl border bg-background p-3 text-foreground",
+          className,
+        )}
+        data-runtime-overview-panel
+        ref={ref}
+        {...rest}
+      >
+        <header>
+          <h3 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+            {title}
+          </h3>
+        </header>
+        {metrics.length === 0 ? (
+          <p
+            className="px-2 py-3 text-center text-xs text-muted-foreground"
+            data-runtime-state="empty"
+          >
+            {resolvedLabels.empty}
+          </p>
+        ) : (
+          <ul className="grid grid-cols-2 gap-1.5" data-runtime-grid>
+            {metrics.map((metric) => (
+              <Tile key={metric.id} metric={metric} />
+            ))}
+          </ul>
+        )}
+      </section>
+    );
+  },
+);

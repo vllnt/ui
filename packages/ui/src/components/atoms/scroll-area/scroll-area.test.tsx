@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it } from "vitest";
 
-import { ScrollArea } from "./scroll-area";
+import { ScrollArea, ScrollBar } from "./scroll-area";
 
 describe("ScrollArea", () => {
   it("renders a visible root that merges className and forwards ref", () => {
@@ -47,5 +47,47 @@ describe("ScrollArea keyboard access", () => {
     expect(
       container.querySelector("[data-radix-scroll-area-viewport]"),
     ).not.toHaveAttribute("tabindex");
+  });
+});
+
+describe("ScrollArea Radix-compatible markers", () => {
+  it("marks the viewport with data-radix-scroll-area-viewport", () => {
+    const { container } = render(
+      <ScrollArea>
+        <p>Content</p>
+      </ScrollArea>,
+    );
+    const viewport = container.querySelector(
+      "[data-radix-scroll-area-viewport]",
+    );
+    expect(viewport).toBeInTheDocument();
+    expect(viewport).toContainElement(screen.getByText("Content"));
+  });
+});
+
+describe("ScrollArea x axis", () => {
+  it("clips the x axis without a horizontal scrollbar, like Radix", () => {
+    const { container } = render(
+      <ScrollArea>
+        <p>Content</p>
+      </ScrollArea>,
+    );
+    const viewport = container.querySelector<HTMLElement>(
+      "[data-radix-scroll-area-viewport]",
+    );
+    expect(viewport).toHaveClass("!overflow-x-hidden");
+  });
+
+  it("lets the x axis scroll once a horizontal scrollbar renders", () => {
+    const { container } = render(
+      <ScrollArea>
+        <p>Content</p>
+        <ScrollBar orientation="horizontal" />
+      </ScrollArea>,
+    );
+    const viewport = container.querySelector<HTMLElement>(
+      "[data-radix-scroll-area-viewport]",
+    );
+    expect(viewport).not.toHaveClass("!overflow-x-hidden");
   });
 });

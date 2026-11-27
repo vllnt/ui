@@ -1,7 +1,3 @@
-import type {
-  ToggleGroupMultipleProps,
-  ToggleGroupSingleProps,
-} from "@radix-ui/react-toggle-group";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it, vi } from "vitest";
@@ -10,6 +6,7 @@ import { ToggleGroup, ToggleGroupItem } from "./toggle-group";
 import {
   UnstyledToggleGroup,
   UnstyledToggleGroupItem,
+  type UnstyledToggleGroupProps,
 } from "./unstyled-toggle-group";
 
 const withoutClasses = (markup: string) =>
@@ -21,8 +18,10 @@ async function pressKey(from: HTMLElement, key: string, to: HTMLElement) {
 }
 
 type GroupOptions =
-  | (Omit<ToggleGroupSingleProps, "type"> & { type?: "single" })
-  | ToggleGroupMultipleProps;
+  | Extract<UnstyledToggleGroupProps, { type: "multiple" }>
+  | (Omit<Extract<UnstyledToggleGroupProps, { type: "single" }>, "type"> & {
+      type?: "single";
+    });
 
 function renderGroup(options: GroupOptions = {}) {
   const items = (
@@ -104,26 +103,26 @@ describe("UnstyledToggleGroup", () => {
     );
   });
 
-  it("moves focus with the arrow keys, Home and End, skipping disabled items", async () => {
+  // Like ToggleGroup (see MIGRATION.md), a disabled item stays reachable with
+  // the arrow keys and ignores presses.
+  it("moves focus with the arrow keys, Home and End, through disabled items", async () => {
     renderGroup();
     const a = screen.getByRole("radio", { name: "A" });
+    const b = screen.getByRole("radio", { name: "B" });
     const c = screen.getByRole("radio", { name: "C" });
     a.focus();
-    await pressKey(a, "ArrowRight", c);
+    await pressKey(a, "ArrowRight", b);
+    await pressKey(b, "ArrowRight", c);
     await pressKey(c, "ArrowRight", a);
     await pressKey(a, "End", c);
     await pressKey(c, "Home", a);
     await pressKey(a, "ArrowLeft", c);
-    await pressKey(c, "ArrowUp", a);
-    await pressKey(a, "ArrowDown", c);
   });
 
-  it("is one tab stop: focusing the group lands on the pressed item", async () => {
+  it("is one tab stop: only the pressed item is in the tab order", () => {
     renderGroup({ defaultValue: "c" });
     const a = screen.getByRole("radio", { name: "A" });
     const c = screen.getByRole("radio", { name: "C" });
-    screen.getByRole("radiogroup").focus();
-    await waitFor(() => expect(c).toHaveFocus());
     expect(c).toHaveAttribute("tabindex", "0");
     expect(a).toHaveAttribute("tabindex", "-1");
   });
@@ -139,7 +138,14 @@ describe("UnstyledToggleGroup", () => {
     );
     fireEvent.click(screen.getByRole("radio", { name: "B" }));
     expect(onValueChange).toHaveBeenCalledTimes(1);
-    expect(screen.getByRole("radio", { name: "B" })).toBeDisabled();
+    expect(screen.getByRole("radio", { name: "B" })).toHaveAttribute(
+      "aria-disabled",
+      "true",
+    );
+    // `disabled:` classes never match; `data-[disabled]:` styles the item.
+    expect(screen.getByRole("radio", { name: "B" })).toHaveAttribute(
+      "data-disabled",
+    );
   });
 
   it("passes className through as given and forwards refs", () => {

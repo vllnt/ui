@@ -310,6 +310,9 @@ export const Moon: Story = {
 };
 
 export const Noise: Story = {
+  // Random frames never land the same way twice; the other spinners cover
+  // the component in the visual diff.
+  tags: ["visual-skip"],
   args: {
     animation: "noise",
     label: "Noise",
@@ -422,6 +425,9 @@ export const Toggle: Story = {
 };
 
 export const Triangle: Story = {
+  // Its glyph renders a few pixels differently between two captures of the
+  // same build on CI; the other spinners cover the component.
+  tags: ["visual-skip"],
   args: {
     animation: "triangle",
     label: "Triangle",

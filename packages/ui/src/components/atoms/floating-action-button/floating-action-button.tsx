@@ -4,6 +4,7 @@ import { memo } from "react";
 
 import type { ReactNode } from "react";
 
+import { named } from "../../../lib/named";
 import { cn } from "../../../lib/utils";
 
 export type FloatingActionButtonProps = {
@@ -41,5 +42,7 @@ function FloatingActionButtonImpl({
   );
 }
 
-export const FloatingActionButton = memo(FloatingActionButtonImpl);
-FloatingActionButton.displayName = "FloatingActionButton";
+export const FloatingActionButton = /* @__PURE__ */ named(
+  "FloatingActionButton",
+  /* @__PURE__ */ memo(FloatingActionButtonImpl),
+);

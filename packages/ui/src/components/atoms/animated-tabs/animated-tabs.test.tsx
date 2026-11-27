@@ -25,6 +25,30 @@ describe("AnimatedTabs", () => {
     expect(onValueChange).toHaveBeenCalledWith("two");
   });
 
+  it("follows `value` when controlled and reports the request", () => {
+    const onValueChange = vi.fn();
+    const { rerender } = render(
+      <AnimatedTabs onValueChange={onValueChange} tabs={tabs} value="one" />,
+    );
+    fireEvent.click(screen.getByRole("tab", { name: "Two" }));
+    expect(onValueChange).toHaveBeenCalledWith("two");
+    expect(screen.getByRole("tab", { name: "One" })).toHaveAttribute(
+      "aria-selected",
+      "true",
+    );
+    rerender(
+      <AnimatedTabs onValueChange={onValueChange} tabs={tabs} value="two" />,
+    );
+    expect(screen.getByRole("tab", { name: "Two" })).toHaveAttribute(
+      "aria-selected",
+      "true",
+    );
+    expect(screen.getByRole("tab", { name: "Two" })).toHaveAttribute(
+      "tabindex",
+      "0",
+    );
+  });
+
   it("keeps a single tab stop on the active tab", () => {
     render(<AnimatedTabs defaultValue="two" tabs={tabs} />);
     expect(screen.getByRole("tab", { name: "One" })).toHaveAttribute(

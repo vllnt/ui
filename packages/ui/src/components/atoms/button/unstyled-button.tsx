@@ -1,4 +1,5 @@
 import { cx } from "../../../lib/cx";
+import { named } from "../../../lib/named";
 
 /** Props for the {@link UnstyledButton} component. */
 export type UnstyledButtonProps =
@@ -17,19 +18,18 @@ export type UnstyledButtonProps =
  *   A
  * </UnstyledButton>
  */
-const UnstyledButton = ({
-  className,
-  ref,
-  type = "button",
-  ...props
-}: UnstyledButtonProps) => (
-  <button
-    className={cx(className) || undefined}
-    ref={ref}
-    type={type === "submit" ? "submit" : type === "reset" ? "reset" : "button"}
-    {...props}
-  />
+const UnstyledButton = /* @__PURE__ */ named(
+  "UnstyledButton",
+  ({ className, ref, type = "button", ...props }: UnstyledButtonProps) => (
+    <button
+      className={cx(className) || undefined}
+      ref={ref}
+      type={
+        type === "submit" ? "submit" : type === "reset" ? "reset" : "button"
+      }
+      {...props}
+    />
+  ),
 );
-UnstyledButton.displayName = "UnstyledButton";
 
 export { UnstyledButton };

@@ -31,7 +31,15 @@ export {
   type ThemePreset,
   type ThemePresetName,
 } from "./lib/theme-presets";
+export { createCommandRanker } from "./lib/command-rank";
+export { commandScore } from "./lib/command-score";
 export { copyText } from "./lib/copy-text";
+export {
+  encodeQrMatrix,
+  type QrErrorLevel,
+  type QrMatrix,
+} from "./lib/qr-encoder";
+export { createSchemaResolver } from "./lib/schema-resolver";
 export { formatChange, normalizeDate } from "./lib/format";
 export {
   isStatusTone,
@@ -39,13 +47,71 @@ export {
   statusDotVariants,
   type StatusTone,
 } from "./lib/status-dot";
-export { focusCalendarDay } from "./lib/focus-calendar-day";
 export { keyByOccurrence } from "./lib/occurrence-keys";
 export {
   moveRovingFocus,
   type RovingFocusOptions,
   type RovingOrientation,
 } from "./lib/roving-focus";
+// ui-sdk compat helpers: the Radix-shaped API (asChild, data-state, focus and
+// dismissal callbacks) that the kit's components build on ui-sdk parts with.
+export {
+  type AsChildProps,
+  asChildProps,
+  assignRef,
+  checkedState,
+  closeAutoFocus,
+  type DataAttributes,
+  type NarrowPartProps,
+  openAutoFocus,
+  openState,
+  Slot,
+  useElementRef,
+  useLazyElementRef,
+  withDataAttributes,
+} from "./lib/ui-sdk";
+export {
+  callPreventDefault,
+  DismissContext,
+  type DismissDetails,
+  type DismissHandlers,
+  type FocusOutsideEvent,
+  type PointerDownOutsideEvent,
+  runDismissHandlers,
+  useDismissRoot,
+  useRegisterDismissHandlers,
+} from "./lib/ui-sdk-dismiss";
+export {
+  createMenuParts,
+  MenuContentContext,
+  type MenuContentProps,
+  type MenuLook,
+  useMenuContentOptions,
+} from "./lib/ui-sdk-menu";
+export {
+  dialogBox,
+  dialogClose,
+  type DialogContentOptions,
+  dialogDescription,
+  dialogOverlay,
+  type DialogPopup,
+  dialogPortal,
+  dialogRoot,
+  dialogTitle,
+  dialogTrigger,
+  type OpenAliases,
+  openAliases,
+  type OverlayLook,
+  type PopupFocusHandlers,
+  type PopupOverlay,
+  useDialogPopup,
+} from "./lib/ui-sdk-dialog";
+export { HIT_AREA_24, HIT_AREA_24_RADIO_CHILD } from "./lib/hit-area";
+export { reselectProps } from "./lib/reselect";
+export {
+  type ControllableStateOptions,
+  useControllableState,
+} from "./lib/use-controllable-state";
 export { useBodyScrollLock } from "./lib/use-body-scroll-lock";
 export { useDebounce } from "./lib/use-debounce";
 export { useEscapeKey } from "./lib/use-escape-key";

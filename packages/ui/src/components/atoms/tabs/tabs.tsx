@@ -1,22 +1,29 @@
 "use client";
 
 import {
+  type ComponentPropsWithoutRef,
   createContext,
   use,
   useCallback,
   useEffect,
-  useId,
-  useLayoutEffect,
   useMemo,
-  useRef,
   useState,
 } from "react";
 
-import { cva } from "class-variance-authority";
-import type { KeyboardEvent, ReactNode } from "react";
+import { mergeProps, renderElement } from "@ui-sdk/react/primitive";
+import {
+  Tabs as TabsPrimitive,
+  TabsList as TabsListPrimitive,
+  TabsPanel,
+  TabsTab,
+} from "@ui-sdk/react/tabs";
+import type { ReactNode, Ref } from "react";
 
-import { moveRovingFocus } from "../../../lib/roving-focus";
+import { named } from "../../../lib/named";
+import { reselectProps } from "../../../lib/reselect";
+import { useControllableState } from "../../../lib/use-controllable-state";
 import { cn } from "../../../lib/utils";
+import { cva } from "../../../lib/variants";
 
 /**
  * Look of the tab triggers (Penpot `Style` axis): `underline` is the default,
@@ -25,15 +32,19 @@ import { cn } from "../../../lib/utils";
  */
 export type TabsVariant = "link" | "pill" | "underline";
 
-const tabsListVariants = cva("flex overflow-x-auto", {
-  variants: {
-    variant: {
-      link: "",
-      pill: "gap-1",
-      underline: "border-b border-border",
+const tabsListVariants = cva(
+  "flex overflow-x-auto data-[orientation=vertical]:flex-col data-[orientation=vertical]:overflow-x-visible",
+  {
+    variants: {
+      variant: {
+        link: "",
+        pill: "gap-1",
+        underline:
+          "border-b border-border data-[orientation=vertical]:border-b-0 data-[orientation=vertical]:border-r",
+      },
     },
   },
-});
+);
 
 const tabsTriggerVariants = cva(
   "px-4 py-2 text-sm font-medium whitespace-nowrap transition-colors motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring",
@@ -43,52 +54,22 @@ const tabsTriggerVariants = cva(
         link: "underline-offset-4 data-[state=active]:text-foreground data-[state=active]:underline data-[state=inactive]:text-muted-foreground data-[state=inactive]:hover:text-foreground data-[state=inactive]:hover:underline",
         pill: "rounded-full data-[state=active]:bg-secondary data-[state=active]:text-foreground data-[state=inactive]:text-muted-foreground data-[state=inactive]:hover:bg-secondary/50 data-[state=inactive]:hover:text-foreground",
         underline:
-          "-mb-px border-b-2 data-[state=active]:border-primary data-[state=active]:text-primary data-[state=inactive]:border-transparent data-[state=inactive]:text-muted-foreground data-[state=inactive]:hover:border-muted-foreground/50 data-[state=inactive]:hover:text-foreground",
+          "-mb-px border-b-2 data-[orientation=vertical]:mb-0 data-[orientation=vertical]:-mr-px data-[orientation=vertical]:border-b-0 data-[orientation=vertical]:border-r-2 data-[state=active]:border-primary data-[state=active]:text-primary data-[state=inactive]:border-transparent data-[state=inactive]:text-muted-foreground data-[state=inactive]:hover:border-muted-foreground/50 data-[state=inactive]:hover:text-foreground",
       },
     },
   },
 );
 
 type TabsContextValue = {
-  activeTab: string;
-  baseId: string;
+  /** Value of the first rendered trigger. */
   firstTab?: string;
-  panelIds: ReadonlyMap<string, string>;
-  registerPanel: (value: string, id: string) => () => void;
-  registerTab: (value: string, id: string) => () => void;
-  setActiveTab: (value: string) => void;
-  tabIds: ReadonlyMap<string, string>;
+  /** Whether the active value matches a rendered trigger. */
+  hasActiveTab: boolean;
+  registerTab: (value: string) => () => void;
+  /** Reports a press on the selected tab, which ui-sdk ignores. */
+  reselect: (value: string) => void;
   variant: TabsVariant;
 };
-
-/**
- * Tracks the element id rendered for each tab value, in mount order, so
- * `aria-controls` / `aria-labelledby` reference rendered nodes and nothing else.
- */
-function useIdRegistry(): readonly [
-  ReadonlyMap<string, string>,
-  (value: string, id: string) => () => void,
-] {
-  const [ids, setIds] = useState<ReadonlyMap<string, string>>(new Map());
-  const register = useCallback((value: string, id: string) => {
-    setIds((current) =>
-      current.get(value) === id ? current : new Map(current).set(value, id),
-    );
-    return () => {
-      setIds((current) => {
-        if (current.get(value) !== id) return current;
-        const next = new Map(current);
-        next.delete(value);
-        return next;
-      });
-    };
-  }, []);
-  return [ids, register];
-}
-
-function toIdPart(value: string): string {
-  return encodeURIComponent(value);
-}
 
 const TabsContext = createContext<null | TabsContextValue>(null);
 
@@ -100,11 +81,61 @@ function useTabsContext(): TabsContextValue {
   return context;
 }
 
-export type TabsProps = {
+/** Tracks the values of the rendered triggers, in mount order. */
+function useTabValues(): readonly [
+  readonly string[],
+  (value: string) => () => void,
+] {
+  const [values, setValues] = useState<readonly string[]>([]);
+  const register = useCallback((value: string) => {
+    setValues((current) =>
+      current.includes(value) ? current : [...current, value],
+    );
+    return () => {
+      setValues((current) => current.filter((item) => item !== value));
+    };
+  }, []);
+  return [values, register];
+}
+
+type RenderProps = Record<string, unknown>;
+
+/**
+ * Renders a trigger with the attributes Radix emitted (`data-state`) and the
+ * caller's overrides of what ui-sdk manages. An override left `undefined`
+ * keeps the ui-sdk value. A press on the selected tab calls `onReselect`.
+ */
+function renderTab(overrides: RenderProps, onReselect: () => void) {
+  return (props: RenderProps, state: { selected: boolean }) =>
+    renderElement(
+      "button",
+      mergeProps(
+        props,
+        overrides,
+        { "data-state": state.selected ? "active" : "inactive" },
+        reselectProps(state.selected ? onReselect : undefined),
+      ),
+      undefined,
+      state,
+    );
+}
+
+/** Renders a panel with the caller's overrides of what ui-sdk manages. */
+function renderPanel(overrides: RenderProps) {
+  return (props: RenderProps, state: object) =>
+    renderElement("div", mergeProps(props, overrides), undefined, state);
+}
+
+export type TabsProps = Omit<
+  ComponentPropsWithoutRef<"div">,
+  "defaultValue" | "dir" | "onChange"
+> & {
   children: ReactNode;
   className?: string;
   defaultValue?: string;
   onValueChange?: (value: string) => void;
+  /** Which arrow keys move between tabs. Defaults to `horizontal`. */
+  orientation?: "horizontal" | "vertical";
   value?: string;
   /** Look of the triggers, shared with `Tabs.List` and `Tabs.Trigger`. Defaults to `underline`. */
   variant?: TabsVariant;
@@ -112,74 +143,62 @@ export type TabsProps = {
 
 /**
  * Root of a tabs group. Holds the active value and the `variant` that
- * `Tabs.List` and `Tabs.Trigger` read from context.
+ * `Tabs.List` and `Tabs.Trigger` read from context. Without a value, no tab
+ * is active until the user picks one.
  */
-function Tabs({
+function TabsRoot({
   children,
   className,
   defaultValue = "",
   onValueChange,
+  orientation,
+  ref,
   value,
   variant = "underline",
-}: TabsProps): React.ReactNode {
-  const [internalTab, setInternalTab] = useState(defaultValue);
-  const isControlled = value !== undefined;
-  const activeTab = isControlled ? value : internalTab;
+  ...props
+}: TabsProps & { ref?: Ref<HTMLDivElement> }): React.ReactNode {
+  const [activeTab, setActiveTab] = useControllableState({
+    defaultValue,
+    onChange: onValueChange,
+    value,
+  });
+  const [tabValues, registerTab] = useTabValues();
+  const hasActiveTab = tabValues.includes(activeTab);
+  const firstTab = tabValues[0];
 
-  // Read the latest `onValueChange` without re-creating the context value.
-  const onValueChangeRef = useRef(onValueChange);
-  useEffect(() => {
-    onValueChangeRef.current = onValueChange;
-  }, [onValueChange]);
-
-  const handleSetActiveTab = useCallback(
-    (next: string): void => {
-      if (!isControlled) {
-        setInternalTab(next);
-      }
-      onValueChangeRef.current?.(next);
+  // A press on the selected tab still reports its value, as before ui-sdk.
+  const reselect = useCallback(
+    (next: string) => {
+      onValueChange?.(next);
     },
-    [isControlled],
+    [onValueChange],
   );
 
-  const baseId = useId();
-  const [tabIds, registerTab] = useIdRegistry();
-  const [panelIds, registerPanel] = useIdRegistry();
-  const [firstTab] = tabIds.keys();
-
   const contextValue = useMemo(
-    () => ({
-      activeTab,
-      baseId,
-      firstTab,
-      panelIds,
-      registerPanel,
-      registerTab,
-      setActiveTab: handleSetActiveTab,
-      tabIds,
-      variant,
-    }),
-    [
-      activeTab,
-      baseId,
-      firstTab,
-      handleSetActiveTab,
-      panelIds,
-      registerPanel,
-      registerTab,
-      tabIds,
-      variant,
-    ],
+    () => ({ firstTab, hasActiveTab, registerTab, reselect, variant }),
+    [firstTab, hasActiveTab, registerTab, reselect, variant],
   );
 
   return (
     <TabsContext.Provider value={contextValue}>
-      <div className={cn("my-6", className)}>{children}</div>
+      <TabsPrimitive
+        {...props}
+        className={cn("my-6", className)}
+        onValueChange={(next) => {
+          if (typeof next !== "string") return;
+          setActiveTab(next);
+        }}
+        orientation={orientation}
+        ref={ref}
+        value={activeTab}
+      >
+        {children}
+      </TabsPrimitive>
     </TabsContext.Provider>
   );
 }
 
-export type TabsListProps = {
+export type TabsListProps = ComponentPropsWithoutRef<"div"> & {
   "aria-label"?: string;
   children: ReactNode;
   className?: string;
@@ -193,36 +212,63 @@ export type TabsListProps = {
  * `onKeyDown` runs first; calling `preventDefault()` in it opts out. Outside a
  * `Tabs` it falls back to the `underline` look.
  */
-function TabsList({
-  "aria-label": ariaLabel,
-  children,
-  className,
-  onKeyDown,
-}: TabsListProps): React.ReactNode {
-  const variant = use(TabsContext)?.variant ?? "underline";
-  const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>): void => {
-    onKeyDown?.(event);
-    moveRovingFocus(event, '[role="tab"]', { activate: true });
-  };
+const TabsList = /* @__PURE__ */ named(
+  "TabsList",
+  function TabsList({
+    "aria-label": ariaLabel,
+    children,
+    className,
+    onKeyDown,
+    ref,
+    ...props
+  }: TabsListProps & { ref?: Ref<HTMLDivElement> }): React.ReactNode {
+    const context = use(TabsContext);
 
-  return (
-    <div
-      aria-label={ariaLabel}
-      className={cn(tabsListVariants({ variant }), className)}
-      onKeyDown={handleKeyDown}
-      role="tablist"
-      tabIndex={-1}
-    >
-      {children}
-    </div>
-  );
-}
+    if (!context) {
+      // The ui-sdk list needs its root, and no trigger can render without one.
+      return (
+        <div
+          {...props}
+          aria-label={ariaLabel}
+          className={cn(tabsListVariants({ variant: "underline" }), className)}
+          onKeyDown={onKeyDown}
+          ref={ref}
+          role="tablist"
+          tabIndex={-1}
+        >
+          {children}
+        </div>
+      );
+    }
 
-export type TabsTriggerProps = {
+    return (
+      <TabsListPrimitive
+        {...props}
+        aria-label={ariaLabel}
+        className={cn(
+          tabsListVariants({ variant: context.variant }),
+          className,
+        )}
+        onKeyDown={onKeyDown}
+        ref={ref}
+        tabIndex={-1}
+      >
+        {children}
+      </TabsListPrimitive>
+    );
+  },
+);
+
+export type TabsTriggerProps = Omit<
+  ComponentPropsWithoutRef<"button">,
+  "value"
+> & {
   "aria-controls"?: string;
   "aria-hidden"?: "false" | "true" | boolean;
   children: ReactNode;
   className?: string;
+  /** Keeps the tab focusable but stops it from taking selection. */
+  disabled?: boolean;
   id?: string;
   tabIndex?: number;
   value: string;
@@ -233,55 +279,54 @@ export type TabsTriggerProps = {
  * (`"active"` or `"inactive"`) from the selected tab; the look follows the
  * `Tabs` variant and every variant draws a `focus-visible` ring.
  */
-function TabsTrigger({
-  "aria-controls": ariaControls,
-  "aria-hidden": ariaHidden,
-  children,
-  className,
-  id,
-  tabIndex,
-  value,
-}: TabsTriggerProps): React.ReactNode {
-  const {
-    activeTab,
-    baseId,
-    firstTab,
-    panelIds,
-    registerTab,
-    setActiveTab,
-    tabIds,
-    variant,
-  } = useTabsContext();
-  const isActive = activeTab === value;
-  const tabId = id ?? `${baseId}-tab-${toIdPart(value)}`;
-  const hasActiveTab = tabIds.has(activeTab);
-  const isTabStop = isActive || (!hasActiveTab && firstTab === value);
+const TabsTrigger = /* @__PURE__ */ named(
+  "TabsTrigger",
+  function TabsTrigger({
+    "aria-controls": ariaControls,
+    "aria-hidden": ariaHidden,
+    children,
+    className,
+    id,
+    ref,
+    tabIndex,
+    value,
+    ...props
+  }: TabsTriggerProps & { ref?: Ref<HTMLButtonElement> }): React.ReactNode {
+    const { firstTab, hasActiveTab, registerTab, reselect, variant } =
+      useTabsContext();
+    // With no active tab, the first trigger stays reachable with the Tab key.
+    const isFallbackStop = !hasActiveTab && firstTab === value;
 
-  useEffect(() => registerTab(value, tabId), [registerTab, tabId, value]);
+    useEffect(() => registerTab(value), [registerTab, value]);
 
-  return (
-    <button
-      aria-controls={
-        ariaControls ?? (isActive ? panelIds.get(value) : undefined)
-      }
-      aria-hidden={ariaHidden}
-      aria-selected={isActive}
-      className={cn(tabsTriggerVariants({ variant }), className)}
-      data-state={isActive ? "active" : "inactive"}
-      id={tabId}
-      onClick={() => {
-        setActiveTab(value);
-      }}
-      role="tab"
-      tabIndex={tabIndex ?? (isTabStop ? 0 : -1)}
-      type="button"
-    >
-      {children}
-    </button>
-  );
-}
+    return (
+      <TabsTab
+        {...props}
+        aria-hidden={ariaHidden}
+        className={cn(tabsTriggerVariants({ variant }), className)}
+        id={id}
+        ref={ref}
+        render={renderTab(
+          {
+            "aria-controls": ariaControls,
+            tabIndex: tabIndex ?? (isFallbackStop ? 0 : undefined),
+          },
+          () => {
+            reselect(value);
+          },
+        )}
+        value={value}
+      >
+        {children}
+      </TabsTab>
+    );
+  },
+);
 
-export type TabsContentProps = {
+export type TabsContentProps = Omit<
+  ComponentPropsWithoutRef<"div">,
+  "value"
+> & {
   "aria-hidden"?: "false" | "true" | boolean;
   "aria-labelledby"?: string;
   children: ReactNode;
@@ -295,76 +340,43 @@ export type TabsContentProps = {
   value: string;
 };
 
-const FOCUSABLE =
-  'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [contenteditable="true"], [tabindex]:not([tabindex="-1"])';
+const TabsContent = /* @__PURE__ */ named(
+  "TabsContent",
+  function TabsContent({
+    "aria-hidden": ariaHidden,
+    "aria-labelledby": ariaLabelledBy,
+    children,
+    className,
+    id,
+    ref,
+    tabIndex,
+    value,
+    ...props
+  }: TabsContentProps & { ref?: Ref<HTMLDivElement> }): React.ReactNode {
+    useTabsContext();
 
-/** Whether the panel holds a focusable element, re-checked as it changes. */
-function useHasFocusableContent(
-  panelRef: React.RefObject<HTMLDivElement | null>,
-  isActive: boolean,
-): boolean {
-  const [hasFocusable, setHasFocusable] = useState(false);
-  useLayoutEffect(() => {
-    const panel = panelRef.current;
-    if (!isActive || !panel) return;
-    const measure = (): void => {
-      setHasFocusable(panel.querySelector(FOCUSABLE) !== null);
-    };
-    measure();
-    if (typeof MutationObserver === "undefined") return;
-    const observer = new MutationObserver(measure);
-    observer.observe(panel, {
-      attributes: true,
-      childList: true,
-      subtree: true,
-    });
-    return () => {
-      observer.disconnect();
-    };
-  }, [isActive, panelRef]);
-  return hasFocusable;
-}
+    return (
+      <TabsPanel
+        {...props}
+        aria-hidden={ariaHidden}
+        className={cn("pt-4", className)}
+        id={id}
+        ref={ref}
+        render={renderPanel({ "aria-labelledby": ariaLabelledBy })}
+        tabIndex={tabIndex}
+        value={value}
+      >
+        {children}
+      </TabsPanel>
+    );
+  },
+);
 
-function TabsContent({
-  "aria-hidden": ariaHidden,
-  "aria-labelledby": ariaLabelledBy,
-  children,
-  className,
-  id,
-  tabIndex,
-  value,
-}: TabsContentProps): React.ReactNode {
-  const { activeTab, baseId, registerPanel, tabIds } = useTabsContext();
-  const isActive = activeTab === value;
-  const panelId = id ?? `${baseId}-panel-${toIdPart(value)}`;
-  const panelRef = useRef<HTMLDivElement>(null);
-  const hasFocusable = useHasFocusableContent(panelRef, isActive);
-
-  useEffect(() => {
-    if (!isActive) return;
-    return registerPanel(value, panelId);
-  }, [isActive, panelId, registerPanel, value]);
-
-  if (!isActive) return null;
-
-  return (
-    <div
-      aria-hidden={ariaHidden}
-      aria-labelledby={ariaLabelledBy ?? tabIds.get(value)}
-      className={cn("pt-4", className)}
-      id={panelId}
-      ref={panelRef}
-      role="tabpanel"
-      tabIndex={tabIndex ?? (hasFocusable ? undefined : 0)}
-    >
-      {children}
-    </div>
-  );
-}
-
-// Attach sub-components
-Tabs.List = TabsList;
-Tabs.Trigger = TabsTrigger;
-Tabs.Content = TabsContent;
+/** The root, with the parts that read its context as statics: `Tabs.List`, `Tabs.Trigger` and `Tabs.Content`. */
+const Tabs = /* @__PURE__ */ named("Tabs", TabsRoot, () => ({
+  Content: TabsContent,
+  List: TabsList,
+  Trigger: TabsTrigger,
+}));
 
 export { Tabs, TabsContent, TabsList, TabsTrigger };

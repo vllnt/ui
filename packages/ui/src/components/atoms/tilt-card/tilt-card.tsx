@@ -2,6 +2,7 @@
 
 import * as React from "react";
 
+import { named } from "../../../lib/named";
 import { cn } from "../../../lib/utils";
 
 /** Props for {@link TiltCard}. */
@@ -126,42 +127,44 @@ function usePointerTransform<T extends HTMLElement>({
  * <TiltCard className="rounded-xl border bg-card p-6">Hover me</TiltCard>
  * ```
  */
-export const TiltCard = ({
-  children,
-  className,
-  maxTilt = 12,
-  ref,
-  style,
-  ...props
-}: TiltCardProps & { ref?: React.Ref<HTMLDivElement> }) => {
-  const reduced = usePrefersReducedMotion();
-  const { handlePointerLeave, handlePointerMove } =
-    usePointerTransform<HTMLDivElement>({
-      compute: (pointer, bounds) => {
-        const offsetX = (pointer.x - bounds.left) / bounds.width - 0.5;
-        const offsetY = (pointer.y - bounds.top) / bounds.height - 0.5;
-        const rotateY = clamp(offsetX * maxTilt * 2, maxTilt);
-        const rotateX = clamp(-offsetY * maxTilt * 2, maxTilt);
-        return `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-      },
-      enabled: !reduced,
-      keepTransform: style?.transform !== undefined,
-    });
+export const TiltCard = /* @__PURE__ */ named(
+  "TiltCard",
+  ({
+    children,
+    className,
+    maxTilt = 12,
+    ref,
+    style,
+    ...props
+  }: TiltCardProps & { ref?: React.Ref<HTMLDivElement> }) => {
+    const reduced = usePrefersReducedMotion();
+    const { handlePointerLeave, handlePointerMove } =
+      usePointerTransform<HTMLDivElement>({
+        compute: (pointer, bounds) => {
+          const offsetX = (pointer.x - bounds.left) / bounds.width - 0.5;
+          const offsetY = (pointer.y - bounds.top) / bounds.height - 0.5;
+          const rotateY = clamp(offsetX * maxTilt * 2, maxTilt);
+          const rotateX = clamp(-offsetY * maxTilt * 2, maxTilt);
+          return `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+        },
+        enabled: !reduced,
+        keepTransform: style?.transform !== undefined,
+      });
 
-  return (
-    <div
-      className={cn(
-        "transition-transform duration-200 ease-out will-change-transform",
-        className,
-      )}
-      onPointerLeave={handlePointerLeave}
-      onPointerMove={handlePointerMove}
-      ref={ref}
-      style={style}
-      {...props}
-    >
-      {children}
-    </div>
-  );
-};
-TiltCard.displayName = "TiltCard";
+    return (
+      <div
+        className={cn(
+          "transition-transform duration-200 ease-out will-change-transform",
+          className,
+        )}
+        onPointerLeave={handlePointerLeave}
+        onPointerMove={handlePointerMove}
+        ref={ref}
+        style={style}
+        {...props}
+      >
+        {children}
+      </div>
+    );
+  },
+);

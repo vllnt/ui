@@ -12,6 +12,7 @@ import {
 } from "react";
 
 import type { MaterialProps } from "../../../lib/material";
+import { named } from "../../../lib/named";
 import { cn } from "../../../lib/utils";
 
 const VIEWBOX_WIDTH = 1000;
@@ -287,43 +288,45 @@ export type ChoroplethTooltipProps = {
   children?: ChoroplethTooltipRender;
 } & Omit<ComponentPropsWithoutRef<"div">, "children">;
 
-export const ChoroplethTooltip = ({
-  children,
-  className,
-  ref,
-  ...rest
-}: ChoroplethTooltipProps & { ref?: React.Ref<HTMLDivElement> }) => {
-  const { hover, regionByid } = useChoroplethContext();
-  if (!hover) return null;
-  const region = regionByid.get(hover.id);
-  if (!region) return null;
-  return (
-    <div
-      className={cn(
-        "pointer-events-none absolute left-3 top-3 z-10 max-w-xs rounded-md border bg-popover px-2 py-1 text-xs text-popover-foreground shadow-md",
-        className,
-      )}
-      data-tooltip-region-id={region.id}
-      ref={ref}
-      role="status"
-      {...rest}
-    >
-      {children ? (
-        children({ region, value: hover.value })
-      ) : (
-        <span>
-          <span className="font-medium">{region.name}</span>
-          {hover.value === undefined ? (
-            <span className="text-muted-foreground"> · no data</span>
-          ) : (
-            <span> · {hover.value.toLocaleString()}</span>
-          )}
-        </span>
-      )}
-    </div>
-  );
-};
-ChoroplethTooltip.displayName = "ChoroplethTooltip";
+export const ChoroplethTooltip = /* @__PURE__ */ named(
+  "ChoroplethTooltip",
+  ({
+    children,
+    className,
+    ref,
+    ...rest
+  }: ChoroplethTooltipProps & { ref?: React.Ref<HTMLDivElement> }) => {
+    const { hover, regionByid } = useChoroplethContext();
+    if (!hover) return null;
+    const region = regionByid.get(hover.id);
+    if (!region) return null;
+    return (
+      <div
+        className={cn(
+          "pointer-events-none absolute left-3 top-3 z-10 max-w-xs rounded-md border bg-popover px-2 py-1 text-xs text-popover-foreground shadow-md",
+          className,
+        )}
+        data-tooltip-region-id={region.id}
+        ref={ref}
+        role="status"
+        {...rest}
+      >
+        {children ? (
+          children({ region, value: hover.value })
+        ) : (
+          <span>
+            <span className="font-medium">{region.name}</span>
+            {hover.value === undefined ? (
+              <span className="text-muted-foreground"> · no data</span>
+            ) : (
+              <span> · {hover.value.toLocaleString()}</span>
+            )}
+          </span>
+        )}
+      </div>
+    );
+  },
+);
 
 /**
  * Legend slot. Renders a horizontal color ramp with min / max labels.
@@ -336,45 +339,47 @@ export type ChoroplethLegendProps = {
 } & MaterialProps &
   Omit<ComponentPropsWithoutRef<"div">, "children">;
 
-export const ChoroplethLegend = ({
-  className,
-  material = "glass",
-  ref,
-  title,
-  ...rest
-}: ChoroplethLegendProps & { ref?: React.Ref<HTMLDivElement> }) => {
-  const { legend } = useChoroplethContext();
-  if (!legend) return null;
-  const stops = legend.scale.join(", ");
-  return (
-    <div
-      className={cn(
-        "vllnt-glass vllnt-glass-dense absolute bottom-3 right-3 z-10 flex flex-col gap-1 rounded-md border px-2 py-1 text-[11px] text-foreground",
-        className,
-      )}
-      data-legend
-      data-material={material}
-      ref={ref}
-      {...rest}
-    >
-      {title ? (
-        <span className="font-medium uppercase tracking-wide text-muted-foreground">
-          {title}
-        </span>
-      ) : null}
+export const ChoroplethLegend = /* @__PURE__ */ named(
+  "ChoroplethLegend",
+  ({
+    className,
+    material = "glass",
+    ref,
+    title,
+    ...rest
+  }: ChoroplethLegendProps & { ref?: React.Ref<HTMLDivElement> }) => {
+    const { legend } = useChoroplethContext();
+    if (!legend) return null;
+    const stops = legend.scale.join(", ");
+    return (
       <div
-        aria-hidden="true"
-        className="h-2 w-32 rounded-full"
-        style={{ background: `linear-gradient(to right, ${stops})` }}
-      />
-      <div className="flex justify-between text-muted-foreground">
-        <span>{legend.domain[0].toLocaleString()}</span>
-        <span>{legend.domain[1].toLocaleString()}</span>
+        className={cn(
+          "vllnt-glass vllnt-glass-dense absolute bottom-3 right-3 z-10 flex flex-col gap-1 rounded-md border px-2 py-1 text-[11px] text-foreground",
+          className,
+        )}
+        data-legend
+        data-material={material}
+        ref={ref}
+        {...rest}
+      >
+        {title ? (
+          <span className="font-medium uppercase tracking-wide text-muted-foreground">
+            {title}
+          </span>
+        ) : null}
+        <div
+          aria-hidden="true"
+          className="h-2 w-32 rounded-full"
+          style={{ background: `linear-gradient(to right, ${stops})` }}
+        />
+        <div className="flex justify-between text-muted-foreground">
+          <span>{legend.domain[0].toLocaleString()}</span>
+          <span>{legend.domain[1].toLocaleString()}</span>
+        </div>
       </div>
-    </div>
-  );
-};
-ChoroplethLegend.displayName = "ChoroplethLegend";
+    );
+  },
+);
 
 type DataSummaryProps = {
   data: Record<string, number>;
@@ -539,79 +544,81 @@ function RegionsLayer({
  *
  * @public
  */
-export const ChoroplethMap = (props: ChoroplethMapProps) => {
-  const {
-    children,
-    className,
-    colorScale = DEFAULT_SCALE,
-    data,
-    domain: domainProperty,
-    labels,
-    missingColor = resolveMissingColor(),
-    onSelectRegion,
-    ref,
-    regions,
-    ...rest
-  } = props;
-  const titleId = useId();
-  const resolvedLabels = useMemo(
-    () => ({ ...DEFAULT_LABELS, ...labels }),
-    [labels],
-  );
+export const ChoroplethMap = /* @__PURE__ */ named(
+  "ChoroplethMap",
+  (props: ChoroplethMapProps) => {
+    const {
+      children,
+      className,
+      colorScale = DEFAULT_SCALE,
+      data,
+      domain: domainProperty,
+      labels,
+      missingColor = resolveMissingColor(),
+      onSelectRegion,
+      ref,
+      regions,
+      ...rest
+    } = props;
+    const titleId = useId();
+    const resolvedLabels = useMemo(
+      () => ({ ...DEFAULT_LABELS, ...labels }),
+      [labels],
+    );
 
-  const domain = useMemo(
-    () => domainProperty ?? computeDomain(Object.values(data)),
-    [data, domainProperty],
-  );
+    const domain = useMemo(
+      () => domainProperty ?? computeDomain(Object.values(data)),
+      [data, domainProperty],
+    );
 
-  const ctx = useChoroplethState({
-    colorScale,
-    data,
-    domain,
-    missingColor,
-    regions,
-  });
-  const buckets = useMemo(() => bucketChildren(children), [children]);
+    const ctx = useChoroplethState({
+      colorScale,
+      data,
+      domain,
+      missingColor,
+      regions,
+    });
+    const buckets = useMemo(() => bucketChildren(children), [children]);
 
-  const [selectedId, setSelectedId] = useState<string | undefined>();
+    const [selectedId, setSelectedId] = useState<string | undefined>();
 
-  const handleSelect = useCallback(
-    (region: ChoroplethRegion) => {
-      setSelectedId(region.id);
-      onSelectRegion?.(region);
-    },
-    [onSelectRegion],
-  );
+    const handleSelect = useCallback(
+      (region: ChoroplethRegion) => {
+        setSelectedId(region.id);
+        onSelectRegion?.(region);
+      },
+      [onSelectRegion],
+    );
 
-  return (
-    <ChoroplethContext.Provider value={ctx}>
-      <section
-        aria-label={resolvedLabels.region}
-        className={cn(
-          "relative aspect-[2/1] w-full overflow-hidden rounded-2xl border bg-background text-foreground",
-          className,
-        )}
-        ref={ref}
-        {...rest}
-      >
-        <svg
-          className="block h-full w-full"
-          preserveAspectRatio="xMidYMid meet"
-          role="group"
-          viewBox={`0 0 ${VIEWBOX_WIDTH.toString()} ${VIEWBOX_HEIGHT.toString()}`}
+    return (
+      <ChoroplethContext.Provider value={ctx}>
+        <section
+          aria-label={resolvedLabels.region}
+          className={cn(
+            "relative aspect-[2/1] w-full overflow-hidden rounded-2xl border bg-background text-foreground",
+            className,
+          )}
+          ref={ref}
+          {...rest}
         >
-          <RegionsLayer
-            onSelect={handleSelect}
-            regions={regions}
-            selectedId={selectedId}
-            setHoverFn={ctx.setHover}
-          />
-        </svg>
-        {buckets.tooltip}
-        {buckets.legend}
-        <DataSummary data={data} regions={regions} titleId={titleId} />
-      </section>
-    </ChoroplethContext.Provider>
-  );
-};
-ChoroplethMap.displayName = "ChoroplethMap";
+          <svg
+            className="block h-full w-full"
+            preserveAspectRatio="xMidYMid meet"
+            role="group"
+            viewBox={`0 0 ${VIEWBOX_WIDTH.toString()} ${VIEWBOX_HEIGHT.toString()}`}
+          >
+            <RegionsLayer
+              onSelect={handleSelect}
+              regions={regions}
+              selectedId={selectedId}
+              setHoverFn={ctx.setHover}
+            />
+          </svg>
+          {buckets.tooltip}
+          {buckets.legend}
+          <DataSummary data={data} regions={regions} titleId={titleId} />
+        </section>
+      </ChoroplethContext.Provider>
+    );
+  },
+);

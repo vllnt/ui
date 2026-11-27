@@ -1,5 +1,6 @@
 import * as React from "react";
 
+import { named } from "../../../lib/named";
 import { cn } from "../../../lib/utils";
 
 /**
@@ -109,68 +110,69 @@ function GaugeText({
  *
  * @public
  */
-export const GaugeChart = ({
-  className,
-  color = "currentColor",
-  label,
-  max = DEFAULT_MAX,
-  min = DEFAULT_MIN,
-  ref,
-  showValue = true,
-  size = DEFAULT_SIZE,
-  thickness = DEFAULT_THICKNESS,
-  value,
-  ...props
-}: GaugeChartProps & { ref?: React.Ref<HTMLDivElement> }) => {
-  const span = max - min;
-  const fraction = span > 0 ? clamp((value - min) / span, 0, 1) : 0;
-  const center: Point = { x: size / 2, y: size / 2 };
-  const radius = size / 2 - thickness / 2;
-  const viewHeight = size / 2 + thickness + 28;
+export const GaugeChart = /* @__PURE__ */ named(
+  "GaugeChart",
+  ({
+    className,
+    color = "currentColor",
+    label,
+    max = DEFAULT_MAX,
+    min = DEFAULT_MIN,
+    ref,
+    showValue = true,
+    size = DEFAULT_SIZE,
+    thickness = DEFAULT_THICKNESS,
+    value,
+    ...props
+  }: GaugeChartProps & { ref?: React.Ref<HTMLDivElement> }) => {
+    const span = max - min;
+    const fraction = span > 0 ? clamp((value - min) / span, 0, 1) : 0;
+    const center: Point = { x: size / 2, y: size / 2 };
+    const radius = size / 2 - thickness / 2;
+    const viewHeight = size / 2 + thickness + 28;
 
-  return (
-    <div
-      className={cn(
-        "rounded-2xl border border-border bg-background/40 p-3",
-        className,
-      )}
-      ref={ref}
-      {...props}
-    >
-      <svg
-        aria-label="Gauge chart"
-        className="h-full w-full"
-        height={viewHeight}
-        role="img"
-        viewBox={`0 0 ${size} ${viewHeight}`}
-        width={size}
+    return (
+      <div
+        className={cn(
+          "rounded-2xl border border-border bg-background/40 p-3",
+          className,
+        )}
+        ref={ref}
+        {...props}
       >
-        <path
-          className="stroke-secondary"
-          d={arc({ center, end: 360, radius, start: 180 })}
-          fill="none"
-          strokeLinecap="round"
-          strokeWidth={thickness}
-        />
-        {fraction > 0 ? (
+        <svg
+          aria-label="Gauge chart"
+          className="h-full w-full"
+          height={viewHeight}
+          role="img"
+          viewBox={`0 0 ${size} ${viewHeight}`}
+          width={size}
+        >
           <path
-            d={arc({ center, end: 180 + fraction * 180, radius, start: 180 })}
+            className="stroke-secondary"
+            d={arc({ center, end: 360, radius, start: 180 })}
             fill="none"
-            stroke={color}
             strokeLinecap="round"
             strokeWidth={thickness}
           />
-        ) : null}
-        <GaugeText
-          center={center}
-          label={label}
-          showValue={showValue}
-          size={size}
-          value={value}
-        />
-      </svg>
-    </div>
-  );
-};
-
-GaugeChart.displayName = "GaugeChart";
+          {fraction > 0 ? (
+            <path
+              d={arc({ center, end: 180 + fraction * 180, radius, start: 180 })}
+              fill="none"
+              stroke={color}
+              strokeLinecap="round"
+              strokeWidth={thickness}
+            />
+          ) : null}
+          <GaugeText
+            center={center}
+            label={label}
+            showValue={showValue}
+            size={size}
+            value={value}
+          />
+        </svg>
+      </div>
+    );
+  },
+);

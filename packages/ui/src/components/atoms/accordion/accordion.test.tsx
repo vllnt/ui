@@ -1,5 +1,5 @@
 import { fireEvent, render, screen, within } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 
 import type { AccordionProps } from "./accordion";
 import {
@@ -76,6 +76,33 @@ describe("Accordion", () => {
       },
     );
 
+    it("puts each trigger in a heading, h3 unless `as` says otherwise", () => {
+      render(
+        <Accordion>
+          <AccordionItem value="a">
+            <AccordionTrigger value="a">Default</AccordionTrigger>
+            <AccordionContent value="a">Body</AccordionContent>
+          </AccordionItem>
+          <AccordionItem value="b">
+            <AccordionTrigger as="h2" value="b">
+              Section
+            </AccordionTrigger>
+            <AccordionContent value="b">Body</AccordionContent>
+          </AccordionItem>
+        </Accordion>,
+      );
+      const heading = screen.getByRole("heading", { level: 3 });
+      expect(
+        within(heading).getByRole("button", { name: "Default" }),
+      ).toBeInTheDocument();
+      expect(
+        within(screen.getByRole("heading", { level: 2 })).getByRole("button", {
+          name: "Section",
+        }),
+      ).toBeInTheDocument();
+      expect(heading).toHaveClass("m-0");
+    });
+
     it("keeps ids unique across Accordions that reuse the same item values", () => {
       render(
         <>
@@ -132,6 +159,57 @@ describe("Accordion", () => {
             ?.getAttribute("aria-labelledby"),
         ),
       ).toEqual(buttons.map((button) => button.id));
+    });
+  });
+
+  describe("structure", () => {
+    it("throws when a trigger is used outside an Accordion", () => {
+      const error = vi.spyOn(console, "error").mockImplementation(() => {
+        /* React logs the thrown error; keep the test output clean */
+      });
+      expect(() =>
+        render(<AccordionTrigger value="a">A</AccordionTrigger>),
+      ).toThrow("AccordionItem must be used within an Accordion");
+      error.mockRestore();
+    });
+
+    it("keeps a closed panel laid out at zero height, not hidden", () => {
+      render(<Faq />);
+
+      expect(panel("Shipping")).not.toHaveAttribute("hidden");
+      expect(panel("Shipping")).toHaveClass(
+        "h-[var(--accordion-panel-height)]",
+        "overflow-hidden",
+      );
+    });
+
+    it("aliases the Radix size variables to the ui-sdk panel size variables", () => {
+      render(<Faq />);
+
+      expect(panel("Shipping")).toHaveClass(
+        "[--radix-accordion-content-height:var(--accordion-panel-height)]",
+        "[--radix-accordion-content-width:var(--accordion-panel-width)]",
+      );
+    });
+
+    it("rotates the chevron and tints the trigger while open", () => {
+      render(<Faq defaultValue="shipping" />);
+
+      expect(trigger("Shipping")).toHaveClass("bg-secondary/30");
+      expect(trigger("Shipping").querySelector("svg")).toHaveClass(
+        "rotate-180",
+      );
+      expect(trigger("Returns")).not.toHaveClass("bg-secondary/30");
+      expect(trigger("Returns").querySelector("svg")).not.toHaveClass(
+        "rotate-180",
+      );
+    });
+
+    it("starts several items open from a defaultValue list", () => {
+      render(<Faq defaultValue={["shipping", "returns"]} type="multiple" />);
+
+      expect(trigger("Shipping")).toHaveAttribute("aria-expanded", "true");
+      expect(trigger("Returns")).toHaveAttribute("aria-expanded", "true");
     });
   });
 

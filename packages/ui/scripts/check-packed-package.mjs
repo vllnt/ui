@@ -376,7 +376,7 @@ async function assertTailwindMergeFree() {
   }
   const controls = [
     ["Separator", "separator", ["tailwind-merge"]],
-    ["ToggleGroup", "toggle-group", forbidden],
+    ["ToggleGroup", "toggle-group", ["tailwind-merge"]],
   ];
   const absent = await Promise.all(
     controls.map(async ([name, subpath, packages]) => {

@@ -1,3 +1,4 @@
+import { named } from "../../../lib/named";
 import { cn } from "../../../lib/utils";
 
 export type AIStreamingTextProps = React.ComponentPropsWithoutRef<"div"> & {
@@ -11,38 +12,39 @@ export type AIStreamingTextProps = React.ComponentPropsWithoutRef<"div"> & {
   text: string;
 };
 
-const AIStreamingText = ({
-  className,
-  cursor = "▍",
-  isStreaming = false,
-  ref,
-  showCursor = true,
-  text,
-  ...props
-}: AIStreamingTextProps & { ref?: React.Ref<HTMLDivElement> }) => {
-  return (
-    <div
-      aria-live={isStreaming ? "polite" : undefined}
-      className={cn(
-        "text-sm leading-6 text-foreground whitespace-pre-wrap",
-        className,
-      )}
-      ref={ref}
-      {...props}
-    >
-      {text}
-      {isStreaming && showCursor ? (
-        <span
-          aria-hidden="true"
-          className="ml-0.5 inline-block animate-pulse text-muted-foreground motion-reduce:animate-none"
-        >
-          {cursor}
-        </span>
-      ) : null}
-    </div>
-  );
-};
-
-AIStreamingText.displayName = "AIStreamingText";
+const AIStreamingText = /* @__PURE__ */ named(
+  "AIStreamingText",
+  ({
+    className,
+    cursor = "▍",
+    isStreaming = false,
+    ref,
+    showCursor = true,
+    text,
+    ...props
+  }: AIStreamingTextProps & { ref?: React.Ref<HTMLDivElement> }) => {
+    return (
+      <div
+        aria-live={isStreaming ? "polite" : undefined}
+        className={cn(
+          "text-sm leading-6 text-foreground whitespace-pre-wrap",
+          className,
+        )}
+        ref={ref}
+        {...props}
+      >
+        {text}
+        {isStreaming && showCursor ? (
+          <span
+            aria-hidden="true"
+            className="ml-0.5 inline-block animate-pulse text-muted-foreground motion-reduce:animate-none"
+          >
+            {cursor}
+          </span>
+        ) : null}
+      </div>
+    );
+  },
+);
 
 export { AIStreamingText };

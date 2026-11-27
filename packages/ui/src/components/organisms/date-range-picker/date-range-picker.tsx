@@ -3,9 +3,9 @@
 import * as React from "react";
 
 import { CalendarIcon } from "lucide-react";
-import type { DateRange } from "react-day-picker";
 
-import { focusCalendarDay } from "../../../lib/focus-calendar-day";
+import { named } from "../../../lib/named";
+import { useControllableState } from "../../../lib/use-controllable-state";
 import { cn } from "../../../lib/utils";
 import { Button } from "../../atoms/button/button";
 import {
@@ -13,7 +13,8 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "../../atoms/popover/popover";
-import { Calendar } from "../../molecules/calendar/calendar";
+import type { DateRange } from "../../molecules/calendar/calendar";
+import { LazyCalendar } from "../../molecules/calendar/calendar-lazy";
 
 const rangeFormatter = new Intl.DateTimeFormat("en-US", {
   day: "numeric",
@@ -46,64 +47,61 @@ export type DateRangePickerProps = {
   value?: DateRange;
 };
 
-const DateRangePicker = ({
-  buttonClassName,
-  className,
-  defaultValue,
-  numberOfMonths = 2,
-  onValueChange,
-  placeholder = "Pick a date range",
-  popoverLabel = "Choose date range",
-  ref,
-  value,
-}: DateRangePickerProps & { ref?: React.Ref<HTMLButtonElement> }) => {
-  const [internalValue, setInternalValue] = React.useState<
-    DateRange | undefined
-  >(defaultValue);
-  const selected = value ?? internalValue;
-  const label = formatRange(selected);
+const DateRangePicker = /* @__PURE__ */ named(
+  "DateRangePicker",
+  ({
+    buttonClassName,
+    className,
+    defaultValue,
+    numberOfMonths = 2,
+    onValueChange,
+    placeholder = "Pick a date range",
+    popoverLabel = "Choose date range",
+    ref,
+    value,
+  }: DateRangePickerProps & { ref?: React.Ref<HTMLButtonElement> }) => {
+    const [selected, handleSelect] = useControllableState<
+      DateRange | undefined
+    >({
+      defaultValue,
+      onChange: onValueChange,
+      value,
+    });
+    const label = formatRange(selected);
 
-  const handleSelect = (range: DateRange | undefined) => {
-    if (value === undefined) {
-      setInternalValue(range);
-    }
-
-    onValueChange?.(range);
-  };
-
-  return (
-    <Popover>
-      <PopoverTrigger asChild>
-        <Button
-          className={cn(
-            "w-full justify-start text-left font-normal",
-            !label && "text-muted-foreground",
-            buttonClassName,
-          )}
-          ref={ref}
-          variant="outline"
+    return (
+      <Popover>
+        <PopoverTrigger asChild>
+          <Button
+            className={cn(
+              "w-full justify-start text-left font-normal",
+              !label && "text-muted-foreground",
+              buttonClassName,
+            )}
+            ref={ref}
+            variant="outline"
+          >
+            <CalendarIcon aria-hidden="true" className="mr-2 size-4" />
+            {label ?? placeholder}
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent
+          align="start"
+          aria-label={popoverLabel}
+          className={cn("w-auto p-0", className)}
         >
-          <CalendarIcon aria-hidden="true" className="mr-2 size-4" />
-          {label ?? placeholder}
-        </Button>
-      </PopoverTrigger>
-      <PopoverContent
-        align="start"
-        aria-label={popoverLabel}
-        className={cn("w-auto p-0", className)}
-        onOpenAutoFocus={focusCalendarDay}
-      >
-        <Calendar
-          defaultMonth={selected?.from}
-          mode="range"
-          numberOfMonths={numberOfMonths}
-          onSelect={handleSelect}
-          selected={selected}
-        />
-      </PopoverContent>
-    </Popover>
-  );
-};
-DateRangePicker.displayName = "DateRangePicker";
+          <LazyCalendar
+            defaultMonth={selected?.from}
+            initialFocus
+            mode="range"
+            numberOfMonths={numberOfMonths}
+            onSelect={handleSelect}
+            selected={selected}
+          />
+        </PopoverContent>
+      </Popover>
+    );
+  },
+);
 
 export { DateRangePicker };

@@ -95,24 +95,37 @@ A component folder holds `{name}.tsx` plus its own helpers and unit tests (`atom
 Every named export — primitives **and compound subcomponents** — uses:
 
 ```tsx
-const Card = ({
-  className,
-  ref,
-  ...props
-}: CardProps & { ref?: React.Ref<HTMLDivElement> }) => (
-  <div ref={ref} className={cn("rounded-md border", className)} {...props} />
-);
-Card.displayName = "Card";
+import { named } from "../../../lib/named";
 
-const CardHeader = ({
-  className,
-  ref,
-  ...props
-}: React.ComponentPropsWithoutRef<"div"> & {
-  ref?: React.Ref<HTMLDivElement>;
-}) => <div ref={ref} className={cn("p-6", className)} {...props} />;
-CardHeader.displayName = "CardHeader";
+const Card = /* @__PURE__ */ named(
+  "Card",
+  ({
+    className,
+    ref,
+    ...props
+  }: CardProps & { ref?: React.Ref<HTMLDivElement> }) => (
+    <div ref={ref} className={cn("rounded-md border", className)} {...props} />
+  ),
+);
+
+const CardHeader = /* @__PURE__ */ named(
+  "CardHeader",
+  ({
+    className,
+    ref,
+    ...props
+  }: React.ComponentPropsWithoutRef<"div"> & {
+    ref?: React.Ref<HTMLDivElement>;
+  }) => <div ref={ref} className={cn("p-6", className)} {...props} />,
+);
 ```
+
+`displayName` comes from `named(displayName, component)` in `lib/named.ts`, written as a **pure annotated initializer**. Never write `Card.displayName = "Card";` as a statement: it has a side effect, so a bundler (esbuild, terser, SWC, Rollup) keeps `Card` and everything it uses in every bundle that loads the module, even when nothing imports `Card`. The annotated call lets a bundler drop an unused `Card`, so importing `DialogHeader` alone does not pull in the whole dialog. The `named-display-name` lint rule fails a `X.displayName = …` statement, a `X.Part = …` static statement, a `named(…)` call without `/* @__PURE__ */` and an annotated call with an argument webpack does not take as pure, and its message names the fix. It applies to `@vllnt/ui` (web); `@vllnt/ui-native` components keep their `X.displayName = …` statements.
+
+- A `function X() {}` component becomes `const X = /* @__PURE__ */ named("X", function X() {…})`.
+- A wrapper such as `memo` is annotated too: `named("X", /* @__PURE__ */ memo(Impl))`.
+- Compound statics go in the third argument, as a function, so `Tabs.List` stays available and droppable: `const Tabs = /* @__PURE__ */ named("Tabs", TabsRoot, () => ({ List: TabsList, Trigger: TabsTrigger }))`. Define the parts above that line. Webpack reads `/* @__PURE__ */` only when every argument is a literal, an identifier, a function or an annotated call; an object or array literal in the call makes it keep the component, which esbuild and terser would drop. Plain data goes in a const above the call (`const OVERLAY_LOOK = { … }`) and the call takes the identifier.
+- The dialog family builds its parts with `dialogRoot`, `dialogTrigger`, `dialogBox` and the other `dialog*` builders of `lib/ui-sdk-dialog.tsx`; each is one annotated call per part, never one `parts` object read per part.
 
 Context is read with `use()`, never `useContext()`:
 
@@ -157,7 +170,7 @@ When a component's name implies an HTML element, the root must render that eleme
 | `alert` | Time-sensitive announcements | Persistent UI |
 | `presentation` / `none` | Element is purely visual scaffolding | Anywhere semantics matter |
 
-When introducing a non-obvious role, **cite the WAI-ARIA Authoring Practices section or the Radix pattern** in the PR body.
+When introducing a non-obvious role, **cite the WAI-ARIA Authoring Practices section or the ui-sdk component docs** in the PR body.
 
 > **Counters:** PR #139 — `role="button"` on canvas workspace; PR #140 — `role="status"` on a static port marker.
 
@@ -231,6 +244,7 @@ Don't leave a prop that "still exists" but means something different.
 - No inline `//` comments in shipped code — use TSDoc on exports, or refactor.
 - Additive architecture: new feature → new file. Don't reflexively edit hub files (`index.ts`, `routes.ts`, global configs).
 - Follow existing codebase patterns. If a pattern exists in 3+ files, use it.
+- **Class helpers come from this package.** Import `cva` and `VariantProps` from `lib/variants`, and `cn` from `lib/utils`. Never import `class-variance-authority` or `clsx` in `src/`: the package ships without them, and lint (`no-restricted-imports`) fails the import. They stay devDependencies as the oracle of `lib/variants.test.ts`.
 - **No status colour on words (lint rule A12).** `text-destructive`, `text-success`, `text-warning`, `text-info` and palette status colours such as `text-red-600` or `text-emerald-700` are lint errors in `packages/ui/src/components`. Keep words in `text-foreground` or `text-muted-foreground`, and put the status colour on an `aria-hidden` icon, a dot or the border. `Text` has no status tones. Files that predate the rule sit in `packages/ui/eslint-rules/a12-allowlist.js` (burn-down: #604); the list only shrinks, so never add to it.
 
 ---

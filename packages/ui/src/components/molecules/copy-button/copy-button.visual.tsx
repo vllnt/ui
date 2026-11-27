@@ -218,12 +218,14 @@ test.describe("CopyButton Visual", () => {
       const button = page.getByRole("button", { name: "Copy" });
 
       await button.hover();
-      await expect(tooltip).toHaveCount(1);
+      await expect(tooltip).toBeVisible();
       await button.click();
       await expect(page.getByRole("button", { name: "Copied!" })).toBeVisible();
+      // Still over the button: the press keeps the tooltip closed until the
+      // pointer leaves. A closed tooltip stays in the page, hidden.
       await page.mouse.move(5, 5);
 
-      await expect(tooltip).toHaveCount(0);
+      await expect(tooltip).toBeHidden();
     });
 
     test("keeps the text the user selected on the page", async ({
@@ -282,14 +284,14 @@ test.describe("CopyButton Visual", () => {
       const button = page.getByRole("button", { name: "Copy" });
 
       await button.hover();
-      await expect(tooltip).toHaveCount(1);
+      await expect(tooltip).toBeVisible();
       await button.click();
       await page.mouse.move(5, 5);
-      await expect(tooltip).toHaveCount(0);
+      await expect(tooltip).toBeHidden();
       await expect(page.getByRole("button", { name: "Copy" })).toBeVisible();
 
       await expect(page.getByRole("button", { name: "Copied!" })).toBeVisible();
-      await expect(tooltip).toHaveCount(0);
+      await expect(tooltip).toBeHidden();
     });
 
     test("gives keyboard focus back to the button after copying", async ({

@@ -1,6 +1,7 @@
 import * as React from "react";
 
 import { normalizeDate } from "../../../lib/format";
+import { named } from "../../../lib/named";
 import type { HeadingTag } from "../../../lib/types";
 import { cn } from "../../../lib/utils";
 
@@ -200,36 +201,37 @@ function HeatmapGrid({
   );
 }
 
-export const ActivityHeatmap = ({
-  as: Heading = "h2",
-  className,
-  data,
-  description,
-  endDate = new Date(),
-  ref,
-  title = "Activity heatmap",
-  weeks = 12,
-  ...props
-}: ActivityHeatmapProps & { ref?: React.Ref<HTMLDivElement> }) => {
-  const normalizedEndDate = normalizeDate(endDate);
-  const gridData = getGridData(data, normalizedEndDate, weeks);
+export const ActivityHeatmap = /* @__PURE__ */ named(
+  "ActivityHeatmap",
+  ({
+    as: Heading = "h2",
+    className,
+    data,
+    description,
+    endDate = new Date(),
+    ref,
+    title = "Activity heatmap",
+    weeks = 12,
+    ...props
+  }: ActivityHeatmapProps & { ref?: React.Ref<HTMLDivElement> }) => {
+    const normalizedEndDate = normalizeDate(endDate);
+    const gridData = getGridData(data, normalizedEndDate, weeks);
 
-  return (
-    <div className={cn("space-y-4", className)} ref={ref} {...props}>
-      <div className="space-y-1">
-        <Heading className="text-lg font-semibold tracking-tight">
-          {title}
-        </Heading>
-        {description ? (
-          <p className="text-sm text-muted-foreground">{description}</p>
-        ) : null}
+    return (
+      <div className={cn("space-y-4", className)} ref={ref} {...props}>
+        <div className="space-y-1">
+          <Heading className="text-lg font-semibold tracking-tight">
+            {title}
+          </Heading>
+          {description ? (
+            <p className="text-sm text-muted-foreground">{description}</p>
+          ) : null}
+        </div>
+
+        <div className="overflow-x-auto rounded-lg border bg-card p-4 shadow-sm">
+          <HeatmapGrid gridData={gridData} weeks={weeks} />
+        </div>
       </div>
-
-      <div className="overflow-x-auto rounded-lg border bg-card p-4 shadow-sm">
-        <HeatmapGrid gridData={gridData} weeks={weeks} />
-      </div>
-    </div>
-  );
-};
-
-ActivityHeatmap.displayName = "ActivityHeatmap";
+    );
+  },
+);

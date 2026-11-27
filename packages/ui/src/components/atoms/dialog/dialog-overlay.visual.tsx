@@ -65,21 +65,26 @@ for (const viewport of viewports) {
       });
 
       await mount(
-        <Dialog defaultOpen>
-          <DialogContent overlay="none">
-            <DialogTitle>Title</DialogTitle>
-            <DialogDescription>Description</DialogDescription>
-          </DialogContent>
-        </Dialog>,
+        <div>
+          <button type="button">Behind</button>
+          <Dialog defaultOpen>
+            <DialogContent overlay="none">
+              <DialogTitle>Title</DialogTitle>
+              <DialogDescription>Description</DialogDescription>
+            </DialogContent>
+          </Dialog>
+        </div>,
       );
 
       await expect(page.getByRole("dialog")).toBeVisible();
       await expect(page.locator(".inset-0")).toHaveCount(0);
       await expect(page.locator('[role="dialog"]:focus-within')).toHaveCount(1);
-      const bodyPointerEvents = await page.evaluate(
-        () => getComputedStyle(document.body).pointerEvents,
-      );
-      expect(bodyPointerEvents).toBe("none");
+      // Modal: everything outside the dialog is inert, so nothing behind it
+      // takes a press or focus.
+      const behindIsInert = await page
+        .getByText("Behind")
+        .evaluate((element) => element.closest("[inert]") !== null);
+      expect(behindIsInert).toBe(true);
 
       await page.keyboard.press("Escape");
       await expect(page.getByRole("dialog")).toBeHidden();
@@ -114,12 +119,8 @@ for (const viewport of viewports) {
         );
 
         await expect(page.getByRole("dialog")).toBeVisible();
-        await expect(page.locator("body")).toHaveAttribute(
-          "data-scroll-locked",
-          /\d+/,
-        );
         const overflow = await page.evaluate(
-          () => getComputedStyle(document.body).overflow,
+          () => getComputedStyle(document.documentElement).overflow,
         );
         expect(overflow).toBe("hidden");
 
@@ -135,9 +136,6 @@ for (const viewport of viewports) {
 
         await page.keyboard.press("Escape");
         await expect(page.getByRole("dialog")).toBeHidden();
-        await expect(page.locator("body")).not.toHaveAttribute(
-          "data-scroll-locked",
-        );
 
         await page.mouse.wheel(0, 800);
         await expect.poll(readScrollY).toBeGreaterThan(0);

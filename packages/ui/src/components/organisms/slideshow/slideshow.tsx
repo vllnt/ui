@@ -5,6 +5,7 @@ import { memo, useCallback, useEffect, useId, useRef, useState } from "react";
 import type { ReactNode } from "react";
 import { createPortal } from "react-dom";
 
+import { named } from "../../../lib/named";
 import type { HeadingTag } from "../../../lib/types";
 import { useBodyScrollLock } from "../../../lib/use-body-scroll-lock";
 import { useEventCallback } from "../../../lib/use-event-callback";
@@ -580,5 +581,7 @@ function SlideshowImpl({
   );
 }
 
-export const Slideshow = memo(SlideshowImpl);
-Slideshow.displayName = "Slideshow";
+export const Slideshow = /* @__PURE__ */ named(
+  "Slideshow",
+  /* @__PURE__ */ memo(SlideshowImpl),
+);

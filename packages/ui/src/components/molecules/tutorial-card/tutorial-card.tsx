@@ -4,6 +4,7 @@ import { memo, useEffect, useState } from "react";
 
 import type { ReactNode } from "react";
 
+import { named } from "../../../lib/named";
 import { useMounted } from "../../../lib/use-mounted";
 import { Badge } from "../../atoms/badge/badge";
 import {
@@ -149,5 +150,7 @@ function TutorialCardImpl({
   );
 }
 
-export const TutorialCard = memo(TutorialCardImpl);
-TutorialCard.displayName = "TutorialCard";
+export const TutorialCard = /* @__PURE__ */ named(
+  "TutorialCard",
+  /* @__PURE__ */ memo(TutorialCardImpl),
+);

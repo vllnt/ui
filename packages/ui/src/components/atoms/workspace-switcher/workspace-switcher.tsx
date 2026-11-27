@@ -1,8 +1,10 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 
+import { named } from "../../../lib/named";
 import { moveRovingFocus } from "../../../lib/roving-focus";
+import { useControllableState } from "../../../lib/use-controllable-state";
 import { cn } from "../../../lib/utils";
 
 export type WorkspaceOption = {
@@ -28,104 +30,83 @@ function handleRadioKeyDown(event: React.KeyboardEvent<HTMLDivElement>): void {
   });
 }
 
-function useWorkspaceValue({
-  defaultValue,
-  onValueChange,
-  value,
-  workspaces,
-}: Pick<
-  WorkspaceSwitcherProps,
-  "defaultValue" | "onValueChange" | "value" | "workspaces"
->): readonly [string, (nextValue: string) => void] {
-  const [internalValue, setInternalValue] = useState(
-    defaultValue ?? workspaces[0]?.id ?? "",
-  );
-  const select = (nextValue: string): void => {
-    if (value === undefined) {
-      setInternalValue(nextValue);
-    }
-    onValueChange?.(nextValue);
-  };
-  return [value ?? internalValue, select];
-}
-
 /**
  * Segmented radio group for switching workspaces. Keyboard follows the
  * WAI-ARIA APG radio group pattern: one tab stop on the checked workspace;
  * arrow keys move focus and check the next / previous workspace (wrapping).
  */
-const WorkspaceSwitcher = ({
-  className,
-  defaultValue,
-  onKeyDown,
-  onValueChange,
-  ref,
-  value,
-  workspaces,
-  ...props
-}: WorkspaceSwitcherProps & { ref?: React.Ref<HTMLDivElement> }) => {
-  const [currentValue, handleSelect] = useWorkspaceValue({
+const WorkspaceSwitcher = /* @__PURE__ */ named(
+  "WorkspaceSwitcher",
+  ({
+    className,
     defaultValue,
+    onKeyDown,
     onValueChange,
+    ref,
     value,
     workspaces,
-  });
+    ...props
+  }: WorkspaceSwitcherProps & { ref?: React.Ref<HTMLDivElement> }) => {
+    const [currentValue, handleSelect] = useControllableState({
+      defaultValue: defaultValue ?? workspaces[0]?.id ?? "",
+      onChange: onValueChange,
+      value,
+    });
 
-  const currentWorkspace = useMemo(
-    () => workspaces.find((workspace) => workspace.id === currentValue),
-    [currentValue, workspaces],
-  );
+    const currentWorkspace = useMemo(
+      () => workspaces.find((workspace) => workspace.id === currentValue),
+      [currentValue, workspaces],
+    );
 
-  const hasChecked = currentWorkspace !== undefined;
+    const hasChecked = currentWorkspace !== undefined;
 
-  return (
-    <div
-      className={cn(
-        "inline-flex min-w-0 items-center gap-1 rounded-full border border-border/70 bg-secondary/50 p-1",
-        className,
-      )}
-      onKeyDown={(event) => {
-        onKeyDown?.(event);
-        handleRadioKeyDown(event);
-      }}
-      ref={ref}
-      role="radiogroup"
-      tabIndex={-1}
-      {...props}
-    >
-      {workspaces.map((workspace, index) => {
-        const isActive = workspace.id === currentValue;
-        return (
-          <button
-            aria-checked={isActive}
-            className={cn(
-              "rounded-full px-3 py-1.5 text-sm font-medium transition-colors",
-              isActive
-                ? "bg-background text-foreground shadow-sm"
-                : "text-muted-foreground hover:text-foreground",
-            )}
-            key={workspace.id}
-            onClick={() => {
-              handleSelect(workspace.id);
-            }}
-            role="radio"
-            tabIndex={isActive || (!hasChecked && index === 0) ? 0 : -1}
-            title={workspace.description}
-            type="button"
-          >
-            {workspace.label}
-          </button>
-        );
-      })}
-      {currentWorkspace?.description ? (
-        <span className="hidden pl-2 pr-1 text-xs text-muted-foreground md:inline">
-          {currentWorkspace.description}
-        </span>
-      ) : null}
-    </div>
-  );
-};
-
-WorkspaceSwitcher.displayName = "WorkspaceSwitcher";
+    return (
+      <div
+        className={cn(
+          "inline-flex min-w-0 items-center gap-1 rounded-full border border-border/70 bg-secondary/50 p-1",
+          className,
+        )}
+        onKeyDown={(event) => {
+          onKeyDown?.(event);
+          handleRadioKeyDown(event);
+        }}
+        ref={ref}
+        role="radiogroup"
+        tabIndex={-1}
+        {...props}
+      >
+        {workspaces.map((workspace, index) => {
+          const isActive = workspace.id === currentValue;
+          return (
+            <button
+              aria-checked={isActive}
+              className={cn(
+                "rounded-full px-3 py-1.5 text-sm font-medium transition-colors",
+                isActive
+                  ? "bg-background text-foreground shadow-sm"
+                  : "text-muted-foreground hover:text-foreground",
+              )}
+              key={workspace.id}
+              onClick={() => {
+                handleSelect(workspace.id);
+              }}
+              role="radio"
+              tabIndex={isActive || (!hasChecked && index === 0) ? 0 : -1}
+              title={workspace.description}
+              type="button"
+            >
+              {workspace.label}
+            </button>
+          );
+        })}
+        {currentWorkspace?.description ? (
+          <span className="hidden pl-2 pr-1 text-xs text-muted-foreground md:inline">
+            {currentWorkspace.description}
+          </span>
+        ) : null}
+      </div>
+    );
+  },
+);
 
 export { WorkspaceSwitcher };

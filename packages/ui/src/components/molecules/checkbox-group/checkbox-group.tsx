@@ -2,6 +2,8 @@
 
 import * as React from "react";
 
+import { named } from "../../../lib/named";
+import { useControllableState } from "../../../lib/use-controllable-state";
 import { cn } from "../../../lib/utils";
 import { Checkbox } from "../../atoms/checkbox/checkbox";
 import { Label } from "../../atoms/label/label";
@@ -29,22 +31,21 @@ function useCheckboxGroupValue(
   defaultValue: string[],
   onValueChange?: (value: string[]) => void,
 ) {
-  const [internalValue, setInternalValue] = React.useState(defaultValue);
-  const values = value ?? internalValue;
+  const [values, setValues] = useControllableState({
+    defaultValue,
+    onChange: onValueChange,
+    value,
+  });
 
   const toggle = React.useCallback(
     (item: string) => {
-      const nextValues = values.includes(item)
-        ? values.filter((entry) => entry !== item)
-        : [...values, item];
-
-      if (value === undefined) {
-        setInternalValue(nextValues);
-      }
-
-      onValueChange?.(nextValues);
+      setValues(
+        values.includes(item)
+          ? values.filter((entry) => entry !== item)
+          : [...values, item],
+      );
     },
-    [onValueChange, value, values],
+    [setValues, values],
   );
 
   return { toggle, values };
@@ -62,44 +63,46 @@ export type CheckboxGroupProps = {
   value?: string[];
 };
 
-const CheckboxGroup = ({
-  children,
-  className,
-  defaultValue = [],
-  disabled = false,
-  name,
-  onValueChange,
-  orientation = "vertical",
-  ref,
-  value,
-}: CheckboxGroupProps & { ref?: React.Ref<HTMLDivElement> }) => {
-  const { toggle, values } = useCheckboxGroupValue(
-    value,
-    defaultValue,
+const CheckboxGroup = /* @__PURE__ */ named(
+  "CheckboxGroup",
+  ({
+    children,
+    className,
+    defaultValue = [],
+    disabled = false,
+    name,
     onValueChange,
-  );
-  const context = React.useMemo<CheckboxGroupContextValue>(
-    () => ({ disabled, name, toggle, values }),
-    [disabled, name, toggle, values],
-  );
+    orientation = "vertical",
+    ref,
+    value,
+  }: CheckboxGroupProps & { ref?: React.Ref<HTMLDivElement> }) => {
+    const { toggle, values } = useCheckboxGroupValue(
+      value,
+      defaultValue,
+      onValueChange,
+    );
+    const context = React.useMemo<CheckboxGroupContextValue>(
+      () => ({ disabled, name, toggle, values }),
+      [disabled, name, toggle, values],
+    );
 
-  return (
-    <CheckboxGroupContext.Provider value={context}>
-      <div
-        className={cn(
-          "flex gap-3",
-          orientation === "vertical" ? "flex-col" : "flex-row flex-wrap",
-          className,
-        )}
-        ref={ref}
-        role="group"
-      >
-        {children}
-      </div>
-    </CheckboxGroupContext.Provider>
-  );
-};
-CheckboxGroup.displayName = "CheckboxGroup";
+    return (
+      <CheckboxGroupContext.Provider value={context}>
+        <div
+          className={cn(
+            "flex gap-3",
+            orientation === "vertical" ? "flex-col" : "flex-row flex-wrap",
+            className,
+          )}
+          ref={ref}
+          role="group"
+        >
+          {children}
+        </div>
+      </CheckboxGroupContext.Provider>
+    );
+  },
+);
 
 /** Single checkbox plus label wired into the parent CheckboxGroup. */
 export type CheckboxGroupItemProps = {
@@ -110,35 +113,37 @@ export type CheckboxGroupItemProps = {
   value: string;
 };
 
-const CheckboxGroupItem = ({
-  children,
-  className,
-  disabled = false,
-  id,
-  ref,
-  value,
-}: CheckboxGroupItemProps & { ref?: React.Ref<HTMLDivElement> }) => {
-  const generatedId = React.useId();
-  const itemId = id ?? generatedId;
-  const group = useCheckboxGroupContext();
-  const checked = group.values.includes(value);
+const CheckboxGroupItem = /* @__PURE__ */ named(
+  "CheckboxGroupItem",
+  ({
+    children,
+    className,
+    disabled = false,
+    id,
+    ref,
+    value,
+  }: CheckboxGroupItemProps & { ref?: React.Ref<HTMLDivElement> }) => {
+    const generatedId = React.useId();
+    const itemId = id ?? generatedId;
+    const group = useCheckboxGroupContext();
+    const checked = group.values.includes(value);
 
-  return (
-    <div className={cn("flex items-center gap-2", className)} ref={ref}>
-      <Checkbox
-        checked={checked}
-        disabled={disabled || group.disabled}
-        id={itemId}
-        name={group.name}
-        onCheckedChange={() => {
-          group.toggle(value);
-        }}
-        value={value}
-      />
-      {children ? <Label htmlFor={itemId}>{children}</Label> : null}
-    </div>
-  );
-};
-CheckboxGroupItem.displayName = "CheckboxGroupItem";
+    return (
+      <div className={cn("flex items-center gap-2", className)} ref={ref}>
+        <Checkbox
+          checked={checked}
+          disabled={disabled || group.disabled}
+          id={itemId}
+          name={group.name}
+          onCheckedChange={() => {
+            group.toggle(value);
+          }}
+          value={value}
+        />
+        {children ? <Label htmlFor={itemId}>{children}</Label> : null}
+      </div>
+    );
+  },
+);
 
 export { CheckboxGroup, CheckboxGroupItem };

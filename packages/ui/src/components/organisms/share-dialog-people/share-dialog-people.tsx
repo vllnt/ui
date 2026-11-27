@@ -2,10 +2,11 @@
 
 import * as React from "react";
 
-import { cva } from "class-variance-authority";
 import { X } from "lucide-react";
 
+import { named } from "../../../lib/named";
 import { cn } from "../../../lib/utils";
+import { cva } from "../../../lib/variants";
 import { Avatar, AvatarFallback, AvatarImage } from "../../atoms/avatar/avatar";
 import { Button } from "../../atoms/button/button";
 import { Input } from "../../atoms/input/input";
@@ -501,70 +502,71 @@ function InviteForm({
  * access with a role menu each, and an invite form. The host wraps it in a
  * `Dialog` or `Sheet` and owns `kind`, the people and every side effect.
  */
-export const ShareDialogPeople = ({
-  className,
-  kind = "list",
-  labels: labelOverrides,
-  layout = "desktop",
-  linkUrl,
-  onClose,
-  onCopyLink,
-  onDone,
-  onInvite,
-  onKindChange,
-  onRemove,
-  onRoleChange,
-  people,
-  ref: reference,
-  roles,
-  title = "Share",
-  ...props
-}: ShareDialogPeopleProps & {
-  ref?: React.Ref<HTMLElement>;
-}): React.JSX.Element => {
-  const titleId = React.useId();
-  const labels = { ...DEFAULT_LABELS, ...labelOverrides };
+export const ShareDialogPeople = /* @__PURE__ */ named(
+  "ShareDialogPeople",
+  ({
+    className,
+    kind = "list",
+    labels: labelOverrides,
+    layout = "desktop",
+    linkUrl,
+    onClose,
+    onCopyLink,
+    onDone,
+    onInvite,
+    onKindChange,
+    onRemove,
+    onRoleChange,
+    people,
+    ref: reference,
+    roles,
+    title = "Share",
+    ...props
+  }: ShareDialogPeopleProps & {
+    ref?: React.Ref<HTMLElement>;
+  }): React.JSX.Element => {
+    const titleId = React.useId();
+    const labels = { ...DEFAULT_LABELS, ...labelOverrides };
 
-  return (
-    <section
-      {...props}
-      aria-labelledby={titleId}
-      className={cn(panelVariants({ layout }), className)}
-      data-kind={kind}
-      data-layout={layout}
-      ref={reference}
-      role="group"
-    >
-      <PanelHeader
-        labels={labels}
-        onClose={onClose}
-        title={title}
-        titleId={titleId}
-      />
-      {kind === "invite" ? (
-        <InviteForm
+    return (
+      <section
+        {...props}
+        aria-labelledby={titleId}
+        className={cn(panelVariants({ layout }), className)}
+        data-kind={kind}
+        data-layout={layout}
+        ref={reference}
+        role="group"
+      >
+        <PanelHeader
           labels={labels}
-          layout={layout}
-          onInvite={onInvite}
-          onKindChange={onKindChange}
-          roles={roles}
+          onClose={onClose}
+          title={title}
+          titleId={titleId}
         />
-      ) : (
-        <ListView
-          labels={labels}
-          layout={layout}
-          linkUrl={linkUrl}
-          onCopyLink={onCopyLink}
-          onDone={onDone}
-          onKindChange={onKindChange}
-          onRemove={onRemove}
-          onRoleChange={onRoleChange}
-          people={people}
-          roles={roles}
-        />
-      )}
-    </section>
-  );
-};
-
-ShareDialogPeople.displayName = "ShareDialogPeople";
+        {kind === "invite" ? (
+          <InviteForm
+            labels={labels}
+            layout={layout}
+            onInvite={onInvite}
+            onKindChange={onKindChange}
+            roles={roles}
+          />
+        ) : (
+          <ListView
+            labels={labels}
+            layout={layout}
+            linkUrl={linkUrl}
+            onCopyLink={onCopyLink}
+            onDone={onDone}
+            onKindChange={onKindChange}
+            onRemove={onRemove}
+            onRoleChange={onRoleChange}
+            people={people}
+            roles={roles}
+          />
+        )}
+      </section>
+    );
+  },
+);

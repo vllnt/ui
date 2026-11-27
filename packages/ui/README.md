@@ -1,6 +1,6 @@
 # @vllnt/ui
 
-React components built on Radix UI primitives, Tailwind CSS, and CVA. For humans and AI agents.
+React components built on [ui-sdk](https://ui-sdk.dev) behaviors, Tailwind CSS, and CVA. For humans and AI agents.
 
 See [CHANGELOG.md](./CHANGELOG.md) for release history and [MIGRATION.md](./MIGRATION.md) to upgrade from 0.3.0.
 
@@ -131,7 +131,7 @@ The preset configures:
 - **Animations**: `accordion-down`, `accordion-up`, `shimmer`
 - **Font**: `mono` family via `--font-mono` variable
 - **Dark mode**: class-based (`darkMode: ["class"]`)
-- **Plugin**: `tailwindcss-animate`
+- **Plugin**: an in-house animation plugin with the `tailwindcss-animate` utilities (`animate-in`, `fade-in`, `zoom-in`, `slide-in-from-*`, …), no extra package needed
 
 ### 2. Import Styles
 
@@ -190,7 +190,7 @@ A subpath is named after the component's directory (`src/components/<level>/<nam
 - Hooks, theme presets and a few helpers (for example `copyText` and `statusDotVariants`) are not in a component directory, so they are root-only: import them from `@vllnt/ui`.
 - Subpaths need `moduleResolution` set to `bundler`, `node16` or `nodenext` in TypeScript, as `@vllnt/ui/tailwind-preset` already does.
 
-Every component pays a shared base of about 20 KB minified for `cn` (`clsx` and `tailwind-merge`). `UnstyledButton`, `PlainSeparator` and `cx` skip it: they join classes with `clsx` alone, so a conflicting class does not replace another, and each stays under 1.3 KB. Most single components then add a few KB on top: `Button` is about 25 KB in total and `Dialog` about 65 KB. `UnstyledToggleGroup` imports neither `tailwind-merge` nor `class-variance-authority` but keeps Radix: about 26 KB minified against 48 KB for `ToggleGroup`. Import it from a `"use client"` module: a server component that imports `@vllnt/ui/toggle-group` also brings `ToggleGroup`. CI fails if a named import grows past its budget, or if any module grows past 320 KB up front (`pnpm -F @vllnt/ui size`).
+Every component pays a shared base of about 17 KB minified for `cn` (`tailwind-merge`, set up for the classes the kit uses, plus a small class joiner). `UnstyledButton`, `PlainSeparator` and `cx` skip it: they join classes with `cx` alone, so a conflicting class does not replace another, and each stays under 1.3 KB. Most single components then add a few KB on top: `Button` is about 20 KB in total. `UnstyledToggleGroup` imports neither `tailwind-merge` nor the variant helpers: about 41 KB minified against 59 KB for `ToggleGroup`, nearly all of it the ui-sdk core that every ui-sdk component shares. Import it from a `"use client"` module: a server component that imports `@vllnt/ui/toggle-group` also brings `ToggleGroup`. CI fails if a named import grows past its budget, or if any module grows past 320 KB up front (`pnpm -F @vllnt/ui size`).
 
 ## Theming
 
@@ -279,10 +279,10 @@ All components follow these conventions:
 
 - **`React.forwardRef`** — every component forwards refs
 - **`React.ComponentPropsWithoutRef`** — extends native HTML element props
-- **`cn()` utility** — merges Tailwind classes via `clsx` + `tailwind-merge`
-- **CVA variants** — variant props defined with `class-variance-authority`
-- **Radix primitives** — accessible behavior (focus, keyboard, ARIA) via Radix UI
-- **Slot support** — `asChild` prop via `@radix-ui/react-slot` for render delegation
+- **`cn()` utility** — joins class values and merges Tailwind classes via `tailwind-merge`
+- **CVA variants** — variant props defined with `cva` from `lib/variants`, which has the API of `class-variance-authority` without the dependency
+- **ui-sdk behaviors** — accessible behavior (focus, keyboard, ARIA) via `@ui-sdk/react` + `@ui-sdk/core`
+- **Slot support** — `asChild` prop for render delegation (a ui-sdk `render` element)
 
 ### Variant Pattern
 
@@ -328,43 +328,43 @@ import {
 | `Button` | `{ Button, buttonVariants }` | Variants: default, destructive, outline, secondary, ghost, link. Sizes: default, sm, lg, icon |
 | `Input` | `{ Input }` | Standard text input |
 | `Textarea` | `{ Textarea }` | Multi-line text input |
-| `Checkbox` | `{ Checkbox }` | Radix checkbox |
-| `RadioGroup` | `{ RadioGroup, RadioGroupItem }` | Radix radio group |
-| `Select` | `{ Select, SelectTrigger, SelectValue, SelectContent, SelectItem, ... }` | Radix select |
-| `Slider` | `{ Slider }` | Radix slider |
-| `Switch` | `{ Switch }` | Radix switch |
-| `Toggle` | `{ Toggle, toggleVariants }` | Radix toggle |
-| `ToggleGroup` | `{ ToggleGroup, ToggleGroupItem }` | Radix toggle group |
-| `InputOTP` | `{ InputOTP, InputOTPGroup, InputOTPSlot, InputOTPSeparator }` | OTP input via `input-otp` |
-| `Label` | `{ Label }` | Radix label |
-| `Calendar` | `{ Calendar }` | Date picker via `react-day-picker` |
+| `Checkbox` | `{ Checkbox }` | ui-sdk checkbox |
+| `RadioGroup` | `{ RadioGroup, RadioGroupItem }` | ui-sdk radio group |
+| `Select` | `{ Select, SelectTrigger, SelectValue, SelectContent, SelectItem, ... }` | ui-sdk select |
+| `Slider` | `{ Slider }` | ui-sdk slider |
+| `Switch` | `{ Switch }` | ui-sdk switch |
+| `Toggle` | `{ Toggle, toggleVariants }` | ui-sdk toggle |
+| `ToggleGroup` | `{ ToggleGroup, ToggleGroupItem }` | ui-sdk toggle group |
+| `InputOTP` | `{ InputOTP, InputOTPGroup, InputOTPSlot, InputOTPSeparator }` | ui-sdk OTP input |
+| `Label` | `{ Label }` | ui-sdk label |
+| `Calendar` | `{ Calendar }` | Date picker via ui-sdk |
 
 ### Layout
 
 | Component | Import | Notes |
 |-----------|--------|-------|
 | `Card` | `{ Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter }` | Content container |
-| `AspectRatio` | `{ AspectRatio }` | Radix aspect ratio |
-| `ScrollArea` | `{ ScrollArea, ScrollBar }` | Radix scroll area |
-| `Separator` | `{ Separator }` | Radix separator |
-| `ResizablePanel` | `{ ResizablePanel, ResizablePanelGroup, ResizableHandle }` | Via `react-resizable-panels` |
-| `Collapsible` | `{ Collapsible, CollapsibleTrigger, CollapsibleContent }` | Radix collapsible |
-| `Carousel` | `{ Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext }` | Via `embla-carousel-react` |
-| `Tabs` | `{ Tabs, TabsList, TabsTrigger, TabsContent }` | Tabbed content |
-| `Accordion` | `{ Accordion, AccordionItem, AccordionTrigger, AccordionContent }` | Collapsible sections |
+| `AspectRatio` | `{ AspectRatio }` | CSS `aspect-ratio` box |
+| `ScrollArea` | `{ ScrollArea, ScrollBar }` | ui-sdk scroll area |
+| `Separator` | `{ Separator }` | `div` line; `role="separator"` when not decorative |
+| `ResizablePanel` | `{ ResizablePanel, ResizablePanelGroup, ResizableHandle }` | Via ui-sdk |
+| `Collapsible` | `{ Collapsible, CollapsibleTrigger, CollapsibleContent }` | ui-sdk collapsible |
+| `Carousel` | `{ Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext }` | ui-sdk carousel |
+| `Tabs` | `{ Tabs, TabsList, TabsTrigger, TabsContent }` | ui-sdk tabs |
+| `Accordion` | `{ Accordion, AccordionItem, AccordionTrigger, AccordionContent }` | ui-sdk accordion |
 
 ### Feedback & Overlays
 
 | Component | Import | Notes |
 |-----------|--------|-------|
-| `Dialog` | `{ Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogClose }` | Radix modal dialog |
+| `Dialog` | `{ Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogClose }` | ui-sdk modal dialog |
 | `AlertDialog` | `{ AlertDialog, AlertDialogTrigger, AlertDialogContent, AlertDialogHeader, AlertDialogTitle, AlertDialogDescription, AlertDialogFooter, AlertDialogAction, AlertDialogCancel }` | Confirmation dialog |
 | `Sheet` | `{ Sheet, SheetTrigger, SheetContent, SheetHeader, SheetTitle, SheetDescription, SheetFooter, SheetClose }` | Slide-out panel |
-| `Drawer` | `{ Drawer, DrawerTrigger, DrawerContent, DrawerHeader, DrawerTitle, DrawerDescription, DrawerFooter, DrawerClose }` | Bottom drawer via `vaul` |
-| `Popover` | `{ Popover, PopoverTrigger, PopoverContent }` | Radix popover |
-| `Tooltip` | `{ Tooltip, TooltipTrigger, TooltipContent, TooltipProvider }` | Radix tooltip (wrap app in `TooltipProvider`) |
-| `HoverCard` | `{ HoverCard, HoverCardTrigger, HoverCardContent }` | Radix hover card |
-| `Toast` | `{ toast, Toaster }` | Toast notifications via `sonner`. Add `<Toaster />` to layout, trigger with `toast()` |
+| `Drawer` | `{ Drawer, DrawerTrigger, DrawerContent, DrawerHeader, DrawerTitle, DrawerDescription, DrawerFooter, DrawerClose }` | Bottom drawer via ui-sdk drawer |
+| `Popover` | `{ Popover, PopoverTrigger, PopoverContent }` | ui-sdk popover |
+| `Tooltip` | `{ Tooltip, TooltipTrigger, TooltipContent, TooltipProvider }` | ui-sdk tooltip (wrap app in `TooltipProvider`) |
+| `HoverCard` | `{ HoverCard, HoverCardTrigger, HoverCardContent }` | ui-sdk hover card |
+| `Toast` | `{ toast, Toaster }` | Toast notifications via ui-sdk toast. Add `<Toaster />` to layout, trigger with `toast()` |
 | `Alert` | `{ Alert, AlertTitle, AlertDescription, alertVariants }` | Static alert banner |
 | `Badge` | `{ Badge, badgeVariants }` | Inline status label. Variants: default, secondary, destructive, outline |
 | `Skeleton` | `{ Skeleton }` | Loading placeholder |
@@ -374,11 +374,11 @@ import {
 
 | Component | Import | Notes |
 |-----------|--------|-------|
-| `Command` | `{ Command, CommandInput, CommandList, CommandEmpty, CommandGroup, CommandItem, CommandSeparator }` | Command palette via `cmdk` |
-| `DropdownMenu` | `{ DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, ... }` | Radix dropdown |
-| `ContextMenu` | `{ ContextMenu, ContextMenuTrigger, ContextMenuContent, ContextMenuItem, ... }` | Radix right-click menu |
-| `Menubar` | `{ Menubar, MenubarMenu, MenubarTrigger, MenubarContent, MenubarItem, ... }` | Radix menu bar |
-| `NavigationMenu` | `{ NavigationMenu, NavigationMenuList, NavigationMenuItem, NavigationMenuTrigger, NavigationMenuContent, NavigationMenuLink }` | Radix nav menu |
+| `Command` | `{ Command, CommandInput, CommandList, CommandEmpty, CommandGroup, CommandItem, CommandSeparator }` | Command palette via ui-sdk command |
+| `DropdownMenu` | `{ DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, ... }` | ui-sdk dropdown |
+| `ContextMenu` | `{ ContextMenu, ContextMenuTrigger, ContextMenuContent, ContextMenuItem, ... }` | ui-sdk right-click menu |
+| `Menubar` | `{ Menubar, MenubarMenu, MenubarTrigger, MenubarContent, MenubarItem, ... }` | ui-sdk menu bar |
+| `NavigationMenu` | `{ NavigationMenu, NavigationMenuList, NavigationMenuItem, NavigationMenuTrigger, NavigationMenuContent, NavigationMenuLink }` | ui-sdk nav menu |
 | `Breadcrumb` | `{ Breadcrumb }` | Breadcrumb navigation |
 | `Pagination` | `{ Pagination }` | Page navigation |
 
@@ -387,7 +387,7 @@ import {
 | Component | Import | Notes |
 |-----------|--------|-------|
 | `Table` | `{ Table, TableHeader, TableBody, TableRow, TableHead, TableCell, TableCaption, TableFooter }` | Data table (use with `@tanstack/react-table` for sorting/filtering) |
-| `Avatar` | `{ Avatar, AvatarImage, AvatarFallback }` | Radix avatar |
+| `Avatar` | `{ Avatar, AvatarImage, AvatarFallback }` | ui-sdk avatar |
 | `AreaChart` | `{ AreaChart }` | Chart component |
 | `BarChart` | `{ BarChart }` | Chart component |
 | `LineChart` | `{ LineChart }` | Chart component |
@@ -499,7 +499,7 @@ import {
 | `PasswordInput` | `{ PasswordInput }` | Input w/ show-password toggle |
 | `InlineInput` | `{ InlineInput }` | Click-to-edit inline input |
 | `Combobox` | `{ Combobox }` | Typeahead select |
-| `Rating` | `{ Rating }` | Star rating input |
+| `Rating` | `{ Rating }` | Star rating input (ui-sdk rating) |
 
 ### Data & Metrics
 
@@ -535,7 +535,7 @@ import {
 ```tsx
 import { cn } from "@vllnt/ui";
 
-// Merge Tailwind classes (clsx + tailwind-merge)
+// Merge Tailwind classes
 <div className={cn("p-4 bg-primary", isActive && "bg-accent", className)} />
 ```
 

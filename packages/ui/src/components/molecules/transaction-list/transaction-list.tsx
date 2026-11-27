@@ -1,5 +1,6 @@
 import type { ComponentPropsWithoutRef, ReactNode } from "react";
 
+import { named } from "../../../lib/named";
 import { cn } from "../../../lib/utils";
 import { Badge, type BadgeProps } from "../../atoms/badge/badge";
 
@@ -204,11 +205,6 @@ export type TransactionListProps = {
   transactions: Transaction[];
 } & ComponentPropsWithoutRef<"div">;
 
-type TransactionListComponent = typeof TransactionListBase & {
-  Pinned: typeof TransactionListPinned;
-  SubscriptionRow: typeof TransactionListSubscriptionRow;
-};
-
 const TransactionListBase = ({
   ref,
   ...props
@@ -256,7 +252,6 @@ const TransactionListBase = ({
     </div>
   );
 };
-TransactionListBase.displayName = "TransactionList";
 
 /**
  * Props for {@link TransactionListPinned}.
@@ -271,17 +266,19 @@ export type TransactionListPinnedProps = ComponentPropsWithoutRef<"div">;
  *
  * @public
  */
-export const TransactionListPinned = ({
-  children,
-  className,
-  ref,
-  ...rest
-}: TransactionListPinnedProps & { ref?: React.Ref<HTMLDivElement> }) => (
-  <div className={cn("flex flex-col gap-1.5", className)} ref={ref} {...rest}>
-    {children}
-  </div>
+export const TransactionListPinned = /* @__PURE__ */ named(
+  "TransactionList.Pinned",
+  ({
+    children,
+    className,
+    ref,
+    ...rest
+  }: TransactionListPinnedProps & { ref?: React.Ref<HTMLDivElement> }) => (
+    <div className={cn("flex flex-col gap-1.5", className)} ref={ref} {...rest}>
+      {children}
+    </div>
+  ),
 );
-TransactionListPinned.displayName = "TransactionList.Pinned";
 
 type TransactionListItemProps = {
   currency?: string;
@@ -392,60 +389,65 @@ function SubscriptionMeta({
  *
  * @public
  */
-export const TransactionListSubscriptionRow = ({
-  ref,
-  ...props
-}: TransactionListSubscriptionRowProps & {
-  ref?: React.Ref<HTMLDivElement>;
-}) => {
-  const {
-    amountCents,
-    className,
-    currency,
-    interval,
-    labels,
-    locale,
-    meta,
-    plan,
-    renewsAt,
-    status,
-    ...rest
-  } = props;
-  const resolvedLabels = { ...DEFAULT_LABELS, ...labels };
-  const formatted = formatTransactionAmount(amountCents, { currency, locale });
-  const intervalSuffix = INTERVAL_LABEL[interval];
+export const TransactionListSubscriptionRow = /* @__PURE__ */ named(
+  "TransactionList.SubscriptionRow",
+  ({
+    ref,
+    ...props
+  }: TransactionListSubscriptionRowProps & {
+    ref?: React.Ref<HTMLDivElement>;
+  }) => {
+    const {
+      amountCents,
+      className,
+      currency,
+      interval,
+      labels,
+      locale,
+      meta,
+      plan,
+      renewsAt,
+      status,
+      ...rest
+    } = props;
+    const resolvedLabels = { ...DEFAULT_LABELS, ...labels };
+    const formatted = formatTransactionAmount(amountCents, {
+      currency,
+      locale,
+    });
+    const intervalSuffix = INTERVAL_LABEL[interval];
 
-  return (
-    <div
-      className={cn(
-        "flex items-start justify-between gap-3 rounded-lg border border-border bg-muted/20 px-3 py-2",
-        className,
-      )}
-      data-status={status}
-      ref={ref}
-      {...rest}
-    >
-      <div className="flex min-w-0 flex-col gap-1">
-        <div className="flex flex-wrap items-center gap-2">
-          <p className="text-sm font-semibold text-foreground">{plan}</p>
-          <Badge dot tone={STATUS_TONE[status]}>
-            {resolvedLabels[STATUS_LABEL_KEY[status]]}
-          </Badge>
+    return (
+      <div
+        className={cn(
+          "flex items-start justify-between gap-3 rounded-lg border border-border bg-muted/20 px-3 py-2",
+          className,
+        )}
+        data-status={status}
+        ref={ref}
+        {...rest}
+      >
+        <div className="flex min-w-0 flex-col gap-1">
+          <div className="flex flex-wrap items-center gap-2">
+            <p className="text-sm font-semibold text-foreground">{plan}</p>
+            <Badge dot tone={STATUS_TONE[status]}>
+              {resolvedLabels[STATUS_LABEL_KEY[status]]}
+            </Badge>
+          </div>
+          <SubscriptionMeta
+            locale={locale}
+            meta={meta}
+            renewsAt={renewsAt}
+            renewsLabel={resolvedLabels.renews}
+          />
         </div>
-        <SubscriptionMeta
-          locale={locale}
-          meta={meta}
-          renewsAt={renewsAt}
-          renewsLabel={resolvedLabels.renews}
-        />
+        <span className="shrink-0 font-mono text-sm font-semibold text-foreground">
+          {formatted}/{intervalSuffix}
+        </span>
       </div>
-      <span className="shrink-0 font-mono text-sm font-semibold text-foreground">
-        {formatted}/{intervalSuffix}
-      </span>
-    </div>
-  );
-};
-TransactionListSubscriptionRow.displayName = "TransactionList.SubscriptionRow";
+    );
+  },
+);
 
 /**
  * Chronological list of financial transactions with credit/debit color
@@ -474,6 +476,11 @@ TransactionListSubscriptionRow.displayName = "TransactionList.SubscriptionRow";
  *
  * @public
  */
-export const TransactionList = TransactionListBase as TransactionListComponent;
-TransactionList.Pinned = TransactionListPinned;
-TransactionList.SubscriptionRow = TransactionListSubscriptionRow;
+export const TransactionList = /* @__PURE__ */ named(
+  "TransactionList",
+  TransactionListBase,
+  () => ({
+    Pinned: TransactionListPinned,
+    SubscriptionRow: TransactionListSubscriptionRow,
+  }),
+);

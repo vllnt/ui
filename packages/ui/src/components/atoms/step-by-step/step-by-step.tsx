@@ -4,6 +4,7 @@ import { Children, isValidElement, useState } from "react";
 
 import type { ReactElement, ReactNode } from "react";
 
+import { named } from "../../../lib/named";
 import type { HeadingTag } from "../../../lib/types";
 import { cn } from "../../../lib/utils";
 
@@ -167,9 +168,10 @@ export type StepByStepProps = {
   title?: string;
 };
 
-// Object.assign (not `StepByStep.Step = Step`) keeps the emitted d.ts free of
-// a namespace member that shadows `Step` (TS2502 under skipLibCheck: false).
-const StepByStep = Object.assign(
+// `named` with `{ Step }` (not `StepByStep.Step = Step`) keeps the emitted d.ts
+// free of a namespace member that shadows `Step` (TS2502 under skipLibCheck: false).
+const StepByStep = /* @__PURE__ */ named(
+  "StepByStep",
   function StepByStep({
     as: Heading = "h3",
     children,
@@ -233,7 +235,7 @@ const StepByStep = Object.assign(
       </div>
     );
   },
-  { Step },
+  () => ({ Step }),
 );
 
 export { Step, StepByStep };

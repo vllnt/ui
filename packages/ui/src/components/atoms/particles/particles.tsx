@@ -2,6 +2,7 @@
 
 import * as React from "react";
 
+import { named } from "../../../lib/named";
 import { cn } from "../../../lib/utils";
 
 /** Props for {@link Particles}. */
@@ -38,39 +39,41 @@ function createParticles(count: number): Particle[] {
  * <Particles count={40} />
  * ```
  */
-export const Particles = ({
-  className,
-  count = 30,
-  ref,
-  ...props
-}: ParticlesProps & { ref?: React.Ref<HTMLDivElement> }) => {
-  const [particles] = React.useState(() => createParticles(count));
+export const Particles = /* @__PURE__ */ named(
+  "Particles",
+  ({
+    className,
+    count = 30,
+    ref,
+    ...props
+  }: ParticlesProps & { ref?: React.Ref<HTMLDivElement> }) => {
+    const [particles] = React.useState(() => createParticles(count));
 
-  return (
-    <div
-      aria-hidden="true"
-      className={cn(
-        "pointer-events-none absolute inset-0 overflow-hidden",
-        className,
-      )}
-      ref={ref}
-      {...props}
-    >
-      {particles.map((particle, index) => (
-        <span
-          className="absolute rounded-full bg-foreground/30 [animation-name:vllnt-particle-float] [animation-iteration-count:infinite] [animation-timing-function:linear] motion-reduce:animate-none"
-          key={index}
-          style={{
-            animationDelay: `${particle.delay}s`,
-            animationDuration: `${particle.duration}s`,
-            height: `${particle.size}px`,
-            left: `${particle.left}%`,
-            top: `${particle.top}%`,
-            width: `${particle.size}px`,
-          }}
-        />
-      ))}
-    </div>
-  );
-};
-Particles.displayName = "Particles";
+    return (
+      <div
+        aria-hidden="true"
+        className={cn(
+          "pointer-events-none absolute inset-0 overflow-hidden",
+          className,
+        )}
+        ref={ref}
+        {...props}
+      >
+        {particles.map((particle, index) => (
+          <span
+            className="absolute rounded-full bg-foreground/30 [animation-name:vllnt-particle-float] [animation-iteration-count:infinite] [animation-timing-function:linear] motion-reduce:animate-none"
+            key={index}
+            style={{
+              animationDelay: `${particle.delay}s`,
+              animationDuration: `${particle.duration}s`,
+              height: `${particle.size}px`,
+              left: `${particle.left}%`,
+              top: `${particle.top}%`,
+              width: `${particle.size}px`,
+            }}
+          />
+        ))}
+      </div>
+    );
+  },
+);

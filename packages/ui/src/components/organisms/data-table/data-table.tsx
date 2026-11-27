@@ -22,13 +22,7 @@ import { cn } from "../../../lib/utils";
 import { Button } from "../../atoms/button/button";
 import { Checkbox } from "../../atoms/checkbox/checkbox";
 import { Input } from "../../atoms/input/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../../atoms/select/select";
+import { NativeSelect } from "../../atoms/native-select/native-select";
 import {
   Table,
   TableBody,
@@ -203,32 +197,26 @@ function DataTableComponent<TData extends RowData>({
                   typeof value === "string" && value ? value : "all";
 
                 return column ? (
-                  <Select
+                  <NativeSelect
+                    aria-label={filter.ariaLabel ?? `Filter by ${filter.label}`}
                     key={filter.columnId}
-                    onValueChange={(nextValue) => {
+                    onChange={(event) => {
                       column.setFilterValue(
-                        nextValue === "all" ? undefined : nextValue,
+                        event.target.value === "all"
+                          ? undefined
+                          : event.target.value,
                       );
                     }}
+                    rootClassName="w-[180px]"
                     value={selectValue}
                   >
-                    <SelectTrigger
-                      aria-label={
-                        filter.ariaLabel ?? `Filter by ${filter.label}`
-                      }
-                      className="w-[180px]"
-                    >
-                      <SelectValue placeholder={filter.label} />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="all">All {filter.label}</SelectItem>
-                      {filter.options.map((option) => (
-                        <SelectItem key={option.value} value={option.value}>
-                          {option.label}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                    <option value="all">All {filter.label}</option>
+                    {filter.options.map((option) => (
+                      <option key={option.value} value={option.value}>
+                        {option.label}
+                      </option>
+                    ))}
+                  </NativeSelect>
                 ) : null;
               })}
             </div>

@@ -11,6 +11,7 @@ import {
   useState,
 } from "react";
 
+import { named } from "../../../lib/named";
 import { cn } from "../../../lib/utils";
 
 const MIN_ZOOM = 0.25;
@@ -161,25 +162,27 @@ function useViewerState(
  *
  * @public
  */
-export const PrimarySourceToolbar = ({
-  children,
-  className,
-  ref,
-  ...rest
-}: ComponentPropsWithoutRef<"div"> & { ref?: React.Ref<HTMLDivElement> }) => (
-  <div
-    className={cn(
-      "flex flex-wrap items-center gap-2 border-b border-border bg-muted/40 px-4 py-2",
-      className,
-    )}
-    ref={ref}
-    role="toolbar"
-    {...rest}
-  >
-    {children}
-  </div>
+export const PrimarySourceToolbar = /* @__PURE__ */ named(
+  "PrimarySourceToolbar",
+  ({
+    children,
+    className,
+    ref,
+    ...rest
+  }: ComponentPropsWithoutRef<"div"> & { ref?: React.Ref<HTMLDivElement> }) => (
+    <div
+      className={cn(
+        "flex flex-wrap items-center gap-2 border-b border-border bg-muted/40 px-4 py-2",
+        className,
+      )}
+      ref={ref}
+      role="toolbar"
+      {...rest}
+    >
+      {children}
+    </div>
+  ),
 );
-PrimarySourceToolbar.displayName = "PrimarySourceToolbar";
 
 type ToolbarButtonProps = {
   ariaLabel: string;
@@ -187,104 +190,112 @@ type ToolbarButtonProps = {
   onActivate: () => void;
 } & Omit<ComponentPropsWithoutRef<"button">, "aria-label" | "onClick" | "type">;
 
-const ToolbarButton = ({
-  ariaLabel,
-  className,
-  glyph,
-  onActivate,
-  ref,
-  ...rest
-}: ToolbarButtonProps & { ref?: React.Ref<HTMLButtonElement> }) => (
-  <button
-    aria-label={ariaLabel}
-    className={cn(
-      "inline-flex h-8 min-w-8 items-center justify-center rounded-md border border-border bg-background px-2 text-sm font-medium hover:bg-accent focus:outline-none focus-visible:ring-2 focus-visible:ring-ring",
-      className,
-    )}
-    onClick={onActivate}
-    ref={ref}
-    type="button"
-    {...rest}
-  >
-    {glyph}
-  </button>
+const ToolbarButton = /* @__PURE__ */ named(
+  "ToolbarButton",
+  ({
+    ariaLabel,
+    className,
+    glyph,
+    onActivate,
+    ref,
+    ...rest
+  }: ToolbarButtonProps & { ref?: React.Ref<HTMLButtonElement> }) => (
+    <button
+      aria-label={ariaLabel}
+      className={cn(
+        "inline-flex h-8 min-w-8 items-center justify-center rounded-md border border-border bg-background px-2 text-sm font-medium hover:bg-accent focus:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+        className,
+      )}
+      onClick={onActivate}
+      ref={ref}
+      type="button"
+      {...rest}
+    >
+      {glyph}
+    </button>
+  ),
 );
-ToolbarButton.displayName = "ToolbarButton";
 
 /**
  * Zoom-in button.
  *
  * @public
  */
-export const PrimarySourceZoomIn = ({
-  ref,
-  ...rest
-}: Omit<
-  ComponentPropsWithoutRef<"button">,
-  "aria-label" | "onClick" | "type"
-> & { ref?: React.Ref<HTMLButtonElement> }) => {
-  const { labels, zoomIn } = useViewerContext();
-  return (
-    <ToolbarButton
-      ariaLabel={labels.zoomIn}
-      glyph="+"
-      onActivate={zoomIn}
-      ref={ref}
-      {...rest}
-    />
-  );
-};
-PrimarySourceZoomIn.displayName = "PrimarySourceZoomIn";
+export const PrimarySourceZoomIn = /* @__PURE__ */ named(
+  "PrimarySourceZoomIn",
+  ({
+    ref,
+    ...rest
+  }: Omit<
+    ComponentPropsWithoutRef<"button">,
+    "aria-label" | "onClick" | "type"
+  > & { ref?: React.Ref<HTMLButtonElement> }) => {
+    const { labels, zoomIn } = useViewerContext();
+    return (
+      <ToolbarButton
+        ariaLabel={labels.zoomIn}
+        glyph="+"
+        onActivate={zoomIn}
+        ref={ref}
+        {...rest}
+      />
+    );
+  },
+);
 
 /**
  * Zoom-out button.
  *
  * @public
  */
-export const PrimarySourceZoomOut = ({
-  ref,
-  ...rest
-}: Omit<
-  ComponentPropsWithoutRef<"button">,
-  "aria-label" | "onClick" | "type"
-> & { ref?: React.Ref<HTMLButtonElement> }) => {
-  const { labels, zoomOut } = useViewerContext();
-  return (
-    <ToolbarButton
-      ariaLabel={labels.zoomOut}
-      glyph="−"
-      onActivate={zoomOut}
-      ref={ref}
-      {...rest}
-    />
-  );
-};
-PrimarySourceZoomOut.displayName = "PrimarySourceZoomOut";
+export const PrimarySourceZoomOut = /* @__PURE__ */ named(
+  "PrimarySourceZoomOut",
+  ({
+    ref,
+    ...rest
+  }: Omit<
+    ComponentPropsWithoutRef<"button">,
+    "aria-label" | "onClick" | "type"
+  > & { ref?: React.Ref<HTMLButtonElement> }) => {
+    const { labels, zoomOut } = useViewerContext();
+    return (
+      <ToolbarButton
+        ariaLabel={labels.zoomOut}
+        glyph="−"
+        onActivate={zoomOut}
+        ref={ref}
+        {...rest}
+      />
+    );
+  },
+);
 
 /**
  * Rotate-90-degrees button.
  *
  * @public
  */
-export const PrimarySourceRotate = ({
-  ref,
-  ...rest
-}: Omit<
-  ComponentPropsWithoutRef<"button">,
-  "aria-label" | "onClick" | "type"
-> & { ref?: React.Ref<HTMLButtonElement> }) => {
-  const { labels, rotate } = useViewerContext();
-  return (
-    <ToolbarButton
-      ariaLabel={labels.rotate}
-      glyph="⟳"
-      onActivate={rotate}
-      ref={ref}
-      {...rest}
-    />
-  );
-};
-PrimarySourceRotate.displayName = "PrimarySourceRotate";
+export const PrimarySourceRotate = /* @__PURE__ */ named(
+  "PrimarySourceRotate",
+  ({
+    ref,
+    ...rest
+  }: Omit<
+    ComponentPropsWithoutRef<"button">,
+    "aria-label" | "onClick" | "type"
+  > & { ref?: React.Ref<HTMLButtonElement> }) => {
+    const { labels, rotate } = useViewerContext();
+    return (
+      <ToolbarButton
+        ariaLabel={labels.rotate}
+        glyph="⟳"
+        onActivate={rotate}
+        ref={ref}
+        {...rest}
+      />
+    );
+  },
+);
 
 /**
  * Region in the source image, expressed as percentages of width / height.
@@ -325,22 +336,24 @@ export type PrimarySourceAnnotationProps = {
  *
  * @public
  */
-export const PrimarySourceAnnotations = ({
-  children,
-  className,
-  ref,
-  ...rest
-}: ComponentPropsWithoutRef<"div"> & { ref?: React.Ref<HTMLDivElement> }) => (
-  <div
-    aria-label="Annotations"
-    className={cn("pointer-events-none absolute inset-0 z-10", className)}
-    ref={ref}
-    {...rest}
-  >
-    {children}
-  </div>
+export const PrimarySourceAnnotations = /* @__PURE__ */ named(
+  "PrimarySourceAnnotations",
+  ({
+    children,
+    className,
+    ref,
+    ...rest
+  }: ComponentPropsWithoutRef<"div"> & { ref?: React.Ref<HTMLDivElement> }) => (
+    <div
+      aria-label="Annotations"
+      className={cn("pointer-events-none absolute inset-0 z-10", className)}
+      ref={ref}
+      {...rest}
+    >
+      {children}
+    </div>
+  ),
 );
-PrimarySourceAnnotations.displayName = "PrimarySourceAnnotations";
 
 type AnnotationTooltipProps = {
   category?: ReactNode;
@@ -382,107 +395,115 @@ function AnnotationTooltip({
  *
  * @public
  */
-export const PrimarySourceAnnotation = ({
-  ref,
-  ...props
-}: PrimarySourceAnnotationProps & { ref?: React.Ref<HTMLButtonElement> }) => {
-  const {
-    category,
-    className,
-    color = "amber",
-    id,
-    note,
-    region,
-    ...rest
-  } = props;
-  const generatedId = useId();
-  const annotationId = id ?? generatedId;
-  const palette = ANNOTATION_PALETTE[color];
-  const tooltipId = `${annotationId}-tooltip`;
-  const noteText = typeof note === "string" ? note : "Annotation";
-  return (
-    <button
-      aria-describedby={tooltipId}
-      aria-label={noteText}
-      className={cn(
-        "group pointer-events-auto absolute rounded-md border-2 outline-none transition-colors hover:bg-foreground/10 focus-visible:bg-foreground/10",
-        palette.border,
-        palette.fill,
-        className,
-      )}
-      data-annotation-id={annotationId}
-      ref={ref}
-      style={{
-        height: `${region.height.toString()}%`,
-        left: `${region.x.toString()}%`,
-        top: `${region.y.toString()}%`,
-        width: `${region.width.toString()}%`,
-      }}
-      type="button"
-      {...rest}
-    >
-      <AnnotationTooltip
-        category={category}
-        color={color}
-        note={note}
-        tooltipId={tooltipId}
-      />
-    </button>
-  );
-};
-PrimarySourceAnnotation.displayName = "PrimarySourceAnnotation";
+export const PrimarySourceAnnotation = /* @__PURE__ */ named(
+  "PrimarySourceAnnotation",
+  ({
+    ref,
+    ...props
+  }: PrimarySourceAnnotationProps & { ref?: React.Ref<HTMLButtonElement> }) => {
+    const {
+      category,
+      className,
+      color = "amber",
+      id,
+      note,
+      region,
+      ...rest
+    } = props;
+    const generatedId = useId();
+    const annotationId = id ?? generatedId;
+    const palette = ANNOTATION_PALETTE[color];
+    const tooltipId = `${annotationId}-tooltip`;
+    const noteText = typeof note === "string" ? note : "Annotation";
+    return (
+      <button
+        aria-describedby={tooltipId}
+        aria-label={noteText}
+        className={cn(
+          "group pointer-events-auto absolute rounded-md border-2 outline-none transition-colors hover:bg-foreground/10 focus-visible:bg-foreground/10",
+          palette.border,
+          palette.fill,
+          className,
+        )}
+        data-annotation-id={annotationId}
+        ref={ref}
+        style={{
+          height: `${region.height.toString()}%`,
+          left: `${region.x.toString()}%`,
+          top: `${region.y.toString()}%`,
+          width: `${region.width.toString()}%`,
+        }}
+        type="button"
+        {...rest}
+      >
+        <AnnotationTooltip
+          category={category}
+          color={color}
+          note={note}
+          tooltipId={tooltipId}
+        />
+      </button>
+    );
+  },
+);
 
 /**
  * Side panel for transcription text.
  *
  * @public
  */
-export const PrimarySourceTranscription = ({
-  children,
-  className,
-  ref,
-  ...rest
-}: ComponentPropsWithoutRef<"aside"> & { ref?: React.Ref<HTMLDivElement> }) => (
-  <section
-    aria-label="Transcription"
-    className={cn(
-      "flex h-full flex-col gap-2 border-l border-border bg-background p-4 text-sm leading-relaxed",
-      className,
-    )}
-    ref={ref}
-    {...rest}
-  >
-    <h3 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-      Transcription
-    </h3>
-    <div className="space-y-2 text-foreground">{children}</div>
-  </section>
+export const PrimarySourceTranscription = /* @__PURE__ */ named(
+  "PrimarySourceTranscription",
+  ({
+    children,
+    className,
+    ref,
+    ...rest
+  }: ComponentPropsWithoutRef<"aside"> & {
+    ref?: React.Ref<HTMLDivElement>;
+  }) => (
+    <section
+      aria-label="Transcription"
+      className={cn(
+        "flex h-full flex-col gap-2 border-l border-border bg-background p-4 text-sm leading-relaxed",
+        className,
+      )}
+      ref={ref}
+      {...rest}
+    >
+      <h3 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+        Transcription
+      </h3>
+      <div className="space-y-2 text-foreground">{children}</div>
+    </section>
+  ),
 );
-PrimarySourceTranscription.displayName = "PrimarySourceTranscription";
 
 /**
  * Wrapper for metadata + discussion-questions slots beneath the viewer.
  *
  * @public
  */
-export const PrimarySourceContext = ({
-  children,
-  className,
-  ref,
-  ...rest
-}: ComponentPropsWithoutRef<"footer"> & { ref?: React.Ref<HTMLElement> }) => (
-  <footer
-    className={cn(
-      "grid gap-6 border-t border-border bg-muted/30 p-4 md:grid-cols-2",
-      className,
-    )}
-    ref={ref}
-    {...rest}
-  >
-    {children}
-  </footer>
+export const PrimarySourceContext = /* @__PURE__ */ named(
+  "PrimarySourceContext",
+  ({
+    children,
+    className,
+    ref,
+    ...rest
+  }: ComponentPropsWithoutRef<"footer"> & { ref?: React.Ref<HTMLElement> }) => (
+    <footer
+      className={cn(
+        "grid gap-6 border-t border-border bg-muted/30 p-4 md:grid-cols-2",
+        className,
+      )}
+      ref={ref}
+      {...rest}
+    >
+      {children}
+    </footer>
+  ),
 );
-PrimarySourceContext.displayName = "PrimarySourceContext";
 
 /**
  * Metadata block. Wrap any markup; pair `<dt>` and `<dd>` for traditional
@@ -490,50 +511,56 @@ PrimarySourceContext.displayName = "PrimarySourceContext";
  *
  * @public
  */
-export const PrimarySourceMetadata = ({
-  children,
-  className,
-  ref,
-  ...rest
-}: ComponentPropsWithoutRef<"dl"> & { ref?: React.Ref<HTMLDListElement> }) => (
-  <dl
-    aria-label="Metadata"
-    className={cn(
-      "grid grid-cols-[max-content_1fr] gap-x-4 gap-y-1 text-sm",
-      className,
-    )}
-    ref={ref}
-    {...rest}
-  >
-    {children}
-  </dl>
+export const PrimarySourceMetadata = /* @__PURE__ */ named(
+  "PrimarySourceMetadata",
+  ({
+    children,
+    className,
+    ref,
+    ...rest
+  }: ComponentPropsWithoutRef<"dl"> & {
+    ref?: React.Ref<HTMLDListElement>;
+  }) => (
+    <dl
+      aria-label="Metadata"
+      className={cn(
+        "grid grid-cols-[max-content_1fr] gap-x-4 gap-y-1 text-sm",
+        className,
+      )}
+      ref={ref}
+      {...rest}
+    >
+      {children}
+    </dl>
+  ),
 );
-PrimarySourceMetadata.displayName = "PrimarySourceMetadata";
 
 /**
  * Discussion-questions block.
  *
  * @public
  */
-export const PrimarySourceQuestions = ({
-  children,
-  className,
-  ref,
-  ...rest
-}: ComponentPropsWithoutRef<"div"> & { ref?: React.Ref<HTMLDivElement> }) => (
-  <div
-    aria-label="Discussion questions"
-    className={cn("space-y-2 text-sm", className)}
-    ref={ref}
-    {...rest}
-  >
-    <h3 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-      Discussion questions
-    </h3>
-    <div className="space-y-1 text-foreground">{children}</div>
-  </div>
+export const PrimarySourceQuestions = /* @__PURE__ */ named(
+  "PrimarySourceQuestions",
+  ({
+    children,
+    className,
+    ref,
+    ...rest
+  }: ComponentPropsWithoutRef<"div"> & { ref?: React.Ref<HTMLDivElement> }) => (
+    <div
+      aria-label="Discussion questions"
+      className={cn("space-y-2 text-sm", className)}
+      ref={ref}
+      {...rest}
+    >
+      <h3 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+        Discussion questions
+      </h3>
+      <div className="space-y-1 text-foreground">{children}</div>
+    </div>
+  ),
 );
-PrimarySourceQuestions.displayName = "PrimarySourceQuestions";
 
 type ChildBuckets = {
   annotations: ReactNode;
@@ -664,63 +691,65 @@ export type PrimarySourceViewerProps = {
  *
  * @public
  */
-export const PrimarySourceViewer = ({
-  ref,
-  ...props
-}: PrimarySourceViewerProps & { ref?: React.Ref<HTMLElement> }) => {
-  const {
-    children,
-    className,
-    labels,
-    origin,
-    period,
-    source,
-    title,
-    ...rest
-  } = props;
-  const titleId = useId();
+export const PrimarySourceViewer = /* @__PURE__ */ named(
+  "PrimarySourceViewer",
+  ({
+    ref,
+    ...props
+  }: PrimarySourceViewerProps & { ref?: React.Ref<HTMLElement> }) => {
+    const {
+      children,
+      className,
+      labels,
+      origin,
+      period,
+      source,
+      title,
+      ...rest
+    } = props;
+    const titleId = useId();
 
-  const resolvedLabels = useMemo(
-    () => ({ ...DEFAULT_LABELS, ...labels }),
-    [labels],
-  );
+    const resolvedLabels = useMemo(
+      () => ({ ...DEFAULT_LABELS, ...labels }),
+      [labels],
+    );
 
-  const ctx = useViewerState(resolvedLabels);
-  const buckets = useMemo(() => bucketChildren(children), [children]);
+    const ctx = useViewerState(resolvedLabels);
+    const buckets = useMemo(() => bucketChildren(children), [children]);
 
-  return (
-    <ViewerContext.Provider value={ctx}>
-      <section
-        aria-labelledby={titleId}
-        className={cn(
-          "flex w-full flex-col overflow-hidden rounded-2xl border bg-background text-foreground",
-          className,
-        )}
-        ref={ref}
-        {...rest}
-      >
-        <header className="flex flex-col gap-1 border-b border-border px-4 py-3">
-          <h2 className="text-lg font-semibold tracking-tight" id={titleId}>
-            {title}
-          </h2>
-          {period || origin ? (
-            <p className="text-xs uppercase tracking-wide text-muted-foreground">
-              {period}
-              {period && origin ? " · " : null}
-              {origin}
-            </p>
-          ) : null}
-        </header>
-        {buckets.toolbar}
-        <div className="grid gap-0 md:grid-cols-[2fr_1fr]">
-          <div className="relative h-[420px] md:h-[520px]">
-            <Stage annotations={buckets.annotations} source={source} />
+    return (
+      <ViewerContext.Provider value={ctx}>
+        <section
+          aria-labelledby={titleId}
+          className={cn(
+            "flex w-full flex-col overflow-hidden rounded-2xl border bg-background text-foreground",
+            className,
+          )}
+          ref={ref}
+          {...rest}
+        >
+          <header className="flex flex-col gap-1 border-b border-border px-4 py-3">
+            <h2 className="text-lg font-semibold tracking-tight" id={titleId}>
+              {title}
+            </h2>
+            {period || origin ? (
+              <p className="text-xs uppercase tracking-wide text-muted-foreground">
+                {period}
+                {period && origin ? " · " : null}
+                {origin}
+              </p>
+            ) : null}
+          </header>
+          {buckets.toolbar}
+          <div className="grid gap-0 md:grid-cols-[2fr_1fr]">
+            <div className="relative h-[420px] md:h-[520px]">
+              <Stage annotations={buckets.annotations} source={source} />
+            </div>
+            {buckets.transcription}
           </div>
-          {buckets.transcription}
-        </div>
-        {buckets.context}
-      </section>
-    </ViewerContext.Provider>
-  );
-};
-PrimarySourceViewer.displayName = "PrimarySourceViewer";
+          {buckets.context}
+        </section>
+      </ViewerContext.Provider>
+    );
+  },
+);

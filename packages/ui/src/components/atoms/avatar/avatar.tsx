@@ -1,11 +1,18 @@
 "use client";
 
-import { createContext, use } from "react";
+import { createContext, use, useEffect, useMemo, useState } from "react";
 
-import * as AvatarPrimitive from "@radix-ui/react-avatar";
-import { cva, type VariantProps } from "class-variance-authority";
+import {
+  Avatar as AvatarPrimitive,
+  AvatarFallback as AvatarFallbackPrimitive,
+  AvatarImage as AvatarImagePrimitive,
+  type AvatarLoadingStatus,
+} from "@ui-sdk/react/avatar";
+import type * as React from "react";
 
+import { named } from "../../../lib/named";
 import { cn } from "../../../lib/utils";
+import { cva, type VariantProps } from "../../../lib/variants";
 
 const avatarSizeVariants = cva("relative flex shrink-0", {
   defaultVariants: {
@@ -90,9 +97,11 @@ export type AvatarPresence = NonNullable<
  *
  * @public
  */
-export type AvatarProps = React.ComponentPropsWithoutRef<
-  typeof AvatarPrimitive.Root
+export type AvatarProps = Omit<
+  React.ComponentProps<typeof AvatarPrimitive>,
+  "children" | "onLoadingStatusChange"
 > & {
+  children?: React.ReactNode;
   /** Status marker drawn at the bottom-right. Omit it for no marker. */
   presence?: AvatarPresence;
   /** Visually hidden status words. Defaults to `Online`, `Away` and `Busy`. */
@@ -109,7 +118,20 @@ const DEFAULT_PRESENCE_LABELS = {
   online: "Online",
 } as const satisfies Record<AvatarPresence, string>;
 
-const AvatarShapeContext = createContext<AvatarShape>("circle");
+type StatusHandler = ((status: AvatarLoadingStatus) => void) | undefined;
+
+type AvatarContextValue = {
+  /** Hands the image's `onLoadingStatusChange` to the root, where ui-sdk takes it. */
+  setStatusHandler: (handler: StatusHandler) => void;
+  shape: AvatarShape;
+};
+
+const AvatarContext = createContext<AvatarContextValue>({
+  setStatusHandler: () => {
+    // No avatar around: nothing listens.
+  },
+  shape: "circle",
+});
 
 const AvatarPresenceMarker = ({
   label,
@@ -148,43 +170,53 @@ const AvatarPresenceMarker = ({
  *
  * @public
  */
-const Avatar = ({
-  children,
-  className,
-  presence,
-  presenceLabels,
-  ref,
-  shape = "circle",
-  size = "md",
-  ...props
-}: AvatarProps & {
-  ref?: React.Ref<React.ComponentRef<typeof AvatarPrimitive.Root>>;
-}) => (
-  <AvatarShapeContext value={shape}>
-    <AvatarPrimitive.Root
-      className={cn(
-        avatarSizeVariants({ size }),
-        avatarShapeVariants({ shape }),
-        presence === undefined && "overflow-hidden",
-        className,
-      )}
-      ref={ref}
-      {...props}
-    >
-      {children}
-      {presence === undefined ? null : (
-        <AvatarPresenceMarker
-          label={
-            presenceLabels?.[presence] ?? DEFAULT_PRESENCE_LABELS[presence]
-          }
-          presence={presence}
-          size={size}
-        />
-      )}
-    </AvatarPrimitive.Root>
-  </AvatarShapeContext>
+const Avatar = /* @__PURE__ */ named(
+  "Avatar",
+  ({
+    children,
+    className,
+    presence,
+    presenceLabels,
+    ref,
+    shape = "circle",
+    size = "md",
+    ...props
+  }: AvatarProps & {
+    ref?: React.Ref<HTMLSpanElement>;
+  }) => {
+    const [statusHandler, setStatusHandler] = useState<StatusHandler>();
+    const context = useMemo(() => ({ setStatusHandler, shape }), [shape]);
+
+    return (
+      <AvatarContext value={context}>
+        <AvatarPrimitive
+          className={cn(
+            avatarSizeVariants({ size }),
+            avatarShapeVariants({ shape }),
+            presence === undefined && "overflow-hidden",
+            className,
+          )}
+          onLoadingStatusChange={(status) => {
+            statusHandler?.(status);
+          }}
+          ref={ref}
+          {...props}
+        >
+          {children}
+          {presence === undefined ? null : (
+            <AvatarPresenceMarker
+              label={
+                presenceLabels?.[presence] ?? DEFAULT_PRESENCE_LABELS[presence]
+              }
+              presence={presence}
+              size={size}
+            />
+          )}
+        </AvatarPrimitive>
+      </AvatarContext>
+    );
+  },
 );
-Avatar.displayName = AvatarPrimitive.Root.displayName;
 
 /**
  * Picture shown inside an {@link Avatar}. It renders once the image has loaded
@@ -192,28 +224,41 @@ Avatar.displayName = AvatarPrimitive.Root.displayName;
  *
  * @public
  */
-const AvatarImage = ({
-  className,
-  ref,
-  ...props
-}: React.ComponentPropsWithoutRef<typeof AvatarPrimitive.Image> & {
-  ref?: React.Ref<React.ComponentRef<typeof AvatarPrimitive.Image>>;
-}) => {
-  const shape = use(AvatarShapeContext);
+const AvatarImage = /* @__PURE__ */ named(
+  "AvatarImage",
+  ({
+    className,
+    onLoadingStatusChange,
+    ref,
+    ...props
+  }: Omit<React.ComponentProps<typeof AvatarImagePrimitive>, "render"> & {
+    /** Runs when the image starts loading, loads or fails. */
+    onLoadingStatusChange?: (status: AvatarLoadingStatus) => void;
+    ref?: React.Ref<HTMLImageElement>;
+  }) => {
+    const { setStatusHandler, shape } = use(AvatarContext);
 
-  return (
-    <AvatarPrimitive.Image
-      className={cn(
-        "aspect-square h-full w-full",
-        avatarShapeVariants({ shape }),
-        className,
-      )}
-      ref={ref}
-      {...props}
-    />
-  );
-};
-AvatarImage.displayName = AvatarPrimitive.Image.displayName;
+    useEffect(() => {
+      // Wrap the function, or React calls it as an updater.
+      setStatusHandler(() => onLoadingStatusChange);
+      return () => {
+        setStatusHandler(undefined);
+      };
+    }, [setStatusHandler, onLoadingStatusChange]);
+
+    return (
+      <AvatarImagePrimitive
+        className={cn(
+          "aspect-square h-full w-full",
+          avatarShapeVariants({ shape }),
+          className,
+        )}
+        ref={ref}
+        {...props}
+      />
+    );
+  },
+);
 
 /**
  * Content shown inside an {@link Avatar} while the image is missing or
@@ -222,27 +267,34 @@ AvatarImage.displayName = AvatarPrimitive.Image.displayName;
  *
  * @public
  */
-const AvatarFallback = ({
-  className,
-  ref,
-  ...props
-}: React.ComponentPropsWithoutRef<typeof AvatarPrimitive.Fallback> & {
-  ref?: React.Ref<React.ComponentRef<typeof AvatarPrimitive.Fallback>>;
-}) => {
-  const shape = use(AvatarShapeContext);
+const AvatarFallback = /* @__PURE__ */ named(
+  "AvatarFallback",
+  ({
+    className,
+    delay,
+    delayMs,
+    ref,
+    ...props
+  }: Omit<React.ComponentProps<typeof AvatarFallbackPrimitive>, "render"> & {
+    /** Milliseconds to wait before showing the fallback. Same as `delay`. */
+    delayMs?: number;
+    ref?: React.Ref<HTMLSpanElement>;
+  }) => {
+    const { shape } = use(AvatarContext);
 
-  return (
-    <AvatarPrimitive.Fallback
-      className={cn(
-        "flex h-full w-full items-center justify-center bg-secondary",
-        avatarShapeVariants({ shape }),
-        className,
-      )}
-      ref={ref}
-      {...props}
-    />
-  );
-};
-AvatarFallback.displayName = AvatarPrimitive.Fallback.displayName;
+    return (
+      <AvatarFallbackPrimitive
+        className={cn(
+          "flex h-full w-full items-center justify-center bg-secondary",
+          avatarShapeVariants({ shape }),
+          className,
+        )}
+        delay={delayMs ?? delay}
+        ref={ref}
+        {...props}
+      />
+    );
+  },
+);
 
 export { Avatar, AvatarFallback, AvatarImage };

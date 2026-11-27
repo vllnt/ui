@@ -2,7 +2,9 @@
 
 import * as React from "react";
 
+import { named } from "../../../lib/named";
 import { keyByOccurrence } from "../../../lib/occurrence-keys";
+import { useControllableState } from "../../../lib/use-controllable-state";
 import { cn } from "../../../lib/utils";
 import { Button } from "../../atoms/button/button";
 import { Input } from "../../atoms/input/input";
@@ -89,77 +91,74 @@ export type ColorPickerProps = {
   value?: string;
 };
 
-const ColorPicker = ({
-  className,
-  defaultValue = "#3b82f6",
-  onValueChange,
-  popoverLabel = "Choose colour",
-  ref,
-  swatches = presetSwatches,
-  value,
-}: ColorPickerProps & { ref?: React.Ref<HTMLButtonElement> }) => {
-  const [internalValue, setInternalValue] = React.useState(defaultValue);
-  const currentValue = value ?? internalValue;
+const ColorPicker = /* @__PURE__ */ named(
+  "ColorPicker",
+  ({
+    className,
+    defaultValue = "#3b82f6",
+    onValueChange,
+    popoverLabel = "Choose colour",
+    ref,
+    swatches = presetSwatches,
+    value,
+  }: ColorPickerProps & { ref?: React.Ref<HTMLButtonElement> }) => {
+    const [currentValue, update] = useControllableState({
+      defaultValue,
+      onChange: onValueChange,
+      value,
+    });
 
-  const update = (next: string) => {
-    if (value === undefined) {
-      setInternalValue(next);
-    }
-
-    onValueChange?.(next);
-  };
-
-  return (
-    <Popover>
-      <PopoverTrigger asChild>
-        <Button
-          className={cn("w-full justify-start gap-2 font-normal", className)}
-          ref={ref}
-          variant="outline"
+    return (
+      <Popover>
+        <PopoverTrigger asChild>
+          <Button
+            className={cn("w-full justify-start gap-2 font-normal", className)}
+            ref={ref}
+            variant="outline"
+          >
+            <span
+              aria-hidden
+              className="size-4 rounded-sm border"
+              style={{ backgroundColor: currentValue }}
+            />
+            <span className="uppercase tabular-nums">{currentValue}</span>
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent
+          align="start"
+          aria-label={popoverLabel}
+          className="w-56 space-y-3"
         >
-          <span
-            aria-hidden
-            className="size-4 rounded-sm border"
-            style={{ backgroundColor: currentValue }}
+          <SwatchGrid
+            onSelect={update}
+            selected={currentValue}
+            swatches={swatches}
           />
-          <span className="uppercase tabular-nums">{currentValue}</span>
-        </Button>
-      </PopoverTrigger>
-      <PopoverContent
-        align="start"
-        aria-label={popoverLabel}
-        className="w-56 space-y-3"
-      >
-        <SwatchGrid
-          onSelect={update}
-          selected={currentValue}
-          swatches={swatches}
-        />
-        <input
-          aria-label="Hue"
-          className="h-3 w-full cursor-pointer appearance-none rounded-full"
-          max={360}
-          min={0}
-          onChange={(event) => {
-            update(hueToHex(Number(event.target.value)));
-          }}
-          style={{
-            background:
-              "linear-gradient(to right, #f00 0%, #ff0 17%, #0f0 33%, #0ff 50%, #00f 67%, #f0f 83%, #f00 100%)",
-          }}
-          type="range"
-        />
-        <Input
-          aria-label="Hex value"
-          onChange={(event) => {
-            update(event.target.value);
-          }}
-          value={currentValue}
-        />
-      </PopoverContent>
-    </Popover>
-  );
-};
-ColorPicker.displayName = "ColorPicker";
+          <input
+            aria-label="Hue"
+            className="h-3 w-full cursor-pointer appearance-none rounded-full"
+            max={360}
+            min={0}
+            onChange={(event) => {
+              update(hueToHex(Number(event.target.value)));
+            }}
+            style={{
+              background:
+                "linear-gradient(to right, #f00 0%, #ff0 17%, #0f0 33%, #0ff 50%, #00f 67%, #f0f 83%, #f00 100%)",
+            }}
+            type="range"
+          />
+          <Input
+            aria-label="Hex value"
+            onChange={(event) => {
+              update(event.target.value);
+            }}
+            value={currentValue}
+          />
+        </PopoverContent>
+      </Popover>
+    );
+  },
+);
 
 export { ColorPicker };

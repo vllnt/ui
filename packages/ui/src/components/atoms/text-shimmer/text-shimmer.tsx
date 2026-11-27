@@ -1,5 +1,6 @@
 import * as React from "react";
 
+import { named } from "../../../lib/named";
 import { cn } from "../../../lib/utils";
 
 /** Props for {@link TextShimmer}. */
@@ -20,32 +21,34 @@ export type TextShimmerProps = React.ComponentPropsWithoutRef<"span"> & {
  * <TextShimmer>Premium</TextShimmer>
  * ```
  */
-export const TextShimmer = ({
-  children,
-  className,
-  duration = 2,
-  ref,
-  style,
-  ...props
-}: TextShimmerProps & { ref?: React.Ref<HTMLSpanElement> }) => {
-  return (
-    <span
-      className={cn(
-        "inline-block animate-[vllnt-text-shimmer_linear_infinite] bg-clip-text text-transparent motion-reduce:animate-none",
-        className,
-      )}
-      ref={ref}
-      style={{
-        animationDuration: `${duration}s`,
-        background:
-          "linear-gradient(90deg, oklch(var(--muted-foreground) / 0.5), oklch(var(--foreground)), oklch(var(--muted-foreground) / 0.5))",
-        backgroundSize: "200% auto",
-        ...style,
-      }}
-      {...props}
-    >
-      {children}
-    </span>
-  );
-};
-TextShimmer.displayName = "TextShimmer";
+export const TextShimmer = /* @__PURE__ */ named(
+  "TextShimmer",
+  ({
+    children,
+    className,
+    duration = 2,
+    ref,
+    style,
+    ...props
+  }: TextShimmerProps & { ref?: React.Ref<HTMLSpanElement> }) => {
+    return (
+      <span
+        className={cn(
+          "inline-block animate-[vllnt-text-shimmer_linear_infinite] bg-clip-text text-transparent motion-reduce:animate-none",
+          className,
+        )}
+        ref={ref}
+        style={{
+          animationDuration: `${duration}s`,
+          background:
+            "linear-gradient(90deg, oklch(var(--muted-foreground) / 0.5), oklch(var(--foreground)), oklch(var(--muted-foreground) / 0.5))",
+          backgroundSize: "200% auto",
+          ...style,
+        }}
+        {...props}
+      >
+        {children}
+      </span>
+    );
+  },
+);

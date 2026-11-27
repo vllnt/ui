@@ -1,19 +1,23 @@
 import { render, screen } from "@testing-library/react";
-import type * as QrModule from "qrcode";
+import { create } from "qrcode";
 import { renderToString } from "react-dom/server";
 import { describe, expect, it, vi } from "vitest";
+
+import type * as EncoderModule from "../../../lib/qr-encoder";
 
 import { QrCode } from "./qr-code";
 
 const encoder = vi.hoisted(() => ({ calls: 0 }));
 
-vi.mock("qrcode", async (importOriginal) => {
-  const actual = await importOriginal<typeof QrModule>();
+vi.mock("../../../lib/qr-encoder", async (importOriginal) => {
+  const actual = await importOriginal<typeof EncoderModule>();
   return {
     ...actual,
-    create: (...arguments_: Parameters<typeof actual.create>) => {
+    encodeQrMatrix: (
+      ...arguments_: Parameters<typeof actual.encodeQrMatrix>
+    ) => {
       encoder.calls += 1;
-      return actual.create(...arguments_);
+      return actual.encodeQrMatrix(...arguments_);
     },
   };
 });
@@ -53,6 +57,15 @@ describe("QrCode", () => {
     const { container: short } = render(<QrCode value="hi" />);
     const { container: long } = render(<QrCode value={"x".repeat(120)} />);
     expect(sizeOf(long)).toBeGreaterThan(sizeOf(short));
+  });
+
+  it("draws the dark modules the qrcode package finds for the value", () => {
+    const value = "https://vllnt.com/qr?level=H";
+    const { container } = render(<QrCode level="H" value={value} />);
+    const { modules } = create(value, { errorCorrectionLevel: "H" });
+    const darkModules = modules.data.reduce((sum, module) => sum + module, 0);
+    expect(pathOf(container)?.match(/M/g)).toHaveLength(darkModules);
+    expect(sizeOf(container)).toBe(modules.size + 8);
   });
 
   it("renders an empty path for an empty value without throwing", () => {

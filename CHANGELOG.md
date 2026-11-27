@@ -31,6 +31,11 @@ Release automation can regenerate this file from Conventional Commits with
 
 ### Changed
 
+- **`@vllnt/ui` is built on ui-sdk** - Radix, cmdk and vaul are replaced by
+  Vercel's ui-sdk (`0.1.0-beta.7`) under the same exports, props and
+  Radix-compatible DOM (`data-state`, `--radix-*` variables). Popups render in
+  the browser top layer, and the ui-sdk compat helpers are public. See
+  `packages/ui/CHANGELOG.md` and `packages/ui/MIGRATION.md`.
 - **Glass is the default material** - bars, panels, menus, popovers, dialogs,
   sheets, docks and map overlays draw a frosted surface (tint, sheen, 20 px
   blur, edge, two-layer shadow) instead of an opaque one. Pass

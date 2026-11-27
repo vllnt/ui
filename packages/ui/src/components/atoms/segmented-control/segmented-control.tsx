@@ -1,11 +1,17 @@
 "use client";
 
-import * as React from "react";
+import { renderElement } from "@ui-sdk/react/primitive";
+import {
+  SegmentedControl as SegmentedControlPrimitive,
+  SegmentedControlItem as SegmentedControlItemPrimitive,
+  type SegmentedControlItemState,
+} from "@ui-sdk/react/segmented-control";
+import type * as React from "react";
 
-import * as ToggleGroupPrimitive from "@radix-ui/react-toggle-group";
-import { cva, type VariantProps } from "class-variance-authority";
-
+import { named } from "../../../lib/named";
+import { asChildProps } from "../../../lib/ui-sdk";
 import { cn } from "../../../lib/utils";
+import { cva, type VariantProps } from "../../../lib/variants";
 
 const segmentedControlVariants = cva(
   "inline-flex items-center rounded-lg p-1 text-muted-foreground",
@@ -34,7 +40,7 @@ const segmentedControlVariants = cva(
 );
 
 const segmentedControlItemVariants = cva(
-  "inline-flex flex-1 items-center justify-center rounded-md px-3 text-sm font-medium whitespace-nowrap transition-all motion-reduce:transition-none outline-none ring-offset-background focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=on]:bg-background data-[state=on]:text-foreground data-[state=on]:shadow-sm",
+  "inline-flex flex-1 items-center justify-center rounded-md px-3 text-sm font-medium whitespace-nowrap transition-all motion-reduce:transition-none outline-none ring-offset-background focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=on]:bg-background data-[state=on]:text-foreground data-[state=on]:shadow-sm forced-colors:data-[state=on]:bg-[color:Highlight] forced-colors:data-[state=on]:text-[color:HighlightText]",
   {
     defaultVariants: {
       size: "default",
@@ -50,8 +56,8 @@ const segmentedControlItemVariants = cva(
 );
 
 export type SegmentedControlProps = Omit<
-  React.ComponentPropsWithoutRef<typeof ToggleGroupPrimitive.Root>,
-  "defaultValue" | "onValueChange" | "type" | "value"
+  React.ComponentProps<typeof SegmentedControlPrimitive>,
+  "defaultValue" | "onValueChange" | "render" | "value"
 > &
   VariantProps<typeof segmentedControlVariants> & {
     defaultValue?: string;
@@ -59,10 +65,38 @@ export type SegmentedControlProps = Omit<
     value?: string;
   };
 
-export type SegmentedControlItemProps = React.ComponentPropsWithoutRef<
-  typeof ToggleGroupPrimitive.Item
+export type SegmentedControlItemProps = Omit<
+  React.ComponentProps<typeof SegmentedControlItemPrimitive>,
+  "render"
 > &
-  VariantProps<typeof segmentedControlItemVariants>;
+  VariantProps<typeof segmentedControlItemVariants> & {
+    asChild?: boolean;
+  };
+
+/**
+ * Keys ui-sdk leaves out: Enter selects the focused segment instead of
+ * submitting a form, and Home and End select the first and last enabled one.
+ */
+function selectOnKey(event: React.KeyboardEvent<HTMLDivElement>): void {
+  // ui-sdk always cancels Enter, so the other keys alone honour a cancel.
+  if (event.defaultPrevented && event.key !== "Enter") {
+    return;
+  }
+  const items = [
+    ...event.currentTarget.querySelectorAll<HTMLElement>(
+      '[role="radio"]:not(:disabled)',
+    ),
+  ];
+  const target =
+    event.key === "Enter"
+      ? items.find((item) => item === event.target)
+      : { End: items.at(-1), Home: items.at(0) }[event.key];
+  if (target) {
+    event.preventDefault();
+    target.focus();
+    target.click();
+  }
+}
 
 /**
  * Single-choice segmented selector.
@@ -77,40 +111,76 @@ export type SegmentedControlItemProps = React.ComponentPropsWithoutRef<
  *   <SegmentedControlItem value="list">List</SegmentedControlItem>
  * </SegmentedControl>
  */
-const SegmentedControl = ({
-  className,
-  fit,
-  ref,
-  size,
-  variant,
-  ...props
-}: SegmentedControlProps & {
-  ref?: React.Ref<React.ComponentRef<typeof ToggleGroupPrimitive.Root>>;
-}) => (
-  <ToggleGroupPrimitive.Root
-    className={cn(segmentedControlVariants({ fit, size, variant }), className)}
-    ref={ref}
-    type="single"
-    {...props}
-  />
+const SegmentedControl = /* @__PURE__ */ named(
+  "SegmentedControl",
+  ({
+    className,
+    fit,
+    onKeyDown,
+    onValueChange,
+    ref,
+    size,
+    variant,
+    ...props
+  }: SegmentedControlProps & { ref?: React.Ref<HTMLDivElement> }) => (
+    <SegmentedControlPrimitive
+      className={cn(
+        segmentedControlVariants({ fit, size, variant }),
+        className,
+      )}
+      onKeyDown={(event) => {
+        onKeyDown?.(event);
+        selectOnKey(event);
+      }}
+      onValueChange={(value) => {
+        onValueChange?.(value ?? "");
+      }}
+      ref={ref}
+      {...props}
+    />
+  ),
 );
-SegmentedControl.displayName = "SegmentedControl";
 
-const SegmentedControlItem = ({
-  className,
-  ref,
-  size,
-  ...props
-}: SegmentedControlItemProps & {
-  ref?: React.Ref<React.ComponentRef<typeof ToggleGroupPrimitive.Item>>;
-}) => (
-  <ToggleGroupPrimitive.Item
-    className={cn(segmentedControlItemVariants({ size }), className)}
-    ref={ref}
-    {...props}
-  />
+const SegmentedControlItem = /* @__PURE__ */ named(
+  "SegmentedControlItem",
+  ({
+    asChild,
+    children,
+    className,
+    ref,
+    size,
+    ...props
+  }: SegmentedControlItemProps & { ref?: React.Ref<HTMLButtonElement> }) => {
+    const slot = asChildProps({ asChild, children });
+    // ui-sdk marks an item of a disabled control with aria-disabled alone; the
+    // styles and Radix both use the native attribute, so add it.
+    const render = (
+      elementProps: React.HTMLAttributes<HTMLElement>,
+      state: SegmentedControlItemState,
+    ) =>
+      renderElement(
+        "button",
+        {
+          ...elementProps,
+          "data-state": state.checked ? "on" : "off",
+          ...(state.disabled ? { disabled: true } : {}),
+        },
+        slot.render,
+        state,
+      );
+
+    return (
+      <SegmentedControlItemPrimitive
+        className={cn(segmentedControlItemVariants({ size }), className)}
+        ref={ref}
+        render={render}
+        {...props}
+      >
+        {slot.children}
+      </SegmentedControlItemPrimitive>
+    );
+  },
 );
-SegmentedControlItem.displayName = "SegmentedControlItem";
 
 export {
   SegmentedControl,

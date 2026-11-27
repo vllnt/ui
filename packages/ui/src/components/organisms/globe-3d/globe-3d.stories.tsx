@@ -16,6 +16,8 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
+  // Rotates on its own; Static covers the same globe in the visual diff.
+  tags: ["visual-skip"],
   render: (args) => (
     <Globe3D {...args}>
       <GlobeMarker color="blue" id="paris" label="Paris" lat={48.85} lng={2.35} />

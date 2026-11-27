@@ -2,6 +2,7 @@
 
 import type { ComponentPropsWithoutRef, ReactNode } from "react";
 
+import { named } from "../../../lib/named";
 import { statusDotVariants, type StatusTone } from "../../../lib/status-dot";
 import { cn } from "../../../lib/utils";
 
@@ -171,45 +172,53 @@ const Row = (props: { assignment: RoutingAssignment }): React.ReactElement => {
  *
  * @public
  */
-export const RoutingAssignmentPanel = ({
-  ref,
-  ...props
-}: RoutingAssignmentPanelProps & { ref?: React.Ref<HTMLElement> }) => {
-  const { assignments, className, labels, title = "Routing", ...rest } = props;
-  const resolvedLabels = { ...DEFAULT_LABELS, ...labels };
-  return (
-    <section
-      aria-label={resolvedLabels.region}
-      className={cn(
-        "flex w-full flex-col gap-2 rounded-lg border bg-background p-3 text-foreground",
-        className,
-      )}
-      data-routing-assignment-panel
-      ref={ref}
-      {...rest}
-    >
-      <header>
-        <h3 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-          {title}
-        </h3>
-      </header>
-      {assignments.length === 0 ? (
-        <p
-          className="px-2 py-3 text-center text-xs text-muted-foreground"
-          data-routing-state="empty"
-        >
-          {resolvedLabels.empty}
-        </p>
-      ) : (
-        <ul className="space-y-0.5">
-          {assignments.map((assignment) => (
-            <li key={assignment.id}>
-              <Row assignment={assignment} />
-            </li>
-          ))}
-        </ul>
-      )}
-    </section>
-  );
-};
-RoutingAssignmentPanel.displayName = "RoutingAssignmentPanel";
+export const RoutingAssignmentPanel = /* @__PURE__ */ named(
+  "RoutingAssignmentPanel",
+  ({
+    ref,
+    ...props
+  }: RoutingAssignmentPanelProps & { ref?: React.Ref<HTMLElement> }) => {
+    const {
+      assignments,
+      className,
+      labels,
+      title = "Routing",
+      ...rest
+    } = props;
+    const resolvedLabels = { ...DEFAULT_LABELS, ...labels };
+    return (
+      <section
+        aria-label={resolvedLabels.region}
+        className={cn(
+          "flex w-full flex-col gap-2 rounded-lg border bg-background p-3 text-foreground",
+          className,
+        )}
+        data-routing-assignment-panel
+        ref={ref}
+        {...rest}
+      >
+        <header>
+          <h3 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+            {title}
+          </h3>
+        </header>
+        {assignments.length === 0 ? (
+          <p
+            className="px-2 py-3 text-center text-xs text-muted-foreground"
+            data-routing-state="empty"
+          >
+            {resolvedLabels.empty}
+          </p>
+        ) : (
+          <ul className="space-y-0.5">
+            {assignments.map((assignment) => (
+              <li key={assignment.id}>
+                <Row assignment={assignment} />
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
+    );
+  },
+);
