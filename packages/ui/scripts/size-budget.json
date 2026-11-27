@@ -7,47 +7,47 @@
     }
   },
   "checks": [
-    { "name": "Button", "export": "Button", "maxBytes": 23500 },
-    { "name": "Badge", "export": "Badge", "maxBytes": 23700 },
-    { "name": "Card", "export": "Card", "maxBytes": 23200 },
-    { "name": "Dialog", "export": "Dialog", "maxBytes": 112000 },
-    { "name": "DataTable", "export": "DataTable", "maxBytes": 231000 },
+    { "name": "Button", "export": "Button", "maxBytes": 19900 },
+    { "name": "Badge", "export": "Badge", "maxBytes": 19700 },
+    { "name": "Card", "export": "Card", "maxBytes": 17200 },
+    { "name": "Dialog", "export": "Dialog", "maxBytes": 84200 },
+    { "name": "DataTable", "export": "DataTable", "maxBytes": 127600 },
     {
       "name": "CodeBlock (up front)",
       "export": "CodeBlock",
-      "maxBytes": 37200
+      "maxBytes": 31500
     },
     {
       "name": "CodeBlock (with lazy highlighter)",
       "export": "CodeBlock",
       "withLazy": true,
-      "maxBytes": 119000
+      "maxBytes": 115300
     },
     {
       "name": "TutorialMDX (up front)",
       "export": "TutorialMDX",
-      "maxBytes": 252300
+      "maxBytes": 138400
     },
     {
       "name": "StaticCode (up front)",
       "export": "StaticCode",
-      "maxBytes": 124800
+      "maxBytes": 120800
     },
     {
       "name": "MDXContent (up front)",
       "export": "MDXContent",
-      "maxBytes": 631300
+      "maxBytes": 281900
     },
     {
       "name": "FlowDiagram (up front)",
       "export": "FlowDiagram",
-      "maxBytes": 230100
+      "maxBytes": 23900
     },
-    { "name": "cn", "export": "cn", "maxBytes": 22300 },
+    { "name": "cn", "export": "cn", "maxBytes": 16900 },
     {
       "name": "* (every export, up front)",
       "export": "*",
-      "maxBytes": 2363600
+      "maxBytes": 1884800
     }
   ]
 }
