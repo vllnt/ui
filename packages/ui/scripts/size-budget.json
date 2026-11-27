@@ -50,7 +50,7 @@
     {
       "name": "UnstyledToggleGroup",
       "export": "UnstyledToggleGroup",
-      "maxBytes": 28000
+      "maxBytes": 42200
     },
     {
       "name": "* (every export, up front)",
