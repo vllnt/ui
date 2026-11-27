@@ -147,6 +147,8 @@ a component's `className` with conditional classes (last class wins on conflict)
 `PlainSeparator` use it, so they add no `tailwind-merge` of their own.
 `UnstyledToggleGroup` and `UnstyledToggleGroupItem` (`@vllnt/ui/toggle-group`)
 are `ToggleGroup` with no classes, `tailwind-merge` or `class-variance-authority`.
+Import them from a `"use client"` module: a server-component import of
+`@vllnt/ui/toggle-group` also brings `ToggleGroup`.
 
 ### Theming / dark mode
 
