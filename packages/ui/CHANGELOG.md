@@ -45,7 +45,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
   focus, arrow keys, Home and End, radio items when `type="single"`, pressed
   buttons otherwise) and no classes of their own; `className` reaches the element
   as given. Neither imports `tailwind-merge` nor `class-variance-authority`: about
-  9 KB gzip against 16 KB for `ToggleGroup`. `ToggleGroup` stays the same.
+  9 KB gzip against 16 KB for `ToggleGroup`. Import them from a `"use client"`
+  module; a server-component import of the subpath also brings `ToggleGroup`.
+  `ToggleGroup` stays the same.
 - **`Text` `dt`, `dd`, `li` and `measure`** - `as` takes `dt`, `dd` and `li`;
   `measure="prose" | "narrow"` caps the width with `size.measure-prose` (720 px,
   new) or `size.measure-narrow` (480 px).
