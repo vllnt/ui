@@ -1,0 +1,66 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './site-header-static.stories'
+
+<Meta of={Stories} />
+
+# SiteHeaderStatic
+
+The header of a site that runs no JavaScript. It is a server component with no state, effect, router hook or event handler. The title (with a `network`) and the menu are buttons that open native popovers, and CSS shows each link at its width, so the page needs no script and no hydration.
+
+It takes the same props as `SiteHeader` (`brand` is required here too), except `close` in `labels`, `onClick` on the language link, and the `actions` slot, none of which a server component can use. It adds `status`, a node that sits beside the brand.
+
+<Primary />
+
+## Installation
+
+`SiteHeaderStatic` shares internal modules with `SiteHeader`, so it is not a single-file registry item. Install the package and import it: `pnpm add @vllnt/ui`.
+
+## Import
+
+```tsx
+import { SiteHeaderStatic } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<SiteHeaderStatic
+  brand="Acme Docs"
+  currentHref="/guides"
+  homeHref="/"
+  items={[{ bar: 'tablet', href: '/guides', label: 'Guides' }]}
+  labels={{ home: 'Acme home', menu: 'Menu', open: 'Open menu', primary: 'Primary' }}
+/>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+Pair it with `SiteShellStatic`. Use `SiteHeader` wherever the page can hydrate.
+
+## API Reference
+
+<Controls />
+
+`currentHref` is the path of the page in the same form as the hrefs. Without it no link is current, since a server component cannot read the browser path.
+
+## States
+
+### Without a network
+
+The title is a link home, named by `labels.home`.
+
+<Canvas of={Stories.WithoutNetwork} sourceState="shown" />
+
+### With a status chip
+
+`status` sits beside the brand, outside the home link, so the name of the link does not hide its text.
+
+<Canvas of={Stories.WithStatus} sourceState="shown" />
+
+## Accessibility
+
+- The browser does what script does in `SiteHeader`: Esc and a press outside close a list, Esc hands focus back to its button, opening one list closes the other, and the button exposes the open state. The buttons carry no `aria-expanded`: the browser reports it.
+- An open list hides while a key has put focus outside the header, so it never covers the element that has focus.
+- Following a link to the same page (`#anchor`) leaves a list open, and focus is not held inside it: Tab leaves.
+- A browser without the Popover API shows both lists in full under the bar and hides the menu button.
+- The header is flat: a hairline under the bar, no shadow and no blur.

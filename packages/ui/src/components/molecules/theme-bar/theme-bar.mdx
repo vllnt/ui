@@ -1,0 +1,50 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './theme-bar.stories'
+
+<Meta of={Stories} />
+
+# ThemeBar
+
+The theme control of a site: a caption and a segmented control with light, dark and system. It reads and sets the theme through `next-themes`, so it needs a theme provider above it (`SiteFrame` has one). It sits in a page column.
+
+<Primary />
+
+## Installation
+
+Add it with the shadcn CLI from the component registry: the registry page of this component lists the command (`r/theme-bar.json`).
+
+## Import
+
+```tsx
+import { ThemeBar } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<ThemeBar
+  label="Theme"
+  options={{ dark: 'Dark', light: 'Light', system: 'System' }}
+/>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## States
+
+### Other language
+
+The component holds no text. `label` and `options` come from your messages.
+
+<Canvas of={Stories.OtherLanguage} sourceState="shown" />
+
+## Accessibility
+
+- The caption names the control (`aria-labelledby`), and the choices are radios of one radio group. Arrow keys, Home and End move between them.
+- The stored theme is unknown on the server, so the control renders unset and inert (`aria-hidden`, `inert`) until mount. It has the same box then, so nothing shifts.
+- Items are 36 px high with a fine pointer and keep the 44 px target with a coarse one.
+- The chosen item has a hairline border, not a shadow.

@@ -1,0 +1,45 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './site-shell-static.stories'
+
+<Meta of={Stories} />
+
+# SiteShellStatic
+
+The shell of a site that hydrates no part of the shell: the theme provider, the skip link, the header, the page and the footer, in the order of `SiteShell`. It has no settings, because a setting is a control that needs script, so the site follows the system.
+
+It lives in its own module and never imports the theme control, so a page that renders it ships none of the control's code. Pair it with `SiteHeaderStatic`.
+
+<Primary />
+
+## Installation
+
+`SiteShellStatic` pairs with `SiteHeaderStatic`, which is a package export. Install the package and import them: `pnpm add @vllnt/ui`.
+
+## Import
+
+```tsx
+import { SiteFooter, SiteHeaderStatic, SiteShellStatic } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<SiteShellStatic
+  footer={<SiteFooter {...footer} />}
+  header={<SiteHeaderStatic {...header} />}
+  skipLabel="Skip to content"
+>
+  {children}
+</SiteShellStatic>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Accessibility
+
+- Same landmarks as `SiteShell`: one skip link first, one `main#main`, the footer outside it.
+- The theme provider puts the `dark` or `light` class on `<html>` with its one inline script, before the first paint. It leaves `color-scheme` to the stylesheet of the app, which follows the system as it changes.

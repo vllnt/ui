@@ -1,0 +1,106 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './site-header.stories'
+
+<Meta of={Stories} />
+
+# SiteHeader
+
+The header of a site that hydrates: a bar across the page with a title, links, an optional language link and button, and a menu below 1200 px. It holds no brand, link or copy of its own; the page gives them all.
+
+With a `network`, **the title is the site switcher**: one button that shows your brand and a chevron, and opens the list of sites (the current site first, linked home, then the others). Without a `network` the title is a plain link home.
+
+<Primary />
+
+## Installation
+
+`SiteHeader` and `SiteHeaderStatic` share internal modules, so they are not a single-file registry item. Install the package and import them: `pnpm add @vllnt/ui`.
+
+## Import
+
+```tsx
+import { SiteHeader } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<SiteHeader
+  brand="Acme Docs"
+  homeHref="/"
+  items={[
+    { bar: 'tablet', href: '/guides', label: 'Guides' },
+    { bar: 'desktop', href: '/pricing', label: 'Pricing' },
+    { href: '/about', label: 'About' },
+  ]}
+  labels={{
+    close: 'Close menu',
+    home: 'Acme home',
+    menu: 'Menu',
+    open: 'Open menu',
+    primary: 'Primary',
+  }}
+  network={{
+    groups: [
+      { id: 'current', items: [{ current: true, href: 'https://docs.example.com', label: 'Docs' }] },
+      { id: 'parent', items: [{ current: false, href: 'https://example.com', label: 'Acme' }] },
+    ],
+    label: 'Acme network',
+  }}
+/>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+`brand` is required. There is no default brand, so a header never shows another site's name.
+
+## API Reference
+
+<Controls />
+
+### Network
+
+`network` is `{ label, groups }`. Each group is `{ id, heading?, items }` and each item is `{ label, href, current }`. You build the groups from your own list of sites: the library holds none. The row marked `current` is listed first and links to `homeHref`, never to its own `href`. No row carries a `rel`.
+
+### Items
+
+| Field | Notes |
+| ----- | ----- |
+| `bar` | `tablet` shows the link in the bar from 768 px, `desktop` from 1200 px. Without it the link stays in the menu. |
+| `external` | Opens a new tab, adds a ↗ and the `labels.external` text. Never the current link. |
+
+### Actions slot
+
+`actions` is one optional slot for site-specific controls (search, a source link, a sidebar toggle). It sits in the primary navigation before the language link, at every width. Nothing renders without it. `SiteHeaderStatic` has no slot because it runs no script.
+
+### Material
+
+`material` stays for compatibility. Both values render the flat header: the page colour, a hairline under the bar, no shadow and no blur.
+
+## States
+
+### Without a network
+
+<Canvas of={Stories.WithoutNetwork} sourceState="shown" />
+
+### With a language link
+
+<Canvas of={Stories.WithLocaleLink} sourceState="shown" />
+
+### With actions
+
+<Canvas of={Stories.WithActions} sourceState="shown" />
+
+### Title only
+
+With no links, no button and no network, the bar has the title alone and no menu.
+
+<Canvas of={Stories.TitleOnly} sourceState="shown" />
+
+## Accessibility
+
+- The bar is a `<header>` (banner) with a labelled primary navigation. It holds the menu button, so the landmark stays at every width.
+- The switcher follows the disclosure navigation pattern: the title button has `aria-expanded` and `aria-controls`, the panel is a `nav` of links, and there is no `aria-haspopup`. Its accessible name is the title followed by the network label.
+- Enter and Space toggle. Arrow Down on the button opens the panel at its first link. Arrow Up and Down, Home and End move between links. Esc closes and returns focus to the button. A press outside or focus leaving closes it.
+- The links of the switcher are in the page at every width, in a `hidden` panel while it is shut, so a crawler and a client with no script read them. The server markup also holds a link home in a `noscript` over the title.
+- The open menu traps focus, closes on Esc and on a route change, and hands focus back to its button. The menu never repeats the sites of the switcher.
+- Links keep the 32 px control height with a fine pointer and the 44 px target with a coarse one.
