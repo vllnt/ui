@@ -47,6 +47,7 @@ const preset: Partial<Config> = {
           DEFAULT: "oklch(var(--card) / <alpha-value>)",
           foreground: "oklch(var(--card-foreground) / <alpha-value>)",
         },
+        composer: "oklch(var(--composer-border) / <alpha-value>)",
         destructive: {
           DEFAULT: "oklch(var(--destructive) / <alpha-value>)",
           foreground: "oklch(var(--destructive-foreground) / <alpha-value>)",
@@ -66,6 +67,10 @@ const preset: Partial<Config> = {
           foreground:
             "oklch(var(--vllnt-glass-muted-foreground, var(--muted-foreground)) / <alpha-value>)",
         },
+        pill: {
+          border: "oklch(var(--pill-border) / <alpha-value>)",
+          DEFAULT: "oklch(var(--pill) / <alpha-value>)",
+        },
         popover: {
           DEFAULT: "oklch(var(--popover) / <alpha-value>)",
           foreground: "oklch(var(--popover-foreground) / <alpha-value>)",
@@ -78,6 +83,14 @@ const preset: Partial<Config> = {
         secondary: {
           DEFAULT: "oklch(var(--secondary) / <alpha-value>)",
           foreground: "oklch(var(--secondary-foreground) / <alpha-value>)",
+        },
+        sidebar: "oklch(var(--sidebar) / <alpha-value>)",
+        status: {
+          done: "oklch(var(--status-done) / <alpha-value>)",
+          failed: "oklch(var(--status-failed) / <alpha-value>)",
+          "needs-you": "oklch(var(--status-needs-you) / <alpha-value>)",
+          ring: "oklch(var(--status-ring) / <alpha-value>)",
+          unread: "oklch(var(--status-unread) / <alpha-value>)",
         },
         success: {
           DEFAULT: "oklch(var(--success) / <alpha-value>)",
