@@ -57,8 +57,8 @@ describe("theme-serialize exports", () => {
     const css = themeToCss(DEFAULT_THEME);
     expect(css).toContain(":root {");
     expect(css).toContain(".dark {");
-    expect(css).toContain("--primary: oklch(0.2044 0 0)");
-    expect(css).toContain("--radius: 0.5rem");
+    expect(css).toContain("--primary: oklch(0 0 0)");
+    expect(css).toContain("--radius: 0.375rem");
   });
 
   it("renders the canonical tokens.json shape", () => {
@@ -67,7 +67,7 @@ describe("theme-serialize exports", () => {
       radius: string;
     };
     expect(json.color.format).toBe("oklch-channel");
-    expect(json.radius).toBe("0.5rem");
+    expect(json.radius).toBe("0.375rem");
   });
 
   it("renders a shadcn registry:theme item", () => {
@@ -78,8 +78,8 @@ describe("theme-serialize exports", () => {
     };
     expect(item.type).toBe("registry:theme");
     expect(item.name).toBe("demo");
-    expect(item.cssVars.light.primary).toBe("oklch(0.2044 0 0)");
-    expect(item.cssVars.theme["--radius"]).toBe("0.5rem");
+    expect(item.cssVars.light.primary).toBe("oklch(0 0 0)");
+    expect(item.cssVars.theme["--radius"]).toBe("0.375rem");
   });
 
   it("builds an install URL pointing at /r/themes", () => {

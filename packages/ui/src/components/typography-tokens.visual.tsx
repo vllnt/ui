@@ -25,7 +25,7 @@ test.describe("Typography token wiring (#465)", () => {
     }
   });
 
-  test("Heading defaults to sans/600, then a theme overrides family + weight via tokens alone", async ({
+  test("Heading defaults to sans/500, then a theme overrides family + weight via tokens alone", async ({
     mount,
     page,
   }) => {
@@ -34,15 +34,16 @@ test.describe("Typography token wiring (#465)", () => {
     const heading = page.getByRole("heading", { level: 1 });
     await expect(heading).toHaveText("Brandable heading");
 
-    // Default house style: the display family resolves to the sans stack, weight 600.
+    // Default house style: the display family resolves to the sans stack
+    // (JetBrains Mono first, issue #768), weight 500.
     const defaultFamily = await heading.evaluate(
       (node) => getComputedStyle(node).fontFamily,
     );
     const defaultWeight = await heading.evaluate(
       (node) => getComputedStyle(node).fontWeight,
     );
-    expect(defaultFamily.toLowerCase()).toMatch(/^inter, system-ui/);
-    expect(defaultWeight).toBe("600");
+    expect(defaultFamily.toLowerCase()).toMatch(/^"?jetbrains mono"?, ui-monospace/);
+    expect(defaultWeight).toBe("500");
 
     // A brand theme overrides the tokens — no library edit, no extra className.
     await page.evaluate(() => {
@@ -69,7 +70,7 @@ test.describe("Typography token wiring (#465)", () => {
     const family = await page
       .getByText("Body copy")
       .evaluate((node) => getComputedStyle(node).fontFamily);
-    expect(family.toLowerCase()).toMatch(/^inter, system-ui/);
+    expect(family.toLowerCase()).toMatch(/^"?jetbrains mono"?, ui-monospace/);
   });
 });
 

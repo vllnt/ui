@@ -36,8 +36,8 @@ describe("GET /r/themes", () => {
     expect(response.headers.get("content-type")).toContain("application/json");
     const body = await response.json();
     expect(body.type).toBe("registry:theme");
-    expect(body.cssVars.light.primary).toBe("oklch(0.2044 0 0)");
-    expect(body.cssVars.theme["--radius"]).toBe("0.5rem");
+    expect(body.cssVars.light.primary).toBe("oklch(0 0 0)");
+    expect(body.cssVars.theme["--radius"]).toBe("0.375rem");
   });
 
   it("honors a valid ?name and falls back for an invalid one", async () => {

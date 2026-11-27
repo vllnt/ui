@@ -28,10 +28,19 @@ const EDITABLE_ROLES = [
 ];
 
 const EXCLUDED_VARIABLES = [
+  "--composer-border",
   "--diff-added",
   "--diff-removed",
   "--info",
   "--info-foreground",
+  "--pill",
+  "--pill-border",
+  "--sidebar",
+  "--status-done",
+  "--status-failed",
+  "--status-needs-you",
+  "--status-ring",
+  "--status-unread",
   "--success",
   "--success-foreground",
   "--warning",
@@ -40,8 +49,8 @@ const EXCLUDED_VARIABLES = [
 
 /**
  * The editor edits the shadcn role set. Adding a role to THEME_TOKENS changes
- * the positional share-link format, so the status and diff roles in tokens.json
- * stay out of it.
+ * the positional share-link format, so the status, diff and workbench roles
+ * (sidebar, pill, composer border) in tokens.json stay out of it.
  */
 function editableSemanticColors(
   mode: "dark" | "light",
@@ -71,7 +80,7 @@ describe("DEFAULT_THEME", () => {
     );
   });
 
-  it("leaves out exactly the status and diff variables", () => {
+  it("leaves out exactly the status, diff and workbench variables", () => {
     const excluded = Object.values(designTokens.color.semantic)
       .map((color) => color.cssVariable)
       .filter((cssVariable) => !EDITABLE_VARIABLES.has(cssVariable))
