@@ -60,10 +60,12 @@ describe("subpath exports", () => {
     expect(exportedNames("button")).toEqual([
       "Button",
       "ButtonProps",
+      "UnstyledButton",
+      "UnstyledButtonProps",
       "buttonVariants",
     ]);
     const button = subpaths.find(({ name }) => name === "button");
-    expect(button?.types).toEqual(["ButtonProps"]);
+    expect(button?.types).toEqual(["ButtonProps", "UnstyledButtonProps"]);
     expect(button?.modules).toEqual([
       {
         names: [
@@ -72,11 +74,15 @@ describe("subpath exports", () => {
         ],
         specifier: "./components/atoms/button/button",
       },
+      {
+        names: [{ exported: "UnstyledButton", local: "UnstyledButton" }],
+        specifier: "./components/atoms/button/unstyled-button",
+      },
     ]);
   });
 
-  it("adds utils for cn", () => {
-    expect(exportedNames("utils")).toEqual(["cn"]);
+  it("adds utils for cn and cx", () => {
+    expect(exportedNames("utils")).toEqual(["cn", "cx"]);
   });
 
   it("groups every module of a directory under its subpath", () => {
@@ -138,7 +144,19 @@ describe("subpath exports", () => {
       collectSubpaths('export { Foo } from "./foo";', rootIndex),
     ).toThrow("unsupported export");
     expect(() => collectSubpaths(componentsIndex, "")).toThrow(
-      "no longer exports ./lib/utils",
+      "no longer exports ./lib/cx.",
     );
+    expect(() =>
+      collectSubpaths(
+        componentsIndex,
+        rootIndex.replace('export { cx } from "./lib/cx";', ""),
+      ),
+    ).toThrow("no longer exports ./lib/cx.");
+    expect(() =>
+      collectSubpaths(
+        componentsIndex,
+        rootIndex.replace(/^export .* from "\.\/lib\/utils";$/m, ""),
+      ),
+    ).toThrow("no longer exports ./lib/utils.");
   });
 });

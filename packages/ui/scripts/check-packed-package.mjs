@@ -1,5 +1,5 @@
 import { spawnSync } from "node:child_process";
-import { readdirSync, readFileSync, statSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import {
   mkdir,
   mkdtemp,
@@ -13,6 +13,11 @@ import {
 import { tmpdir } from "node:os";
 import { dirname, join, resolve } from "node:path";
 
+import {
+  PACKAGES,
+  planComponentDocs,
+  readMetadata,
+} from "../../../scripts/agent-docs.mjs";
 import { collectSubpaths } from "./subpaths.ts";
 
 const packageDirectory = resolve(import.meta.dirname, "..");
@@ -71,6 +76,38 @@ function packedSubpaths(packedDirectory) {
     );
   }
   return names;
+}
+
+/**
+ * The prepack (scripts/agent-docs.mjs) ships an llms.txt index, a page for
+ * every exported component and an exact copy of the agent skill, for agents
+ * that read node_modules/@vllnt/ui.
+ */
+function assertAgentDocs(packedDirectory) {
+  const config = PACKAGES.ui;
+  const pages = planComponentDocs(packageDirectory, config, readMetadata(config));
+  const missing = pages.filter(
+    ({ path }) => !existsSync(join(packedDirectory, path)),
+  );
+  if (pages.length === 0 || missing.length > 0) {
+    throw new Error(
+      `Packed docs/components is missing ${missing.length || "all"} of ${pages.length} component pages: ${missing
+        .slice(0, 10)
+        .map(({ path }) => path)
+        .join(", ")}.`,
+    );
+  }
+  assertFile(join(packedDirectory, "llms.txt"), "llms.txt agent docs index");
+  for (const [from, to] of config.copies) {
+    const packed = join(packedDirectory, to);
+    assertFile(packed, to);
+    if (
+      readFileSync(packed, "utf8") !==
+      readFileSync(join(packageDirectory, "../..", from), "utf8")
+    ) {
+      throw new Error(`Packed ${to} differs from ${from}.`);
+    }
+  }
 }
 
 function assertExportTargets(value, path, packedDirectory) {
@@ -285,6 +322,58 @@ async function assertNodeResolution(manifest, packedDirectory) {
 }
 
 /**
+ * Bundles a consumer of the plain exports from the packed subpaths and checks
+ * that no `tailwind-merge` code reaches the bundle. A `Separator` consumer is
+ * the control: it must bring `tailwind-merge`, so the check can fail. Runs
+ * after `assertNodeResolution`, which links the dependencies.
+ */
+async function assertTailwindMergeFree() {
+  const { build } = await import("esbuild");
+  const bundledInputs = async (contents) => {
+    const result = await build({
+      absWorkingDir: temporaryDirectory,
+      bundle: true,
+      external: ["react", "react-dom", "react/jsx-runtime"],
+      format: "esm",
+      logLevel: "silent",
+      metafile: true,
+      platform: "browser",
+      stdin: { contents, resolveDir: temporaryDirectory },
+      write: false,
+    });
+    return Object.values(result.metafile.outputs).flatMap((output) =>
+      Object.entries(output.inputs)
+        .filter(([, input]) => input.bytesInOutput > 0)
+        .map(([path]) => path),
+    );
+  };
+  const plain = await bundledInputs(
+    [
+      'export { PlainSeparator } from "@vllnt/ui/separator";',
+      'export { UnstyledButton } from "@vllnt/ui/button";',
+      'export { cx } from "@vllnt/ui/utils";',
+    ].join("\n"),
+  );
+  const leaked = plain.filter((path) => path.includes("tailwind-merge"));
+  if (leaked.length > 0) {
+    throw new Error(
+      `PlainSeparator, UnstyledButton and cx bundle tailwind-merge: ${leaked.join(", ")}`,
+    );
+  }
+  if (!plain.some((path) => path.endsWith("plain-separator.js"))) {
+    throw new Error(
+      `The plain bundle is missing PlainSeparator: ${plain.join(", ")}`,
+    );
+  }
+  const control = await bundledInputs(
+    'export { Separator } from "@vllnt/ui/separator";',
+  );
+  if (!control.some((path) => path.includes("tailwind-merge"))) {
+    throw new Error("The Separator control bundle has no tailwind-merge.");
+  }
+}
+
+/**
  * Type-checks an ES module consumer that imports, by name, every value and
  * type the barrel defines for every subpath, under the two module resolutions
  * consumers use.
@@ -375,6 +464,7 @@ try {
   );
 
   assertNoLocalProtocols(manifest);
+  assertAgentDocs(packedDirectory);
 
   for (const field of ["main", "module", "types"]) {
     const target = manifest[field];
@@ -397,10 +487,11 @@ try {
 
   await assertResolvableRelativeSpecifiers(packedDirectory);
   await assertNodeResolution(manifest, packedDirectory);
+  await assertTailwindMergeFree();
   await assertSubpathTypes(packedDirectory);
 
   console.log(
-    `Packed web package resolves every export, internal ESM specifier, root entry, tailwind preset and subpath (runtime and types) from published files (${manifest.version}).`,
+    `Packed web package resolves every export, internal ESM specifier, root entry, tailwind preset and subpath (runtime and types) from published files, and the plain exports bundle without tailwind-merge (${manifest.version}).`,
   );
 } finally {
   await rm(temporaryDirectory, { force: true, recursive: true });

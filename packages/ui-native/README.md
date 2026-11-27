@@ -2,6 +2,10 @@
 
 Accessible React Native components that share VLLNT UI semantic tokens and portable option names while using a renderer designed specifically for React Native.
 
+## For AI agents
+
+The installed package carries the docs for its own version. Start at `node_modules/@vllnt/ui-native/llms.txt`: it links the README, `registry.json` and `docs/PARITY.md` (web vs native status of every component).
+
 ## Install
 
 ```bash

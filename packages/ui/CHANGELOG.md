@@ -8,6 +8,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Added
 
+- **Docs in the package** - the tarball now ships `llms.txt`, one Markdown page per
+  component in `docs/components/` (import, props, variants) and the `vllnt-ui` agent
+  skill in `skills/vllnt-ui/SKILL.md`, so agents read the docs of the installed
+  version from `node_modules/@vllnt/ui/`. They are written at pack time; the build
+  and the JavaScript bundles do not change.
+
 - **`Separator` `variant`** - `variant="dashed"` draws a dashed 1 px border over a
   transparent fill, in both orientations. The default stays `solid`.
 - **`Link` `size`, `foreground` and `skip`** - `size="sm" | "default" | "lg"`
@@ -26,6 +32,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
   `w-auto`, items `flex-none`); `variant="hairline"` swaps the filled track for a
   transparent one with a 1 px input-colour border (`glass-input` inside glass).
   The defaults stay `filled` and full width.
+- **`cx`, `UnstyledButton` and `PlainSeparator`: no `tailwind-merge`** - `cx`
+  (root and `@vllnt/ui/utils`) joins class values with `clsx` and keeps every
+  class. `UnstyledButton` (`@vllnt/ui/button`) is a native `<button>` with no
+  classes of its own and `type="button"` by default. `PlainSeparator`
+  (`@vllnt/ui/separator`) renders the same markup as `Separator`, but a
+  conflicting `className` adds to the default classes instead of replacing
+  them. None of the three imports `tailwind-merge`, so a bundle that uses only
+  them carries none of its code. `cn`, `Button` and `Separator` stay the same.
 - **`Text` `dt`, `dd`, `li` and `measure`** - `as` takes `dt`, `dd` and `li`;
   `measure="prose" | "narrow"` caps the width with `size.measure-prose` (720 px,
   new) or `size.measure-narrow` (480 px).

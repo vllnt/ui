@@ -8,6 +8,8 @@ See [CHANGELOG.md](./CHANGELOG.md) for release history and [MIGRATION.md](./MIGR
 
 An agent can read this library as text and JSON, without scraping pages. The site is <https://ui.vllnt.com>.
 
+The installed package carries the docs for its own version. Start at `node_modules/@vllnt/ui/llms.txt`: it links one Markdown page per component in `docs/components/` (import, props and variants) and the agent skill in `skills/vllnt-ui/SKILL.md`. The site below always describes the latest release.
+
 | URL | Returns |
 | --- | --- |
 | `https://ui.vllnt.com/llms.txt` | A short plain-text overview: install steps, docs links, and components grouped by category. |
@@ -163,7 +165,7 @@ export function Example() {
 |-------------|------|
 | `@vllnt/ui` | All components, types, and utilities |
 | `@vllnt/ui/<component>` | One component directory, for example `@vllnt/ui/button`, `@vllnt/ui/toggle-group`, `@vllnt/ui/dropdown-menu`: the same names the root exports from it |
-| `@vllnt/ui/utils` | `cn` |
+| `@vllnt/ui/utils` | `cn`, `cx` |
 | `@vllnt/ui/tailwind-preset` | Tailwind CSS preset config |
 | `@vllnt/ui/styles.css` | Full styles (Tailwind base + theme variables + utilities) |
 | `@vllnt/ui/themes/default.css` | Theme CSS variables only (no Tailwind base) |
@@ -188,7 +190,7 @@ A subpath is named after the component's directory (`src/components/<level>/<nam
 - Hooks, theme presets and a few helpers (for example `copyText` and `statusDotVariants`) are not in a component directory, so they are root-only: import them from `@vllnt/ui`.
 - Subpaths need `moduleResolution` set to `bundler`, `node16` or `nodenext` in TypeScript, as `@vllnt/ui/tailwind-preset` already does.
 
-Every component pays a shared base of about 20 KB minified for `cn` (`clsx` and `tailwind-merge`). Most single components then add a few KB on top: `Button` is about 25 KB in total and `Dialog` about 65 KB. CI fails if a named import grows past its budget, or if any module grows past 320 KB up front (`pnpm -F @vllnt/ui size`).
+Every component pays a shared base of about 20 KB minified for `cn` (`clsx` and `tailwind-merge`). `UnstyledButton`, `PlainSeparator` and `cx` skip it: they join classes with `clsx` alone, so a conflicting class does not replace another, and each stays under 1.3 KB. Most single components then add a few KB on top: `Button` is about 25 KB in total and `Dialog` about 65 KB. CI fails if a named import grows past its budget, or if any module grows past 320 KB up front (`pnpm -F @vllnt/ui size`).
 
 ## Theming
 

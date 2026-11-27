@@ -12,6 +12,18 @@ og:
 
 VLLNT UI expose des surfaces lisibles par les agents afin que les agents de codage puissent decouvrir les composants, inspecter les contrats d'installation et citer la documentation actuelle sans extraire le contenu du site rendu.
 
+## Documentation dans le paquet
+
+Le paquet installe contient la documentation de sa propre version : l'agent lit l'API que l'application utilise vraiment, pas celle du site, qui decrit la derniere version. Les builds canary l'incluent aujourd'hui, la prochaine version stable aussi.
+
+```text
+node_modules/@vllnt/ui/llms.txt                  index avec des liens relatifs
+node_modules/@vllnt/ui/docs/components/<name>.md une page par composant : import, props, variantes
+node_modules/@vllnt/ui/skills/vllnt-ui/SKILL.md  le skill d'agent vllnt-ui
+```
+
+`@vllnt/ui-core` et `@vllnt/ui-native` publient un `llms.txt` au meme endroit. Indiquez `node_modules/@vllnt/ui/llms.txt` dans le `AGENTS.md` de l'application pour que l'agent l'ouvre en premier.
+
 ## llms.txt
 
 Utilisez `/llms.txt` pour un apercu compact du registre. Il inclut des conseils d'installation, des liens vers la documentation principale et des liens vers les composants regroupes par categorie.
