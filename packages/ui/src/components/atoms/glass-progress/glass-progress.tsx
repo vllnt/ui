@@ -47,6 +47,7 @@ export const GlassProgress = /* @__PURE__ */ named(
           "vllnt-glass relative h-2 w-full overflow-hidden rounded-full border",
           className,
         )}
+        data-glass={material === "glass" ? "on" : undefined}
         data-material={material}
         ref={ref}
         role="progressbar"

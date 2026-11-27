@@ -14,7 +14,9 @@ it("GlassCard renders its children and applies a custom class name", () => {
 it("GlassCard is glass by default and opts out with material=solid", () => {
   const { container, rerender } = render(<GlassCard>Content</GlassCard>);
   expect(container.firstChild).toHaveAttribute("data-material", "glass");
+  expect(container.firstChild).toHaveAttribute("data-glass", "on");
   expect(container.firstChild).toHaveClass("vllnt-glass", "vllnt-glass-dense");
   rerender(<GlassCard material="solid">Content</GlassCard>);
   expect(container.firstChild).toHaveAttribute("data-material", "solid");
+  expect(container.firstChild).not.toHaveAttribute("data-glass");
 });
