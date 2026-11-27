@@ -2,14 +2,49 @@
 
 import { memo } from "react";
 
+import {
+  Dialog as DialogRoot,
+  DialogBackdrop,
+  DialogClose as DialogClosePart,
+  DialogContent as DialogContentPart,
+} from "@ui-sdk/react/dialog";
 import type { ReactNode } from "react";
 
-import type { MaterialProps } from "../../../lib/material";
+import type { Material, MaterialProps } from "../../../lib/material";
 import { named } from "../../../lib/named";
 import type { HeadingTag } from "../../../lib/types";
-import { type OpenAliases, openAliases } from "../../../lib/ui-sdk-dialog";
+import {
+  dialogClose,
+  dialogOverlay,
+  dialogRoot,
+  type OpenAliases,
+  openAliases,
+  type OverlayLook,
+  useDialogPopup,
+} from "../../../lib/ui-sdk-dialog";
 import { cn } from "../../../lib/utils";
-import { Sheet, SheetClose, SheetContent, SheetOverlay } from "../sheet/sheet";
+
+// An atom imports no other component, so this is a ui-sdk dialog of its own:
+// the same side panel and veil classes as `SheetContent`, on the right edge.
+const TocRoot = /* @__PURE__ */ dialogRoot(
+  "TableOfContentsPanelRoot",
+  DialogRoot,
+);
+const TocClose = /* @__PURE__ */ dialogClose(
+  "TableOfContentsPanelClose",
+  DialogClosePart,
+);
+const VEIL_LOOK: OverlayLook = {
+  veil: "fixed inset-0 z-50 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
+};
+const TocVeil = /* @__PURE__ */ dialogOverlay(
+  "TableOfContentsPanelVeil",
+  DialogBackdrop,
+  VEIL_LOOK,
+);
+// The plain glass shadow replaces the floating shadow of `vllnt-glass-floating`.
+const SIDE_PANEL =
+  "vllnt-glass-floating vllnt-glass-dense fixed inset-y-0 right-0 z-50 h-full w-full max-w-md border-l transition ease-in-out data-[state=closed]:duration-300 data-[state=open]:duration-500 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:slide-out-to-right data-[state=open]:slide-in-from-right [--vllnt-glass-shadow:var(--shadow-glass)]";
 
 export type TOCSection = {
   id: string;
@@ -50,7 +85,7 @@ function TocHeader({
       <Heading className="text-lg font-semibold" id="toc-title">
         {title}
       </Heading>
-      <SheetClose
+      <TocClose
         aria-label="Close table of contents"
         className="flex size-8 items-center justify-center rounded-md hover:bg-secondary"
       >
@@ -70,8 +105,38 @@ function TocHeader({
             />
           </svg>
         )}
-      </SheetClose>
+      </TocClose>
     </div>
+  );
+}
+
+type TocPanelProps = {
+  children: ReactNode;
+  className?: string;
+  material: Material;
+};
+
+function TocPanel({
+  children,
+  className,
+  material,
+}: TocPanelProps): React.ReactNode {
+  const { openFocus, panelReference, render } = useDialogPopup({ names: {} });
+
+  return (
+    <>
+      <TocVeil data-testid="toc-backdrop" material={material} />
+      <DialogContentPart
+        aria-labelledby="toc-title"
+        className={cn(SIDE_PANEL, className)}
+        data-material={material}
+        initialFocus={openFocus}
+        ref={panelReference}
+        render={render}
+      >
+        {children}
+      </DialogContentPart>
+    </>
   );
 }
 
@@ -222,19 +287,8 @@ function TableOfContentsPanelImpl({
   const state = openAliases({ isOpen, onClose, onOpenChange, open });
 
   return (
-    <Sheet onOpenChange={state.handleOpenChange} open={state.open}>
-      <SheetOverlay data-testid="toc-backdrop" material={material} />
-      <SheetContent
-        aria-labelledby="toc-title"
-        className={cn(
-          // Plain glass shadow: the sheet's floating shadow drops.
-          "[--vllnt-glass-shadow:var(--shadow-glass)] w-full max-w-md gap-0 p-0 sm:max-w-md",
-          className,
-        )}
-        closeButton={false}
-        material={material}
-        overlay="none"
-      >
+    <TocRoot onOpenChange={state.handleOpenChange} open={state.open}>
+      <TocPanel className={className} material={material}>
         <div className="flex h-full flex-col">
           {/* Header */}
           <TocHeader closeIcon={closeIcon} Heading={Heading} title={title} />
@@ -262,8 +316,8 @@ function TableOfContentsPanelImpl({
             <TocFooter onReset={onReset} resetLabel={resetLabel} />
           ) : null}
         </div>
-      </SheetContent>
-    </Sheet>
+      </TocPanel>
+    </TocRoot>
   );
 }
 

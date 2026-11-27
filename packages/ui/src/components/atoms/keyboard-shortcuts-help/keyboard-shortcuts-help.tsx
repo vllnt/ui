@@ -2,14 +2,48 @@
 
 import { Children, memo } from "react";
 
+import {
+  Dialog as DialogRoot,
+  DialogBackdrop,
+  DialogClose as DialogClosePart,
+  DialogContent as DialogContentPart,
+} from "@ui-sdk/react/dialog";
 import type { ReactNode } from "react";
 
-import type { MaterialProps } from "../../../lib/material";
+import type { Material, MaterialProps } from "../../../lib/material";
 import { named } from "../../../lib/named";
 import type { HeadingTag } from "../../../lib/types";
-import { type OpenAliases, openAliases } from "../../../lib/ui-sdk-dialog";
+import {
+  dialogClose,
+  dialogOverlay,
+  dialogRoot,
+  type OpenAliases,
+  openAliases,
+  type OverlayLook,
+  useDialogPopup,
+} from "../../../lib/ui-sdk-dialog";
 import { cn } from "../../../lib/utils";
-import { Dialog, DialogClose, DialogContent } from "../dialog/dialog";
+
+// An atom imports no other component, so this is a ui-sdk dialog of its own:
+// the same panel and veil classes as `DialogContent`, with the sizing this help needs.
+const ShortcutsRoot = /* @__PURE__ */ dialogRoot(
+  "KeyboardShortcutsHelpRoot",
+  DialogRoot,
+);
+const ShortcutsClose = /* @__PURE__ */ dialogClose(
+  "KeyboardShortcutsHelpClose",
+  DialogClosePart,
+);
+const VEIL_LOOK: OverlayLook = {
+  veil: "fixed inset-0 z-50 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
+};
+const ShortcutsVeil = /* @__PURE__ */ dialogOverlay(
+  "KeyboardShortcutsHelpVeil",
+  DialogBackdrop,
+  VEIL_LOOK,
+);
+const PANEL =
+  "fixed left-[50%] top-[50%] z-50 vllnt-glass-floating vllnt-glass-dense block w-[calc(100%-2rem)] max-w-sm translate-x-[-50%] translate-y-[-50%] rounded-lg border p-6 duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%]";
 
 export type KeyboardShortcut = {
   description: string;
@@ -90,13 +124,43 @@ function ShortcutsHeader({
       <Heading className="text-lg font-semibold" id="shortcuts-title">
         {title}
       </Heading>
-      <DialogClose
+      <ShortcutsClose
         aria-label="Close shortcuts help"
         className="flex size-8 items-center justify-center rounded-md hover:bg-secondary"
       >
         {closeIcon ?? <DefaultCloseIcon />}
-      </DialogClose>
+      </ShortcutsClose>
     </div>
+  );
+}
+
+type ShortcutsPanelProps = {
+  children: ReactNode;
+  className?: string;
+  material: Material;
+};
+
+function ShortcutsPanel({
+  children,
+  className,
+  material,
+}: ShortcutsPanelProps): React.ReactNode {
+  const { openFocus, panelReference, render } = useDialogPopup({ names: {} });
+
+  return (
+    <>
+      <ShortcutsVeil material={material} />
+      <DialogContentPart
+        aria-labelledby="shortcuts-title"
+        className={cn(PANEL, className)}
+        data-material={material}
+        initialFocus={openFocus}
+        ref={panelReference}
+        render={render}
+      >
+        {children}
+      </DialogContentPart>
+    </>
   );
 }
 
@@ -116,16 +180,8 @@ function KeyboardShortcutsHelpImpl({
   const state = openAliases({ isOpen, onClose, onOpenChange, open });
 
   return (
-    <Dialog onOpenChange={state.handleOpenChange} open={state.open}>
-      <DialogContent
-        aria-labelledby="shortcuts-title"
-        className={cn(
-          "block w-[calc(100%-2rem)] max-w-sm rounded-lg",
-          className,
-        )}
-        closeButton={false}
-        material={material}
-      >
+    <ShortcutsRoot onOpenChange={state.handleOpenChange} open={state.open}>
+      <ShortcutsPanel className={className} material={material}>
         <ShortcutsHeader as={Heading} closeIcon={closeIcon} title={title} />
 
         {/* Shortcuts List */}
@@ -137,8 +193,8 @@ function KeyboardShortcutsHelpImpl({
             {footer}
           </div>
         ) : null}
-      </DialogContent>
-    </Dialog>
+      </ShortcutsPanel>
+    </ShortcutsRoot>
   );
 }
 
