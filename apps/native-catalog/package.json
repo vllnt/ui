@@ -34,6 +34,8 @@
   "dependencies": {
     "@vllnt/ui-native": "workspace:*",
     "expo": "~57.0.34",
+    "expo-blur": "57.0.3",
+    "expo-glass-effect": "57.0.5",
     "expo-status-bar": "~57.0.1",
     "lucide-react-native": "1.73.0",
     "react": "19.2.3",

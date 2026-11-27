@@ -4,6 +4,19 @@ All notable changes to `@vllnt/ui-core` are documented in this file.
 
 ## [Unreleased]
 
+### Added
+
+- `llms.txt` in the tarball: an index of the README, tokens, contracts and
+  changelog for agents reading `node_modules/@vllnt/ui-core/`. Written at pack time.
+
+- `nativeTokens.glass`: the glass material per color scheme, generated from
+  `packages/design/tokens.json`. It holds the tint steps, hairline,
+  `mutedForeground`, `input` and `foreground` text roles, blur radii and the
+  `glass` and `glassFloating` shadows as React Native shadow props with an
+  Android `elevation`. `glass.solid` is the same surface with glass off
+  (opaque Card color, no blur). `NativeTheme` carries it as `theme.glass`, and
+  `NativeGlassTokens` and `NativeShadow` are exported.
+
 ## [0.1.0] - 2026-11-20
 
 ### Added

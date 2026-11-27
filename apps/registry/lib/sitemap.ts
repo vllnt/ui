@@ -113,6 +113,8 @@ function staticRouteList(changelog: LastModified): readonly PageRouteInput[] {
     { changeFrequency: "monthly", path: "/vs/vercel-ai-sdk", priority: 0.7 },
     { changeFrequency: "monthly", path: "/vs/assistant-ui", priority: 0.7 },
     { changeFrequency: "monthly", path: "/themes", priority: 0.7 },
+    { changeFrequency: "monthly", path: "/request-component", priority: 0.4 },
+    { changeFrequency: "monthly", path: "/report", priority: 0.4 },
   ];
 }
 

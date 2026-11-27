@@ -173,6 +173,9 @@ export * from "./components/atoms/typewriter/typewriter";
 export * from "./components/molecules/view-switcher/view-switcher";
 export * from "./components/molecules/workspace-switcher/workspace-switcher";
 export * from "./components/molecules/world-clock-bar/world-clock-bar";
+export { GlassSurface, useGlassTextColor } from "./primitives/glass-surface";
+export type { GlassSurfaceProps } from "./primitives/glass-surface";
+export type { Material, MaterialProps } from "./primitives/material";
 export type {
   ModalLayerCloseReason,
   ModalLayerPresentationProps,
@@ -206,11 +209,21 @@ export type {
   ControllableStateResult,
   ControllableStateSetter,
 } from "./primitives/use-controllable-state";
+export { useGlassAvailability } from "./primitives/use-glass-availability";
 export {
   defaultReducedMotionService,
   useReducedMotion,
 } from "./primitives/use-reduced-motion";
 export type { ReducedMotionService } from "./primitives/use-reduced-motion";
+export {
+  defaultGlassAccessibilityService,
+  GlassAvailabilityProvider,
+} from "./theme/glass-availability";
+export type {
+  GlassAccessibilityService,
+  GlassAvailabilityProviderProps,
+  GlassPreference,
+} from "./theme/glass-availability";
 export { ThemeProvider, useTheme } from "./theme/theme-provider";
 export type {
   ThemeProviderProps,

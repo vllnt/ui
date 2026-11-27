@@ -44,6 +44,14 @@
       "maxBytes": 23900
     },
     { "name": "cn", "export": "cn", "maxBytes": 16900 },
+    { "name": "UnstyledButton", "export": "UnstyledButton", "maxBytes": 900 },
+    { "name": "PlainSeparator", "export": "PlainSeparator", "maxBytes": 1300 },
+    { "name": "cx", "export": "cx", "maxBytes": 600 },
+    {
+      "name": "UnstyledToggleGroup",
+      "export": "UnstyledToggleGroup",
+      "maxBytes": 28000
+    },
     {
       "name": "* (every export, up front)",
       "export": "*",

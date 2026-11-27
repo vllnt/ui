@@ -26,6 +26,8 @@ export {
   createNativeTheme,
   darkTheme,
   lightTheme,
+  type NativeGlassTokens,
+  type NativeShadow,
   type NativeTheme,
   type NativeThemeOverride,
   type ThemeColorScheme,

@@ -41,6 +41,19 @@ describe("sitemap URLs", () => {
     expect(withoutArticles.filter((url) => url.includes("?"))).toEqual([]);
   });
 
+  it("lists the request and report pages in both locales", () => {
+    const all = urls(dated({ articles }));
+
+    expect(all).toEqual(
+      expect.arrayContaining([
+        `${SITE}/request-component`,
+        `${SITE}/fr/request-component`,
+        `${SITE}/report`,
+        `${SITE}/fr/report`,
+      ]),
+    );
+  });
+
   it("no longer lists the platform=native variants", () => {
     const all = urls(dated({ articles }));
 

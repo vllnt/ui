@@ -1,6 +1,7 @@
 import { expect, test } from "@playwright/experimental-ct-react";
 
 import { Button } from "./button";
+import { UnstyledButton } from "./unstyled-button";
 
 test.describe("Button Visual", () => {
   test("default", async ({ mount }) => {
@@ -57,5 +58,22 @@ test.describe("Button Visual", () => {
     const component = await mount(<Button>Focus Me</Button>);
     await page.keyboard.press("Tab");
     await expect(component).toHaveScreenshot("button-focus-visible.png");
+  });
+
+  test("variant-unstyled", async ({ mount }) => {
+    const component = await mount(
+      <Button className="border border-dashed px-3 py-1" variant="unstyled">
+        Test
+      </Button>,
+    );
+    await expect(component).toHaveScreenshot("button-variant-unstyled.png");
+  });
+  test("unstyled-button", async ({ mount }) => {
+    const component = await mount(
+      <UnstyledButton className="rounded-sm border border-dashed px-3 py-1">
+        A
+      </UnstyledButton>,
+    );
+    await expect(component).toHaveScreenshot("button-unstyled-button.png");
   });
 });

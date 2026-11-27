@@ -19,6 +19,10 @@ export {
   buttonVariants,
 } from "./atoms/button/button";
 export {
+  UnstyledButton,
+  type UnstyledButtonProps,
+} from "./atoms/button/unstyled-button";
+export {
   CookieConsent,
   type CookieConsentActions,
   type CookieConsentLabels,
@@ -235,6 +239,12 @@ export {
   ToggleGroup,
   ToggleGroupItem,
 } from "./molecules/toggle-group/toggle-group";
+export {
+  UnstyledToggleGroup,
+  UnstyledToggleGroupItem,
+  type UnstyledToggleGroupItemProps,
+  type UnstyledToggleGroupProps,
+} from "./molecules/toggle-group/unstyled-toggle-group";
 export {
   type TreeNode,
   TreeView,
@@ -575,6 +585,10 @@ export {
 } from "./molecules/avatar-group/avatar-group";
 export { Skeleton } from "./atoms/skeleton/skeleton";
 export { Separator } from "./atoms/separator/separator";
+export {
+  PlainSeparator,
+  type PlainSeparatorProps,
+} from "./atoms/separator/plain-separator";
 export {
   Alert,
   AlertDescription,

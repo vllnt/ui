@@ -24,8 +24,10 @@ Radix-facing DOM is kept (`data-state` values, `--radix-*` CSS variables,
 
 Known differences that remain:
 
-- `ToggleGroup`: a disabled item stays focusable with the arrow keys, and the
-  root has no `tabindex`.
+- `ToggleGroup` and `UnstyledToggleGroup`: a disabled item stays focusable
+  with the arrow keys (it reports `aria-disabled` instead of `disabled`), the
+  root has no `tabindex`, and the arrow keys follow `orientation`: Left and
+  Right in a horizontal group (the default), Up and Down in a vertical one.
 - `Slider`: the thumb is a native range input, so it exposes its value through
   the input instead of `aria-valuenow`.
 - `NavigationMenu`: the open viewport is drawn by a fixed-position layer, so

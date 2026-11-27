@@ -47,3 +47,11 @@ next-env.d.ts
 
 # codebase-intelligence cache
 .code-visualizer/
+
+# Agent docs written into the packages at pack time (scripts/agent-docs.mjs)
+packages/ui/docs
+packages/ui/skills
+packages/ui/llms.txt
+packages/ui-core/llms.txt
+packages/ui-native/docs
+packages/ui-native/llms.txt

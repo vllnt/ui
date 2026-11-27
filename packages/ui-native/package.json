@@ -56,12 +56,16 @@
     "registry.json",
     "registry.schema.json",
     "CHANGELOG.md",
-    "README.md"
+    "README.md",
+    "docs",
+    "llms.txt"
   ],
   "sideEffects": false,
   "scripts": {
-    "boundaries:check": "node --test scripts/check-boundaries.test.mjs && node scripts/check-boundaries.mjs",
+    "boundaries:check": "node --test scripts/check-boundaries.test.mjs scripts/optional-peers.test.mjs && node scripts/check-boundaries.mjs",
     "build": "tsup",
+    "prepack": "node ../../scripts/agent-docs.mjs write ui-native",
+    "postpack": "node ../../scripts/agent-docs.mjs clean ui-native",
     "check:atomic": "node ../../scripts/check-atomic-levels.mjs src/components --base src/primitives --base src/theme",
     "check:parity": "node --test scripts/check-parity.test.mjs && node scripts/check-parity.mjs --check",
     "clean": "rm -rf dist node_modules coverage",
@@ -75,8 +79,18 @@
     "typecheck": "tsc --noEmit --incremental --tsBuildInfoFile node_modules/.cache/tsc/typecheck.tsbuildinfo --project tsconfig.json"
   },
   "peerDependencies": {
+    "expo-blur": ">=57.0.3",
+    "expo-glass-effect": ">=57.0.5",
     "react": ">=19.1.0 <20",
     "react-native": ">=0.81.0 <1"
+  },
+  "peerDependenciesMeta": {
+    "expo-blur": {
+      "optional": true
+    },
+    "expo-glass-effect": {
+      "optional": true
+    }
   },
   "dependencies": {
     "@vllnt/ui-core": "workspace:*"

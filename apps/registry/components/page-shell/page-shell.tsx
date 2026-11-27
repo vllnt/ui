@@ -30,6 +30,7 @@ export function PageShell({
       <main
         className="flex-1 overflow-y-auto bg-background"
         data-pagefind-ignore={searchable ? undefined : ""}
+        id="main"
       >
         {children}
       </main>

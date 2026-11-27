@@ -48,7 +48,9 @@ trustPolicyExclude:
   - "@expo/schema-utils@57.0.3"
   - "babel-preset-expo@57.0.17"
   - "expo-asset@57.0.22"
+  - "expo-blur@57.0.3" # glass fallback; the 57 line never had provenance
   - "expo-constants@57.0.25"
+  - "expo-glass-effect@57.0.5" # iOS Liquid Glass; the 57 line never had provenance
   - "expo-modules-autolinking@57.0.18"
   - "expo-modules-core@57.0.26"
   - "expo-modules-jsi@57.1.3"

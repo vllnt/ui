@@ -124,11 +124,18 @@ export function Example() {
 }
 ```
 
+In Next.js App Router server components, import by subpath so the route ships
+only that component's client JS: `import { Button } from "@vllnt/ui/button"`,
+`import { cn } from "@vllnt/ui/utils"`. The subpath is the component's
+directory name and exports the same names as the root.
+
 ### Export surface
 
 | Import path | What |
 |-------------|------|
-| `@vllnt/ui` | All components, hooks, types, and the `cn()` utility |
+| `@vllnt/ui` | All components, hooks, types, and the `cn()` and `cx()` utilities |
+| `@vllnt/ui/<component>` | One component directory (for example `@vllnt/ui/button`), the same names the root exports from it |
+| `@vllnt/ui/utils` | `cn()`, `cx()` |
 | `@vllnt/ui/tailwind-preset` | Tailwind preset config |
 | `@vllnt/ui/styles.css` | Tailwind base + theme variables + utilities |
 | `@vllnt/ui/themes/default.css` | Theme CSS variables only |
@@ -137,6 +144,12 @@ export function Example() {
 
 `cn()` joins class values and merges Tailwind classes via `tailwind-merge` — use it to combine
 a component's `className` with conditional classes (last class wins on conflict).
+`cx()` joins classes without `tailwind-merge` and keeps every class. `UnstyledButton` and
+`PlainSeparator` use it, so they add no `tailwind-merge` of their own.
+`UnstyledToggleGroup` and `UnstyledToggleGroupItem` (`@vllnt/ui/toggle-group`)
+are `ToggleGroup` with no classes, `tailwind-merge` or variant helpers.
+Import them from a `"use client"` module: a server-component import of
+`@vllnt/ui/toggle-group` also brings `ToggleGroup`.
 
 ### Theming / dark mode
 

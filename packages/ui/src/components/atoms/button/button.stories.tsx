@@ -22,6 +22,7 @@ const meta = {
         "link",
         "outline",
         "secondary",
+        "unstyled",
       ],
     },
   },
@@ -43,3 +44,11 @@ export const VariantGhost: Story = { args: { variant: "ghost" } };
 export const VariantLink: Story = { args: { variant: "link" } };
 export const VariantOutline: Story = { args: { variant: "outline" } };
 export const VariantSecondary: Story = { args: { variant: "secondary" } };
+/** No classes of its own: the button draws only what `className` gives it. */
+export const VariantUnstyled: Story = {
+  args: {
+    className:
+      "rounded-sm border border-dashed border-border px-3 py-1 text-sm text-foreground",
+    variant: "unstyled",
+  },
+};

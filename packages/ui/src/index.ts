@@ -132,3 +132,4 @@ export {
   type UseThemePresetResult,
 } from "./lib/use-theme-preset";
 export { cn } from "./lib/utils";
+export { cx } from "./lib/cx";

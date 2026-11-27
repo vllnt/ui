@@ -20,6 +20,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - **`commandScore` and `createCommandRanker`** - cmdk's scoring (MIT, ported from
   cmdk 1.1.1) and the ranker `Command` uses to order its results, so search
   results keep cmdk's ranking.
+- **Docs in the package** - the tarball now ships `llms.txt`, one Markdown page per
+  component in `docs/components/` (import, props, variants) and the `vllnt-ui` agent
+  skill in `skills/vllnt-ui/SKILL.md`, so agents read the docs of the installed
+  version from `node_modules/@vllnt/ui/`. They are written at pack time; the build
+  and the JavaScript bundles do not change.
 - **`Separator` `variant`** - `variant="dashed"` draws a dashed 1 px border over a
   transparent fill, in both orientations. The default stays `solid`.
 - **`Link` `size`, `foreground` and `skip`** - `size="sm" | "default" | "lg"`
@@ -28,7 +33,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
   primary; `variant="skip"` is a skip-to-content link, hidden until focused,
   then shown at the top left, 44 px high, above other content.
 - **`Button` size `icon-lg`** - a 44 px square icon button (`size-11`).
-
 - **More ui-sdk helpers are public** - the dialog part builders (`dialogRoot`,
   `dialogTrigger`, `dialogClose`, `dialogPortal`, `dialogOverlay`, `dialogBox`,
   `dialogTitle`, `dialogDescription`, `useDialogPopup`, `openAliases`),
@@ -55,10 +59,32 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
   `AnimatedTabs`; `ref`, `orientation` and trigger `disabled` on `Tabs`.
 - **`data-slot`** on the parts of `Card`, `Alert`, `Panel`, `DataList` and
   `Table`, like the ui-sdk parts.
+- **`Button` `variant="unstyled"`** - keeps the button's behaviour (`asChild`,
+  `disabled`, ref, every native attribute) and adds no classes of its own: the
+  element's class list is only the caller's `className`, and `size` has no
+  effect. `buttonVariants({ variant: "unstyled" })` returns only the caller's
+  classes, merged with `cn`. The caller styles focus and disabled states. Every other variant and size renders the same class string as
+  before.
 - **`SegmentedControl` `fit` and `variant`** - `fit` hugs the content (root
   `w-auto`, items `flex-none`); `variant="hairline"` swaps the filled track for a
   transparent one with a 1 px input-colour border (`glass-input` inside glass).
   The defaults stay `filled` and full width.
+- **`cx`, `UnstyledButton` and `PlainSeparator`: no `tailwind-merge`** - `cx`
+  (root and `@vllnt/ui/utils`) joins class values like `clsx` and keeps every
+  class. `UnstyledButton` (`@vllnt/ui/button`) is a native `<button>` with no
+  classes of its own and `type="button"` by default. `PlainSeparator`
+  (`@vllnt/ui/separator`) renders the same markup as `Separator`, but a
+  conflicting `className` adds to the default classes instead of replacing
+  them. None of the three imports `tailwind-merge`, so a bundle that uses only
+  them carries none of its code. `cn`, `Button` and `Separator` stay the same.
+- **`UnstyledToggleGroup` and `UnstyledToggleGroupItem`** - `ToggleGroup`
+  without styles, from `@vllnt/ui/toggle-group`: the same behaviour (one tab
+  stop, arrow keys, Home and End, radio items when `type="single"`, pressed
+  buttons otherwise) and no classes of their own; `className` reaches the element
+  as given. Neither imports `tailwind-merge` nor the variant helpers, and
+  `ToggleGroup` is now the styled layer over them. Import them from a
+  `"use client"` module; a server-component import of the subpath also brings
+  `ToggleGroup`. `ToggleGroup` stays the same.
 - **`Text` `dt`, `dd`, `li` and `measure`** - `as` takes `dt`, `dd` and `li`;
   `measure="prose" | "narrow"` caps the width with `size.measure-prose` (720 px,
   new) or `size.measure-narrow` (480 px).
@@ -73,6 +99,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
   switch by pointer, not by screen width.
 - **`size.measure-prose` token** - 720 px (`--size-measure-prose`), for lead
   copy and descriptions.
+- **Per-component subpath exports** - `@vllnt/ui/<component>` (for example
+  `@vllnt/ui/button`, `@vllnt/ui/toggle-group`) re-exports exactly the names the
+  root exports from that component directory, and `@vllnt/ui/utils` exports
+  `cn`. A Next.js server component that imports a subpath pulls only that
+  directory's `"use client"` modules into the route's client JS, not every
+  client component the root reaches, so a server-safe component such as
+  `Button` or `Separator` adds none. The subpaths are generated from the barrel
+  at build time; the root export is unchanged.
 
 ### Changed
 

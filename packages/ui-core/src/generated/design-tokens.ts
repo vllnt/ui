@@ -1106,6 +1106,168 @@ export const nativeTokens = {
       "ring": "#0a0a0a"
     }
   },
+  "glass": {
+    "dark": {
+      "blur": {
+        "sm": 8,
+        "md": 12,
+        "lg": 24,
+        "default": 20
+      },
+      "foreground": "#fafafa",
+      "hairline": "#ffffff2e",
+      "input": "#a3a3a3",
+      "mutedForeground": "#d4d4d4",
+      "shadow": {
+        "glass": {
+          "elevation": 6,
+          "shadowColor": "#000000",
+          "shadowOffset": {
+            "height": 4,
+            "width": 0
+          },
+          "shadowOpacity": 0.302,
+          "shadowRadius": 7
+        },
+        "glassFloating": {
+          "elevation": 12,
+          "shadowColor": "#000000",
+          "shadowOffset": {
+            "height": 10,
+            "width": 0
+          },
+          "shadowOpacity": 0.502,
+          "shadowRadius": 14
+        }
+      },
+      "tint": {
+        "top": "#1c1c1cb2",
+        "bottom": "#1414149c",
+        "denseTop": "#121212e0",
+        "denseBottom": "#121212d1"
+      },
+      "solid": {
+        "blur": {
+          "sm": 0,
+          "md": 0,
+          "lg": 0,
+          "default": 0
+        },
+        "foreground": "#fafafa",
+        "hairline": "#262626",
+        "input": "#696969",
+        "mutedForeground": "#a3a3a3",
+        "shadow": {
+          "glass": {
+            "elevation": 1,
+            "shadowColor": "#000000",
+            "shadowOffset": {
+              "height": 1,
+              "width": 0
+            },
+            "shadowOpacity": 0.4,
+            "shadowRadius": 1.5
+          },
+          "glassFloating": {
+            "elevation": 18,
+            "shadowColor": "#000000",
+            "shadowOffset": {
+              "height": 16,
+              "width": 0
+            },
+            "shadowOpacity": 0.6,
+            "shadowRadius": 20
+          }
+        },
+        "tint": {
+          "top": "#0a0a0a",
+          "bottom": "#0a0a0a",
+          "denseTop": "#0a0a0a",
+          "denseBottom": "#0a0a0a"
+        }
+      }
+    },
+    "light": {
+      "blur": {
+        "sm": 8,
+        "md": 12,
+        "lg": 24,
+        "default": 20
+      },
+      "foreground": "#0a0a0a",
+      "hairline": "#00000024",
+      "input": "#595959",
+      "mutedForeground": "#404040",
+      "shadow": {
+        "glass": {
+          "elevation": 6,
+          "shadowColor": "#000000",
+          "shadowOffset": {
+            "height": 4,
+            "width": 0
+          },
+          "shadowOpacity": 0.059,
+          "shadowRadius": 7
+        },
+        "glassFloating": {
+          "elevation": 12,
+          "shadowColor": "#000000",
+          "shadowOffset": {
+            "height": 10,
+            "width": 0
+          },
+          "shadowOpacity": 0.122,
+          "shadowRadius": 14
+        }
+      },
+      "tint": {
+        "top": "#ffffffa3",
+        "bottom": "#ffffff80",
+        "denseTop": "#ffffffe6",
+        "denseBottom": "#ffffffd6"
+      },
+      "solid": {
+        "blur": {
+          "sm": 0,
+          "md": 0,
+          "lg": 0,
+          "default": 0
+        },
+        "foreground": "#0a0a0a",
+        "hairline": "#e5e5e5",
+        "input": "#858585",
+        "mutedForeground": "#6a6a6a",
+        "shadow": {
+          "glass": {
+            "elevation": 1,
+            "shadowColor": "#000000",
+            "shadowOffset": {
+              "height": 1,
+              "width": 0
+            },
+            "shadowOpacity": 0.102,
+            "shadowRadius": 1.5
+          },
+          "glassFloating": {
+            "elevation": 18,
+            "shadowColor": "#000000",
+            "shadowOffset": {
+              "height": 16,
+              "width": 0
+            },
+            "shadowOpacity": 0.18,
+            "shadowRadius": 20
+          }
+        },
+        "tint": {
+          "top": "#ffffff",
+          "bottom": "#ffffff",
+          "denseTop": "#ffffff",
+          "denseBottom": "#ffffff"
+        }
+      }
+    }
+  },
   "motion": {
     "duration": {
       "fast": 100,
