@@ -34,8 +34,10 @@ const [shardIndex = 1, shardCount = 1] = (
 /** Shards by story id, so both builds split their stories the same way. */
 const shardOf = (id: string) => {
   let hash = 0;
-  for (const char of id) hash = Math.trunc(hash * 31 + char.codePointAt(0)!);
-  return (Math.abs(hash) % shardCount) + 1;
+  for (const char of id) {
+    hash = (Math.imul(hash, 31) + char.codePointAt(0)!) >>> 0;
+  }
+  return (hash % shardCount) + 1;
 };
 const directoryOf = (entry: Entry) => entry.importPath.split("/").at(-2) ?? "";
 

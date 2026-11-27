@@ -218,14 +218,14 @@ jobs:
           retention-days: 7
 
   visual-diff-shard:
-    name: Visual Diff (${{ matrix.shard }}/4)
+    name: Visual Diff (${{ matrix.shard }}/8)
     needs: [build-storybook, build-base-storybook]
     runs-on: ubuntu-latest
     timeout-minutes: 45
     strategy:
       fail-fast: false
       matrix:
-        shard: [1, 2, 3, 4]
+        shard: [1, 2, 3, 4, 5, 6, 7, 8]
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -274,7 +274,7 @@ jobs:
         run: |
           status=0
           node scripts/visual-diff/run.mjs --base storybook-base --head storybook-static \
-            --shard "$SHARD/4" --workers 4 --deep "$DEEP" --out .visual-diff || status=$?
+            --shard "$SHARD/8" --workers 4 --deep "$DEEP" --out .visual-diff || status=$?
           # 1 means some shots changed: the Visual Diff job below decides.
           test "$status" -le 1
 
