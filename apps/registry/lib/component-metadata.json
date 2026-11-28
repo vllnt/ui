@@ -5741,6 +5741,78 @@
     ],
     "title": "Sidebar Toggle"
   },
+  "site-frame": {
+    "category": "navigation",
+    "defaultStoryId": "layout-siteframe--default",
+    "description": "Theme provider and skip link around the pages of a site, with the system theme by default.",
+    "name": "site-frame",
+    "platforms": [
+      "web"
+    ],
+    "stories": [
+      {
+        "id": "layout-siteframe--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Site Frame"
+  },
+  "site-main": {
+    "category": "navigation",
+    "defaultStoryId": "layout-sitemain--default",
+    "description": "The page landmark of a site: a main element with the id that the skip link jumps to.",
+    "name": "site-main",
+    "platforms": [
+      "web"
+    ],
+    "stories": [
+      {
+        "id": "layout-sitemain--default",
+        "name": "Default"
+      },
+      {
+        "id": "layout-sitemain--flex-child",
+        "name": "Flex Child"
+      }
+    ],
+    "title": "Site Main"
+  },
+  "site-shell": {
+    "category": "navigation",
+    "defaultStoryId": "layout-siteshell--default",
+    "description": "The whole shell of a site in one order: theme provider, skip link, header, page, footer and a theme control.",
+    "name": "site-shell",
+    "platforms": [
+      "web"
+    ],
+    "stories": [
+      {
+        "id": "layout-siteshell--default",
+        "name": "Default"
+      },
+      {
+        "id": "layout-siteshell--with-theme-control",
+        "name": "With Theme Control"
+      }
+    ],
+    "title": "Site Shell"
+  },
+  "site-shell-static": {
+    "category": "navigation",
+    "defaultStoryId": "layout-siteshellstatic--default",
+    "description": "The shell of a site that hydrates no part of the shell: theme provider, skip link, header, page and footer.",
+    "name": "site-shell-static",
+    "platforms": [
+      "web"
+    ],
+    "stories": [
+      {
+        "id": "layout-siteshellstatic--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Site Shell Static"
+  },
   "skeleton": {
     "category": "core",
     "defaultStoryId": "core-skeleton--default",

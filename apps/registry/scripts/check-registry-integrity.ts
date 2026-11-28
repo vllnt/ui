@@ -45,8 +45,13 @@ const nativeRegistryPath = join(repoRoot, "packages/ui-native/registry.json");
  */
 const EXCLUDED = new Set<string>([
   "chart", // meta directory — shipped as area-chart / bar-chart / line-chart
+  "site-footer", // imports the shell layout constants, which the package does not export
+  "site-header", // multi-file (imports ./nav-parts, ./network-switcher) and shell constants
+  "site-header-static", // multi-file (imports ../site-header/nav-parts) and shell constants
+  "skip-link", // imports the shell layout constants, which the package does not export
   "social-fab", // multi-file (imports ./use-social-fab) — single-file shim cannot inline it yet
   "static-code", // multi-file (imports ./static-code-copy) — single-file shim cannot inline it yet
+  "theme-bar", // imports the shell layout constants, which the package does not export
 ]);
 
 type RegistryItem = {

@@ -6896,6 +6896,95 @@
       }
     },
     {
+      "name": "site-frame",
+      "type": "registry:component",
+      "title": "Site Frame",
+      "description": "Theme provider and skip link around the pages of a site, with the system theme by default.",
+      "files": [
+        {
+          "path": "registry/default/site-frame/site-frame.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.3.0",
+        "next-themes"
+      ],
+      "category": "navigation",
+      "version": "0.3.0",
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "name": "site-main",
+      "type": "registry:component",
+      "title": "Site Main",
+      "description": "The page landmark of a site: a main element with the id that the skip link jumps to.",
+      "files": [
+        {
+          "path": "registry/default/site-main/site-main.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.3.0"
+      ],
+      "category": "navigation",
+      "version": "0.3.0",
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "name": "site-shell",
+      "type": "registry:component",
+      "title": "Site Shell",
+      "description": "The whole shell of a site in one order: theme provider, skip link, header, page, footer and a theme control.",
+      "files": [
+        {
+          "path": "registry/default/site-shell/site-shell.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.3.0"
+      ],
+      "category": "navigation",
+      "version": "0.3.0",
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "name": "site-shell-static",
+      "type": "registry:component",
+      "title": "Site Shell Static",
+      "description": "The shell of a site that hydrates no part of the shell: theme provider, skip link, header, page and footer.",
+      "files": [
+        {
+          "path": "registry/default/site-shell-static/site-shell-static.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.3.0"
+      ],
+      "category": "navigation",
+      "version": "0.3.0",
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
+    },
+    {
       "name": "skeleton",
       "type": "registry:component",
       "title": "Skeleton",
