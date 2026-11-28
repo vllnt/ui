@@ -28,6 +28,17 @@ Release automation can regenerate this file from Conventional Commits with
 - **Glass checks** - WCAG 2.2 AA contrast tests for text and control borders on
   both tints in every theme, and a backdrop-filter budget test: no
   `backdrop-blur-*`, no blur radius above `blur.glass.lg` (24 px).
+- **Generic site shell** - `SiteShell` and `SiteShellStatic` (the whole shell of
+  a site: theme provider, skip link, header, `main#main`, footer and an optional
+  theme control), with `SiteHeader` and `SiteHeaderStatic` (the title is the
+  site switcher when you pass a `network`, and the link home when you do not),
+  `SiteFooter`, `SiteFrame`, `SiteThemeProvider`, `SiteMain`, `SkipLink` and
+  `ThemeBar`. The shell holds no brand, link or copy: you pass `brand`, the
+  links, the network and the footer columns as props, and a guard test fails on
+  any brand string in the exported sources. `SiteHeader` takes an `actions` slot
+  for the controls of one site. The docs site renders this shell.
+- Total component count: **325** (up from 321): `site-main`, `site-frame`,
+  `site-shell` and `site-shell-static` join the registry.
 
 ### Changed
 
