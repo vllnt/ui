@@ -16,9 +16,9 @@ The Affordance column below shows what each existing component styles today; the
 | --- | --- | --- |
 | native-0.1.0, built | 172 | A native module exists in `registry.json`. |
 | native-0.1.0, planned (missing) | 0 | Foundation component that 0.1.0 must add; not built yet. |
-| web-only | 79 | Stays web-only, with a concrete reason and the native equivalent when there is one. |
+| web-only | 88 | Stays web-only, with a concrete reason and the native equivalent when there is one. |
 | later | 70 | Native releases after 0.1.0: 0.2.0 (20), 0.3.0 (36), 0.4.0 (12), 0.5.0 (2). |
-| **Web components** | **321** | One entry each. |
+| **Web components** | **330** | One entry each. |
 | Native-only primitives | 3 | `icon`, `stack`, `spacer`: no web component behind them (0 planned, 3 built). |
 
 Foundation set: 41 rows, 40 exist on native, 0 missing, 1 mapped to a native equivalent. Open decisions: 0.
@@ -120,15 +120,19 @@ Everything here ships in 0.1.0. **State**: exists = native module today; MISSING
 
 Foundation components are listed above and not repeated here.
 
-### Layout (3)
+### Layout (7)
 
-native-0.1.0 2 · web-only 1 · later 0
+native-0.1.0 2 · web-only 5 · later 0
 
 | Component | Web | Status | Target | Native / equivalent | Reason and needs |
 | --- | --- | --- | --- | --- | --- |
 | `horizontal-scroll-row` | molecules | native-0.1.0 | — | molecules/horizontal-scroll-row |  |
 | `resizable` | atoms | native-0.1.0 | — | atoms/resizable |  |
 | `scroll-area` | atoms | web-only | — | `ScrollView`, `FlatList` | Custom-styled scrollbars over DOM overflow; native scroll containers are platform-drawn. |
+| `site-frame` | molecules | web-only | — | — | Document frame that sets up the theme provider and the skip link of a web page; native has its own ThemeProvider. |
+| `site-main` | atoms | web-only | — | — | The page landmark that the skip link jumps to; native screens have no skip target. |
+| `site-shell` | templates | web-only | — | — | Web page chrome built on DOM landmarks; a native app is made of screens and has no page to frame. |
+| `site-shell-static` | templates | web-only | — | — | Web page chrome built on DOM landmarks; a native app is made of screens and has no page to frame. |
 
 ### Typography (3)
 
@@ -221,9 +225,9 @@ native-0.1.0 6 · web-only 2 · later 2
 | `share-dialog` | organisms | native-0.1.0 | — | atoms/share-dialog |  |
 | `share-dialog-people` | organisms | later | 0.3.0 | — | People-sharing panel with link, role menus and invite form. Needs: native share-dialog (exists). |
 
-### Navigation (21)
+### Navigation (25)
 
-native-0.1.0 16 · web-only 4 · later 1
+native-0.1.0 16 · web-only 8 · later 1
 
 | Component | Web | Status | Target | Native / equivalent | Reason and needs |
 | --- | --- | --- | --- | --- | --- |
@@ -244,6 +248,10 @@ native-0.1.0 16 · web-only 4 · later 1
 | `sidebar` | molecules | native-0.1.0 | — | molecules/sidebar |  |
 | `sidebar-provider` | atoms | native-0.1.0 | — | atoms/sidebar-provider |  |
 | `sidebar-toggle` | molecules | native-0.1.0 | — | molecules/sidebar-toggle |  |
+| `site-footer` | molecules | web-only | — | — | Site footer with link columns, a landmark and a skip target; a native app has no page footer. |
+| `site-header` | organisms | web-only | — | `top-bar` | Site header with a site switcher, links and a menu, built on DOM landmarks and next/link style anchors. |
+| `site-header-static` | organisms | web-only | — | `top-bar` | Server-rendered site header that opens its menus without client script; a native app has no page header. |
+| `skip-link` | atoms | web-only | — | — | Keyboard link that jumps past the header to the page landmark; native uses the screen reader focus order. |
 | `step-navigation` | atoms | native-0.1.0 | — | molecules/step-navigation |  |
 | `toolbar` | atoms | native-0.1.0 | — | molecules/toolbar |  |
 | `view-switcher` | atoms | native-0.1.0 | — | molecules/view-switcher |  |
@@ -512,13 +520,14 @@ native-0.1.0 13 · web-only 17 · later 1
 | `tilt-card` | atoms | web-only | — | `card` | 3D tilt toward the pointer. |
 | `typewriter` | atoms | native-0.1.0 | — | atoms/typewriter |  |
 
-### Theme (4)
+### Theme (5)
 
-native-0.1.0 0 · web-only 4 · later 0
+native-0.1.0 0 · web-only 5 · later 0
 
 | Component | Web | Status | Target | Native / equivalent | Reason and needs |
 | --- | --- | --- | --- | --- | --- |
 | `lang-provider` | atoms | web-only | — | — | Language context bound to next/navigation routes; native apps use app-level i18n. |
+| `theme-bar` | molecules | web-only | — | `ThemeProvider` | Footer bar with a segmented theme control for next-themes; native has its own ThemeProvider. |
 | `theme-preset-provider` | atoms | web-only | — | `ThemeProvider` | Persists web theme presets and injects a no-flash script; native ThemeProvider takes colorScheme and override. |
 | `theme-provider` | atoms | web-only | — | `ThemeProvider` | next-themes provider for CSS-variable theming; native has its own ThemeProvider. |
 | `theme-switcher` | atoms | web-only | — | `ThemeProvider` | Swatch row for web CSS theme presets kept in sync across the page. |
