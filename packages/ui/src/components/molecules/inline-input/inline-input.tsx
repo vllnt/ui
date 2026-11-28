@@ -21,9 +21,19 @@ export type InlineInputProps = {
   value: string;
 };
 
-/** Stable ref callback: focuses the input once when it mounts, like `autoFocus`. */
+/**
+ * Stable ref callback: focuses the input once when it mounts, like `autoFocus`,
+ * while the click or key press that opened the editor is still live. A mount
+ * with no user gesture (a preview, or a page that renders the editor on load)
+ * does not take focus: browsers block that focus in embedded frames and log a
+ * "focus-without-user-activation" policy violation. Browsers without
+ * `navigator.userActivation` always focus.
+ */
 function focusOnMount(node: HTMLInputElement | null): void {
-  node?.focus();
+  const activation: undefined | UserActivation = navigator.userActivation;
+  if (node && (!activation || activation.isActive)) {
+    node.focus();
+  }
 }
 
 /**

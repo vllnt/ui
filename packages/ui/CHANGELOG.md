@@ -262,6 +262,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - **`Kbd` `shortcut`** - each key cap has an explicit React key, so a
   multi-key shortcut no longer logs the "unique key prop" warning in
   development.
+- **`InlineInput` focus on mount** - it still takes focus when a click or key
+  press opens the editor, but no longer when it mounts with no user gesture
+  (a preview, or a page that renders it on load). Browsers block that focus in
+  embedded frames and log a `focus-without-user-activation` policy violation.
 
 ## [0.4.0] - 2026-11-23
 
