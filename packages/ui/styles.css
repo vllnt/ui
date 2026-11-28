@@ -103,9 +103,9 @@
     --size-target-min: 2.75rem;
     --opacity-grain: 1;
     --opacity-contact: 1;
-    --shadow-raised: none;
-    --shadow-overlay: none;
-    --shadow-floating: none;
+    --shadow-raised: 0 0 #0000;
+    --shadow-overlay: 0 0 #0000;
+    --shadow-floating: 0 0 #0000;
     --depth-z-0-offset: 0px;
     --depth-z-0-shadow: none;
     --depth-z-1-offset: 2px;
@@ -184,9 +184,9 @@
     --status-failed: 0.637 0.208 25.33;
     --status-done: 0.723 0.219 149.58;
     --status-ring: 0.715 0 0;
-    --shadow-raised: none;
-    --shadow-overlay: none;
-    --shadow-floating: none;
+    --shadow-raised: 0 0 #0000;
+    --shadow-overlay: 0 0 #0000;
+    --shadow-floating: 0 0 #0000;
     --color-glass-border: #FFFFFF2E;
     --material-highlight-top: #FFFFFF2E;
     --depth-z-1-shadow: var(--shadow-raised);

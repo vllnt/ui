@@ -137,8 +137,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
   black page and card, `--popover` #0a0a0a, `--muted` and `--secondary` #141414,
   `--accent` #181818, `--border` #1e1e1e, `--muted-foreground` #8a8a8a. The
   `--shadow-raised`, `--shadow-overlay` and `--shadow-floating` tokens are
-  `none`. `--radius` is 0.375rem (`rounded-lg`, `rounded-md` and `rounded-sm`
-  are 6, 4 and 2 px), `--radius-surface` 6 px and `--radius-control` 4 px.
+  empty (`0 0 #0000`, which stays valid inside a `box-shadow` list), and every
+  Tailwind `shadow-*` step reads them (`sm` and `DEFAULT` raised, `md` and `lg`
+  overlay, `xl` and `2xl` floating), so no part draws a shadow. `--radius` is
+  0.375rem (`rounded-lg`, `rounded-md` and `rounded-sm` are 6, 4 and 2 px),
+  `rounded-xl`, `rounded-2xl` and `rounded-3xl` follow `--radius-surface` (6 px),
+  and `--radius-control` is 4 px.
   `--font-sans` and `--font-mono` are one JetBrains Mono stack with system mono
   fallbacks (no font file is shipped). Headings weigh 500 and the type scale is
   denser (body 14 px, h1 20 px, display 28 px; display stays 600).

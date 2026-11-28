@@ -2,6 +2,12 @@ import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
+// A shadow token with no layers. `none` is invalid inside a box-shadow list, so
+// a Tailwind `shadow-*` utility (ring + ring offset + shadow) would drop the
+// whole declaration, focus rings included. A transparent zero layer draws
+// nothing and stays valid in a list.
+const EMPTY_SHADOW = "0 0 #0000";
+
 const scriptDirectory = dirname(fileURLToPath(import.meta.url));
 const designDirectory = join(scriptDirectory, "..");
 const repositoryRoot = join(designDirectory, "..", "..");
@@ -711,7 +717,7 @@ function shadowLines(mode, indentation, names) {
     .filter(([name]) => names.includes(name))
     .map(
       ([name, token]) =>
-        `${indentation}--shadow-${name}: ${token[mode].length > 0 ? token[mode].map(cssShadowLayer).join(", ") : "none"};`,
+        `${indentation}--shadow-${name}: ${token[mode].length > 0 ? token[mode].map(cssShadowLayer).join(", ") : EMPTY_SHADOW};`,
     );
 }
 

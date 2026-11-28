@@ -65,10 +65,23 @@ const config = {
           foreground: 'oklch(var(--info-foreground) / <alpha-value>)',
         },
       },
+      // Same as the published preset: the large radius steps follow the
+      // surface radius and every shadow step reads a theme shadow token.
       borderRadius: {
+        '2xl': 'var(--radius-surface)',
+        '3xl': 'var(--radius-surface)',
         lg: 'var(--radius)',
         md: 'calc(var(--radius) - 2px)',
         sm: 'calc(var(--radius) - 4px)',
+        xl: 'var(--radius-surface)',
+      },
+      boxShadow: {
+        '2xl': 'var(--shadow-floating)',
+        DEFAULT: 'var(--shadow-raised)',
+        lg: 'var(--shadow-overlay)',
+        md: 'var(--shadow-overlay)',
+        sm: 'var(--shadow-raised)',
+        xl: 'var(--shadow-floating)',
       },
       height: {
         'control-xs': 'var(--size-control-xs)',
