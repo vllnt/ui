@@ -105,7 +105,7 @@ test.describe("i18n language switcher", () => {
     await page.goto("/components");
     await expect(page.locator("html")).toHaveAttribute("lang", "en");
     await page
-      .getByRole("link", { name: "fr", exact: true })
+      .getByRole("link", { name: /^FR, / })
       .first()
       .click();
     await page.waitForURL(`${baseURL}/fr/components`);
@@ -119,7 +119,7 @@ test.describe("i18n language switcher", () => {
     await page.goto("/fr/components");
     await expect(page.locator("html")).toHaveAttribute("lang", "fr");
     await page
-      .getByRole("link", { name: "en", exact: true })
+      .getByRole("link", { name: /^EN, / })
       .first()
       .click();
     await page.waitForURL(`${baseURL}/components`);

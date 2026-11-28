@@ -101,7 +101,7 @@ test.describe("language choice", () => {
   }) => {
     await page.goto("/components/button");
     await expect(async () => {
-      await page.getByRole("link", { exact: true, name: "fr" }).click();
+      await page.getByRole("link", { name: /^FR, / }).click();
       await expect(page).toHaveURL("/fr/components/button", { timeout: 5000 });
     }).toPass({ timeout: 20_000 });
 

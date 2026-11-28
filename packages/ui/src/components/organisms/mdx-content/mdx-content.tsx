@@ -51,7 +51,7 @@ const MDXComponents: Components = {
     }
     return (
       <code
-        className="bg-muted px-1 py-0.5 rounded text-sm font-mono"
+        className="bg-muted px-1 py-0.5 rounded text-sm font-mono break-words"
         {...props}
       >
         {children}

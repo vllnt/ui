@@ -68,7 +68,7 @@ const SEPARATOR_CHARS: Record<string, string> = {
   slash: "/",
 };
 
-const crumbVariants = cva("flex min-h-6 items-center gap-1", {
+const crumbVariants = cva("flex min-h-6 min-w-0 items-center gap-1", {
   defaultVariants: {
     tone: "muted",
   },
@@ -196,13 +196,15 @@ const Breadcrumb = /* @__PURE__ */ named(
     return (
       <nav
         aria-label={labels?.region ?? DEFAULT_LABELS.region}
-        className={cn("flex items-center space-x-1 text-sm", className)}
+        className={cn("flex min-w-0 items-center space-x-1 text-sm", className)}
         ref={ref}
       >
-        <ol className="flex items-center space-x-1">
+        {/* min-w-0 down the chain lets a long current crumb truncate instead of
+            widening the page on a narrow screen. */}
+        <ol className="flex min-w-0 items-center space-x-1">
           {getVisibleEntries(items, overflow).map((entry, position) => (
             <li
-              className="flex items-center"
+              className="flex min-w-0 items-center"
               key={
                 entry
                   ? `${typeof entry.item.label === "string" ? entry.item.label : "breadcrumb"}-${entry.index.toString()}`
@@ -210,7 +212,7 @@ const Breadcrumb = /* @__PURE__ */ named(
               }
             >
               {position > 0 && (
-                <span className="mx-2">
+                <span className="mx-2 shrink-0">
                   <SeparatorIcon type={separator} />
                 </span>
               )}
