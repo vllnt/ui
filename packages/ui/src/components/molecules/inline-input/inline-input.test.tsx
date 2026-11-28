@@ -1,7 +1,18 @@
 import { fireEvent, render, screen } from "@testing-library/react";
-import { expect, it, vi } from "vitest";
+import { afterEach, expect, it, vi } from "vitest";
 
 import { InlineInput } from "./inline-input";
+
+function stubUserActivation(isActive: boolean): void {
+  Object.defineProperty(navigator, "userActivation", {
+    configurable: true,
+    value: { hasBeenActive: isActive, isActive },
+  });
+}
+
+afterEach(() => {
+  Reflect.deleteProperty(navigator, "userActivation");
+});
 
 it("InlineInput renders a visible root that applies custom className", () => {
   const { container } = render(<InlineInput className="custom-class" />);
@@ -49,4 +60,18 @@ it("InlineInput focuses on mount and does not refocus after re-render once blurr
   rerender(<InlineInput onChange={vi.fn()} onCommit={onCommit} value="ab" />);
 
   expect(input).not.toHaveFocus();
+});
+
+it("InlineInput leaves focus alone on mount when no user gesture is live", () => {
+  stubUserActivation(false);
+  render(<InlineInput onChange={vi.fn()} onCommit={vi.fn()} value="a" />);
+
+  expect(screen.getByRole("textbox")).not.toHaveFocus();
+});
+
+it("InlineInput focuses on mount while a user gesture is live", () => {
+  stubUserActivation(true);
+  render(<InlineInput onChange={vi.fn()} onCommit={vi.fn()} value="a" />);
+
+  expect(screen.getByRole("textbox")).toHaveFocus();
 });
