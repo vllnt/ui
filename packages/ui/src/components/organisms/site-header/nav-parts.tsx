@@ -169,15 +169,22 @@ export function menuReach({
 
 /**
  * A link is current on its own page and on the pages below it. A home link (`/`
- * or a locale root such as `/fr`) matches its own page alone.
+ * or a locale root such as `/fr`) matches its own page alone. A query or a hash
+ * on the link does not count, so an app that adds a query to its links keeps
+ * the current mark.
  */
 export function isCurrent(
   path: string,
   href: string,
   homeHref: string,
 ): boolean {
-  if (path === href) return true;
-  return href !== homeHref && href !== "/" && path.startsWith(`${href}/`);
+  const target = href.split(/[#?]/, 1)[0] ?? href;
+  if (path === target) return true;
+  return (
+    target !== homeHref.split(/[#?]/, 1)[0] &&
+    target !== "/" &&
+    path.startsWith(`${target}/`)
+  );
 }
 
 const ICON = {

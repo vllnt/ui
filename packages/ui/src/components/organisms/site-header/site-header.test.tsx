@@ -278,6 +278,18 @@ describe("SiteHeader links and menu", () => {
     ).not.toHaveAttribute("aria-current");
   });
 
+  it("ignores a query on the link when it marks the current page", () => {
+    renderHeader({
+      currentHref: "/guides",
+      items: [{ bar: "tablet", href: "/guides?plan=pro", label: "Guides" }],
+    });
+    const bar = screen.getByRole("navigation", { name: "Primary" });
+    expect(within(bar).getByRole("link", { name: "Guides" })).toHaveAttribute(
+      "aria-current",
+      "page",
+    );
+  });
+
   it("gives an external link a new tab, an arrow and the external text", () => {
     renderHeader({ currentHref: "/" });
     fireEvent.click(screen.getByRole("button", { name: "Open menu" }));
