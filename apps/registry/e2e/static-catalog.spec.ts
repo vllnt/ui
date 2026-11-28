@@ -203,10 +203,12 @@ test.describe("platform variants", () => {
 
   test("keep variant copies out of the search index", async ({ page }) => {
     await page.goto("/components/button");
-    await expect(page.locator("main[data-pagefind-ignore]")).toHaveCount(0);
+    // The shell owns `main`; the page's content region carries the opt-out.
+    const content = 'main [data-slot="page-content"][data-pagefind-ignore]';
+    await expect(page.locator(content)).toHaveCount(0);
 
     await page.goto("/components/button?platform=native");
-    await expect(page.locator("main[data-pagefind-ignore]")).toHaveCount(1);
+    await expect(page.locator(content)).toHaveCount(1);
   });
 
   test("private variant URLs redirect to the public URL", async ({

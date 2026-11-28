@@ -4,7 +4,6 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
-import { Footer } from "@/components/footer/footer";
 import { PageShell } from "@/components/page-shell";
 import { Link, type Locale, routing } from "@/i18n/routing";
 import { resolveAiComponent } from "@/lib/ai-seo";
@@ -141,7 +140,6 @@ export default async function UseCasePage({ params }: Props) {
           </Link>
         </div>
       </div>
-      <Footer />
     </PageShell>
   );
 }

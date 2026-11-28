@@ -5,7 +5,6 @@ import { notFound } from "next/navigation";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
 import { ComponentCard } from "@/components/component-card";
-import { Footer } from "@/components/footer/footer";
 import { PlatformSelector } from "@/components/platform-selector";
 import { PlatformSidebar } from "@/components/platform-sidebar";
 import { Link, type Locale, routing } from "@/i18n/routing";
@@ -146,10 +145,10 @@ export default async function FamilyPage({ params }: Props) {
         platform={getPlatform(platformParameter, "all")}
         sections={await getSidebarSections(group.category, locale)}
       />
-      <main
-        className="flex-1 overflow-y-auto bg-background"
+      <div
+        className="min-w-0 flex-1 bg-background"
         data-pagefind-ignore={platformParameter === undefined ? undefined : ""}
-        id="main"
+        data-slot="page-content"
       >
         <section className="border-b border-border">
           <div className="mx-auto max-w-7xl px-4 py-16 lg:px-8">
@@ -322,9 +321,7 @@ export default async function FamilyPage({ params }: Props) {
             </div>
           </section>
         ) : null}
-
-        <Footer />
-      </main>
+      </div>
     </>
   );
 }

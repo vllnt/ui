@@ -3,7 +3,8 @@ import { expect, test } from "@playwright/test";
 /**
  * The header's "Skip to content" link points at `#main`, so every page needs
  * exactly one element with that id. Lighthouse fails the `skip-link` audit
- * without it. Give a new page's `<main>` the id `main` (PageShell already does).
+ * without it. The shared site shell renders the one `<main id="main">`, so a
+ * page renders its content inside it and no `<main>` of its own.
  */
 const ROUTES = [
   "/",

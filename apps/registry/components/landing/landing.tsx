@@ -10,7 +10,6 @@ import {
 } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 
-import { Footer } from "@/components/footer/footer";
 import { GitHubMark } from "@/components/github-mark";
 import { VersionChannels } from "@/components/landing/version-channels";
 import { Link } from "@/i18n/routing";
@@ -489,7 +488,6 @@ export async function Landing() {
       <AgentCallout />
       <FeaturedComponents />
       <CommunityCTA />
-      <Footer />
     </>
   );
 }

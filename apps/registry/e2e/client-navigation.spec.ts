@@ -322,7 +322,7 @@ test.describe("header on wide screens", () => {
 
         const layout = await page.evaluate(() => {
           const header = document.querySelector("header");
-          const row = header?.querySelector(":scope > div > div");
+          const row = header?.querySelector(":scope > div");
           const clipped = [...(header?.querySelectorAll("a, button") ?? [])]
             .filter((element) => {
               const box = element.getBoundingClientRect();

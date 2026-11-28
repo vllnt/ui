@@ -20,7 +20,6 @@
     "builtWith": "VLLNT UI · MIT licensed · Built with ui-sdk, Tailwind CSS, and CVA",
     "changelog": "Changelog",
     "codeOfConduct": "Code of Conduct",
-    "community": "Community",
     "components": "Components",
     "design": "Design",
     "designTokens": "Design tokens",
@@ -42,7 +41,24 @@
     "storybook": "Storybook",
     "vision": "Vision",
     "native": "React Native",
-    "nativeRegistryJson": "Native registry JSON"
+    "nativeRegistryJson": "Native registry JSON",
+    "navLabel": "Footer",
+    "networkHeadings": {
+      "company": "vllnt",
+      "learnBuild": "Learn and build",
+      "platforms": "Platforms"
+    },
+    "otherSite": "other site",
+    "pages": {
+      "company": "Company",
+      "contact": "Contact",
+      "journal": "Journal",
+      "legal": "Legal notice",
+      "privacy": "Privacy",
+      "services": "Services",
+      "terms": "Terms"
+    },
+    "tagline": "The accessible design system for AI agents."
   },
   "forms": {
     "report": {
@@ -76,8 +92,17 @@
   },
   "header": {
     "changelog": "Changelog",
+    "closeMenu": "Close menu",
     "closeNavigation": "Close navigation",
+    "externalLink": "opens in a new tab",
     "githubLabel": "VLLNT UI on GitHub",
+    "homeLabel": "VLLNT UI home",
+    "languages": {
+      "en": "English",
+      "fr": "French"
+    },
+    "localeAria": "{code}, read this page in {language}",
+    "menu": "Menu",
     "navComponents": "Components",
     "navDesign": "Design",
     "navDocs": "Docs",
@@ -86,7 +111,15 @@
     "navTemplates": "Templates",
     "navThemes": "Themes",
     "navVision": "Vision",
+    "networkGroups": {
+      "directory": "Directory",
+      "learnBuild": "Learn and build",
+      "platforms": "Platforms"
+    },
+    "networkLabel": "VLLNT network",
+    "openMenu": "Open menu",
     "openNavigation": "Open navigation",
+    "primaryNavigation": "Primary",
     "releases": "Releases",
     "rssFeed": "RSS feed",
     "searchButton": "Search...",
@@ -96,6 +129,10 @@
     "searchGroup": "Components",
     "searchPlaceholder": "Search docs and components...",
     "skipToContent": "Skip to content",
+    "themeDark": "Dark",
+    "themeLabel": "Theme",
+    "themeLight": "Light",
+    "themeSystem": "System",
     "whatsNew": "What's new"
   },
   "landing": {

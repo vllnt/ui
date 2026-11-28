@@ -2,7 +2,6 @@ import { Breadcrumb } from "@vllnt/ui";
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
-import { Footer } from "@/components/footer/footer";
 import { PageShell } from "@/components/page-shell";
 import { PlatformSelector } from "@/components/platform-selector";
 import { Link, type Locale } from "@/i18n/routing";
@@ -144,7 +143,6 @@ export default async function FamiliesPage({ params }: Props) {
           ))}
         </div>
       </div>
-      <Footer />
     </PageShell>
   );
 }

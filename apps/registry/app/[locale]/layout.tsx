@@ -5,13 +5,14 @@ import "../globals.css";
 
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
-import { SidebarProvider, ThemePresetProvider, ThemeProvider } from "@vllnt/ui";
+import { SidebarProvider, SiteShell, ThemePresetProvider } from "@vllnt/ui";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
-import { setRequestLocale } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 import type React from "react";
 
+import { Footer } from "@/components/footer/footer";
 import { ForwardedQueryProvider } from "@/components/forwarded-query";
 import { Header } from "@/components/header";
 import { RybbitAnalytics } from "@/components/rybbit-analytics";
@@ -126,6 +127,7 @@ export default async function LocaleLayout({ children, params }: Props) {
   }
 
   setRequestLocale(locale);
+  const t = await getTranslations("header");
 
   return (
     <html lang={locale} suppressHydrationWarning>
@@ -149,33 +151,39 @@ export default async function LocaleLayout({ children, params }: Props) {
           type="application/atom+xml"
         />
       </head>
-      <body className="h-full overflow-hidden">
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="dark"
-          disableTransitionOnChange
-          enableSystem
-        >
-          <ThemePresetProvider />
-          <SidebarProvider>
-            <div className="flex h-full flex-col overflow-hidden">
-              <NextIntlClientProvider>
-                <ForwardedQueryProvider>
-                  <Header locale={locale} />
-                  <div className="flex flex-1 overflow-hidden">
-                    <script
-                      {...jsonLdScriptAttributes([
-                        organizationLd(),
-                        websiteLd(),
-                      ])}
-                    />
-                    {children}
+      <body className="flex min-h-dvh flex-col">
+        <SidebarProvider>
+          <NextIntlClientProvider>
+            <ForwardedQueryProvider>
+              <ThemePresetProvider />
+              <SiteShell
+                footer={<Footer locale={locale} />}
+                header={
+                  <div className="sticky top-0 z-50">
+                    <Header locale={locale} />
                   </div>
-                </ForwardedQueryProvider>
-              </NextIntlClientProvider>
-            </div>
-          </SidebarProvider>
-        </ThemeProvider>
+                }
+                mainClassName="flex flex-1"
+                settings={{
+                  theme: {
+                    label: t("themeLabel"),
+                    options: {
+                      dark: t("themeDark"),
+                      light: t("themeLight"),
+                      system: t("themeSystem"),
+                    },
+                  },
+                }}
+                skipLabel={t("skipToContent")}
+              >
+                <script
+                  {...jsonLdScriptAttributes([organizationLd(), websiteLd()])}
+                />
+                {children}
+              </SiteShell>
+            </ForwardedQueryProvider>
+          </NextIntlClientProvider>
+        </SidebarProvider>
         {/* These scripts exist on Vercel's platform; on any other host they 404 on every page. */}
         {process.env.VERCEL === "1" ? (
           <>

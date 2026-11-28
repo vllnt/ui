@@ -20,7 +20,6 @@
     "builtWith": "VLLNT UI · licence MIT · Construit avec ui-sdk, Tailwind CSS et CVA",
     "changelog": "Journal des modifications",
     "codeOfConduct": "Code de conduite",
-    "community": "Communaute",
     "components": "Composants",
     "design": "Design",
     "designTokens": "Jetons de design",
@@ -42,7 +41,24 @@
     "storybook": "Storybook",
     "vision": "Vision",
     "native": "React Native",
-    "nativeRegistryJson": "JSON du registre natif"
+    "nativeRegistryJson": "JSON du registre natif",
+    "navLabel": "Pied de page",
+    "networkHeadings": {
+      "company": "vllnt",
+      "learnBuild": "Apprendre et construire",
+      "platforms": "Plateformes"
+    },
+    "otherSite": "autre site",
+    "pages": {
+      "company": "Entreprise",
+      "contact": "Contact",
+      "journal": "Journal",
+      "legal": "Informations legales",
+      "privacy": "Confidentialite",
+      "services": "Services",
+      "terms": "Conditions"
+    },
+    "tagline": "Le design system accessible pour les agents IA."
   },
   "forms": {
     "report": {
@@ -76,8 +92,17 @@
   },
   "header": {
     "changelog": "Journal des modifications",
+    "closeMenu": "Fermer le menu",
     "closeNavigation": "Fermer la navigation",
+    "externalLink": "s'ouvre dans un nouvel onglet",
     "githubLabel": "VLLNT UI sur GitHub",
+    "homeLabel": "Accueil VLLNT UI",
+    "languages": {
+      "en": "anglais",
+      "fr": "francais"
+    },
+    "localeAria": "{code}, lire cette page en {language}",
+    "menu": "Menu",
     "navComponents": "Composants",
     "navDesign": "Design",
     "navDocs": "Docs",
@@ -86,7 +111,15 @@
     "navTemplates": "Modeles",
     "navThemes": "Themes",
     "navVision": "Vision",
+    "networkGroups": {
+      "directory": "Annuaire",
+      "learnBuild": "Apprendre et construire",
+      "platforms": "Plateformes"
+    },
+    "networkLabel": "Reseau VLLNT",
+    "openMenu": "Ouvrir le menu",
     "openNavigation": "Ouvrir la navigation",
+    "primaryNavigation": "Principale",
     "releases": "Versions",
     "rssFeed": "Flux RSS",
     "searchButton": "Rechercher...",
@@ -96,6 +129,10 @@
     "searchGroup": "Composants",
     "searchPlaceholder": "Rechercher docs et composants...",
     "skipToContent": "Aller au contenu",
+    "themeDark": "Sombre",
+    "themeLabel": "Theme",
+    "themeLight": "Clair",
+    "themeSystem": "Systeme",
     "whatsNew": "Nouveautes"
   },
   "landing": {

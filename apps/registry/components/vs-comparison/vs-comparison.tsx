@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
-import { Footer } from "@/components/footer/footer";
 import { PageShell } from "@/components/page-shell";
 import { Link, type Locale } from "@/i18n/routing";
 import { breadcrumbTrailLd } from "@/lib/jsonld";
@@ -99,7 +98,6 @@ export async function VsComparisonPage({
           </Link>
         </div>
       </div>
-      <Footer />
     </PageShell>
   );
 }
