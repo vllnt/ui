@@ -1972,3 +1972,43 @@ export type { AreaChartProps } from "./organisms/chart/area-chart";
 export type { BarChartProps } from "./organisms/chart/bar-chart";
 export type { LineChartProps } from "./organisms/chart/line-chart";
 export type { ThemePresetProviderProps } from "./atoms/theme-preset-provider/theme-preset-provider";
+
+// Site shell: the generic page frame (skip link, header, main, footer, theme bar).
+export { SkipLink, type SkipLinkProps } from "./atoms/skip-link/skip-link";
+export { SiteMain, type SiteMainProps } from "./atoms/site-main/site-main";
+export {
+  SiteFrame,
+  type SiteFrameProps,
+  SiteThemeProvider,
+} from "./molecules/site-frame/site-frame";
+export { ThemeBar, type ThemeBarProps } from "./molecules/theme-bar/theme-bar";
+export {
+  SiteFooter,
+  type SiteFooterColumn,
+  type SiteFooterLink,
+  type SiteFooterProps,
+} from "./molecules/site-footer/site-footer";
+export { SiteHeader } from "./organisms/site-header/site-header";
+export type {
+  SiteHeaderProps,
+  SiteLocaleLink,
+  SiteNavItem,
+} from "./organisms/site-header/nav-parts";
+export type {
+  NetworkSwitcherGroup,
+  NetworkSwitcherItem,
+  SiteNetwork,
+} from "./organisms/site-header/network-list";
+export {
+  SiteHeaderStatic,
+  type SiteHeaderStaticProps,
+} from "./organisms/site-header-static/site-header-static";
+export {
+  SiteShell,
+  type SiteShellProps,
+  type SiteShellSettings,
+} from "./templates/site-shell/site-shell";
+export {
+  SiteShellStatic,
+  type SiteShellStaticProps,
+} from "./templates/site-shell-static/site-shell-static";

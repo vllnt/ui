@@ -147,10 +147,10 @@ export default async function DocsSlugPage(props: Props) {
         platform={getPlatform(platformParameter, "all")}
         sections={await getSidebarSections(undefined, locale)}
       />
-      <main
-        className="flex-1 overflow-y-auto bg-background"
+      <div
+        className="min-w-0 flex-1 bg-background"
         data-pagefind-ignore={platformParameter === undefined ? undefined : ""}
-        id="main"
+        data-slot="page-content"
       >
         <div className="container mx-auto px-4 py-16 lg:px-8">
           <div className="mb-8">
@@ -177,7 +177,7 @@ export default async function DocsSlugPage(props: Props) {
 
           <MDXContent content={pageContent} />
         </div>
-      </main>
+      </div>
     </>
   );
 }

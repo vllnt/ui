@@ -105,10 +105,7 @@ export default async function ComponentPlaygroundPage(props: Props) {
           locale,
         )}
       />
-      <main
-        className="flex-1 overflow-y-auto overflow-x-hidden bg-background"
-        id="main"
-      >
+      <div className="min-w-0 flex-1 overflow-x-hidden bg-background">
         <div className="mx-auto max-w-7xl px-4 py-8 lg:px-8">
           <Breadcrumb
             className="mb-4 text-muted-foreground"
@@ -157,7 +154,7 @@ export default async function ComponentPlaygroundPage(props: Props) {
             />
           </div>
         </div>
-      </main>
+      </div>
     </>
   );
 }

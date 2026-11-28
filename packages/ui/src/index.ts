@@ -20,6 +20,7 @@ export {
   type SupportedLanguage as UISupportedLanguage,
 } from "./lib/types";
 export type { Material, MaterialProps } from "./lib/material";
+export { SHELL_MATERIAL, type ShellMaterial } from "./lib/shell-material";
 export {
   CUSTOM_THEME_NAME,
   DEFAULT_THEME_PRESET,

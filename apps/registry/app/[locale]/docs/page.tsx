@@ -67,7 +67,7 @@ export default async function DocumentationPage({ params }: Props) {
         ])}
       />
       <PlatformSidebar sections={await getSidebarSections(undefined, locale)} />
-      <main className="flex-1 overflow-y-auto bg-background" id="main">
+      <div className="min-w-0 flex-1 bg-background">
         <div className="container mx-auto px-4 py-16 lg:px-8">
           <div className="mb-8">
             <Breadcrumb
@@ -104,7 +104,7 @@ export default async function DocumentationPage({ params }: Props) {
 
           <MDXContent content={stripLeadingMarkdownHeading(content)} />
         </div>
-      </main>
+      </div>
     </>
   );
 }

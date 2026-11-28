@@ -1,302 +1,104 @@
 "use client";
 
-import {
-  Button,
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-  NavbarSaas,
-  SearchDialog,
-} from "@vllnt/ui";
-import { ChevronDown, Languages } from "lucide-react";
+import { SiteHeader, type SiteLocaleLink, type SiteNavItem } from "@vllnt/ui";
 import { useTranslations } from "next-intl";
-import type React from "react";
 
-import { useForwardedQuery } from "@/components/forwarded-query";
-import { GitHubMark } from "@/components/github-mark";
-import { searchPagefind } from "@/components/header/pagefind-search";
-import {
-  Link,
-  type Locale,
-  routing,
-  usePathname,
-  useRouter,
-} from "@/i18n/routing";
-import { getPlatform, withPlatformQuery } from "@/lib/platform";
+import { HeaderActions } from "@/components/header/header-actions";
+import { usePreservedQuery } from "@/components/header/use-preserved-query";
+import { type Locale, routing, usePathname } from "@/i18n/routing";
 import { publicPagePathname } from "@/lib/platform-variant";
 import { localizePathname } from "@/lib/seo";
-import registryData from "@/registry.json";
+import { switcherGroups } from "@/lib/site-network";
 
-const GITHUB_URL = "https://github.com/vllnt/ui";
 /** next-intl's default locale cookie name. */
 const LOCALE_COOKIE = "NEXT_LOCALE";
 
-type HeaderProps = {
-  readonly locale: Locale;
-};
-
-const NO_QUERY = new URLSearchParams();
-
-type LocaleLinkProps = Omit<React.ComponentProps<"a">, "href"> & {
-  readonly current: boolean;
-  readonly href: string;
-  readonly locale: Locale;
-};
-
-/**
- * A language choice. It loads the page in the chosen language as a new
- * document at its canonical URL (`/docs`, `/fr/docs`), after storing the choice
- * in the cookie the middleware reads.
- *
- * A plain link, not a client navigation: after a soft navigation from
- * `/fr/...` to an unprefixed English URL, Next's router guessed the English
- * route shape wrong and refetched missing prefetch segments without end.
- */
-function LocaleLink({
-  children,
-  current,
-  href,
-  locale,
-  ...props
-}: LocaleLinkProps) {
-  return (
-    <a
-      {...props}
-      aria-current={current ? "page" : undefined}
-      href={href}
-      hrefLang={locale}
-      lang={locale}
-      onClick={() => {
-        // The cookie must exist before the request for an unprefixed URL, or
-        // the middleware sends a French browser back to /fr.
-
-        document.cookie = `${LOCALE_COOKIE}=${locale}; path=/; samesite=lax`;
-      }}
-    >
-      {children}
-    </a>
-  );
+function rememberLocale(locale: Locale): void {
+  document.cookie = `${LOCALE_COOKIE}=${locale}; path=/; samesite=lax`;
 }
 
+/** A language's own name, which no language translates. */
+const LANGUAGE_NAMES: Record<Locale, string> = {
+  en: "English",
+  fr: "Français",
+};
+
 /**
- * Site header. Its links keep the browser query, which the page can read after
- * hydration, so the prerendered HTML carries the plain links and the query
- * joins them in place.
+ * The links of the bar, in order. `tablet` links join the bar from 768 px and
+ * `desktop` links from 1200 px; the menu lists the ones the bar hides.
  */
-export function Header({ locale }: HeaderProps) {
-  const router = useRouter();
+const NAV_ITEMS = [
+  { bar: "desktop", key: "navGetStarted", path: "/" },
+  { bar: "tablet", key: "navDocs", path: "/docs" },
+  { bar: "desktop", key: "navVision", path: "/vision" },
+  { bar: "desktop", key: "navDesign", path: "/design" },
+  { bar: "tablet", key: "navComponents", path: "/components" },
+  { bar: "desktop", key: "navTemplates", path: "/templates" },
+  { bar: "desktop", key: "navThemes", path: "/themes" },
+  { bar: "desktop", key: "navRequest", path: "/request-component" },
+] as const;
+
+/**
+ * The shared site header with this site's links and controls. Its links keep
+ * the browser query, which the page can read after hydration, so the
+ * prerendered HTML carries the plain links and the query joins them in place.
+ */
+export function Header({ locale }: { readonly locale: Locale }) {
   const pathname = publicPagePathname(usePathname());
-  const searchParameters = useForwardedQuery() ?? NO_QUERY;
-  const common = useTranslations("common");
   const t = useTranslations("header");
-  const activePlatform = getPlatform(
-    searchParameters.get("platform") ?? undefined,
-  );
-  const preserveQuery = (href: string) =>
-    withPlatformQuery(href, searchParameters);
+  const { preserveQuery } = usePreservedQuery();
 
-  const navItems = [
-    {
-      href: preserveQuery(localizePathname("/", locale)),
-      title: t("navGetStarted"),
-    },
-    {
-      href: preserveQuery(localizePathname("/docs", locale)),
-      title: t("navDocs"),
-    },
-    {
-      href: preserveQuery(localizePathname("/vision", locale)),
-      title: t("navVision"),
-    },
-    {
-      href: preserveQuery(localizePathname("/design", locale)),
-      title: t("navDesign"),
-    },
-    {
-      href: preserveQuery(localizePathname("/components", locale)),
-      title: t("navComponents"),
-    },
-    {
-      href: preserveQuery(localizePathname("/templates", locale)),
-      title: t("navTemplates"),
-    },
-    {
-      href: preserveQuery(localizePathname("/themes", locale)),
-      title: t("navThemes"),
-    },
-    {
-      href: preserveQuery(localizePathname("/request-component", locale)),
-      title: t("navRequest"),
-    },
-  ];
+  const items: SiteNavItem[] = NAV_ITEMS.map(({ bar, key, path }) => ({
+    bar,
+    href: preserveQuery(localizePathname(path, locale)),
+    label: t(key),
+  }));
 
-  const searchItems = registryData.items.reduce<
-    {
-      description?: string;
-      href?: string;
-      id: string;
-      keywords?: string;
-      title: string;
-    }[]
-  >((items, item) => {
-    if (
-      item.type !== "registry:component" ||
-      item.stability === "deprecated" ||
-      !item.platforms.includes(activePlatform ?? "web")
-    ) {
-      return items;
-    }
-
-    items.push({
-      description: item.description,
-      href: preserveQuery(localizePathname(`/components/${item.name}`, locale)),
-      id: item.name,
-      keywords: [item.category, ...(item.platforms ?? ["web"])].join(" "),
-      title: item.title,
-    });
-
-    return items;
-  }, []);
+  // The two languages link each other: the one that is not the page's own.
+  const other = routing.locales.find((entry) => entry !== locale) ?? locale;
+  const localeLink: SiteLocaleLink = {
+    ariaLabel: t("localeAria", {
+      code: other.toUpperCase(),
+      language: t(`languages.${other}`),
+    }),
+    href: preserveQuery(localizePathname(pathname, other)),
+    hrefLang: other,
+    label: other.toUpperCase(),
+    name: LANGUAGE_NAMES[other],
+    // A plain link, not a client navigation: after a soft navigation from
+    // `/fr/...` to an unprefixed English URL, Next's router guessed the English
+    // route shape wrong and refetched missing prefetch segments without end.
+    // The cookie must exist before the request for an unprefixed URL, or the
+    // middleware sends a French browser back to /fr.
+    onClick: () => {
+      rememberLocale(other);
+    },
+  };
 
   return (
-    <>
-      <a
-        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-md focus:bg-background focus:px-4 focus:py-3 focus:text-sm focus:font-medium focus:ring-2 focus:ring-ring"
-        href="#main"
-        onClick={(event) => {
-          // Pages render one <main>; focus it so the next Tab starts in the content.
-          const main = document.querySelector("main");
-          if (!main) return;
-          event.preventDefault();
-          main.tabIndex = -1;
-          main.focus();
-        }}
-      >
-        {t("skipToContent")}
-      </a>
-      <NavbarSaas
-        brand={
-          <Link
-            className="shrink-0 whitespace-nowrap text-xl font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-            href={preserveQuery("/")}
-          >
-            VLLNT UI
-          </Link>
-        }
-        closeSidebarLabel={t("closeNavigation")}
-        navItems={navItems}
-        openSidebarLabel={t("openNavigation")}
-        rightSlot={
-          <div className="flex min-w-0 items-center gap-1 sm:gap-2">
-            <div className="w-9 shrink-0 max-sm:[&_button]:size-9 max-sm:[&_button]:justify-center max-sm:[&_button]:px-0 max-sm:[&_button_span]:sr-only max-sm:[&_button_svg]:mr-0 sm:w-auto lg:[&_button]:w-48 2xl:[&_button]:w-64">
-              <SearchDialog
-                buttonText={t("searchButton")}
-                buttonTextMobile={t("searchButton")}
-                docsEmptyText={t("searchDocsEmpty")}
-                docsGroupHeading={t("searchDocsGroup")}
-                docsSearch={searchPagefind}
-                emptyText={t("searchEmpty")}
-                groupHeading={t("searchGroup")}
-                items={searchItems}
-                onDocsSelect={(item) => {
-                  router.push(preserveQuery(item.href ?? item.id));
-                }}
-                onSelect={(item) => {
-                  router.push(
-                    preserveQuery(
-                      item.href ??
-                        localizePathname(`/components/${item.id}`, locale),
-                    ),
-                  );
-                }}
-                searchPlaceholder={t("searchPlaceholder")}
-              />
-            </div>
-            {/* Shown from 1536 px, where the search button also widens back to 256 px: below that the nav links need the room (with DejaVu, the default Linux font, the row overflowed at 1280 px). The footer and /docs/changelog link the same pages. */}
-            <div className="hidden 2xl:block">
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button className="min-h-11" size="sm" variant="outline">
-                    {t("whatsNew")}
-                    <ChevronDown className="size-4" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                  <DropdownMenuItem asChild>
-                    <Link href={preserveQuery("/releases")}>
-                      {t("releases")}
-                    </Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem asChild>
-                    <Link href={preserveQuery("/changelog")}>
-                      {t("changelog")}
-                    </Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem asChild>
-                    {/* react-doctor-disable-next-line react-doctor/nextjs-no-a-element -- /rss.xml is an XML feed, not a Next page; the router cannot render it */}
-                    <a href="/rss.xml">{t("rssFeed")}</a>
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </div>
-            <div className="md:hidden">
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button
-                    aria-label={`${common("locale")}: ${locale.toUpperCase()}`}
-                    className="size-9"
-                    size="icon"
-                    variant="outline"
-                  >
-                    <Languages aria-hidden="true" className="size-4" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                  {routing.locales.map((entry) => (
-                    <DropdownMenuItem asChild key={entry}>
-                      <LocaleLink
-                        current={entry === locale}
-                        href={preserveQuery(localizePathname(pathname, entry))}
-                        locale={entry}
-                      >
-                        {entry.toUpperCase()}
-                      </LocaleLink>
-                    </DropdownMenuItem>
-                  ))}
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </div>
-            <div className="hidden items-center rounded-md border border-border md:flex">
-              <Languages
-                aria-hidden="true"
-                className="ml-2 size-4 text-muted-foreground"
-              />
-              {routing.locales.map((entry) => (
-                <LocaleLink
-                  className="inline-flex min-h-11 items-center px-2 text-xs font-medium uppercase text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring aria-[current=page]:text-foreground"
-                  current={entry === locale}
-                  href={preserveQuery(localizePathname(pathname, entry))}
-                  key={entry}
-                  locale={entry}
-                >
-                  {entry}
-                </LocaleLink>
-              ))}
-            </div>
-            <a
-              aria-label={t("githubLabel")}
-              className="hidden size-11 items-center justify-center rounded-md text-muted-foreground hover:bg-secondary hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:inline-flex"
-              href={GITHUB_URL}
-              rel="noreferrer"
-              target="_blank"
-            >
-              <GitHubMark className="size-4" />
-            </a>
-          </div>
-        }
-        sidebarId="site-sidebar"
-      />
-    </>
+    <SiteHeader
+      actions={<HeaderActions locale={locale} />}
+      brand="VLLNT UI"
+      currentHref={localizePathname(pathname, locale)}
+      homeHref={preserveQuery(localizePathname("/", locale))}
+      items={items}
+      labels={{
+        close: t("closeMenu"),
+        external: t("externalLink"),
+        home: t("homeLabel"),
+        menu: t("menu"),
+        open: t("openMenu"),
+        primary: t("primaryNavigation"),
+      }}
+      locale={localeLink}
+      network={{
+        groups: switcherGroups({
+          directory: t("networkGroups.directory"),
+          learnBuild: t("networkGroups.learnBuild"),
+          platforms: t("networkGroups.platforms"),
+        }),
+        label: t("networkLabel"),
+      }}
+    />
   );
 }

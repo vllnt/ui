@@ -1,0 +1,49 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './skip-link.stories'
+
+<Meta of={Stories} />
+
+# SkipLink
+
+The first tab stop of a page. It stays hidden until it has focus, then jumps past the header to the page (`#main`, the id that `SiteMain` carries). It sits in a page column, at the content edge.
+
+<Primary />
+
+## Installation
+
+Add it with the shadcn CLI from the component registry: the registry page of this component lists the command (`r/skip-link.json`).
+
+## Import
+
+```tsx
+import { SkipLink } from '@vllnt/ui'
+```
+
+## Usage
+
+Put it first in `body`, before the header. `SiteFrame` and the site shells do this for you.
+
+```tsx
+<SkipLink>Skip to content</SkipLink>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## States
+
+### Custom target
+
+`href` defaults to `#main`. Point it at another element when the page has no `SiteMain`.
+
+<Canvas of={Stories.CustomTarget} sourceState="shown" />
+
+## Accessibility
+
+- A page has one skip link, and it is the first focusable element.
+- It is visually hidden (`sr-only`) until focus, so a screen reader reads it and a sighted keyboard user sees it.
+- The target needs `tabIndex={-1}` so the jump moves focus; `SiteMain` sets it.
+- Colours are the `primary` and `primary-foreground` tokens. There is no shadow.

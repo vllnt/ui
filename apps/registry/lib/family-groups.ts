@@ -247,6 +247,12 @@ const FAMILY_GROUPS: readonly FamilyGroupSet[] = [
           "horizontal-scroll-row",
         ],
       },
+      {
+        blurb:
+          "The page landmark, theme-aware frame, and full site shells that put the header, page, and footer of a website in one order.",
+        heading: "Site Shells",
+        slugs: ["site-main", "site-frame", "site-shell", "site-shell-static"],
+      },
     ],
   },
   {

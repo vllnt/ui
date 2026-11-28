@@ -1,0 +1,66 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './site-shell.stories'
+
+<Meta of={Stories} />
+
+# SiteShell
+
+The whole shell of a site, inside `body`: the theme provider, the skip link, the header, the page, the footer and the settings. It holds no brand, link or copy: the header and the footer you pass carry them.
+
+The order is the skip link, the header, `main#main`, the footer and the theme bar. The footer sits outside `main`. The app keeps `html` and `body`, its fonts and its own providers.
+
+<Primary />
+
+## Installation
+
+Add it with the shadcn CLI from the component registry: the registry page of this component lists the command (`r/site-shell.json`). `SiteHeader` is a package export, so the item installs `@vllnt/ui` for it.
+
+## Import
+
+```tsx
+import { SiteFooter, SiteHeader, SiteShell } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<SiteShell
+  footer={<SiteFooter {...footer} />}
+  header={<SiteHeader {...header} />}
+  settings={{
+    theme: {
+      label: 'Theme',
+      options: { dark: 'Dark', light: 'Light', system: 'System' },
+    },
+  }}
+  skipLabel="Skip to content"
+>
+  {children}
+</SiteShell>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+### Settings
+
+`settings` holds the text of what a visitor can set. Each key is one setting, and the shell decides where it sits.
+
+| Key | Shape | Notes |
+| --- | ----- | ----- |
+| `theme` | `{ label, options: { dark, light, system } }` | Adds `ThemeBar` after the footer. Without it the site has no control and follows the system. |
+
+## States
+
+### With the theme control
+
+<Canvas of={Stories.WithThemeControl} sourceState="shown" />
+
+## Accessibility
+
+- One skip link to `#main` is the first focusable element, and there is one `main#main` per page.
+- The header is the banner and the footer is the contentinfo landmark, outside `main`.
+- For a page that runs no script, use `SiteShellStatic` with `SiteHeaderStatic`.

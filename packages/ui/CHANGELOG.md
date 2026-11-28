@@ -116,6 +116,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
   client component the root reaches, so a server-safe component such as
   `Button` or `Separator` adds none. The subpaths are generated from the barrel
   at build time; the root export is unchanged.
+- **Generic site shell** - `SiteShell` and `SiteShellStatic` (theme provider,
+  skip link, header, `main#main`, footer and an optional theme control, in one
+  order), `SiteHeader` and `SiteHeaderStatic` (the title is the site switcher
+  when you pass a `network`, and the link home when you do not), `SiteFooter`,
+  `SiteFrame`, `SiteThemeProvider`, `SiteMain`, `SkipLink` and `ThemeBar`, with
+  their prop types and `SiteNetwork`, `NetworkSwitcherGroup`,
+  `NetworkSwitcherItem`, `SiteFooterColumn`, `SiteFooterLink`, `SiteNavItem` and
+  `SiteLocaleLink`. The shell holds no brand, link or copy: `brand` has no
+  default, and you pass the links, the network and the footer columns. A guard
+  test fails on any brand string in the exported sources. `SiteHeader` takes an
+  `actions` slot for the controls of one site, and its `currentHref` ignores a
+  query or fragment on a link. The sources use the flat default theme: no glass,
+  no blur and no shadow.
 
 ### Changed
 

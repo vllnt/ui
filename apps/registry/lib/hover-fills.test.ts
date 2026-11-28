@@ -27,7 +27,7 @@ const MIGRATED_HOVERS: readonly (readonly [string, number])[] = [
   ["app/[locale]/templates/[slug]/page.tsx", 2],
   ["components/component-mdx/component-mdx.tsx", 1],
   ["components/component-mdx/storybook-link.tsx", 1],
-  ["components/header/header.tsx", 1],
+  ["components/header/header-actions.tsx", 1],
   ["components/landing/landing.tsx", 7],
   ["components/platform-selector/platform-selector.tsx", 1],
 ];

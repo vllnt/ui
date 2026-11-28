@@ -201,7 +201,8 @@ test.describe("platform-aware component discovery", () => {
       "/components?platform=native",
     );
 
-    const frenchLink = page.getByRole("link", { name: "fr", exact: true });
+    // The bar's language link is named "FR, read this page in French".
+    const frenchLink = page.getByRole("link", { name: /^FR, / });
     await expect(frenchLink).toHaveAttribute(
       "href",
       "/fr/components?platform=native",

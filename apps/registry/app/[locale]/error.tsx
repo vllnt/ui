@@ -21,7 +21,7 @@ export default function PageError({ error, reset }: Props) {
   }, [error]);
 
   return (
-    <main className="container mx-auto max-w-3xl px-4 py-24 lg:px-8" id="main">
+    <div className="container mx-auto max-w-3xl px-4 py-24 lg:px-8">
       <h1 className="text-4xl font-semibold">{t("title")}</h1>
       <p className="mt-4 text-lg text-muted-foreground">{t("description")}</p>
       <div className="mt-8 flex flex-wrap gap-3">
@@ -35,6 +35,6 @@ export default function PageError({ error, reset }: Props) {
           {t("reload")}
         </Button>
       </div>
-    </main>
+    </div>
   );
 }

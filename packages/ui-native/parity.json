@@ -2107,6 +2107,61 @@
       "source": "src/components/molecules/sidebar-toggle/sidebar-toggle.tsx"
     },
     {
+      "name": "site-footer",
+      "level": "molecules",
+      "status": "web-only",
+      "category": "navigation",
+      "reason": "Site footer with link columns, a landmark and a skip target; a native app has no page footer."
+    },
+    {
+      "name": "site-frame",
+      "level": "molecules",
+      "status": "web-only",
+      "category": "layout",
+      "reason": "Document frame that sets up the theme provider and the skip link of a web page; native has its own ThemeProvider."
+    },
+    {
+      "name": "site-header",
+      "level": "organisms",
+      "status": "web-only",
+      "category": "navigation",
+      "reason": "Site header with a site switcher, links and a menu, built on DOM landmarks and next/link style anchors.",
+      "nativeEquivalent": [
+        "top-bar"
+      ]
+    },
+    {
+      "name": "site-header-static",
+      "level": "organisms",
+      "status": "web-only",
+      "category": "navigation",
+      "reason": "Server-rendered site header that opens its menus without client script; a native app has no page header.",
+      "nativeEquivalent": [
+        "top-bar"
+      ]
+    },
+    {
+      "name": "site-main",
+      "level": "atoms",
+      "status": "web-only",
+      "category": "layout",
+      "reason": "The page landmark that the skip link jumps to; native screens have no skip target."
+    },
+    {
+      "name": "site-shell",
+      "level": "templates",
+      "status": "web-only",
+      "category": "layout",
+      "reason": "Web page chrome built on DOM landmarks; a native app is made of screens and has no page to frame."
+    },
+    {
+      "name": "site-shell-static",
+      "level": "templates",
+      "status": "web-only",
+      "category": "layout",
+      "reason": "Web page chrome built on DOM landmarks; a native app is made of screens and has no page to frame."
+    },
+    {
       "name": "skeleton",
       "level": "atoms",
       "status": "native-0.1.0",
@@ -2115,6 +2170,13 @@
       "interactive": false,
       "source": "src/components/atoms/skeleton/skeleton.tsx",
       "propsGap": []
+    },
+    {
+      "name": "skip-link",
+      "level": "atoms",
+      "status": "web-only",
+      "category": "navigation",
+      "reason": "Keyboard link that jumps past the header to the page landmark; native uses the screen reader focus order."
     },
     {
       "name": "slider",
@@ -2413,6 +2475,16 @@
       "source": "src/components/molecules/textarea/textarea.tsx",
       "propsGap": [],
       "note": "Wraps native Input and inherits its states."
+    },
+    {
+      "name": "theme-bar",
+      "level": "molecules",
+      "status": "web-only",
+      "category": "theme",
+      "reason": "Footer bar with a segmented theme control for next-themes; native has its own ThemeProvider.",
+      "nativeEquivalent": [
+        "ThemeProvider"
+      ]
     },
     {
       "name": "theme-preset-provider",

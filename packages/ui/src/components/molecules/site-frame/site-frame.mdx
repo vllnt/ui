@@ -1,0 +1,47 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './site-frame.stories'
+
+<Meta of={Stories} />
+
+# SiteFrame
+
+The theme provider and the skip link around the body of every page. It exports two parts: `SiteFrame`, the default composition, and `SiteThemeProvider`, `next-themes` set up for a site shell (the `class` attribute, the system theme by default, no transition on change).
+
+<Primary />
+
+## Installation
+
+Add it with the shadcn CLI from the component registry: the registry page of this component lists the command (`r/site-frame.json`).
+
+## Import
+
+```tsx
+import { SiteFrame, SiteThemeProvider } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<SiteFrame skipLabel="Skip to content">
+  <header>...</header>
+  <SiteMain>{children}</SiteMain>
+  <footer>...</footer>
+</SiteFrame>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+The app keeps the `html` and `body` elements, its fonts and its own providers. Use `SiteThemeProvider` on its own, with props such as `enableColorScheme={false}`, when you build another composition.
+
+## API Reference
+
+<Controls />
+
+### SiteThemeProvider
+
+Takes every `next-themes` `ThemeProvider` prop. Its defaults are `attribute="class"`, `defaultTheme="system"`, `enableSystem` and `disableTransitionOnChange`; any prop you pass replaces one.
+
+## Accessibility
+
+- The skip link is the first focusable element and jumps to `#main`, which `SiteMain` carries.
+- The theme provider sets the `dark` or `light` class on `<html>` with one inline script before the first paint.

@@ -1,0 +1,84 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './site-footer.stories'
+
+<Meta of={Stories} />
+
+# SiteFooter
+
+The footer of a site: a brand block with a tagline, one to five link columns and an optional bottom row. It holds no brand, link or copy of its own. Everything comes in through props.
+
+<Primary />
+
+## Installation
+
+Add it with the shadcn CLI from the component registry: the registry page of this component lists the command (`r/site-footer.json`).
+
+## Import
+
+```tsx
+import { SiteFooter } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<SiteFooter
+  brand="Acme"
+  columns={[
+    {
+      heading: 'Product',
+      id: 'product',
+      links: [{ href: '/pricing', label: 'Pricing' }],
+    },
+    {
+      heading: 'Sites',
+      id: 'sites',
+      links: [{ external: true, href: 'https://docs.example.com', label: 'Docs' }],
+    },
+  ]}
+  navLabel="Footer"
+  otherSite="other site"
+  tagline="Tools for builders."
+/>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+`brand` is required. There is no default: the footer renders what you pass, so a site never shows another site's name.
+
+## API Reference
+
+<Controls />
+
+### Columns
+
+| Prop | Type | Notes |
+| ---- | ---- | ----- |
+| `heading` | `string` | The column title, rendered as `<h2>`. |
+| `id` | `string` | Names the column. The heading gets `footer-${id}`. |
+| `links` | `SiteFooterLink[]` | `{ href, label, external? }`. |
+
+An `external` link is a plain anchor with a ↗ and the `otherSite` text for screen readers. Other links go through `next/link`.
+
+### Material
+
+`material` stays for compatibility with older code. Both values render the flat footer: no surface, a hairline above it, no shadow and no blur.
+
+## States
+
+### Five columns
+
+Up to four columns share four tracks, so a column is as wide on every site. A fifth column takes five tracks from 1200 px, three from 768 px and two below.
+
+<Canvas of={Stories.FiveColumns} sourceState="shown" />
+
+### One column, no bottom row
+
+<Canvas of={Stories.OneColumnNoBottom} sourceState="shown" />
+
+## Accessibility
+
+- It renders a `<footer>` (contentinfo) landmark. Keep it outside `<main>`.
+- The navigation is labelled by `navLabel`. Each column heading is an `<h2>`, and each list is labelled by its heading.
+- An external link reads the `otherSite` text after its label, for example "Docs (other site)".
+- Links keep the 32 px control height with a fine pointer and the 44 px target with a coarse one.

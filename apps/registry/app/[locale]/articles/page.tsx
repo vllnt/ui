@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
 import { ArticleMeta } from "@/components/article-meta";
-import { Footer } from "@/components/footer/footer";
 import { PageShell } from "@/components/page-shell";
 import { Link, type Locale } from "@/i18n/routing";
 import { articleFeedPath } from "@/lib/article-feed";
@@ -97,7 +96,6 @@ export default async function ArticlesIndexPage({ params }: Props) {
           </ul>
         )}
       </div>
-      <Footer />
     </PageShell>
   );
 }

@@ -5,7 +5,6 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 
 import { ArticleMeta } from "@/components/article-meta";
 import { ComponentCard } from "@/components/component-card";
-import { Footer } from "@/components/footer/footer";
 import { PageShell } from "@/components/page-shell";
 import type { Locale } from "@/i18n/routing";
 import { articleMetadata, articleStructuredData } from "@/lib/article-seo";
@@ -103,7 +102,6 @@ export default async function ArticlePage({ params }: Props) {
           </section>
         ) : null}
       </div>
-      <Footer />
     </PageShell>
   );
 }

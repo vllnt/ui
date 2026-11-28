@@ -1,0 +1,45 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './site-main.stories'
+
+<Meta of={Stories} />
+
+# SiteMain
+
+The page landmark: `<main id="main" tabIndex={-1}>`. It is the target of the skip link in `SiteFrame`. A page has one.
+
+<Primary />
+
+## Installation
+
+Add it with the shadcn CLI from the component registry: the registry page of this component lists the command (`r/site-main.json`).
+
+## Import
+
+```tsx
+import { SiteMain } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<SiteMain className="flex-1">{children}</SiteMain>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## States
+
+### In a flex column
+
+Pass `className` for layout, for example `flex-1` when the body is a flex column.
+
+<Canvas of={Stories.FlexChild} sourceState="shown" />
+
+## Accessibility
+
+- One `main` per page. Do not render the footer inside it.
+- `id="main"` is what the skip link points at. `tabIndex={-1}` lets the jump move focus into the page without adding a tab stop.

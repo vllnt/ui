@@ -178,10 +178,10 @@ export default async function ComponentPage(props: Props) {
         locale={locale}
       />
       <PlatformSidebar platform={platform} sections={sidebarSections} />
-      <main
-        className="flex-1 overflow-y-auto bg-background overflow-x-hidden"
+      <div
+        className="min-w-0 flex-1 overflow-x-hidden bg-background"
         data-pagefind-ignore={platformParameter === undefined ? undefined : ""}
-        id="main"
+        data-slot="page-content"
       >
         <div className="mx-auto max-w-7xl px-4 py-8 lg:px-8">
           <div className="grid grid-cols-1 xl:grid-cols-[minmax(0,1fr)_200px] gap-8">
@@ -239,7 +239,7 @@ export default async function ComponentPage(props: Props) {
             />
           </div>
         </div>
-      </main>
+      </div>
     </>
   );
 }

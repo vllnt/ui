@@ -271,3 +271,24 @@ describe.each(
     expect(failures(colors, pairs, 3)).toEqual([]);
   });
 });
+
+/*
+ * The pairs of the site shell (header, switcher panel, footer, theme control)
+ * that the table above does not hold. The bar and the footer sit on the page
+ * background, the switcher panel is a popover, a hovered row pairs `accent`
+ * with `accent-foreground`, and the current site's row is `secondary` (the dark
+ * theme's `muted` is black like the page, so it cannot mark a row). Link rows
+ * in the panel read `foreground` on the popover.
+ */
+const SHELL_TEXT_PAIRS: readonly Pair[] = [
+  ["foreground", "popover"],
+  ["foreground", "secondary"],
+];
+
+describe.each(CASES)("%s theme (%s): site shell", (preset, mode) => {
+  const colors = palette(preset, mode);
+
+  it("keeps the shell text at 4.5:1 on its panel and current row", () => {
+    expect(failures(colors, SHELL_TEXT_PAIRS, 4.5)).toEqual([]);
+  });
+});
