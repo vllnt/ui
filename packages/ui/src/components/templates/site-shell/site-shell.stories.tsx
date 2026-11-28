@@ -17,7 +17,7 @@ const header = (
     ]}
     labels={{
       close: "Close menu",
-      home: "Acme home",
+      home: "Acme Docs home",
       menu: "Menu",
       open: "Open menu",
       primary: "Primary",

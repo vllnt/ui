@@ -77,8 +77,10 @@ export type SiteHeaderProps = {
     /** Read after the text of an external link, e.g. `opens in a new tab`. */
     external?: string;
     /**
-     * Names the brand link. A header with a `network` ignores it: its title is
-     * a button, named by its own text and `network.label`.
+     * Names the brand link. Start it with the brand's visible text (brand
+     * "Acme", label "Acme home"): WCAG 2.5.3 wants the visible text inside the
+     * accessible name. A header with a `network` ignores it: its title is a
+     * button, named by its own text and `network.label`.
      */
     home: string;
     /** Names the menu's navigation. */

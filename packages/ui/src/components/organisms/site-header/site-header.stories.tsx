@@ -5,7 +5,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 const LABELS = {
   close: "Close menu",
   external: "opens in a new tab",
-  home: "Acme home",
+  home: "Acme Docs home",
   menu: "Menu",
   open: "Open menu",
   primary: "Primary",

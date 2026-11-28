@@ -10,7 +10,7 @@ import { SiteHeader } from "./site-header";
 const LABELS = {
   close: "Close menu",
   external: "opens in a new tab",
-  home: "Acme home",
+  home: "Acme Docs home",
   menu: "Menu",
   open: "Open menu",
   primary: "Primary",
@@ -110,7 +110,7 @@ describe("SiteHeader landmarks", () => {
 describe("SiteHeader without a network", () => {
   it("makes the title a link home named by labels.home", () => {
     renderHeader();
-    const home = screen.getByRole("link", { name: "Acme home" });
+    const home = screen.getByRole("link", { name: "Acme Docs home" });
     expect(home).toHaveAttribute("href", "/");
     expect(home).toHaveTextContent("Acme Docs");
     expect(screen.queryByRole("button", { name: /Acme network/ })).toBeNull();
@@ -126,7 +126,7 @@ describe("SiteHeader with a network: the title is the switcher", () => {
     expect(title).toHaveAttribute("aria-expanded", "false");
     expect(title).toHaveAttribute("aria-controls", "site-network");
     expect(title).not.toHaveAttribute("aria-haspopup");
-    expect(screen.queryByRole("link", { name: "Acme home" })).toBeNull();
+    expect(screen.queryByRole("link", { name: "Acme Docs home" })).toBeNull();
   });
 
   it("keeps the links in the page while the panel is shut", () => {

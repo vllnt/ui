@@ -11,7 +11,7 @@ import { SiteHeaderStatic } from "./site-header-static";
 
 const LABELS = {
   external: "opens in a new tab",
-  home: "Acme home",
+  home: "Acme Docs home",
   menu: "Menu",
   open: "Open menu",
   primary: "Primary",
@@ -72,7 +72,7 @@ describe("SiteHeaderStatic", () => {
   });
 
   it("makes the title a link home when there is no network", () => {
-    const link = dom().querySelector('a[aria-label="Acme home"]');
+    const link = dom().querySelector('a[aria-label="Acme Docs home"]');
     expect(link).toHaveAttribute("href", "/");
     expect(link).toHaveTextContent("Acme Docs");
   });

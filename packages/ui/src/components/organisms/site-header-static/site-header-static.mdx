@@ -29,7 +29,7 @@ import { SiteHeaderStatic } from '@vllnt/ui'
   currentHref="/guides"
   homeHref="/"
   items={[{ bar: 'tablet', href: '/guides', label: 'Guides' }]}
-  labels={{ home: 'Acme home', menu: 'Menu', open: 'Open menu', primary: 'Primary' }}
+  labels={{ home: 'Acme Docs home', menu: 'Menu', open: 'Open menu', primary: 'Primary' }}
 />
 ```
 
@@ -47,7 +47,7 @@ Pair it with `SiteShellStatic`. Use `SiteHeader` wherever the page can hydrate.
 
 ### Without a network
 
-The title is a link home, named by `labels.home`.
+The title is a link home, named by `labels.home`. Start that label with the brand text (WCAG 2.5.3, label in name).
 
 <Canvas of={Stories.WithoutNetwork} sourceState="shown" />
 

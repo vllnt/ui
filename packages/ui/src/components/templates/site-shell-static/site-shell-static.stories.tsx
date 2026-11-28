@@ -40,7 +40,7 @@ const meta = {
           { href: "/about", label: "About" },
         ]}
         labels={{
-          home: "Acme home",
+          home: "Acme Docs home",
           menu: "Menu",
           open: "Open menu",
           primary: "Primary",
